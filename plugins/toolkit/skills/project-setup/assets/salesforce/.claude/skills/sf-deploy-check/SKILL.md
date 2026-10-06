@@ -1,15 +1,15 @@
 ---
 name: sf-deploy-check
-description: 'Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use running-work-item-lifecycle.'
+description: 'Checks whether a Salesforce deploy would include components or edits beyond the intended change, or whose feature is not ready in the target org. Use before a deploy to a shared org or before giving the owner a deploy command. For deciding whether a work item is ready or for running the deploy, use running-work-item-lifecycle.'
 ---
 
-# Salesforce deploy hitch-hiker check
+# Salesforce deploy scope check
 
-A metadata deploy ships the whole current source of every component it names, not only your edit. A hitch-hiker is a component in the deploy set, or an undeployed edit inside a named component's file, that would land in the target org although it is not the intended change or its feature is not ready there.
+Use this skill to find components or edits that a Salesforce metadata deploy would ship beyond the intended change, or whose feature is not ready in the target org. A metadata deploy ships the whole current source of every component it names, including edits outside the work item's scope.
 
-Two shapes:
-1. A whole component the target does not have yet. The deploy creates it. Example: a field whose LWC, Apex, page, or backfill has not shipped.
-2. Extra edits inside a file you touch for one reason. Example: you change a field's help text; the deploy also ships a renamed label, a new rollup filter, a changed formula, or added picklist values in that file.
+A change outside the intended scope, or a feature that is not ready for the target org, can enter the deploy in two ways:
+1. The deploy includes a whole component that the target org does not have yet. For example, it creates a field whose LWC, Apex, page, or backfill has not shipped.
+2. The deploy includes other edits in a file you changed for one reason. For example, you change a field's help text, but the file also contains a renamed label, a new rollup filter, a changed formula, or added picklist values.
 
 ## When to run
 
@@ -20,13 +20,13 @@ Two shapes:
 
 1. List the exact deploy set: every `<members>` in the `-x` manifest, every member in the `-m` list, every file or folder under `-d`. An `-x` deploy of a full-cutover manifest is the highest risk. Check the whole member list.
 2. For each named component, the whole current `force-app/` definition ships: label, inline help text, formula, rollup and summary filters, picklist values, all field metadata, and the component itself if the target lacks it.
-3. For each component, decide whether its feature is already live in the target. Hitch-hiker signals:
+3. For each component, decide whether its feature is already live in the target. Check for these signs of a change outside the intended scope or a feature that is not ready:
    - The component tracker (if the project keeps one) marks it as not in the target org.
    - It belongs to a work item or feature the owner has not called ready for that org.
    - The file has edits beyond the intended one. Diff it against the commit last deployed to the target org (the "Source revision" line of that deploy's `DEPLOYMENT-RECORD.md`). When no record names it, run `git log -p` on the path and read each change.
-   - When `tools/kb/` exists, run `python tools/kb/query_graph.py <Object.Field>` to see what the component connects to. A connected component that is not in the target org is a candidate hitch-hiker.
+   - When `tools/kb/` exists, run `python tools/kb/query_graph.py <Object.Field>` to see what the component connects to. A connected component that is not in the target org may be outside the intended scope or not ready there.
 4. Treat any tracker as a hint, not proof. Before you call a component missing, verify against the target org read-only: `sf sobject describe`, or a SOQL or Tooling query for the field, class, or flag. Do not block a deploy on a stale tracker alone. Do not tell the owner a component would ship to production until a read-only check confirms it is not already there.
-5. If a confirmed hitch-hiker remains, stop. Do not deploy. Do not hand over the command. Tell the owner which component, what would ship, and why it may be unintended. The owner decides: narrow the deploy set, or confirm the hitch-hiker is wanted.
+5. If you confirm that a component or edit outside the intended scope, or a feature not ready for the target org, would ship, stop. Do not deploy or hand over the command. Tell the owner which component or edit would ship and why it is outside the scope or not ready. The owner decides whether to narrow the deploy set or confirm that the change is wanted.
 
 ## Narrow the deploy set
 

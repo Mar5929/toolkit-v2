@@ -1,6 +1,6 @@
 ---
 name: braindump
-description: 'Plays back a loose brain dump in very simple words and waits for the owner''s yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when the owner wants a brain dump checked first, such as "here''s a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump the owner asks only to plan; use running-work-item-lifecycle.'
+description: 'Plays back the owner''s loose ideas in simple words and waits for the owner''s yes before starting work. Use when the owner asks "tell me what you heard", "play that back", or otherwise asks to check understanding first. When the owner asks only to plan the idea, use running-work-item-lifecycle.'
 ---
 
 # Brain dump playback

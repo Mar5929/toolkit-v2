@@ -1,6 +1,6 @@
 ---
 name: using-memory-store
-description: 'Saves, finds, and changes project memory records and the project''s Current State as Markdown files in the memory folder, so every skill reads and writes memory the same way. Use when a memory record or the project''s Current State must be read, saved, searched, renamed, retired, or deleted, such as "which memory files link to WI-031" or "read Current State". Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with local memory.'
+description: 'Reads, finds, saves, changes, renames, retires, and deletes project memory records and the project''s Current State as files in memory/. Use when a local memory record or the project''s Current State must be read or changed. curating-project-memory decides what to keep and when to ask the owner. Only for projects with local memory.'
 ---
 
 # Using the memory store (local files)

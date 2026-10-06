@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: 'Sets up Toolkit V2 in a project, checks or updates the setup, moves over a project set up another way, changes where work items or memory are kept, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer, so projects run the same files. Use for any Toolkit V2 setup request, such as "toolkit v2", "set up this project", "check the setup", or "update the toolkit". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-sync).'
+description: 'Sets up, checks, updates, or moves a project onto Toolkit V2. It also changes the project''s work or memory choice, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer. Use for requests such as "set up this project", "check the setup", or "update the toolkit". For new commits from Git, use pull-latest. The older claude-toolkit uses project-sync.'
 ---
 
 # Project setup

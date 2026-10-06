@@ -1,6 +1,6 @@
 ---
 name: reset-to-remote
-description: 'Makes the local repository an exact copy of its remote, discarding local commits and branches the remote no longer has, after showing a plan, so cloning again is not needed and nothing is lost without warning. Use only when the owner asks for it in the owner''s own words, for example "wipe local", "match remote exactly", or "fresh start from remote". Not for a routine update; use pull-latest.'
+description: 'Shows a plan, then makes the local repository match its remote by discarding local commits and removing branches whose remote branches are gone. Use only when the owner explicitly asks to "wipe local", "match remote exactly", or start fresh from the remote. For a routine update that keeps local work, use pull-latest.'
 ---
 
 # Reset to remote

@@ -67,7 +67,7 @@ This table is for files in `.claude/rules/`. "Same name" means that Toolkit V2 h
 | `work-item-stages.md` | Compare | `keep-work-item-current.md` and the `running-work-item-lifecycle` skill |
 | `work-item-folders.md` | Compare | `work-items/AGENTS.md`, only with local work items |
 | `ai-external-knowledge.md` | Compare | `reference/AGENTS.md` |
-| `plain-english-artifacts.md` | Compare | `write-documents-in-plain-english.md` |
+| `plain-english-artifacts.md` | Compare | `document-clarity-standard.md` |
 | `humanize-outbound-text.md` | Compare | Same name |
 | `dependency-graph.md` | Compare | Same name in a Salesforce project; nothing otherwise |
 | `component-tracker.md`, `permissions-source-control.md` | Compare | Same name (Salesforce) |

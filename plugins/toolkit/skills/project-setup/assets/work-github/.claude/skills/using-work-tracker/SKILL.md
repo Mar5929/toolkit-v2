@@ -1,6 +1,6 @@
 ---
 name: using-work-tracker
-description: 'Saves, finds, and changes work items as GitHub issues, so running-work-item-lifecycle reads and writes every work item the same way. Use when a work item must be read, created, saved, or searched, such as "show me #12". Not for deciding a work item''s plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work in GitHub Issues.'
+description: 'Reads, creates, finds, and saves work items as GitHub issues. Use when a GitHub-tracked work item must be read or changed, such as "show me #12". running-work-item-lifecycle decides the plan, State, and approvals. Only for projects that track work in GitHub Issues.'
 ---
 
 # Work items kept as GitHub issues

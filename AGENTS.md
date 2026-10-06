@@ -80,7 +80,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/placing-files.md`, "5. The pre-commit check", is the one place that says how `core.hooksPath` is set. `references/update.md` is "update the toolkit"; two parts of it are in their own files: `references/one-home-layout.md` brings a project set up before the one-home layout to it, and `references/earlier-versions.md` holds the changes from toolkit 0.6.0, 0.8.0, and 0.8.1. |
 | `OUTSIDE-TOOLS.md` | The owner's list of outside tools: a table with one row per kind of job, and one section per tool (where it comes from, how to set it up, and the owner's choices). A plain file, not a skill. No plugin ships it, and it is never copied into a project. |
-| `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` says how to get the current official guidance (the agents and skills Claude Code provides first, then the web address of the official page for each kind), `references/checklist.md` holds the practices and the check for each kind, and `references/rewrite-steps.md` the steps and checks for rewriting a file that exists, with the prompt for a team. `references/writing-rule.md` is an exact copy of the rule `write-documents-in-plain-english.md`, which holds all the writing rules; `check-skills.mjs` fails when the copy and the rule differ. Never copied into a project. |
+| `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` says how to get the current official guidance (the agents and skills Claude Code provides first, then the web address of the official page for each kind), `references/checklist.md` holds the practices and the check for each kind, and `references/rewrite-steps.md` the steps and checks for rewriting a file that exists, with the prompt for a team. `references/writing-rule.md` is an exact copy of the rule `document-clarity-standard.md`, which holds all the writing rules; `check-skills.mjs` fails when the copy and the rule differ. Never copied into a project. |
 | `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 9 shared skills in `.claude/skills/`, the four hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), and `.githooks/pre-commit`, which runs the fourth before each commit. Edited here directly (see "The starter project"). |
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
 | `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md` (the index the session-start hook rebuilds), and `project_topic_template.md`, the blank form for a memory record. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
@@ -258,7 +258,7 @@ node --test 'dev/tests/*.test.mjs'
   naming an AI, and no AI named in a comment, file header, manifest, README,
   commit, or pull request.
 - **Plain English.** Every skill, rule, agent guide, project document, and
-  artifact follows the writing rule, `write-documents-in-plain-english.md`:
+  artifact follows the writing rule, `document-clarity-standard.md`:
   whole sentences, real names, and no metaphors. The rule does not cover
   replies to the owner, which follow the output style, or text sent to
   another person, which follows `humanize-outbound-text.md`. Helper agents and Codex never see the output style, so
@@ -295,13 +295,14 @@ node --test 'dev/tests/*.test.mjs'
     choosing, so every file changes the same way.
   - One place for the writing rules (Mike, 2026-10-06). All the writing
     rules are in one rule,
-    `<setup>assets/every-project/.claude/rules/write-documents-in-plain-english.md`,
+    `<setup>assets/every-project/.claude/rules/document-clarity-standard.md`,
     and only there. He approved its text: change a word of it only with his
-    yes. He gave the file that name on 2026-10-06. It was
-    `write-for-the-reader.md` for about two hours on the branch that rewrote
-    it, a name no released version held, and
-    it replaced `plain-english-artifacts.md`; `<setup>references/update.md`,
-    "The renamed rule", replaces either old file in an existing project. No
+    yes. On 2026-10-06 he renamed it from
+    `write-documents-in-plain-english.md` to `document-clarity-standard.md`.
+    Before that, it was `write-for-the-reader.md` for about two hours on the
+    rewrite branch, a name no released version held, and it replaced
+    `plain-english-artifacts.md`. `<setup>references/update.md`, "The renamed
+    rule", replaces each old file in an existing project. No
     other file states a writing rule again: a file that needs one points to
     the rule.
   - The copy in the skill. He found a second, longer text of the writing
@@ -458,7 +459,7 @@ node --test 'dev/tests/*.test.mjs'
   copy names its source; `grep -rl 'dev/build-shared/<file>' plugins` lists
   them). Never edit a copy. One copy has its source outside
   `dev/build-shared/`: `writing-harness-files/references/writing-rule.md`
-  copies the starter rule `write-documents-in-plain-english.md`, so the
+  copies the starter rule `document-clarity-standard.md`, so the
   owner's rule stays where a project gets it ("Plain English" above).
 - **`dev/` is not shipped.** Claude Code installs only `plugins/toolkit/` and
   `plugins/workstreams/`, and Codex only `plugins/toolkit/`. Nothing shipped
@@ -631,7 +632,7 @@ node --test 'dev/tests/*.test.mjs'
   a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. A hook means the command and its entry in a settings or hooks
   file. This list is the same, word for word, in the
   `writing-harness-files` skill's `SKILL.md` and in `README.md`: change all
-  three together, and the skill's description with them. The
+  three together. Keep the skill's description an accurate summary. The
   `writing-harness-files` skill is the way to follow this
   rule: open it, in this repository and in any project. In this repository
   its steps mean:
@@ -653,7 +654,7 @@ node --test 'dev/tests/*.test.mjs'
     current page differ, the page wins; correct the guide in the same
     change.
   - Follow the writing rule,
-    `<setup>assets/every-project/.claude/rules/write-documents-in-plain-english.md`
+    `<setup>assets/every-project/.claude/rules/document-clarity-standard.md`
     ("Plain English" above). The skill holds an exact copy of it,
     `references/writing-rule.md`, which `check-skills.mjs` compares with
     the rule.

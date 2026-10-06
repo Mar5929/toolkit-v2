@@ -1,6 +1,6 @@
 ---
 name: curating-project-memory
-description: 'Keeps project memory true: saves what no other file holds (a fact about a person or the client, an event, a job run), sends any other fact to its place, updates the project''s Current State, writes "from now on" instructions as rules, and finds or cleans up what was saved. Use when the owner asks to keep, correct, forget, or find something, or reports a fact, a date, what someone said, or a job run. Not for a decision; use filing-project-records. Not for a to-do; use running-work-item-lifecycle.'
+description: 'Saves facts that no other project file holds, routes other facts to their proper files, keeps the project''s Current State accurate, writes "from now on" instructions as rules, and finds or cleans up saved facts. Use when the owner asks to remember, find, correct, or forget something, or reports a fact, date, statement, or job run. For a shared decision, use filing-project-records; for a task, use running-work-item-lifecycle.'
 ---
 
 # Curating project memory

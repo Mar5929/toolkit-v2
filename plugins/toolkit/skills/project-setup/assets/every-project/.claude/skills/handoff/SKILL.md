@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 'Updates this session''s work items and the project''s Current State, files any decision or source this session left unfiled, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session, clears context, or asks for a handoff prompt or a check of one, such as "write a handoff". Not for a recap alone; use session-summary.'
+description: 'Updates this session''s work items and the project''s Current State, files decisions or sources left unfiled, and writes a checked, self-contained prompt for the next session or checks one the owner provides. Use when the owner ends a session, clears context, asks for a handoff prompt, or asks to check one. For a recap without a handoff, use session-summary.'
 ---
 
 # Handoff

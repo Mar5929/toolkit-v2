@@ -1,6 +1,6 @@
 ---
 name: merge-and-clean-up
-description: 'Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session''s work is removed. Use when running-work-item-lifecycle asks, or the owner names a pull request to merge, such as "merge PR 12". Not for taking an approved work item through merge and deployment; use running-work-item-lifecycle.'
+description: 'Merges one approved GitHub pull request only after its checks and the merge-safety check pass. It then removes only that pull request''s branches and worktree. Use when the owner names a pull request to merge or running-work-item-lifecycle requests its merge. For an entire work item through merge and deployment, use running-work-item-lifecycle.'
 ---
 
 # Merge and clean up
