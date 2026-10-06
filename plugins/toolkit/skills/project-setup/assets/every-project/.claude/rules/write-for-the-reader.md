@@ -1,15 +1,15 @@
-# Write for a Reader Who Was Not in the Chat
+# Write Documents and Artifacts in Plain English
 
 This rule covers two kinds of writing:
 
-- **Something made for a person to look at:** a diagram, a chart, a dashboard, a mockup, a slide deck, a published page, or a report. It covers the words inside it: the title, headings, labels, notes, captions, and body text.
-- **A file that someone follows or relies on later:** a skill, a rule, an agent guide, requirements, a design, a system document, a decision, a test plan, or a delivery record.
+- **Artifacts.** An artifact is something made for a person to look at: a diagram, a chart, a dashboard, a mockup, a slide deck, a published page, or a report. The rule covers the words inside it: the title, headings, labels, notes, captions, and body text.
+- **Documents.** A document is a file that someone follows or relies on later: a skill, a rule, an agent guide, requirements, a design, a system document, a decision, a test plan, or a delivery record.
 
 It does not cover chat replies to the owner, which follow the output style, or text sent to another person, which follows `humanize-outbound-text.md`.
 
-The reader opens the result alone. The reader was not in this chat and cannot ask what a word means. Helper agents and Codex do not get the output style, so this rule states it for them. Where this rule and the active style file differ, the style file wins.
+The reader opens the result alone. The reader was not in the session that produced it and cannot ask what a word means. Helper agents and Codex do not get the output style, so this rule states it for them. Where this rule and the active style file differ, the style file wins.
 
-## For everything this rule covers
+## Rules for all documents and artifacts
 
 - Use common words, and the exact name the system uses, the same every time.
 - Never use a picture word, an idiom, or a joke in place of the real name. Write "the only setting you can change", not "the only lever".
@@ -20,7 +20,7 @@ The reader opens the result alone. The reader was not in this chat and cannot as
 - Put the main point first. A paragraph or a section starts with the sentence that states its point. What supports it comes after.
 - Be specific. Name the thing, the person, or the number: write "the save failed because the file was locked", not "there were problems". Never write "this" or "that" without the word it stands for.
 - Short means no sentence the reader does not need. It never means fewer words inside a sentence that stays. When clear and short disagree, choose clear.
-- Write about the subject, not about the document or the chat that produced it. Quote the chat only when the exact words are the fact, and then say who said them and when.
+- Write about the subject, not about the document or the session that produced it. Quote the session only when the exact words are the fact, and then say who said them and when.
 - Keep every fact, number, name, date, and quotation exactly as it is.
 
 ## How to build a sentence
@@ -34,7 +34,7 @@ The reader opens the result alone. The reader was not in this chat and cannot as
 - Give every item in a list the same form, and every step in a procedure the same form.
 - Write steps in the order the reader does them, one step per sentence.
 
-## Something made to look at
+## Rules for artifacts
 
 - Start with the content. No preamble, and no closing line that sums up.
 - A heading names what is under it, in the words of the subject. Write "Team structure options", not "Three ways to build the team tree, pick one". Put a number in a heading only when the number is the fact.
@@ -42,7 +42,7 @@ The reader opens the result alone. The reader was not in this chat and cannot as
 - Do not tell the reader what matters. Write the decision itself.
 - Layout is the agent's choice. This rule decides the words.
 
-## A file that someone follows later
+## Rules for documents
 
 - Start from the whole file: what must the reader know and do? Write that in the plainest order and words. Do not repair the file line by line.
 - Open with what the file is for and what must be true when its job is done. When another skill or file does a neighbouring job, say in one sentence which one does which part.
