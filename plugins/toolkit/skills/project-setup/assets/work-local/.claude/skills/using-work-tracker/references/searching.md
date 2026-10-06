@@ -1,41 +1,45 @@
 # Finding work in local files
 
-The exact commands that read items from `work-items/`. They only read.
+This file gives the exact commands that read work items from `work-items/`. The commands only read. Open it when you find or read work items.
 
-- Start each command with the `MAIN=` line from `SKILL.md`, "Every time", step 1.
-- Replace `WI` with the prefix from `PROJECT.md`, "Toolkit settings", and `WI-031` with the ID, in three digits.
-- Keep the flags as written. They skip the template and `DESIGN.md` files, except in the word search.
+Three rules apply to every command in this file:
 
-## One item
+- Start each command with the `MAIN=` line from `SKILL.md`, section "Steps for every read and every save", step 1.
+- Replace `WI` with the prefix from `PROJECT.md`, section "Toolkit settings", and replace `WI-031` with the ID, in three digits.
+- Keep the flags as they are written. The flags make a command skip the template and `DESIGN.md` files, except in the search by words.
+
+## One work item
 
 ```bash
 grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^id: *"?WI-031"? *$' "$MAIN/work-items"
 ```
 
-- One path: read the whole file, starting with the five lines under `### Current state`. Its folder also holds `DESIGN.md` and its sub-items' folders.
-- No path: run the hand-change check (`folders-and-files.md`), then search by title. Never make a second item for work that already has one.
-- Two paths: two items share the ID (`folders-and-files.md`).
+- When the command prints one path, read the whole file, starting with the five lines under `### Current state`. The file's folder also holds `DESIGN.md` and the folders of the work item's sub-items.
+- When the command prints no path, run the check for changes made by hand, and then search by title. `folders-and-files.md`, section "The check for changes made by hand", gives the check. Never make a second work item for work that already has one.
+- When the command prints two paths, two work items share the ID. `folders-and-files.md`, section "Two work items with one ID", says what to do.
 
 ## The board
 
-Open items, `archive/` left out:
+The board is the list of the open work items. This command prints it, with `archive/` left out:
 
 ```bash
 grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude-dir=archive --exclude=DESIGN.md '^(id|title|type|state|status|parent|waiting_on|priority):|^\*\*Next action:\*\*' "$MAIN/work-items"
 ```
 
-- The lines from one file are one item. A file with no `id:` line is not an item.
-- Leave out Done and Cancelled unless the owner asks.
+- The lines from one file are one work item. A file with no `id:` line is not a work item.
+- Leave out the work items that are Done or Cancelled unless the owner asks for them.
 
 ## Open questions
 
-Open rows are at the top of each table. Only a row with Status `Open` counts. Leave out a row that is still the template's example (its question is `<Specific unanswered question>`); an item the owner made by hand can hold one:
+Open rows are at the top of each Questions and Answers table. This command prints them:
 
 ```bash
 grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude-dir=archive --exclude=DESIGN.md '^\| *Q-[0-9]+ *\|.*\| *Open *\|' "$MAIN/work-items"
 ```
 
-Report what waits on the owner first (item ID, Q-ID, what it blocks), then what is in progress, then your next step.
+- Only a row with Status `Open` counts.
+- Leave out a row that is still the template's example. Its question is `<Specific unanswered question>`. A work item that the owner made by hand can hold such a row.
+- Report in this order: first what waits on the owner (the work item's ID, the Q-ID, and what the question blocks), then what is in progress, then your next step.
 
 ## A parent's full tree
 
@@ -46,7 +50,8 @@ grep -rHE --include='*.md' --exclude=DESIGN.md '^(id|title|state|status|parent|w
 grep -nE '^\| *P[0-9]+ —|^\*\*Sub-items:\*\*|^- \[ \] \*\*(P[0-9]+-)?T[0-9]+' "<item file>"
 ```
 
-The second shows an item's sub-item list and its open tasks: a top-level item's phases with their Sub-items cells, or a sub-item's `**Sub-items:**` line. Under a top-level item, a sub-item no Sub-items cell names goes last, under "No phase".
+- The second command shows a work item's list of sub-items and its open tasks. For a top-level item, it shows the phases with their Sub-items cells. For a sub-item, it shows the `**Sub-items:**` line.
+- Under a top-level item, a sub-item that no Sub-items cell names goes last, under "No phase".
 
 ## Search by words or by a field
 
@@ -56,13 +61,13 @@ grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md 
 grep -rliE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^title:.*login' "$MAIN/work-items"
 ```
 
+- The first command is the search by words. It also reads designs. A match in a design belongs to the work item whose file is in the same folder.
 - The second command searches one field. Use `^state: *Building`, `^status: *Blocked`, or `^waiting_on: *"?owner` the same way.
-- The word search also reads designs. A hit there belongs to the item whose file sits in the same folder.
-- Two or more matches: name each, with your recommendation, and ask which.
+- When a search has two or more matches, name each match, give your recommendation, and ask the owner which one is meant.
 
-## Check for hand changes
+## The commands of the check for changes made by hand
 
-Three read-only checks: every item's file, ID, and `parent:`; each ID that two files share; template copies the owner made by hand. `folders-and-files.md`, "The hand-change check", explains how to read them.
+These three commands only read. The first prints every work item's file, ID, and `parent:` line. The second prints each ID that two files share. The third prints the template copies that the owner made by hand. `folders-and-files.md`, section "The check for changes made by hand", explains how to read what they print.
 
 ```bash
 grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^(id|parent):' "$MAIN/work-items"
