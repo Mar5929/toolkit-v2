@@ -33,11 +33,11 @@ try {
   const lines = state.split('\n').length;
   const updated = state.match(/Last updated:\W*(\d{4}-\d{2}-\d{2})/i)?.[1];
   const days = Math.floor((Date.now() - Date.parse(updated)) / 864e5) || 0;
-  const prune = memory === 'hindsight' ? 'a direct edit, as .claude/rules/hindsight-memory.md says'
-    : 'the curating-project-memory skill';
+  const prune = `Remove the lines that are no longer true with ${memory === 'hindsight' ? 'a direct'
+    + ' edit, as .claude/rules/hindsight-memory.md says' : 'the curating-project-memory skill'}`;
   const size = lines >= 40 ? `${lines} lines (limit: under 40)` : days > 7 && `${days} days old`;
-  if (size) out.push(`Current State is ${size}. Prune it with ${prune}.`);
-  if (state) out.push('Current State:', state);
+  if (size) out.push(`The project's Current State is ${size}. ${prune}.`);
+  if (state) out.push("The project's Current State:", state);
   else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
     + ' Read it with the using-memory-store skill.');
   else out.push(`memory/CURRENT_STATE.md is missing or empty in ${dirname(dir)}.`);
@@ -65,8 +65,8 @@ try {
       Object.values(lists).join('').trim() || 'No memory files yet.');
   }
 } catch (error) {
-  const why = String(error.message).split('\n')[0];
-  out.push(`The session-start hook stopped early (${why}). Read Current State yourself: ${where}.`);
+  out.push(`The session-start hook stopped early (${String(error.message).split('\n')[0]}). Read`
+    + ` the project's Current State yourself: ${where}.`);
 }
 // Claude Code caps hook output at 10,000 characters. Codex limits it by tokens (about 2,500, or
 // the entry's additionalContextLimit). So longer output is cut here, between two lines.

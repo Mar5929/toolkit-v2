@@ -116,8 +116,8 @@ test('finding 5: a work item that still holds the template\'s prompts gets no fi
   clean(run(dir, ['--all']), 'an open item straight from the template');
   put(dir, 'work-items/WI-002-new-item/WI-002.md', filled.replace('status: In progress', 'status: Done'));
   const closed = run(dir, ['--all']);
-  assert.match(closed.err, /^The record check found problems: 1\./, closed.err);
-  assert.match(closed.err, /WI-002\.md: the item is closed, but its Moved up line is empty/, 'check 14 sees the prompt as empty');
+  assert.match(closed.err, /^validate-records\.mjs found problems: 1\./, closed.err);
+  assert.match(closed.err, /WI-002\.md: the work item is closed, but its Moved up line is empty/, 'check 14 sees the prompt as empty');
 });
 
 test('finding 6: text in backticks is not a prompt; a prompt outside backticks on the same line still is', () => {
@@ -171,7 +171,7 @@ test('note 22: a record that is there but cannot be read gives one line and exit
   for (const args of [['--all'], ['--staged'], []]) {
     const result = args.length ? run(dir, args, '') : edit(dir, 'sources/README.md');
     assert.equal(result.code, 0, args.join());
-    assert.match(result.err, /^The record check did not run\. Its own error: Error: EACCES[^\n]*\n$/);
+    assert.match(result.err, /^validate-records\.mjs did not run\. Its own error: Error: EACCES[^\n]*\n$/);
   }
   chmodSync(join(dir, 'sources/README.md'), 0o644);
   rmSync(join(dir, 'sources/README.md'));
@@ -182,11 +182,11 @@ test('notes 25 and 36: the first line says what happened in each mode, with no "
   const dir = project();
   change(dir, 'DECISIONS.md', 'Status: Decided', 'Status: Approved');
   const first = (result) => result.err.split('\n')[0];
-  assert.equal(first(run(dir, ['--all'])), 'The record check found problems: 1. Fix each one. Tell the owner of any you cannot fix.');
-  assert.equal(first(run(dir, ['--staged'], '')), 'The record check found problems: 1. The commit was stopped. Fix each one. Tell the owner of any you cannot fix.');
+  assert.equal(first(run(dir, ['--all'])), 'validate-records.mjs found problems: 1. Fix each one. Tell the owner of any you cannot fix.');
+  assert.equal(first(run(dir, ['--staged'], '')), 'validate-records.mjs found problems: 1. The commit was stopped. Fix each one. Tell the owner of any you cannot fix.');
   // In Codex, exit code 2 after apply_patch replaces the tool result with this text (codex/hooks.md, "PostToolUse").
-  assert.equal(first(edit(dir, 'DECISIONS.md')), 'The record check found problems: 1. The edit was not undone. Fix each one. Tell the owner of any you cannot fix.');
-  for (const result of [run(dir, ['--all']), run(dir, [], 'not json')]) assert.doesNotMatch(result.err, /\(s\)|validate-records\.mjs/);
+  assert.equal(first(edit(dir, 'DECISIONS.md')), 'validate-records.mjs found problems: 1. The edit was not undone. Fix each one. Tell the owner of any you cannot fix.');
+  for (const result of [run(dir, ['--all']), run(dir, [], 'not json')]) assert.doesNotMatch(result.err, /\(s\)|\n\s+at |validate-records\.mjs:\d/);
 });
 
 test('review of the second fixes, blocker: a worktree session writes a record in the save worktree, which holds the default branch\'s records', () => {
@@ -224,10 +224,10 @@ test('review of the second fixes, note 8: in a worktree session, a record of the
   change(session, 'DECISIONS.md', 'Status: Decided', 'Status: Approved');
   chmodSync(join(dir, 'DECISIONS.md'), 0o000);
   const stop = () => run(session, ['--all'], { cwd: session, hook_event_name: 'Stop' }, session);
-  const lost = /The record check did not run in the main checkout\. Its own error: Error: EACCES[^\n]*\n$/;
+  const lost = /validate-records\.mjs did not run in the main checkout\. Its own error: Error: EACCES[^\n]*\n$/;
   const both = stop();
   assert.equal(both.code, 2, both.err);
-  assert.match(both.err, /^The record check found problems: 1\. Fix each one\./);
+  assert.match(both.err, /^validate-records\.mjs found problems: 1\. Fix each one\./);
   assert.match(both.err, /\nDECISIONS\.md:\d+: DEC-001 has Status "Approved"\./, 'the finding of the session\'s own checkout is kept');
   assert.match(both.err, lost, 'then the one line for the main checkout');
   assert.equal(edit(session, 'DECISIONS.md').code, 2, 'the same after an edit');

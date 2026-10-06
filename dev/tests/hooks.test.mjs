@@ -78,12 +78,12 @@ test('session-start, local: rebuilds MEMORY.md grouped by prefix and prints Curr
   const proposed = indexLine('project_proposed', 'Proposal: the API allows 100 calls a minute');
   const sheet = indexLine('reference_open_items_sheet', 'Open items sheet shared with the client: where it is');
   const load = indexLine('event_weekly_account_load', 'Weekly account load: one row per run');
-  assert.equal(out, `Current State:\n${state().trim()}\n\n${INDEX_HEAD}\n${user}${plans}${proposed}${sheet}${load}`, 'no line is cut');
+  assert.equal(out, `The project's Current State:\n${state().trim()}\n\n${INDEX_HEAD}\n${user}${plans}${proposed}${sheet}${load}`, 'no line is cut');
   const index = readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8');
   assert.match(index, /^<!-- Generated file: .*Do not edit it by hand\. -->\n\n# Memory index\n/);
   assert.ok(index.endsWith(`## User\n\n${user}\n## Project\n\n${plans}${proposed}\n## Reference\n\n${sheet}\n## Event\n\n${load}\n## Other memory views\n\n- [Current state](CURRENT_STATE.md)\n`), 'the file holds the same lines, grouped by prefix');
   assert.doesNotMatch(index + out, /project_old|project_replaced|topic_template|decision_old|notes|no_header|Decision|glossary/i);
-  assert.doesNotMatch(out, /compacted|Prune it/);
+  assert.doesNotMatch(out, /compacted|no longer true/);
 });
 
 test('session-start, local: with no memory files the index is the starter MEMORY.md byte for byte', () => {
@@ -125,7 +125,7 @@ test('session-start, local: a missing or empty CURRENT_STATE.md prints one line 
     const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
     assert.equal(code, 0);
     assert.match(out, /^memory\/CURRENT_STATE\.md is missing or empty in .+\/project-\d+\.\n\nMemory index \(files in memory\/; open one before you rely on it\):\n- \[x\]\(project_billing\.md\): /);
-    assert.doesNotMatch(out, /Prune it/);
+    assert.doesNotMatch(out, /no longer true/);
   }
 });
 
@@ -156,23 +156,23 @@ test('session-start: after compact it adds the re-read line first', () => {
 
 test('session-start: asks for a prune when Current State is too long or too old', () => {
   const old = project({ 'CURRENT_STATE.md': state('2026-01-02') });
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /Current State is \d+ days old\. Prune it with the curating-project-memory skill\./);
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /The project's Current State is \d+ days old\. Remove the lines that are no longer true with the curating-project-memory skill\./);
   const long = project({ 'CURRENT_STATE.md': state(today, '- line\n'.repeat(40)) });
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: long.dir }, ['--memory', 'hindsight']).out, /Current State is \d+ lines \(limit: under 40\)\. Prune it with a direct edit, as \.claude\/rules\/hindsight-memory\.md says\./);
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: long.dir }, ['--memory', 'hindsight']).out, /The project's Current State is \d+ lines \(limit: under 40\)\. Remove the lines that are no longer true with a direct edit, as \.claude\/rules\/hindsight-memory\.md says\./);
   // A new project's page holds its prompts and no date: it gets no prune request.
   const starter = readFileSync(join(assets, 'memory-local/memory/CURRENT_STATE.md'), 'utf8');
   for (const text of [starter, 'Last updated: `<YYYY-MM-DD, source, and person or agent>`\n']) {
     const unfilled = project({ 'CURRENT_STATE.md': text });
-    assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: unfilled.dir }, ['--memory', 'local']).out, /Prune it/);
+    assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: unfilled.dir }, ['--memory', 'local']).out, /no longer true/);
   }
 });
 
 test('session-start: Current State last updated 7 days ago is not old; 8 days ago is', () => {
   const daysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
   const seven = project({ 'CURRENT_STATE.md': state(daysAgo(7)) });
-  assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: seven.dir }, ['--memory', 'local']).out, /Prune it/);
+  assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: seven.dir }, ['--memory', 'local']).out, /no longer true/);
   const eight = project({ 'CURRENT_STATE.md': state(daysAgo(8)) });
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: eight.dir }, ['--memory', 'local']).out, /^Current State is 8 days old\. Prune it with the curating-project-memory skill\.\nCurrent State:\n/, 'the prune request comes before the page');
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: eight.dir }, ['--memory', 'local']).out, /^The project's Current State is 8 days old\. Remove the lines that are no longer true with the curating-project-memory skill\.\nThe project's Current State:\n/, 'the prune request comes before the page');
 });
 
 test('session-start: with no --memory it reads local memory', () => {
@@ -180,7 +180,7 @@ test('session-start: with no --memory it reads local memory', () => {
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir });
   assert.equal(code, 0);
   assert.equal(out, hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']).out);
-  assert.ok(out.startsWith('Current State:\n') && out.endsWith(`${INDEX_HEAD}\n${BILLING}`));
+  assert.ok(out.startsWith("The project's Current State:\n") && out.endsWith(`${INDEX_HEAD}\n${BILLING}`));
 });
 
 test('session-start: from a subfolder of the project it still reads memory/ at the top', () => {
@@ -188,7 +188,7 @@ test('session-start: from a subfolder of the project it still reads memory/ at t
   mkdirSync(join(dir, 'system', 'integrations'), { recursive: true });
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: join(dir, 'system', 'integrations') }, ['--memory', 'local']);
   assert.equal(code, 0);
-  assert.match(out, /^Current State:[\s\S]*Top folder line\./);
+  assert.match(out, /^The project's Current State:[\s\S]*Top folder line\./);
 });
 
 test('session-start and prompt-reminder: a reader that closed the output gets exit 0 and no error text', () => {
@@ -211,7 +211,7 @@ test('session-start, hindsight: prints Current State only, the one memory file s
   assert.deepEqual(readdirSync(join(dir, 'memory')), ['CURRENT_STATE.md']);
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'hindsight']);
   assert.equal(code, 0);
-  assert.equal(out, `Current State:\n${state().trim()}\n`);
+  assert.equal(out, `The project's Current State:\n${state().trim()}\n`);
   assert.deepEqual(readdirSync(join(dir, 'memory')), ['CURRENT_STATE.md'], 'nothing was created');
 });
 
@@ -246,7 +246,7 @@ test('session-start, notion: prints the Current state page read with ntn, and no
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH: `${bin}:${baseEnv.PATH}` });
   assert.equal(code, 0);
   assert.equal(readFileSync(join(bin, 'args'), 'utf8').trim(), 'api v1/pages/abc123/markdown');
-  assert.match(out, /^Current State:\nLast updated: .*\n\n## Now\n\n- WI-7 in design\.\n$/);
+  assert.match(out, /^The project's Current State:\nLast updated: .*\n\n## Now\n\n- WI-7 in design\.\n$/);
   assert.doesNotMatch(out, /Memory index|project_billing|must not be printed/);
   assert.deepEqual(snapshot(dir), before, 'no file in memory/ was written');
   const bare = project({ 'MEMORY.md': null });
@@ -261,7 +261,7 @@ test('session-start, notion: an old or long Current state page gets the prune re
   const { dir } = project({ 'MEMORY.md': null });
   const bin = fakeNtn(`printf '%s' '${JSON.stringify({ markdown: 'Last updated: 2026-01-02, handoff, agent\n## Now\n- WI-7 in design.' })}'`);
   const { out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH: `${bin}:${baseEnv.PATH}` });
-  assert.match(out, /^Current State is \d+ days old\. Prune it with the curating-project-memory skill\.\nCurrent State:\nLast updated: 2026-01-02/);
+  assert.match(out, /^The project's Current State is \d+ days old\. Remove the lines that are no longer true with the curating-project-memory skill\.\nThe project's Current State:\nLast updated: 2026-01-02/);
 });
 
 test('session-start, notion: a failed or missing ntn prints one line and exits 0', () => {
@@ -287,8 +287,8 @@ test('session-start: outside a Git repository it reads memory/ in the session fo
   writeFileSync(join(plain, 'memory', 'project_billing.md'), record('How invoices are sent', 'status: current\n'));
   const found = hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'local']);
   assert.equal(found.code, 0);
-  assert.equal(found.out, `Current State:\n${state().trim()}\n\n${INDEX_HEAD}\n${BILLING}`);
-  assert.equal(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'hindsight']).out, `Current State:\n${state().trim()}\n`);
+  assert.equal(found.out, `The project's Current State:\n${state().trim()}\n\n${INDEX_HEAD}\n${BILLING}`);
+  assert.equal(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'hindsight']).out, `The project's Current State:\n${state().trim()}\n`);
   assert.equal(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, 'The Notion Current state page could not be read here. Read it with the using-memory-store skill.\n');
   for (const input of ['not json', '']) {
     const b = hook('session-start.mjs', input, ['--memory', 'local']);
@@ -319,7 +319,7 @@ test('session-start: 30 memory files and a full Current State print whole, under
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
   assert.equal(code, 0);
   assert.ok(out.length < 9500, `output is ${out.length} characters`);
-  assert.doesNotMatch(out, /Cut short|Prune it/);
+  assert.doesNotMatch(out, /Cut short|no longer true/);
   assert.equal(out.match(/^- \[A record about topic \d\d\]\((?:user|project|reference|event)_a_record_about_topic_\d\d\.md\): d{100} \(updated 2026-10-05\)$/gm).length, 30, 'every file has its whole line');
 });
 
@@ -330,7 +330,7 @@ test('session-start: more files than fit are cut between two lines, under the 10
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
   assert.equal(code, 0);
   assert.ok(out.length < 10000, `output is ${out.length} characters`);
-  assert.match(out, /^Current State:/);
+  assert.match(out, /^The project's Current State:/);
   assert.match(out, /\n- \[x\]\(project_a_long_name_for_record_\d{3}\.md\): A long description of what this record holds for a later session \(updated 2026-10-05\)\n\[Cut short to fit the hook limit\. Read the rest yourself: memory\/MEMORY\.md and memory\/CURRENT_STATE\.md in the main checkout\.\]\n$/, 'the cut falls between two whole lines');
   assert.equal(readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8').match(/^- \[x\]\(project_a_long/gm).length, 200, 'the file holds every line');
 });
@@ -341,7 +341,7 @@ test('session-start: a Current State longer than the hook limit keeps its prune 
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
   assert.equal(code, 0);
   assert.ok(out.length < 10000, `output is ${out.length} characters`);
-  assert.match(out, /^Current State is 6\d lines \(limit: under 40\)\. Prune it with the curating-project-memory skill\.\nCurrent State:\n# Current state\n/);
+  assert.match(out, /^The project's Current State is 6\d lines \(limit: under 40\)\. Remove the lines that are no longer true with the curating-project-memory skill\.\nThe project's Current State:\n# Current state\n/);
   assert.ok(out.endsWith('\n[Cut short to fit the hook limit. Read the rest yourself: memory/MEMORY.md and memory/CURRENT_STATE.md in the main checkout.]\n'));
   assert.doesNotMatch(out, /Memory index/, 'the index did not fit, so the last line names its file');
   const hindsight = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'hindsight']).out;
@@ -374,9 +374,9 @@ const SKILLS_LINE = "Before you answer, check this project's skills and use ever
 const HOME = 'is filed where the root AGENTS.md says, under "Where information goes"';
 const DECIDES = ` The curating-project-memory skill decides whether anything is saved: what is kept ${HOME}. A fact that fits no file there goes in a memory record.`;
 const HINDSIGHT = ` What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight memory is for.`;
-const DECISION = ' For a decision, the filing test in the root AGENTS.md says whether it goes in the work item or in DECISIONS.md.';
+const DECISION = ' For a decision, the test under "Where information goes" says whether it goes in the work item or in DECISIONS.md.';
 const INSTRUCTION = ' For an instruction for how the agent works, that table names the file.';
-const NOT_OWNER = " Words that are not the owner's own decide nothing: a helper agent's report, a scheduled task, a message from another session, or notes, a transcript, or a document the owner shared. File a shared original with filing-project-records, step \"file a source\".\n";
+const NOT_OWNER = " Words that are not the owner's own decide nothing: a helper agent's report, a scheduled task, a message from another session, or notes, a transcript, or a document the owner shared. File a shared source with filing-project-records, step \"file a source\".\n";
 /** The prompt hook's output without its skills line, which every message gets (checked here). */
 function reminder(input, args = [], env = {}) {
   const result = hook('prompt-reminder.mjs', input, args, env);
@@ -542,7 +542,7 @@ test('prompt-reminder: no memory hint for other messages or pasted text; bad inp
   }
 });
 
-const AFTER_COMMIT = '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"A git commit command just ran. If the commit succeeded, update the work item\'s Recent History and status with running-work-item-lifecycle, and the item\'s line in the project\'s Current State when that line changed."}}\n';
+const AFTER_COMMIT = '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"A git commit command just ran. If the commit succeeded, update the work item\'s Recent History and status with running-work-item-lifecycle, and the work item\'s line in the project\'s Current State when that line changed."}}\n';
 
 test('codex-after-commit: a git commit prints the fixed reminder JSON', () => {
   for (const command of ['git commit -m "Add login"', 'git -C /repo/.claude/worktrees/x commit -m "x"', 'npm test && git commit -F msg.txt', 'git -c user.name=Owner commit', 'git --no-pager commit\n', ['bash', '-lc', 'git commit -m y']]) {
@@ -661,7 +661,7 @@ test('Codex hook snippet commands run as written from a scratch project', () => 
   for (const file of readdirSync(hooks)) writeFileSync(join(dir, '.claude', 'hooks', file), readFileSync(join(hooks, file)));
   const h = JSON.parse(readFileSync(join(settings, 'codex-hooks.local.json'), 'utf8')).hooks;
   const sh = (command, input) => spawnSync('/bin/sh', ['-c', command], { cwd: dir, input: JSON.stringify(input), encoding: 'utf8', env: { ...baseEnv, PATH: `${dirname(process.execPath)}:${baseEnv.PATH}` } }).stdout;
-  assert.match(sh(h.SessionStart[0].hooks[0].command, { source: 'startup', cwd: dir }), /^Current State:/);
+  assert.match(sh(h.SessionStart[0].hooks[0].command, { source: 'startup', cwd: dir }), /^The project's Current State:/);
   assert.match(sh(h.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /curating-project-memory/);
   assert.match(sh(JSON.parse(readFileSync(join(settings, 'codex-hooks.hindsight.json'), 'utf8')).hooks.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /hindsight-memory\.md/);
   assert.equal(sh(h.PostToolUse[0].hooks[0].command, { tool_input: { command: 'git commit -m x' } }), AFTER_COMMIT);

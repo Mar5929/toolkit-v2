@@ -137,9 +137,9 @@ const BROKEN = [
   [11, 'a CLAUDE.md that does not hold @AGENTS.md', (d) => put(d, 'sources/CLAUDE.md', 'See AGENTS.md\n'), 'sources/CLAUDE.md', /^sources\/CLAUDE\.md: this folder has an AGENTS\.md, so its CLAUDE\.md holds exactly one line/m],
   [12, 'an integration document with no row', (d) => change(d, 'system/integrations/README.md', /\| \[billing.*\n/, ''), 'system/integrations/billing.md', /billing\.md: has no row in system\/integrations\/README\.md/, 'later'],
   [12, 'a row whose document is missing', (d) => add(d, 'system/integrations/README.md', '| [crm.md](crm.md) | CRM | Draft | INT-02 |\n'), 'system/integrations/README.md', /the row for crm\.md names a document that is not in this folder/, 'later'],
-  [13, 'a work item file not named for its ID', (d) => renameSync(join(d, W), join(d, dirname(W), 'ITEM.md')), 'work-items/WI-001-client-workspaces/ITEM.md', /this item's id is WI-001, so its file is WI-001\.md/],
+  [13, 'a work item file not named for its ID', (d) => renameSync(join(d, W), join(d, dirname(W), 'ITEM.md')), 'work-items/WI-001-client-workspaces/ITEM.md', /this work item's id is WI-001, so its file is WI-001\.md/],
   [13, 'two work items with one ID', (d) => put(d, 'work-items/WI-001-copy/WI-001.md', item('WI-001')), 'work-items/', /WI-001 is also the id of work-items\/WI-001-/],
-  [14, 'a Done work item with an empty Moved up line', (d) => change(d, W, /\*\*Moved up:\*\* .*/, '**Moved up:** <Leave empty until the closing step.>'), W, /the item is closed, but its Moved up line is empty/],
+  [14, 'a Done work item with an empty Moved up line', (d) => change(d, W, /\*\*Moved up:\*\* .*/, '**Moved up:** <Leave empty until the closing step.>'), W, /the work item is closed, but its Moved up line is empty/],
   [15, 'a work item ID in DECISIONS.md that does not exist', (d) => change(d, 'DECISIONS.md', 'Affects: WI-001', 'Affects: WI-042'), 'DECISIONS.md', /WI-042 is not a work item in work-items\//],
   [15, 'a work item ID in Current State that does not exist', (d) => change(d, 'memory/CURRENT_STATE.md', 'WI-001', 'WI-042'), 'memory/CURRENT_STATE.md', /^memory\/CURRENT_STATE\.md:\d+: WI-042 is not a work item/m],
 ];
@@ -150,7 +150,7 @@ for (const [number, name, breakIt, file, finding, later] of BROKEN) {
     breakIt(dir);
     const all = run(dir, ['--all']);
     assert.equal(all.code, 2, all.err);
-    assert.match(all.err, /^The record check found problems: \d+\. Fix each one\. Tell the owner of any you cannot fix\.$/m);
+    assert.match(all.err, /^validate-records\.mjs found problems: \d+\. Fix each one\. Tell the owner of any you cannot fix\.$/m);
     const line = all.err.split('\n').find((each) => finding.test(each) || new RegExp(finding.source).test(each));
     assert.ok(line?.startsWith(file), `a line for ${file} matches ${finding} in:\n${all.err}`);
     const edited = file.endsWith('/') ? W : file;
@@ -170,7 +170,7 @@ test('check 8: a commit that changes or deletes a filed original is stopped by .
   git(dir, 'config', 'core.hooksPath', '.githooks');
   add(dir, 'sources/SRC-001-kickoff-notes.md', 'A correction.\n');
   git(dir, 'add', 'sources/SRC-001-kickoff-notes.md');
-  assert.throws(() => git(dir, 'commit', '-m', 'Change an original'), /sources\/SRC-001-kickoff-notes\.md: this commit changes or deletes a filed original/);
+  assert.throws(() => git(dir, 'commit', '-m', 'Change an original'), /sources\/SRC-001-kickoff-notes\.md: this commit changes or deletes a filed source/);
   assert.match(run(dir, ['--staged'], '').err, /The commit was stopped\./);
   git(dir, 'restore', '--staged', '--worktree', 'sources/SRC-001-kickoff-notes.md');
   // A new original with its row, an edit of the list, and an edit of the folder guide all pass.
@@ -211,7 +211,7 @@ test('never fails because of its own error: bad input, a missing folder, no Git 
     assert.equal(result.code, 0, JSON.stringify(input));
     assert.ok(result.err.trimEnd().split('\n').length <= 1, 'at most one line');
   }
-  assert.match(run(dir, [], 'not json').err, /^The record check did not run\. Its own error: SyntaxError: .*\n$/);
+  assert.match(run(dir, [], 'not json').err, /^validate-records\.mjs did not run\. Its own error: SyntaxError: .*\n$/);
   clean(claudeEdit(dir, 'src/app.js'), 'an edit of a file that is not a record checks nothing');
   assert.equal(run(dir, [], { cwd: dir, tool_name: 'apply_patch', tool_input: { command: 'a patch in a form the check does not know' } }).code, 2, 'a Codex patch that names no file: every group is reported');
   clean(run(dir, ['--all'], { cwd: dir, hook_event_name: 'Stop', stop_hook_active: true }), 'the agent is never kept from stopping twice');

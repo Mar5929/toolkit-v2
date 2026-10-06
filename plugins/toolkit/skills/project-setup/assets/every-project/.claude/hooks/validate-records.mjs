@@ -27,7 +27,7 @@ const add = (file, line, ...t) => found.push({ file, line, text: t.join(' ').sli
 // A record made of two files is whole only after two edits, so it waits for the stop or commit.
 const pair = (...finding) => mode !== 'edit' && add(...finding);
 const read = (path) => (existsSync(path) ? readFileSync(path, 'utf8') : ''); // missing: empty
-const fail = (error, where = '') => console.error(`The record check did not run${where}.`
+const fail = (error, where = '') => console.error(`validate-records.mjs did not run${where}.`
   + ` Its own error: ${String(error).split('\n')[0]}`);
 const real = (path) => { try { return realpathSync(path); } catch { return path; } };
 function list(d) { try { return readdirSync(d, { withFileTypes: true }); } catch { return []; } }
@@ -158,7 +158,7 @@ function check(top, main) {
   const diff = main ? '' : execFileSync('git', ['diff', '--cached', '--name-only', '--no-renames',
     '--diff-filter=MD', '--', 'sources'], { ...GIT, cwd: top });
   diff.split('\n').filter((name) => name && !GUIDES.includes(name.slice(8))).forEach((file) => add(
-    file, 0, 'this commit changes or deletes a filed original. Take that change out of the',
+    file, 0, 'this commit changes or deletes a filed source. Take that change out of the',
     'commit, and file a corrected version as a new SRC.'));
   // Checks 13 and 14: local work items, in the main checkout.
   const items = new Map();
@@ -171,14 +171,14 @@ function check(top, main) {
     const [id, file] = [value('id'), relative(main, path)];
     if (!id || basename(path) === 'DESIGN.md') continue;
     if (basename(path) !== `${id}.md` || !basename(dirname(path)).startsWith(`${id}-`)) add(file,
-      0, `this item's id is ${id}, so its file is ${id}.md, in a folder whose name starts with`,
-      `"${id}-". Rename it with using-work-tracker.`);
-    if (items.has(id)) add(file, 0, `${id} is also the id of ${items.get(id)}. Renumber the item`,
-      `made in this session with using-work-tracker, and tell the owner.`);
+      0, `this work item's id is ${id}, so its file is ${id}.md, in a folder whose name starts`,
+      `with "${id}-". Rename it with using-work-tracker.`);
+    if (items.has(id)) add(file, 0, `${id} is also the id of ${items.get(id)}. Renumber the work`,
+      `item made in this session with using-work-tracker, and tell the owner.`);
     items.set(id, file);
     const moved = text.match(/^\*\*Moved up:\*\*(.*)$/m)?.[1].replace(/<[^<>\n]*>/g, '').trim();
-    if (/^(Done|Cancelled)$/.test(value('status')) && !moved) add(file, 0, 'the item is closed,',
-      'but its Moved up line is empty. The closing step of running-work-item-lifecycle fills it.');
+    if (/^(Done|Cancelled)$/.test(value('status')) && !moved) add(file, 0, 'the work item is',
+      'closed, but its Moved up line is empty. Closing with running-work-item-lifecycle fills it.');
     scan.push([file, noPrompts(lines(text)), false]);
   }
   // Check 9: every DEC, SRC, and rule ID that is written is defined. Check 10: no prompt is left.
@@ -267,7 +267,7 @@ try {
     .map(({ file, line, text: what }) => `${file}${line ? `:${line}` : ''}: ${what}`);
   if (!all.length && !lost) process.exit(0);
   // In Codex this text replaces the result of the edit, so it says the edit was not undone.
-  const out = !all.length ? [] : [`The record check found problems: ${all.length}.${{ edit:
+  const out = !all.length ? [] : [`validate-records.mjs found problems: ${all.length}.${{ edit:
     ' The edit was not undone.', staged: ' The commit was stopped.' }[mode] ?? ''} Fix each one.`
     + ' Tell the owner of any you cannot fix.'];
   // Hosts cut long hook output, so the list stays under about 2,000 characters.
