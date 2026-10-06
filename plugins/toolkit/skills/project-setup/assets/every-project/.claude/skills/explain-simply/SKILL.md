@@ -1,6 +1,6 @@
 ---
 name: explain-simply
-description: 'Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use when he finds an answer too technical or hard to follow, for example "explain it like I''m five", "simpler", "less jargon", or "I don''t get it".'
+description: 'Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use when the owner finds an answer too technical or hard to follow, for example "explain it like I''m five", "simpler", "less jargon", or "I don''t get it".'
 ---
 
 # Explain it simply
@@ -9,7 +9,7 @@ Rewrite something as short bullets the owner can read once and act on.
 
 1. **Pick what to explain.** Whatever the owner named (a file path, a plan, a
    work item id, a topic). If nothing was named, your own most recent answer
-   in this conversation that explained or reported something, not one that
+   in this session that explained or reported something, not one that
    only acknowledged or asked a question. With none, say so in one line and
    ask what to explain. Read a file first. Read a work item by its ID with
    `using-work-tracker`, never by a path.
@@ -68,7 +68,7 @@ What I need from you:
 2. Say yes to the plan, or tell me what to change.
 ```
 
-## Hand-offs
+## Work that another skill does
 
 | For | Use |
 | --- | --- |

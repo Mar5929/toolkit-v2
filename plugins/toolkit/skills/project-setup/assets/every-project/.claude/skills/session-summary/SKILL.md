@@ -1,20 +1,21 @@
 ---
 name: session-summary
-description: 'Recaps this chat as a table of the owner''s requests, the result of each one, and which still need him, so he sees what is done and what is open. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", "what did we do in this chat", or "summarize this session". Not for a handoff; use handoff.'
+description: 'Recaps this session as a table of the owner''s requests, the result of each one, and which still need the owner, so the owner sees what is done and what is open. Use when the owner asks what happened in this session, for example "recap this chat", "what did I ask for", "what did we do in this chat", or "summarize this session". Not for a handoff; use handoff.'
 ---
 
 # Session summary
 
-Answer exactly two questions: what did I ask for in this chat and where does
-each one stand, and what still needs me.
+Answer exactly two questions for the owner: what the owner asked for in this
+session and where each request stands, and what still needs the owner. A
+session is one chat with the agent.
 
-1. **Read this conversation only.** When the owner names a transcript, log,
-   or exported chat, read that instead. List his real requests, not the steps
-   taken to do them (see "One row per request").
+1. **Read this session only.** When the owner names a transcript, a log, or
+   an exported copy of a session, read that instead. List the owner's real requests, not
+   the steps taken to do them (see "One row per request").
 2. **Write the table.** Columns `#`, `What you asked`, `Status`, `Result`.
    One row per request, in the order asked. Use only the eight statuses
    below. Write `What you asked` in the owner's own words, cut down to the
-   part that says what he asked; the outcome goes in `Result`, where you name
+   part that says what the owner asked; the outcome goes in `Result`, where you name
    the place that holds the work: a work item id (`WI-014`), a decision or
    source ID (`DEC-004`, `SRC-012`), a pull request number, or a file path.
    Apart from the status words, bold only the one phrase the owner most
@@ -23,14 +24,14 @@ each one stand, and what still needs me.
    `### 🔴 Still open, and it needs you`. When nothing needs the owner, keep
    the heading and write "Nothing needed from you."
 4. **Name another skill only in this case.** When a request is still open and nothing in
-   this conversation shows it saved as a work item or a project task, end
+   this session shows it saved as a work item or a project task, end
    the open block with one offer that covers every such request: turn each
-   into a work item or a project task, with the skill named in Hand-offs,
-   below. Make the offer once.
+   into a work item or a project task, with the skill named in "Work that another
+   skill does", below. Make the offer once.
 5. **Change nothing.** If the owner says yes to the offer, make each change
-   he chose with that skill.
+   the owner chose with that skill.
 
-## Gotchas
+## Mistakes to avoid
 
 - No title above the table, no story of the work, no wrap-up, no third part.
   If something went wrong or surprised you, it goes in the `Result` cell of
@@ -90,7 +91,7 @@ Two work item files there have conflicting changes. I did not touch it.
    Tell me once that merge is done, and I will remove both.
 ````
 
-## Hand-offs
+## Work that another skill does
 
 | For | Use |
 | --- | --- |
