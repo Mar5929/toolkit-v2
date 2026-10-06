@@ -2,6 +2,13 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Headings in the document clarity standard, version 0.9.5 (2026-10-06)
+
+Mike liked the short, clear headings in the standard and asked for useful
+changes. The rule now asks every document heading to use a short, ordinary
+name for its section. It allows more detail when the reader needs it to know
+what follows. The copy in `writing-harness-files` matches the rule.
+
 ## Artifact wording in the document clarity standard, version 0.9.4 (2026-10-06)
 
 Mike asked for finished artifacts, including diagrams, charts, dashboards,

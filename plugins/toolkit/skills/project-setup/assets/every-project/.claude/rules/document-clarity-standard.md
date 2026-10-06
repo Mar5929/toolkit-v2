@@ -20,7 +20,8 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 - A made-up word is new or has a meaning that exists only in this project. If plain words and a visible name do not work, explain the made-up word when it first appears. Use one clause and an example.
 - Plain never means vaguer. When you replace a word, the new words must name the subject at least as exactly as the old word did.
 - Keep an ordinary word that is exact, such as "outbound" or "criteria". An exact ordinary word is not a made-up word.
-- Give every file, heading, and label a name that says its subject. A reader who sees only the name must know what it is about. For example, `memory-criteria.md` says its subject, and `what-to-keep.md` does not.
+- Give every file and label a name that says its subject. A reader who sees only the name must know what it is about. For example, `memory-criteria.md` says its subject, and `what-to-keep.md` does not.
+- Give every heading a name in ordinary words that tells the reader what the section covers. Leave out words that do not help identify the content.
 - Be specific. Name the thing, the person, or the number. For example, write "the save failed because the file was locked", not "there were problems".
 - Make the subject of "this", "that", "it", and "they" clear. When two subjects could fit, repeat the name.
 - Name the source of a claim when the source matters. For example, name the test and its result instead of writing "tests show".
