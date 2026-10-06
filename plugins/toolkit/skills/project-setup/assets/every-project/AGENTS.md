@@ -53,7 +53,7 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 | `system/automation.md` | Everything that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes (AUT-##). | As for `system/`. |
 | `system/integrations/` | One document per connection between this system and another one: what data is sent, in which direction, when, and which system holds the true value (INT-##). `README.md` lists them; `INTEGRATION-TEMPLATE.md` is the template. | As for `system/`. |
 | `system/diagrams/` | Diagrams that explain the system, such as a data model diagram, a process flow, or a map of the integrations. Each is linked from the `system/` document it explains. | As for `system/`. |
-| `sources/` | Every source: a document or message the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. Other records point to a source by its ID. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
+| `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. Other records point to a source by its ID. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
 | `sources/README.md` | The list of all sources, one row each: its ID, the date received, who it came from, what it is, where it is kept, and which work items used it. | As for `sources/`. |
 | `delivery/` | The records of putting the work into use: releases, deployments to an environment, data migrations, and what was handed to the client or the next team. It does not hold the work itself, or its requirements and tasks: those are in the work item. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
 | `delivery/releases/` | One folder per release: what the release contains, its release notes, and the plan for the release. | As for `delivery/`. |
@@ -97,7 +97,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A test plan | `tests/` |
 | A lesson that is not proven yet | The work item's Notes. Closing the work item decides whether the lesson is kept for the whole project. With no work item open: memory |
 | A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory: `curating-project-memory` |
-| Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in the session, that a later session would need and no other record shows | Write it to memory before you reply: `curating-project-memory` |
+| Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in a reply, that a later session would need and no other record shows | Write it to memory before you reply: `curating-project-memory` |
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
