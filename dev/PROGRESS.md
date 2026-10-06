@@ -2,13 +2,14 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## The one-home layout, version 0.9.0 (2026-10-05, on a branch, not landed)
+## The one-home layout, version 0.9.0 (landed on main 2026-10-06)
 
-Work item TKV-24. Branch `claude/one-home-layout`, worktree
-`.claude/worktrees/one-home-layout`. Not pushed. It lands only with Mike's
-yes, after he has looked at a new project folder set up from it
-(`~/Documents/Projects/toolkit-setup-preview`; he asked for a fresh setup
-in place of a rebuilt HarborDesk sample, 2026-10-05).
+Work item TKV-24. It landed on main on 2026-10-06 as version 0.9.0, by pull
+request 22 (merge commit `1217ce07`), together with the restored memory and
+the plain-English rewrite. It was built on the branch
+`claude/one-home-layout`. A new project folder was set up from it for Mike
+to look at (`~/Documents/Projects/toolkit-setup-preview`; he asked for a
+fresh setup in place of a rebuilt HarborDesk sample, 2026-10-05).
 
 What Mike decided is in `dev/research/layout-audit/DESIGN-SPEC.md`. The
 audits, the memory scenario test, and the specification of the checking
@@ -57,8 +58,9 @@ script are beside it. The reviews are `dev/reviews/2026-10-05-*.md`.
   description changes they suggest are not made yet.
 - A Codex project must trust its hooks again in `/hooks` after an update.
 
-The plain-English rewrite (2026-10-06, on the branch `claude/one-home-plain`,
-not landed; the version is still 0.9.0):
+The plain-English rewrite (2026-10-06, built on the branch
+`claude/one-home-plain`; it landed on main with the same pull request, and
+the version is still 0.9.0):
 - Seven writers rewrote the skills, the setup references, the folder
   guides, and the rules into plain English: an opening that says what the
   file is for, whole sentences, and plain words or a name the reader can
@@ -81,8 +83,9 @@ not landed; the version is still 0.9.0):
   template, and the three Notion page texts).
 - The root guide of a project is 19,880 bytes; setup fails a project whose
   guide is over 20,480.
-- Still to do: the skill routing test in both hosts, because 15 skill
-  descriptions changed.
+- The skill routing test ran in both hosts, because 15 skill descriptions
+  changed (`dev/test-runs/skill-routing-plain-english.md`): of 70 requests,
+  Claude Code opened the right skill first for 65 and Codex for 56.
 
 Open with Mike (also in `dev/research/layout-audit/FIX-LIST.md`, "Waits for
 the owner", and `MEMORY-SCENARIOS.md`):
@@ -94,21 +97,20 @@ the owner", and `MEMORY-SCENARIOS.md`):
   file `.ignore`; `@PROJECT.md` in the root guide; a project task may name
   another person; whether his request for an analysis is also his yes to
   commit its record; a save about a named person waits for his yes.
-- The review file `dev/reviews/2026-10-05-memory-restore-review.md` is
-  written but not committed: the reviewer's commit was refused by the
-  permission system, and the orchestrator did not commit it in its place.
-  It is in the `one-home-memory` worktree.
 - `session-handoff.md` (his wording) and the figurative words in his older
   rule files.
 - What Notion memory stores and when its pointers are read.
 - The twelve changes the builders made on their own, listed in
   `DESIGN-SPEC.md` section 9 for him to confirm.
+- Mike's answer on whether `toolkit-setup-preview` looks right is not
+  recorded.
 
-Before it lands:
-- The main checkout has an uncommitted `AGENTS.md` edit from another
-  session, the rule "Challenge the current design (Mike, 2026-10-04)". It is
-  not on this branch. It must be kept.
-- Mike has looked at `toolkit-setup-preview` and said it looks right.
+No longer open:
+- The `AGENTS.md` edit that another session left uncommitted in the main
+  checkout, the rule "Challenge the current design (Mike, 2026-10-04)", is
+  kept: commit `a20dadd0` holds it unchanged.
+- The review file `dev/reviews/2026-10-05-memory-restore-review.md` is
+  committed (commit `571e40f1`, 2026-10-06).
 
 ## Project filing system interview (2026-10-04, TKV-24)
 
