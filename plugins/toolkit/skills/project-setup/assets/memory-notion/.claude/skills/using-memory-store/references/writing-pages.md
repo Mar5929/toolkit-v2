@@ -20,7 +20,7 @@ This file says how to create, change, mark, link, merge, and delete a page of Me
 
 ## A new page for a subject
 
-First choose the key. The key is `<prefix>_<slug>`: the prefix is the type of the memory record (`user`, `project`, `reference`, or `event`), then lower-case words joined by underscores, naming the subject (`project_client_plans`), at most 60 characters. An event that happened once ends its key with its date, as in `event_client_meeting_2026-10-05`.
+First choose the key. The key is `<prefix>_<slug>`: the prefix is the type of the memory record (`user`, `project`, `reference`, or `event`), then lower-case words joined by underscores, naming the subject (`project_client_plans`). The whole key, with its prefix, is at most 60 characters. An event that happened once ends its key with its date, as in `event_client_meeting_2026-10-05`.
 
 Before you make the page, check that no page has the key. `searching.md`, section "A page by its key", gives the call.
 

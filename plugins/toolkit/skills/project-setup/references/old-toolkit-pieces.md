@@ -53,7 +53,7 @@ diff -u <old copy> <project file>
 
 ## Plugins
 
-Turn off, for this project only, every plugin whose name ends in `@claude-toolkit`, and every `@toolkit-v2` plugin except `toolkit@toolkit-v2`. `skills-hooks-settings.md`, "The older plugins, off in this project", gives the commands that list the plugins and the settings entries that turn one off. List the plugins on one Update line. Never uninstall a plugin, and never change `~/.claude` or `~/.codex`.
+Turn off, for this project only, every plugin whose name ends in `@claude-toolkit`, and every `@toolkit-v2` plugin except `toolkit@toolkit-v2` and `workstreams@toolkit-v2`, which are the toolkit's own two plugins. `skills-hooks-settings.md`, "The older plugins, off in this project", gives the commands that list the plugins and the settings entries that turn one off. List the plugins on one Update line. Never uninstall a plugin, and never change `~/.claude` or `~/.codex`.
 
 ## Rules
 
