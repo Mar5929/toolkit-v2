@@ -89,7 +89,8 @@ that file name; the setup copy holds it only for the choices it applies to.
 | `work-item-stages.md` | Compare | `keep-work-item-current.md` and the `running-work-item-lifecycle` skill |
 | `work-item-folders.md` | Compare | `work-items/AGENTS.md`, only with local work items |
 | `ai-external-knowledge.md` | Compare | `reference/AGENTS.md` |
-| `plain-english-artifacts.md`, `humanize-outbound-text.md` | Compare | Same name |
+| `plain-english-artifacts.md` | Compare | `write-for-the-reader.md` |
+| `humanize-outbound-text.md` | Compare | Same name |
 | `dependency-graph.md` | Compare | Same name in a Salesforce project; nothing otherwise |
 | `component-tracker.md`, `permissions-source-control.md` | Compare | Same name (Salesforce) |
 | `salesforce-safety-guardrails.md` | Compare | `salesforce-org-safety.md` |

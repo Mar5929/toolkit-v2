@@ -280,6 +280,28 @@ changed, so Codex asks the owner to trust the project's hooks again in
   a rule in a project whose memory is not Hindsight. A line in the rule
   that he wrote himself goes where `move-over.md`, step 3, "Where his lines
   from an old toolkit file go", says, before the file is removed.
+- One rule was renamed and rewritten: `plain-english-artifacts.md` is now
+  `write-for-the-reader.md`. The new rule says how to word two kinds of
+  writing: something made for a person to look at, which the old rule
+  covered, and a file that someone follows or relies on later. A project
+  never holds both files. Find the old file with
+  `ls .claude/rules/plain-english-artifacts.md 2>/dev/null`. The "Missing
+  files" row in section 3 adds the new file. Decide whether the old file
+  holds an edit of his, as section 3, "Whose edit a difference is", says.
+  - When the old file holds no edit of his, list both files in the
+    numbered table. After his yes, remove the old file with `git rm` in
+    the same change that adds the new file.
+  - When the old file holds an edit of his, show him the lines he changed.
+    `git log -p -- .claude/rules/plain-english-artifacts.md` shows them in
+    each commit that is his, and `git diff -- .claude/rules/plain-english-artifacts.md`
+    shows an edit he has not committed. A comparison with the new rule
+    would show every line, because the whole text changed. Ask him whether
+    his lines go into the new rule. Add the lines he names to the new
+    file, and only then remove the old file. His file stays until he
+    answers.
+  - When a rule or a skill of his own, or a rule from the toolkit that
+    holds an edit of his, names `plain-english-artifacts.md`, list it, and
+    change the name after his yes.
 - An old end-of-reply check (a `Stop` hook of type `prompt` in
   `.claude/settings.json`), or an older Codex helper-reminder handler with
   the matcher `^(spawn_agent|wait_agent)$`: list it. After his yes, remove
