@@ -7,8 +7,8 @@ Every skill Toolkit V2 ships, its folder, and its description word for word.
 the routing rounds for the retired skills) is in Git history.
 
 - Folders are relative to `plugins/toolkit/skills/project-setup/`.
-- In a project, every skill except the three of the `toolkit` plugin
-  (`project-setup`, `choosing-outside-tools`, and `writing-harness-files`)
+- In a project, every skill except the two of the `toolkit` plugin
+  (`project-setup` and `writing-harness-files`)
   sits in `.claude/skills/<name>/`, and `.agents/skills` is a link to
   `.claude/skills`, so Claude Code and Codex read the same files.
 - A description is changed in its `SKILL.md` and in this file in the same
@@ -20,9 +20,6 @@ the routing rounds for the retired skills) is in Git history.
 
 - **1 onboarding skill**, `project-setup`, in the `toolkit` plugin. It is on
   for every folder in both hosts and is never copied into a project.
-- **1 tool list skill**, `choosing-outside-tools`, in the `toolkit` plugin
-  (TKV-18). It is on for every folder in both hosts and is never copied into
-  a project. It lists the outside tool the owner uses for each kind of job.
 - **1 skill for harness files**, `writing-harness-files`, in the `toolkit`
   plugin (Mike's yes, 2026-10-05). It is on for every folder in both hosts
   and is never copied into a project. It makes every change to a harness
@@ -30,7 +27,7 @@ the routing rounds for the retired skills) is in Git history.
   rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
   `.rules` file, an output style, a plugin manifest or marketplace file, a
   mod, a subagent definition, or a helper-agent brief.
-- **10 shared skills** that every project gets.
+- **9 shared skills** that every project gets.
 - **The work tracking choice**, one per project, 1 skill, always named
   `using-work-tracker`: local folders with Obsidian, Notion, or GitHub
   Issues. Jira is deferred by Mike: no Jira skills.
@@ -41,19 +38,18 @@ the routing rounds for the retired skills) is in Git history.
 - **Notion**: work items or memory in Notion add `using-notion-cli`, once.
 - **Salesforce projects** add 3 skills, plus Salesforce's own skills
   (`forcedotcom/sf-skills`), which the owner installs.
-- A project has 10 + 1 + 2 = 13 skills, 14 with work items or memory in
-  Notion; with Hindsight memory, 11, or 12 with work items in Notion.
+- A project has 9 + 1 + 2 = 12 skills, 13 with work items or memory in
+  Notion; with Hindsight memory, 10, or 11 with work items in Notion.
   Salesforce adds 3.
 
-## 1. The `toolkit` plugin's own skills (onboarding, the tool list, and harness files)
+## 1. The `toolkit` plugin's own skills (onboarding and harness files)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
 | `project-setup` | `./` | Sets up Toolkit V2 in a project, checks or updates the setup, moves over a project set up another way, changes where work items or memory are kept, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer, so projects run the same files. Use for any Toolkit V2 setup request, such as "toolkit v2", "set up this project", "check the setup", or "update the toolkit". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-sync). |
-| `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner uses for each kind of job and how to set it up, so every computer uses the same tool. Use when he asks for a job on the list, such as "make an explainer video", and no skill for that tool is on this computer; when he asks which tool he uses for a job; or when he says "add this to my tool list". Not for doing the job when a skill for that tool is on this computer. |
 | `writing-harness-files` | `../writing-harness-files/` | Makes every change to a harness file follow the current official Claude Code and Codex pages. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before any agent writes or changes one. Not for toolkit setup; use project-setup. Not for a line the owner dictates for owner-preferences.md; use curating-project-memory. |
 
-## 2. Shared skills (every project, 10)
+## 2. Shared skills (every project, 9)
 
 They never assume one tracker or memory. Every work tracking folder holds
 a skill named `using-work-tracker`, and every project with local or Notion
@@ -83,7 +79,6 @@ section 5):
 | `filing-project-records` | `assets/every-project/.claude/skills/filing-project-records/` | Files the records the whole project needs, each with an ID, so later work finds them: every source the project receives, in sources/; a decision or open question more than one work item needs, in DECISIONS.md; a change to a document that describes the system, in system/. Use when the owner hands over a source, such as a transcript, a decision affects more than one work item, or a system document must be updated. Not for a decision only one work item needs; use running-work-item-lifecycle. |
 | `handoff` | `assets/every-project/.claude/skills/handoff/` | Updates this session's work items and the project's Current State, files any decision or source this session left unfiled, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session, clears context, or asks for a handoff prompt or a check of one, such as "write a handoff". Not for a recap alone; use session-summary. |
 | `braindump` | `assets/every-project/.claude/skills/braindump/` | Plays back a loose brain dump in very simple words and waits for the owner's yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when the owner wants a brain dump checked first, such as "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump the owner asks only to plan; use running-work-item-lifecycle. |
-| `explain-simply` | `assets/every-project/.claude/skills/explain-simply/` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use when the owner finds an answer too technical or hard to follow, for example "explain it like I'm five", "simpler", "less jargon", or "I don't get it". |
 | `session-summary` | `assets/every-project/.claude/skills/session-summary/` | Recaps this session as a table of the owner's requests, the result of each one, and which still need the owner, so the owner sees what is done and what is open. Use when the owner asks what happened in this session, for example "recap this chat", "what did I ask for", "what did we do in this chat", or "summarize this session". Not for a handoff; use handoff. |
 | `pull-latest` | `assets/every-project/.claude/skills/pull-latest/` | Brings the local repository up to date with its remote by fetching and merging, never rebasing or resetting, so no local work or shared history is lost. Use when the owner asks for the remote's newest commits, such as "get the latest" or "sync with remote". Not for discarding local work; use reset-to-remote. Not for a toolkit update; use project-setup. |
 | `reset-to-remote` | `assets/every-project/.claude/skills/reset-to-remote/` | Makes the local repository an exact copy of its remote, discarding local commits and branches the remote no longer has, after showing a plan, so cloning again is not needed and nothing is lost without warning. Use only when the owner asks for it in the owner's own words, for example "wipe local", "match remote exactly", or "fresh start from remote". Not for a routine update; use pull-latest. |

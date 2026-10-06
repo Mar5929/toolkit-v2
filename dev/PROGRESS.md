@@ -2,6 +2,30 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Two skills removed, version 0.9.2 (2026-10-06, not merged)
+
+Work item TKV-28. Mike, 2026-10-06: "Delete the Explain Simply skill and the
+Choosing Outside Tools skill. That should absolutely not be a skill. That
+just needs to be something that's just a simple file that's referenced in the
+toolkit v2 but doesn't get installed into projects."
+
+- Built on the branch `claude/remove-two-skills`. It waits for Mike's yes to
+  merge.
+- `explain-simply` is removed from `every-project/`. A project now gets 9
+  shared skills. `project-setup`'s `references/update.md`, "Retired skills",
+  tells "update the toolkit" to remove the folder from an existing project.
+- `choosing-outside-tools` is removed from the `toolkit` plugin, which now
+  holds two skills. The tool list is the plain file `OUTSIDE-TOOLS.md` in the
+  repository root. No plugin ships it. This reverses the decision of
+  2026-10-03 (TKV-18) that put the list on every computer as a skill: an
+  agent in another project is no longer told that the list exists.
+- Every check in `AGENTS.md`, "Checks", passed on the branch.
+- The routing test was not run for this change. Another session is rewriting
+  every skill description on 2026-10-06 and holds version 0.9.1; its routing
+  test covers the remaining skills. This branch merges after that work lands,
+  and both sets of changes edit `dev/SKILL-INDEX.md`, the version lines,
+  and this file.
+
 ## The one-home layout, version 0.9.0 (landed on main 2026-10-06)
 
 Work item TKV-24. It landed on main on 2026-10-06 as version 0.9.0, by pull

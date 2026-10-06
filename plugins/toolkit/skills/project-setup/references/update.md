@@ -229,6 +229,7 @@ A retired skill is a folder in `.claude/skills/` that is not in the setup copy a
 - When a folder in `.claude/skills/` that is not in the setup copy is the owner's own project skill, or you are not sure, leave it and ask.
 - Toolkit 0.6.0 retired `work-refine`, `solution-design`, `work-delegate`, `work-check`, `work-finish`, `local-work-track`, `notion-work-track`, and `github-work-track`. `running-work-item-lifecycle` and `using-work-tracker` replace them.
 - Toolkit 0.7.0 retired `local-memory-save`, `local-memory-find`, `local-memory-refine`, `notion-memory-save`, `notion-memory-find`, and `notion-memory-refine`. `curating-project-memory` and `using-memory-store` replace them, and a project with work items or memory in Notion also gets `using-notion-cli`.
+- Toolkit 0.9.2 retired `explain-simply`. No skill replaces it.
 
 ### Renamed skills
 

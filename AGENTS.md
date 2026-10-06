@@ -20,12 +20,16 @@ choices (with its skills), and the settings. Each tool is used its own way: plai
 files and Obsidian, Notion through `ntn` or the Notion connector, GitHub
 through `gh`, and Hindsight through its own MCP tools.
 
-The `toolkit` plugin holds one more skill, `choosing-outside-tools` (Mike,
-2026-10-03, work item TKV-18): the list of the outside tool he uses for each
-kind of job, such as explainroo for explainer videos. It is text only. The
+The owner's list of outside tools is one plain file, `OUTSIDE-TOOLS.md`, in
+the root of this repository (Mike, 2026-10-06). It names the outside tool he
+uses for each kind of job, such as explainroo for explainer videos, and says
+how to set each one up. It is not a skill, no plugin ships it, and it is
+never copied into a project. From 2026-10-03 to 2026-10-06 it was a skill of
+the `toolkit` plugin, `choosing-outside-tools` (work item TKV-18). The
 toolkit ships none of those tools.
 
-The plugin holds a third skill, `writing-harness-files` (Mike, 2026-10-05).
+The `toolkit` plugin holds a second skill, `writing-harness-files` (Mike,
+2026-10-05).
 It tells an agent that writes or changes a harness file to get the current
 official guidance first: from the agents and skills that Claude Code
 provides for the job, and from the official page addresses when none is
@@ -75,16 +79,16 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/placing-files.md`, "5. The pre-commit check", is the one place that says how `core.hooksPath` is set. `references/update.md` is "update the toolkit"; two parts of it are in their own files: `references/one-home-layout.md` brings a project set up before the one-home layout to it, and `references/earlier-versions.md` holds the changes from toolkit 0.6.0, 0.8.0, and 0.8.1. |
-| `plugins/toolkit/skills/choosing-outside-tools/` | The owner's tool list: `SKILL.md` holds one row per job, and `references/` holds one file per tool (where it comes from, how to set it up, and the owner's choices). Never copied into a project. |
+| `OUTSIDE-TOOLS.md` | The owner's list of outside tools: a table with one row per kind of job, and one section per tool (where it comes from, how to set it up, and the owner's choices). A plain file, not a skill. No plugin ships it, and it is never copied into a project. |
 | `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` says how to get the current official guidance (the agents and skills Claude Code provides first, then the web address of the official page for each kind), `references/checklist.md` holds the practices and the check for each kind, and `references/rewrite-steps.md` the steps and checks for rewriting a file that exists, with the prompt for a team. `references/writing-rule.md` is an exact copy of the rule `write-documents-in-plain-english.md`, which holds all the writing rules; `check-skills.mjs` fails when the copy and the rule differ. Never copied into a project. |
-| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, the four hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), and `.githooks/pre-commit`, which runs the fourth before each commit. Edited here directly (see "The starter project"). |
+| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 9 shared skills in `.claude/skills/`, the four hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), and `.githooks/pre-commit`, which runs the fourth before each commit. Edited here directly (see "The starter project"). |
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
 | `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md` (the index the session-start hook rebuilds), and `project_topic_template.md`, the blank form for a memory record. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
 | `<setup>assets/notion-tools/` | `using-notion-cli` and the rule `notion-records.md`, for every project with work items or memory in Notion. |
 | `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and eleven rules. One of them, `salesforce-delivery.md`, holds the Salesforce lines for `delivery/` and loads only for files there (`paths: delivery/**`). |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
 | `<setup>assets/owner-preferences.md` | The starting text of `.claude/rules/owner-preferences.md`, which every project gets. It is the one file every project gets that sits outside `every-project/`: from the first instruction on it is the owner's own file, so setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it (`<setup>references/setup-copy.md`, "The owner-preferences rule"). `check-rules.mjs` counts its size with the rules. |
-| Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 20 project skills stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
+| Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 19 project skills stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
 | `ai-external-knowledge/` | Official pages, captured with Firecrawl, one folder per source: `claude-code/`, `codex/`, `openai-plugins/`, `anthropic-agent-skills/`, `anthropic-engineering/`, and `hindsight/`. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address and capture date. Not shipped. |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
@@ -97,7 +101,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `dev/tests/validate-records-cases.test.mjs` | More tests for `validate-records.mjs`, from the second review: a record saved to the default branch and then named in a work item, with a remote and from a worktree; a work item that still holds the template's prompts; text in backticks; a source kept outside Git; an edit in another repository; a closed output; an unreadable record; and the first line of the findings in each mode. From the review of those fixes: a record written in a save worktree by a session that works in its own worktree, and an unreadable record in the main checkout. New cases go here. |
 | `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
 | `dev/tests/permission-set-guard.test.mjs` | Tests the second Salesforce guard, `guard-permission-set-deploy.cjs`, in a scratch folder. No org is reached. |
-| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 17 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. |
+| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 16 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. |
 
 What a project gets from onboarding:
 
@@ -197,8 +201,7 @@ node --test 'dev/tests/*.test.mjs'
   runs `hooks/register.test.tsx` without a session, on the terminal and the
   desktop app.
 - `check-skills.mjs` checks project-setup, every skill under it, and the
-  plugin's other skills (`choosing-outside-tools` and
-  `writing-harness-files`): only
+  plugin's other skill (`writing-harness-files`): only
   `name` and `description` in the frontmatter, `name` equal to the folder
   and in the allowed form, the description's shape and its row in
   `dev/SKILL-INDEX.md`, a `SKILL.md` body under 500 lines, every file
@@ -533,11 +536,12 @@ node --test 'dev/tests/*.test.mjs'
   Code and Codex pages, out of the box, and nothing Mike must remember
   (Mike, 2026-09-30). Every workflow that edits skill text includes these
   steps.
-- **The tool list** (`choosing-outside-tools`). A row holds a tool Mike
-  chose; never add one he has not chosen. A new tool is one row in its
-  `SKILL.md` and one file in its `references/`. When the new kind of job is
-  not named in the description, add it there and in `dev/SKILL-INDEX.md`,
-  then run the routing test again.
+- **The tool list** (`OUTSIDE-TOOLS.md`, in the root of this repository). A
+  row holds a tool Mike chose; never add one he has not chosen. A new tool
+  is one row in the table and one section below it. The file is not a skill
+  (Mike, 2026-10-06: "That should absolutely not be a skill. That just needs to be something that's just a simple file that's referenced in the toolkit v2 but doesn't get installed into projects."). So it
+  has no description, no row in `dev/SKILL-INDEX.md`, and no routing test,
+  and nothing under `plugins/` reads it.
 - **Adding, renaming, or removing a skill** changes its folder,
   `dev/SKILL-INDEX.md`, `<setup>references/skills-hooks-settings.md`, the
   skill counts in `<setup>references/interview.md`, `README.md`, the
@@ -600,12 +604,13 @@ node --test 'dev/tests/*.test.mjs'
     when the owner says "update the toolkit" in each project.
   - Each install command changes Mike's own setup, so ask him first.
 - **Machine-wide plugin** (Mike, 2026-09-28, and draft 2): `toolkit` is on
-  for every folder in both hosts. It holds `project-setup` and
-  `choosing-outside-tools`, and no hooks, so "set up this project" works in
-  an empty folder, the tool list is on every computer, and nothing runs in
-  other projects. Its third skill is `writing-harness-files` (Mike's yes,
+  for every folder in both hosts. It holds `project-setup` and no hooks, so
+  "set up this project" works in an empty folder and nothing runs in other
+  projects. Its second skill is `writing-harness-files` (Mike's yes,
   2026-10-05), so every agent on this computer, in any project, has the
-  steps for a harness file. A fourth skill in this plugin needs Mike's yes
+  steps for a harness file. Mike took the skill `choosing-outside-tools` out
+  of this plugin on 2026-10-06 ("The tool list" above). A third skill in
+  this plugin needs Mike's yes
   first: every chat in both hosts reads each one's description.
   `workstreams` is on for every folder in Claude Code only,
   and its hooks run there ("Workstreams plugin" above says what they do).

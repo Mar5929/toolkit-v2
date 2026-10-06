@@ -11,8 +11,8 @@
 // work-notion, and work-github; using-memory-store in memory-local and memory-notion) sit at
 // the same path in each of those folders; every other path is in exactly one folder.
 //
-// For project-setup and every SKILL.md under it, the plugin's other skills beside
-// project-setup (choosing-outside-tools and writing-harness-files), plus the Salesforce
+// For project-setup and every SKILL.md under it, the plugin's other skill beside
+// project-setup (writing-harness-files), plus the Salesforce
 // folder's .claude/skills/ (the model's own project skills; every-project/.agents/skills is a
 // link that onboarding never copies):
 //   - the frontmatter holds only name and description, and name equals the folder name;
@@ -211,7 +211,7 @@ const indexNames = new Set([...index.values()].map((row) => row.name));
 
 const setupSkillDirs = walk(SETUP).filter((f) => path.basename(f) === 'SKILL.md' && !inside(f, SALESFORCE)).map(path.dirname);
 const modelSkillDirs = walk(SALESFORCE_SKILLS).filter((f) => path.basename(f) === 'SKILL.md').map(path.dirname);
-// The plugin's own skills beside project-setup (choosing-outside-tools, writing-harness-files): on in every folder, never copied into a project.
+// The plugin's own skills beside project-setup (today only writing-harness-files): on in every folder, never copied into a project.
 const pluginSkillDirs = walk(path.dirname(SETUP)).filter((f) => path.basename(f) === 'SKILL.md' && !inside(f, SETUP)).map(path.dirname);
 const skills = [...setupSkillDirs.map((dir) => ({ dir, model: false })), ...pluginSkillDirs.map((dir) => ({ dir, model: false })), ...modelSkillDirs.map((dir) => ({ dir, model: true }))];
 const allDirs = skills.map((s) => s.dir);
