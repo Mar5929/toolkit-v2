@@ -1,10 +1,10 @@
 # Update a system document
 
-Use this file to change a document in `system/`. That folder holds the approved description of the system: how it must work, written as numbered rules, so that work items, decisions, and tests can name a rule by its ID. This file gives the steps. `system/AGENTS.md` says which document holds what, and gives the form of a document, the form of a rule and its four marks, a glossary term, an integration document, a diagram, and what must stay true.
+Use this file to change a document in `system/`. That folder holds the approved description of the system: how it must work, written as numbered rules, so that work items, decisions, and tests can name a rule by its ID. `system/AGENTS.md` says which document holds what, and gives the form of a document, the form of a rule and its four marks, a glossary term, an integration document, a diagram, and what must stay true.
 
 The mark of a rule is one of four words: Draft (the owner has not approved it yet), Approved, Built (a work item delivered it), or Retired (it no longer applies).
 
-Before you write a rule, name the DEC ID behind the change. A DEC ID, DEC-###, is the ID of the entry in `DECISIONS.md` that holds the decision or the open question. When no entry exists, record the decision with `record-decision.md` first. It sends you back here before its save.
+Before you write a rule, name the DEC ID behind the change: the ID of its entry in `DECISIONS.md`. When no entry exists, record the decision with `record-decision.md` first. It sends you back here before its save.
 
 ## Add or change a rule
 
@@ -15,7 +15,7 @@ Before you write a rule, name the DEC ID behind the change. A DEC ID, DEC-###, i
    - For a changed rule, change its Rule line and its "Conditions and exceptions" line in place, under the same ID, and set its Source to the new DEC ID. Do not keep the old wording in the document, because the superseded entry in `DECISIONS.md` holds it.
    - A rule marked Built whose wording changes goes back to Approved with the new DEC ID, because the new wording is not delivered yet.
    - For a rule that no longer applies, set its mark to Retired, and its Source to the DEC ID that retired it.
-   - When a rule's Source names an SRC ID, add the rule ID to the "Used by" cell of that row in `sources/README.md`. An SRC ID is the ID of a source, which is a filed original.
+   - When a rule's Source names an SRC ID, add the rule ID to the "Used by" cell of that row in `sources/README.md`.
 4. When an Open entry becomes Decided, change each Draft rule that waited for it to Approved, and remove its DEC ID from Open questions.
 5. Set the document's "Last changed via" line to the DEC ID. Set the document's Status again. `system/AGENTS.md`, section "The form of a document", says what each Status means.
 6. Add one Changelog row. It holds the date, the change with the rule ID, the DEC ID, and the work item that caused the change or "none".
@@ -25,7 +25,7 @@ Before you write a rule, name the DEC ID behind the change. A DEC ID, DEC-###, i
 
 ## Mark a rule Built
 
-Use this when the closing step of `running-work-item-lifecycle` names a rule a work item may have delivered. The closing step is the step that closes a work item as Done or Cancelled.
+Use this when the closing step of `running-work-item-lifecycle` names a rule a work item may have delivered.
 
 1. A work item delivered a rule only when all three of these are true. When one is not true, change nothing, and tell the closing step which one.
    - The rule's mark is Approved.

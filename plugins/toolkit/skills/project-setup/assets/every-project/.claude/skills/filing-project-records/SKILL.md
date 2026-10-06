@@ -11,7 +11,7 @@ This skill files the project's lasting records and gives each one an ID, so that
 - **A decision, an open question, or a rule** is filed with this skill only when more than one work item needs it.
   - A decision or an open question goes in `DECISIONS.md`, as an entry whose ID has the form DEC-###.
   - A rule is a numbered statement of how the system must work. It goes in a document in `system/`, and its ID is a rule ID, such as SEC-04.
-  - The root `AGENTS.md`, section "Where information goes", gives the filing test, which decides whether more than one work item needs something. It also lists the home of each kind of information. A home is the one file or folder where that kind of information is kept. Apply that test first.
+  - The root `AGENTS.md`, section "Where information goes", gives the filing test, which decides whether more than one work item needs something. It also lists the home of each kind of information. A home is the one place where that kind of information is kept. Apply that test first.
 - **A decision or a requirement that only one work item needs** is not filed with this skill. It stays in that work item: use `running-work-item-lifecycle`.
 
 ## Steps
@@ -24,7 +24,7 @@ Find what happened in the table, and open only the file for that step. When one 
 | A decision was made, or a question was raised, that more than one work item needs; the status of an entry in `DECISIONS.md` changes; or the closing step of a work item moves up a lesson about the system or the project | Record a decision | [references/record-decision.md](references/record-decision.md) |
 | An approved fact about the system changes: a rule, a term, an integration document, or a diagram; or a closing work item delivered a rule | Update a system document | [references/update-system-doc.md](references/update-system-doc.md) |
 
-The closing step is the step of `running-work-item-lifecycle` that closes a work item as Done or Cancelled. A lesson moves up when the owner says yes, at that step, to filing it for the whole project. A work item delivered a rule when it built what the rule states.
+The closing step is the step of `running-work-item-lifecycle` that closes a work item as Done or Cancelled. A lesson moves up when the owner says yes, at that step, to filing it for the whole project. A work item may have delivered a rule when one of its requirements built or changed the behaviour the rule states. `references/update-system-doc.md`, section "Mark a rule Built", gives the conditions.
 
 ## Every time
 
@@ -37,17 +37,17 @@ The closing step is the step of `running-work-item-lifecycle` that closes a work
 - An ID is yours only when the save that uses it is on the default branch. Save right after you write the record.
   - When `publish-docs` finds that another session's save took the same ID, take the next ID. Change the ID in your record, and in the file name when the record is an original. Then save again.
 - A pointer is a record's ID, written in a work item that needs the record. Never copy the record's text into the work item. Only this skill writes these pointers, and it writes them with `using-work-tracker`. The work item template gives the place for each pointer:
-  - A DEC ID or a rule ID goes on the work item's Related items line.
+  - A DEC ID or a rule ID goes on the Related items line, in the work item's Overview.
   - An SRC ID goes on a line under Notes, Sources, which is the Sources part of the work item's Notes.
 - The time to write a pointer depends on where this project keeps its work items.
   - When work items are in Notion or GitHub, write the pointer once the save is on the default branch.
-  - When work items are local files, write the pointer only after `publish-docs` reports that the main checkout holds the save. The record check looks the ID up there. The record check is the command `.claude/hooks/validate-records.mjs`.
+  - When work items are local files, write the pointer only after `publish-docs` reports that the main checkout holds the save. The record check looks the ID up there. It checks the form of the project's records after each edit and before each commit, and it is the command `.claude/hooks/validate-records.mjs`.
   - When work items are local files and `publish-docs` reports that the main checkout does not hold the save, write no pointer yet.
     - Hand one line for "Waiting on" in Current State to `curating-project-memory`. Current State is the project's one page of what is true now, and "Waiting on" is its part for who owes what. The line holds the record's ID, each work item that needs the pointer, and what `publish-docs` named as blocking the update of the main checkout.
     - Tell the owner the same three things.
     - When the main checkout's files hold the record, write each pointer, and hand the removal of that line to `curating-project-memory`.
     - With Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of that skill.
-- When a work item must follow a record that already exists, make no new record. Such a record is a rule in `system/`, an entry in `DECISIONS.md`, or a source. Add the work item's ID to the record's Affects line or "Used by" cell, where the record has one. Save. Then write the pointer in the work item.
+- When a work item must follow a record that already exists, make no new record. Such a record is a rule in `system/`, an entry in `DECISIONS.md`, or a source. Add the work item's ID to the record's Affects line or "Used by" cell, where the record has one. An entry in `DECISIONS.md` has an Affects line, which lists the work items and rules the entry affects. A row in `sources/README.md` has a "Used by" cell, which lists the records that used the source. Save. Then write the pointer in the work item.
 - When another skill asked for the step, give that skill two things when the save is done: each new ID, and what `publish-docs` reported about the main checkout.
 - Read each changed file and each pointer back after you write it. When a save fails, start your reply with "Not saved" and name the write that failed.
 
