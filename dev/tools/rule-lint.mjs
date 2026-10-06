@@ -111,15 +111,20 @@ export const RULE_LIMITS = Object.freeze({
 });
 
 /**
- * Folders the model does not hold but a project has later, so a rule's
- * `paths` may name them before they exist. Each entry says why.
+ * First path parts a rule's `paths` may name although the checked folder does
+ * not hold them. Each entry says why: a project makes the folder later, or
+ * only a project with one setup choice has it. A rule every project gets
+ * (publish-project-documents.md) names paths of every choice, because a choice
+ * decides which files a project gets, never which lines inside a file.
  */
 export const FOLDERS_MADE_LATER = Object.freeze({
   'force-app': 'Salesforce source; sfdx-project.json names it as the package directory, and a retrieve or `sf project generate` creates it',
-  engagement: 'the client-work folder of older Salesforce projects, which keep it in place of delivery/ (project-file-locations.md)',
+  engagement: 'the folder older Salesforce projects keep in place of delivery/ (project-file-locations.md)',
+  tools: 'only a Salesforce project has it (the salesforce setup folder)',
+  'PROJECT-ROADMAP.md': 'only a project with local work items has it (the work-local setup folder)',
 });
 
-/** The first folder a paths pattern names before any wildcard, or null. */
+/** The first path part a paths pattern names before any wildcard (a folder, or a file at the root), or null. */
 export function firstFolder(pattern) {
   const first = String(pattern).split('/')[0];
   return /[*?[{]/.test(first) ? null : first;
@@ -517,7 +522,7 @@ export function lintRule(rule, opts = {}) {
       out.push(f(rule, null, 'size', 'warning', `The rule loads in every session and is ${size.bytes} bytes, over the limit of ${limits.alwaysOnBytes}.`, shorter));
     }
     if (opts.ownerFile && size.entries > limits.ownerEntries) {
-      out.push(f(rule, null, 'size', 'warning', `The rule has ${size.entries} instructions, over the limit of ${limits.ownerEntries}.`, 'Merge instructions that say the same thing, and move a procedure to a skill (managing-project-memory proposes these when it tidies memory). A change to the owner\'s own words needs his yes.'));
+      out.push(f(rule, null, 'size', 'warning', `The rule has ${size.entries} instructions, over the limit of ${limits.ownerEntries}.`, 'Merge instructions that say the same thing, and move a procedure to a skill (curating-project-memory proposes these when it tidies memory). A change to the owner\'s own words needs his yes.'));
     }
   }
   return out;
@@ -736,8 +741,9 @@ function clip(s) {
 }
 
 // ------------------------------------------------------------------ the AGENTS.md rules list
-// Copied from the retired program's lib/project/render.mjs. The project-setup
-// skill writes the same list by hand (references/setup-copy.md).
+// Copied from the retired program's lib/project/render.mjs. A project set up
+// before the one-home layout (TKV-24) holds this list in its AGENTS.md. Setup no
+// longer writes it: the starter AGENTS.md tells Codex to read the rule files.
 
 export const SPAN_START = '<!-- toolkit:rules:start -->';
 export const SPAN_END = '<!-- toolkit:rules:end -->';

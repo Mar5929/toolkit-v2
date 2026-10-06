@@ -1,0 +1,90 @@
+{
+  "skill_name": "running-work-item-lifecycle",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Yesterday I paid cash at the farmers market and totally forgot to log it. What if the app let you take a photo of the receipt and filled in the transaction for you? I have no idea how it would work yet, I just want to get it going. Can you start on that?",
+      "expected_output": "The agent treats this as new work. It creates a new work item for the receipt-photo idea in State Refining Requirements (Status Preparing), titled in his words, with his message as the Starting request, and links it to the related item WI-031 (Transaction entry). It then asks one question only: the goal question, 'So the goal is <one sentence>?', with its recommendation and the reason. It does not ask how the photo would be read, list requirements, offer a helper team, or start designing. The question is saved as an open question before the reply ends, and the item shows it waits on Mike.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger/AGENTS.md",
+        "dev/evals/fixtures/pocket-ledger/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger/memory/MEMORY.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/references/2026-09-28-kickoff-notes.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-032-offline-sync/references/2026-09-29-signal-notes.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-033-charting-library/WI-033.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-033-charting-library/references/charting-options.md"
+      ],
+      "expectations": [
+        "A new work item for the receipt-photo idea exists in the project's tracker with the next free ID after WI-033, and no existing ID is reused.",
+        "The new item's State is Refining Requirements and its Status is Preparing.",
+        "The new item's Starting request holds Mike's own words about the farmers market and the receipt photo, quoted or kept close to as he said them, not a rewritten summary.",
+        "The new item's Related items line, or the reply, names WI-031 (Transaction entry) as related.",
+        "The reply asks exactly one question, and it is the goal question: it reads like 'So the goal is <one sentence>?'.",
+        "The goal question comes with a recommendation and its reason (for example a 'Recommended:' line).",
+        "The reply asks nothing about how to build it (how the photo would be read, which service or library) and lists no requirements.",
+        "The reply does not offer a team of helper agents yet.",
+        "The goal question is saved before the reply ends: the item has a question row with Status Open, and the item shows it waits on Mike.",
+        "No Agreed goal and no requirement is recorded as settled before Mike answers the goal question.",
+        "Neither the new item nor the reply uses stage numbers (01 to 14) or calls the State a 'stage'; the item has State and Status and no stage field."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I think offline sync is covered now, nothing else comes to mind. Can we just start building it?",
+      "expected_output": "The agent finds WI-032 (every question is already answered), runs the readiness check with the requirements analyst helper, and then stops for Mike's OK instead of building. The reply shows the Agreed goal, R-01 to R-04 in one line each, and the Acceptance list. It recommends Designing as the next State and gives the reason (more than one sensible way to build sync, and a mistake could save a transaction twice). The reply ends with exactly 'Do you approve these requirements?'. Nothing is marked Finalized and the State does not change until he says yes.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger/AGENTS.md",
+        "dev/evals/fixtures/pocket-ledger/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger/memory/MEMORY.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/references/2026-09-28-kickoff-notes.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-032-offline-sync/references/2026-09-29-signal-notes.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-033-charting-library/WI-033.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-033-charting-library/references/charting-options.md"
+      ],
+      "expectations": [
+        "Before asking for approval, the agent runs the readiness check by starting the requirements analyst helper.",
+        "The agent does not start building, write code, or create build tasks.",
+        "The reply shows the Agreed goal in one sentence.",
+        "The reply lists R-01, R-02, R-03, and R-04 with one line each, and shows the Acceptance list.",
+        "The reply recommends Designing as the next State, not Building, and gives a reason in plain words (for example: there is more than one way to build sync, or a mistake could save a transaction twice).",
+        "The last line of the reply is exactly: Do you approve these requirements?",
+        "The reply asks only that one question.",
+        "The agent asks no new interview question and does not repeat the 'what have we not talked about yet' question, because every question is already answered.",
+        "After the run, no requirement is marked Finalized, the requirements-approved field is still 'no', and WI-032 is still in State Refining Requirements, because Mike has not said yes.",
+        "No item other than WI-032 is changed."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I read through the chart library comparison on the train and it's what I wanted. There's nothing to ship, it's just a recommendation.",
+      "expected_output": "The agent finds WI-033 and treats his message as the answer to its open question Q-04 ('Do you approve the finished result?'). It saves his OK and moves the item to Reflecting. It never goes to Deploying, because there is nothing to merge or deploy. It runs the Reflecting checks (the item tidy and current, the requirements match what was built, the project-wide decision offered to memory as a question, project documents checked) and then asks him whether to mark WI-033 Done. It does not mark it Done itself.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger/AGENTS.md",
+        "dev/evals/fixtures/pocket-ledger/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger/memory/MEMORY.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/references/2026-09-28-kickoff-notes.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-031-transaction-entry/WI-032-offline-sync/references/2026-09-29-signal-notes.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-033-charting-library/WI-033.md",
+        "dev/evals/fixtures/pocket-ledger/work-items/WI-033-charting-library/references/charting-options.md"
+      ],
+      "expectations": [
+        "The agent finds WI-033 and treats his message as the answer to its open question Q-04, 'Do you approve the finished result?'.",
+        "Q-04 is saved with his words, today's date, Decision? yes, and Status Answered, and the item's result-approved field holds today's date and his name.",
+        "WI-033's State becomes Reflecting and its Status is In Progress.",
+        "WI-033 never gets State Deploying: no merge, pull request, or deploy step is started.",
+        "WI-033's Current state is rewritten in place so it no longer says it waits on Q-04, and a new Recent History row records the result approval.",
+        "The agent runs the Reflecting checks and the reply shows the result of each: the item is tidy and current, R-01 and R-02 match what was built, decisions and lessons were offered to memory, and project documents and the knowledge base were checked or updated.",
+        "The agent offers the project-wide decision (iOS 17 and newer, or Swift Charts as the chart tool) for project memory as a question, such as 'This looks project-wide. Save it to memory too?', and writes nothing to memory before he answers.",
+        "The agent does not set State or Status to Done and does not record Done as approved, because Mike has not said yes to Done.",
+        "The reply asks him whether to mark WI-033 Done.",
+        "WI-033 is not marked Blocked while it waits for his answer."
+      ]
+    }
+  ]
+}

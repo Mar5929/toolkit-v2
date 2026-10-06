@@ -1,5 +1,5 @@
-// Tests for the starter project's Salesforce org guard, guard-protected-orgs.cjs,
-// run with the starter project's own policy file, protected-orgs.json (action "deny").
+// Tests for the Salesforce org guard, guard-protected-orgs.cjs,
+// run with the salesforce folder's own policy file, protected-orgs.json (action "deny").
 // Run from the repository root: node --test dev/tests/org-guard.test.mjs
 // Every run copies the guard and its policy into a scratch project folder. A stand-in
 // `sf` there answers the two org lookups the guard makes, and PATH holds only that
@@ -14,7 +14,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const model = join(repo, 'plugins/toolkit/skills/project-setup/assets/model/.claude');
+const model = join(repo, 'plugins/toolkit/skills/project-setup/assets/salesforce/.claude');
 const scratch = mkdtempSync(join(tmpdir(), 'tkv2-org-guard-'));
 process.on('exit', () => rmSync(scratch, { recursive: true, force: true }));
 

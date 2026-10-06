@@ -3,6 +3,12 @@
 Research brief, written 2026-09-26. Read-only research; nothing outside this file
 was changed.
 
+Corrected 2026-10-05 against the pages captured that day in
+`ai-external-knowledge/` (Claude Code 2.1.289): when a path-scoped rule
+loads (the Part 1 table), and when `UserPromptSubmit` runs (the hook events
+table). Nothing else was checked again that day; the
+citations below still name the 2026-09-22 and 2026-09-26 captures.
+
 This brief is the reference the architect and builders use when they build
 Toolkit V2's plugins, skills, hooks, rules, instruction files, and output style.
 It stands alone: every fact has a source you can open.
@@ -127,7 +133,7 @@ features; CC:`memory.md`#When to add to CLAUDE.md.
 | --- | --- | --- | --- |
 | Instruction file (`CLAUDE.md` or `AGENTS.md`) | Session start, full text | Every request | Facts Claude needs every session: build commands, conventions, "always do X" rules. Target under 200 lines per file. |
 | `.claude/rules/*.md` without `paths:` | Session start | Every request | Topic rules that always apply. |
-| `.claude/rules/*.md` with `paths:` | When Claude reads a matching file | Only after a match | Directory- or file-type-specific rules. |
+| `.claude/rules/*.md` with `paths:` | When Claude uses the Read, Write, or Edit tool on a matching file (`ai-external-knowledge/claude-code/memory.md` "Path-specific rules", 2026-10-05) | Only after a match | Directory- or file-type-specific rules. |
 | Skill | Name and description at start; body when invoked | Low (listing only) | Procedures and reference material. |
 | Subagent | When spawned, in its own context | Isolated | Research, parallel work, focused workers. |
 | Hook | On an event; runs outside the model | Zero unless it returns context | Steps that must run the same way every time. |
@@ -663,7 +669,7 @@ code 2 behavior per event.
 | `SessionStart` | `startup`, `resume`, `clear`, `compact`, `fork` | `source`, `model` (optional), `agent_type`, `session_title`; on resume/fork also `seconds_since_last_response`, `context_tokens`, `prompt_cache_likely_expired`, `estimated_cache_write_usd` | No | Plain stdout or `additionalContext`; also `initialUserMessage` (`-p` only), `sessionTitle`, `watchPaths`, `reloadSkills` |
 | `Setup` | `init`, `maintenance` | `trigger` | No | Output discarded |
 | `InstructionsLoaded` | `load_reason`: `session_start`, `nested_traversal`, `path_glob_match`, `include`, `compact` | `file_path`, `memory_type`, `load_reason`, `globs`, `trigger_file_path`, `parent_file_path` | No | None (observability). **Does not fire for an `AGENTS.md` read natively.** |
-| `UserPromptSubmit` | none | `prompt` | Yes (erases prompt) | Plain stdout or `additionalContext`; `sessionTitle` |
+| `UserPromptSubmit` | none | `prompt` | Yes (erases prompt) | Plain stdout or `additionalContext`; `sessionTitle`. It also runs on turns the app starts itself: a scheduled task or `/loop` turn, a background subagent reporting back, and a message from another session (`ai-external-knowledge/claude-code/hooks.md` "UserPromptSubmit", 2026-10-05). |
 | `UserPromptExpansion` | command name | `expansion_type`, `command_name`, `command_args`, `command_source`, `prompt` | Yes | `additionalContext`. Fires when the user types `/skill`; `PreToolUse` on `Skill` fires only when Claude calls the tool. |
 | `PreToolUse` | tool name | `tool_name`, `tool_input`, `tool_use_id`, `mcp_server` (MCP only) | Yes | `additionalContext`; decisions below |
 | `PermissionRequest` | tool name | `tool_name`, `tool_input` | via `decision.behavior` only (exit 2 not honored) | n/a |

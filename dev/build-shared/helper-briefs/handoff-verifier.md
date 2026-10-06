@@ -2,31 +2,44 @@
 
 # Handoff verifier: helper brief
 
-A helper that checks, without changing anything, that a drafted handoff prompt states the overarching goal and that every fact in it matches the repository and the work tracker.
+This file is for the handoff verifier, the helper that `handoff` starts at its step 6. A helper is a separate agent that sees only the instructions it is given. The verifier checks a drafted handoff prompt and changes nothing. Its check is done when it has reported whether the draft states the overarching goal, and whether every fact in the draft matches the repository and what is saved where the work items are kept.
+
+The file has two parts. "For the main agent" says how to start the verifier. "Brief for the helper" is the text that the verifier receives.
+
+## Contents
+
+- For the main agent
+- Brief for the helper
+  - Your job
+  - Read-only means read-only
+  - What you receive
+  - Job one: is the goal there
+  - Job two: check every checkable claim
+  - Your report
 
 ## For the main agent
 
-Start it from `handoff`, after you draft the prompt and before the owner sees it. Act on every verdict as `handoff` step 6 says.
+Start the verifier from `handoff`, after you draft the prompt and before the owner sees the prompt. Act on every verdict as step 6 of `handoff` says.
 
-How to start it, as a new helper that does not see this conversation:
+Start the verifier as a new helper that does not see this session:
 
-- Claude Code: the Agent tool, `subagent_type` set to `general-purpose` and `model` set to `opus`. Never a fork: the verifier must not share this conversation.
-- Codex: the `spawn_agent` tool with `fork_turns` set to `none`. Wait for its report with `wait_agent`.
-- The message: everything under "Brief for the helper", word for word, then the job block, filled in. The helper sees nothing else.
-- The verifier can open local files and run `gh`. It cannot read Notion or Hindsight: paste the text of each Notion work item or memory record, and each Hindsight memory, that the draft relies on.
+- In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose` and `model` set to `opus`. Never use a fork, because the verifier must not share this session.
+- In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`. Wait for its report with `wait_agent`.
+- The message to the helper holds everything under "Brief for the helper", word for word, and then the list of inputs below, filled in. The helper sees nothing else.
+- The verifier can open local files and run `gh`. It cannot read Notion or Hindsight. So paste, under "Supplied text", the text of each Notion work item, the Notion "Current state" page, and each Hindsight memory record that the draft relies on.
 
-The job block:
+The list of inputs:
 
 ```text
 Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
-Tracker: local (work-items/ in the main checkout) | Notion (item text
+Tracker: local (work-items/ in the main checkout) | Notion (work item text
   pasted below) | GitHub Issues (<account/repository>)
-Memory: local (memory/ in the main checkout) | Notion or Hindsight
-  (records pasted below)
+Current State: memory/CURRENT_STATE.md in the main checkout | Notion
+  (page text pasted below)
 Sources for claims: <for each claim you can: file, repository, owner (with
   the owner's words when you have them), or worked out>
-Supplied text: <Notion items, Notion memory records, Hindsight memories>
+Supplied text: <Notion work items, the Notion Current state page, Hindsight memories>
 ```
 
 ## Brief for the helper
@@ -35,50 +48,73 @@ Paste everything from here to the end of the file.
 
 ### Your job
 
-You check. You never write. The main agent drafted a handoff prompt for a fresh session. Say, claim by claim, whether each one matches what is in the repository and the work tracker, and say which claims no record supports. You have not seen the conversation, so believe only what you can open and read.
+Check the draft and change nothing. The main agent drafted a handoff prompt, which is a prompt that a new session uses to continue the work. For each claim in the draft, say whether the claim matches what is in the repository and what is saved where the work items are kept. Also say which claims no record supports.
+
+You have not seen the session that wrote the draft. So give a claim the verdict Confirmed only when you opened the record that holds the claim.
 
 ### Read-only means read-only
 
-- Never create, change, move, or delete a file, a work item, or a memory record. Run only reading commands, each on its own (`git status`, `log`, `diff`, `show`, `worktree list`, `ls`, `cat`, `grep`, `rg`, `gh issue view`, `gh pr view`). If you believe something needs changing, say what and where.
-- Never run tests, builds, installs, or any script. If the draft says a test or a build passed, that claim is Unchecked unless you were given the command output.
-- If `gh` fails with a network or sign-in error, give each claim that needed `gh` the verdict Skipped, and list the check, with the error, under "Skipped".
+- Never create, change, move, or delete a file, a work item, or anything in memory.
+- Run only commands that read, and run each one on its own: `git status`, `log`, `diff`, `show`, `worktree list`, `ls`, `cat`, `grep`, `rg`, `gh issue view`, `gh pr view`.
+- When you believe that something needs to change, say what and where.
+- Never run tests, builds, installs, or any script. When the draft says that a test or a build passed, give that claim the verdict Unchecked, unless you were given the command output.
+- When `gh` fails with a network error or a sign-in error, give each claim that needed `gh` the verdict Skipped. List the check, with the error, under "Skipped".
 
 ### What you receive
 
-The full draft, the main checkout's path, a source for each claim where there is one, and the text of anything you cannot open yourself. A claim from a file or the repository: open it or check it. A claim the owner said: check it against his supplied words and write "checked against supplied text" in the Detail column; with no words, it is Unchecked. A claim the agent worked out, or with no source given, is Unchecked.
+You receive the full draft, the path of the main checkout, a source for each claim where there is one, and the text of anything that you cannot open yourself. The main checkout is the project's main folder.
 
-Work items are named by ID, never by path. To open one:
+How you check a claim depends on its source:
 
-- Local: find the file under `work-items/` in the main checkout whose front matter says `id: WI-014` (for example `grep -rl '^id: WI-014$' <main checkout>/work-items`). Its design is `DESIGN.md` in the same folder.
-- GitHub: `gh issue view <number> --json title,body,labels,state`, and `gh issue view <number> --comments` for its design comment.
+- A claim from a file or from the repository: open the file, or check the claim in the repository.
+- A claim that the owner made: check it against the owner's words that you were given, and write "checked against supplied text" in the Detail column. When you were given no words of the owner, give the claim the verdict Unchecked.
+- A claim that the agent worked out, or a claim with no source given: give it the verdict Unchecked.
+
+Work items are named by ID, never by path. How you open a work item depends on the "Tracker" line of the list of inputs:
+
+- Local: find the file under `work-items/` in the main checkout whose front matter says `id: WI-014` (for example `grep -rlE '^id: *"?WI-014"? *$' <main checkout>/work-items`; the value may be in quotes). The front matter is the block of fields at the top of the file. The design of the work item is `DESIGN.md` in the same folder.
+- GitHub: `gh issue view <number> -R <account/repository> --json title,body,labels,state`, and `gh issue view <number> -R <account/repository> --comments` for its design comment. The list of inputs names the repository. Pass `-R` on every `gh` command.
 - Notion: check against the supplied text.
 
-Local memory is the `memory/` folder in the main checkout (Current State is `memory/CURRENT_STATE.md`, except in a Notion project). Notion memory records, the Notion "Current state" page, and Hindsight memories: the supplied text only. The fixed notice on the first line of the prompt (that it is AI-generated and may contain hallucinations) is not a claim; if the draft has no such line, say so under "Also noticed".
+The other records are in these places:
+
+- The project's Current State is the project's one short page of what is true now. It is `memory/CURRENT_STATE.md` in the main checkout, except in a project with Notion memory.
+- For the Notion "Current state" page and for Hindsight memory records, use only the supplied text.
+- A decision that more than one work item needs is an entry in `DECISIONS.md`. An approved rule of the system is in `system/`. A filed source, which is something the project was given and keeps, is in `sources/`. All three are in the repository.
+
+The first line of the prompt is a fixed notice, which says that the prompt is AI-generated and may contain hallucinations. That notice is not a claim. When the draft has no such line, say so under "Also noticed".
 
 ### Job one: is the goal there
 
-Does the draft state the overarching goal (what the work is trying to achieve, not the next action), why it matters, and where it is written down (a work item ID, a `requirements/` file, an issue or pull request number)? Open the pointer and confirm it holds the goal the draft claims. Verdict: Confirmed; Wrong (the pointer does not exist or says something else); Unchecked (no pointer); or Missing (only the next step, or no goal at all). Missing must be fixed before the owner sees the prompt; say so.
+Check that the draft states three things: the overarching goal, why the goal matters, and where the goal is written down. The overarching goal is what the work is trying to achieve, not the next action. The place where the goal is written down is a work item ID, a rule ID in `system/`, a DEC ID in `DECISIONS.md`, or an issue or pull request number.
+
+Open the place that the draft names, and confirm that it holds the goal that the draft claims. Then give one verdict: Confirmed, or one of these three:
+
+- Wrong: the place does not exist, or it says something else.
+- Unchecked: the draft names no place.
+- Missing: the draft gives only the next step, or no goal at all. The main agent must fix a goal that is Missing before the owner sees the prompt. Say so.
 
 ### Job two: check every checkable claim
 
-- Every file and folder path, and every claim about what a file says: does it exist, and does it say that? If a path is close to a real one, name the real one.
-- Every branch, worktree, commit, pull request, issue, and work item ID: is it the one named, in the state the draft says (for a work item: its State, `waiting_on`, the lines of its Current state, and its first open question)?
-- Every number, count, date, and duration, including any the draft worked out from others: work it out again.
-- Every claim that something was run, passed, failed, or was verified: with no command output behind it, Unchecked.
-- Anything carried over from an earlier handoff prompt is not a source: check it from scratch.
+- For every file path and folder path, and every claim about what a file says, check that the path exists and that the file says what the draft claims. When a path is close to a real path, name the real path.
+- For every branch, worktree, commit, pull request, issue, and work item ID, check that it is the one named, and that it is in the state the draft says. For a work item, check its State, `waiting_on`, the lines of its Current state, and its first open question.
+- For every decision (DEC), source (SRC), and rule ID, check that it exists, with the Status or the Mark that the draft says. The Mark of a rule is one of four words: Draft, Approved, Built, or Retired.
+- For every number, count, date, and duration, including any that the draft worked out from other values, work it out again.
+- When no command output supports a claim that something was run, passed, failed, or was verified, give that claim the verdict Unchecked.
+- An earlier handoff prompt is not a source. Check again, as a new claim, anything that was carried over from one.
 
-Then list every sentence that sounds settled ("we decided", "the owner wants") but that no file, record, or rule supports. Do not delete or reword them.
+Then list every sentence that sounds settled, such as "we decided" or "the owner wants", but that no file, record, or rule supports. Do not delete or reword those sentences.
 
 ### Your report
 
-Your final message is the only thing the main agent receives. Always end it with the report.
+Your final message is the only thing the main agent receives. Always end your final message with the report, in this form:
 
 ```text
 Handoff check
 
 Goal
   Verdict: Confirmed / Wrong / Unchecked / Missing
-  <one line: what the goal says, and what its pointer led to>
+  <one line: what the goal says, and what the place it is written down holds>
 
 Claims
 
@@ -88,7 +124,7 @@ Claims
 | 2 | <short quote> | file | Wrong | the file says 4 files, not 9 |
 
 Carried over from an earlier handoff
-- <claim>: <what checking it from scratch found>
+- <claim>: <what checking it again found>
   (or "Nothing in the draft is carried over from an earlier handoff.")
 
 Skipped (a check that could not run; never report it as Confirmed)

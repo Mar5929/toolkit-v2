@@ -2,15 +2,15 @@
 
 Six prompts, three for each skill, in skill-creator's format (`evals.json`, with `expectations` as the schema names them). Nothing here is shipped.
 
-- `managing-work-items/evals.json`: start a rough idea, ask for approval of requirements, finish an item with nothing to deploy.
-- `tracking-work-items/evals.json`: save an answer, find what waits on Mike, add a sub-item at the right level.
+- `running-work-item-lifecycle/evals.json`: start a rough idea, ask for approval of requirements, finish an item with nothing to deploy.
+- `using-work-tracker/evals.json`: save an answer, find what waits on Mike, add a sub-item at the right level.
 - `fixtures/pocket-ledger/`: the scratch project every eval uses. The `files` lists in `evals.json` are repository-relative paths.
 
 ## Running an eval
 
 1. Copy `fixtures/pocket-ledger/` to a scratch folder. Make a fresh copy for every run, because the runs change the items.
-2. Copy the model's `work-items/work-item-template/` (from `plugins/toolkit/skills/project-setup/assets/model/`) into the copy's `work-items/`. The template is not stored here, so it cannot drift from the model.
-3. `git init` the copy and add `work-items/` and `memory/` to its `.gitignore`, as the model does. Install `managing-work-items` and the local version of `tracking-work-items` into its `.claude/skills/`.
+2. Copy the model's `work-items/work-item-template/` (from `plugins/toolkit/skills/project-setup/assets/work-local/`) into the copy's `work-items/`. The template is not stored here, so it cannot drift from the model.
+3. `git init` the copy and add `work-items/` and `memory/` to its `.gitignore`, as the model does. Install `running-work-item-lifecycle` and the local version of `using-work-tracker` into its `.claude/skills/`.
 4. Run the prompt in that folder. Today's date is the date to expect in saved answers.
 
 ## The scratch project

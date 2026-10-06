@@ -4,26 +4,30 @@ Toolkit V2 sets up a project folder so the agent can run the project for you
 in Claude Code or Codex. You make the decisions and steer. The agent does the
 work, tracks it, and remembers what matters.
 
-It is written instructions plus three small hooks. There is no program to
+It is written instructions plus four small hooks. There is no program to
 install, run, or keep working (your decision of 2026-09-29). The one
 exception is the workstream panel for Claude Code (your decision of
 2026-10-03), described below.
 
 ## The parts
 
-- **The model project inside the toolkit** is the source of every project
+- **The starter project inside the toolkit** is the source of every project
   file: `AGENTS.md` (the project manual the agent reads), `PROJECT.md`,
-  `PROJECT-ROADMAP.md` where local work tracking uses it, the rules,
-  `project-wide-records/`, and the templates. It lives under
-  `plugins/toolkit/skills/project-setup/assets/model/`.
+  `DECISIONS.md`, the folders `system/`, `sources/`, `delivery/`, and
+  `reference/`, the rules, and the templates. It is one folder for what every
+  project gets (`every-project`) and one folder for each choice you make
+  (work items in local folders, Notion, or GitHub Issues; memory in local
+  files, Notion, or Hindsight; Salesforce; `SOUL.md`), all under
+  `plugins/toolkit/skills/project-setup/assets/`. A choice decides which
+  files a project gets, never which lines inside a file.
 - **Skills** are written instructions, one per job. The agent picks one from
   what you say, by reading each skill's short description.
 - **Rules** are instructions the agent always follows, such as "ask before
-  deploying". They come from your model.
+  deploying". They come from the starter project.
 - **Hooks** are small commands Claude Code and Codex run by themselves at set
   moments, for example when a session starts.
 
-## The main plugin and its two skills
+## The main plugin and its three skills
 
 The toolkit's main plugin is `toolkit`. Its main skill is `project-setup`. The
 plugin is switched on for every folder, so "toolkit v2" or "set up this project"
@@ -37,6 +41,26 @@ choices for it. The toolkit does not ship those tools. When you ask for a job
 on the list, the agent uses your tool. When the tool is not on that computer,
 the agent says so and sets it up only after your yes. To add a tool, say "add
 this to my tool list" in a chat opened in this repository.
+
+Its third skill, `writing-harness-files`, is for harness files: the files
+that tell Claude Code or Codex how to behave. A harness file is a skill, a
+rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
+`.rules` file, an output style, a plugin manifest or marketplace file, a
+mod, a subagent definition, or a helper-agent brief. Before an agent writes
+or changes one, in any project, the skill has it read the current official
+documentation page for that kind of file, follow a short checklist, and
+have a second agent review the change (your decision of 2026-10-05). The
+skill first sends the agent to the agents and skills that Claude Code
+provides for the job, and to the official page addresses when none is
+available, and always for Codex.
+
+All the writing rules are in one place (your decision of 2026-10-06): the
+rule `write-documents-in-plain-english.md`, which every project gets. It
+says that a file opens with what it is for and its goal, says things in
+plain words in place of made-up project words, and uses whole sentences.
+The skill holds an exact copy of that rule, so that it also works in a
+folder where the toolkit was never set up. A check fails when the copy and
+the rule differ.
 
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
@@ -107,14 +131,24 @@ project"**. The agent asks one question at a time and recommends an answer:
 - whether you want a `SOUL.md`.
 
 Any mix works, for example work items in Notion and memory in local files.
-Every choice also gets `project-wide-records/`: one place to connect
-sources, shared questions, people, domain maps, and target direction across
-work items. It links to the chosen tracker and memory system without
-replacing either.
+Whatever you choose, every project gets the same five places, as files in the
+project folder, for what lasts longer than one work item:
 
-It shows you the plan and waits for your yes. Then it copies your model's
-files, the skills for your answers, the hooks, and the settings into the
-project. It asks you to sign in where needed (`ntn login` for Notion,
+- `DECISIONS.md`: every decision and open question that more than one work
+  item needs.
+- `system/`: the approved description of the system, as numbered rules.
+- `sources/`: the sources the project received, such as meeting notes and
+  client documents.
+- `delivery/`: each release, deployment, data migration, and client handoff.
+- `reference/`: outside documentation, and the record of the system as it is
+  today.
+
+It shows you the plan and waits for your yes. Then it copies the starter
+project's files, the skills for your answers, the hooks, and the settings
+into the project. It turns on a check of the project's records that runs
+before each commit (a Git setting in that copy of the project; when the
+project already has a Git hook of its own, or its own hooks folder, setup
+changes nothing there and tells you). It asks you to sign in where needed (`ntn login` for Notion,
 `gh auth login` for GitHub), then sets up the Notion pages, the GitHub labels,
 or the Hindsight memory bank. It finishes by running its checks and offering
 to commit.
@@ -130,9 +164,23 @@ the bank in the dashboard, `https://memory.mrihm-memory.com`.
 Start a new session afterwards, so the new files load. In Codex, also trust
 the project folder and its hooks (`/hooks`).
 
-Later, say **"check the setup"** to see what differs (it changes nothing), or
+Later, say **"check the setup"** to see what differs (it changes nothing,
+except that it puts back a toolkit guide or template that is missing from
+`work-items/` or `memory/`), or
 **"update the toolkit"** to bring a project up to date. It shows every change
-first and never overwrites a file you changed without asking.
+first and never overwrites a file you changed without asking. The check
+before each commit is a setting of one copy of the project: in a new copy,
+or on another computer, "check the setup" says it is off and "update the
+toolkit" turns it on.
+
+A project set up before the five places above existed keeps the same facts
+elsewhere: shared questions, requirements, a system guide, decision records
+and a glossary in memory, and sources stored inside work items. Every
+other memory record stays where it is. "Update the toolkit"
+finds them and shows you one table: each old location, what is in it,
+where it goes, and what is removed afterwards. Nothing moves until you say
+yes, and nothing is removed before what it held is read back in its new
+place.
 
 ## Say "toolkit v2" in any project
 
@@ -166,8 +214,8 @@ agent's own branch and reach your main branch only after your yes.
 
 | Skill | What it does | You might say |
 | --- | --- | --- |
-| `managing-work-items` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `tracking-work-items`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
-| `managing-project-wide-records` | Connects sources, shared questions, people, domain maps, and target direction across work items. It shows where each authoritative answer lives and which records still need an update. | "This workshop affects several items", "where did we decide the account model?" |
+| `running-work-item-lifecycle` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `using-work-tracker`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
+| `filing-project-records` | Files what more than one work item needs: it records a decision in `DECISIONS.md`, files a source in `sources/`, and updates a document in `system/`. | "This decision affects several items", "file this meeting transcript" |
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
 | `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
@@ -183,20 +231,29 @@ Each project gets the skills for where its work items and memory live:
 
 | Your choice | Skills it adds |
 | --- | --- |
-| Work items in local folders | `tracking-work-items` (saves, finds, and changes items in the `work-items/` folder) |
-| Work items in Notion | `tracking-work-items` (the Notion version), `using-notion-cli` (how to run Notion's command-line tool, `ntn`) |
-| Work items in GitHub Issues | `tracking-work-items` (the GitHub version) |
-| Memory in local files | `managing-project-memory` (decides what to keep, asks you, corrects, forgets, finds, and cleans up), `storing-project-memory` (saves and finds it as files in `memory/`) |
-| Memory in Notion | `managing-project-memory`, `storing-project-memory` (the Notion version), `using-notion-cli` |
-| Memory in Hindsight | None. Hindsight's coding-agent add-on saves each session to the project's bank, and the agent uses its save and search tools. |
+| Work items in local folders | `using-work-tracker` (saves, finds, and changes items in the `work-items/` folder) |
+| Work items in Notion | `using-work-tracker` (the Notion version), `using-notion-cli` (how to run Notion's command-line tool, `ntn`) |
+| Work items in GitHub Issues | `using-work-tracker` (the GitHub version) |
+| Memory in local files | `curating-project-memory` (decides what memory keeps, sends every other fact to its own file, keeps Current State current, and writes your "from now on" instructions to the rules), `using-memory-store` (stores Current State and the memory records as files in `memory/`) |
+| Memory in Notion | `curating-project-memory`, `using-memory-store` (the Notion version), `using-notion-cli` |
+| Memory in Hindsight | None from the toolkit (your decision of 2026-10-05). Hindsight's coding-agent add-on saves each session to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
 | Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
 
-Memory is kept by concept, like a wiki: one record per concept, added to as
-it grows. `using-notion-cli` comes once, even with work items and memory
-both in Notion.
+Memory is the design you built from the Davis memory system, brought back on
+2026-10-05. It holds Current State (what is in progress, what is coming up,
+who owes what, the standing jobs and shared files, and where the next session
+starts) and one record per concept, in four kinds: facts about people
+(`user_`), facts about the project or the client that fit no other file
+(`project_`), where to find something (`reference_`), and what happened or a
+job that ran (`event_`). Every record carries the date it was created, the
+date it last changed, and, when it is true only for a while, a date to check
+or remove it. Memory no longer holds decisions, terms, or how the system
+works: those are in `DECISIONS.md` and `system/`. Notion memory stores the
+same kinds in Lore's layout. `using-notion-cli` comes once, even with work
+items and memory both in Notion.
 
-A project ends up with 12 skills, or 13 when work items or memory are in
-Notion. With Hindsight memory it has 10, or 11 with work items in Notion. A
+A project ends up with 13 skills, or 14 when work items or memory are in
+Notion. With Hindsight memory it has 11, or 12 with work items in Notion. A
 Salesforce project has 3 more, plus Salesforce's own skills. Saying where the work stands needs no skill: the
 project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
 description.
@@ -205,11 +262,18 @@ description.
 
 | When | What happens |
 | --- | --- |
-| A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, the hook first rebuilds the memory index, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
+| A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the memory index: one line per memory record, which the hook rebuilds in `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
 | You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
-| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
+| The agent edits a file | The record check runs: 15 checks on the form of `DECISIONS.md`, `system/`, `sources/`, and local work items, such as an ID used twice or a rule marked approved with no decision behind it. The agent is told what is wrong and fixes it. |
+| The agent finishes a turn (Claude Code only) | The record check runs on every record. A problem nobody fixed is reported again. |
+| Before each commit | The record check runs again, and a commit that breaks a record or changes a filed source is stopped. |
+
+The record check is the fourth hook command (your yes of 2026-10-05). It
+only reads. It checks the form of a record, never whether what it says is
+right.
 
 There is no hook for marking work Done. The agent asks you first, and
 records your words and the date.
@@ -221,32 +285,33 @@ records your words and the date.
 - Each work item has a Questions and Answers table. Your answer is saved the
   moment you give it, and unanswered questions stay at the top, so a new
   session picks up at the first open one.
-- Every decision is saved in its work item first. When a decision matters
-  beyond that item, the agent asks "This looks project-wide. Save it to
-  memory too?"
+- A decision only one work item needs is saved in that item. A decision or
+  open question more than one work item needs goes in `DECISIONS.md`, and
+  each item holds a one-line pointer to it.
+- An item becomes Done or Cancelled only after its closing step recorded
+  whether it changed `system/` or `DECISIONS.md`.
 - An independent checker agent tests the work before you are asked to
   approve it. Only you mark an item Done.
 - "From now on" instructions become a line in the project's
   `.claude/rules/owner-preferences.md`.
-- A memory that is out of date is retired or marked replaced, so its
-  history stays. One that is no longer needed, or was saved by mistake, is
-  deleted only after your yes, or when you ask.
+- An action item from a meeting is saved as a project task with who owes
+  it: you, the agent, or a named other person, such as the client or a
+  vendor.
+- A fact that fits no other file, such as who is away or what the client
+  plans, is a memory record. A fact that is true only for a while is
+  checked or removed on its date.
 - When the agent uses something it recalled, it says where it came from and
   ends with a short Sources list.
 - You can move files by hand. The agent finds work items by their ID, notices
   the move, and carries on.
 
-## When you change your model project
+## When you change the starter project
 
-In this folder, ask an agent to **"refresh the model copy"**. It copies your
-model into the toolkit, runs the checks, and raises the toolkit's version
+The starter project lives in this repository, in the folders under
+`plugins/toolkit/skills/project-setup/assets/`. In this folder, ask an agent
+to change a file there. It runs the checks and raises the toolkit's version
 number. Then say **"update the toolkit"** in each project that should get the
 change.
-
-Right now the copy comes from
-`/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`,
-the folder with the changes you approved. After you merge those changes into
-your model, the copy comes from your model folder.
 
 ## Install on this Mac (one time)
 
@@ -273,7 +338,8 @@ codex plugin add toolkit@toolkit-v2
 Start a new session in each app afterwards.
 
 With Hindsight memory, the memory itself stays on your VPS, so nothing is
-copied to a new Mac and there is no backup step. On a new Mac, say **"update
+copied to a new Mac. The VPS has weekly automatic backups at Hostinger, and
+the toolkit adds no backup step of its own. On a new Mac, say **"update
 the toolkit"** in each Hindsight project. The agent names the server the
 project uses and what this Mac is missing. After your yes, you enter the API
 key yourself in Terminal, and the agent installs Hindsight's coding-agent
@@ -299,8 +365,11 @@ The agent never does these for you. It tells you when each one is needed.
 
 ## Where things are
 
-- `plugins/toolkit/`: the plugin. Its `skills/project-setup/assets/` folder
-  holds the model copy, every skill, the hooks, and the settings.
+- `plugins/toolkit/`: the main plugin, with its three skills in `skills/`.
+  The `skills/project-setup/assets/` folder holds the starter project:
+  `every-project/` (the files, skills, and hooks every project gets), one
+  or more folders for each choice, and `settings/`.
+- `plugins/workstreams/`: the workstream panel.
 - `dev/`: the goal, progress, design, research, checks, and test runs. It is
   not installed anywhere.
 - `ai-external-knowledge/`: saved copies of the official Claude Code, Codex,

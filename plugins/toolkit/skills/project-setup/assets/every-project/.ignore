@@ -1,0 +1,3 @@
+# Search tools skip what .gitignore names. These two folders hold project records, so search them.
+!/work-items/
+!/memory/

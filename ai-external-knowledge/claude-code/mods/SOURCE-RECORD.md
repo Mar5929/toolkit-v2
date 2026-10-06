@@ -2,8 +2,9 @@
 
 - Publisher: Anthropic
 - Original documentation home: https://code.claude.com/docs/en/plugins/mods/overview
-- Captured on: 2026-10-02
+- Captured on: 2026-10-02. Checked again on 2026-10-05: 8 pages replaced, 16 files found unchanged and left as they were (see "What changed since 2026-10-02"). The capture date in each file header says which day that file was captured.
 - Captured with: the Firecrawl CLI 1.24.3. Documentation pages: `firecrawl scrape <page URL>.md --format rawHtml`, which returns the Markdown source the site publishes for each page, unchanged. GitHub files: `firecrawl scrape <raw.githubusercontent.com URL> --format rawHtml`, which returns the file as GitHub serves it, unchanged. The list of pages in the section came from `firecrawl map https://code.claude.com/docs/en/plugins/mods` and the "Mods" group of https://code.claude.com/docs/llms.txt.
+- Claude Code version on 2026-10-05: 2.1.289.
 - Pages: 24 (10 pages of the mods section, 8 documentation pages they link to, and 6 files from Anthropic's public GitHub repositories)
 - Redistribution: Anthropic's published documentation and public repository files, kept here as a private reference copy for this repository. Not shipped in any plugin.
 
@@ -60,6 +61,18 @@ Read before deciding whether any part of Toolkit V2 should be a mod, and before 
   - `types-claude-code.d.ts` was written by Claude Code 2.1.277 and opens with "EARLY ACCESS: this surface may change between releases without notice." `reference.md` warns that the GitHub copy can be older than the installed version, and that the copy Claude Code writes for your version wins.
   - `builtin-mods-readme.md` ends with "Early access: hooks modules load only where function hooks are enabled", which the documentation no longer says.
   - The three sample READMEs say each sample "was built and tested on 2.1.280".
-- Two pages in the parent folder were captured on 2026-09-27, before mods were documented, and the live pages have changed since. `../hooks.md` now has a paragraph that points function hooks to the mods pages. `../settings-reference.md` now describes what `disableAllHooks`, `allowManagedHooksOnly`, `prependPlugins`, and `appendPlugins` do to mods. Neither was captured again here; capture them again in the parent folder and update its `SOURCE-RECORD.md` when those sections are needed. The mods pages state the same rules for mods.
+- The two parent-folder pages that this record once called out of date, `../hooks.md` and `../settings-reference.md`, were captured again on 2026-10-05. See `../SOURCE-RECORD.md`.
 - Not captured, although the mods pages link to them: the organization and managed-settings pages (`/docs/en/plugins/org`, `/docs/en/managed-settings`, `/docs/en/server-managed-settings`), the sandboxing, Remote Control, cloud session, WSL, cross-session messaging, prompt caching, keybindings, and environment variable pages, and the source code of the built-in and sample mods. They are about administration or neighboring features, not about writing a mod.
 - Firecrawl use for this capture: 27 scrapes and 1 map, including pages read for comparison and not kept (`llms.txt`, and the live `hooks` and `settings-reference` pages).
+
+## What changed since 2026-10-02
+
+Source: the comparison the helper made on 2026-10-05, checked against the stored files.
+
+- Replaced, with the capture date 2026-10-05: `create.md`, `interface.md`, `reference.md`, `permissions.md`, `permission-modes.md`, `plugins-cli-reference.md`, `plugins-create.md`, `plugins-loading.md`.
+  - `reference.md` adds the `tool.describe` and `agent.spawn` events and the `ui.fault` event.
+  - `create.md` adds a list of ways to share a mod.
+  - `plugins-loading.md` adds how runtime packages install for a plugin and how Claude Code works out a plugin's version.
+  - `plugins-cli-reference.md` adds the `--config` flag and which scope `claude plugin update` changes.
+  - `permissions.md` and `permission-modes.md` changed in wording and screenshots.
+- Checked on 2026-10-05 and found unchanged, so the files were left as they were: `overview.md`, `gallery.md`, `events.md`, `api.md`, `test.md`, `troubleshoot.md`, `admin.md`, `plugins-security.md`, `plugins-install.md`, `agent-sdk-plugins.md`, `types-claude-code.d.ts`, and the five README files (`builtin-mods-readme.md`, `sample-mods-readme.md`, `sample-token-weather.md`, `sample-blast-radius.md`, `sample-replay-theater.md`). `types-claude-code.d.ts` is still the file Claude Code 2.1.277 wrote.

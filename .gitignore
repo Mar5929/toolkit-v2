@@ -1,6 +1,7 @@
 # Files for this repository only. Patterns that name a folder start with "/"
-# so they never hide a file inside plugins/toolkit/scaffold/, which is copied
-# into projects as it is.
+# so they never hide a file inside the setup folders under
+# plugins/toolkit/skills/project-setup/assets/, which are copied into projects
+# as they are.
 
 # macOS and editor files
 .DS_Store
@@ -26,3 +27,13 @@ node_modules/
 /dev/test-runs/notion-skill-sets.md
 /dev/test-runs/notion-layouts-set-by-hand.md
 /dev/test-runs/codex-dot-folders.md
+
+# Files the Salesforce tools write when they are run inside the starter's
+# salesforce folder. A project ignores them through its own .gitignore, which
+# is in every-project/ and so does not reach this folder.
+/plugins/toolkit/skills/project-setup/assets/salesforce/tools/kb/out/
+/plugins/toolkit/skills/project-setup/assets/salesforce/tools/kb/_freshness_stamp.json
+/plugins/toolkit/skills/project-setup/assets/salesforce/tools/kb/_drift_pending.md
+/plugins/toolkit/skills/project-setup/assets/salesforce/tools/kb/_prev-*.json
+__pycache__/
+*.pyc

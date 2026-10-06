@@ -3,6 +3,22 @@
 Mike's goal, set 2026-09-26. This file is the single place the goal and his
 answers live. Update it when he changes a decision.
 
+## Project filing interview decisions (2026-10-04, TKV-24)
+
+- Setup shows a complete labeled structure, agent instructions, and reusable
+  forms, without invented project records.
+- Every retained original source has one stable entry or locator, including
+  a meeting relevant to just one work item. Related work items link to it.
+- The project must remain browsable by a human in VS Code. Do not create a
+  giant collection of tiny decision files. The exact folder layout is still
+  under review.
+- A work item can produce a durable project design, such as the consolidated
+  data model. The item holds the work, questions, answers, and approval
+  history; the resulting design has a stable, shared home for later items.
+  Mike said, “I would consider the data model design work item done when the
+  design is approved.” Later changes can revise the guiding artifact through
+  new work. This settles the lifecycle boundary, not its folder name.
+
 ## Goal and finish list (approved by Mike, 2026-09-29: "Okay, yeah, that's great")
 
 Test scenarios (Mike, 2026-09-29, with the approval): the test projects

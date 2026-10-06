@@ -1,29 +1,33 @@
-// Checks the model's rule files against Claude Code's guidance for rules
+// Checks the model's rule files (the rules in the setup folders under
+// plugins/toolkit/skills/project-setup/assets/) against Claude Code's guidance for rules
 // (Mike, 2026-09-29: "Make sure the rules are written using Claude Code best
 // practices"; dev/GOAL.md, "Rules follow Claude Code best practices": a
 // checker enforces the format). The checklist and its sources:
 // dev/research/rules-best-practices.md, Part 1.
 //
-//   node dev/tools/check-rules.mjs                 check plugins/toolkit/skills/project-setup/assets/model/.claude/rules/
-//   node dev/tools/check-rules.mjs --dir <folder>  check another project folder (for example the model
-//                                                  branch folder before a refresh)
+//   node dev/tools/check-rules.mjs                 check the rules of every setup folder, put together
+//                                                  in a scratch folder as one project that has every choice
+//   node dev/tools/check-rules.mjs --dir <folder>  check another project folder (for example a set-up project)
 //
 // It fails (exit 1) when a rule:
 //   - has frontmatter that does not parse, holds a field other than `paths`,
 //     or has an invalid `paths` pattern (an unclosed "[" or "{", a leading
 //     "/", more than 1,000 patterns after brace expansion);
 //   - has a `paths` pattern that matches no file in the folder, unless the
-//     pattern is under a folder a project creates later (FOLDERS_MADE_LATER in
-//     dev/tools/rule-lint.mjs);
+//     pattern starts with a path a project creates later or only one setup
+//     choice has (FOLDERS_MADE_LATER in dev/tools/rule-lint.mjs);
 //   - does not start with a "# " heading, or has no instruction, or only vague
 //     ones ("properly", "as needed") that name nothing to check;
 //   - holds a numbered procedure of 5 or more steps (move it to a skill);
 //   - loads in every session (no `paths`) and is over 200 lines;
 //   - repeats an instruction in another rule, or says never where another
 //     rule says do in nearly the same words.
-// It also fails when the AGENTS.md rules list is not the one the rule files
-// give, and when the owner-preferences.md template that project-setup copies
+// It also fails when the owner-preferences.md template that project-setup copies
 // into a project (assets/owner-preferences.md) would itself fail these checks.
+// The starter AGENTS.md holds no rules list since the one-home layout (TKV-24): it
+// tells Codex to read the rule files. So the rules-list check runs only with --dir, on
+// a project whose AGENTS.md still holds the two toolkit:rules marker lines; there it
+// fails when the list is not the one the rule files give.
 //
 // It warns, and does not fail, when a rule:
 //   - loads in every session and is over 4,096 bytes. The number is a
@@ -40,14 +44,17 @@
 //     rule names without a never: a possible contradiction for a person to
 //     read.
 // It also prints, as information and never as a warning, how many bytes load in every
-// session in three setups (the rules without `paths` plus AGENTS.md, with the setup markers
-// resolved and the rules each setup leaves out removed). No ceiling for that total is set:
+// session in three setups (the rules without `paths` plus AGENTS.md, with the rules each
+// setup leaves out removed: the rule files of salesforce, memory-hindsight, and notion-tools
+// go only to a project with that choice). No file holds a setup marker since the one-home
+// layout (TKV-24), so every file counts whole. No ceiling for that total is set:
 // it waits for Mike's answer (dev/reviews/best-practices-review.md, question 9).
 // Not checked: that every file path a rule names exists. Most are files a
 // project or a tool makes later (`tools/kb/out/`, `.claude/rules/owner-preferences.md`,
-// `delivery/data/...`), so the check would need a hand-kept list of them.
+// `delivery/migrations/...`), so the check would need a hand-kept list of them.
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -57,16 +64,38 @@ import {
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..', '..');
 const SETUP = path.join(REPO, 'plugins', 'toolkit', 'skills', 'project-setup');
-const DEFAULT_DIR = path.join(SETUP, 'assets', 'model');
+const ASSETS = path.join(SETUP, 'assets');
+/** The one folder under assets/ that holds no project files: the settings snippets. */
+const NOT_PROJECT_FOLDERS = ['settings'];
+/**
+ * The setup folders: project files at the paths a project has them. Read from the disk, so a new folder is
+ * never left out. check-skills.mjs fails when one of them is not in the table "Folders the choices add" of setup-copy.md.
+ */
+const PROJECT_FOLDERS = fs.readdirSync(ASSETS, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && !NOT_PROJECT_FOLDERS.includes(e.name))
+  .map((e) => e.name)
+  .sort((a, b) => (a === 'every-project' ? -1 : b === 'every-project' ? 1 : a.localeCompare(b)));
 /** The owner's rule file. Its lines are the owner's own, so they are compared by list item only. */
 const RULE_FILE_NAME = 'owner-preferences.md';
 /** The owner-preferences.md template project-setup copies into a project's .claude/rules/. */
-const OWNER_TEMPLATE = path.join(SETUP, 'assets', RULE_FILE_NAME);
+const OWNER_TEMPLATE = path.join(ASSETS, RULE_FILE_NAME);
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '__pycache__', '.sfdx', '.sf']);
 
+/** Put every setup folder into one scratch folder: a project with every choice (the folders that alternate overwrite each other's skills only). */
+let mergedDir = null;
+function mergedModel() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'check-rules-'));
+  mergedDir = dir;
+  process.on('exit', () => fs.rmSync(dir, { recursive: true, force: true }));
+  for (const folder of PROJECT_FOLDERS) {
+    fs.cpSync(path.join(ASSETS, folder), dir, { recursive: true, filter: (src) => path.basename(src) !== '.agents' });
+  }
+  return dir;
+}
+
 function parseArgs(argv) {
-  const out = { dir: DEFAULT_DIR };
+  const out = { dir: null };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     if (a === '--dir') {
@@ -79,7 +108,7 @@ function parseArgs(argv) {
       process.exit(0);
     } else fail(`Unknown option ${a}.`);
   }
-  out.dir = path.resolve(out.dir);
+  out.dir = out.dir ? path.resolve(out.dir) : mergedModel();
   return out;
 }
 
@@ -114,15 +143,7 @@ function knownSkills(dir) {
     }
   };
   add(path.join(REPO, 'plugins', 'toolkit', 'skills'));
-  const assets = path.join(SETUP, 'assets');
-  add(path.join(assets, '.shared-skills'));
-  add(path.join(assets, '.salesforce'));
-  const sets = path.join(assets, '.skill-sets');
-  try {
-    for (const e of fs.readdirSync(sets, { withFileTypes: true })) if (e.isDirectory()) add(path.join(sets, e.name));
-  } catch {
-    // No skill sets.
-  }
+  for (const folder of PROJECT_FOLDERS) add(path.join(ASSETS, folder, '.claude', 'skills'));
   add(path.join(dir, '.claude', 'skills'));
   add(path.join(dir, '.agents', 'skills'));
   return names;
@@ -130,6 +151,7 @@ function knownSkills(dir) {
 
 /** A folder as a path inside this repository, or in full when it is outside. */
 function shown(dir) {
+  if (mergedDir && dir.startsWith(mergedDir)) return `the setup folders (put together)${dir.slice(mergedDir.length)}`;
   const rel = path.relative(REPO, dir);
   return rel && !rel.startsWith('..') ? rel : dir;
 }
@@ -141,58 +163,37 @@ const SETUPS = [
   { name: 'local work, Hindsight memory, Salesforce', tracker: 'local', memory: 'hindsight', salesforce: true },
 ];
 
-/** Keep the blocks whose setup marker holds and delete every marker line (project-setup/references/setup-copy.md, "Setup markers"). */
-function resolveMarkers(text, setup) {
-  const holds = (condition) => {
-    if (condition === 'salesforce') return setup.salesforce;
-    if (condition === 'not salesforce') return !setup.salesforce;
-    return condition.split(' or ').some((part) => {
-      const m = part.trim().match(/^(tracker|memory)=(\w+)$/);
-      return m ? setup[m[1]] === m[2] : false;
-    });
-  };
-  const out = [];
-  let keep = true;
-  for (const line of text.split('\n')) {
-    const t = line.trim();
-    const open = t.match(/^<!-- if (.+) -->$/);
-    if (open) keep = holds(open[1]);
-    else if (t === '<!-- endif -->') keep = true;
-    else if (keep) out.push(line);
-  }
-  return out.join('\n').replace(/<!-- Project setup fill-in guide[\s\S]*?-->\n?/, '');
+/** AGENTS.md as a session reads it once setup is finished: without its fill-in guide comment. */
+function withoutFillInGuide(text) {
+  return text.replace(/<!-- Project setup fill-in guide[\s\S]*?-->\n?/, '');
 }
 
-/** The rules a project without Salesforce leaves out: the bullets of "The Salesforce list" in setup-copy.md. */
-function salesforceRuleNames() {
-  const file = path.join(SETUP, 'references', 'setup-copy.md');
-  if (!fs.existsSync(file)) return [];
-  const text = fs.readFileSync(file, 'utf8');
-  const at = text.indexOf('The Salesforce list (only a Salesforce project keeps these):');
-  if (at === -1) return [];
-  const lines = [];
-  for (const line of text.slice(at).split('\n').slice(1)) {
-    if (line.trim() === '' && !lines.length) continue;
-    if (line.startsWith('- ') || line.startsWith('  ')) lines.push(line);
-    else break;
-  }
-  return [...lines.join('\n').matchAll(/`([\w-]+\.md)`/g)].map((m) => m[1]);
+/** The rule files one setup folder holds. */
+function ruleNamesOf(folder) {
+  const dir = path.join(ASSETS, folder, '.claude', 'rules');
+  return fs.existsSync(dir) ? fs.readdirSync(dir).filter((n) => n.endsWith('.md')) : [];
 }
+
+/** The folders whose rules only some projects get, and the setups that get them (setup-copy.md, "Folders the choices add"). */
+const CHOICE_RULES = [
+  { folder: 'salesforce', when: (setup) => setup.salesforce },
+  { folder: 'memory-hindsight', when: (setup) => setup.memory === 'hindsight' },
+  { folder: 'notion-tools', when: (setup) => setup.tracker === 'notion' || setup.memory === 'notion' },
+];
 
 /** Bytes that load in every session in each setup: always-on rules plus AGENTS.md, and the owner-preferences.md template. */
 function setupTotals(dir, raw, rules) {
-  const salesforce = new Set(salesforceRuleNames());
+  const choiceRules = CHOICE_RULES.map((c) => ({ names: new Set(ruleNamesOf(c.folder)), when: c.when }));
   const agentsFile = path.join(dir, 'AGENTS.md');
   const agents = fs.existsSync(agentsFile) ? fs.readFileSync(agentsFile, 'utf8') : '';
   const ownerTemplate = fs.existsSync(OWNER_TEMPLATE) ? Buffer.byteLength(fs.readFileSync(OWNER_TEMPLATE, 'utf8')) : 0;
   return SETUPS.map((setup) => {
-    let bytes = Buffer.byteLength(resolveMarkers(agents, setup)) + ownerTemplate;
+    let bytes = Buffer.byteLength(withoutFillInGuide(agents)) + ownerTemplate;
     for (const r of raw) {
       const parsed = rules.find((x) => x.name === r.name);
       if (!parsed || parsed.scoped) continue;
-      if (!setup.salesforce && salesforce.has(r.name)) continue;
-      if (setup.tracker !== 'local' && r.name === 'work-item-folders.md') continue;
-      bytes += Buffer.byteLength(resolveMarkers(r.text, setup));
+      if (choiceRules.some((c) => c.names.has(r.name) && !c.when(setup))) continue;
+      bytes += Buffer.byteLength(r.text);
     }
     return { name: setup.name, bytes };
   });
@@ -217,22 +218,22 @@ function main() {
       if (skills.has(s.name) || rule.text.includes(`\`${s.name}\` is not installed`)) continue;
       findings.push({ rule: rule.name, line: s.line, check: 'skill', severity: 'warning', message: `The rule names the \`${s.name}\` skill, which project-setup does not ship and no project skill in ${shown(dir)} holds, and does not say what to do when it is not installed.`, fix: 'Name a skill that exists, or add what to do when it is not installed.' });
     }
-    // A pattern must match a file the project has, or name a folder it makes later.
+    // A pattern must match a file the project has, or start with a path it makes later or only one choice has.
     for (const p of rule.paths || []) {
       if (globProblems(p) || files.some((f) => globMatches(p, f))) continue;
       const folder = firstFolder(p);
       if (folder && FOLDERS_MADE_LATER[folder]) continue;
-      findings.push({ rule: rule.name, line: 1, check: 'glob', severity: 'error', message: `The paths pattern "${p}" matches no file in ${shown(dir)}, so the rule never loads.`, fix: `Fix the pattern, or add its folder to FOLDERS_MADE_LATER in dev/tools/rule-lint.mjs with the reason a project creates it later.` });
+      findings.push({ rule: rule.name, line: 1, check: 'glob', severity: 'error', message: `The paths pattern "${p}" matches no file in ${shown(dir)}, so the rule never loads.`, fix: `Fix the pattern, or add its first path part to FOLDERS_MADE_LATER in dev/tools/rule-lint.mjs with the reason a project may not have it.` });
     }
   }
   findings.push(...lintRuleSet(rules, { listItemsOnly: [RULE_FILE_NAME] }));
 
-  // The AGENTS.md rules list matches the rule files (R26).
+  // A project set up before the one-home layout: its AGENTS.md rules list matches the rule files (R26).
   const agentsFile = path.join(dir, 'AGENTS.md');
   if (fs.existsSync(agentsFile)) {
     const agents = fs.readFileSync(agentsFile, 'utf8');
     if (hasSpan(agents) && spanBody(agents) !== buildSpan(raw)) {
-      findings.push({ rule: 'AGENTS.md', line: null, check: 'rules-list', severity: 'error', message: 'The rules list in AGENTS.md is not the list the rule files give (a heading, a paths list, or a file changed).', fix: 'On the model branch, rewrite the list between the toolkit:rules markers to match buildSpan(readRules(<folder>)) in dev/tools/rule-lint.mjs, then refresh the model copy.' });
+      findings.push({ rule: 'AGENTS.md', line: null, check: 'rules-list', severity: 'error', message: 'The rules list in AGENTS.md is not the list the rule files give (a heading, a paths list, or a file changed).', fix: 'Rewrite the list between the toolkit:rules markers to match buildSpan(readRules(<folder>)) in dev/tools/rule-lint.mjs.' });
     }
   }
 
@@ -250,13 +251,21 @@ function main() {
     }
   }
 
+  // A setup folder for one choice that holds rules must be in CHOICE_RULES, or its rules are counted for every setup.
+  if (dir === mergedDir) {
+    for (const folder of PROJECT_FOLDERS) {
+      if (folder === 'every-project' || !ruleNamesOf(folder).length || CHOICE_RULES.some((c) => c.folder === folder)) continue;
+      findings.push({ rule: `assets/${folder}/.claude/rules`, line: null, check: 'choice-rules', severity: 'error', message: `The setup folder ${folder} holds rules, but CHOICE_RULES in dev/tools/check-rules.mjs does not say which setups get them.`, fix: 'Add the folder to CHOICE_RULES with the choice that copies it.' });
+    }
+  }
+
   const errors = findings.filter((x) => x.severity === 'error');
   const warnings = findings.filter((x) => x.severity !== 'error');
   const always = rules.filter((r) => !r.scoped);
   const alwaysBytes = always.reduce((n, r) => n + ruleSize(r).bytes, 0);
   const largest = [...always].sort((a, b) => ruleSize(b).bytes - ruleSize(a).bytes)[0];
   console.log(`check-rules: ${rules.length} rules in ${shown(rulesDir)}: ${always.length} always on (${alwaysBytes} bytes in all; largest ${largest ? `${largest.name}, ${ruleSize(largest).bytes} bytes` : 'none'}; proposed limit ${RULE_LIMITS.alwaysOnBytes} bytes each, a warning until Mike says yes), ${rules.length - always.length} path-scoped.`);
-  console.log(`check-rules: bytes that load in every session (always-on rules plus AGENTS.md, setup markers resolved): ${setupTotals(dir, raw, rules).map((t) => `${t.name}, ${t.bytes}`).join('; ')}. No ceiling is set for this total yet; it waits for Mike's answer.`);
+  console.log(`check-rules: bytes that load in every session (always-on rules plus AGENTS.md): ${setupTotals(dir, raw, rules).map((t) => `${t.name}, ${t.bytes}`).join('; ')}. No ceiling is set for this total yet; it waits for Mike's answer.`);
   for (const x of [...errors, ...warnings]) {
     console.log(`${x.severity === 'error' ? 'Error' : 'Warning'}: ${x.rule}${x.line ? `, line ${x.line}` : ''}: ${x.message}${x.fix ? ` Fix: ${x.fix}` : ''}`);
   }
@@ -265,7 +274,7 @@ function main() {
     process.exit(1);
   }
   console.log(`check-rules: passed${warnings.length ? ` with ${warnings.length} warning${warnings.length === 1 ? '' : 's'}` : ''}.`);
-  if (warnings.length) console.log('Warnings do not fail the run. A fix that changes what a model rule means, or rewrites wording Mike approved (session-handoff.md is his), waits for his yes; the open questions are in dev/model-changes.md, "Rules best practices: needs your yes".');
+  if (warnings.length) console.log('Warnings do not fail the run. A fix that changes what a model rule means, or rewrites wording Mike approved (salesforce-org-safety.md is his), waits for his yes; the open questions are in dev/model-changes.md, "Rules best practices: needs your yes".');
 }
 
 main();

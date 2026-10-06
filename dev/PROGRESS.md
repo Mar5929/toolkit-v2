@@ -2,6 +2,181 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The one-home layout, version 0.9.0 (2026-10-05, on a branch, not landed)
+
+Work item TKV-24. Branch `claude/one-home-layout`, worktree
+`.claude/worktrees/one-home-layout`. Not pushed. It lands only with Mike's
+yes, after he has looked at a new project folder set up from it
+(`~/Documents/Projects/toolkit-setup-preview`; he asked for a fresh setup
+in place of a rebuilt HarborDesk sample, 2026-10-05).
+
+What Mike decided is in `dev/research/layout-audit/DESIGN-SPEC.md`. The
+audits, the memory scenario test, and the specification of the checking
+script are beside it. The reviews are `dev/reviews/2026-10-05-*.md`.
+
+- One folder per setup choice under `project-setup/assets/` (`every-project`,
+  `work-local`, `work-notion`, `work-github`, `memory-local`,
+  `memory-notion`, `memory-process`, `memory-hindsight`, `notion-tools`,
+  `salesforce`, `soul`). A choice decides which files a project gets, never
+  which lines: all 53 setup marker blocks are gone.
+- The project layout: a root `AGENTS.md` that is the outline and the filing
+  table; `DECISIONS.md`; `system/`; `sources/`; `delivery/`; `reference/`;
+  a guide (`AGENTS.md` with a one-line `CLAUDE.md`) in each main folder.
+  `project-wide-records/`, `requirements/`, `system-guide/`, and
+  `ai-external-knowledge/` are removed from the starter.
+- Skills renamed: `running-work-item-lifecycle`, `using-work-tracker`,
+  `filing-project-records`, `curating-project-memory`, `using-memory-store`.
+  No new project skill: closing is a step of the lifecycle skill; recording
+  a decision, filing a source, and updating a system document are three
+  steps of the filing skill.
+- Local memory is the Davis-based memory again (Mike, 2026-10-05: "restore
+  the Davis memory and fine-tune it"; he approved the component list the
+  same day): Current State in five parts, one Markdown file per concept in
+  four kinds (`user_`, `project_`, `reference_`, `event_`), a generated
+  index, and the "Memory approval" line. No decision records, glossary, or
+  system facts in memory. Two filing rows say to write an analysis of the
+  existing system to `reference/current-system/`, and a run of a recurring
+  job to memory, before the reply. Reviewed twice and fixed
+  (`dev/reviews/2026-10-05-memory-restore-review.md`,
+  `dev/test-runs/memory-restore.md`,
+  `dev/test-runs/skill-routing-memory-restore.md`). A Hindsight project
+  gets no toolkit memory skill (Mike, 2026-10-05): the add-on ships its own.
+- A fourth hook command, `validate-records.mjs` (15 checks; Mike accepted
+  279 lines plus tests on 2026-10-05), run after an edit, at stop in Claude
+  Code, and before a commit through `.githooks/pre-commit`.
+- A third plugin skill, `writing-harness-files` (Mike's yes, 2026-10-05),
+  and the repository rule "Harness files follow the current official
+  documentation". The official pages were captured again on 2026-10-05, and
+  Hindsight's pages were added.
+- "Update the toolkit" has steps that move a project from the old layout to
+  the new one (`references/one-home-layout.md`).
+- Reviews: three separate reviews, a review of the fixes, and a review of
+  the second fixes. Their status sections say what is closed and what waits.
+- Routing test: `dev/test-runs/skill-routing-0.9.0.md`. Claude Code 54 of
+  60 right, Codex 51 of 60. The steady misses are listed there; the
+  description changes they suggest are not made yet.
+- A Codex project must trust its hooks again in `/hooks` after an update.
+
+The plain-English rewrite (2026-10-06, on the branch `claude/one-home-plain`,
+not landed; the version is still 0.9.0):
+- Seven writers rewrote the skills, the setup references, the folder
+  guides, and the rules into plain English: an opening that says what the
+  file is for, whole sentences, and plain words or a name the reader can
+  see in place of each made-up word. No rule was changed. A last pass made
+  the words and the headings the same across the files.
+- The writing rule has a new name, `write-documents-in-plain-english.md`
+  (Mike, 2026-10-06). It was `write-for-the-reader.md` for about two hours on a branch, and
+  `plain-english-artifacts.md` before that. "Update the toolkit" replaces
+  either old file in an existing project.
+- All the writing rules are in that one rule (Mike, 2026-10-06). The long
+  second text in `writing-harness-files` was deleted. The skill holds an
+  exact copy of the rule, `references/writing-rule.md`, and
+  `check-skills.mjs` fails when the copy and the rule differ.
+- The word list is `dev/reviews/word-list.md`: one answer for each made-up
+  word, and one word where the files used several, such as "session" (never
+  "chat"), "the project's Current State" and "the work item's Current
+  state", "the owner's yes", and "source".
+- Not rewritten: the Salesforce skills and rules, `choosing-outside-tools`,
+  and the templates (the work item and design templates, the memory record
+  template, and the three Notion page texts).
+- The root guide of a project is 19,880 bytes; setup fails a project whose
+  guide is over 20,480.
+- Still to do: the skill routing test in both hosts, because 15 skill
+  descriptions changed.
+
+Open with Mike (also in `dev/research/layout-audit/FIX-LIST.md`, "Waits for
+the owner", and `MEMORY-SCENARIOS.md`):
+- Memory, known limits from the live runs: a mid-size model does not save
+  a draft it gave only in the chat, such as a meeting preparation list (0
+  of 3); a reported job failure was saved in 4 of 5 runs. Fixing more needs
+  a new hook job, which needs his yes.
+- Memory, for him to confirm (`DESIGN-SPEC.md` section 9): the new starter
+  file `.ignore`; `@PROJECT.md` in the root guide; a project task may name
+  another person; whether his request for an analysis is also his yes to
+  commit its record; a save about a named person waits for his yes.
+- The review file `dev/reviews/2026-10-05-memory-restore-review.md` is
+  written but not committed: the reviewer's commit was refused by the
+  permission system, and the orchestrator did not commit it in its place.
+  It is in the `one-home-memory` worktree.
+- `session-handoff.md` (his wording) and the figurative words in his older
+  rule files.
+- What Notion memory stores and when its pointers are read.
+- The twelve changes the builders made on their own, listed in
+  `DESIGN-SPEC.md` section 9 for him to confirm.
+
+Before it lands:
+- The main checkout has an uncommitted `AGENTS.md` edit from another
+  session, the rule "Challenge the current design (Mike, 2026-10-04)". It is
+  not on this branch. It must be kept.
+- Mike has looked at `toolkit-setup-preview` and said it looks right.
+
+## Project filing system interview (2026-10-04, TKV-24)
+
+Mike set an active goal to define one project lifecycle, filing system,
+record schema, and set of agent procedures across Salesforce and SaaS
+projects and across tracker and memory choices. This is design work; the
+Toolkit V2 model and shipped skills have not been changed for it. The
+working inventory is `dev/research/project-filing-lifecycle-working.md`.
+The active Notion work item is TKV-24, "Define the project lifecycle and filing
+system." TKV-4's HarborDesk review follows its approved design; TKV-21's
+Claude-Obsidian evaluation follows that review. TKV-19 remains Done for the
+earlier project-wide records work.
+Mike chose a complete labeled setup structure with instructions and forms,
+and no fictional records. He also asked agents to recommend a better design
+when current files are unclear; the instruction is in this repository's
+`AGENTS.md`. Mike approved one stable entry or locator for each original
+source, including one-item meeting sources, so work items can lead an agent
+back to their context on resume (TKV-24 Q-02). Mike also rejected a giant
+collection of bite-sized decision files and requires an answer to be findable
+by a human browsing in VS Code (TKV-24 Q-03). Mike did not accept the
+subject-based proposal (TKV-24 Q-04); he asked for a Salesforce org-merge
+walkthrough starting at setup, planning, and discovery before choosing
+folders. The walkthrough and comparison are drafted in the working inventory
+through target decision, build, cutover, and a changed answer. The draft also
+separates claim, approval, delivery, question, and work-item states. It now
+includes a candidate filing decision procedure, readback rule, and examples
+showing that tracker and memory choices do not change the record route.
+An event-by-event ledger now tests which record carries the source, current
+answer, unresolved question, work, and verification at each org-merge stage.
+An audit against `codex/tkv4-review` now lists the actual model route and
+unresolved gap for each of those records, including conflicting no-item
+decision instructions and the missing general SaaS release evidence route.
+The changed-answer procedure has been checked against the current shared
+records skill; the draft identifies six seams to settle while retaining its
+existing answer history, impact checks, and readback behavior.
+The org-merge scenario now compares the current role split, a single
+`planning/` home, and separate dated discovery versus maintained answers
+across workshop, approval, cutover, changed answer, human lookup, and
+migration. No folder choice has been approved.
+TKV-24's Notion summary and solution-options note now reflect the three
+approaches and the open Q-05; its status remains In Progress and Waiting on
+Mike for that question.
+Mike clarified the missing workflow: a result-led data model design work item
+uses kickoff and discovery questions, and its finished design needs a lasting
+human-findable home. The working draft now traces that item through source
+intake, questions, a maintained design, approval, build handoff, and a later
+change. Mike agreed that the design item ends when the design is approved;
+the decision is recorded in `dev/GOAL.md`. The draft now compares two
+whole-project structures: one organized by record role (recommended for
+testing) and one by business/system area. It identifies overlap among the
+current system data model requirement, item design, and shared target
+architecture. The exact paths remain proposals. Next: show the options to
+Mike, test a cross-area architecture design and changed answer against his
+preferred layout, then settle the folder names and procedures.
+For Mike's refactor-size question, the newer model branch has 60 candidate
+files mentioning the old location terms: 23 model files, 19 shared-skill
+files, 2 tracker-skill files, 9 setup files, and 7 settings/docs/check files.
+The working design records a provisional 30-45 substantive edits, plus file
+moves, migration instructions, and scratch-project verification; it would
+not require a new runtime. This is a reference inventory, not a final edit
+count, and no shipped files were changed for the proposal.
+The HarborDesk current-state audit is in
+`dev/research/harbordesk-current-state-audit.md`. It maps the existing files
+and the lifecycle gaps using the fictional sample, without changing that
+project or the shipped model. Mike asked for a plain explanation, so the file
+now describes the setup and each problem with an example, without proposing
+a final folder design. Read it before settling the final folder layout.
+
 ## Merge update (2026-10-04)
 
 - Mike approved both merges. Pull request 20 landed the `dev/` cleanup, and
