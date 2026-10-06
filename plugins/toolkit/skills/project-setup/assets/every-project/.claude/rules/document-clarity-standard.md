@@ -2,13 +2,13 @@
 
 Write documents and the words inside artifacts so that someone who was not in the session can understand them after one read.
 
-An artifact is something made for a person to look at, such as a diagram, chart, dashboard, mockup, slide deck, published page, or report. Follow this standard for its title, headings, labels, notes, captions, and body text.
+An artifact is something made for a person to look at, such as a diagram, chart, dashboard, mockup, slide deck, published page, or report. These are examples; the standard also covers the words in other finished visuals and presentations. Follow it for titles, headings, labels, notes, captions, and body text.
 
 A document is a file that someone follows or relies on later. Skills, rules, agent guides (`AGENTS.md` and `CLAUDE.md`), requirements, designs, system documents, decisions, test plans, and delivery records are all documents.
 
-Replies to the owner in a session follow the output style. Text sent to another person follows `humanize-outbound-text.md`.
+Replies to the owner in a session follow the output style. Text sent to another person follows `humanize-outbound-text.md`. If that text is an artifact, follow this standard for its words too.
 
-A helper agent is an agent started for one job. Helper agents and Codex do not get the output style, so they follow this standard. When the standard and the active style file disagree, follow the style file.
+A helper agent is an agent started for one job. Helper agents and Codex do not get the output style, so they follow this standard for documents and artifacts.
 
 ## Words and names
 
@@ -27,7 +27,7 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 
 ## Sentences
 
-- Write whole sentences. A whole sentence has a subject and a verb. Never cut a sentence down to a label and a colon. For example, write "When a save fails, start your reply with 'Not saved'", not "A save that failed: 'Not saved'".
+- Write whole sentences in prose and instructions. A whole sentence has a subject and a verb. Headings and labels in artifacts can be short phrases. Never cut a prose sentence down to a label and a colon. For example, write "When a save fails, start your reply with 'Not saved'", not "A save that failed: 'Not saved'".
 - Put one idea in a sentence, or two ideas that belong together. Start a new sentence for a third idea.
 - Name who acts, and put that name first. For example, write "The agent saves the file", not "The file is saved".
 - Put the condition before the action. The reader then knows whether the sentence applies before reading what to do. For example, write "When the save fails, tell the owner", not "Tell the owner when the save fails".
@@ -46,14 +46,16 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 - Use as many points as the subject needs. Do not add a third point just to make a list of three.
 - Write about the subject. Do not write about the document itself or about the session that produced it.
 - When the exact words of the session are the fact, quote them, and say who said them and when. Otherwise do not quote the session.
-- Keep every fact, number, name, date, and quotation exactly as it is.
+- When rewriting a document that is not an artifact, keep every fact, number, name, date, and quotation unchanged. In an artifact, include only what the reader needs, and keep what you include accurate.
 
 ## Extra rules for artifacts
 
+- Keep artifact text short, direct, and easy to scan. Use common words and the fewest words that convey the needed meaning. Keep a name, number, or explanation when removing it would make the text unclear.
+- These rules take priority over the document rules for text people scan. If an artifact includes a procedure or detailed explanation, use the document rules for that part.
 - Start with the content. Do not write an introduction before the content, and do not end with a line that repeats it in short.
 - Give each heading a name that says what is under it, in the words of the subject. For example, write "Team structure options", not "Three ways to build the team tree, pick one".
-- When a number is itself the fact, a heading may contain it. Otherwise leave numbers out of headings.
-- Put the real name on a box or a label. A label can be a short name. A note or a caption must be a whole sentence.
+- Include a number in a heading when readers need it to know what the heading covers or when the number is the fact. Otherwise leave it out.
+- Put the real name on a box or a label. A heading, label, note, or caption can be a short phrase when its meaning is clear. Use a whole sentence for an instruction or claim only when a short phrase would be unclear.
 - State the decision or the fact itself. Do not add a line that tells the reader it is important.
 - The agent chooses the layout. This rule governs only the words.
 

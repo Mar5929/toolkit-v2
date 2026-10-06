@@ -2,6 +2,17 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Artifact wording in the document clarity standard, version 0.9.4 (2026-10-06)
+
+Mike asked for finished artifacts, including diagrams, charts, dashboards,
+mockups, slide decks, published pages, and reports, to use short, ordinary
+language that is easy to scan. The standard now says to use the fewest words
+that convey the needed meaning. It allows short headings, labels, notes,
+and captions, while requiring complete sentences for prose and instructions.
+It also states that an artifact sent to another person follows both the
+document clarity standard and the outbound text rule. The repository guide
+and the copy in `writing-harness-files` are kept in step with the rule.
+
 ## Two skills removed, version 0.9.3 (landed 2026-10-06)
 
 Work item TKV-28. Mike, 2026-10-06: "Delete the Explain Simply skill and the
