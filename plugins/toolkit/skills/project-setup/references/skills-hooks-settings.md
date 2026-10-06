@@ -140,9 +140,9 @@ grep -o 'plugins\."[^"]*"' ~/.codex/config.toml
 ```
 
 For each name that ends in `@claude-toolkit`, and each `@toolkit-v2` name
-other than `toolkit@toolkit-v2` (the retired `work`, `memory`,
-`session-skills`, `git-workflows`, and Salesforce architect plugins),
-that the snippets do not already name:
+other than `toolkit@toolkit-v2` and `workstreams@toolkit-v2` (the retired
+`work`, `memory`, `session-skills`, `git-workflows`, and Salesforce
+architect plugins), that the snippets do not already name:
 
 - add `"<name>": false` under `enabledPlugins` in
   `<copy>/.claude/settings.json`;
@@ -153,7 +153,8 @@ that the snippets do not already name:
   enabled = false
   ```
 
-Never turn off `toolkit@toolkit-v2`: it holds this skill. Never change the
+Never turn off `toolkit@toolkit-v2`, which holds this skill, or
+`workstreams@toolkit-v2`, the side panel of the owner's chats. Never change the
 files in `~/.claude` or `~/.codex`.
 
 ## Check

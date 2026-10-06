@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 // SessionStart hook for Claude Code and Codex: prints Current State; with local memory it also
-// prints the pointer table, memory/MEMORY.md. It writes no file. Any error prints one line. It
-// always exits 0.
+// rebuilds memory/MEMORY.md and prints one line per memory file. An error prints one line; exit 0.
 // Usage: node session-start.mjs --memory local|notion|hindsight [--page <Current state page id>]
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
 const COMPACTED = 'Context was just compacted. Before you answer the next message, re-read the'
   + ' active work item with using-work-tracker, then do "Every session" in the root AGENTS.md'
   + ' again.';
+const NEW_INDEX = '<!-- Generated file: the session-start hook rebuilds this index from each'
+  + " memory file's title, description, and updated date. Do not edit it by hand. -->\n\n"
+  + '# Memory index\n\n## User\n\n## Other memory views\n\n- [Current state](CURRENT_STATE.md)\n';
 process.stdout.on('error', () => {}); // A reader that closed the output is no error.
 const arg = (name, i = process.argv.indexOf(`--${name}`)) => i > 1 && process.argv[i + 1];
 const memory = arg('memory') || 'local';
@@ -27,28 +29,48 @@ try {
   const page = () => execFileSync('ntn', ['api', `v1/pages/${arg('page')}/markdown`], opts);
   const state = String(memory === 'notion' ? attempt(() => JSON.parse(page()).markdown)
     : read('CURRENT_STATE.md')).trim();
-  if (state) out.push('Current State:', state);
-  else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
-    + ' Read it with the using-memory-store skill.');
-  else out.push(`memory/CURRENT_STATE.md is missing or empty in ${dirname(dir)}.`);
-  // A prune request when Current State is 40 lines or more, or was last updated over 7 days ago.
+  // A prune request (40 lines or more, or over 7 days old), printed first so it is never cut off.
   const lines = state.split('\n').length;
   const updated = state.match(/Last updated:\W*(\d{4}-\d{2}-\d{2})/i)?.[1];
   const days = Math.floor((Date.now() - Date.parse(updated)) / 864e5) || 0;
   const prune = memory === 'hindsight' ? 'a direct edit, as .claude/rules/hindsight-memory.md says'
     : 'the curating-project-memory skill';
-  const size = lines >= 40 ? `${lines} lines (limit: under 40)` : `${days} days old`;
-  if (lines >= 40 || days > 7) out.push(`Current State is ${size}. Prune it with ${prune}.`);
-  // Local memory: the pointer table, printed as it is. Only using-memory-store writes it.
-  const pointers = memory === 'local' && read('MEMORY.md').trim();
-  if (pointers) out.push('', 'Memory pointers (memory/MEMORY.md):', pointers);
+  const size = lines >= 40 ? `${lines} lines (limit: under 40)` : days > 7 && `${days} days old`;
+  if (size) out.push(`Current State is ${size}. Prune it with ${prune}.`);
+  if (state) out.push('Current State:', state);
+  else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
+    + ' Read it with the using-memory-store skill.');
+  else out.push(`memory/CURRENT_STATE.md is missing or empty in ${dirname(dir)}.`);
+  // Local memory: rebuild the index, one line per current memory file.
+  if (memory === 'local' && attempt(() => readdirSync(dir).length)) {
+    const lists = { user: '', project: '', reference: '', event: '' };
+    for (const file of readdirSync(dir).sort()) {
+      const type = file.match(/^(user|project|reference|event)_.+\.md$/)?.[1];
+      const [, front, body] = (type && read(file).match(/^---\r?\n(.*?)\r?\n---(.*)/s)) || [];
+      const field = (key) => (front.match(new RegExp(`^${key}:[ \\t]*(.*)$`, 'm'))?.[1] ?? '')
+        .trim().replace(/^(["'])(.*)\1$/, '$2');
+      if (!front || /^(template|retired|superseded|withdrawn)$/i.test(field('status'))) continue;
+      const title = body.match(/^# (.+)$/m)?.[1].trim() || field('name') || file.slice(0, -3);
+      const date = field('updated') && ` (updated ${field('updated')})`;
+      lists[type] += `- [${title}](${file}): ${field('description')}${date}\n`;
+    }
+    const sections = Object.entries(lists).map(([type, text]) => (
+      `## ${type[0].toUpperCase()}${type.slice(1)}\n\n${text}`)).join('\n');
+    const old = read('MEMORY.md');
+    const base = /\n## User\n[\s\S]*\n## Other memory views/.test(old) ? old : NEW_INDEX;
+    const index = base.replace(/## User\n[\s\S]*?(?=## Other memory views)/, () => `${sections}\n`);
+    // Write only a changed index. A sandbox may block the write; the lines are still printed.
+    attempt(() => index !== old && writeFileSync(join(dir, 'MEMORY.md'), index));
+    out.push('', 'Memory index (files in memory/; open one before you rely on it):',
+      Object.values(lists).join('').trim() || 'No memory files yet.');
+  }
 } catch (error) {
   const why = String(error.message).split('\n')[0];
   out.push(`The session-start hook stopped early (${why}). Read Current State yourself: ${where}.`);
 }
-// Hosts cut hook output at 10,000 characters, so a long table is cut here, between two lines.
-const text = out.join('\n');
-const rest = memory === 'notion' ? where : 'the files in memory/ in the main checkout';
+// Claude Code caps hook output at 10,000 characters. Codex limits it by tokens (about 2,500, or
+// the entry's additionalContextLimit). So longer output is cut here, between two lines.
+const [text, rest] = [out.join('\n'), memory === 'local' ? `memory/MEMORY.md and ${where}` : where];
 const cut = text.length > 9500 && `${text.slice(0, text.lastIndexOf('\n', 9400))}\n[Cut short to`
   + ` fit the hook limit. Read the rest yourself: ${rest}.]`;
 process.stdout.write(`${cut || text}\n`);

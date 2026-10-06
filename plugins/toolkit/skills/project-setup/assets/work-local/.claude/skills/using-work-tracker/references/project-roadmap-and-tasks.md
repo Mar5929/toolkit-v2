@@ -21,10 +21,10 @@ Where the project's own phases and its project tasks are saved, and how to read 
 ## Project tasks: PROJECT-TASKS.md
 
 - The project's tasks are in `work-items/PROJECT-TASKS.md` in the main checkout. Missing: stop and tell the owner the setup is incomplete (the project-setup skill restores it).
-- Each task is a checkbox block in the same form as an item's task (`field-mapping.md`, "Roadmap and Tasks"), in one plain list with no phase headings. Its ID is `PT-` and two digits: `PT-01`, then the next unused number. A new task goes at the end of the list. The first real task replaces the template's example task.
+- Each task is a checkbox block in the same form as an item's task (`field-mapping.md`, "Roadmap and Tasks"), in one plain list with no phase headings. Its Who does it line may also hold the name of another person who owes the task, with the party: `Sarah Chen (client)`. Its ID is `PT-` and two digits: `PT-01`, then the next unused number. A new task goes at the end of the list. The first real task replaces the template's example task.
 - Starting, ticking, and cancelling are the same writes as for an item's task (`field-mapping.md`, "A task's writes").
-- Open project tasks:
+- Open project tasks, each with who does it:
 
   ```bash
-  grep -nE '^- \[ \] \*\*PT-[0-9]+' "$MAIN/work-items/PROJECT-TASKS.md"
+  grep -nE -A4 '^- \[ \] \*\*PT-[0-9]+' "$MAIN/work-items/PROJECT-TASKS.md" | grep -E 'PT-[0-9]+|Who does it'
   ```

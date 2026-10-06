@@ -81,7 +81,7 @@ Do these in order.
   | --- | --- |
   | Old work items in local folders (`old-toolkit-pieces.md`, "Old records") | Work items in local folders, with the ID prefix the old items use |
   | A root `AGENTS.md` that names GitHub Issues or a GitHub project board as its tracker | Work items in GitHub Issues |
-  | `knowledge/memory/` | Local memory. Tell him before he answers: the old memory was committed to Git, so it reached his other computers. In Toolkit V2 the decisions, the description of the system, and the terms are files Git tracks, with every memory choice. Local memory holds only Current State and pointers, is Git-ignored, and stays on this computer. Memory in Notion or Hindsight is readable from every computer. |
+  | `knowledge/memory/` | Local memory. Tell him before he answers: the old memory was committed to Git, so it reached his other computers. In Toolkit V2 the decisions, the description of the system, and the terms are files Git tracks, with every memory choice. Local memory holds Current State and what no other file holds (facts about people and the client, where to find things, and what happened), is Git-ignored, and stays on this computer. Memory in Notion or Hindsight is readable from every computer. |
   | `.toolkit-memory.json` that names `hindsight` | Hindsight memory |
   | `.toolkit-memory.json` that names another service | Tell him Toolkit V2 does not offer that service, and ask question 3 |
   | `SOUL.md` | Yes: his file stays as it is |
@@ -273,7 +273,8 @@ below say. A carry-over writes a new record in the Toolkit V2 form.
      whatever its status, so new IDs continue above every old ID;
    - what the old memory holds that is still true: topic files whose
      status is `current` or not set, and the glossary. Each fact goes to
-     its Toolkit V2 home, never into `memory/`.
+     its Toolkit V2 home; only a fact that fits no other file becomes a
+     memory record.
 
    Finished work items and superseded or retired memory stay where they
    are. He may change any of this on the list.

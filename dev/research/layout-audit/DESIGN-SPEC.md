@@ -360,3 +360,156 @@ complete in one file that reads the same in every project.
   - The rule `session-handoff.md` holds three lines the owner approved in
     place of his earlier paragraph: when to use the `handoff` skill, when
     to offer a handoff, and when not to offer one.
+- From the memory restore (2026-10-05, side branch `claude/one-home-memory`;
+  `MEMORY-RESTORE-SPEC.md`; record: `dev/test-runs/memory-restore.md`).
+  Decisions 13 and 13a of section 2 are replaced by that specification, and
+  so are the two memory rows of section 5 and the memory lines of section
+  7:
+  - Memory is the Davis-based design of `origin/main` again:
+    `curating-project-memory` holds the process (with its five references),
+    each `using-memory-store` holds storage, `memory/` holds one file per
+    concept, and the session-start hook rebuilds the index `MEMORY.md`.
+  - Memory has four kinds of record: `user_`, `project_`, `reference_`,
+    `event_`. It has no decision records, no decision template, and no
+    glossary: those facts are in `DECISIONS.md` and `system/glossary.md`.
+    Every record carries `created`, `updated`, and `check_by`.
+  - Current State has five parts: Now, Coming up, Waiting on, Standing jobs
+    and shared files, Next session starts with. It stays under 40 lines.
+    (The restore also set a limit of 1,600 characters; the fix pass below
+    removed it.)
+  - The "Memory approval" line is back in "Toolkit settings", which has 11
+    lines again.
+  - Settled by the builder, for the owner to confirm:
+    1. A person's lasting role and what the person may decide stay in
+       `PROJECT.md`, "People and ownership". A `user_` record holds only
+       what that table does not: who is away, who covers, what a person
+       handles for now.
+    2. A save that needs the owner's yes is kept as a proposal in the same
+       turn as the question (on `origin/main`: only after his next message
+       did not answer), with its line under "Waiting on".
+    3. An event record and a run row of a recurring job need no question.
+    4. Replaced in the fix pass below. (It was: the index line is the file
+       name and the description, cut at 74 characters, and the two together
+       hold at most 70 characters.)
+    5. Replaced in the fix pass below. (It was: every reply ends with a
+       "Recorded:" line, and the per-message reminder says to record what
+       the turn produced.)
+    6. Claude Code loads `PROJECT.md` through an `@PROJECT.md` line in the
+       root `AGENTS.md`. The root `CLAUDE.md` still holds only
+       `@AGENTS.md`, because record check 11 requires that.
+    7. Every project gets a file `.ignore` with two lines, so the search
+       tools read `work-items/` and `memory/`. Section 3 does not list it.
+    8. A project task's "Who does it" may name another person who owes the
+       task, with the party. A work item's own tasks still say agent or
+       owner.
+    9. In "update the toolkit", a memory decision record is marked as moved
+       and kept, not removed; the old glossary file is removed after its
+       rows are read back.
+    10. Closing a work item offers a third outcome for a lesson: kept in
+        memory as not proven, with the dates it was seen.
+- From the fix pass on the memory restore (2026-10-05; review:
+  `dev/reviews/2026-10-05-memory-restore-review.md`; record:
+  `dev/test-runs/memory-restore.md`, "Fix pass").
+  - Settled:
+    - No reply ends with a "Recorded:" line. The per-message reminder is
+      back to its one job: it tells the agent to check the project's
+      skills, and adds the keep hint on a keep or decision phrase. A save is
+      reported once, in the reply line `curating-project-memory` gives for
+      it.
+    - The session-start command cuts its output at 9,500 characters, as on
+      `origin/main`. The 4,000-character limit rested on a wrong reading of
+      the Codex page: Claude Code caps hook output at 10,000 characters, and
+      Codex limits it by tokens (about 2,500 by default; 4,000 in the
+      toolkit's Codex snippets). `MEMORY-RESTORE-SPEC.md`, "Limits", is
+      corrected.
+    - The index line is `origin/main`'s again: the record's title as a
+      link to its file, its description, and the date it last changed. No
+      line is cut. With it the index and `record-format.md` use one link
+      form.
+    - Current State keeps its five parts and their line limits (5, 3, 4,
+      3, 3) and stays under 40 lines. It has no character limit. A file
+      name is at most 60 characters, as on `origin/main`; the description
+      and the Notion Synopsis are "one short line" with no character
+      limit.
+    - The prune request is printed before Current State, so a long page
+      cannot push it past the cut.
+    - "Seed" is "blank form" and "thread" is "piece of work" in every
+      starter file and memory skill.
+  - For the owner to confirm (each changes what a project file means):
+    1. The root guide's "Where information goes" has two more rows. Each
+       says when to write, not only where. An analysis of how the system
+       works today, for the owner or a work item, is written to
+       `reference/current-system/` before the reply; the reply answers
+       from that record, and its work item or project task holds a
+       pointer. A run of a recurring job, also a failure or result the
+       owner reports, is written as a run row in the job's event record
+       before the reply. A first wording without "before you reply"
+       recorded the analysis in 0 of 3 runs on the mid-size model; this
+       wording did in 3 of 3 (`dev/test-runs/memory-restore.md`, "Fix
+       pass").
+    2. `reference/AGENTS.md` has a section "An analysis of how the system
+       works today" with the three steps for item 1.
+    3. When the owner reports a run without its detail, the run row is
+       written first, with "not known yet" in the cells he did not give,
+       and the question comes after it.
+    4. A save about a named person's personal details is not kept as a
+       proposal record. Until his yes it is only a line under "Waiting
+       on" that names the person and leaves the details out.
+    5. An event record or a run row that holds more about a named person
+       than attendance or work role gets the save question for that part.
+    6. "Now" holds one line per active piece of work. A part with more
+       true lines than its limit is handled by the pruning step that
+       proposes cuts; no text says "every" beside a limit of 5.
+    7. In "update the toolkit", the old blank form
+       `memory/project_topic_template.md` is replaced only after the
+       difference is shown and he says yes.
+    8. The root guide lists six moments to search memory first: before
+       asking him to repeat something, naming who does or decides
+       something, setting a date, deploying, loading data, and running a
+       recurring job. `curating-project-memory` points to that list.
+    9. Four descriptions changed: `curating-project-memory` (two "Not for"
+       lines, and "how a job ran"), both versions of `using-memory-store`
+       (the example is a read of Current State), and `session-summary`
+       ("what did we do in this chat").
+    10. Item 8 of the list above (a project task may name another person)
+        still waits: the words "(the owner, 2026-10-05)" were taken out of
+        `notion-build/work-layout.md`, and the feature stays.
+  - From the second fix pass (2026-10-05), also for the owner to confirm:
+    1. The row for a run of a recurring job is wider. Something that
+       happened (examples: a meeting, a run of a recurring job, a failure
+       the owner reports), or a result given only in the chat, that a later
+       session would need and no other record shows, is written to memory
+       before the reply, with `curating-project-memory`. The row for an
+       analysis keeps "before you reply" and points to
+       `reference/AGENTS.md` for the rest.
+    2. A file written to `reference/current-system/` is never committed
+       without the owner's yes. A session in the main checkout leaves it
+       there and says it is not committed. A session in its own worktree
+       says so and asks whether to save it with `publish-docs`. Open
+       question for the owner: does his request for an analysis count as
+       his yes to commit its record?
+    3. In a Hindsight project, a run of a recurring job or another event
+       has no event record: the reply states the date, what ran, and the
+       result, the add-on saves the conversation, and a job that has a
+       `delivery/` record gets the run there.
+    4. An earlier run that another record already shows gets a row with
+       only its date and that record's ID.
+    5. One measure for what needs the save question about a named person:
+       more than attendance, work role, when the person is away, or who
+       covers.
+    6. A record's one-line summary is one line of about 100 characters or
+       fewer (`curating-project-memory`, `references/saving.md`). The
+       tidying step for too many records starts only when the text shown
+       at a session start ended with "Cut short to fit the hook limit";
+       the count of 30 is gone.
+  - Left as it is:
+    - The Notion `decision` tag and the empty "Decisions" view. They are
+      the toolkit's own additions, but a new Notion project is a copy of
+      the owner's "Project" template, which already holds both. Taking
+      the two files out of the skill would change no project and would
+      make the skill's layout differ from his template. Removing them
+      needs a change to his template, with his yes.
+    - `hindsight-memory.md` is 4,722 bytes after the second fix pass, over
+      the proposed 4,096.
+    - The word "seed" in two comments of the Salesforce `package.xml`
+      templates, which this work did not touch.

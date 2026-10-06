@@ -1,6 +1,6 @@
 # <Project name>
 
-<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and each person. Keep stable project facts here and active tasks in the work tracker. Delete this guide after setup. -->
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and each person. Keep stable project facts here and active tasks in the work tracker. Delete this guide when every prompt is filled. -->
 
 ## Purpose and intended outcome
 
@@ -50,6 +50,7 @@ Keep this table short. Write no biography and no contact details.
 
 - Tracker: `<local, notion, or github>`
 - Memory: `<local, notion, or hindsight>`
+- Memory approval: `<onboarding or trusted>`
 - Work item ID prefix: `<WI>`
 - Notion work items: `<nested bullets under this line, written by the Notion setup step: the link to the project's Notion page, and the ids of its Work Items, Phases, Tasks, and Projects databases>`
 - GitHub repository: `<owner/name>`

@@ -144,7 +144,7 @@ says which are removed, added, and kept:
 
 | Old piece | Part | Toolkit V2 has in its place |
 | --- | --- | --- |
-| `.claude/tools/build-knowledge-index.mjs`, `check-knowledge.mjs`, `frontmatter.mjs`, `inspect-knowledge-save.mjs` | Delete | Nothing: memory is Current State and a short list of pointers, and no index is built |
+| `.claude/tools/build-knowledge-index.mjs`, `check-knowledge.mjs`, `frontmatter.mjs`, `inspect-knowledge-save.mjs` | Delete | Nothing: the session-start hook builds the memory index |
 | The Git hook `pre-commit` in this copy's Git hooks folder, when its text names `check-knowledge` | Delete, in the same step as `.claude/tools/` | Nothing. Git does not track it, so each computer's copy of the project has its own: say so on its line |
 | Any other Git hook of this copy (for example a `post-commit` that rebuilds a code graph) | Kept | Nothing |
 | `.claude/skills/sf-component-tracker/`, `sf-data-change/`, `sf-deploy-check/` | Compare | Same names |
@@ -238,16 +238,16 @@ new item: "Carried over from `<old path>` in the move to Toolkit V2."
 
 ## Old memory to its Toolkit V2 home
 
-Toolkit V2 memory holds where work stopped, and pointers. So an old memory
-record is not saved as memory: each fact in it goes to the home that the
-root `AGENTS.md`, "Where information goes", gives it, in the form that home
-gives. The owner's yes to the Update line is his yes to write these
+Toolkit V2 memory holds only what no other project file holds. So each
+fact in an old memory record goes to the home that the root `AGENTS.md`,
+"Where information goes", gives it, in the form that home gives. Only a
+fact that fits no other file is saved as a memory record. The owner's yes to the Update line is his yes to write these
 records. Each new record says "Carried over from `<old path>`".
 
 | Old | Toolkit V2 |
 | --- | --- |
 | A topic file with `status: current` or no `status`, and `type: decision` | More than one work item needs it, or none is named: a `DECISIONS.md` entry, Decided, with the person and date the header gives; a header that gives neither: "Your call". One work item needs it: an answered Questions and Answers row in that item. |
-| A topic file with `status: current` or no `status`, and another `type` | Each fact to its home: a fact about the project to `PROJECT.md`; a rule about the system to the matching `system/` document, marked Draft unless a decision that approved it can be found; a term to `system/glossary.md`; a fact with no home: "Your call". |
+| A topic file with `status: current` or no `status`, and another `type` | Each fact to its home: a fact about the project to `PROJECT.md`; a rule about the system to the matching `system/` document, marked Draft unless a decision that approved it can be found; a term to `system/glossary.md`; a fact about a person or the client, a way to reach something, or something that happened, that fits no other file: a memory record of the matching kind, written with `curating-project-memory` in the setup copy (Hindsight memory: "Your call"). |
 | A topic file that holds the steps of a job | Not a record in Toolkit V2. "Your call": recommend a document or a project skill of his own. |
 | A topic file with `status: superseded` or `retired` | Stays where it is |
 | `terminology-glossary.md` | `system/glossary.md`, one row per term |
@@ -260,11 +260,6 @@ records. Each new record says "Carried over from `<old path>`".
 | `knowledge/project.md`, or the old root `PROJECT.md` | The matching sections of the Toolkit V2 `PROJECT.md`. |
 | A file in `knowledge/prds/` or `prds/` | "Your call": recommend moving the whole file to `sources/` with `git mv` and an SRC number, so its text and its Git history stay, and carrying its agreed requirements into the matching `system/` documents as rules whose Source names that SRC (`one-home-layout.md`, "Where each old piece goes", the row for an agreed requirement) |
 | Memory in a service | Stays in the service. When it is Hindsight and he chose Hindsight memory: "Your call" whether this project uses that bank or a new one. |
-
-A pointer in the new memory is added only for a `DECISIONS.md` entry made
-from an old memory record: its DEC ID and its link, in the form the
-project's memory gives (local: `memory/AGENTS.md`). With Hindsight memory
-no pointer is written.
 
 ## The retired toolkit program
 

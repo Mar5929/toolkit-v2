@@ -106,7 +106,7 @@ Changing the Status options replaces the whole list: always send every option, e
 | Work | Text | The action to take. |
 | Deliverable | Text | The file, decision, or other result. |
 | Done when | Text | The observable completion check. |
-| Who does it | Select | agent or owner. |
+| Who does it | Select | agent or owner. A project task may hold the name of another person who owes it, with the party, such as `Sarah Chen (client)`: write that name as the option, and Notion adds it. |
 | Task type | Formula | `Project` when Work item is empty, otherwise `Work item`. It fills itself; never set it. |
 | Work item | Relation to Work Items | The item it belongs to. Empty for a project task. The other side is Tasks. |
 | Phase | Relation to Phases | Its phase, for a top-level item's task. Empty for a sub-item's task and for a project task. The other side is Tasks. |

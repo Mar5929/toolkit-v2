@@ -62,9 +62,10 @@ only one database of a workspace.
 
 ## Question 3: where memory lives
 
-Memory holds where work stopped, and pointers to records. Decisions,
-sources, and the description of the system are files in the repository
-with every choice. Recommend local memory with Obsidian: it is private,
+Memory holds where the project stands now, and what no other project file
+holds: facts about people and the client, where to find things, and what
+happened. Decisions, terms, sources, and the description of the system are
+files in the repository with every choice, never memory. Recommend local memory with Obsidian: it is private,
 fast, and needs no server.
 
 - When work items are in Notion, recommend Notion memory instead, so work
@@ -80,8 +81,8 @@ fast, and needs no server.
 
 | Choice | "Memory" value | Good when | What to know |
 | --- | --- | --- | --- |
-| Local with Obsidian | `local` | Most projects | Two files in `memory/`, which Git ignores, on this computer only: Current State and the list of pointers. |
-| Notion, in Lore's layout | `notion` | Work items are in Notion, or he reads memory on his phone | A "Current state" page, and a Memory page holding Lore's databases, where each pointer is a page. Needs `ntn` signed in. |
+| Local with Obsidian | `local` | Most projects | Markdown files in `memory/`, which Git ignores, on this computer only: Current State, and one file per concept. The session-start hook shows Current State and one line per file. |
+| Notion, in Lore's layout | `notion` | Work items are in Notion, or he reads memory on his phone | A "Current state" page, and a Memory page holding Lore's databases, where each concept is a page. A session is shown only the Current state page at its start, and searches the pages when it needs them. Needs `ntn` signed in. |
 | Hindsight | `hindsight` | Search by meaning across past sessions matters | His Hindsight server on the VPS, one memory bank per project, never Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, saves each session to the bank. No memory skills: the agent uses the add-on's tools. Current State is the local file `memory/CURRENT_STATE.md`. |
 
 Any mix of work tracking and memory works, for example Notion work items
@@ -127,7 +128,8 @@ where work items live (with the ID prefix for local folders; with Notion it
 is asked later), where memory lives, Salesforce (and the org aliases), and
 `SOUL.md`. Say that you will copy the project files for his choices into
 this folder, with the skills and the 4 small hook commands (give the skill
-count), turn on the check of the project's records before each commit (the
+count), for both Claude Code and Codex (setup writes `.codex/` in every
+project, with no question), turn on the check of the project's records before each commit (the
 Git setting `core.hooksPath`, in this copy of the repository), and turn the
 older claude-toolkit plugins off for this project only. Say that every
 project gets `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and

@@ -1,6 +1,6 @@
 # <Project name>
 
-<!-- Fill-in guide for a copied project: replace the project name and every angle-bracket prompt in the purpose, Start here, and Release with verified facts in that exact location. Delete this guide after setup. -->
+<!-- Fill-in guide for a copied project: replace the project name and every angle-bracket prompt in the purpose, Start here, and Release with verified facts in that exact location. Delete this guide when every prompt is filled. -->
 
 <One sentence describing this project and the result it is building.>
 

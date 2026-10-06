@@ -163,8 +163,9 @@ or on another computer, "check the setup" says it is off and "update the
 toolkit" turns it on.
 
 A project set up before the five places above existed keeps the same facts
-elsewhere: shared questions, requirements, a system guide, memory records,
-a glossary, and originals stored inside work items. "Update the toolkit"
+elsewhere: shared questions, requirements, a system guide, decision records
+and a glossary in memory, and originals stored inside work items. Every
+other memory record stays where it is. "Update the toolkit"
 finds them and shows you one table: each old location, what is in it,
 where it goes, and what is removed afterwards. Nothing moves until you say
 yes, and nothing is removed before what it held is read back in its new
@@ -222,16 +223,23 @@ Each project gets the skills for where its work items and memory live:
 | Work items in local folders | `using-work-tracker` (saves, finds, and changes items in the `work-items/` folder) |
 | Work items in Notion | `using-work-tracker` (the Notion version), `using-notion-cli` (how to run Notion's command-line tool, `ntn`) |
 | Work items in GitHub Issues | `using-work-tracker` (the GitHub version) |
-| Memory in local files | `curating-project-memory` (keeps memory to where work stopped plus pointers to records, and writes your "from now on" instructions to the rules), `using-memory-store` (stores Current State and the pointers as files in `memory/`) |
+| Memory in local files | `curating-project-memory` (decides what memory keeps, sends every other fact to its own file, keeps Current State current, and writes your "from now on" instructions to the rules), `using-memory-store` (stores Current State and the memory records as files in `memory/`) |
 | Memory in Notion | `curating-project-memory`, `using-memory-store` (the Notion version), `using-notion-cli` |
 | Memory in Hindsight | None from the toolkit (your decision of 2026-10-05). Hindsight's coding-agent add-on saves each session to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
 | Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
 
-Local memory holds where work stopped, and pointers: an ID and a link to the
-record that holds the fact. It never holds a second copy of a fact. What
-Notion memory and Hindsight store has not changed; that is a separate decision
-for you. `using-notion-cli` comes once, even with work items and memory both
-in Notion.
+Memory is the design you built from the Davis memory system, brought back on
+2026-10-05. It holds Current State (what is in progress, what is coming up,
+who owes what, the standing jobs and shared files, and where the next session
+starts) and one record per concept, in four kinds: facts about people
+(`user_`), facts about the project or the client that fit no other file
+(`project_`), where to find something (`reference_`), and what happened or a
+job that ran (`event_`). Every record carries the date it was created, the
+date it last changed, and, when it is true only for a while, a date to check
+or remove it. Memory no longer holds decisions, terms, or how the system
+works: those are in `DECISIONS.md` and `system/`. Notion memory stores the
+same kinds in Lore's layout. `using-notion-cli` comes once, even with work
+items and memory both in Notion.
 
 A project ends up with 13 skills, or 14 when work items or memory are in
 Notion. With Hindsight memory it has 11, or 12 with work items in Notion. A
@@ -243,7 +251,7 @@ description.
 
 | When | What happens |
 | --- | --- |
-| A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the list of memory pointers, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
+| A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the memory index: one line per memory record, which the hook rebuilds in `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
 | You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
 | You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
@@ -275,9 +283,12 @@ records your words and the date.
   approve it. Only you mark an item Done.
 - "From now on" instructions become a line in the project's
   `.claude/rules/owner-preferences.md`.
-- A pointer in local memory is changed when the record it names is
-  replaced, and removed when the record is gone or no later session needs
-  it.
+- An action item from a meeting is saved as a project task with who owes
+  it: you, the agent, or a named other person, such as the client or a
+  vendor.
+- A fact that fits no other file, such as who is away or what the client
+  plans, is a memory record. A fact that is true only for a while is
+  checked or removed on its date.
 - When the agent uses something it recalled, it says where it came from and
   ends with a short Sources list.
 - You can move files by hand. The agent finds work items by their ID, notices

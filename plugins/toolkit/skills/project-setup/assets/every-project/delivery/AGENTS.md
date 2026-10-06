@@ -21,7 +21,7 @@ With no template, a record is the file or files below, in its own folder, holdin
 
 | Record | File | Fields |
 | --- | --- | --- |
-| Deployment | `DEPLOYMENT-RECORD.md` | The work item's ID; the target environment; Status; who is responsible; exactly what was deployed (a commit, a version, or a package); the checks before it; the owner's decision, with the date and where it is recorded; the result; the checks after it. |
+| Deployment | `DEPLOYMENT-RECORD.md` | The work item's ID; the target environment; Status; the date and time it ran; who ran it and who is responsible; exactly what was deployed (a commit, a version, or a package); the checks before it; the owner's decision, with the date and where it is recorded; each manual step, in order, with who did it; the result; the checks after it. |
 | Release plan | `CUTOVER-PLAN.md` | The owner of the release; the target environment; the time window; Status; the work items in it, each with its deployment record; what must be true before it starts; the steps in order; each point where the owner decides to go on or stop; how to undo it. |
 | Release notes | `RELEASE-NOTES.md` | The release date; the environment; Status; one row per work item: its ID, what changed for the user, and the evidence. |
 | Migration area | An area file, a field mapping, and the rules for changing values, each named for the area | In the area file: the objects and the source systems; the work items it serves; Mapping status; the date and environment it was last checked. |

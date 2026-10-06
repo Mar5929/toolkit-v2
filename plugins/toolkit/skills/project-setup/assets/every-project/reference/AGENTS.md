@@ -31,6 +31,15 @@ One file per area, named for the area in lowercase words joined by hyphens. It h
 | Known gaps | What was not checked, what may be out of date, and where to confirm it. |
 | Last verified | The date, the environment, the sources, and who checked. |
 
+## An analysis of how the system works today
+
+When the owner asks how a part of the existing system works today, or a work item needs to know it:
+
+1. Before you reply, write what you found in that area's file in `current-system/`, in the form above. An area that has a file: add to that file.
+2. Answer from the file, and name its path in the reply. A result given only in the chat is lost: a later session never sees it.
+3. When the analysis was for a work item or a project task, write the file's path there with `running-work-item-lifecycle`.
+4. Never commit the file without the owner's yes: `publish-docs` saves only an edit the owner asked for or said yes to. A session in the main checkout: leave the file there, and say in the reply that it is not committed yet. A session in its own worktree: a later session does not see a file there, so say in the reply that the file is not committed yet, and ask the owner whether to save it with `publish-docs`.
+
 ## What must stay true
 
 - Never edit a captured page. Capture it again and update its `SOURCE-RECORD.md`.

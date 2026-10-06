@@ -26,8 +26,10 @@ Filing a source decides nothing and approves nothing. Read the source for what i
 | A decision somebody states, or a question | More than one work item needs it: `record-decision.md`, as Open until a person who may decide confirms it. One item needs it: `running-work-item-lifecycle` |
 | A fact about how the system works today | `reference/current-system/`, as `reference/AGENTS.md` says |
 | A term and its meaning | `update-system-doc.md`, "A glossary term" |
+| An action item: something a named person agreed to do | A task in the work item it belongs to, or a project task with that person as Who does it: `running-work-item-lifecycle`. Saved at once, with no question |
+| A date or a deadline; a fact about a person or the client that fits no row above; a claim nobody checked | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
 
-When no work item is open for the source, file it with "none yet" under "Used by". Then list for the owner what it holds that has no record yet, and do each one the owner chooses.
+When no work item is open for the source, file it with "none yet" under "Used by". Save its action items and its dates as the table says. Then list for the owner the requests, decisions, and questions it holds that have no record yet, and do each one the owner chooses.
 
 ## A corrected version
 
