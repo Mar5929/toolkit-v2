@@ -15,7 +15,7 @@ Record what a later session must know and no record shows yet, in the same turn,
 | --- | --- |
 | You did work for the owner that is no work item | Its project task, ticked when it is done (`running-work-item-lifecycle`). With no project task: an event record, or a row in its recurring job's record (`references/saving.md`). |
 | You gave the owner a result that is only in the chat, such as an agenda, a draft, or an analysis | The file where it belongs, when the root `AGENTS.md`, "Where information goes", gives it a home. Otherwise an event record that holds the result in a few lines (`references/saving.md`, "An event"). |
-| A recurring job ran, or the owner reported that it ran or failed | A run row in the job's record, written before any question about it (`references/saving.md`, "A recurring job and its runs") |
+| A recurring job ran, or the owner reported that it ran or failed | A run row in the job's record (`references/saving.md`, "A recurring job and its runs") |
 | The owner started a piece of work that is not finished and is no work item | A line under Now in Current State (`references/current-state.md`) |
 | The owner named a date or a deadline | A line under Coming up |
 | Somebody owes something | A project task with who owes it (`running-work-item-lifecycle`), and a line under Waiting on when work waits on it |
@@ -52,7 +52,7 @@ Never say a memory is deleted when it is not.
   - more than five records at once;
   - retiring or deleting a memory he did not ask you to forget;
   - a change to this policy.
-- No question in either mode: a lesson, an event record, a run row of a recurring job (a failed run too), and a change to Current State alone. They record what happened, not a judgment. Report each in one line. An event or a run row that holds more about a named person than the person's attendance or work role still gets the question for that part.
+- No question in either mode: a lesson, an event record, a run row of a recurring job (a failed run too), and a change to Current State alone. They record what happened, not a judgment. Report each in one line. An event or a run row that holds more about a named person than attendance, work role, when the person is away, or who covers still gets the question for that part.
 - A question is never the only trace: the session can end before he answers. In the same turn as the question, add its line under "Waiting on" in Current State, "Owner: save to memory? <the fact in one line> (asked <date>)", and keep the save as a proposal (`references/saving.md`, "Proposals").
 - When he changes the mode, change the "Memory approval" line in `PROJECT.md`, as Hand-offs says, never `.claude/rules/owner-preferences.md`.
 

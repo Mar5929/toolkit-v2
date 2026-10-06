@@ -79,7 +79,7 @@ Check that each link target exists. A missing target: point the link at the righ
 
 ## Too many records
 
-When more than 30 records are current, or the start of a session said the list of records was cut short: put on the plan the merges of records about one subject, and the retirements of event records that no open work, job, or person still needs, until 30 or fewer are current.
+When the text shown at the start of a session ended with "Cut short to fit the hook limit": put on the plan the merges of records about one subject, and the retirements of event records that no open work, job, or person still needs, until the list of records is shown whole.
 
 ## Lessons that should become rules or skills
 

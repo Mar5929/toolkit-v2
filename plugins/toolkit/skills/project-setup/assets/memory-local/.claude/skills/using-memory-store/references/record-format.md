@@ -19,7 +19,7 @@ The blank form holds the file shape: `memory/project_topic_template.md`. Open it
 | Field | Holds |
 | --- | --- |
 | `name` | The file name without `.md`. |
-| `description` | One short line that states what the file holds, with its dates: the fact itself, not only its subject. The index prints it whole. |
+| `description` | One line that states what the file holds, with its dates: the fact itself, not only its subject. `curating-project-memory` gives its length. The index prints it whole. |
 | `created` | The date the file was made, `YYYY-MM-DD`. Never change it. |
 | `updated` | The date of the last change, `YYYY-MM-DD`. Set it to today on every change. |
 | `check_by` | The date to check or remove the file, `YYYY-MM-DD`, for a fact that is true only for a while; otherwise `none`. A single section with its own date carries a `**Check or remove by:**` line. |
