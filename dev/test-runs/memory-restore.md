@@ -345,3 +345,43 @@ removed.
   pointers.
 - One "where are we" run and two runs per model for scenario 41 are small
   samples.
+
+## Second fix pass
+
+Date: 2026-10-05. The reviewer read the fix pass and left seven items. The
+same agent did them on this branch. Where this section differs from "Fix
+pass", this section holds.
+
+| Item | Status | What was done |
+| --- | --- | --- |
+| 1 | Done | `reference/AGENTS.md`, step 4: never commit the file without the owner's yes. A session in the main checkout leaves the file there and says it is not committed. A session in its own worktree says so and asks whether to save it with `publish-docs`. This agrees with `publish-docs`, step 1 ("Save only an edit the owner asked for or said yes to"). Neither `publish-docs` nor `publish-project-documents.md` says a later save picks the file up: a file stays uncommitted until a save names it. |
+| 2 | Done | The root guide's row is "Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in the chat, that a later session would need and no other record shows", with "Write it to memory before you reply: `curating-project-memory`". The analysis row keeps "Write it to `reference/current-system/` before you reply" and points to `reference/AGENTS.md`. The file is 19,900 bytes; nothing of meaning was cut. |
+| 3 | Done | `hindsight-memory.md` has one bullet for a run of a recurring job or another event. Checked against `ai-external-knowledge/hindsight/coding-agents-integration.md` (the add-on writes the transcript when the agent stops) (READ). The rule is 4,722 bytes. |
+| 4 | Done | An earlier run that another record already shows gets a row with only its date and that record's ID. |
+| 5 | Done | One measure in `SKILL.md` and `saving.md`: "more about a named person than attendance, work role, when the person is away, or who covers". |
+| 6 | Done | The six words are out of `SKILL.md`. `tidying.md` starts the step only when the text shown at a session start ended with "Cut short to fit the hook limit", the line the command prints (READ: `session-start.mjs`, line 75); the count of 30 is gone. The description's measure, "one line of about 100 characters or fewer", is in `saving.md`; `record-format.md` points to `curating-project-memory` for it. |
+| 7 | Done | No description changed. `DESIGN-SPEC.md`, section 9, and this section. |
+
+Checks (RUN, on the final text): `node dev/tools/check-skills.mjs` passed, 0
+errors, 0 warnings; `node dev/tools/check-rules.mjs` passed with 2 warnings
+(`hindsight-memory.md` 4,722 bytes, `salesforce-org-safety.md` 4,200);
+`node --test 'dev/tests/*.test.mjs'` 112 tests, 112 pass.
+
+Live runs (LIVE): Sonnet only, the same command line and sign-in as the fix
+pass, one fresh session per fresh copy, no text change during the counted
+set.
+
+| Test | Result |
+| --- | --- |
+| Rollup message: the result was recorded in `reference/current-system/` before the reply | 2 of 2. Both said the file is not committed, and neither committed it. One of the two added the pointer to PT-02. |
+| "we have a meeting Wednesday with the client and the vendor, we need to prepare": the result or the meeting was recorded before the reply | 0 of 3. Each reply gave a preparation list in the chat and wrote no file. The meeting's date was already under "Coming up" from message (a). |
+| Scenario 41: a run row was saved | 4 of 5. Each of the four also wrote the earlier failure as a row that points to WI-002. The fifth opened no skill and only asked which job and what failed. |
+
+After the counted set, three uncounted sessions tried the row with the
+result first and "such as an agenda, a plan, or a draft" in it. They also
+recorded nothing, 0 of 3, so the row went back to the wording of the counted
+set. The root guide's row does not make the mid-size model record a
+preparation list that it gives in the chat.
+
+13 live sessions in this pass, about 2.80 US dollars. Not run: Opus, Codex,
+Notion, Hindsight, and the routing test.

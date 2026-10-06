@@ -474,6 +474,34 @@ complete in one file that reads the same in every project.
     10. Item 8 of the list above (a project task may name another person)
         still waits: the words "(the owner, 2026-10-05)" were taken out of
         `notion-build/work-layout.md`, and the feature stays.
+  - From the second fix pass (2026-10-05), also for the owner to confirm:
+    1. The row for a run of a recurring job is wider. Something that
+       happened (examples: a meeting, a run of a recurring job, a failure
+       the owner reports), or a result given only in the chat, that a later
+       session would need and no other record shows, is written to memory
+       before the reply, with `curating-project-memory`. The row for an
+       analysis keeps "before you reply" and points to
+       `reference/AGENTS.md` for the rest.
+    2. A file written to `reference/current-system/` is never committed
+       without the owner's yes. A session in the main checkout leaves it
+       there and says it is not committed. A session in its own worktree
+       says so and asks whether to save it with `publish-docs`. Open
+       question for the owner: does his request for an analysis count as
+       his yes to commit its record?
+    3. In a Hindsight project, a run of a recurring job or another event
+       has no event record: the reply states the date, what ran, and the
+       result, the add-on saves the conversation, and a job that has a
+       `delivery/` record gets the run there.
+    4. An earlier run that another record already shows gets a row with
+       only its date and that record's ID.
+    5. One measure for what needs the save question about a named person:
+       more than attendance, work role, when the person is away, or who
+       covers.
+    6. A record's one-line summary is one line of about 100 characters or
+       fewer (`curating-project-memory`, `references/saving.md`). The
+       tidying step for too many records starts only when the text shown
+       at a session start ended with "Cut short to fit the hook limit";
+       the count of 30 is gone.
   - Left as it is:
     - The Notion `decision` tag and the empty "Decisions" view. They are
       the toolkit's own additions, but a new Notion project is a copy of
@@ -481,6 +509,7 @@ complete in one file that reads the same in every project.
       the two files out of the skill would change no project and would
       make the skill's layout differ from his template. Removing them
       needs a change to his template, with his yes.
-    - `hindsight-memory.md` is 4,444 bytes, over the proposed 4,096.
+    - `hindsight-memory.md` is 4,722 bytes after the second fix pass, over
+      the proposed 4,096.
     - The word "seed" in two comments of the Salesforce `package.xml`
       templates, which this work did not touch.
