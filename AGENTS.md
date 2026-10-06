@@ -458,10 +458,16 @@ node --test 'dev/tests/*.test.mjs'
   `session-start.mjs` finds it with `git rev-parse --git-common-dir`, and so
   works from inside a Git worktree. With local memory it rebuilds
   `memory/MEMORY.md`, the index of the memory records, and prints one line
-  per record, cut at 74 characters. Its whole output stays under 4,000
-  characters for a project with 30 memory records and a Current State at
-  its limits (under 40 lines and 1,600 characters); a test fails when it
-  does not. It is 76 lines. `validate-records.mjs`
+  per record: its title, its file, its description, and the date it last
+  changed. Claude Code caps a hook's output at 10,000 characters
+  (`ai-external-knowledge/claude-code/hooks.md`). Codex limits it by
+  tokens: about 2,500 by default, and 4,000 in the toolkit's Codex snippets,
+  which set `additionalContextLimit`
+  (`ai-external-knowledge/codex/hooks.md`, "Large hook output"). So the
+  command cuts longer output at 9,500 characters, between two lines, and
+  names the files that hold the rest. A project with 30 memory records and
+  a Current State at its line limits (under 40 lines) prints whole; a test
+  fails when it does not. It is 76 lines. `validate-records.mjs`
   runs from three places: a `PostToolUse` entry in both hosts, a `Stop`
   entry in Claude Code only (Codex accepts only JSON output for `Stop`),
   and `.githooks/pre-commit`. In an update of a project that does not have
