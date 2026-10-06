@@ -2,6 +2,28 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Two skills removed, version 0.9.3 (2026-10-06, ready to merge)
+
+Work item TKV-28. Mike, 2026-10-06: "Delete the Explain Simply skill and the
+Choosing Outside Tools skill. That should absolutely not be a skill. That
+just needs to be something that's just a simple file that's referenced in the
+toolkit v2 but doesn't get installed into projects."
+
+- Built on the branch `claude/remove-two-skills`. Mike asked to merge the
+  open pull requests on 2026-10-06.
+- `explain-simply` is removed from `every-project/`. A project now gets 9
+  shared skills. `project-setup`'s `references/update.md`, "Retired skills",
+  tells "update the toolkit" to remove the folder from an existing project.
+- `choosing-outside-tools` is removed from the `toolkit` plugin, which now
+  holds two skills. The tool list is the plain file `OUTSIDE-TOOLS.md` in the
+  repository root. No plugin ships it. This reverses the decision of
+  2026-10-03 (TKV-18) that put the list on every computer as a skill: an
+  agent in another project is no longer told that the list exists.
+- Every check in `AGENTS.md`, "Checks", passed on the branch.
+- The routing test was not run for this change. The description rewrite
+  landed in PR 25. The writing rule rename landed in PR 26. This branch
+  includes both changes and raises the version to 0.9.3.
+
 ## Document clarity standard (2026-10-06)
 
 Mike named the writing rule `document-clarity-standard.md` and asked for the
@@ -9,15 +31,14 @@ rule and `writing-harness-files` to follow their own clarity guidance. The
 new name replaces `write-documents-in-plain-english.md` in the starter
 project, the rule copy, the check tool, the setup update steps, and the
 repository guides. The skill description and opening now state their job
-without a long definition in the description. This change raises the
-toolkit version to 0.9.2. PR 24 also proposes version 0.9.2 and will need
-a version update before it can land after this change.
+without a long definition in the description. That change raised
+the toolkit version to 0.9.2.
 
 ## Skill description clarity pass (2026-10-06)
 
 The description pass landed in pull request 25 as version 0.9.1.
 
-The 23 skills that Toolkit V2 ships have revised descriptions in their
+The 23 skills that Toolkit V2 shipped at the time had revised descriptions in their
 `SKILL.md` files and in `dev/SKILL-INDEX.md`. Each description now states the
 skill's job, when to use it, and any neighboring skill that could be confused
 with it. The opening of `filing-project-records/SKILL.md` gives each record
@@ -35,8 +56,8 @@ plain-English writing rule now adds the useful points from pstack's
 references, named evidence, readable noun phrases, natural list length,
 and choosing a document form for the reader's job. Its exact copy in
 `writing-harness-files/references/writing-rule.md` matches. No output style
-changed. Mike's PR 24 removes `explain-simply` and
-`choosing-outside-tools` separately; it waits for this description pass.
+changed. PR 24 removes `explain-simply` and `choosing-outside-tools` after this
+description pass.
 
 The plugin version is 0.9.1. The marketplace, plugin, skill, rule, workstreams,
 and Node tests passed. `check-rules.mjs` gave its three existing size warnings.

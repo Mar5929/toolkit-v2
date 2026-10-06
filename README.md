@@ -27,22 +27,14 @@ exception is the workstream panel for Claude Code (your decision of
 - **Hooks** are small commands Claude Code and Codex run by themselves at set
   moments, for example when a session starts.
 
-## The main plugin and its three skills
+## The main plugin and its two skills
 
 The toolkit's main plugin is `toolkit`. Its main skill is `project-setup`. The
 plugin is switched on for every folder, so "toolkit v2" or "set up this project"
 works anywhere. It has
 no hooks, so it does nothing in your other projects.
 
-Its second skill, `choosing-outside-tools`, is your tool list. It holds one
-row for each kind of job you use an outside tool for, such as explainer
-videos: the tool you chose, where it comes from, how to set it up, and your
-choices for it. The toolkit does not ship those tools. When you ask for a job
-on the list, the agent uses your tool. When the tool is not on that computer,
-the agent says so and sets it up only after your yes. To add a tool, say "add
-this to my tool list" in a chat opened in this repository.
-
-Its third skill, `writing-harness-files`, is for harness files: the files
+Its second skill, `writing-harness-files`, is for harness files: the files
 that tell Claude Code or Codex how to behave. A harness file is a skill, a
 rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
 `.rules` file, an output style, a plugin manifest or marketplace file, a
@@ -65,6 +57,16 @@ the rule differ.
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
 in your code editor, which loads no plugins.
+
+## Your tool list
+
+Your tool list is the file `OUTSIDE-TOOLS.md` in this repository. It holds one
+row for each kind of job you use an outside tool for, such as explainer
+videos: the tool you chose, where it comes from, how to set it up, and your
+choices for it. The toolkit does not ship those tools. The file is not a
+skill, so the agent reads it only in a chat opened in this repository, and
+setup never copies it into a project. To add a tool, say "add this to my tool
+list" in a chat opened in this repository.
 
 ## The workstream panel
 
@@ -210,7 +212,7 @@ are; the ones still in use are carried over into the Toolkit V2 form, and
 you see the first one before the rest are done. The changes are made on the
 agent's own branch and reach your main branch only after your yes.
 
-## Skills every project gets (10)
+## Skills every project gets (9)
 
 | Skill | What it does | You might say |
 | --- | --- | --- |
@@ -218,7 +220,6 @@ agent's own branch and reach your main branch only after your yes.
 | `filing-project-records` | Files what more than one work item needs: it records a decision in `DECISIONS.md`, files a source in `sources/`, and updates a document in `system/`. | "This decision affects several items", "file this meeting transcript" |
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
-| `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
 | `session-summary` | Shows what you asked for in this chat and where each request landed. | "recap this chat" |
 | `pull-latest` | Brings your copy of the code up to date, safely. | "get the latest" |
 | `reset-to-remote` | Makes your copy an exact match of the remote copy. It deletes local changes, so it runs only when you clearly ask. | "wipe local" |
@@ -252,8 +253,8 @@ works: those are in `DECISIONS.md` and `system/`. Notion memory stores the
 same kinds in Lore's layout. `using-notion-cli` comes once, even with work
 items and memory both in Notion.
 
-A project ends up with 13 skills, or 14 when work items or memory are in
-Notion. With Hindsight memory it has 11, or 12 with work items in Notion. A
+A project ends up with 12 skills, or 13 when work items or memory are in
+Notion. With Hindsight memory it has 10, or 11 with work items in Notion. A
 Salesforce project has 3 more, plus Salesforce's own skills. Saying where the work stands needs no skill: the
 project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
 description.
@@ -365,7 +366,8 @@ The agent never does these for you. It tells you when each one is needed.
 
 ## Where things are
 
-- `plugins/toolkit/`: the main plugin, with its three skills in `skills/`.
+- `OUTSIDE-TOOLS.md`: your tool list ("Your tool list" above).
+- `plugins/toolkit/`: the main plugin, with its two skills in `skills/`.
   The `skills/project-setup/assets/` folder holds the starter project:
   `every-project/` (the files, skills, and hooks every project gets), one
   or more folders for each choice, and `settings/`.

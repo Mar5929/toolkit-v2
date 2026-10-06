@@ -124,7 +124,6 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | The owner ends the session or clears context, or pastes a handoff to check | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
-| The owner finds an answer too technical or hard to follow, such as "explain that simply" | `explain-simply` |
 | Committing an approved document edit to the default branch | `publish-docs` |
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |

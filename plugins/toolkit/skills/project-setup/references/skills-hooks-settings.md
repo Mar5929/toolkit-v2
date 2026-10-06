@@ -19,7 +19,7 @@ The job is done when each snippet is merged into the settings file that the setu
 
 Every skill is already in `<copy>/.claude/skills/`, one folder per skill, because the steps of `setup-copy.md` copied the setup folders for the owner's choices. A setup folder is a folder in this skill's `assets/` that holds project files at the paths a project has them. Claude Code reads that folder. Codex reads `.agents/skills`, which becomes a link to that folder. `placing-files.md`, "4. The .agents/skills link", says how to make the link.
 
-The shared skills are the same in every project (10): `running-work-item-lifecycle`, `filing-project-records`, `handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. The setup folder `every-project` holds them.
+The shared skills are the same in every project (9): `running-work-item-lifecycle`, `filing-project-records`, `handoff`, `braindump`, `session-summary`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. The setup folder `every-project` holds them.
 
 Each choice adds the skills in the table below. `setup-copy.md`, "Folders the choices add", says which setup folders hold them.
 
@@ -119,7 +119,7 @@ Never turn off `toolkit@toolkit-v2`, which holds this skill, or `workstreams@too
 
 ## Check
 
-- `ls <copy>/.claude/skills` shows exactly the 10 shared skills and the skills that the table under "Skills" gives for the owner's choices, each with a `SKILL.md`.
+- `ls <copy>/.claude/skills` shows exactly the 9 shared skills and the skills that the table under "Skills" gives for the owner's choices, each with a `SKILL.md`.
 - Both JSON files are valid.
 - Every hook command that the settings name is in `<copy>/.claude/hooks/`.
 - `.codex/config.toml` has each table once, and `[skills]` holds `max_context_tokens = 10000`.
