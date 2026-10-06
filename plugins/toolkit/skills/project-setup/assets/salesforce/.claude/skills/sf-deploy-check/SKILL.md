@@ -1,6 +1,6 @@
 ---
 name: sf-deploy-check
-description: 'Checks whether a Salesforce deploy would include components or edits beyond the intended change, or whose feature is not ready in the target org. Use before a deploy to a shared org or before giving the owner a deploy command. For deciding whether a work item is ready or for running the deploy, use running-work-item-lifecycle.'
+description: 'Checks whether a Salesforce deploy would include components or edits beyond the intended change, or whose feature is not ready in the target org. Use before a deploy to a shared org or before giving the owner a deploy command. For deciding whether a work item is ready or for running the deploy, use managing-work-items.'
 ---
 
 # Salesforce deploy scope check
@@ -43,7 +43,7 @@ A tracker can be wrong both ways: it can show a component as missing from an org
 | For | Use |
 | --- | --- |
 | The component tracker this check reads | `sf-component-tracker` |
-| Checking whether a work item is ready, or running the deploy | `running-work-item-lifecycle` |
+| Checking whether a work item is ready, or running the deploy | `managing-work-items` |
 
 ## Related
 

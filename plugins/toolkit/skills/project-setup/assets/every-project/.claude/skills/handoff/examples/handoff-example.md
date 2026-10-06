@@ -57,7 +57,7 @@ credit note exports with the same columns as an invoice and the tests in
 
 ## Read first
 
-1. WI-007, opened with `using-work-tracker`: its Current state, and Q-06.
+1. WI-007, opened with `managing-work-items`: its Current state, and Q-06.
    Q-06 points to DEC-006 in `DECISIONS.md`.
 2. `DESIGN.md` in WI-007's folder: Option A is approved.
 3. `src/export.js`, from line 40.
@@ -75,7 +75,7 @@ credit note exports with the same columns as an invoice and the tests in
 
 ## First action
 
-Open WI-007 with `using-work-tracker`, then read `src/export.js` from line 40.
+Open WI-007 with `managing-work-items`, then read `src/export.js` from line 40.
 
 ## Repository
 

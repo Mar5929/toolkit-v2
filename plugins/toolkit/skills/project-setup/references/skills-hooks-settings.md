@@ -19,17 +19,17 @@ The job is done when each snippet is merged into the settings file that the setu
 
 Every skill is already in `<copy>/.claude/skills/`, one folder per skill, because the steps of `setup-copy.md` copied the setup folders for the owner's choices. A setup folder is a folder in this skill's `assets/` that holds project files at the paths a project has them. Claude Code reads that folder. Codex reads `.agents/skills`, which becomes a link to that folder. `placing-files.md`, "4. The .agents/skills link", says how to make the link.
 
-The shared skills are the same in every project (9): `running-work-item-lifecycle`, `filing-project-records`, `handoff`, `braindump`, `session-summary`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. The setup folder `every-project` holds them.
+The shared skills are the same in every project (9): `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `session-summary`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. The setup folder `every-project` holds them. A work choice adds the selected tracker references inside `managing-work-items`, not another skill.
 
 Each choice adds the skills in the table below. `setup-copy.md`, "Folders the choices add", says which setup folders hold them.
 
 | Choice | Skills |
 | --- | --- |
-| Work items local | `using-work-tracker` |
-| Work items in Notion | `using-work-tracker`, `using-notion-cli` |
-| Work items in GitHub Issues | `using-work-tracker` |
-| Memory local | `curating-project-memory`, `using-memory-store` |
-| Memory in Notion | `curating-project-memory`, `using-memory-store`, `using-notion-cli` |
+| Work items local | none |
+| Work items in Notion | `using-notion-cli` |
+| Work items in GitHub Issues | none |
+| Memory local | `managing-project-memory` |
+| Memory in Notion | `managing-project-memory`, `using-notion-cli` |
 | Memory in Hindsight | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
 | Salesforce | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
 
@@ -37,6 +37,8 @@ Two rows name another file of this skill:
 
 - In the row "Memory in Hindsight", `hindsight-on-vps.md`, "What runs where", describes the add-on and the tools it gives the agent.
 - In the row "Salesforce", `salesforce.md`, "Salesforce's skills", says how to check that Salesforce's own skills are installed, and what to tell the owner when they are not.
+
+A work choice adds tracker references, and a local or Notion memory choice adds store references. The finished `managing-work-items` folder contains one `SKILL.md` and one selected `references/work-tracker.md`. With local or Notion memory, the finished `managing-project-memory` folder contains one `SKILL.md` and one selected `references/memory-store.md`. Hindsight adds no Toolkit memory skill.
 
 ## Hook commands
 

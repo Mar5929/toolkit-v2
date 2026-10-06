@@ -1,6 +1,6 @@
 ---
 name: filing-project-records
-description: 'Files sources the project receives in sources/, decisions and open questions that more than one work item needs in DECISIONS.md, and changes to documents about system rules in system/. Each record gets an ID so later work can find it. Use when the owner gives the project a source, a shared decision or question needs recording, or a system document needs updating. For a decision that only one work item needs, use running-work-item-lifecycle.'
+description: 'Files sources the project receives in sources/, decisions and open questions that more than one work item needs in DECISIONS.md, and changes to documents about system rules in system/. Each record gets an ID so later work can find it. Use when the owner gives the project a source, a shared decision or question needs recording, or a system document needs updating. For a decision that only one work item needs, use managing-work-items.'
 ---
 
 # Filing project records
@@ -11,7 +11,7 @@ Use this skill to file records that later work may need. File the three kinds of
 2. Record decisions and open questions that more than one work item needs in `DECISIONS.md`. Give each entry an ID like DEC-001.
 3. Record rules about how the system must work that more than one work item needs in a document in `system/`. Give each rule an ID like SEC-04.
 
-If only one work item needs a decision or a requirement, do not save it here. It stays in that work item: use `running-work-item-lifecycle`.
+If only one work item needs a decision or a requirement, do not save it here. It stays in that work item: use `managing-work-items`.
 
 Before you save a decision, an open question, or a rule, check that more than one work item needs it. The root `AGENTS.md`, section "Where information goes", gives the test for that, and lists where every kind of information is kept.
 
@@ -26,9 +26,9 @@ Find what happened in the table, and open only the file in that row. When one me
 | The project was given a source, such as a transcript, a meeting note, an email, a client document, a screenshot, or an export | File a source | [references/file-source.md](references/file-source.md) |
 | A decision was made, or a question was raised, that more than one work item needs | Record a decision | [references/record-decision.md](references/record-decision.md) |
 | The status of an entry in `DECISIONS.md` changes | Record a decision | [references/record-decision.md](references/record-decision.md) |
-| `running-work-item-lifecycle` is closing a work item, and the owner agreed to keep, for the whole project, a lesson from it about the system or the project | Record a decision | [references/record-decision.md](references/record-decision.md) |
+| `managing-work-items` is closing a work item, and the owner agreed to keep, for the whole project, a lesson from it about the system or the project | Record a decision | [references/record-decision.md](references/record-decision.md) |
 | An approved fact about the system changes: a rule, a term, an integration document, or a diagram | Update a system document | [references/update-system-doc.md](references/update-system-doc.md) |
-| `running-work-item-lifecycle` is closing a work item, and the work item built what a rule says | Update a system document | [references/update-system-doc.md](references/update-system-doc.md) |
+| `managing-work-items` is closing a work item, and the work item built what a rule says | Update a system document | [references/update-system-doc.md](references/update-system-doc.md) |
 
 The rest of this file applies to all three steps.
 
@@ -57,7 +57,7 @@ When this session's folder is not the main checkout, read and write `DECISIONS.m
 
 ## Writing a record's ID in a work item
 
-A work item that needs a record holds the record's ID, and never a copy of the record's text. Only this skill writes these IDs into work items, and it writes them with `using-work-tracker`.
+A work item that needs a record holds the record's ID, and never a copy of the record's text. Only this skill writes these IDs into work items, and it writes them with `managing-work-items`.
 
 ### Where the ID goes
 
@@ -73,10 +73,10 @@ The time depends on where the project keeps its work items.
 - When work items are in Notion or GitHub, write the ID once the save is on the default branch.
 - When work items are local files, write the ID only after `publish-docs` reports that the main checkout holds the save. The command that checks the records, `.claude/hooks/validate-records.mjs`, looks the ID up there.
 - When work items are local files and `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item. Do this in its place:
-  - Give `curating-project-memory` one line for "Waiting on" in the project's Current State. The project's Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
+  - Give `managing-project-memory` one line for "Waiting on" in the project's Current State. The project's Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
   - Tell the owner the same.
-  - When the main checkout's files hold the record, write the ID in each work item, and ask `curating-project-memory` to remove that line.
-  - In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `curating-project-memory`.
+  - When the main checkout's files hold the record, write the ID in each work item, and ask `managing-project-memory` to remove that line.
+  - In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `managing-project-memory`.
 
 ### A work item that must follow a record that already exists
 
@@ -97,7 +97,7 @@ The record can be a rule in `system/`, an entry in `DECISIONS.md`, or a source. 
 | For | Use |
 | --- | --- |
 | The commit of every change this skill makes | `publish-docs` |
-| Writing a record's ID in a work item, and reading a work item | `using-work-tracker` |
-| Anything that one work item alone needs; a requirement that a new decision changes; the closing of a work item, which says what the work item built | `running-work-item-lifecycle` |
-| A line under "Waiting on" in the project's Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `curating-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place. |
+| Writing a record's ID in a work item, and reading a work item | `managing-work-items` |
+| Anything that one work item alone needs; a requirement that a new decision changes; the closing of a work item, which says what the work item built | `managing-work-items` |
+| A line under "Waiting on" in the project's Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `managing-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place. |
 | A captured outside page, or a record of the system as it is today | `reference/AGENTS.md` |

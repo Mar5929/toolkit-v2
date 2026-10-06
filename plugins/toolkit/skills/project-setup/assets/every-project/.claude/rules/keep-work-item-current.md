@@ -2,7 +2,7 @@
 
 While you work on a work item, keep the whole work item true, and not only its Current state. A work item's Current state is the five lines at the top of the work item that say where it stands. Keep these true as well: the status of each task and who does it, the status of each of the work item's phases, and every field you have information for.
 
-The work item template gives the form of each field, such as the five Current state lines, the three forms of Next action, and a Questions and Answers row. The template is `assets/work-item-template.md` in the `running-work-item-lifecycle` skill.
+The work item template gives the form of each field, such as the five Current state lines, the three forms of Next action, and a Questions and Answers row. The template is `assets/work-item-template.md` in the `managing-work-items` skill.
 
 ## The work item's Current state
 

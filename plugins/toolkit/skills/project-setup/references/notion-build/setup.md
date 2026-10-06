@@ -4,7 +4,7 @@ This file gives the Notion steps for a project's memory: the memory steps of set
 
 Some of the files named here are in other folders of this skill:
 
-- `database-layout.md`, `views-and-layout.md`, `current-state-page.md`, and the `assets/` files are in the Notion `using-memory-store` skill, which is `assets/memory-notion/.claude/skills/using-memory-store/` in this skill.
+- `database-layout.md`, `views-and-layout.md`, `current-state-page.md`, and the `assets/` files are added to `managing-project-memory` by the Notion memory choice. Their source is `assets/memory-notion/.claude/skills/managing-project-memory/` in this skill.
 - `ntn-commands.md` is in the `using-notion-cli` skill, in `assets/notion-tools/.claude/skills/using-notion-cli/references/` in this skill. That skill's `SKILL.md` says how to run `ntn` in Codex.
 - `notion.md`, `finishing.md`, `earlier-versions.md`, and `one-home-layout.md` are in this skill's `references/` folder.
 

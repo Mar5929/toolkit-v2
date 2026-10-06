@@ -9,7 +9,7 @@ Use this skill to run `ntn`, which is Notion's own command-line tool. The goal i
 
 `ntn api <path>` calls the Notion API as the "Notion CLI" connection, which is the connection that the owner signed in with.
 
-This skill says how to run each call. It never says what to store. `using-work-tracker` says what to read and save for a work item, and `using-memory-store` says what to read and save for project memory.
+This skill says how to run each call. It never says what to store. `managing-work-items` says what to read and save for a work item, and `managing-project-memory` says what to read and save for project memory.
 
 ## Before your first call in a session
 
@@ -49,8 +49,8 @@ The Codex sandbox is the closed area where Codex runs commands. It blocks networ
 
 | For | Use |
 | --- | --- |
-| What to read and save for a work item | `using-work-tracker` |
-| What to read and save for project memory | `using-memory-store` |
+| What to read and save for a work item | `managing-work-items` |
+| What to read and save for project memory | `managing-project-memory` |
 
 ## References
 

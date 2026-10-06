@@ -64,7 +64,7 @@ This table is for files in `.claude/rules/`. "Same name" means that Toolkit V2 h
 | `parallel-agent-sessions.md` | Compare | `shared-repository-work.md` |
 | `offer-context-handoff.md` | Compare | `session-handoff.md` |
 | `knowledge-direct-commit.md` | Compare | `publish-project-documents.md` |
-| `work-item-stages.md` | Compare | `keep-work-item-current.md` and the `running-work-item-lifecycle` skill |
+| `work-item-stages.md` | Compare | `keep-work-item-current.md` and the `managing-work-items` skill |
 | `work-item-folders.md` | Compare | `work-items/AGENTS.md`, only with local work items |
 | `ai-external-knowledge.md` | Compare | `reference/AGENTS.md` |
 | `plain-english-artifacts.md` | Compare | `document-clarity-standard.md` |
@@ -77,7 +77,7 @@ This table is for files in `.claude/rules/`. "Same name" means that Toolkit V2 h
 | `deploy-hitchhiker-check.md` | Compare | `check-deployment-contents.md` |
 | `deployment-runbook.md` | Compare | `record-deployment-steps.md` |
 | `delivery-and-knowledge-boundary.md` | Compare | `project-file-locations.md` (Salesforce), and "Where information goes" in `AGENTS.md` |
-| `capture-the-thinking.md`, `wrap-up-ritual.md`, `track-open-topics.md`, `spec-before-you-build.md` | Compare | `memory-review-and-save.md`, `keep-work-item-current.md`, and `running-work-item-lifecycle` |
+| `capture-the-thinking.md`, `wrap-up-ritual.md`, `track-open-topics.md`, `spec-before-you-build.md` | Compare | `memory-review-and-save.md`, `keep-work-item-current.md`, and `managing-work-items` |
 | `writing-and-language.md`, `how-to-reply.md`, `treat-owner-as-non-technical.md`, `define-your-terms.md` | Compare | The output style named by `outputStyle` in `.claude/settings.json` |
 | `.claude/RULES.md`, `.claude/rules/README.md` (indexes of the rules) | Delete | Nothing: `AGENTS.md` tells Codex to read the rule files |
 | `.claude/toolkit-sync.md` (what the old sync skill recorded, with the owner's declines) | Carry | In step 6 of `move-over.md`, each decision in it that the owner confirms is still true goes to its new place: an instruction for the agent goes to `.claude/rules/owner-preferences.md`, and a decision about the project goes to `DECISIONS.md`. |
@@ -173,7 +173,7 @@ When a project already has a root `work-items/` folder from an earlier tracker, 
 
 ## Old work item to Toolkit V2 work item
 
-Create each new work item with the project's `using-work-tracker` skill. A work item in the earlier form holds the same fields in these files: `ITEM.yaml` or `ITEM.json` (the fields), `REQUIREMENTS.md` or `SPEC.md` (the requirements), `TASKS.yaml` (the tasks), `STATUS.md` and `HISTORY.ndjson` (the history).
+Create each new work item with the project's `managing-work-items` skill and its selected `references/work-tracker.md`. A work item in the earlier form holds the same fields in these files: `ITEM.yaml` or `ITEM.json` (the fields), `REQUIREMENTS.md` or `SPEC.md` (the requirements), `TASKS.yaml` (the tasks), `STATUS.md` and `HISTORY.ndjson` (the history).
 
 The table uses two words for the level of a work item: a top-level item is a work item with no parent, and a sub-item is a work item inside another work item.
 
@@ -200,7 +200,7 @@ The table uses two words for the level of a work item: a top-level item is a wor
 | No old field | In a work item that is not Done or Cancelled, the `**Moved up:**` line stays empty, and "Lessons not proven yet" holds "None." |
 | Git branch and pull request fields, completion evidence, the schema version | No Toolkit V2 field. Name them on the Update line as not carried over. |
 
-`running-work-item-lifecycle`, "Levels", gives the levels, the task IDs, and the project phase that a top-level item goes under. Add one Recent History row to each new work item: "Carried over from `<old path>` in the move to Toolkit V2."
+`managing-work-items/references/lifecycle-rules.md`, "Levels", gives the levels, the task IDs, and the project phase that a top-level item goes under. Add one Recent History row to each new work item: "Carried over from `<old path>` in the move to Toolkit V2."
 
 ## Old memory to its place in Toolkit V2
 
@@ -230,12 +230,12 @@ For the row of a topic file with another `type`, each fact goes to one of these 
 - A fact about the project goes to `PROJECT.md`.
 - A rule about the system goes to the matching `system/` document. Mark the rule Draft unless a decision that approved it can be found.
 - A term goes to `system/glossary.md`.
-- A fact about a person or the client, a way to reach something, or something that happened, when it fits no other file, becomes a memory record of the matching type. Write it with `curating-project-memory` in the setup copy. With Hindsight memory, put it under "Your call".
+- A fact about a person or the client, a way to reach something, or something that happened, when it fits no other file, becomes a memory record of the matching type. Write it with `managing-project-memory` in the setup copy. With Hindsight memory, put it under "Your call".
 
 For the row `knowledge/memory/current.md`: the project's Current State is the project's one short page of what is true now.
 
 - An "Active work" entry becomes a "Now" line when its work item was carried over and has left Backlog.
-- Each "General project to-dos" entry goes under "Your call". Recommend a project task when the entry is administrative work for the whole project, and otherwise a new Backlog work item. A project task is a task that belongs to no work item. `running-work-item-lifecycle`, "Levels", describes both.
+- Each "General project to-dos" entry goes under "Your call". Recommend a project task when the entry is administrative work for the whole project, and otherwise a new Backlog work item. A project task is a task that belongs to no work item. `managing-work-items/references/lifecycle-rules.md`, "Levels", describes both.
 - "Session handoffs" are not carried over.
 - "Project goal" is the suggestion for the outcome question in `finishing.md`.
 

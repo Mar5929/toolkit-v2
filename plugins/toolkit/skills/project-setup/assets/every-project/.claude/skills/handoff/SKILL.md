@@ -38,7 +38,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    Never choose a work item only because it is open, because another session may be working on it.
    - When no work item belongs to this session, ask the owner which work item this session worked on, if any.
    - When the owner answers "None", update only the project tasks in step 2.
-2. **Update each of those work items** with `using-work-tracker`. For each work item:
+2. **Update each of those work items** with `managing-work-items`. For each work item:
    - Read the work item first.
    - Make every part of the work item true, as the rule `.claude/rules/keep-work-item-current.md` says.
    - Add a Questions and Answers row for each answer or decision from this session that is not there yet.
@@ -48,23 +48,23 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - Read the work item back.
 
    Then update each project task that this session worked on. A project task is a task that belongs to no work item, with an ID such as `PT-01`. Use the test of step 1 to decide whether this session worked on a project task. For each project task:
-   - Read the project task with `using-work-tracker`.
-   - Make its status and who does it true. `running-work-item-lifecycle`, section "Levels", says what a project task is and when to tick it.
+   - Read the project task with `managing-work-items`.
+   - Make its status and who does it true. `managing-work-items/references/lifecycle-rules.md`, "Levels", says what a project task is and when to tick it.
    - Read the project task back.
 3. **File what this session left unfiled.** Step 2 saved each decision that only one work item needs. Go through the five kinds below for the rest.
    - **A decision or a question that more than one work item needs.** When one came from this session and `DECISIONS.md` does not hold it, record it with `filing-project-records`, step "record a decision". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs it. When the owner has not confirmed it, record it as Open. Do not wait for the owner's answer before you write the prompt.
    - **A source with no SRC ID.** A source is anything the project was given and keeps, such as a transcript or an email. When the owner gave this session a source that has no SRC ID, file it with `filing-project-records`, step "file a source".
-   - **An instruction for how the agent works that is not written down.** Give it to `curating-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
-   - **What this session learned or did that no record holds.** This kind covers a fact about a person, the client, or the project; a claim nobody checked; a lesson with no work item; a meeting or other event; and a run of a recurring job. Give each one to `curating-project-memory`. When a save needs the owner's yes, `curating-project-memory` keeps it as a proposal, which is a save the owner has not said yes to. Do not wait for the owner's answer.
+   - **An instruction for how the agent works that is not written down.** Give it to `managing-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+   - **What this session learned or did that no record holds.** This kind covers a fact about a person, the client, or the project; a claim nobody checked; a lesson with no work item; a meeting or other event; and a run of a recurring job. Give each one to `managing-project-memory`. When a save needs the owner's yes, `managing-project-memory` keeps it as a proposal, which is a save the owner has not said yes to. Do not wait for the owner's answer.
    - **An Open entry in `DECISIONS.md`.** Read the Open entries that this session raised or that name this session's work items. Put each one under "Open questions" in the prompt, with its DEC ID.
 
    When there is nothing to file, say so in one line.
-4. **Update the project's Current State.** The project's Current State is the project's one short page of what is true now. Read and write it with `using-memory-store`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `using-memory-store`.
+4. **Update the project's Current State.** The project's Current State is the project's one short page of what is true now. Read and write it with `managing-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `managing-project-memory`.
    - Write the part "Next session starts with". It has one line for each piece of work that this session worked on.
      - For a work item, the line holds the work item's ID and the words "read its Current state".
      - For a piece of work that is not a work item, the line says what the work is and its next step.
-   - Check the line under "Now" for each of this session's work items. When that line is missing or no longer true, add or correct it as `running-work-item-lifecycle` says.
-   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, a date that passed, or a thing owed that was delivered. The reference file on the project's Current State in `curating-project-memory`, section "Removing what is no longer true", says how.
+   - Check the line under "Now" for each of this session's work items. When that line is missing or no longer true, add or correct it as `managing-work-items` says.
+   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, a date that passed, or a thing owed that was delivered. `managing-project-memory/references/current-state.md`, "Removing what is no longer true", says how.
    - Set the "Last updated" line to the date, `handoff`, and `agent`.
    - When the project's Current State is missing, do not create it. Tell the owner that it is missing, and suggest the setup check (`project-setup`, "check the setup"). Put in the prompt the entry that this step would have written.
 5. **Draft the prompt. Do not show it yet.**
@@ -114,11 +114,11 @@ When the owner gives you a handoff prompt that was written elsewhere and wants i
 
 | For | Use |
 | --- | --- |
-| Reading and updating this session's work items and project tasks | `using-work-tracker` |
-| What a project task is, when to tick it, and a work item's line under "Now" in the project's Current State | `running-work-item-lifecycle` |
+| Reading and updating this session's work items and project tasks | `managing-work-items` |
+| What a project task is, when to tick it, and a work item's line under "Now" in the project's Current State | `managing-work-items` |
 | A decision or a question that more than one work item needs, and a source | `filing-project-records` |
-| An instruction for how the agent works; what no record holds yet; which lines of the project's Current State are no longer true | `curating-project-memory` |
-| Every read and write of the project's Current State | `using-memory-store` |
+| An instruction for how the agent works; what no record holds yet; which lines of the project's Current State are no longer true | `managing-project-memory` |
+| Every read and write of the project's Current State | `managing-project-memory` |
 | In a project with Hindsight memory: the project's Current State, and an instruction for how the agent works | `.claude/rules/hindsight-memory.md` |
 | The recap table, when the owner also asked for one | `session-summary` |
 | The project's Current State is missing | `project-setup` ("check the setup") |

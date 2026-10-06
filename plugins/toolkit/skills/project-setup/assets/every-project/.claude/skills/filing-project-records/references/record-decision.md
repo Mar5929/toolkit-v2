@@ -29,7 +29,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 4. Add the entry in the form that `DECISIONS.md` gives, with the next DEC number. Fill these lines as follows.
    - On the Why line, write the reason in the words of the person who decided. Later work does not read a closed work item, so the reason must be in this entry, not only in the work item.
    - On the Affects line, name each open work item the entry changes.
-     - Name only a work item that exists. For work that has no work item yet, write "none yet", or first add the work item to the Backlog with `running-work-item-lifecycle`.
+     - Name only a work item that exists. For work that has no work item yet, write "none yet", or first add the work item to the Backlog with `managing-work-items`.
      - When you cannot tell which work items the entry changes, ask the owner in one question.
    - On the Sources line, name each SRC ID the entry is based on. Add the DEC ID to the "Used by" cell of each of those rows in `sources/README.md`.
    - When the entry is a lesson from a work item that is being closed, the owner's yes to keeping the lesson for the whole project is the decision. On the Decision line, state the lesson as what to do or what to avoid. On the Why line, say what happened and where it was seen, with the work item's ID.
@@ -38,10 +38,10 @@ The Status of an entry is one of four words: Open (a question that waits for an 
    - An Open entry gets a rule now only when a work item under its Affects is designed or built to the proposed wording before the answer is given. That rule is marked Draft.
    - Otherwise, write the rule of an Open entry when the entry is answered.
 6. Make one save with `publish-docs`. The save holds `DECISIONS.md`, `sources/README.md` when step 4 changed it, and every system document that step 5 changed.
-7. Write the IDs in each work item under Affects, with `using-work-tracker`. `SKILL.md`, section "When to write the ID", says when you can write them. Wait until then. On the work item's Related items line, write the DEC ID and the ID of each rule that step 5 added or changed.
+7. Write the IDs in each work item under Affects, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write them. Wait until then. On the work item's Related items line, write the DEC ID and the ID of each rule that step 5 added or changed.
    - When a Questions and Answers row in a work item raised the decision, add "Filed as DEC-###." at the end of that row's Answer cell, after the owner's words. The row keeps the owner's words.
-   - When a work item cannot continue without the answer to an Open entry, that work item waits on the owner. Continue with `running-work-item-lifecycle` for that work item.
-   - When no work item waits on an Open entry, give `curating-project-memory` a line for "Waiting on" in the project's Current State, with the DEC ID and who must answer. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+   - When a work item cannot continue without the answer to an Open entry, that work item waits on the owner. Continue with `managing-work-items` for that work item.
+   - When no work item waits on an Open entry, give `managing-project-memory` a line for "Waiting on" in the project's Current State, with the DEC ID and who must answer. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
 8. Tell the owner the DEC ID, its Status, and the work items that now name it.
 
 ## Answering an open question
@@ -53,8 +53,8 @@ The Status of an entry is one of four words: Open (a question that waits for an 
    - When the decision states how the system must work and no rule holds it yet, add the rule there now.
 4. Save as step 6 of "A new entry" says.
 5. Leave the DEC ID in each work item under Affects as it is. The work item holds only the ID, so nothing there changes.
-   - When a work item waited on this entry, it continues now. Continue with `running-work-item-lifecycle` for that work item.
-   - When a line under "Waiting on" in the project's Current State names this entry, ask `curating-project-memory` to remove it. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+   - When a work item waited on this entry, it continues now. Continue with `managing-work-items` for that work item.
+   - When a line under "Waiting on" in the project's Current State names this entry, ask `managing-project-memory` to remove it. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
 
 ## Replacing a decision
 
@@ -64,12 +64,12 @@ Use this section when the owner changes a Decided entry.
 2. In the old entry, set Status to Superseded and "Replaces or replaced by" to "replaced by DEC-###". Change no other line of the old entry.
 3. For each rule whose Source names the old entry, update the rule with `update-system-doc.md`, and give it the new DEC ID.
 4. Save both entries and the system documents in one save.
-5. In each work item under the old entry's Affects that is not Done or Cancelled, replace the old DEC ID with the new one on its Related items line, with `using-work-tracker`.
-   - When a requirement the owner already approved was based on the old decision, that is a requirement change. Continue with `running-work-item-lifecycle` for that change.
+5. In each work item under the old entry's Affects that is not Done or Cancelled, replace the old DEC ID with the new one on its Related items line, with `managing-work-items`.
+   - When a requirement the owner already approved was based on the old decision, that is a requirement change. Continue with `managing-work-items` for that change.
 
 ## Withdrawing an entry
 
 Use this section when the owner drops a question or a decision, and nothing replaces it.
 
 - When a rule's Source names the entry, do not withdraw the entry. Ask the owner what holds now, and record the answer with "Replacing a decision".
-- Otherwise, set Status to Withdrawn, add the owner's reason, with the date, to the Why line, and save. Then remove the DEC ID from the Related items line of each work item under Affects that is not Done or Cancelled, with `using-work-tracker`.
+- Otherwise, set Status to Withdrawn, add the owner's reason, with the date, to the Why line, and save. Then remove the DEC ID from the Related items line of each work item under Affects that is not Done or Cancelled, with `managing-work-items`.

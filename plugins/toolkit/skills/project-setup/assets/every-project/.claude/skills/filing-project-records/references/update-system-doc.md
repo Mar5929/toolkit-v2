@@ -13,7 +13,7 @@ Before you write a rule, name the DEC ID behind the change. When `DECISIONS.md` 
 | What you change | Section |
 | --- | --- |
 | A rule: a new one, a changed one, or one that no longer applies | Add or change a rule |
-| The mark of a rule, when `running-work-item-lifecycle` closes a work item that may have built what the rule says | Mark a rule Built |
+| The mark of a rule, when `managing-work-items` closes a work item that may have built what the rule says | Mark a rule Built |
 | A term in the glossary | A glossary term |
 | An integration document or a diagram | An integration document or a diagram |
 
@@ -36,9 +36,9 @@ Before you write a rule, name the DEC ID behind the change. When `DECISIONS.md` 
 
 ## Mark a rule Built
 
-Use this section when `running-work-item-lifecycle` closes a work item and names a rule that the work item may have built.
+Use this section when `managing-work-items` closes a work item and names a rule that the work item may have built.
 
-1. Check three conditions. The work item built what the rule says only when all three are true. When one is not true, change nothing, and tell `running-work-item-lifecycle` which one.
+1. Check three conditions. The work item built what the rule says only when all three are true. When one is not true, change nothing, and tell `managing-work-items` which one.
    - The rule's mark is Approved.
    - The work item's change is on the default branch, and deployed when the work item has a deployment.
    - The owner approved the work item's result, and the work item's checker marked Met a requirement of the work item that builds or changes the behaviour the rule states. The checker is the separate agent that tested the result. A requirement that only names, explains, or documents the rule does not count.
@@ -46,7 +46,7 @@ Use this section when `running-work-item-lifecycle` closes a work item and names
 3. Change the mark to Built with the work item's ID. Change no other line of the rule.
 4. Set the document's Status again. Add one Changelog row that holds the date, "<rule ID> built", the rule's DEC ID, and the work item's ID. "Last changed via" keeps the rule's DEC ID.
 5. Save with `publish-docs`.
-6. Give `running-work-item-lifecycle` each rule ID, the commit ID, and whether the main checkout holds the save. `SKILL.md`, section "Check what you wrote, and report", says what to report about the main checkout. `running-work-item-lifecycle` records the rule IDs in the work item.
+6. Give `managing-work-items` each rule ID, the commit ID, and whether the main checkout holds the save. `SKILL.md`, section "Check what you wrote, and report", says what to report about the main checkout. `managing-work-items` records the rule IDs in the work item.
 
 ## A glossary term
 

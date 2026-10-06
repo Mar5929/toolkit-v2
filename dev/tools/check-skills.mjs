@@ -7,9 +7,9 @@
 // plugins/toolkit/skills/project-setup/assets/) hold project files at the paths a project
 // has them. The list of setup folders is read from the table "Folders the choices add" in
 // project-setup's references/setup-copy.md, the table the agent acts on, plus every-project.
-// The two storage skills the owner's choices alternate (using-work-tracker in work-local,
-// work-notion, and work-github; using-memory-store in memory-local and memory-notion) sit at
-// the same path in each of those folders; every other path is in exactly one folder.
+// Each work choice adds files inside managing-work-items; each local or Notion memory choice
+// adds files inside managing-project-memory. Their common SKILL.md files come from
+// every-project and memory-process. Every other project path is in exactly one folder.
 //
 // For project-setup and every SKILL.md under it, the plugin's other skill beside
 // project-setup (writing-harness-files), plus the Salesforce
@@ -92,10 +92,10 @@ const CHOICE_ROWS = [];
 const SHARED_FOLDERS = ['notion-tools', 'memory-process'];
 // The folders that hold files at the paths a project has them. The first is copied for every project.
 const PROJECT_FOLDERS = ['every-project', ...new Set(CHOICE_ROWS.flatMap((row) => row.folders))];
-// The two storage skills: the folders of choices that exclude each other hold one at the same path. Nothing else is shared.
+// The merged skill folders have common files and one selected set of storage references.
 const ALTERNATIVES = [
-  { folders: ['work-local', 'work-notion', 'work-github'], under: '.claude/skills/using-work-tracker/' },
-  { folders: ['memory-local', 'memory-notion'], under: '.claude/skills/using-memory-store/' },
+  { folders: ['every-project', 'work-local', 'work-notion', 'work-github'], under: '.claude/skills/managing-work-items/' },
+  { folders: ['memory-process', 'memory-local', 'memory-notion'], under: '.claude/skills/managing-project-memory/' },
 ];
 const EVERY = path.join(ASSETS, 'every-project');
 const SALESFORCE = path.join(ASSETS, 'salesforce');
@@ -115,8 +115,8 @@ const PATH_SPAN = /^(?:\.\/)?(?:references|assets|examples|scripts|agents)\/\S*$
 // Skill assets that are copies of project files: path under project-setup/assets -> the project path of the file.
 const SHARED = 'every-project/.claude/skills';
 const MODEL_COPIES = {
-  [`${SHARED}/running-work-item-lifecycle/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
-  [`${SHARED}/running-work-item-lifecycle/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
+  [`${SHARED}/managing-work-items/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
+  [`${SHARED}/managing-work-items/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
 };
 
 // Skill files that are exact copies of a project rule: path from the repository root -> the rule it copies.
@@ -195,7 +195,7 @@ function frontmatter(file, text, level) {
 
 // ------------------------------------------------------------------ the index
 
-// Rows are keyed by folder: the three work tracking folders each hold a skill named using-work-tracker.
+// Rows are keyed by folder. Choice folders contribute references to the shared skills.
 const indexDir = (folder) => path.join(SETUP, folder);
 const index = new Map();
 for (const [i, line] of read(INDEX).split('\n').entries()) {
@@ -282,10 +282,11 @@ for (const { dir, model } of skills) {
   for (const f of own.filter((x) => x.endsWith('.md'))) {
     const body = read(f);
     for (const x of namedPaths(body)) {
-      if (x.path.startsWith('../')) { report(level, f, `line ${x.n}: ${x.path} leaves the skill folder`); continue; }
+      if (x.path.startsWith('../') && !inside(path.resolve(path.dirname(f), x.path), dir)) { report(level, f, `line ${x.n}: ${x.path} leaves the skill folder`); continue; }
       if (x.span && !(f === skillFile && x.table)) continue; // prose code spans may name project paths
       const target = path.join(dir, x.path);
-      if (!fs.existsSync(target) && !fs.existsSync(path.join(path.dirname(f), x.path))) report(level, f, `line ${x.n}: ${x.path} does not exist`);
+      const installed = ALTERNATIVES.some((group) => inside(f, path.join(ASSETS, group.folders[0], group.under.replace(/\/$/, ''))) && group.folders.slice(1).every((folder) => fs.existsSync(path.join(ASSETS, folder, group.under, x.path))));
+      if (!fs.existsSync(target) && !fs.existsSync(path.join(path.dirname(f), x.path)) && !installed) report(level, f, `line ${x.n}: ${x.path} does not exist`);
     }
     const rel = posix(path.relative(dir, f));
     const lines = body.split('\n').length - (body.endsWith('\n') ? 1 : 0);
@@ -335,7 +336,71 @@ for (const folder of PROJECT_FOLDERS) {
   }
 }
 for (const [rel, folders] of holders) {
-  if (folders.length > 1 && !ALTERNATIVES.some((group) => rel.startsWith(group.under) && folders.every((f) => group.folders.includes(f)))) report('error', ASSETS, `the project path ${rel} is in ${folders.join(' and ')}: a project path is in one setup folder; only the files of using-work-tracker (in the work folders) and using-memory-store (in memory-local and memory-notion) are in more than one`);
+  if (folders.length > 1 && !ALTERNATIVES.some((group) => rel.startsWith(group.under) && folders.every((f) => group.folders.includes(f)))) report('error', ASSETS, `the project path ${rel} is in ${folders.join(' and ')}: a project path is in one setup folder unless the files are parts of managing-work-items or managing-project-memory`);
+}
+// Choice folders contain only fragments of the merged skills, without their own SKILL.md.
+// Check those files directly; the SKILL.md loop above cannot see them.
+for (const [folder, skill, anchor] of [
+  ...['work-local', 'work-notion', 'work-github'].map((folder) => [folder, 'managing-work-items', 'references/work-tracker.md']),
+  ...['memory-local', 'memory-notion'].map((folder) => [folder, 'managing-project-memory', 'references/memory-store.md']),
+]) {
+  const root = path.join(ASSETS, folder, '.claude/skills', skill);
+  const entry = path.join(root, anchor);
+  if (!fs.existsSync(entry)) { report('error', root, `the selected ${anchor} is missing`); continue; }
+  const linked = namedPaths(read(entry)).filter((x) => !x.span).map((x) => posix(path.relative(root, path.resolve(path.dirname(entry), x.path))));
+  for (const file of walk(root)) {
+    const rel = posix(path.relative(root, file));
+    if (file !== entry && !linked.some((link) => rel === link || rel.startsWith(`${link}/`))) report('error', file, `${anchor} does not link this selected reference or asset`);
+    if (!TEXT_FILE.test(file)) continue;
+    const body = read(file);
+    const lines = body.split('\n');
+    if (skill === 'managing-work-items' && /(?<!work-tracker-)\b(?:gh-commands|issue-layout|labels|field-mapping|folders-and-files|project-roadmap-and-tasks|database-layout|page-layout|searching)\.md\b/.test(body)) {
+      report('error', file, 'names a work tracker reference by its old filename; use its work-tracker- filename');
+    }
+    const hits = lines.flatMap((line, i) => (TOOLKIT_COMMAND.test(line) ? [i + 1] : []));
+    if (hits.length) report('error', file, `names a command of the retired toolkit program on line${hits.length > 1 ? 's' : ''} ${hits.join(', ')}`);
+    const source = lines[0].match(/dev\/build-shared\/([\w./-]+\.md)/);
+    if (source) {
+      const shared = path.join(ROOT, 'dev/build-shared', source[1]);
+      if (!fs.existsSync(shared) || read(shared).split('\n').slice(1).join('\n') !== lines.slice(1).join('\n')) report('error', file, `differs from its shared source ${shown(shared)}`);
+    }
+    if (file.endsWith('.md') && rel.startsWith('references/') && lines.length - (body.endsWith('\n') ? 1 : 0) > CONTENTS_OVER) {
+      const heading = proseLines(body).find((line) => /^#{2,6}\s/.test(line.text));
+      if (!heading || !/^#{2,6}\s+(?:Table of )?Contents\s*$/i.test(heading.text)) report('error', file, `a reference over ${CONTENTS_OVER} lines must start with a Contents section`);
+    }
+  }
+}
+if (/(?<!work-tracker-)\b(?:gh-commands|issue-layout|labels|project-roadmap-and-tasks|searching)\.md\b/.test(read(path.join(SETUP, 'references/github.md')))) {
+  report('error', path.join(SETUP, 'references/github.md'), 'names a GitHub work tracker reference by its old filename');
+}
+// Read the skills as a project will receive them. The shared indexes refer to one selected
+// work tracker and, for local or Notion memory, one selected memory store. Check every
+// supported pairing so a link cannot work only with the choice used by its writer.
+for (const work of ['work-local', 'work-notion', 'work-github']) {
+  for (const memory of ['memory-local', 'memory-notion', 'memory-hindsight']) {
+    const selected = ['every-project', work, ...(memory === 'memory-hindsight' ? [memory] : ['memory-process', memory])];
+    const files = new Map();
+    for (const folder of selected) {
+      const root = path.join(ASSETS, folder);
+      for (const file of walk(root)) files.set(posix(path.relative(root, file)), file);
+    }
+    for (const name of ['managing-work-items', ...(memory === 'memory-hindsight' ? [] : ['managing-project-memory'])]) {
+      const skill = `.claude/skills/${name}`;
+      if (!files.has(`${skill}/SKILL.md`)) report('error', ASSETS, `${work} with ${memory} has no ${name}/SKILL.md`);
+      const anchor = `${skill}/references/${name === 'managing-work-items' ? 'work-tracker' : 'memory-store'}.md`;
+      if (!files.has(anchor)) report('error', ASSETS, `${work} with ${memory} has no selected ${anchor}`);
+      for (const [rel, file] of files) {
+        if (!rel.startsWith(`${skill}/`) || !rel.endsWith('.md')) continue;
+        for (const link of namedPaths(read(file)).filter((x) => !x.span)) {
+          const fromFile = posix(path.normalize(path.join(path.dirname(rel), link.path)));
+          const fromSkill = posix(path.normalize(path.join(skill, link.path)));
+          if (!files.has(fromFile) && !files.has(fromSkill) && ![...files.keys()].some((key) => key.startsWith(`${fromFile}/`) || key.startsWith(`${fromSkill}/`))) {
+            report('error', file, `line ${link.n}: ${link.path} is absent when setup selects ${work} and ${memory}`);
+          }
+        }
+      }
+    }
+  }
 }
 // No file under assets/ holds a setup marker: a choice decides which files a project gets, never which lines.
 for (const f of walk(ASSETS)) {
@@ -383,7 +448,7 @@ for (const f of walk(ASSETS)) {
   const ticks = (text) => [...text.matchAll(/`([^`\n]+)`/g)].map((m) => m[1]);
   const dirs = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name).sort() : []);
   const same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
-  const skillsOf = (folder) => dirs(path.join(ASSETS, folder, '.claude/skills'));
+  const skillsOf = (folder) => dirs(path.join(ASSETS, folder, '.claude/skills')).filter((name) => fs.existsSync(path.join(ASSETS, folder, '.claude/skills', name, 'SKILL.md')));
 
   // The Salesforce skills are the model's own: every one is in the salesforce folder, and nothing else is.
   const everySf = skillsOf('every-project').filter((n) => n.startsWith('sf-'));
@@ -422,11 +487,11 @@ for (const f of walk(ASSETS)) {
   }
 
   // The skill counts in the plan the owner confirms.
-  const interview = read(interviewFile).replace(/\s+/g, ' ').match(/(\d+) shared, plus (\d+) for the work tracking choice, plus (\d+) for local or Notion memory \(none for Hindsight\), plus (\d+) for Notion work items or memory \(`using-notion-cli`, once\), plus (\d+) for Salesforce/);
-  if (!interview) report('error', interviewFile, 'has no "N shared, plus N for the work tracking choice, ..." sentence in the expected shape');
+  const interview = read(interviewFile).replace(/\s+/g, ' ').match(/(\d+) shared, plus (\d+) for local or Notion memory \(none for Hindsight\), plus (\d+) for Notion work items or memory \(`using-notion-cli`, once\), plus (\d+) for Salesforce/);
+  if (!interview) report('error', interviewFile, 'has no "N shared, plus N for local or Notion memory, ..." sentence in the expected shape');
   else {
     const count = (folder) => skillsOf(folder).length;
-    const want = [sharedDirs.length, Math.max(...['work-local', 'work-notion', 'work-github'].map(count)), count('memory-process') + Math.max(...['memory-local', 'memory-notion'].map(count)), count('notion-tools'), sfSkills.filter((n) => n.startsWith('sf-')).length];
+    const want = [sharedDirs.length, count('memory-process'), count('notion-tools'), sfSkills.filter((n) => n.startsWith('sf-')).length];
     if (interview.slice(1).map(Number).join() !== want.join()) report('error', interviewFile, `its skill counts are ${interview.slice(1).join(', ')}, but the folders give ${want.join(', ')}`);
   }
 }

@@ -4,7 +4,7 @@ This file gives the Notion steps for a project that keeps its work items or its 
 
 This file names files that are kept in three places:
 
-- `database-layout.md` and the `assets/schema/` files are in the Notion `using-work-tracker` skill, which is in `assets/work-notion/.claude/skills/using-work-tracker/` in this skill.
+- `work-tracker-database-layout.md` and the `assets/schema/` files are added to `managing-work-items` by the Notion work choice. Their source is `assets/work-notion/.claude/skills/managing-work-items/` in this skill.
 - `ntn-commands.md` is in the `using-notion-cli` skill, in `assets/notion-tools/.claude/skills/using-notion-cli/references/` in this skill. That skill's `SKILL.md` says how to run `ntn` in Codex.
 - The other reference files named here are in this folder (`setup.md`, `work-layout.md`, `project-page.md`, and `work-item-page.md`) or in this skill's `references/` folder (`update.md`, `finishing.md`, and `earlier-versions.md`).
 
@@ -197,7 +197,7 @@ The only exceptions are the Tasks "Done" checkbox and the type of the Tasks Stat
 
    - When a Tasks database has a "Done" checkbox, or a Status that is missing or of type select, run "From the Done checkbox to Status" below, after this step. When Status is missing, add it first, from file 03.
    - When any other property has the right name but another type, leave the property as it is and tell the owner.
-   - When a select or status property lacks an option, send every option the property has now plus the new one. `database-layout.md` lists the options of each property.
+   - When a select or status property lacks an option, send every option the property has now plus the new one. `work-tracker-database-layout.md` lists the options of each property.
    - When the project has a Stage property, run "From Stage to State" below, after this step.
 2. **Relations, the rollup, and the columns made from them.** These come from files 04 to 07d. Each of these files is already a whole body with its `properties` wrapper, so never take a spec out of such a file and wrap it again.
    - Fill the placeholders in a copy of the file, and send the copy as it is, with `PATCH v1/data_sources/<data-source-id>` and `-d @<copy>`.
@@ -270,8 +270,8 @@ The only exceptions are the Tasks "Done" checkbox and the type of the Tasks Stat
 
 A project set up before toolkit 0.6.0 has a Stage property and the Status options Backlog, Ready, In Progress, In Review, Done, and Cancelled. Run this section after step 1 of "Bringing a project up to the current template" has added the State property.
 
-1. Add the Status options Not Started (To-do), Preparing (In progress), and Blocked (In progress) to the project's Work Items database in one change, for example one `PATCH v1/data_sources/<work-items-data-source-id>` call. The name in brackets is the group of the option. Changing the Status options replaces the whole list. So send every option the database has now plus the new ones, each with its group. `database-layout.md` lists the Status options and gives this rule for changing them.
-2. Set each work item's State and Status as `earlier-versions.md`, "Work items from Stage to State", says. That section gives the State for each old Stage. `database-layout.md`, "Setting State and Status", gives the call that sets both.
+1. Add the Status options Not Started (To-do), Preparing (In progress), and Blocked (In progress) to the project's Work Items database in one change, for example one `PATCH v1/data_sources/<work-items-data-source-id>` call. The name in brackets is the group of the option. Changing the Status options replaces the whole list. So send every option the database has now plus the new ones, each with its group. `work-tracker-database-layout.md` lists the Status options and gives this rule for changing them.
+2. Set each work item's State and Status as `earlier-versions.md`, "Work items from Stage to State", says. That section gives the State for each old Stage. `work-tracker-database-layout.md`, "Setting State and Status", gives the call that sets both.
 3. In each work item template, replace the Next action prompt with the one in `work-item-page.md`, with one `update_content` call. The work item templates are the project's own (step 4 of "Bringing a project up to the current template") and the one in "Project".
 4. Step 3 of "Bringing a project up to the current template" adds the "By state" view. The Stage property, the "By stage" view, and the Status options Backlog, Ready, and In Review stay. Never remove them. Tell the owner that the owner may delete them in Notion once no work item uses them.
 
@@ -302,7 +302,7 @@ Run this section on the project's Tasks database, and on the Tasks database of "
 
    The answer must show type `status`. When Notion refuses the call, or accepts it but the type is not `status`, stop, tell the owner what Notion answered, and change nothing more. Notion's pages do not promise that a type change keeps the values (https://developers.notion.com/reference/update-data-source-properties: "Changing a type can make existing values unreadable in the new type"). So the list saved in step 2 is what you use to put the values back.
 4. Read Status again. Each option must be in its group: Not Started in To-do, In Progress in In progress, Done and Cancelled in Complete.
-   - When an option is not in its group, send the whole list from `03-tasks-database.json`, each option with its group, and read it back. `database-layout.md` says that a change to the Status options always sends the whole list, each option with its group.
+   - When an option is not in its group, send the whole list from `03-tasks-database.json`, each option with its group, and read it back. `work-tracker-database-layout.md` says that a change to the Status options always sends the whole list, each option with its group.
    - When a group still differs, give the owner the click: in "Edit property", drag the option into its group.
    - Then read every task's Status and compare it with the list from step 2. Set each Status that differs or is empty back to its saved Status.
 5. Put the view filters back. A type change can clear the filter of a view, so do this step after step 3, never before.
@@ -346,7 +346,7 @@ Keep the ids you get in a file in a temporary folder, never in the project, beca
     - When the template's page is empty, write `work-item-page.md` into it with `replace_content`. When this step rebuilds a damaged template, tell the owner that sections the owner added in the Notion app are not in the file, so the owner adds them again.
     - When the owner already pasted the owner's own text into the template, write nothing. Compare the template's section headings with `work-item-page.md`, and tell the owner which are missing.
     - The file leaves out one block that the API cannot write: the "Embed Github" block under "Linked Github PRs". Ask the owner to add it by hand in the Notion app, under that section's prompt line. Wait until the owner says it is done, or says the owner does not want it.
-    - In a work item, the agent adds each pull request as a plain link under the heading. `page-layout.md`, "Pull request links", in the Notion `using-work-tracker` skill, gives the form of that link.
+    - In a work item, the agent adds each pull request as a plain link under the heading. `references/work-tracker-page-layout.md`, "Pull request links", in `managing-work-items`, gives the form of that link.
 12. Make the views of the work item template.
     - First, the owner may have pasted views in from another page, and each such view keeps a filter that names that page. For each `<database …>` line in the template's text, read its view's filter with `ntn api v1/views database_id==<id> < /dev/null`, then `ntn api v1/views/<view-id> < /dev/null | jq .filter`.
     - When the filter names a page other than this template, delete that view's block with `ntn api v1/blocks/<id> -X DELETE < /dev/null`. Take the block id from the template's children list, as in "Removing the part a project keeps elsewhere". These are views inside the template, never the Work Items, Phases, or Tasks databases.
@@ -373,7 +373,7 @@ Keep the ids you get in a file in a temporary folder, never in the project, beca
   - No row may have a template's id, because a template that comes back as a row shows as a card on the owner's board.
 - Only after building or rebuilding the templates, and only after the owner's yes, test the template in a throwaway project. Never run this test for a new project.
   - Make a throwaway project from the template, named "… (safe to delete)".
-  - Make one work item in it, as `database-layout.md`, "Creating a work item", says, and check that the work item's page shows its own views.
+  - Make one work item in it, as `work-tracker-database-layout.md`, "Creating a work item", says, and check that the work item's page shows its own views.
   - Never test inside a template, because a copy would take the test work item with it.
 - For a new project, the project page lists only the parts the project keeps in Notion: Work Items, Phases, and Tasks; Memory and "Current state". When the project keeps work items in Notion, its Work Items templates list shows one template with `is_default` true, the ID property shows the project's prefix, and the relations check below passes.
 - Each database's relations point at the same project's databases. Check with `ntn api v1/data_sources/<id> < /dev/null | jq '.properties | map_values(select(.type=="relation") | .relation.data_source_id)'`.

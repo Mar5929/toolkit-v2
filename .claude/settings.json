@@ -8,20 +8,18 @@
   ],
   "skillOverrides": {
     "braindump": "off",
-    "curating-project-memory": "off",
     "filing-project-records": "off",
     "handoff": "off",
+    "managing-project-memory": "off",
+    "managing-work-items": "off",
     "merge-and-clean-up": "off",
     "publish-docs": "off",
     "pull-latest": "off",
     "reset-to-remote": "off",
-    "running-work-item-lifecycle": "off",
     "session-summary": "off",
     "sf-component-tracker": "off",
     "sf-data-change": "off",
     "sf-deploy-check": "off",
-    "using-memory-store": "off",
-    "using-notion-cli": "off",
-    "using-work-tracker": "off"
+    "using-notion-cli": "off"
   }
 }

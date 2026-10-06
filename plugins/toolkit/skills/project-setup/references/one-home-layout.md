@@ -44,21 +44,21 @@ Use the table to find out whether the project has the old layout. Each command o
 | Local memory: the glossary | Run `ls <main>/memory/terminology-glossary.md 2>/dev/null`. The project has the old layout when the command lists the file. |
 | Local memory: decision records or the glossary named in the index | Run `command grep -n -e '^## Decision' -e 'terminology-glossary' <main>/memory/MEMORY.md`. The project has the old layout when the command prints a line. |
 | Local memory: the project's Current State in the earlier form | Run `command grep -n '^## Waiting on the owner' <main>/memory/CURRENT_STATE.md`. The project has the old layout when the command prints a line. |
-| Notion memory: decision pages and the glossary | Use `using-memory-store` in the setup copy, and make the three checks that are listed under this table. |
+| Notion memory: decision pages and the glossary | Use the selected `references/memory-store.md` inside `managing-project-memory` in the setup copy, and make the three checks that are listed under this table. |
 | Sources inside local work items | Run `find <main>/work-items -type d -name references`. |
 | Sources inside GitHub issues | Run `gh issue list --state all --search '"## Source:" in:comments' --json number,title`. |
 | Sources inside Notion work items | Run `ntn api v1/data_sources/<Work Items data source id>/query -d '{"filter":{"property":"Files","files":{"is_not_empty":true}}}' < /dev/null`, as `using-notion-cli` in the setup copy says. The command returns each work item whose Files property holds a file. The id is under "Notion work items" in `PROJECT.md`. |
 | Work items in the earlier form, in local files | Run `command grep -rL '^\*\*Moved up:\*\*' <main>/work-items --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=PROJECT-TASKS.md`. The command lists each file with no Moved up line. A listed file named `<ID>.md` is a work item in the earlier form. |
-| Work items in the earlier form, in Notion or GitHub | With `using-work-tracker` in the setup copy, read one work item that is not Done or Cancelled. The work items are in the earlier form when that work item has no "Moved up" label. |
+| Work items in the earlier form, in Notion or GitHub | With the selected `references/work-tracker.md` inside `managing-work-items` in the setup copy, read one work item that is not Done or Cancelled. The work items are in the earlier form when that work item has no "Moved up" label. |
 | A `DECISIONS.md` in another form | Run `head -3 DECISIONS.md` and `head -3 <copy>/DECISIONS.md`. The project's file is in another form when the two commands print different lines. |
 | "Toolkit settings" in the earlier form | Run the count command in `setup-copy.md`, "Check the setup copy". The section is in the earlier form when that command prints fewer than 11 for `PROJECT.md`, or when `command grep -n -e '<!-- if ' -e '<!-- endif' PROJECT.md README.md AGENTS.md .claude/rules/*.md` prints a line. |
 | A rules list in `AGENTS.md` | Run `grep -n 'toolkit:rules' AGENTS.md`. |
 | The two removed rules | Run `ls .claude/rules/work-item-folders.md .claude/rules/ai-external-knowledge.md 2>/dev/null`. |
-| The renamed skills | Run `ls .claude/skills`. The project still holds a skill under its old name when the list shows a name from the "Old folder" column in `update.md`, "4. What the toolkit no longer ships". |
+| Skills under a retired name | Run `ls .claude/skills`. This row applies when the list shows `running-work-item-lifecycle`, `using-work-tracker`, `curating-project-memory`, `using-memory-store`, `tracking-work-items`, `storing-project-memory`, or `managing-project-wide-records`. `managing-work-items` and `managing-project-memory` are current names, so their names alone do not show an old layout. |
 
 For Notion memory, the project has the old layout when one of these three things is true:
 
-- The query under "Every page" in `references/searching.md` of `using-memory-store` prints a line whose key starts `decision_` and whose status is accepted or proposed.
+- The query under "Every page" in `references/searching.md` of the selected `managing-project-memory` store prints a line whose key starts `decision_` and whose status is accepted or proposed.
 - The "Terminology glossary" page beside the Memory page holds a row. Read the page's text as `using-notion-cli` says.
 - The "Current state" page holds the heading "Waiting on the owner".
 
@@ -147,15 +147,15 @@ The table says where each old file or record goes. The rules for each row are in
   - superseded becomes Superseded, with the entry that replaced it;
   - retired or withdrawn becomes Withdrawn.
 - With the Status Decided, take the date and the person from the memory record. When the memory record names neither, put the row under "Your call".
-- Do not remove the memory record. In step 8 of "After the owner's yes", mark the memory record as moved, with the DEC ID, or with the work item and the Q-ID. A link to the memory record from another memory record then still leads to the decision. `using-memory-store` in the setup copy says how to mark it:
+- Do not remove the memory record. In step 8 of "After the owner's yes", mark the memory record as moved, with the DEC ID, or with the work item and the Q-ID. A link to the memory record from another memory record then still leads to the decision. The selected `references/memory-store.md` inside `managing-project-memory` in the setup copy says how to mark it:
   - for local memory, in `references/record-format.md`, "Marks for what is not current";
   - for Notion memory, in `references/writing-pages.md`, "Replacing a page", with the DEC ID as the text of Superseded by.
 
 **Every other memory record**
 
 - Move nothing and rewrite nothing.
-- A local file gets the header fields `created` and `check_by` at its next change, as `using-memory-store` says.
-- When a memory record holds a term, a rule of the system, or a decision inside its text, this update does not move it. "clean up memory" with `curating-project-memory` finds such a record later and asks the owner.
+- A local file gets the header fields `created` and `check_by` at its next change, as `managing-project-memory` says.
+- When a memory record holds a term, a rule of the system, or a decision inside its text, this update does not move it. "clean up memory" with `managing-project-memory` finds such a record later and asks the owner.
 
 **The glossary**
 
@@ -267,7 +267,7 @@ The table says where each old file or record goes. The rules for each row are in
 
 **A work item that is not Done or Cancelled**
 
-Make these changes with `using-work-tracker` in the setup copy:
+Make these changes with the selected `references/work-tracker.md` inside `managing-work-items` in the setup copy:
 
 - Add the `**Moved up:**` line after Related items, and leave it empty.
 - Add the Notes heading "Lessons not proven yet" after Sources, with "None." under it.

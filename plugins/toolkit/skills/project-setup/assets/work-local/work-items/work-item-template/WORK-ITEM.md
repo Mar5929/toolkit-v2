@@ -16,7 +16,7 @@ updated: <YYYY-MM-DD>
 
 # WI-001: <Work item title>
 
-<!-- Fill-in guide for a new work item: create it with `using-work-tracker`, which sets the real ID in the front matter and the heading. In the front matter, keep one value from each list; the status follows from the state, as `running-work-item-lifecycle` says. A new item starts with `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, and `design: none`. A sub-item's `parent` names the item above it. Text in angle brackets tells you what to write in that same field, cell, or paragraph: replace it with real content, or delete it when there is nothing to write yet, so no angle-bracket prompt is left in the item. Keep the headings and field labels. Delete each example phase, task, question, and requirement the item does not have yet. Delete this guide when you create the item. -->
+<!-- Fill-in guide for a new work item: create it with `managing-work-items`, which sets the real ID in the front matter and the heading. In the front matter, keep one value from each list; the status follows from the state, as `managing-work-items` says. A new item starts with `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, and `design: none`. A sub-item's `parent` names the item above it. Text in angle brackets tells you what to write in that same field, cell, or paragraph: replace it with real content, or delete it when there is nothing to write yet, so no angle-bracket prompt is left in the item. Keep the headings and field labels. Delete each example phase, task, question, and requirement the item does not have yet. Delete this guide when you create the item. -->
 
 ## Overview
 
@@ -40,7 +40,7 @@ updated: <YYYY-MM-DD>
 
 **Related items:** <For a top-level item, “Project phase P01.”, or “No project phase yet.”; for a sub-item, its parent's ID, and “Built from the design of”, then the parent's ID, when it has no design of its own. Related work item IDs (never folder paths) and external links. Each decision in `DECISIONS.md` and each rule in `system/` that this item must follow, by ID, for example “DEC-014, SEC-04”.>
 
-**Moved up:** <Leave empty until the closing step of `running-work-item-lifecycle`; the item cannot become Done or Cancelled while it is empty. Then: each entry in `DECISIONS.md` and each rule in `system/` that this item added or changed, by ID, with what happened, for example “DEC-014 recorded. SEC-04 added and Built. DAT-02 changed.”; or “Nothing:”, then the reason.>
+**Moved up:** <Leave empty until the closing step of `managing-work-items`; the item cannot become Done or Cancelled while it is empty. Then: each entry in `DECISIONS.md` and each rule in `system/` that this item added or changed, by ID, with what happened, for example “DEC-014 recorded. SEC-04 added and Built. DAT-02 changed.”; or “Nothing:”, then the reason.>
 
 ## Roadmap
 

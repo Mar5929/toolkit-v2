@@ -45,6 +45,8 @@ This table is the only list of which setup folders a choice copies. For each cho
 cp -R <skill folder>/assets/<folder>/. <copy>/
 ```
 
+Copy `every-project` first, then each chosen folder. A work choice adds its `references/work-tracker.md` and supporting files inside the `managing-work-items` skill that `every-project` already supplied. Local or Notion memory adds its `references/memory-store.md` and supporting files inside the `managing-project-memory` skill that `memory-process` supplied. Copy a chosen folder into the existing paths; it adds files to those skill folders. Only one work choice and one memory choice are copied, so the finished project has one version of each selected reference and no storage skill of its own.
+
 | Choice | Folders to copy |
 | --- | --- |
 | Work items local | `work-local` |

@@ -216,7 +216,7 @@ agent's own branch and reach your main branch only after your yes.
 
 | Skill | What it does | You might say |
 | --- | --- | --- |
-| `running-work-item-lifecycle` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `using-work-tracker`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
+| `managing-work-items` | Finds each work item in the tracker you chose and takes it from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. | "help me plan this", "how should we build it", "is it ready", "ship it" |
 | `filing-project-records` | Files what more than one work item needs: it records a decision in `DECISIONS.md`, files a source in `sources/`, and updates a document in `system/`. | "This decision affects several items", "file this meeting transcript" |
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
@@ -228,17 +228,19 @@ agent's own branch and reach your main branch only after your yes.
 
 ## Skills for your choices
 
-Each project gets the skills for where its work items and memory live:
+Each project gets one work skill. Setup copies into it only the reference files for the work tracker you chose. Local and Notion memory add one memory skill; setup copies into it only the reference files for the memory store you chose.
 
-| Your choice | Skills it adds |
+| Your choice | What setup adds |
 | --- | --- |
-| Work items in local folders | `using-work-tracker` (saves, finds, and changes items in the `work-items/` folder) |
-| Work items in Notion | `using-work-tracker` (the Notion version), `using-notion-cli` (how to run Notion's command-line tool, `ntn`) |
-| Work items in GitHub Issues | `using-work-tracker` (the GitHub version) |
-| Memory in local files | `curating-project-memory` (decides what memory keeps, sends every other fact to its own file, keeps Current State current, and writes your "from now on" instructions to the rules), `using-memory-store` (stores Current State and the memory records as files in `memory/`) |
-| Memory in Notion | `curating-project-memory`, `using-memory-store` (the Notion version), `using-notion-cli` |
-| Memory in Hindsight | None from the toolkit (your decision of 2026-10-05). Hindsight's coding-agent add-on saves each session to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
+| Work items in local folders | Local tracking references inside `managing-work-items`, plus `work-items/` and `PROJECT-ROADMAP.md` |
+| Work items in Notion | Notion tracking references inside `managing-work-items`, plus `using-notion-cli` |
+| Work items in GitHub Issues | GitHub tracking references inside `managing-work-items` |
+| Memory in local files | `managing-project-memory` with local storage references, plus `memory/` |
+| Memory in Notion | `managing-project-memory` with Notion storage references, plus `using-notion-cli` |
+| Memory in Hindsight | No Toolkit memory skill (your decision of 2026-10-05). Hindsight's coding-agent add-on saves each session to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
 | Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
+
+`using-notion-cli` is installed once when either choice uses Notion. Each selected reference has the same file name in every project, such as `references/work-tracker.md` or `references/memory-store.md`. A project receives only one version of each file. The skills do not contain local-versus-Notion setup conditions.
 
 Memory is the design you built from the Davis memory system, brought back on
 2026-10-05. It holds Current State (what is in progress, what is coming up,
@@ -253,10 +255,13 @@ works: those are in `DECISIONS.md` and `system/`. Notion memory stores the
 same kinds in Lore's layout. `using-notion-cli` comes once, even with work
 items and memory both in Notion.
 
-A project ends up with 12 skills, or 13 when work items or memory are in
-Notion. With Hindsight memory it has 10, or 11 with work items in Notion. A
-Salesforce project has 3 more, plus Salesforce's own skills. Saying where the work stands needs no skill: the
-project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
+A project with local or Notion memory has 10 skills, or 11 when work items
+or memory are in Notion. With Hindsight memory it has 9, or 10 when work
+items are in Notion. A Salesforce project adds three Toolkit Salesforce skills;
+the owner also installs Salesforce's own skills.
+When you ask where the work stands, the project's `AGENTS.md` routes the
+agent to the work and memory skills for the records it reads.
+`dev/SKILL-INDEX.md` lists every skill with its exact
 description.
 
 ## The hooks
@@ -265,7 +270,7 @@ description.
 | --- | --- |
 | A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the memory index: one line per memory record, which the hook rebuilds in `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
 | You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
-| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved, and asks you first. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
 | The agent edits a file | The record check runs: 15 checks on the form of `DECISIONS.md`, `system/`, `sources/`, and local work items, such as an ID used twice or a rule marked approved with no decision behind it. The agent is told what is wrong and fixes it. |

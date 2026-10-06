@@ -10,16 +10,17 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 
 ## Every session
 
-- The session-start hook adds the project's Current State, the one short page of what is true in the project now, to your context. If it is missing, read it with `using-memory-store`.
+- The session-start hook adds the project's Current State, the one short page of what is true in the project now, to your context. If it is missing, read it with `managing-project-memory`. In a Hindsight project, follow `.claude/rules/hindsight-memory.md` instead.
 - Read `PROJECT.md`, and `SOUL.md` when the project has one. Read them again after resume, clear, or compaction. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
 - Before you change a file in a folder that has its own `AGENTS.md`, read that file.
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 - The bullets below are for the session the owner writes to. A helper agent (a separate agent started for one job) follows its brief.
-- When a message continues a work item, find the work item, read its Current state (the five lines at its top), and do its Next action with `running-work-item-lifecycle`.
+- On every turn, decide whether the owner's message concerns a work item, a source, a project record that several work items need, project memory, or none of these. More than one may apply. Decide whether the owner asks for an answer or a change. Use "Where information goes" and "Which skill" below to choose the work; do not advance a work item when the owner only asks a question.
+- When a turn concerns a work item, find the work item, read its Current state (the five lines at its top), and use `managing-work-items` for the requested work.
   - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's Current State names.
   - Stop at the first check that finds one. Ask the owner only when it finds two.
 - When the owner asks a question, answer it. Do not take the next step of a work item in place of an answer.
-- Before a turn ends, record what a later session must know and no record holds. `curating-project-memory`, "Before a turn ends", lists what to record and where.
+- Before a turn ends, record what a later session must know and no record holds. `managing-project-memory/references/memory-process.md`, "Before a turn ends", lists what to record and where. In a Hindsight project, follow `.claude/rules/hindsight-memory.md` instead.
 
 ## Project map
 
@@ -30,19 +31,19 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 | Location | What it holds | When you change it |
 | --- | --- | --- |
 | `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, the work item ID prefix, and links. | Ask the owner first. Commit with `publish-docs`. |
-| `PROJECT-ROADMAP.md` (local work items) | The plan at project level: the project's phases in order, and the top-level work items (with no parent) that belong to each phase. | `running-work-item-lifecycle` decides the change. |
+| `PROJECT-ROADMAP.md` (local work items) | The plan at project level: the project's phases in order, and the top-level work items (with no parent) that belong to each phase. | `managing-work-items` decides the change. |
 | `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
 | `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in `work-items/` or `memory/`: they come from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
 | `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
 | `SOUL.md` (optional) | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
 | `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read `work-items/` and `memory/`. | Only with the owner's yes. |
-| `work-items/` (local work items) | The work items: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. | `using-work-tracker` for every read and save. |
-| `work-items/<ID>-<short-slug>/<ID>.md` (local work items) | One work item: its goal, requirements, questions and answers, tasks, Current state, and history. | `running-work-item-lifecycle`. |
-| `work-items/<ID>-<short-slug>/DESIGN.md` (local work items) | The solution design for that one work item: the options considered and the approach the owner approved. | `running-work-item-lifecycle`. |
-| `work-items/PROJECT-TASKS.md` (local work items) | The project tasks: administrative tasks that belong to no work item, such as giving a person access. | `running-work-item-lifecycle`. |
+| `work-items/` (local work items) | The work items: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. | `managing-work-items` for every read and save. |
+| `work-items/<ID>-<short-slug>/<ID>.md` (local work items) | One work item: its goal, requirements, questions and answers, tasks, Current state, and history. | `managing-work-items`. |
+| `work-items/<ID>-<short-slug>/DESIGN.md` (local work items) | The solution design for that one work item: the options considered and the approach the owner approved. | `managing-work-items`. |
+| `work-items/PROJECT-TASKS.md` (local work items) | The project tasks: administrative tasks that belong to no work item, such as giving a person access. | `managing-work-items`. |
 | `work-items/work-item-template/` (local work items) | The templates that are copied to start a new work item and its design. | Never edit; they come from the toolkit. |
-| `memory/` (local memory, Hindsight memory) | What a later session needs and no other file holds. Local memory: the project's Current State, and one file per subject. Hindsight memory: only `CURRENT_STATE.md`. | Local memory: `curating-project-memory`. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
-| `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | The project's Current State, in five parts. | As for `memory/`; with local memory, `using-memory-store` writes it. |
+| `memory/` (local memory, Hindsight memory) | What a later session needs and no other file holds. Local memory: the project's Current State, and one file per subject. Hindsight memory: only `CURRENT_STATE.md`. | Local memory: `managing-project-memory`. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
+| `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | The project's Current State, in five parts. | As for `memory/`; with local memory, `managing-project-memory` writes it. |
 | `memory/MEMORY.md` (local memory) | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
 | `system/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, built, or retired. | `filing-project-records`, step "update a system document". |
 | `system/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. `system/AGENTS.md` gives the columns of a row. Read it before you use or define a project term. | As for `system/`. |
@@ -63,7 +64,7 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 | `reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions are in `system/` and `DECISIONS.md`. | Commit with `publish-docs`. |
 | `reference/outside-docs/` | Documentation captured from outside the project, such as vendor and product documentation, one folder per topic. `INDEX.md` lists the topics. | As for `reference/`. |
 | `reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `reference/`. |
-| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `running-work-item-lifecycle` writes them here, never where the work items are kept. |
+| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
 | `force-app/`, `sfdx-project.json`, `.forceignore` (Salesforce) | The Salesforce metadata this project builds and deploys, in `force-app/`, and the two files that tell Salesforce tools how to treat this repository. `force-app/` is made when the first metadata is added. | The Salesforce rules in `.claude/rules/`; `sf-component-tracker` before building. `.claude/rules/salesforce-project.md` names the official Salesforce skills. |
 | `tools/` (Salesforce) | Scripts for Salesforce work. `tools/kb/` lists which parts of the org read and write each other, to show what a change affects. `tools/permissions/` holds the tool that keeps permission sets in Git. | `.claude/rules/salesforce-project.md` says where each command is. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
@@ -96,18 +97,18 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A test plan | `tests/` |
 | A lesson that is not proven yet | The work item's Notes. Closing the work item decides whether the lesson is kept for the whole project. With no work item open: memory |
-| A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory: `curating-project-memory` |
-| Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in a reply, that a later session would need and no other record shows | Write it to memory before you reply: `curating-project-memory` |
+| A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory: `managing-project-memory` |
+| Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in a reply, that a later session would need and no other record shows | Write it to memory before you reply: `managing-project-memory` |
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
-To find what was decided before, read `DECISIONS.md`, then `system/`, then the work item. Before you say nothing is recorded, search `work-items/` and `memory/` too (`using-work-tracker`, `using-memory-store`). Search memory before you ask the owner to repeat something, name who does or decides something, set a date, deploy, load data, or run a recurring job.
+To find what was decided before, read `DECISIONS.md`, then `system/`, then the work item. Before you say nothing is recorded, search `work-items/` and `memory/` too (`managing-work-items`, `managing-project-memory`). Search memory before you ask the owner to repeat something, name who does or decides something, set a date, deploy, load data, or run a recurring job.
 
 ## Ask the owner first
 
 Ask the owner, and record the answer, before you:
 
-- take a step of a work item that needs the owner's yes (`running-work-item-lifecycle`, "When to stop for the owner's yes", lists them);
+- take a step of a work item that needs the owner's yes (`managing-work-items/references/lifecycle-rules.md`, "When to stop for the owner's yes", lists them);
 - do anything that cannot be undone, spend money, sign in, or change an account.
 
 ## Which skill
@@ -116,11 +117,9 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 
 | When this happens | Use |
 | --- | --- |
-| Anything about one work item, from a new idea to Done, including closing or cancelling it; the project's phases and project tasks | `running-work-item-lifecycle` |
-| Reading or saving a work item; moving, nesting, or archiving work items | `using-work-tracker` |
+| Anything about one work item, from finding or reading it to closing or cancelling it; the project's phases and project tasks | `managing-work-items` |
 | A decision or open question more than one work item needs; the project receives a source; an approved fact about the system changes | `filing-project-records` |
-| The owner asks to keep, correct, forget, or find something, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `curating-project-memory` |
-| A plain read of memory, or the write `curating-project-memory` decided on | `using-memory-store` |
+| The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
 | The owner ends the session or clears context, or pastes a handoff to check | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
@@ -129,7 +128,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
 | Salesforce metadata changes, a production data change, or a deploy to a shared org (Salesforce) | `sf-component-tracker`, `sf-data-change`, `sf-deploy-check`. The Salesforce rules say when to open each. |
-| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | No skill. Read the project's Current State, the open work items and project tasks, and the Open entries in `DECISIONS.md`. Report each dated line of the project's Current State, and say when its date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
+| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use `managing-work-items` for open work items and project tasks. Use `managing-project-memory` for the project's Current State, or `.claude/rules/hindsight-memory.md` in a Hindsight project. Read the Open entries in `DECISIONS.md`. Report each dated line of the project's Current State, and say when its date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
 
 ## Commands
 

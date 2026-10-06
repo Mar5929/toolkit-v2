@@ -61,7 +61,7 @@ Fill the prompts in this order:
    - In a project with code, list in the report each value that you took from the repository, so that the owner can correct it.
    - A file keeps its fill-in guide comment for as long as the file holds a prompt. Delete the guide when the last prompt is filled.
 4. **`PROJECT-ROADMAP.md`**, which only a project with local work items has. Fill it only when the owner already knows the facts. In a new project it usually stays as it is. List it in the report with the prompts that are left.
-   - A project with its work items in Notion or GitHub has no `PROJECT-ROADMAP.md`. The project's phases go where the work items are kept, later, with `running-work-item-lifecycle`.
+   - A project with its work items in Notion or GitHub has no `PROJECT-ROADMAP.md`. The project's phases go where the work items are kept, later, with `managing-work-items`.
 5. **`DECISIONS.md`, the documents in `system/`, and `sources/README.md`** stay as they were copied. They hold no prompt, and each `system/` document says Status "Not started". Never write a decision, a rule, or a source into them during setup.
 6. **The fill-in guide comments.** Delete each fill-in guide comment when its own text says to delete it. Keep the guide comment inside "Toolkit settings", because later sessions read it.
 

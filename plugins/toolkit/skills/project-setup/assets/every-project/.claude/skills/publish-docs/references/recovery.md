@@ -44,7 +44,7 @@ Never force-push, never bypass branch protection, and never retry through anothe
 
 - Report separately what is written, what is checked, what is committed, and what is on the default branch.
 - Keep the save worktree and the commit id.
-- When the save belongs to a work item, write the exact next action into the work item's Current state with `using-work-tracker`, in a form that the work item template gives.
+- When the save belongs to a work item, write the exact next action into the work item's Current state with `managing-work-items`, in a form that the work item template gives.
 - Otherwise, tell the owner the exact next action. When a handoff is written, put the next action in the handoff with the `handoff` skill.
 
 ## The repository has remotes, but none named `origin`

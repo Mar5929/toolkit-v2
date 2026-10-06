@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in DECISIONS.md, sources/, or system/, use filing-project-records. For code, rules, skills, or work items, use running-work-item-lifecycle.'
+description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in DECISIONS.md, sources/, or system/, use filing-project-records. For code, rules, skills, or work items, use managing-work-items.'
 ---
 
 # Commit project documents to the default branch
@@ -169,9 +169,9 @@ The save is still finished. Say so in the report in one line: "The main checkout
 
 | For | Use |
 | --- | --- |
-| A pull request for rules, skills, prompts, hooks, settings, or code | `running-work-item-lifecycle` |
+| A pull request for rules, skills, prompts, hooks, settings, or code | `managing-work-items` |
 | What a decision entry, a source row, or a system document says; an ID that another session's save took | `filing-project-records` |
-| A save that cannot finish now: the next action in its work item | `using-work-tracker` |
+| A save that cannot finish now: the next action in its work item | `managing-work-items` |
 | A save that cannot finish now: the next action in the handoff | `handoff` |
 
 ## References

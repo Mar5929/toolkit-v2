@@ -3,6 +3,22 @@
 Mike's goal, set 2026-09-26. This file is the single place the goal and his
 answers live. Update it when he changes a decision.
 
+## Work and memory skill structure (2026-10-06, TKV-29)
+
+Mike approved one project skill for work items, `managing-work-items`, and
+one for local or Notion project memory, `managing-project-memory`. Each skill
+has one process that applies everywhere. Project setup copies only the
+reference files for the selected work tracker and memory store into those
+skills. The work-item lifecycle stays in its own reference. The top-level
+`SKILL.md` in each skill routes the agent to the needed process and store
+files. A Hindsight project keeps its separate rule and does not get the
+toolkit memory skill. `filing-project-records` and `using-notion-cli` keep
+their separate jobs. The starter `AGENTS.md` checks the work and memory
+relevance of every turn and routes to the appropriate skill. Preserve the
+existing work and memory rules, record forms, and approval points while
+making this structural change. This replaces the 2026-10-01 choice of
+separate process and storage skills recorded below.
+
 ## Project filing interview decisions (2026-10-04, TKV-24)
 
 - Setup shows a complete labeled structure, agent instructions, and reusable
