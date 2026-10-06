@@ -26,8 +26,8 @@ kind of job, such as explainroo for explainer videos. It is text only. The
 toolkit ships none of those tools.
 
 The plugin holds a third skill, `writing-harness-files` (Mike, 2026-10-05):
-the steps, the official page addresses, and the checklist for writing or
-changing a harness file. A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. It is text only.
+the steps, the official page addresses, the checklist, and the writing
+standard for writing or changing a harness file. A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. It is text only.
 
 One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
 Code only. It is a mod: code that runs inside Claude Code and draws a side
@@ -68,7 +68,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/placing-files.md`, "5. The pre-commit check", is the one place that says how `core.hooksPath` is set. `references/update.md` is "update the toolkit"; two parts of it are in their own files: `references/one-home-layout.md` brings a project set up before the one-home layout to it, and `references/earlier-versions.md` holds the changes from toolkit 0.6.0, 0.8.0, and 0.8.1. |
 | `plugins/toolkit/skills/choosing-outside-tools/` | The owner's tool list: `SKILL.md` holds one row per job, and `references/` holds one file per tool (where it comes from, how to set it up, and the owner's choices). Never copied into a project. |
-| `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` the web address of the official page for each kind, and `references/checklist.md` the practices and the check for each kind. Never copied into a project. |
+| `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` the web address of the official page for each kind, `references/checklist.md` the practices and the check for each kind, `references/writing-standard.md` the long form of the writing standard, with a reason and a before-and-after example for each point, and `references/rewrite-steps.md` the steps and checks for rewriting a file that exists, with the prompt for a team. Never copied into a project. |
 | `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, the four hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), and `.githooks/pre-commit`, which runs the fourth before each commit. Edited here directly (see "The starter project"). |
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
 | `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md` (the index the session-start hook rebuilds), and `project_topic_template.md`, the blank form for a memory record. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
@@ -243,9 +243,56 @@ node --test 'dev/tests/*.test.mjs'
 - **No AI credit anywhere.** No "Generated with" line, no `Co-Authored-By`
   naming an AI, and no AI named in a comment, file header, manifest, README,
   commit, or pull request.
-- **Plain English.** Every file, message, and skill uses short sentences,
-  real names, and no metaphors. Skills and helper briefs carry their own
-  writing rules, because helper agents and Codex never see the output style.
+- **Plain English.** Every file, message, and skill follows the writing
+  standard: whole sentences, real names, and no metaphors. Skills and
+  helper briefs carry their own writing rules, because helper agents and
+  Codex never see the output style.
+  - The writing standard (Mike, 2026-10-06). He found the skill text hard
+    to follow and agreed with this statement: "The skills are organized
+    correctly and their rules are right. The wording is the problem: it was
+    squeezed too short, and it uses project words without saying what they
+    mean. Every skill should open with what it is for and its goal, explain
+    each project word once, and use full sentences, without changing any
+    rule." The cause was the earlier instructions to writers here, which
+    asked for short and terse text. The standard replaces the earlier
+    wording rule ("plain, terse, technical English"), also where
+    `dev/research/layout-audit/DESIGN-SPEC.md`, point 19, still states it.
+  - His correction the same day, after a trial rewrite kept a made-up word
+    and put a definition in front of it: "Why did you feel like you needed
+    to keep the word 'an original'? Isn't there a better way to just
+    rewrite? We need to look at the file as a whole." So a writer starts
+    from the whole file, and for each made-up word chooses in this order:
+    plain words; a name the reader can already see, such as a folder name,
+    a field name, or an ID prefix ("source" for something in `sources/`);
+    and only then the word itself, explained once. A writer may regroup a
+    file and rename a heading, and updates every file that cites it in the
+    same change. The checks in the skill's `references/rewrite-steps.md`
+    protect the rules, not a limit on what the writer may touch. An exact
+    string that a tool or another file reads stays word for word.
+  - One name for one thing still holds. A made-up word is a finding when
+    plain words or a name the reader can already see would do.
+  - A word decision that reaches past one file goes on the shared word
+    list, `dev/reviews/word-list.md`, with one row per word: the word, the
+    files that use it, the choice (plain words, a visible name, or keep and
+    explain), and the text that takes its place. The first team that
+    rewrites the skills makes the file. Every writer reads it before
+    choosing, so every file changes the same way.
+  - The standard has two files. The short form is the starter rule
+    `<setup>assets/every-project/.claude/rules/write-for-the-reader.md`,
+    whose text he approved: change a word of it only with his yes. It
+    replaced `plain-english-artifacts.md`. The long form is
+    `plugins/toolkit/skills/writing-harness-files/references/writing-standard.md`.
+    Its opening says which part of it explains which line of the rule: one
+    part for each of the 14 lines under "For everything this rule covers"
+    and "A file that someone follows later", in the rule's order. Change
+    both files in one change, and compare them line by line before you
+    commit. The long form explains each line of the rule and gives
+    examples; it never contradicts the rule and never leaves a line of it
+    out.
+  - Guidance for writers describes the reader and the result and shows
+    before-and-after examples. It is never a list of bans: he rejected one,
+    because a ban could be read as "remove the statement of what the skill
+    is and its goal".
 - **Code limit** (`dev/GOAL.md`, "Code limit"; Mike, 2026-09-30). The only
   code a project runs is the four hook commands (`session-start.mjs`,
   `prompt-reminder.mjs`, `codex-after-commit.mjs`, and
@@ -382,9 +429,9 @@ node --test 'dev/tests/*.test.mjs'
     work locally.").
   - The description matches `dev/SKILL-INDEX.md` word for word. After you
     change one, run the routing test again in both hosts.
-  - `SKILL.md` is short, and always under 500 lines: the steps, then a
-    References table that links every file in the folder with when to open
-    it. A reference over 100 lines
+  - `SKILL.md` is always under 500 lines: what the skill is for and what
+    must be true when its job is done, then the steps, then a References
+    table that links every file in the folder with when to open it. A reference over 100 lines
     starts with a `## Contents` list. A skill reads only files inside its own
     folder, never `../`.
   - Shared skills never assume one tracker or memory. For work items they
@@ -404,7 +451,9 @@ node --test 'dev/tests/*.test.mjs'
     home (the comment at the top of `DECISIONS.md`, and the folder's
     `AGENTS.md`); a skill points to it and never repeats it.
   - Test every written rule: a template field, a check, or delete. Keep a
-    sentence only when none of those can carry it (Mike, 2026-10-05).
+    sentence only when none of those can carry it (Mike, 2026-10-05). This
+    is about rules. It never removes an opening, the explanation of a
+    made-up word that was kept, or a reason.
   - Memory skills (Mike, 2026-10-01). `curating-project-memory` holds the
     process, the same for local and Notion memory: it never names a
     storage tool, file, folder, database, or command, and hands every read
@@ -415,13 +464,18 @@ node --test 'dev/tests/*.test.mjs'
     Notion storage skills (`using-work-tracker` and
     `using-memory-store`) run `ntn` through `using-notion-cli` and never
     repeat its sign-in, Codex, or error text. Each instruction lives in
-    exactly one file.
+    exactly one file. These lines are for the toolkit's authors. In the
+    skill itself, say what the skill does and name the skill that does the
+    other part; never copy "holds the process" or "never names" into it.
 - **Wording and overlap review** (Mike, 2026-09-30). New or changed text in
   a skill, reference, template, example, helper brief, or
   `dev/build-shared/` source is reviewed by a separate agent against
   `dev/reviews/wording-review.md` before it is committed: plain, clear,
   concise, no jargon, no figurative language, and one meaning for every
-  instruction unless the text says the agent should use its judgment. The
+  instruction unless the text says the agent should use its judgment.
+  Concise means what the writing standard says: no sentence the reader
+  does not need, and never fewer words inside a sentence that stays
+  (Mike, 2026-10-06; "Plain English" above). The
   writer fixes each verified finding and the reviewer reads the fix. A new
   or changed description, skill name, or row of the "Which skill" table in
   the starter's `AGENTS.md` also gets a
@@ -532,6 +586,10 @@ node --test 'dev/tests/*.test.mjs'
   - Read the official page for that kind of file in `ai-external-knowledge/`
     (`claude-code/`, `codex/`, `anthropic-agent-skills/`, `openai-plugins/`,
     `anthropic-engineering/`; `hindsight/` for the Hindsight setup file).
+    For a skill, read
+    `anthropic-agent-skills/skill-authoring-best-practices.md` every time,
+    together with `claude-code/skills.md` and `codex/build-skills.md`
+    (Mike, 2026-10-06).
     Each folder's `SOURCE-RECORD.md` gives the
     capture date. When the capture is more than 14 days old, capture the
     page again with Firecrawl first, update its `SOURCE-RECORD.md`, and read
@@ -542,10 +600,11 @@ node --test 'dev/tests/*.test.mjs'
     `dev/research/platform-best-practices.md` part 3. Where a guide and the
     current page differ, the page wins; correct the guide in the same
     change.
-  - Write plain, terse, technical English with no figurative language and
-    one meaning for every instruction.
-  - Put this rule, the files above, and the wording rule in the brief of
-    every helper agent that will change a harness file.
+  - Write to the standard in
+    `plugins/toolkit/skills/writing-harness-files/references/writing-standard.md`
+    ("Plain English" above).
+  - Put this rule, the files above, and the path of the writing standard
+    in the brief of every helper agent that will change a harness file.
   - "Wording and overlap review" above covers the separate review.
 - **Notion memory uses Lore's layout.** Never rename or remove a Lore
   database or property: Lore finds them by their exact names. The layout is

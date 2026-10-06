@@ -49,7 +49,11 @@ rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
 mod, a subagent definition, or a helper-agent brief. Before an agent writes
 or changes one, in any project, the skill has it read the current official
 documentation page for that kind of file, follow a short checklist, and
-have a second agent review the change (your decision of 2026-10-05).
+have a second agent review the change (your decision of 2026-10-05). The
+skill also holds the writing standard (your decision of 2026-10-06): a file
+opens with what it is for and its goal, says things in plain words in place
+of made-up project words, and uses whole sentences. Every project gets the short form of that
+standard as the rule `write-for-the-reader.md`.
 
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
