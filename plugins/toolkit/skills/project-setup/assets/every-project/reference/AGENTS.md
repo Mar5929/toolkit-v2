@@ -10,7 +10,7 @@ This folder holds two kinds of material the project reads but did not decide: do
 | `outside-docs/INDEX.md` | One row per topic folder. |
 | `current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. One file per area of the system. |
 
-Never put here: a client file, a meeting note, or a transcript (they go in `sources/`); a project decision; an instruction for agents.
+Never put any of these here: a client file, a meeting note, or a transcript, which go in `sources/`; a project decision; an instruction for agents.
 
 ## The form of a topic folder in outside-docs/
 
@@ -35,10 +35,12 @@ One file per area, named for the area in lowercase words joined by hyphens. It h
 
 When the owner asks how a part of the existing system works today, or a work item needs to know it:
 
-1. Before you reply, write what you found in that area's file in `current-system/`, in the form above. An area that has a file: add to that file.
-2. Answer from the file, and name its path in the reply. A result given only in the chat is lost: a later session never sees it.
+1. Before you reply, write what you found in that area's file in `current-system/`, in the form above. When the area already has a file, add to that file.
+2. Answer from the file, and name its path in the reply. A result given only in the reply is lost, because a later session never sees the reply.
 3. When the analysis was for a work item or a project task, write the file's path there with `running-work-item-lifecycle`.
-4. Never commit the file without the owner's yes: `publish-docs` saves only an edit the owner asked for or said yes to. A session in the main checkout: leave the file there, and say in the reply that it is not committed yet. A session in its own worktree: a later session does not see a file there, so say in the reply that the file is not committed yet, and ask the owner whether to save it with `publish-docs`.
+4. Never commit the file without the owner's yes, because `publish-docs` commits only an edit the owner asked for or said yes to.
+   - In a session in the main checkout, leave the file there, and say in the reply that it is not committed yet.
+   - In a session in its own worktree, say in the reply that the file is not committed yet, and ask the owner whether to commit it with `publish-docs`. A later session does not see a file that is only in that worktree.
 
 ## What must stay true
 
@@ -46,7 +48,7 @@ When the owner asks how a part of the existing system works today, or a work ite
 - Add or change the `INDEX.md` row in the same edit as the topic folder.
 - A file in `current-system/` holds observed facts only. Put the evidence beside each claim, and put anything unsure under Known gaps.
 - Every file in `current-system/` says the date and the environment it was observed in.
-- When a page here disagrees with `system/`, `system/` wins. Tell the owner about the disagreement.
+- When a page here disagrees with `system/`, use what `system/` says. Tell the owner about the disagreement.
 - What the project concluded from a page goes in `system/`, `DECISIONS.md`, or the work item, with the page's path beside it.
 
 ## Which skill to use

@@ -49,7 +49,18 @@ rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
 mod, a subagent definition, or a helper-agent brief. Before an agent writes
 or changes one, in any project, the skill has it read the current official
 documentation page for that kind of file, follow a short checklist, and
-have a second agent review the change (your decision of 2026-10-05).
+have a second agent review the change (your decision of 2026-10-05). The
+skill first sends the agent to the agents and skills that Claude Code
+provides for the job, and to the official page addresses when none is
+available, and always for Codex.
+
+All the writing rules are in one place (your decision of 2026-10-06): the
+rule `write-documents-in-plain-english.md`, which every project gets. It
+says that a file opens with what it is for and its goal, says things in
+plain words in place of made-up project words, and uses whole sentences.
+The skill holds an exact copy of that rule, so that it also works in a
+folder where the toolkit was never set up. A check fails when the copy and
+the rule differ.
 
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
@@ -126,7 +137,7 @@ project folder, for what lasts longer than one work item:
 - `DECISIONS.md`: every decision and open question that more than one work
   item needs.
 - `system/`: the approved description of the system, as numbered rules.
-- `sources/`: the originals the project received, such as meeting notes and
+- `sources/`: the sources the project received, such as meeting notes and
   client documents.
 - `delivery/`: each release, deployment, data migration, and client handoff.
 - `reference/`: outside documentation, and the record of the system as it is
@@ -154,7 +165,7 @@ Start a new session afterwards, so the new files load. In Codex, also trust
 the project folder and its hooks (`/hooks`).
 
 Later, say **"check the setup"** to see what differs (it changes nothing,
-except that it puts back a toolkit guide or blank form that is missing from
+except that it puts back a toolkit guide or template that is missing from
 `work-items/` or `memory/`), or
 **"update the toolkit"** to bring a project up to date. It shows every change
 first and never overwrites a file you changed without asking. The check
@@ -164,7 +175,7 @@ toolkit" turns it on.
 
 A project set up before the five places above existed keeps the same facts
 elsewhere: shared questions, requirements, a system guide, decision records
-and a glossary in memory, and originals stored inside work items. Every
+and a glossary in memory, and sources stored inside work items. Every
 other memory record stays where it is. "Update the toolkit"
 finds them and shows you one table: each old location, what is in it,
 where it goes, and what is removed afterwards. Nothing moves until you say
@@ -204,7 +215,7 @@ agent's own branch and reach your main branch only after your yes.
 | Skill | What it does | You might say |
 | --- | --- | --- |
 | `running-work-item-lifecycle` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `using-work-tracker`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
-| `filing-project-records` | Files what more than one work item needs: it records a decision in `DECISIONS.md`, files an original in `sources/`, and updates a document in `system/`. | "This decision affects several items", "file this meeting transcript" |
+| `filing-project-records` | Files what more than one work item needs: it records a decision in `DECISIONS.md`, files a source in `sources/`, and updates a document in `system/`. | "This decision affects several items", "file this meeting transcript" |
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
 | `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
@@ -258,7 +269,7 @@ description.
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
 | The agent edits a file | The record check runs: 15 checks on the form of `DECISIONS.md`, `system/`, `sources/`, and local work items, such as an ID used twice or a rule marked approved with no decision behind it. The agent is told what is wrong and fixes it. |
 | The agent finishes a turn (Claude Code only) | The record check runs on every record. A problem nobody fixed is reported again. |
-| Before each commit | The record check runs again, and a commit that breaks a record or changes a filed original is stopped. |
+| Before each commit | The record check runs again, and a commit that breaks a record or changes a filed source is stopped. |
 
 The record check is the fourth hook command (your yes of 2026-10-05). It
 only reads. It checks the form of a record, never whether what it says is

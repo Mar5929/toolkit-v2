@@ -1,6 +1,12 @@
 # Finding what Notion memory holds
 
-The exact calls that find memory pages by key, subject, work item, status, kind, or date, list them, and read them. Replace `{{MEMORIES_DS}}` and the page ids with the values in `PROJECT.md`, section "Toolkit settings": the nested bullets under the fixed line "Notion memory". The queries return accepted and proposed pages. For history, take the Status clause out.
+This file gives the exact calls that find memory pages by key, subject, work item, status, type, or date, the call that lists every page, and the way to read a page. Open this file when you need to find or read memory.
+
+Three things to know before you use the calls:
+
+- Replace `{{MEMORIES_DS}}` and the page ids with the values in `PROJECT.md`, section "Toolkit settings": the nested bullets under the fixed line "Notion memory".
+- The queries return pages with the Status accepted or proposed. To see history too, take the Status clause out.
+- The Current state page is not read with these calls. `current-state-page.md` says how to read it.
 
 ## Contents
 
@@ -12,11 +18,9 @@ The exact calls that find memory pages by key, subject, work item, status, kind,
 - Every page
 - Reading a page
 
-The Current state page is read as `current-state-page.md` says.
-
 ## A page by its key
 
-Use it to read one page, and to check that a key is free before a new page: the answer must be empty.
+Use this call to read one page. Also use it before you make a new page, to check that the key is free: the answer must be empty.
 
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"property":"Record Key","rich_text":{"equals":"project_client_plans"}}}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.url)"'
@@ -24,7 +28,7 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"property":"Record 
 
 ## Pages about a subject
 
-The API's search matches page titles only. Query the columns that describe a page, then read the candidates' bodies:
+Query the columns that describe a page, because the API's search matches page titles only. Then read the bodies of the pages that the query returns:
 
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[
@@ -37,12 +41,12 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[
 ```
 
 - Try two or three words and their synonyms.
-- By kind: `{"property":"Tags","multi_select":{"contains":"event"}}`, with `user`, `project`, `reference`, or `event`.
-- To find the concept a new fact belongs to, take the Status clause out, so a retired or replaced page shows too.
+- To search by type, use this clause with `user`, `project`, `reference`, or `event`: `{"property":"Tags","multi_select":{"contains":"event"}}`.
+- To find the subject that a new fact belongs to, take the Status clause out. A retired or replaced page then shows too.
 
 ## Pages linked to a work item
 
-When the work items are in Notion (the relation exists), by the item's page id:
+When the work items are in Notion, the Work items relation exists. Search by the page id of the work item:
 
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[
@@ -50,21 +54,30 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[
   {"or":[{"property":"Status","select":{"equals":"accepted"}},{"property":"Status","select":{"equals":"proposed"}}]}]}}' < /dev/null | jq -r '.results[] | "\(.properties["Record Key"].rich_text[0].plain_text)\t\([.properties.Tags.multi_select[].name] | join(","))\t\(.url)"'
 ```
 
-In every setup, by the ID text: `{"property":"Work item IDs","rich_text":{"contains":"IML-3"}}`. `contains` also matches a longer ID (`IML-3` finds `IML-31`), so check each hit's Work item IDs for the whole ID. Facts and Entities link to work items the same way, through their own Work items column.
+In every setup, you can search by the text of the ID, with this clause: `{"property":"Work item IDs","rich_text":{"contains":"IML-3"}}`.
+
+- `contains` also matches a longer ID: `IML-3` finds `IML-31`. So check the Work item IDs of each page the query returns for the whole ID.
+- Facts and Entities link to work items the same way, through their own Work items column.
 
 ## Pages by date
 
-Pages whose "check or remove by" date is today or earlier (replace the date with today's):
+This call finds the pages whose "check or remove by" date is today or earlier. Replace the date with today's date:
 
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[{"property":"Review By","date":{"on_or_before":"2026-10-06"}},{"property":"Status","select":{"equals":"accepted"}}]}}' < /dev/null | jq -r '.results[] | "\(.properties["Record Key"].rich_text[0].plain_text // "")\t\(.properties["Review By"].date.start)\t\(.properties.Synopsis.rich_text[0].plain_text // "")"'
 ```
 
-Pages changed on or after a day, for what happened since then: `{"property":"Saved","date":{"on_or_after":"2026-10-05"}}` in place of the Review By clause. Then read the Runs table of each `event_` page of a recurring job for rows of those days.
+To find what happened since a day, do two things:
+
+1. Find the pages changed on or after that day. Use this clause in place of the Review By clause: `{"property":"Saved","date":{"on_or_after":"2026-10-05"}}`.
+2. Read the Runs table of each `event_` page of a recurring job, for rows of those days.
 
 ## The open proposals
 
-A proposal page has Status "proposed". A proposal inside another page starts `**Proposal, not approved yet:**`, so read a candidate's body to find one.
+A proposal is a whole page or a section inside another page.
+
+- A proposal page has Status "proposed". The call below finds those pages.
+- A proposal inside another page starts `**Proposal, not approved yet:**`. To find one, read the body of each candidate page.
 
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"property":"Status","select":{"equals":"proposed"}}}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.properties["Record Key"].rich_text[0].plain_text // "")"'
@@ -72,7 +85,10 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"property":"Status"
 
 ## Every page
 
-Every page of Memories, with its key, status, tags (the kind is one of them), the dates it was created, last changed, and must be checked by, its last check, work items, and summary. A page with no key shows "(no key)". With more than 100 pages, page through the answer (`using-notion-cli`):
+This call lists every page of Memories. For each page it prints the key, the status, the tags (the type is one of them), the date the page was created, the date it was last changed, the date it must be checked by, its last check, its work items, and its summary.
+
+- A page with no key shows "(no key)".
+- When Memories has more than 100 pages, page through the answer the way `using-notion-cli` says.
 
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"sorts":[{"property":"Record Key","direction":"ascending"}],"page_size":100}' < /dev/null | jq -r '.results[] | [.id,
@@ -89,4 +105,4 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"sorts":[{"property":"Record 
 
 ## Reading a page
 
-Read its text and its columns as `using-notion-cli` says ("Reading and changing page text", "Reading properties"), with the page's id.
+Read the page's text and its columns with the page's id. `using-notion-cli`, sections "Reading and changing page text" and "Reading properties", gives the calls.

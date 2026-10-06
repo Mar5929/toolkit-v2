@@ -47,8 +47,8 @@ Which records it reads:
 - In a session that works in its own worktree, when the check of the main
   checkout fails on its own error, such as a record there that cannot be
   read, the findings for the session's own checkout are still reported.
-  After them comes one line: "The record check did not run in the main
-  checkout. Its own error: ...". With no such finding, that line is the
+  After them comes one line: "validate-records.mjs did not run in the
+  main checkout. Its own error: ...". With no such finding, that line is the
   only output and the exit code is 0 (review of the second fixes, note 8).
 
 ## What it must never do

@@ -1,6 +1,25 @@
 # Official pages by kind of file
 
-Read the page for the product that reads the file. Read both when both do. Each address below returns the page as Markdown when `.md` is added to it, except the Codex best practices guide.
+This file says how to get the current official guidance for a kind of harness file, and gives the web address of the official page for each kind. Use it at step 2 of `SKILL.md`, so that a change follows what Claude Code and Codex do today and not what the writer remembers.
+
+## How to get the current guidance
+
+1. In Claude Code, first use the agent or skill that Claude Code provides for the job, when it is available. A later release of Claude Code may rename one of them.
+   - For a question about how Claude Code treats a kind of file, such as a skill, a hook, a rule, a `CLAUDE.md`, a settings file, a plugin, or a subagent, use the built-in `claude-code-guide` agent.
+   - To write a new skill, or to test whether a skill is chosen for the right requests, use the `skill-creator` skill. It comes from a plugin, so a computer may not have it.
+   - To change a hook or a settings file, use the built-in `update-config` skill.
+2. When none of these is available, open the address in the table below. Always do so for a Codex page: these three know nothing about Codex, and a Codex session has none of them.
+3. A dated copy of a page counts only when it was captured in the last 14 days. When a line of this skill's checklist disagrees with the live page, the live page wins. Tell the owner which checklist line is out of date.
+
+## The pages
+
+Read the page for the product that reads the file. Read both when both do. A skill is the one exception: before you write or change a skill, read these three pages every time, whichever product reads the skill.
+
+- The skill best practices page: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+- The Claude Code skill page, in the Skill row of the table below.
+- The Codex skill page, in the same row.
+
+Each address below returns the page as Markdown when `.md` is added to it, except the Codex best practices guide.
 
 | Kind of file | Claude Code | Codex |
 | --- | --- | --- |

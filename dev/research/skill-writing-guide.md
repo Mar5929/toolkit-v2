@@ -10,6 +10,15 @@ Corrected 2026-10-05 against the pages captured that day (Claude Code
 listing budget in D4, H3 (`UserPromptSubmit`), H11 (the Codex hooks file),
 and the Codex source commit below. Nothing else was checked again that day.
 
+Changed 2026-10-06 (Mike's decision on the writing rule, `AGENTS.md`,
+Rules, "Plain English"): B0 was added, B4 and B5 say what they never
+remove, and Part 9 has a row on giving a reason. Part 4 gives the rules and
+their sources. How to word a sentence is in the writing rule, the one place
+for the writing rules:
+`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md`.
+The `writing-harness-files` skill holds an exact copy of it,
+`references/writing-rule.md`.
+
 Mike's decisions win over this guide. They are in `dev/GOAL.md` and the Rules
 section of `AGENTS.md`. Three of them shape everything below:
 
@@ -415,6 +424,18 @@ Checks for each description:
 
 ## Part 4. Rules for SKILL.md bodies
 
+The wording of a body follows the writing rule,
+`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md`.
+The rules below say what a body holds and where each rule comes from.
+
+**B0. Start with what the skill is for and what it must achieve.** The first
+lines say what the skill does and what must be true when its job is done,
+and which neighbouring skill does which part. Take the goal from text that
+exists, such as the ", so ..." part of the description. The number is B0 so
+that the numbers other files cite (B4, B5, B12) stay as they are.
+(`ai-external-knowledge/codex/openai-plugins-build-skills.md` "Define the
+workflow boundary"; Mike, 2026-10-06)
+
 **B1. Keep `SKILL.md` under 500 lines and under about 5,000 tokens.** All
 three sources say 500 lines; the standard adds 5,000 tokens. Move detail to
 reference files.
@@ -439,7 +460,12 @@ example in the work item), so the next turn can find it.
 
 **B4. Include only what the agent would get wrong without it.** Agent Skills
 asks of each line: would the agent get this wrong without it? If not, cut it.
-Do not explain what a pull request or a YAML file is.
+Do not explain what a pull request or a YAML file is. An agent gets a
+made-up project word wrong when nothing says what it means, and a purpose
+wrong without a statement of it. So the purpose stays, and a made-up word
+is replaced by plain words or by a name the reader can already see, or is
+kept and explained once (the writing rule, "Words and names"). B4 removes whole sentences of general
+knowledge. It never removes words from a sentence that stays.
 (`ai-external-knowledge/anthropic-agent-skills/agentskills-best-practices.md`
 "Add what the agent lacks, omit what it knows";
 `ai-external-knowledge/anthropic-agent-skills/skill-authoring-best-practices.md`
@@ -447,7 +473,8 @@ Do not explain what a pull request or a YAML file is.
 
 **B5. State what to do, not a story about it.** "State what to do rather than
 narrating how or why." Codex: "Write imperative steps with explicit inputs and
-outputs."
+outputs." One reason clause, where an instruction would look arbitrary, is
+not a story (Part 9).
 (`ai-external-knowledge/claude-code/skills.md` "Types of skill content";
 `ai-external-knowledge/codex/build-skills.md` "Best practices")
 
@@ -851,6 +878,8 @@ need more detail for Haiku."
 | Codex trigger rule | Source: "you must use that skill" when the task clearly matches (`source-skills-catalog-prompt.md`). | Model instructions seen in 0.157.0: "use reasonable judgement" (Observed). | Write so the match is clear either way; do not rely on "must use". |
 | Length cap | Claude Code: 1,536 characters (`skills.md`). | Agent Skills standard and Codex: 1,024 (`agentskills-specification.md`, `source-skills-render.md`). | 1,024 is the standard's cap; this repository's rule is under 500, and `check-skills.mjs` fails at 500 or more (D1, D4). |
 | Naming pattern | Anthropic prefers gerunds (`skill-authoring-best-practices.md`). | The standard's and Codex's examples use nouns and actions (`agentskills-specification.md`, `customization-overview.md`). | Any one pattern, used everywhere. Toolkit V2's names are settled in `dev/SKILL-INDEX.md` (N4). |
+| Giving a reason | Claude Code: "State what to do rather than narrating how or why" (`skills.md`). | Agent Skills: "explaining *why* can be more effective than rigid directives" (`agentskills-best-practices.md`). | No narration. One reason clause where an instruction would look arbitrary (B5; the writing rule, "Extra rules for documents"). |
+| How short | Anthropic: "Only add context Claude doesn't already have" (`skill-authoring-best-practices.md`, "Concise is key"). | Mike agreed, 2026-10-06, with this statement: the text "was squeezed too short, and it uses project words without saying what they mean". | Leave out general knowledge, which is what the page's own examples leave out. What the project means by one of its own words is context the agent does not have: say it in plain words, or with a name the reader can see, or explain the word once. Concise removes whole sentences, never words inside a sentence that stays (B4; the writing rule, "Words and names" and "Paragraphs and sections"). |
 | Trigger text field | Claude Code reads `when_to_use` (`skills.md`). | Codex does not; it can show `metadata.short-description` instead (`source-skills-parser.md`). | Only `description` (D3). This is also Mike's rule in `AGENTS.md`. |
 | Claude Code list after compaction | Settings reference: Claude sees the skill listing each turn (`settings-reference.md`). | Context window page: the listing "is not re-injected after `/compact`" (`context-window.md`). | Unsettled. Observed: the list sits in the Skill tool's description, which supports "each turn". If routing after compaction matters, a `SessionStart` hook with matcher `compact` can restate it (H3). |
 

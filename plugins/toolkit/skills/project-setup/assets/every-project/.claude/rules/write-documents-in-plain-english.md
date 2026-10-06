@@ -1,0 +1,75 @@
+# Write Documents and Artifacts in Plain English
+
+Follow this rule whenever you write an artifact or a document. The goal is that a reader who was not in the session can understand the result after one read, without asking what a word means.
+
+An artifact is something made for a person to look at, such as a diagram, a chart, a dashboard, a mockup, a slide deck, a published page, or a report. This rule covers the words inside an artifact: the title, headings, labels, notes, captions, and body text.
+
+A document is a file that someone follows or relies on later. Skills, rules, agent guides (`AGENTS.md` and `CLAUDE.md`), requirements, designs, system documents, decisions, test plans, and delivery records are all documents.
+
+Two kinds of writing have their own guides, so this rule does not cover them. Replies to the owner in a session follow the output style, which is the writing style that Claude Code applies to replies. Text sent to another person follows `humanize-outbound-text.md`.
+
+A helper agent is an agent that another agent starts for one job. Helper agents and Codex do not get the output style, so this rule states its points for them. When this rule and the active style file disagree, follow the style file.
+
+## Words and names
+
+- Use common words.
+- Use the exact name the system uses for a thing, and use the same name every time.
+- Use the real name of a thing. A picture word describes a thing as something else, so never put a picture word, an idiom, or a joke in place of the real name. For example, write "the only setting you can change", not "the only lever".
+- Say a thing in plain words before you give it a name.
+- When a name is needed, use a name the reader can already see, such as a folder name or a field name.
+- A made-up word is a word that a dictionary does not have, or a word that has its own meaning only in this project. When plain words and a visible name both fail, keep the made-up word and explain it once, where it first appears, in one clause with an example.
+- Plain never means vaguer. When you replace a word, the new words must name the subject at least as exactly as the old word did.
+- Keep an ordinary word that is exact, such as "outbound" or "criteria". An exact ordinary word is not a made-up word.
+- Give every file, heading, and label a name that says its subject. A reader who sees only the name must know what it is about. For example, `memory-criteria.md` says its subject, and `what-to-keep.md` does not.
+- Be specific. Name the thing, the person, or the number. For example, write "the save failed because the file was locked", not "there were problems".
+- When you write "this" or "that", add the word it stands for.
+
+## Sentences
+
+- Write whole sentences. A whole sentence has a subject and a verb. Never cut a sentence down to a label and a colon. For example, write "When a save fails, start your reply with 'Not saved'", not "A save that failed: 'Not saved'".
+- Put one idea in a sentence, or two ideas that belong together. Start a new sentence for a third idea.
+- Name who acts, and put that name first. For example, write "The agent saves the file", not "The file is saved".
+- Put the condition before the action. The reader then knows whether the sentence applies before reading what to do. For example, write "When the save fails, tell the owner", not "Tell the owner when the save fails".
+- When a sentence has a goal and an action, put the goal first. For example, write "To undo the change, run the reset step".
+- Put the action in the verb. For example, write "check the file", not "perform a check of the file".
+- Say what to do. Use "never" and "do not" only for something that is forbidden.
+- Keep the subject and its verb close together. Do not put a long aside between them.
+- Give every item in a list the same form. Give every step in a procedure the same form.
+- Write steps in the order the reader does them, and give each step its own sentence.
+
+## Paragraphs and sections
+
+- Start a paragraph or a section with the sentence that states its point. Put what supports the point after it.
+- Leave out a sentence that the reader does not need. Never shorten a sentence by removing words that it needs. When the clear version and the short version differ, choose the clear version.
+- Write about the subject. Do not write about the document itself or about the session that produced it.
+- When the exact words of the session are the fact, quote them, and say who said them and when. Otherwise do not quote the session.
+- Keep every fact, number, name, date, and quotation exactly as it is.
+
+## Extra rules for artifacts
+
+- Start with the content. Do not write an introduction before the content, and do not end with a line that repeats it in short.
+- Give each heading a name that says what is under it, in the words of the subject. For example, write "Team structure options", not "Three ways to build the team tree, pick one".
+- When a number is itself the fact, a heading may contain it. Otherwise leave numbers out of headings.
+- Put the real name on a box or a label. A label can be a short name. A note or a caption must be a whole sentence.
+- State the decision or the fact itself. Do not add a line that tells the reader it is important.
+- The agent chooses the layout. This rule governs only the words.
+
+## Extra rules for documents
+
+- Start from the whole document. First work out what the reader must know and what the reader must do. Then write that in the plainest order and words. Do not fix a document one line at a time.
+- Open the document with what it is for and what must be true when its job is done.
+- When another skill or file does a neighbouring job, say in one sentence which one does which part.
+- Give each instruction its own sentence. The sentence says who does what, and when.
+- When one point needs several rules, give the main rule first. Then give each special case on its own line.
+- Decide whether each instruction is exact or general.
+  - An exact instruction is a command, a name, a number, the form of an ID, or words that the owner must see. Keep an exact instruction exactly as it is written.
+  - A general instruction covers a class of cases. State a general instruction in one sentence, and then give two or three examples marked "for example".
+- When you point to another file, say what is in the file and when to open it. Never leave a file name where the instruction should be.
+- When an instruction would look arbitrary, give the reason in one clause.
+
+## Rewriting a document that exists
+
+- You may reorder the document, split or join its sections, and rename a heading. When you rename a heading, update every file that names it.
+- Change no rule, no limit, and no exact text that a tool or another file reads.
+- Leave a sentence or a name that is already clear. Change one only when a reader who is new to the project would not understand it.
+- To rewrite a skill, a rule, or an agent guide, follow the rewrite steps in the `writing-harness-files` skill.

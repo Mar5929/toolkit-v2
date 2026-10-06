@@ -3,7 +3,7 @@
 A project with local work items and local memory. This session worked on
 WI-007 in its own worktree. Another session works in the main checkout.
 
-## The job block given to the verifier (step 6)
+## The list of inputs given to the verifier (step 6)
 
 After the brief from `references/handoff-verifier.md`, word for word:
 
@@ -17,7 +17,7 @@ Sources for claims:
 - "Option A is approved": file, WI-007 front matter, `design: approved`
 - "DEC-006 is Open": file, DECISIONS.md
 - "branch claude/wi-007-csv-export": repository, git worktree list
-- "credit notes show negative amounts": owner, his words "just make them negative"
+- "credit notes show negative amounts": owner, the owner's words "just make them negative"
 - "the bank rejects files over 5 MB": worked out
 Supplied text: none
 ```
@@ -29,8 +29,8 @@ Not saved: nothing.
 Saved: WI-007 Current state and one Recent History row; Q-05
 (negative amounts) added to Questions and Answers. Current State: "Next
 session starts with" rewritten.
-Filed: DEC-006 (the date format every bank export uses), Open, with a
-pointer in WI-007 and WI-009.
+Filed: DEC-006 (the date format every bank export uses), Open, with its
+ID in WI-007 and WI-009.
 
 Checked the handoff prompt: 1 fixed, 1 not confirmed.
 

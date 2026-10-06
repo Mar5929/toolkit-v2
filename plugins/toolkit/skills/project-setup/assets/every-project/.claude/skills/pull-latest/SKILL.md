@@ -21,14 +21,15 @@ now.
    - the branch's upstream is on a remote not named `origin`, or the branch
      has no upstream and no remote is named `origin`: ask which remote to
      pull from;
-   - the working tree is dirty (untracked `??` files alone do not count): the
-     changes may be another session's work, so never commit or discard them;
+   - the working tree has uncommitted changes (untracked `??` files alone do
+     not count): the changes may be another session's work, so never commit
+     or discard them;
    - this is the main checkout (the first path `git worktree list` prints)
      on a branch other than the default branch. Your own worktree on your
      own branch is fine.
 
-   In your own worktree, a stop for no checked-out branch or a dirty working
-   tree ends only the work on your own branch: run step 2 first, then stop,
+   In your own worktree, a stop for no checked-out branch or for uncommitted
+   changes ends only the work on your own branch: run step 2 first, then stop,
    and add step 5's line on the main checkout to the line saying why.
 
    The default branch: `git symbolic-ref --short refs/remotes/origin/HEAD`
@@ -36,9 +37,10 @@ now.
    `git remote show origin`. Never assume `main`.
 2. **Fetch:** `git fetch --prune origin`. In your own worktree, update the
    main checkout next: run `git -C <main checkout> status -sb`. When it
-   shows the default branch and a working tree that is not dirty, as step 1
-   counts it, run `git -C <main checkout> pull --ff-only`. On another
-   branch, dirty, or a pull that fails: leave the main checkout as it is.
+   shows the default branch and no uncommitted changes, as step 1 counts
+   them, run `git -C <main checkout> pull --ff-only`. On another branch,
+   with uncommitted changes, or a pull that fails: leave the main checkout
+   as it is.
 3. **The branch has an upstream** (`git status -sb` shows
    `...origin/<branch>` after the branch name): run `git pull --ff-only`.
    - Diverged ("Not possible to fast-forward"): run
@@ -53,7 +55,7 @@ now.
    `git log --oneline HEAD..origin/<default>`. Nothing listed: the branch
    already holds everything on the default branch. Otherwise tell the owner
    how many commits it lists and ask "Merge the latest `<default>` into this
-   branch?" After his yes, run `git merge --no-edit origin/<default>`.
+   branch?" After the owner's yes, run `git merge --no-edit origin/<default>`.
 5. **Report** the incoming commits (one line each, then one line on what they
    change together), the final state, and anything step 3 found: another
    session's commits, or content already on the remote under another commit
@@ -70,13 +72,13 @@ now.
    error>."
 
    End with the one question the owner must answer, or else the exact words
-   he can say to start the next step.
+   the owner can say to start the next step.
 
-## Gotchas
+## Mistakes to avoid
 
 - `--no-edit` is only for a merge that finishes without a conflict. On a
   conflict, run `git merge --abort` and report the conflicting files, unless
-  the owner said in this conversation to resolve conflicts or finish this
+  the owner said in this session to resolve conflicts or finish this
   merge. Then read both sides of each file, stop and ask when the right
   result is not clear, stage each resolved file by name, and commit with a
   message you write, with no AI credit line. Never `git commit --no-edit`
@@ -87,9 +89,9 @@ now.
   `git commit`) alone, with escalated permissions
   (`sandbox_permissions` set to `require_escalated`, with a one-line reason).
   When Codex refuses without asking, show the owner the exact command and
-  ask him to run it.
+  ask the owner to run it.
 
-## Hand-offs
+## Work that another skill does
 
 | For | Use |
 | --- | --- |

@@ -2,7 +2,7 @@
 
 <!-- Keep this guide.
 
-What goes here: every decision and open question that more than one work item needs. A decision only one work item needs stays in that item's Questions and Answers.
+What goes here: every decision and open question that more than one work item needs. A decision only one work item needs stays in that work item's Questions and Answers.
 
 Rules for an entry:
 - Add or change an entry with `filing-project-records`, step "record a decision".
@@ -30,7 +30,7 @@ Entry form:
 - Why: <the reason for the decision, or why the question matters>
 - Affects: <work item IDs and rule IDs, or "none yet">
 - Replaces or replaced by: <"replaces DEC-###", "replaced by DEC-###", or "none">
-- Sources: <SRC-### for each original it rests on, or "none">
+- Sources: <SRC-### for each source it is based on, or "none">
 -->
 
 No entries yet. Replace this line with the first entry.

@@ -1,73 +1,143 @@
 # Refining Requirements
 
-Takes an item from a rough idea, meeting notes, or documents to requirements the owner approves. Every question is a row in the item's Questions and Answers, and every answer is saved the moment he gives it, so a later chat picks up at the first open question.
+Use this file to take a work item from a rough idea, meeting notes, or documents to requirements that the owner approves. The job is done when the owner has approved the requirements and the work item has moved to its next State.
 
-The template's Requirements section gives a requirement's form and what each part holds.
+Every question to the owner is a row in the work item's Questions and Answers, and every answer is saved the moment the owner gives it. A later session can then continue at the first open question.
 
-- The item's goal is the goal in its Overview, together with each requirement's Goal. Acceptance is each requirement's Acceptance Criteria; the item has no other acceptance list.
-- A requirement is approved only when `requirements_approved` holds a date and no row that asks him to approve it is open.
+The Requirements section of the work item template gives the form of a requirement and says what each part holds. Three facts apply in every step:
+
+- The work item's goal is the goal in its Overview, together with the Goal of each requirement.
+- Acceptance is the Acceptance Criteria of each requirement. The work item has no other acceptance list.
+- A requirement is approved only when `requirements_approved` holds a date and no row that asks the owner to approve that requirement is open.
+
+## Contents
+
+- Steps
+- The question format
+- Sources
+- Roadmap, tasks, and sub-items
+- Mistakes to avoid
 
 ## Steps
 
-1. **Start or pick up.**
-   - New work: create the item in State Refining Requirements, titled in his words. Give it one requirement for each separate thing he asked for, with his words for it as its Original verbatim requirement.
-   - An existing item with open questions: say in one line what is settled, then ask the first open question again. Never start the interview over.
-2. **Read what the project already decided:** `DECISIONS.md`, the area's document in `system/`, `system/constraints.md`, and related items with `using-work-tracker`. File each new source before you use it (Sources, below).
-3. **Agree the goal first.** Ask "So the goal is <one sentence>?" After his yes, write it as the goal in the item's Overview.
-4. **Offer a helper team once.** After the goal, when the item is clearly large (a part of it meets a split test below) and `delivery` is `not-offered`, ask once whether he wants a team of helper agents to build it, and record his answer in `delivery`. A sub-item takes its parent's answer.
-5. **Interview one question at a time,** in the question format below. Ask first what later questions depend on. Ask about each vague word ("fast", "all users") until a tester could check it. Add the question's row before the reply ends, set `waiting_on` to the owner, and name its Q-ID in the Current state.
-6. **Save each answer the moment he gives it,** in one save: his words, the date, Decision? `yes` or `no`, Status Answered; the Q-ID in Recent History; the rewritten Current state. Then update what the answer settles:
-   - the goal: the goal in the Overview, or the Goal of the requirement it is about;
-   - a behavior, rule, or exception: a line in the Functional Requirements of the requirement it belongs to, and a line in that requirement's Acceptance Criteria when the check changes. When no requirement covers it, add a new requirement, with his words as its Original verbatim requirement. The row's Affects column names the `R-xx`;
-   - something out of scope: a line in the Functional Requirements of the requirement it limits ("Does not apply to ...");
-   - a phase, its order, or a split: the Roadmap of a top-level item, or the task list of a sub-item;
-   - a fact that is not a requirement: Notes, Context;
-   - an idea for how to build it: Notes, "Solution options and considerations", naming its `R-xx`.
+1. Start the work item, or continue it.
+   - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
+   - For an existing work item with open questions, say in one line what is settled, and then ask the first open question again. Never start the interview over.
+2. Read what the project already decided: `DECISIONS.md`, the document in `system/` for the area the work item changes, `system/constraints.md`, and the related work items, which you read with `using-work-tracker`. File each new source before you use it, as "Sources" below says.
+3. Agree the goal first. Ask "So the goal is <one sentence>?" After the owner's yes, write that sentence as the goal in the work item's Overview.
+4. Offer a team of helper agents once. Ask after the goal is agreed, and only when both of these are true: the work item is clearly large, and `delivery` is `not-offered`. A work item is clearly large when a part of it meets one of the conditions for a split in "Roadmap, tasks, and sub-items" below.
+   - Ask once whether the owner wants a team of helper agents to build the work item, and record the answer in `delivery`.
+   - A sub-item takes its parent's answer.
+5. Interview the owner, one question at a time, in the form that "The question format" below gives.
+   - Ask first the questions that later questions depend on.
+   - Ask about each vague word, such as "fast" or "all users", until a tester could check it.
+   - Add the question's row before the reply ends, set `waiting_on` to the owner, and name the question's Q-ID in the work item's Current state.
+6. Save each answer the moment the owner gives it. Do three things for each answer, in this order.
 
-   Then apply the filing test in the root `AGENTS.md`, "Where information goes". An answer that an agent working on a different item would need goes to `filing-project-records`: step "record a decision" for a decision or an open question, step "update a system document" for a rule several items rely on. That step adds "Filed as DEC-014." to the end of the row, which keeps his words. A requirement that rests on a rule in `system/` names the rule's ID and never copies its text.
-7. **Handle a change** to an earlier answer or an approved requirement.
-   - Never rewrite the old row. Add "Change to Q-03: <the question now>" with his words and the date, and set the old row to "Superseded by Q-09".
-   - Change the lines of each `R-xx` it affects, and keep the old wording in the Recent History row ("R-02 was: ...; changed by Q-12"). Never change an Original verbatim requirement: add his new words after it, with the date and the Q-ID.
-   - When the old row ends "Filed as DEC-###", or a rule in `system/` rests on it, hand the change to `filing-project-records` as step 6 says.
-   - After the requirements were approved, a changed requirement and a new one each need his OK for that requirement only: add the row "Do you approve the change to R-02?", or "Do you approve R-05?" for a new one, and ask it. While that row is open, that requirement is not approved: design, build, and test nothing from it. The others stay approved, and `requirements_approved` stays as it is. A design it affects goes back to Designing. When a sub-item holds a copy of the changed requirement, change the copy the same way once he approves.
-   - On his no, put the old lines back from that Recent History row, or mark a new requirement dropped, and save his words in the row. A design that went back to Designing for that change returns to the status it had.
-8. **Shape the plan** (Roadmap, tasks, and sub-items, below).
-9. **Stop asking** when every requirement has its Goal, at least one line in its Functional Requirements, and at least one line in its Acceptance Criteria, no open question affects a requirement, a top-level item's roadmap has at least one phase, and the split is settled. Ask once: "What have we not talked about yet that could change this?"
-10. **Check readiness** before asking for approval, and after any change to an approved requirement. Start the requirements analyst helper (`requirements-analyst-brief.md`). Fix wording that changes nothing he asked for yourself, and say so in one line. A finding that would change what he asked for becomes a question with your recommendation. More than three findings go to him as one numbered list.
-11. **Ask for his OK on the requirements.** Show the goal, each requirement in one line with its Acceptance Criteria, and your recommended next State with its reason (Designing or Building, as `SKILL.md` says). Add the row "Do you approve these requirements?" (Affects: every `R-xx`), and end the reply with exactly that question. After his yes, save his words and the date in that row first (Decision? `yes`), then:
-    - set `requirements_approved` to `YYYY-MM-DD by <name>`;
-    - move the item to the next State he agreed to;
-    - a sub-item that these requirements cover: bring the lines it copied from the parent up to the approved wording, give it the same approval with "(from <parent ID>)", add the Recent History row "Covers <parent ID> R-xx, approved there.", and move it to the same next State. It skips its own interview.
+   First, make one save that holds all of these:
+   - in the question's row: the owner's words, the date, Decision? `yes` or `no`, and Status Answered;
+   - in Recent History: the Q-ID;
+   - the rewritten Current state of the work item.
+
+   Second, update what the answer settles. This table says where each kind of answer goes.
+
+   | What the answer settles | Where to write it |
+   | --- | --- |
+   | The goal | The goal in the Overview, or the Goal of the requirement that the answer is about. |
+   | A behavior, a rule, or an exception | A line in the Functional Requirements of the requirement it belongs to. When the check changes, also a line in that requirement's Acceptance Criteria. The question's row names the `R-xx` in its Affects column. `R-xx` is the short form of a requirement's number, such as R-01 for Requirement 1. |
+   | A behavior, a rule, or an exception that no requirement covers | A new requirement, with the owner's words as its Original verbatim requirement. Then a line in its Functional Requirements and, when the check changes, a line in its Acceptance Criteria. The question's row names the `R-xx` in its Affects column. |
+   | Something that is out of scope | A line in the Functional Requirements of the requirement it limits, in the form "Does not apply to ...". |
+   | A phase, the order of the phases, or a split | The Roadmap of a top-level work item, or the task list of a sub-item. |
+   | A fact that is not a requirement | Notes, Context. |
+   | An idea for how to build it | Notes, "Solution options and considerations", with the `R-xx` it is for. |
+
+   Third, check whether more than one work item needs the answer. The root `AGENTS.md`, section "Where information goes", gives the test: would an agent that works on a different work item need the answer?
+   - When the answer passes that test, give it to `filing-project-records`. Use step "record a decision" for a decision or an open question, and step "update a system document" for a rule that several work items rely on.
+   - That step adds "Filed as DEC-014.", with the real ID, to the end of the row. The row keeps the owner's words.
+   - A requirement that is based on a rule in `system/` names the rule's ID, and never copies the rule's text.
+7. Handle a change to an earlier answer or to an approved requirement.
+   - Never rewrite the old row. Add a row "Change to Q-03: <the question now>", with the owner's words and the date, and set the old row to "Superseded by Q-09". Use the real Q-IDs.
+   - Change the lines of each `R-xx` that the change affects, and keep the old wording in the Recent History row, in the form "R-02 was: ...; changed by Q-12".
+   - Never change an Original verbatim requirement. Add the owner's new words after it, with the date and the Q-ID.
+   - When the old row ends "Filed as DEC-###", or a rule in `system/` is based on the old row, give the change to `filing-project-records`, as step 6 says.
+   - After the requirements were approved, a changed requirement and a new requirement each need the owner's yes for that requirement only.
+     - Add the row "Do you approve the change to R-02?" for a changed requirement, or "Do you approve R-05?" for a new one, and ask it.
+     - While that row is open, that requirement is not approved. Design nothing, build nothing, and test nothing from it.
+     - The other requirements stay approved, and `requirements_approved` stays as it is.
+     - A design that the change affects goes back to Designing.
+     - When a sub-item holds a copy of the changed requirement, change the copy in the same way once the owner approves.
+   - When the owner says no, put the old lines back from that Recent History row, or mark a new requirement dropped. Save the owner's words in the row. A design that went back to Designing for that change returns to the status it had.
+8. Shape the plan, as "Roadmap, tasks, and sub-items" below says.
+9. Stop asking when all four of these are true:
+   - Every requirement has its Goal, at least one line in its Functional Requirements, and at least one line in its Acceptance Criteria.
+   - No open question affects a requirement.
+   - The roadmap of a top-level work item has at least one phase.
+   - The split is settled.
+
+   Then ask once: "What have we not talked about yet that could change this?"
+10. Check that the requirements are ready. Do this check before you ask for approval, and after any change to an approved requirement. Start the requirements analyst helper, with `requirements-analyst-brief.md`. Then handle its findings:
+    - When a finding needs wording that changes nothing the owner asked for, fix the wording yourself, and say so in one line.
+    - When a finding would change what the owner asked for, make it a question with your recommendation.
+    - When there are more than three findings, give them to the owner as one numbered list.
+11. Ask for the owner's yes on the requirements.
+    - Show the goal, each requirement in one line with its Acceptance Criteria, and the next State you recommend, with the reason. The next State is Designing or Building. `SKILL.md`, section "Status and State", says when to recommend each.
+    - Add the row "Do you approve these requirements?", with every `R-xx` in its Affects column, and end the reply with exactly that question.
+    - After the owner's yes, first save the owner's words and the date in that row, with Decision? `yes`. Then do these three things:
+      - Set `requirements_approved` to `YYYY-MM-DD by <name>`.
+      - Move the work item to the next State that the owner agreed to.
+      - For each sub-item that these requirements cover, bring the lines it copied from the parent up to the approved wording. Give it the same approval, with "(from <parent ID>)". Add the Recent History row "Covers <parent ID> R-xx, approved there." Move it to the same next State. Such a sub-item skips its own interview.
 
 ## The question format
+
+Write each question to the owner in this form:
 
 ```text
 Q-07: <One question that settles one thing.>
 Recommended: <your answer>, because <the reason>.
 Watch out: <the catch of this choice>.
-Not yet covered: <what this affects that he has not raised>.
+Not yet covered: <what this affects that the owner has not raised>.
 ```
 
-Leave out "Watch out" or "Not yet covered" only when there is nothing real to say.
+Leave out "Watch out" or "Not yet covered" only when there is nothing real to say on that line.
 
 ## Sources
 
-- File a transcript, a document, a file, or pasted text before you use it: `filing-project-records`, step "file a source". That step gives you the SRC-### and adds the source's line under Notes, Sources.
-- From a source: a stated behavior becomes a requirement, or a line of one, with the source's words as its Original verbatim requirement and its SRC-### named there; something another person decided becomes a question asking the owner to confirm it; a gap becomes a question with your recommendation; other facts go under Notes, Context. Tell him how many requirements and questions it gave, then ask the first question.
+A source is anything the project was given, such as a transcript, a document, a file, or pasted text.
+
+- File a source before you use it, with `filing-project-records`, step "file a source". That step gives you the SRC-### and adds the source's line under Notes, Sources.
+- A source gives four kinds of information:
+  - A behavior that the source states becomes a requirement, or a line of one. The source's words are its Original verbatim requirement, and the SRC-### is named there.
+  - Something that another person decided becomes a question that asks the owner to confirm it.
+  - A gap becomes a question with your recommendation.
+  - Other facts go under Notes, Context.
+- Tell the owner how many requirements and how many questions the source gave. Then ask the first question.
 
 ## Roadmap, tasks, and sub-items
 
-The levels, and which ones have phases, are in `SKILL.md`, "Levels".
+`SKILL.md`, section "Levels", gives the levels and says which ones have phases.
 
-- A top-level item: propose its phases as one question, each with a one-line reason. Name a phase by what it delivers ("P1 — Personas agreed"), not by the kind of work.
-- During refining, add a task only for work refining itself needs, such as "P1-T01 — Get the current persona list from the client" (in a sub-item, "T01 — ...").
-- Propose a split into sub-items when a part of the work can be approved, built, or shipped on its own; is for other people or another area of the system; needs its own design; or is large enough that the owner will want to track it by itself. Never split for a single step (that is a task).
-- Show the split in one message: each sub-item's title, a one-line reason, the parent's phase it goes under (a level-2 sub-item only), and the parent requirements it covers. Ask "Shall I split WI-012 into these 4 sub-items?" His yes covers the split only.
-- After his yes, create each sub-item with the parent's ID, in State Refining Requirements, with one requirement for each parent requirement it covers: its Original verbatim requirement quotes the parent's words for that part and names where they are from ("from <parent ID> R-02"), and its Functional Requirements and Acceptance Criteria copy the parent's lines it covers, word for word. When the parent's requirements are already approved and cover it, create it in the parent's next State with the approval copied from the parent instead. List each level-2 sub-item's ID under its phase on the top-level parent; a level-3 sub-item is listed on its level-2 parent, with no phase.
+- For a top-level work item, propose its phases as one question, with a one-line reason for each phase. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
+- During Refining Requirements, add a task only for work that Refining Requirements itself needs, such as "P1-T01 — Get the current persona list from the client". In a sub-item the task is "T01 — ...".
+- Propose a split into sub-items when a part of the work meets one of these four conditions:
+  - It can be approved, built, or shipped on its own.
+  - It is for other people or for another area of the system.
+  - It needs its own design.
+  - It is large enough that the owner will want to track it by itself.
+- Never split off a single step. A single step is a task.
+- Show the split in one message, and ask "Shall I split WI-012 into these 4 sub-items?", with the real ID and number. The owner's yes covers the split only. For each sub-item, the message gives:
+  - its title;
+  - a one-line reason;
+  - the parent's phase it goes under, for a level-2 sub-item only;
+  - the parent requirements it covers.
+- After the owner's yes, create each sub-item with the parent's ID, in State Refining Requirements. Give it one requirement for each parent requirement it covers:
+  - Its Original verbatim requirement quotes the parent's words for that part, and names where the words are from, in the form "from <parent ID> R-02".
+  - Its Functional Requirements and Acceptance Criteria copy the parent's lines it covers, word for word.
+- When the parent's requirements are already approved and cover the sub-item, create the sub-item in the parent's next State instead, with the approval copied from the parent.
+- List the ID of each level-2 sub-item under its phase on the top-level parent. List a level-3 sub-item on its level-2 parent, with no phase.
 
-## Gotchas
+## Mistakes to avoid
 
-- Only the owner's words answer a question. A source, another person, or your recommendation stays a candidate until he confirms it. A tentative answer ("probably B, let me think") leaves the question open.
-- Requirements say what and why, never how.
-- A sub-item has its own Questions and Answers. Save each answer in the item it is about.
-- Ask in the reply text, never through a question tool, one question per reply. A list of recommendations he can accept with one yes, each with a one-line reason, counts as one question.
+- Only the owner's words answer a question. A source, another person, or your recommendation is a proposed answer until the owner confirms it. A tentative answer, such as "probably B, let me think", leaves the question open.
+- Requirements say what and why. They never say how.
+- A sub-item has its own Questions and Answers. Save each answer in the work item that the answer is about.
+- Ask in the text of the reply, and never through a question tool. Ask one question in each reply. A list of recommendations that the owner can accept with one yes, each with a one-line reason, counts as one question.

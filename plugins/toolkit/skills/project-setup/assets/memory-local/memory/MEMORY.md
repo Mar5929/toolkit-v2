@@ -2,7 +2,7 @@
 
 # Memory index
 
-One line per current memory file, with a link to it. Open a file before relying on it. The blank form (`status: template`) and files whose status is retired or superseded are left out. In a new project, the sections stay empty until real memories are saved with the `curating-project-memory` skill.
+One line per current memory file, with a link to it. Open a file before relying on it. The template (`status: template`) and files whose status is retired or superseded are left out. In a new project, the sections stay empty until memory records are saved with the `curating-project-memory` skill.
 
 ## User
 

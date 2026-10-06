@@ -16,7 +16,7 @@ Put a rule in the one document for its area. A rule that covers more than one ar
 | `automation.md` | Something that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes. | AUT-## |
 | `integrations/<system-name>.md` | One connection to another system: what is sent, in which direction, when, and which side holds the true value. | INT-## |
 | `integrations/README.md` | One row per integration document. | None |
-| `integrations/INTEGRATION-TEMPLATE.md` | The form for a new integration document. Never write an integration into it. | None |
+| `integrations/INTEGRATION-TEMPLATE.md` | The template for a new integration document. Never write an integration into it. | None |
 | `diagrams/` | A diagram that explains the system, such as a data model diagram, a process flow, or a map of the integrations. | None |
 
 ## The form of a document
@@ -63,17 +63,17 @@ What each mark means:
 | Mark | Meaning |
 | --- | --- |
 | Draft | More than one work item depends on the rule, and the owner has not approved it. Its question is an Open entry in `DECISIONS.md`, listed under Open questions. |
-| Approved (DEC-###) | The owner approved the rule in that decision. It is not delivered yet. |
-| Built (work item ID) | The rule is approved, and that work item delivered it. |
+| Approved (DEC-###) | The owner approved the rule in that decision. No work item has built what the rule says yet. |
+| Built (work item ID) | The rule is approved, and that work item built what the rule says. |
 | Retired | The rule no longer applies. Keep its block and its ID. |
 
 ## A glossary term
 
 - One row per term: Term, System or context, Meaning here, Distinction or alias, Source, Last checked.
-- Source is the owner's words with the date, or a DEC-###. Add the SRC-### when the meaning came from an original.
-- A meaning that only an original gives, or that you worked out, is not a term yet: the owner confirms it first. Never infer a definition from a similar word.
+- Source is the owner's words with the date, or a DEC-###. Add the SRC-### when the meaning came from a source listed in `sources/README.md`.
+- A meaning that only a source listed in `sources/README.md` gives, or that you worked out, is not a term yet. The owner confirms it first. Never infer a definition from a similar word.
 - A word that two systems use differently gets two rows.
-- A renamed term gets a row under "Naming changes": the old term, the preferred term, the reason, the source, and the date.
+- A renamed term gets a row under "Naming changes", with the columns Old term, Preferred term, Reason, Source, and Date.
 
 ## An integration document
 
@@ -90,7 +90,7 @@ What each mark means:
 ## What must stay true
 
 - A rule is added, changed, or retired only because of a decision. The rule's Source, the document's "Last changed via", and the Changelog row of the change name that DEC-###.
-- One work item's proposal stays in that item's design. It comes here only when more than one work item depends on it, as a Draft rule.
+- A rule that one work item proposes stays in that work item's design. It comes here only when more than one work item depends on it, as a Draft rule.
 - This folder describes the system the owner approved. The record of how the system works today (what was observed, in which environment, and on which date) goes in `reference/current-system/`.
 - Name work items, decisions, and sources by ID. Never copy their text into a document.
 - `.claude/hooks/validate-records.mjs` checks these documents after each edit and before each commit. Fix what it reports.
@@ -101,5 +101,5 @@ What each mark means:
 | --- | --- |
 | Add, change, or retire a rule; add or correct a term; add or change an integration document or a diagram | `filing-project-records`, step "update a system document" |
 | A question about a rule, or the decision that approves it | `filing-project-records`, step "record a decision" |
-| Mark a rule Built, when the closing step of `running-work-item-lifecycle` asks what the work item changed | `filing-project-records`, step "update a system document" |
+| Mark a rule Built, when `running-work-item-lifecycle` is closing a work item and asks what the work item changed | `filing-project-records`, step "update a system document" |
 | Commit the change to the default branch | `publish-docs` |

@@ -1,23 +1,27 @@
 # Review and Save Project Memory
 
-This rule applies to the main agent. The project's one memory store is the system named under "Memory" in `PROJECT.md`, "Toolkit settings". Never save project memory in a host's own memory feature (Claude Code's auto-memory, Codex Memories) or another plugin's.
+This rule applies to the main agent. It says when to review project memory, what never goes in memory, and what the owner's yes covers. To review memory is to decide whether anything should be saved, corrected, or forgotten.
+
+The project keeps its memory in one system: the one named on the "Memory" line in `PROJECT.md`, section "Toolkit settings". Never save project memory in the memory feature of Claude Code (auto-memory) or of Codex (Codex Memories), or in the memory of another plugin.
 
 ## When to review memory
 
-- Review memory after an explicit remember or forget request, a correction, a meaningful discovery, a significant fix or episode, a change of people, tools, or references, a focus shift, a finished work item, and a handoff.
-- Review it also when the owner reports what another person said (for example the client, a developer, or a vendor), when a job ran, and when a dated event was set or its date passed.
-- A review also checks that every line of Current State is still true.
-- A hook reminder is not a save decision. Do not save on every hook reminder or every turn. A review can end with nothing saved.
+- Review memory after each of these: an explicit request to remember or forget, a correction, a meaningful discovery, a significant fix or episode, a change of people, tools, or references, a focus shift, a finished work item, and a handoff.
+- Review memory also when the owner reports what another person said, for example the client, a developer, or a vendor.
+- Review memory also when a job ran, and when a dated event was set or its date passed.
+- In every review, also check that every line of the project's Current State is still true.
+- A reminder that a hook prints is not a decision to save. Do not save on every hook reminder or on every turn.
+- A review can end with nothing saved.
 
 ## What never goes in memory
 
-- The owner's instructions for how the agent works go to `.claude/rules/owner-preferences.md`, never to memory.
-- A fact that `AGENTS.md`, "Where information goes", gives a home outside memory never goes in memory. When a review finds one that is not filed yet, file it in that home.
-- A save the owner said no to is kept nowhere else: not in Current State, another memory, or a list of pending saves.
+- Write the owner's instructions for how the agent works in `.claude/rules/owner-preferences.md`, never in memory.
+- Never save in memory a fact that `AGENTS.md`, section "Where information goes", keeps in a place outside memory. When a review finds such a fact that is not filed yet, file it in that place.
+- When the owner said no to a save, keep that save nowhere else: not in the project's Current State, not in another memory record, and not in a list of pending saves.
 
-## Approval
+## The owner's yes
 
-- Save, correct, forget, and tidy memory only through `curating-project-memory`, which holds the approval policy. Hindsight memory: `.claude/rules/hindsight-memory.md`.
-- The approval mode (onboarding or trusted) is the "Memory approval" line in `PROJECT.md`, "Toolkit settings". Only an explicit owner instruction changes it.
-- A yes approves only the change and meaning shown. Silence approves nothing.
-- An unanswered save question stays a proposal: do not rely on it.
+- Save, correct, forget, and clean up memory only with `curating-project-memory`, which says when a save needs the owner's yes. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+- The "Memory approval" line in `PROJECT.md`, section "Toolkit settings", holds the value `onboarding` or `trusted`. Only an explicit instruction from the owner changes that value.
+- The owner's yes covers only the change and the meaning that you showed. Silence is never a yes.
+- A question about a save that the owner has not answered stays a proposal. Do not rely on what the proposal says.

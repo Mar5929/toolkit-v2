@@ -29,12 +29,15 @@
 //   - SKILL.md links every file in the skill folder (a link to a folder covers what is in it),
 //     every link resolves, and no link leaves the folder with ../;
 //   - a Markdown file in references/ or examples/ over 100 lines has "## Contents" as its first
-//     section;
+//     section, except a copy of a rule (RULE_COPIES), which must equal the rule;
 //   - no file names a command of the retired toolkit program; the hook commands in every setup
 //     folder's .claude/hooks/ are checked the same way;
 //   - a file whose first line names a dev/build-shared/ source equals that source after the
 //     first line;
 //   - a skill asset copied from a project file (MODEL_COPIES) equals that file;
+//   - a skill file that is an exact copy of a project rule (RULE_COPIES) is one comment line that
+//     names the rule, a blank line, and then the rule's whole text: today the writing rule in
+//     writing-harness-files/references/writing-rule.md;
 //   - every folder under assets/ except settings/ is every-project or a folder that a row of
 //     the setup-copy.md table names, and every folder the table names exists;
 //   - a folder is in one row of that table, except notion-tools and memory-process, which two
@@ -114,6 +117,12 @@ const SHARED = 'every-project/.claude/skills';
 const MODEL_COPIES = {
   [`${SHARED}/running-work-item-lifecycle/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
   [`${SHARED}/running-work-item-lifecycle/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
+};
+
+// Skill files that are exact copies of a project rule: path from the repository root -> the rule it copies.
+// A plugin skill reads only files in its own folder, so it holds the rule's text itself. The rule is the source.
+const RULE_COPIES = {
+  'plugins/toolkit/skills/writing-harness-files/references/writing-rule.md': 'plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md',
 };
 
 const findings = [];
@@ -280,7 +289,9 @@ for (const { dir, model } of skills) {
     }
     const rel = posix(path.relative(dir, f));
     const lines = body.split('\n').length - (body.endsWith('\n') ? 1 : 0);
-    if (/^(references|examples)\//.test(rel) && lines > CONTENTS_OVER) {
+    // A copy of a rule must equal the rule, so it cannot start with a Contents list: it is exempt.
+    const ruleCopy = Object.keys(RULE_COPIES).includes(posix(path.relative(ROOT, f)));
+    if (/^(references|examples)\//.test(rel) && lines > CONTENTS_OVER && !ruleCopy) {
       const heading = proseLines(body).find((l) => /^#{2,6}\s/.test(l.text));
       if (!heading || !/^#{2,6}\s+(?:Table of )?Contents\s*$/i.test(heading.text)) report(level, f, `${lines} lines: a reference over ${CONTENTS_OVER} lines starts with a "## Contents" section`);
     }
@@ -340,6 +351,15 @@ for (const f of walk(ASSETS)) {
     const b = homes.length ? path.join(ASSETS, homes[0], original) : null;
     if (!fs.existsSync(a) || !b) report('error', a, `this copy or its project file ${original} is missing`);
     else if (read(a) !== read(b)) report('error', a, `differs from the project file ${shown(b)}; copy that file over it`);
+  }
+  // A copy of a rule: its first line names the rule, its second line is blank, and the rest is the rule, whole.
+  for (const [copy, rule] of Object.entries(RULE_COPIES)) {
+    const a = path.join(ROOT, copy);
+    const b = path.join(ROOT, rule);
+    if (!fs.existsSync(a) || !fs.existsSync(b)) { report('error', a, `this copy or the rule it copies, ${rule}, is missing`); continue; }
+    const [first, second, ...rest] = read(a).split('\n');
+    if (!first.startsWith('<!--') || !first.includes(rule)) report('error', a, `its first line must be a comment that names the rule it copies, ${rule}`);
+    if (second !== '' || rest.join('\n') !== read(b)) report('error', a, `differs from the rule ${rule}: edit the rule, then copy it over this file below its first line and one blank line`);
   }
   // The Next action prompt is written by hand in two places; they must match.
   const pageFile = path.join(SETUP, 'references/notion-build/work-item-page.md');
