@@ -1,6 +1,10 @@
 # Checklist by kind of file
 
-Checked against the official pages on 2026-10-05 (Claude Code 2.1.289, Codex 0.160). When a page says something different, the page is right.
+This file gives, for each kind of harness file, the practices that the official pages ask for and the way to check a change. Use it at steps 3 and 6 of `SKILL.md`, after you have read the official page, so that no practice is missed and every change is checked before a reviewer sees it.
+
+Every section ends with a line that starts "Check:". That line is the check that step 6 of `SKILL.md` asks for.
+
+The practices were checked against the official pages on 2026-10-05 (Claude Code 2.1.289, Codex 0.160). When a page says something different, the page is right.
 
 ## Contents
 
@@ -17,19 +21,19 @@ Checked against the official pages on 2026-10-05 (Claude Code 2.1.289, Codex 0.1
 
 ## Skill
 
-- A skill is a folder: `SKILL.md`, plus `references/` and `assets/` as needed. Add `scripts/` only when the project allows scripts in skills.
-- `name` equals the folder name: lowercase letters, digits, and hyphens, 64 characters or fewer, with no hyphen at the start or the end and no two hyphens in a row. It holds neither "anthropic" nor "claude".
-- `description` is required by the standard and by Codex, and is 1,024 characters or fewer. Claude Code cuts the text it lists for one skill at 1,536 characters.
+- A skill is a folder that holds `SKILL.md`, plus `references/` and `assets/` as needed. Add `scripts/` only when the project allows scripts in skills.
+- The frontmatter is the block of fields between two `---` lines at the top of `SKILL.md`. Its `name` field equals the folder name: lowercase letters, digits, and hyphens, 64 characters or fewer, with no hyphen at the start or the end and no two hyphens in a row. It holds neither "anthropic" nor "claude".
+- `description` is required by the Agent Skills standard and by Codex, and is 1,024 characters or fewer. Claude Code cuts the text it lists for one skill at 1,536 characters.
 - Codex reads only `name`, `description`, and `metadata.short-description` from the frontmatter. A field that only Claude Code reads, such as `when_to_use`, `allowed-tools`, `paths`, or `disable-model-invocation`, does nothing in Codex. So a skill that both products read must work with `name` and `description` alone.
 - The description says what the skill does and when to use it, in the third person, with the words the owner would say. Put the main use first. When the list of skills is over its budget, Codex cuts each description from the end, and Claude Code drops whole descriptions, starting with the skills used least. Keep it far below the limit: every chat reads every description.
 - Name a neighbour skill in the description only where the two compete: "Not for ...; use <skill>."
-- `SKILL.md` stays under 500 lines: the steps first, then a table that links every file in the folder and says when to open it.
+- `SKILL.md` stays under 500 lines. It says first what the skill is for and what must be true when its job is done, then gives the steps, then a table that links every file in the folder and says when to open it.
 - A reference over 100 lines starts with a contents list. References link from `SKILL.md`, not from each other.
 - A skill names its own files by a path from the skill folder, and reads no file outside that folder.
 - In Claude Code a personal or project skill with the name of a built-in command or a bundled skill replaces it. A personal or project skill named `verify` or `simplify` is run before each commit. Choose another name unless that is the purpose.
 - Claude Code loads a skill in a `.claude/skills/` folder below the folder a session started in once the agent reads or edits a file there. A copy of a skill kept in a repository as a template is loaded this way.
 
-Check: run the project's skill checks when it has them. After a new or changed name or description, test in each product that reads the skill that it is chosen for three requests that should choose it and not for three that should not.
+Check: run the project's skill checks when the project has them. After a new or changed name or description, test in each product that reads the skill that it is chosen for three requests that should choose it and not for three that should not.
 
 ## Rule
 
@@ -49,8 +53,8 @@ Check: open a session in Claude Code, read a matching file when the rule has `pa
 - The file holds what every session needs and nothing else. Keep each file under 200 lines.
 - Write instructions that are specific and can be checked.
 - Codex reads `AGENTS.md`. Claude Code reads `CLAUDE.md`; it reads `AGENTS.md` by itself only when no `CLAUDE.md` or `CLAUDE.local.md` is in the working folder or above it (Claude Code 2.1.277 or later). A `CLAUDE.md` that holds the one line `@AGENTS.md` makes both products read one text in every case.
-- A file inside a folder, in Claude Code: the folder's `CLAUDE.md` loads when the agent reads, writes, or edits a file there. The folder's `AGENTS.md` loads by itself only when the agent reads a file there and the folder has no `CLAUDE.md`.
-- A file inside a folder, in Codex: Codex loads the `AGENTS.md` of each folder from the project root down to the folder it was started in, and no other. So the root file must tell Codex to read a folder's file before it works there.
+- In Claude Code, a folder's `CLAUDE.md` loads when the agent reads, writes, or edits a file in that folder. The folder's `AGENTS.md` loads by itself only when the agent reads a file there and the folder has no `CLAUDE.md`.
+- Codex loads the `AGENTS.md` of each folder from the project root down to the folder it was started in, and no other. So the root file must tell Codex to read a folder's file before it works there.
 - Codex stops adding instruction files once they reach 32 KiB together, unless the owner's settings raise that limit.
 - A procedure goes in a skill. What a hook or a check can enforce goes there, not in a sentence.
 
@@ -135,7 +139,7 @@ Check: `claude plugin validate <folder>` lists what the mod hooks and calls. `cl
 - A Claude Code subagent definition is a Markdown file in `.claude/agents/`. A Codex custom agent is a TOML file in `.codex/agents/`. Neither product reads the other's file.
 - A helper starts with only the brief. State the goal, the helper's own part, the files to read first, what it must not change, how to verify the work, and what to report.
 - Tell the helper to report only on its own part.
-- Put the writing rules in the brief. A helper does not see the main chat's reply style.
+- Give the helper the writing standard in the brief: the path of `references/writing-standard.md`, or its text when the helper cannot open it. A helper does not see the main chat's reply style.
 - Ask it to mark what it verified and what it inferred.
 
 Check: read the brief as if you knew nothing else. Every file it names exists, and every instruction has one meaning.
