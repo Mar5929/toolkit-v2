@@ -298,8 +298,9 @@ table below is that second, whole set. No text changed during it.
 - Each second session read the file in `reference/current-system/` first and
   named it under Sources.
 - One Opus rollup run also committed the file to the default branch with
-  `publish-docs`, without being asked. The other five left it uncommitted
-  and said so.
+  `publish-docs`, without being asked. The other five left it uncommitted;
+  the two Opus runs among them said so in the reply, and the three Sonnet
+  runs did not.
 - Each saved run row holds the date, the owner's words, and "not known yet"
   for the error and the fix. Each of the three sessions also made the job's
   record, added the earlier failure of 2026-09-30 as a row from WI-002,
