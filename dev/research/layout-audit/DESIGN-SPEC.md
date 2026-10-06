@@ -360,3 +360,51 @@ complete in one file that reads the same in every project.
   - The rule `session-handoff.md` holds three lines the owner approved in
     place of his earlier paragraph: when to use the `handoff` skill, when
     to offer a handoff, and when not to offer one.
+- From the memory restore (2026-10-05, side branch `claude/one-home-memory`;
+  `MEMORY-RESTORE-SPEC.md`; record: `dev/test-runs/memory-restore.md`).
+  Decisions 13 and 13a of section 2 are replaced by that specification, and
+  so are the two memory rows of section 5 and the memory lines of section
+  7:
+  - Memory is the Davis-based design of `origin/main` again:
+    `curating-project-memory` holds the process (with its five references),
+    each `using-memory-store` holds storage, `memory/` holds one file per
+    concept, and the session-start hook rebuilds the index `MEMORY.md`.
+  - Memory has four kinds of record: `user_`, `project_`, `reference_`,
+    `event_`. It has no decision records, no decision template, and no
+    glossary: those facts are in `DECISIONS.md` and `system/glossary.md`.
+    Every record carries `created`, `updated`, and `check_by`.
+  - Current State has five parts: Now, Coming up, Waiting on, Standing jobs
+    and shared files, Next session starts with. It stays under 40 lines and
+    1,600 characters.
+  - The "Memory approval" line is back in "Toolkit settings", which has 11
+    lines again.
+  - Settled by the builder, for the owner to confirm:
+    1. A person's lasting role and what the person may decide stay in
+       `PROJECT.md`, "People and ownership". A `user_` record holds only
+       what that table does not: who is away, who covers, what a person
+       handles for now.
+    2. A save that needs the owner's yes is kept as a proposal in the same
+       turn as the question (on `origin/main`: only after his next message
+       did not answer), with its line under "Waiting on".
+    3. An event record and a run row of a recurring job need no question.
+    4. The index line is the file name and the description, cut at 74
+       characters, so 30 records and a full Current State print in under
+       4,000 characters. The file name and the description together hold
+       at most 70 characters.
+    5. The root guide's "Every session" gets one more line: before a turn
+       ends, record what no record holds yet, and end the reply with a
+       "Recorded:" line. The per-message reminder says the same in one
+       sentence.
+    6. Claude Code loads `PROJECT.md` through an `@PROJECT.md` line in the
+       root `AGENTS.md`. The root `CLAUDE.md` still holds only
+       `@AGENTS.md`, because record check 11 requires that.
+    7. Every project gets a file `.ignore` with two lines, so the search
+       tools read `work-items/` and `memory/`. Section 3 does not list it.
+    8. A project task's "Who does it" may name another person who owes the
+       task, with the party. A work item's own tasks still say agent or
+       owner.
+    9. In "update the toolkit", a memory decision record is marked as moved
+       and kept, not removed; the old glossary file is removed after its
+       rows are read back.
+    10. Closing a work item offers a third outcome for a lesson: kept in
+        memory as not proven, with the dates it was seen.

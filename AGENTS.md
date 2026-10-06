@@ -71,7 +71,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` the web address of the official page for each kind, and `references/checklist.md` the practices and the check for each kind. Never copied into a project. |
 | `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, the four hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), and `.githooks/pre-commit`, which runs the fourth before each commit. Edited here directly (see "The starter project"). |
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
-| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, and `MEMORY.md`, the table of pointers. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
+| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md` (the index the session-start hook rebuilds), and `project_topic_template.md`, the blank form for a memory record. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
 | `<setup>assets/notion-tools/` | `using-notion-cli` and the rule `notion-records.md`, for every project with work items or memory in Notion. |
 | `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and eleven rules. One of them, `salesforce-delivery.md`, holds the Salesforce lines for `delivery/` and loads only for files there (`paths: delivery/**`). |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
@@ -122,10 +122,18 @@ add", is the only table of choices and folders; a new folder under
   (Mike, 2026-10-05). Notion databases for decisions and sources are a
   later, separate work item. `project-wide-records/`, `requirements/`,
   `system-guide/`, and `ai-external-knowledge/` are no longer in the model.
-- Memory holds where work stopped plus pointers, an ID and a link, never a
-  restated fact; every memory entry carries the date it was created and the
-  date it last changed; and a work item holds no original: every original
-  goes to `sources/`, and the item holds its SRC ID (Mike, 2026-10-05).
+- Memory is the Davis-based design Mike built, restored on 2026-10-05
+  (`dev/research/layout-audit/MEMORY-RESTORE-SPEC.md`): Current State, and
+  one record per concept in four kinds (`user_`, `project_`, `reference_`,
+  `event_`). It holds only what no other project file holds. A decision
+  more than one work item needs is in `DECISIONS.md`, a project term in
+  `system/glossary.md`, and how the system works in `system/` or
+  `reference/current-system/`: memory has no decision records, no decision
+  template, and no glossary. Every record carries the date it was created
+  and the date it last changed, and a record that is true only for a while
+  carries a "check or remove by" date. A work item holds no original: every
+  original goes to `sources/`, and the item holds its SRC ID (Mike,
+  2026-10-05).
 
 - A choice decides which files a project gets, never which lines inside a
   file (Mike, 2026-10-05). A folder holds files at the paths a project has
@@ -142,13 +150,14 @@ add", is the only table of choices and folders; a new folder under
   `salesforce-delivery.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`).
 - No file under `<setup>assets/` holds a setup marker (`<!-- if ... -->`,
   `<!-- endif -->`): `check-skills.mjs` fails on one. Setup fills only
-  blanks: the project name, the prompts the owner answers, and the 10 lines
+  blanks: the project name, the prompts the owner answers, and the 11 lines
   of "Toolkit settings" in `PROJECT.md`, which are the same lines in every
   project (a line for a choice the owner did not make holds `not used`).
   The settings files (`.claude/settings.json`, `.codex/hooks.json`,
   `.codex/config.toml`) are machine settings: setup still merges them and
   takes the Salesforce entries out of a project that is not a Salesforce
   project.
+- `every-project/.ignore` is a project file (added 2026-10-05, for Mike to confirm). It holds two lines that make ripgrep, and with it Claude Code's Grep and Glob tools, read `work-items/` and `memory/`, which `.gitignore` hides from them. Without it a session that searched the project missed an earlier record in a work item in 2 of 2 live runs; with it, it found the record (`dev/test-runs/memory-restore.md`). It changes nothing in this repository: `every-project/` holds neither folder.
 - `every-project/.gitignore` is a project file. It keeps the lines `/memory/`
   and `/work-items/`, which apply only inside `every-project/`, where neither
   folder exists. So `memory-local/memory/` and `work-local/work-items/` are
@@ -399,8 +408,9 @@ node --test 'dev/tests/*.test.mjs'
   - Memory skills (Mike, 2026-10-01). `curating-project-memory` holds the
     process, the same for local and Notion memory: it never names a
     storage tool, file, folder, database, or command, and hands every read
-    and write to `using-memory-store`. It keeps memory to Current State
-    and pointers, and sends each fact to its home (Mike, 2026-10-05). Each version of
+    and write to `using-memory-store`. It sends each fact that has a home
+    outside memory to that home, and keeps in memory only what no other
+    project file holds (Mike, 2026-10-05). Each version of
     `using-memory-store` holds storage only, never a process rule. Both
     Notion storage skills (`using-work-tracker` and
     `using-memory-store`) run `ntn` through `using-notion-cli` and never
@@ -446,9 +456,12 @@ node --test 'dev/tests/*.test.mjs'
   hook commands; `dev/tests/hooks.test.mjs` checks both. `work-items/` and
   `memory/` are kept out of Git, so they exist only in the main checkout:
   `session-start.mjs` finds it with `git rev-parse --git-common-dir`, and so
-  works from inside a Git worktree. With local memory it prints
-  `memory/MEMORY.md`, the table of pointers, and never writes it:
-  `using-memory-store` does (Mike, 2026-10-05). `validate-records.mjs`
+  works from inside a Git worktree. With local memory it rebuilds
+  `memory/MEMORY.md`, the index of the memory records, and prints one line
+  per record, cut at 74 characters. Its whole output stays under 4,000
+  characters for a project with 30 memory records and a Current State at
+  its limits (under 40 lines and 1,600 characters); a test fails when it
+  does not. It is 76 lines. `validate-records.mjs`
   runs from three places: a `PostToolUse` entry in both hosts, a `Stop`
   entry in Claude Code only (Codex accepts only JSON output for `Stop`),
   and `.githooks/pre-commit`. In an update of a project that does not have
