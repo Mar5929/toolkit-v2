@@ -1,6 +1,6 @@
 # The memory views, column order, and page layout
 
-The views of the memory databases, the order of their columns, the page layout, and the schema files that build them. The `project-setup` skill uses this to build, check, and update a project's memory. Saving and finding memory never need it. The columns are in `database-layout.md`.
+This file gives the views of the memory databases, the order of their columns, the page layout, and the schema files that build them. The `project-setup` skill uses this file to build, check, and update a project's memory. Saving and finding memory never need this file. The columns are in `database-layout.md`.
 
 ## Contents
 
@@ -13,13 +13,15 @@ The views of the memory databases, the order of their columns, the page layout, 
 | Database | View | Grouping, filter, and order |
 | --- | --- | --- |
 | Memories | Index | Status accepted or proposed; by Record Key. |
-| Memories | Decisions | Kind = decision, not deprecated; newest first. No new page has that Kind, so the view lists only pages from before the one-home layout: decisions are in `DECISIONS.md`. |
+| Memories | Decisions | Kind = decision, not deprecated; newest first. |
 | Memories | By work item | Grouped by Work items (or by Work item IDs when work items are not in Notion); newest first. |
 | Memories | Retired | Status superseded or deprecated; newest first. |
 
+No new page has the Kind decision, because decisions are in `DECISIONS.md`. So the Decisions view lists only pages from the layout that was used before the current folder layout.
+
 ## Property order and page layout
 
-The owner approved this grouping (2026-09-30). Hiding a property removes nothing: Lore still finds every column by its name.
+This table gives, for each database, the properties that are pinned in the heading, the sections in order, and the hidden properties. The owner approved this grouping (2026-09-30). Hiding a property removes nothing: Lore still finds every column by its name.
 
 | Database | Heading (pinned) | Sections, in order | Hidden |
 | --- | --- | --- | --- |
@@ -31,9 +33,22 @@ The owner approved this grouping (2026-09-30). Hiding a property removes nothing
 
 Table views list the columns in this order, with the hidden ones `"visible": false`.
 
-The page layout is set only in the Notion app, once per database of a template (https://www.notion.com/help/layouts). Open any page of the database, choose "…" then Customize layout, and pin the heading properties (up to 15; the page title, such as Subject or Name, is always at the top). Choose "Add section" for each named section, and drag its properties in. Turn the eye icon off for each hidden property, then choose Apply to all pages. "Every page in your database will have the same layout, and new pages you create will also have that layout." A copy of the template keeps the layout (tested 2026-09-30).
+The page layout is set only in the Notion app, once per database of a template (https://www.notion.com/help/layouts). These are the clicks:
 
-A property added after the layout is set appears in a visible section. Right away, ask the owner to move it into its section from the table above, or to hide it when the table's Hidden column covers it. For any other property, ask him which section it goes in.
+1. Open any page of the database, and choose "…" then Customize layout.
+2. Pin the heading properties. Up to 15 can be pinned. The page title, such as Subject or Name, is always at the top.
+3. Choose "Add section" for each named section, and drag its properties in.
+4. Turn the eye icon off for each hidden property.
+5. Choose Apply to all pages. "Every page in your database will have the same layout, and new pages you create will also have that layout."
+
+A copy of the template keeps the layout (tested 2026-09-30).
+
+A property that is added after the layout is set appears in a visible section. Right away, ask the owner to do one of two things:
+
+- move the property into its section from the table above; or
+- hide the property, when the table's Hidden column covers it.
+
+For any other property, ask the owner which section it goes in.
 
 ## The schema files
 
