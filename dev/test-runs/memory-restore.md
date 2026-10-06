@@ -197,3 +197,150 @@ Changed in this pass: `curating-project-memory` (485 characters),
   that does not exist yet when a page is written (INF, not tested).
 - 39 live sessions, about 7 US dollars. The test home got the session
   records of these runs and nothing else; nothing was installed or removed.
+
+## Fix pass
+
+Date: 2026-10-05. A second agent fixed the findings of
+`dev/reviews/2026-10-05-memory-restore-review.md` (1 blocker, 17 should fix,
+9 notes) on this branch, starting from commit `d320ab7e`. Sections 1 to 9
+above describe the branch before this pass; where they differ from this
+section, this section holds. Marks as above.
+
+### The seven checks (RUN, from the worktree root, on the final text)
+
+| Command | Result |
+| --- | --- |
+| `claude plugin validate .` | Validation passed |
+| `claude plugin validate ./plugins/toolkit` | Validation passed |
+| `claude plugin validate ./plugins/workstreams` | Validation passed |
+| `claude plugin test ./plugins/workstreams` | 14 pass, 0 fail |
+| `node dev/tools/check-skills.mjs` | passed, 0 errors, 0 warnings (23 skills, 23 index rows) |
+| `node dev/tools/check-rules.mjs` | passed with 2 warnings: `hindsight-memory.md` is 4,444 bytes and `salesforce-org-safety.md` 4,200 bytes, each over the proposed 4,096 |
+| `node --test 'dev/tests/*.test.mjs'` | 112 tests, 112 pass, 0 fail |
+
+### Each finding
+
+| Finding | Status | What was done |
+| --- | --- | --- |
+| Blocker 1, should fix 2 | Fixed another way, as the coordinator decided | No reply ends with a "Recorded:" line. The sentence added to `prompt-reminder.mjs` is gone, so the command has the one job it had. The root guide's line is one sentence that points to `curating-project-memory`, "Before a turn ends". Two rows in the root guide's "Where information goes" close the gap: an analysis of how the system works today, and a run of a recurring job. Each says to write the record before the reply. The matching steps are in `reference/AGENTS.md` (the analysis) and in `curating-project-memory` (the run row). |
+| 1 | Fixed as the reviewer said | The prune request is printed before Current State. The last line names `memory/MEMORY.md` and `memory/CURRENT_STATE.md`. One new test: a Current State of 60 lines and about 12,000 characters. |
+| 3 | Fixed as the reviewer said | The command lists only decision files that are not marked as moved. RUN in a scratch folder: marked files are not listed, one unmarked file is, and no file gives no error. |
+| 4 | Fixed as the reviewer said | The words "(the owner, 2026-10-05)" are out of `notion-build/work-layout.md`. Adding a select option by a person's name in Notion is still not tested. |
+| 5 | Fixed another way | The reference's section and the words `or answering "where are we"` are deleted. The root row says to report each dated line "saying when its date has passed". The words "then prune that line" were not added: the rule `memory-review-and-save.md` already starts a review when a date has passed, and the reference's "Removing what is no longer true" removes the line. |
+| 6 | Fixed as the reviewer said | Both pointers name the reference and its section "Removing what is no longer true". |
+| 7 | Fixed as the reviewer said | An event or a run row that holds more about a named person than attendance or work role gets the question for that part. A save about a named person's personal details gets only its line under "Waiting on", without the details, until his yes. |
+| 8 | Not needed any more | No index line is cut: the index line and the output cap are `origin/main`'s again (should fix 12). |
+| 9 | Not needed any more | The 1,600-character limit is gone. Five parts at their line limits are 36 lines, so the case "every part within its limit, the whole over its limit" cannot happen. |
+| 10 | Fixed as the reviewer said | The Runs table's columns are only in the storage skills. "What never goes in memory" is the list in `memory-criteria.md`; the folder guide, the rule, and the blank form point to the root table, and the folder guide keeps the line on secrets. The three bullets are deleted from `memory/AGENTS.md`. The moments to search memory are one list, in the root guide. |
+| 11 | Fixed as the reviewer said | Both listings print the page's tags. RUN with `jq` on sample data, not against Notion. |
+| 12 | Fixed, as the coordinator decided | The output cap is 9,500 characters and the index line is the title as a link, the description, and the date of the last change, as on `origin/main`. The 70-character and 1,600-character limits are removed. The comment in the command and the line in the repository `AGENTS.md` say what the captured pages say. |
+| 13 | Fixed as the reviewer said | The four descriptions are under "Descriptions" below. The routing test was not run: a separate agent runs it. |
+| 14 | Fixed as the reviewer said | The row names the blank form as an exception and sends it to the "Other toolkit files" row. |
+| 15 | Fixed as the reviewer said | |
+| 16 | Fixed another way | "In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md". It is shorter than the reviewer's sentence, which did not fit the size limit of the file. LIVE: sessions named facts from `PROJECT.md` without reading the file. |
+| 17 | Fixed as the reviewer said | `handoff` says "what it is and its next step", as the process skill does. |
+| Note 1 | Fixed | The three texts no longer say a search skips the folders. The root guide says to search both with their skills. The local storage skill says `memory/` is only in the main checkout, so a search from a worktree misses it. |
+| Note 2 | Not changed | See "Left as it is" in `DESIGN-SPEC.md`, section 9: a new Notion project is a copy of the owner's template, which already holds the `decision` tag and the "Decisions" view. |
+| Note 3 | Fixed | "Blank form" and "piece of work" in every starter file and memory skill. The reminder's hint says "A fact that fits no file there goes in a memory record." `onboarding` says the save "becomes a current record only after his yes". Not changed: the word "seed" in two comments of the Salesforce `package.xml` templates. |
+| Note 4 | Fixed | A file name and a Notion key hold at most 60 characters, as on `origin/main`; the description and the Synopsis are "one short line". "Six months" is only in `tidying.md`. "Now" holds "one line per active piece of work", and a part with more true lines than its limit is handled by "Pruning", step 4. |
+| Note 5 | Fixed | The index writes relative Markdown links, the form `record-format.md` gives. |
+| Note 7 | Fixed | The old blank form is replaced after the difference is shown and the owner says yes. |
+| Notes 6, 8, 9 | Not changed | Not on the list for this pass. |
+
+### Sizes (RUN)
+
+| What | Value |
+| --- | --- |
+| `session-start.mjs` | 76 lines |
+| `prompt-reminder.mjs` | 64 lines |
+| `validate-records.mjs` | 279 lines, not changed |
+| Starter root `AGENTS.md` | 19,900 bytes, 151 lines |
+| Start hook output, 30 memory records and a full Current State | 7,834 characters, all 30 lines whole, nothing cut |
+
+The fixture for the last row: 30 records, each with a title of 24
+characters, a file name of about 30, and a description of 100; and a Current
+State with every part at its line limit (36 lines, 2,161 characters).
+
+### Descriptions (RUN: each equals its row in `dev/SKILL-INDEX.md`)
+
+| Skill | Length | What changed |
+| --- | --- | --- |
+| `curating-project-memory` | 498 | "how a job ran" is a reason to use it. Two "Not for" lines: a decision goes to `filing-project-records`, a to-do to `running-work-item-lifecycle`. To make room: "and small", "an unchecked claim", "a lesson", "where to find something", and "corrects or retires what is wrong" are out. |
+| `using-memory-store` (local) | 443 | The example is "read Current State", not "update Current State". |
+| `using-memory-store` (Notion) | 460 | The example is "read the Current state page". |
+| `session-summary` | 334 | "what did we do in this chat", not "what did we do today". |
+
+### Live runs (LIVE)
+
+Claude Code 2.1.289, the test sign-in, the command line of section 6 with
+`--model sonnet` (`claude-sonnet-5-5`) or `--model opus`
+(`claude-opus-5-5`), `--permission-mode acceptEdits`. Each run is one fresh
+session on its own fresh copy of a scratch project. The rollup runs start
+from the state after messages (a) to (c) of section 6, with the final
+toolkit files copied in. The job runs start from a newly built and seeded
+project, as scenario 41 did.
+
+The text changed once during the runs. The first set ran with the two new
+rows written as a place only ("`reference/current-system/`. Answer from
+that record."). The mid-size model recorded the analysis in 0 of 3 runs. The
+rows were then changed to say when to write ("Write it to
+`reference/current-system/` before you reply"), four uncounted sessions
+tried that wording, and the whole set was run again on fresh copies. The
+table below is that second, whole set. No text changed during it.
+
+| Test | Sonnet | Opus |
+| --- | --- | --- |
+| Rollup message: the result was recorded in `reference/current-system/` | 3 of 3 | 3 of 3 |
+| Rollup message: project task PT-02, which asked for the analysis, got a pointer to the file | 3 of 3 | 3 of 3 |
+| A second fresh session answered "what do we know about how the rollup fields on the account object work?" from the record | 3 of 3 | 3 of 3 |
+| Scenario 41, "the nightly job broke again": a run row was saved | 1 of 2 | 2 of 2 |
+
+- Each second session read the file in `reference/current-system/` first and
+  named it under Sources.
+- One Opus rollup run also committed the file to the default branch with
+  `publish-docs`, without being asked. The other five left it uncommitted
+  and said so.
+- Each saved run row holds the date, the owner's words, and "not known yet"
+  for the error and the fix. Each of the three sessions also made the job's
+  record, added the earlier failure of 2026-09-30 as a row from WI-002,
+  added the job's line under "Standing jobs and shared files", and then
+  asked what broke. The Sonnet run that saved nothing opened no skill and
+  only asked which job and what failed.
+- The first set, for comparison (not counted): rollup recorded in 0 of 3
+  Sonnet runs and 3 of 3 Opus runs (2 of them committed the file); run row
+  saved in 1 of 2 Sonnet runs and 2 of 2 Opus runs. The four uncounted
+  Sonnet sessions with the new wording: rollup recorded in 2 of 2, run row
+  saved in 2 of 2.
+
+Day two, one Sonnet session, "where are we". The project was the first
+Sonnet rollup run of the counted set, with its records and commits dated one
+day back, as in section 6. The reply named all four pieces of work:
+
+| Piece of work | Named as |
+| --- | --- |
+| The call and its action items | PT-01 to PT-08 with who owes each and each date |
+| The sheet update | PT-03, and `shared/open-items.csv` as edited and not committed |
+| Wednesday's meeting and its preparation | The call on 2026-10-07 at 10:00; PT-08 in progress, the agenda waits for approval |
+| The rollup analysis | PT-02, and `reference/current-system/account-appointment-rollups.md` as "PT-02 first look", not committed |
+
+It opened no skill and read both work items, the project tasks,
+`DECISIONS.md`, and `git status`.
+
+31 live sessions in this pass, about 10.70 US dollars. The test home got the
+session records of these runs and nothing else; nothing was installed or
+removed.
+
+### Not done, and limits
+
+- The routing test was not run after the four description changes: a
+  separate agent runs it.
+- No separate agent reviewed the wording of this pass.
+- Codex ran no session. Notion and Hindsight were read, not run. Whether
+  Codex counts plain hook output against `additionalContextLimit`, and
+  whether 9,500 characters stay under 4,000 tokens there, was not tested.
+- The update steps (`one-home-layout.md`, `update.md`) were not run on a
+  project; only the new detection command was run.
+- No session ran the `handoff` skill or a closing step with the changed
+  pointers.
+- One "where are we" run and two runs per model for scenario 41 are small
+  samples.

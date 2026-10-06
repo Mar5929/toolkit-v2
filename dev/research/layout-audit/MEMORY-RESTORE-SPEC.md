@@ -131,8 +131,13 @@ Numbers are the causes in `MEMORY-SCENARIOS.md`.
 
 - `session-start.mjs` was 76 lines on `origin/main` and is 54 now. It may
   return to about 76. It must stay one job, never break a session, and keep
-  its output under what Codex shows (about 4,000 characters): the index is
-  one line per record, and Current State keeps a line limit.
+  its output under what the hosts show: the index is one line per record,
+  and Current State keeps a line limit. Corrected in the fix pass
+  (2026-10-05): this line said "what Codex shows (about 4,000
+  characters)". The captured pages give 10,000 characters for Claude Code
+  and a limit in tokens for Codex (about 2,500 by default; 4,000 in the
+  toolkit's Codex snippets), so the command cuts at 9,500 characters, as on
+  `origin/main`.
 - `validate-records.mjs` does not change.
 - No new hook command and no new skill.
 
