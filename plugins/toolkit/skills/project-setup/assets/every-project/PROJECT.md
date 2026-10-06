@@ -1,6 +1,6 @@
 # <Project name>
 
-<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and each person. Keep stable project facts here and active tasks in the work tracker. Delete this guide when every prompt is filled. -->
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and each person. Keep stable project facts here, and keep active tasks where the work items are kept. Delete this guide when every prompt is filled. -->
 
 ## Purpose and intended outcome
 
@@ -29,11 +29,11 @@ Keep this table short. Write no biography and no contact details.
 
 ## Work and project records
 
-- Work items, the project's phases, and the project's tasks: in the work tracker named under "Toolkit settings" below.
+- Work items, the project's phases, and the project's tasks: in the place that the "Tracker" line under "Toolkit settings" below names.
 - Decisions and open questions that more than one work item needs: [DECISIONS.md](DECISIONS.md).
 - The approved description of the system: [system/](system/).
-- Originals the project received: [sources/](sources/).
-- Project memory: in the memory system named under "Toolkit settings" below.
+- Sources, which are the documents and messages the project received: [sources/](sources/).
+- Project memory: in the place that the "Memory" line under "Toolkit settings" below names.
 
 ## Resources and project paths
 
