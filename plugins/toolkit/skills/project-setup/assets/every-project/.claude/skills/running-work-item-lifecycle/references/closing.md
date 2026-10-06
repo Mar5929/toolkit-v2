@@ -109,7 +109,7 @@ Use this section when the owner cancels a work item.
    - Where it stands: "Cancelled on `YYYY-MM-DD`: <the owner's reason>."
    - Next action: "None. Cancelled."
 5. Update the project's Current State, as step 5 of "Marking Done" says.
-6. Leave the work item's open pull request, its branch, and its worktree as they are until the owner says what to do with them. Delete nothing.
+6. Leave the work item's open pull request, its branch, and its worktree as they are until the owner says what to do with them. Delete nothing. The offer in "Leftover branches and worktrees" covers only a merged branch, so it does not cover the unmerged branch of a cancelled work item.
 
 ## Done or Cancelled by hand
 

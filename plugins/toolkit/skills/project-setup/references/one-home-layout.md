@@ -71,7 +71,7 @@ Read every file that the commands found. Then show the owner one table that has 
 Show the plan in this form:
 
 ```text
-Moving <project name> to the one-home layout
+Moving <project name> to the current folder layout
 
 Nothing changes until you say yes. Nothing is removed before what it held is read back in its new place.
 
@@ -272,7 +272,7 @@ Make these changes with `using-work-tracker` in the setup copy:
 - Add the `**Moved up:**` line after Related items, and leave it empty.
 - Add the Notes heading "Lessons not proven yet" after Sources, with "None." under it.
 - Write each Sources line in the SRC form, which the rules for a source inside a work item give.
-- Add one Recent History row: "Toolkit update: the one-home layout."
+- Add one Recent History row: "Toolkit update: the current folder layout."
 
 **A work item that is Done or Cancelled**
 
@@ -283,7 +283,8 @@ Make these changes with `using-work-tracker` in the setup copy:
 **The Notion work item template**
 
 - Follow `notion-build/work-setup.md`, "Bringing a project up to the current template", step 4. That step brings the project's work item template up to the current one, section by section.
-- Follow every rule of "Where the templates are kept" in that file: never restore a template through the API, and never move the project's own work item template to the trash.
+- Follow every rule of "Where the templates are kept" in that file, for example the rule never to restore a template through the API.
+- Never move the project's own work item template to the trash.
 
 ### The project's Current State in the earlier form
 
@@ -319,7 +320,7 @@ Do `update.md`, "3. What to do with each kind of file", "4. What the toolkit no 
 Each change has one place where you make it:
 
 - Change the files that Git tracks in your worktree.
-- Change `memory/`, `work-items/`, and the data files that Git ignores in the main checkout, and only in step 8, after the branch was merged. A work item, or a record's ID in a work item, must never name a record that is not on the default branch.
+- Change `memory/`, `work-items/`, and the data files that Git ignores in the main checkout, and only in step 8, after the branch was merged. A work item or a memory record must never name a record that is not on the default branch.
 - Only one change is made in the main checkout earlier: a fix for a finding of the command that checks the records, `.claude/hooks/validate-records.mjs`, in step 7.
 
 Do the nine steps in this order.

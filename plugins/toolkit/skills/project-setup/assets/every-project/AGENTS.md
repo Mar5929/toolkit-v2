@@ -16,8 +16,8 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 - The bullets below are for the session the owner writes to. A helper agent (a separate agent started for one job) follows its brief.
 - When a message continues a work item, find the work item, read its Current state (the five lines at its top), and do its Next action with `running-work-item-lifecycle`.
-  - The work item is, in this order: the one the owner names, the one this branch or session is working on, or the one the project's Current State names.
-  - If two work items fit, ask the owner which.
+  - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's Current State names.
+  - Stop at the first check that finds one. Ask the owner only when it finds two.
 - When the owner asks a question, answer it. Do not take the next step of a work item in place of an answer.
 - Before a turn ends, record what a later session must know and no record holds. `curating-project-memory`, "Before a turn ends", lists what to record and where.
 
