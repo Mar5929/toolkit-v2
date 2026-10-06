@@ -332,6 +332,11 @@ node --test 'dev/tests/*.test.mjs'
     before-and-after examples. It is never a list of bans: he rejected one,
     because a ban could be read as "remove the statement of what the skill
     is and its goal".
+- **Challenge the current design** (Mike, 2026-10-04). Inspect current files
+  to understand existing behavior. Recommend the clearest end-to-end
+  lifecycle, filing locations, record schemas, and procedures even when they
+  differ from the current setup. Explain why and identify earlier owner
+  decisions that a recommendation would revisit before changing the model.
 - **Code limit** (`dev/GOAL.md`, "Code limit"; Mike, 2026-09-30). The only
   code a project runs is the four hook commands (`session-start.mjs`,
   `prompt-reminder.mjs`, `codex-after-commit.mjs`, and

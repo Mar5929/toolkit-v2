@@ -110,6 +110,73 @@ Before it lands:
   not on this branch. It must be kept.
 - Mike has looked at `toolkit-setup-preview` and said it looks right.
 
+## Project filing system interview (2026-10-04, TKV-24)
+
+Mike set an active goal to define one project lifecycle, filing system,
+record schema, and set of agent procedures across Salesforce and SaaS
+projects and across tracker and memory choices. This is design work; the
+Toolkit V2 model and shipped skills have not been changed for it. The
+working inventory is `dev/research/project-filing-lifecycle-working.md`.
+The active Notion work item is TKV-24, "Define the project lifecycle and filing
+system." TKV-4's HarborDesk review follows its approved design; TKV-21's
+Claude-Obsidian evaluation follows that review. TKV-19 remains Done for the
+earlier project-wide records work.
+Mike chose a complete labeled setup structure with instructions and forms,
+and no fictional records. He also asked agents to recommend a better design
+when current files are unclear; the instruction is in this repository's
+`AGENTS.md`. Mike approved one stable entry or locator for each original
+source, including one-item meeting sources, so work items can lead an agent
+back to their context on resume (TKV-24 Q-02). Mike also rejected a giant
+collection of bite-sized decision files and requires an answer to be findable
+by a human browsing in VS Code (TKV-24 Q-03). Mike did not accept the
+subject-based proposal (TKV-24 Q-04); he asked for a Salesforce org-merge
+walkthrough starting at setup, planning, and discovery before choosing
+folders. The walkthrough and comparison are drafted in the working inventory
+through target decision, build, cutover, and a changed answer. The draft also
+separates claim, approval, delivery, question, and work-item states. It now
+includes a candidate filing decision procedure, readback rule, and examples
+showing that tracker and memory choices do not change the record route.
+An event-by-event ledger now tests which record carries the source, current
+answer, unresolved question, work, and verification at each org-merge stage.
+An audit against `codex/tkv4-review` now lists the actual model route and
+unresolved gap for each of those records, including conflicting no-item
+decision instructions and the missing general SaaS release evidence route.
+The changed-answer procedure has been checked against the current shared
+records skill; the draft identifies six seams to settle while retaining its
+existing answer history, impact checks, and readback behavior.
+The org-merge scenario now compares the current role split, a single
+`planning/` home, and separate dated discovery versus maintained answers
+across workshop, approval, cutover, changed answer, human lookup, and
+migration. No folder choice has been approved.
+TKV-24's Notion summary and solution-options note now reflect the three
+approaches and the open Q-05; its status remains In Progress and Waiting on
+Mike for that question.
+Mike clarified the missing workflow: a result-led data model design work item
+uses kickoff and discovery questions, and its finished design needs a lasting
+human-findable home. The working draft now traces that item through source
+intake, questions, a maintained design, approval, build handoff, and a later
+change. Mike agreed that the design item ends when the design is approved;
+the decision is recorded in `dev/GOAL.md`. The draft now compares two
+whole-project structures: one organized by record role (recommended for
+testing) and one by business/system area. It identifies overlap among the
+current system data model requirement, item design, and shared target
+architecture. The exact paths remain proposals. Next: show the options to
+Mike, test a cross-area architecture design and changed answer against his
+preferred layout, then settle the folder names and procedures.
+For Mike's refactor-size question, the newer model branch has 60 candidate
+files mentioning the old location terms: 23 model files, 19 shared-skill
+files, 2 tracker-skill files, 9 setup files, and 7 settings/docs/check files.
+The working design records a provisional 30-45 substantive edits, plus file
+moves, migration instructions, and scratch-project verification; it would
+not require a new runtime. This is a reference inventory, not a final edit
+count, and no shipped files were changed for the proposal.
+The HarborDesk current-state audit is in
+`dev/research/harbordesk-current-state-audit.md`. It maps the existing files
+and the lifecycle gaps using the fictional sample, without changing that
+project or the shipped model. Mike asked for a plain explanation, so the file
+now describes the setup and each problem with an example, without proposing
+a final folder design. Read it before settling the final folder layout.
+
 ## Merge update (2026-10-04)
 
 - Mike approved both merges. Pull request 20 landed the `dev/` cleanup, and
