@@ -1,6 +1,6 @@
 ---
 name: filing-project-records
-description: 'Files the project''s lasting records, each with an ID, so later work finds them: every original the project receives, in sources/; a decision or open question more than one work item needs, in DECISIONS.md; an approved change to a system/ document. Use when the owner hands over an original, such as a transcript, a decision affects more than one work item, or a closing item changed the system. Not for a decision only one item needs; use running-work-item-lifecycle.'
+description: 'Files the project''s lasting records, each with an ID, so later work finds them: every original the project receives, in sources/; a decision or open question more than one work item needs, in DECISIONS.md; a change to a document that describes the system, in system/. Use when the owner hands over an original, such as a transcript, a decision affects more than one work item, or a system document must be updated. Not for a decision only one item needs; use running-work-item-lifecycle.'
 ---
 
 # Filing project records
@@ -30,8 +30,9 @@ Open the one file for the step. One message can need more than one step: do them
 - When to write a pointer to the record:
   - Work items in Notion or GitHub: once the save is on the default branch.
   - Local work items: only after `publish-docs` reports that the main checkout holds the save. The record check looks the ID up there.
-  - Local work items, and `publish-docs` reports that the main checkout does not hold the save: write no pointer. Hand one line for "Waiting on the owner" in Current State to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`): the ID, each work item that needs the pointer, and what `publish-docs` named as blocking the update. Tell the owner the same. When the main checkout's files hold the record, write each pointer, and hand the removal of that line to the same skill.
+  - Local work items, and `publish-docs` reports that the main checkout does not hold the save: write no pointer. Hand one line for "Waiting on" in Current State to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`): the ID, each work item that needs the pointer, and what `publish-docs` named as blocking the update. Tell the owner the same. When the main checkout's files hold the record, write each pointer, and hand the removal of that line to the same skill.
 - A pointer in a work item is the record's ID, in the place the work item template gives it: a DEC ID or a rule ID on the item's Related items line, an SRC ID on a line under Notes, Sources. Never copy the record's text into the item. Only this skill writes these pointers, with `using-work-tracker`.
+- A work item that must follow a record that already exists (a rule in `system/`, an entry in `DECISIONS.md`, a source): make no new record. Add the item to the record's Affects line or "Used by" cell where it has one, save, then write the pointer in the item.
 - When another skill asked for the step, give it each new ID when the save is done, and what `publish-docs` reported about the main checkout.
 - Read each changed file and each pointer back. A save that failed: start the reply with "Not saved", and name the write.
 
@@ -42,5 +43,5 @@ Open the one file for the step. One message can need more than one step: do them
 | The commit of every change this skill makes | `publish-docs` |
 | The pointer in a work item, and reading an item | `using-work-tracker` |
 | Anything one work item alone needs; a requirement that a new decision changes; the closing step that says what an item delivered | `running-work-item-lifecycle` |
-| A pointer in memory, when the owner asked for one; a line under "Waiting on the owner" in Current State | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
+| A line under "Waiting on" in Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
 | A captured outside page, or a record of the system as it is today | `reference/AGENTS.md` |

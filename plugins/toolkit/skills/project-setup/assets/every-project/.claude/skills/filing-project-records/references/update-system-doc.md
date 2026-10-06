@@ -27,7 +27,7 @@ Use this when the closing step of `running-work-item-lifecycle` names a rule a w
 1. A work item delivered a rule only when all three are true. When one is not, change nothing and tell the closing step which one.
    - The rule's mark is Approved.
    - The work item's change is on the default branch, and deployed when the item has a deployment.
-   - The owner approved the item's result, and the item's checker marked the requirement behind the rule Met.
+   - The owner approved the item's result, and the item's checker marked Met a requirement of the item that builds or changes the behaviour the rule states. A requirement that only names, explains, or documents the rule does not count.
 2. The item delivered something more than one work item depends on, and no rule covers it: the rule needs the owner's decision first. Do `record-decision.md`, which adds the rule and saves. Then come back here.
 3. Change the mark to Built with the work item's ID. Change no other line of the rule.
 4. Set the document's Status again. Add one Changelog row: the date, "<rule ID> built", the rule's DEC ID, and the work item's ID. "Last changed via" keeps the rule's DEC ID.

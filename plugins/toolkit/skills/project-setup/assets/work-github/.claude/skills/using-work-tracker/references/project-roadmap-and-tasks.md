@@ -71,7 +71,7 @@ The project's administrative tasks that belong to no work item, in one plain lis
   **Work:** <The action to take.>  
   **Deliverable:** <The file, decision, or other result.>  
   **Done when:** <The observable completion check.>  
-  **Who does it:** <agent | owner>  
+  **Who does it:** <agent | owner | the name of another person who owes it, with the party, such as “Sarah Chen (client)”>  
   **Depends on:** <Task ID or “None.”>
 ```
 

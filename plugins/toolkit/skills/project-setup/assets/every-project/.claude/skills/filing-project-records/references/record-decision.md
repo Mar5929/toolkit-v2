@@ -15,26 +15,26 @@ For a decision or an open question that more than one work item needs. The comme
 3. File each original the entry rests on that has no SRC ID yet: `file-source.md`.
 4. Add the entry in the form `DECISIONS.md` gives, with the next DEC number.
    - Why holds the reason in the words of the person who decided. Later work does not read a closed work item, so the reason must be in this entry, not only in the item.
-   - Affects names each open work item the entry changes. When you cannot tell which items it changes, ask the owner in one question.
+   - Affects names each open work item the entry changes. Name only a work item that exists: for work that has no item yet, write "none yet", or first add the item to the Backlog with `running-work-item-lifecycle`. When you cannot tell which items it changes, ask the owner in one question.
    - Sources names each SRC ID the entry rests on. Add the DEC ID to the "Used by" cell of each of those rows in `sources/README.md`.
    - A lesson that the closing step of a work item moves up: the owner's yes to moving it up is the decision. The Decision line states the lesson as what to do or what to avoid. Why says what happened and where it was seen, with the work item's ID.
-5. When the entry states how the system must work, it is also a rule: do `update-system-doc.md` now, before the save. An Open entry gets a rule only when more than one work item depends on the rule.
+5. When a Decided entry states how the system must work, it is also a rule: do `update-system-doc.md` now, before the save. An Open entry gets a rule, marked Draft, only when a work item under its Affects is designed or built to the proposed wording before the answer is given. Otherwise its rule is written when the entry is answered.
 6. Save `DECISIONS.md`, `sources/README.md` when step 4 changed it, and every system document step 5 changed, in one save with `publish-docs`.
 7. When `SKILL.md`, "Every time", says the pointer can be written, add it in each work item under Affects with `using-work-tracker`: the DEC ID, and the ID of each rule that step 5 added or changed, on the item's Related items line.
-   - A Questions and Answers row in an item raised the decision: add "Filed as DEC-###." to the end of that row. The row keeps the owner's words.
+   - A Questions and Answers row in an item raised the decision: add "Filed as DEC-###." at the end of that row's Answer cell, after the owner's words. The row keeps the owner's words.
    - An Open entry that a work item cannot continue without: that item waits on the owner. Hand it to `running-work-item-lifecycle`.
-   - An Open entry that no work item waits on: hand a line for "Waiting on the owner" in Current State, with the DEC ID, to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
+   - An Open entry that no work item waits on: hand a line for "Waiting on" in Current State, with the DEC ID and who must answer, to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
 8. Tell the owner the DEC ID, its Status, and the work items that now point to it.
 
 ## Answering an open question
 
 1. Only the answer of a person who may decide closes the question (step 2 above).
 2. In the entry: set Status to Decided, fill the Decided line, replace the question on the Decision line with the decision, and write the reason in Why.
-3. Each rule marked Draft that waited for this entry: `update-system-doc.md`.
+3. Each rule marked Draft that waited for this entry: `update-system-doc.md`. When the decision states how the system must work and no rule holds it yet: add the rule there now.
 4. Save as in step 6 above.
 5. The pointer in each work item under Affects holds the ID only, so it stays as it is.
    - An item that waited on this entry continues: hand that to `running-work-item-lifecycle`.
-   - A line under "Waiting on the owner" in Current State that names this entry: hand its removal to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
+   - A line under "Waiting on" in Current State that names this entry: hand its removal to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
 
 ## Replacing a decision
 

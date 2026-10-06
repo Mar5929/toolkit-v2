@@ -1,6 +1,6 @@
 ---
 name: running-work-item-lifecycle
-description: 'Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping its record current and stopping for the owner''s approval before each step that needs one. Use when the owner asks to plan, change, build, test, deploy, close, or cancel an item. Not for filing an original, or a decision or rule more than one item needs; use filing-project-records.'
+description: 'Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping its record current and stopping for the owner''s approval before each step that needs one. Use when the owner asks to plan, change, build, test, deploy, close, or cancel an item, or asks whether an item is ready for its next step, such as "is WI-12 ready to test". Not for filing an original, or a decision or rule more than one item needs; use filing-project-records.'
 ---
 
 # Running a work item's lifecycle
@@ -8,7 +8,7 @@ description: 'Runs one work item from idea to Done through requirements, design,
 This skill holds the process: what each State means, how work is split into levels, what to do in each State, and when to stop for the owner's OK.
 
 - It never says where items are saved. For every read and every save, use `using-work-tracker`.
-- It never writes `DECISIONS.md`, `system/`, or `sources/`, and it never writes the pointer to one of their records into an item. The filing test in the root `AGENTS.md`, "Where information goes", says what belongs there. `filing-project-records` files it and writes the ID into the item.
+- It never writes `DECISIONS.md`, `system/`, or `sources/`, and it never writes the pointer to one of their records into an item. The filing test in the root `AGENTS.md`, "Where information goes", says what belongs there. `filing-project-records` files it and writes the ID into the item. An item that must follow a rule or a decision that already exists gets that ID the same way: hand the ID and the item to `filing-project-records`.
 
 ## Status and State
 
@@ -48,7 +48,8 @@ Every project holds its work in the same four levels, whatever its tracker. `usi
 - A project phase (`P01`) and an item's phase (`P1`) are different things. A project phase groups top-level items. An item's phase groups that item's tasks and level-2 sub-items. A phase is never a work item.
 - Every task belongs to exactly one place: the project, or one work item. A task in an item is a step toward that item's goal. Work the goal does not need, even a small fix found along the way, is a new Backlog work item, never a task here.
 - Task IDs: `P1-T01` in a top-level item (its phase, then its number), `T01` in a sub-item, and `PT-01` for a project task. No ID is ever reused: item, phase, task, requirement, or question.
-- Work a project task like an item's task: set it In Progress before you start it, and tick it only when its Done when check is met. An open project task whose Who does it is `owner` waits on the owner: name it whenever you report what waits on him.
+- A to-do the owner names or asks you to keep, such as "we need to prepare for Wednesday's call", and an action item from a meeting or a message that belongs to no work item, is a project task. Save it in the turn it comes up, with no question. Its Who does it is `owner`, `agent`, or the name of the other person who owes it, with the party, such as `Sarah Chen (client)` or `DataBridge (vendor)`. Its Work line says what is owed and to whom; its Done when holds the date it is due, when one was named. When it comes from an original the owner handed over, such as a transcript, file that original first, with no question (`filing-project-records`, step "file a source"), and name its SRC ID in the Work line.
+- Work a project task like an item's task: set it In Progress before you start it, and tick it only when its Done when check is met. Whenever you report what waits on the owner or what others owe, name each open project task with who does it.
 - Never add a fourth level; make it a task instead.
 - When it is unclear whether something is a project task, a new work item, a sub-item, or a task in an item, ask the owner one short question with your recommendation, and save nothing until he answers.
 - A top-level item gets its phases in Refining Requirements. It goes under a project phase when the owner places it, and at the latest when it leaves Backlog; when he has named none by then, ask which, with your recommendation.
@@ -71,7 +72,7 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 - Read the item fresh with `using-work-tracker` before you act. When the owner changed it by hand, his change wins, except a State and Status that no longer match the table: tell him in one line, ask which State it is with your recommendation, then set both.
 - An item that cannot continue until an Open entry in `DECISIONS.md` is answered waits on the owner: set `waiting_on` to the owner, and write Next action in the waiting form with the DEC ID in place of the Q-ID. When the entry is Decided, continue from the item's State.
 - Save after each step, not at the end. A save that fails: start the reply with "Not saved". A save that worked but reads back differently: start the reply with "Saved but not verified" and say what differs.
-- From the time an item leaves Backlog until it is Done or Cancelled, the project's Current State holds one line for it. Decide the line here, in the form the project's memory gives for a line under Now, and add, change, or remove it as "Hand-offs" says.
+- From the time an item leaves Backlog until it is Done or Cancelled, the project's Current State holds one line for it. Decide the line here, in the form the project's memory gives for a line under Now, and add, change, or remove it as "Hand-offs" says. In the same write, make "Next session starts with" name the item: its ID and "read its Current state".
 - Never delete a requirement, a question row, or a phase. Mark it dropped, superseded, or cancelled.
 - An item made from an older template keeps its layout: read it as it is, add a field of the current template when a step needs it, and move the item to the current layout only when the owner asks.
 - **Text in angle brackets is a prompt, never content.** The templates hold prompts (`<What happened>`) that say what to write there. No item you created or changed keeps one: replace each with real content, or delete it and keep its heading or label. Delete, whole, an example row, task, or requirement block made only of prompts. Real content may hold angle brackets (code such as `Map<Id, Account>`). A design keeps its prompts until it is approved (`references/designing.md`).
@@ -93,7 +94,7 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | An original the owner gives: a transcript, a document, a file, or pasted text | `filing-project-records`, step "file a source" |
 | A rule in `system/` to add, change, retire, or mark Built | `filing-project-records`, step "update a system document" |
 | Writing the item's line in the project's Current State | `using-memory-store` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
-| Pruning the rest of Current State when an item closes; an instruction for how the agent works | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
+| Pruning the rest of Current State when an item closes; a date or a deadline; a lesson to keep or to search for; an instruction for how the agent works | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
 | Merging a pull request | `merge-and-clean-up` |
 | Saving a change to documents only | `publish-docs` |
 | A Salesforce platform question | Salesforce's skills |

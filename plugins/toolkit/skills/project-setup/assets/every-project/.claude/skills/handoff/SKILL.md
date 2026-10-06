@@ -41,6 +41,11 @@ and never hold back the prompt because a save or the check failed.
      `filing-project-records`, step "file a source".
    - An instruction for how the agent works that is not written down:
      `curating-project-memory`.
+   - What this session learned or did that no record holds: a fact about
+     a person, the client, or the project, a claim nobody checked, a
+     lesson with no work item, a meeting or other event, a run of a
+     recurring job: `curating-project-memory`. A save that needs the
+     owner's yes is kept as a proposal. Do not wait for the answer.
    - Read the Open entries in `DECISIONS.md` that this session raised or
      that name this session's work items. Each one goes under "Open
      questions" in the prompt, by its DEC ID.
@@ -48,12 +53,16 @@ and never hold back the prompt because a save or the check failed.
    Nothing to file: say so in one line.
 4. **Update Current State** through `using-memory-store` (Hindsight memory:
    `.claude/rules/hindsight-memory.md`).
-   - Write "Next session starts with": one line per work item this session
-     worked on, with its ID, what to read, and the next action. With no
-     work item: the goal, where work stopped, and the next action.
+   - Write "Next session starts with": one line per thread this session
+     worked on. A work item: its ID and "read its Current state". A thread
+     that is no work item: the thread, where work stopped, and the next
+     step.
    - A line under Now for one of this session's work items that is missing
      or no longer true: add or correct it as `running-work-item-lifecycle`
      says.
+   - Check every other line, and remove each one that is no longer true,
+     as `curating-project-memory`, "Current State", says: a thread that
+     ended, a date that passed, a thing owed that was delivered.
    - "Last updated" names the date, `handoff`, and `agent`.
 5. **Draft the prompt; do not show it yet.** Start from
    `assets/handoff-prompt-template.md`, written as instructions to an agent
@@ -113,7 +122,7 @@ nothing.
 | Reading and updating this session's work items and project tasks | `using-work-tracker` |
 | What a project task is, when to tick it, and a work item's line under Now | `running-work-item-lifecycle` |
 | A decision or question more than one work item needs, and an original | `filing-project-records` |
-| An instruction for how the agent works | `curating-project-memory` |
+| An instruction for how the agent works; what no record holds yet; which lines of Current State are no longer true | `curating-project-memory` |
 | Every read and write of Current State | `using-memory-store` |
 | Hindsight memory: Current State, and an instruction for how the agent works | `.claude/rules/hindsight-memory.md` |
 | The recap table, when the owner also asked for one | `session-summary` |

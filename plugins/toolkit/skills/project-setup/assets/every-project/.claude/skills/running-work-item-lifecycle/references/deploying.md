@@ -31,10 +31,12 @@ After a merge, confirm it reached the default branch and add a Recent History ro
 
 Only when the result must go beyond the default branch. A Salesforce project: `salesforce-deploying.md`.
 
+- Before each deploy, read what earlier deploys taught: the lines about deploying in `.claude/rules/owner-preferences.md`, the entries in `DECISIONS.md` that name deploying or the target environment, and the lessons and earlier runs in memory (`curating-project-memory`, "When to search memory"; Hindsight memory: `.claude/rules/hindsight-memory.md`). Do what each says before you run the command, and name each one you applied in the deployment record.
 - Use only the deploy command in `AGENTS.md`, "Commands", or `PROJECT.md`. None: ask how this project deploys. Each deploy needs his yes.
 - Never run a production deploy or data load. Hand him the exact command, what it deploys, and what to check afterwards, and record his report in his words.
-- Write the item's deployment record in `delivery/deployments/`. A release of several work items together also gets a release plan and release notes in `delivery/releases/`. `delivery/AGENTS.md` gives each record's folder name, its fields, and its Status values. Add a Recent History row with the result.
-- A failed deploy: fill Blockers with the error and tell him. A code fix moves the item back to the Testing Loop.
+- Write the item's deployment record in `delivery/deployments/`, with the date and time it ran and each manual step, done by whom. A release of several work items together also gets a release plan and release notes in `delivery/releases/`. `delivery/AGENTS.md` gives each record's folder name, its fields, and its Status values. Add a Recent History row with the result.
+- A deploy that runs on a schedule, such as a monthly release, is also a recurring job: hand its run to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
+- A failed deploy: fill Blockers with the error and tell him. A code fix moves the item back to the Testing Loop. Write what caused it under Notes, "Lessons not proven yet", with the date.
 
 ## Gotchas
 
