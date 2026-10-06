@@ -79,7 +79,7 @@ Check that each link target exists. A missing target: point the link at the righ
 
 ## Too many records
 
-More than 30 current records: a session cannot be shown them all at its start. Put on the plan the merges of records about one subject, and the retirements of event records that no open work, job, or person still needs, until 30 or fewer are current.
+When more than 30 records are current, or the start of a session said the list of records was cut short: put on the plan the merges of records about one subject, and the retirements of event records that no open work, job, or person still needs, until 30 or fewer are current.
 
 ## Lessons that should become rules or skills
 

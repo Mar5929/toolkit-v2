@@ -47,7 +47,7 @@ When the work items are in Notion (the relation exists), by the item's page id:
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[
   {"property":"Work items","relation":{"contains":"<item-page-id>"}},
-  {"or":[{"property":"Status","select":{"equals":"accepted"}},{"property":"Status","select":{"equals":"proposed"}}]}]}}' < /dev/null | jq -r '.results[] | "\(.properties["Record Key"].rich_text[0].plain_text)\t\(.properties.Kind.select.name)\t\(.url)"'
+  {"or":[{"property":"Status","select":{"equals":"accepted"}},{"property":"Status","select":{"equals":"proposed"}}]}]}}' < /dev/null | jq -r '.results[] | "\(.properties["Record Key"].rich_text[0].plain_text)\t\([.properties.Tags.multi_select[].name] | join(","))\t\(.url)"'
 ```
 
 In every setup, by the ID text: `{"property":"Work item IDs","rich_text":{"contains":"IML-3"}}`. `contains` also matches a longer ID (`IML-3` finds `IML-31`), so check each hit's Work item IDs for the whole ID. Facts and Entities link to work items the same way, through their own Work items column.
@@ -72,13 +72,13 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"property":"Status"
 
 ## Every page
 
-Every page of Memories, with its key, status, kind, the dates it was created, last changed, and must be checked by, its last check, work items, and summary. A page with no key shows "(no key)". With more than 100 pages, page through the answer (`using-notion-cli`):
+Every page of Memories, with its key, status, tags (the kind is one of them), the dates it was created, last changed, and must be checked by, its last check, work items, and summary. A page with no key shows "(no key)". With more than 100 pages, page through the answer (`using-notion-cli`):
 
 ```bash
 ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"sorts":[{"property":"Record Key","direction":"ascending"}],"page_size":100}' < /dev/null | jq -r '.results[] | [.id,
   (.properties["Record Key"].rich_text[0].plain_text // "(no key)"),
   (.properties.Status.select.name // ""),
-  (.properties.Kind.select.name // ""),
+  ([.properties.Tags.multi_select[].name] | join(",")),
   (.created_time[0:10]),
   (.properties.Saved.date.start // ""),
   (.properties["Review By"].date.start // ""),

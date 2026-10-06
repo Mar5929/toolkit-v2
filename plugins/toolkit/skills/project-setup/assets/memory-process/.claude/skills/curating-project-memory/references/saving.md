@@ -42,7 +42,7 @@ Search before every save. Search the fact's words and their synonyms, and read e
 - **A section in an existing concept.** Add the fact as its own section, above the concept's lessons. Update the concept's one-line summary when it now covers more, set its last-changed date, and add each related work item, keeping every one already there.
 - **A new concept.** Name it for the concept, not for one fact. Use the kind that fits (user, project, reference, or event). Give it a first section and an empty lessons section. Set its created date and its last-changed date to today.
 - Each section says what to remember, why it matters, how to apply it, and where it came from with its date and what is uncertain.
-- The one-line summary states the fact itself in a few words, with its dates, not only the subject: "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the record. `using-memory-store` gives its length limit.
+- The one-line summary states the fact itself in a few words, with its dates, not only the subject: "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the record, so keep it to one short line.
 - A fact that is true only for a while gets a "check or remove by" date (`references/memory-criteria.md`).
 - Record what allowed the save: "Approved by <owner> on <date>", "Trusted grant, <date>", or "Proposed by the agent on <date>; not approved".
 - Group several independent signals into one save.
@@ -69,23 +69,27 @@ An instruction the owner gives is never a lesson: it is a rule at once. A lesson
 
 ## An event
 
-Work done for the owner that no work item, project task, commit, or filed record shows, and anything else that happened and a later session must know: a meeting, a call, an outage, an analysis whose result was only said in chat. Make one event record, in the same turn, with no question:
+Work done for the owner that no work item, project task, commit, or filed record shows, and anything else that happened and a later session must know, such as a meeting, a call, or an outage. Make one event record, in the same turn, with no question:
 
 - the date, and who took part;
 - what was done or what happened;
 - the result, in a few lines;
 - where the output is: an SRC ID, a file path, a work item or project task ID, or "said in chat only".
 
-Name the record for what happened and its date. An analysis whose result later sessions will need again is first written where the root `AGENTS.md` gives it a home (often `reference/current-system/`); the event then names that file.
+Name the record for what happened and its date. A result that the root `AGENTS.md`, "Where information goes", gives a home, such as an analysis of how the system works today, is written there and gets no event record.
 
 ## A recurring job and its runs
 
 A job the team runs again and again, such as a weekly data load, a monthly release, or the update of a shared sheet after each meeting, has one event record for the job:
 
 - a first section that says what the job is, when it runs, who runs it, and the exact steps or the file that holds them;
-- a section "Runs" with one table: Date, Who ran it, What ran, Result, Problems and fix. One row per run, newest first.
+- a section "Runs" with one row per run, in the table `using-memory-store` gives.
 
-Add the row in the turn the run happens or the owner reports it ("the weekly load ran fine"). A failed run is a row too, with the error and the fix. No question: report it in one line. The first run also adds the job's line under "Standing jobs and shared files" (`references/current-state.md`).
+Add the row in the turn the run happens or the owner reports it, such as "the weekly load ran fine" or "the nightly job broke again". A failed run is a row too, with the error and the fix. No question comes before the row: report it in one line.
+
+- The owner reports a run without its detail: write the row first, with the date, his words, and "not known yet" in each cell he did not give. Then ask for what is missing, and complete the row with his answer.
+- The job has no record yet: make it, with what is known, and add its line under "Standing jobs and shared files" (`references/current-state.md`).
+- An earlier run that another record shows, such as a work item: add its row from that record, and name the record's ID in the row's last cell.
 
 Before you run the job again, or answer how the last run went, read the Runs table.
 
@@ -110,7 +114,7 @@ A file kept outside the project's records that people keep up to date, such as a
 
 ## Proposals: a save the owner has not answered
 
-A save that needs his yes is kept as a proposal in the same turn as the question "Save to memory: <one line>?", so it is not lost when the session ends before he answers. This holds for every such question, also one about a fact found in a document he shared. An inferred rule is never kept as a proposal record: it gets only its line in step 1.
+A save that needs his yes is kept as a proposal in the same turn as the question "Save to memory: <one line>?", so it is not lost when the session ends before he answers. This holds for every such question, also one about a fact found in a document he shared. Two saves are never kept as a proposal record, and get only their line in step 1: an inferred rule, and a save about a named person's personal details, whose line names the person and leaves the details out until his yes.
 
 1. Add one line under "Waiting on" in Current State: "Owner: save to memory? <the fact in one line> (asked <date>)". For a rule, the line is "Owner: add to the project rules? <one line>". Several open proposals share one line naming each. Remove each as he answers, and the line when none is left.
 2. Save it where it would live, marked proposed (`using-memory-store` says how).

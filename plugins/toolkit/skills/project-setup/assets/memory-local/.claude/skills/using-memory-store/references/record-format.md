@@ -1,6 +1,6 @@
 # Memory file format (local files)
 
-The seed holds the file shape: `memory/project_topic_template.md`. Open the seed when you make a file (`folders-and-files.md`, "Making a file from the seed"). This file holds what the seed does not say: what each field means, the statuses, the marks, and the links.
+The blank form holds the file shape: `memory/project_topic_template.md`. Open it when you make a file (`folders-and-files.md`, "Making a file from the blank form"). This file holds what the blank form does not say: what each field means, the statuses, the marks, and the links.
 
 ## Contents
 
@@ -19,7 +19,7 @@ The seed holds the file shape: `memory/project_topic_template.md`. Open the seed
 | Field | Holds |
 | --- | --- |
 | `name` | The file name without `.md`. |
-| `description` | One short line that states what the file holds, with its dates: the fact itself, not only its subject. The index prints the file name and this line; together they hold at most 70 characters. |
+| `description` | One short line that states what the file holds, with its dates: the fact itself, not only its subject. The index prints it whole. |
 | `created` | The date the file was made, `YYYY-MM-DD`. Never change it. |
 | `updated` | The date of the last change, `YYYY-MM-DD`. Set it to today on every change. |
 | `check_by` | The date to check or remove the file, `YYYY-MM-DD`, for a fact that is true only for a while; otherwise `none`. A single section with its own date carries a `**Check or remove by:**` line. |
@@ -41,7 +41,7 @@ Keep any other field a host or an import wrote. A file made before `created` and
 | `needs-review` | A new file the owner has not approved. Never rely on it. | Listed, with a description that starts "Proposal:". |
 | `superseded` | Replaced by another file, named in its first body line. | Left out. |
 | `retired` | No longer true, and nothing replaces it. | Left out. |
-| `template` | The seed only. | Left out. |
+| `template` | The blank form only. | Left out. |
 
 ## Marks for what is not current
 
@@ -61,7 +61,7 @@ Mark a file in three places: its status, its description, and its body. Then the
 
 ## Body layout
 
-- One `# ` title comes first, under the header.
+- One `# ` title comes first, under the header. The index shows it.
 - Each sub-topic is a `##` section holding six bold labels, in this order:
 
 | Label | Holds |

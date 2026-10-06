@@ -42,7 +42,7 @@ One page of Memories is one concept, one thing that happened (an `event_` page),
 | --- | --- | --- |
 | Key `<prefix>_<slug>` | Record Key, and Keywords | `user_team_availability` |
 | Title | Title | Team availability |
-| One-line summary: the fact itself, with its dates, in at most 70 characters | Synopsis | Tom away to 2026-10-20; Sarah covers approvals |
+| One-line summary: the fact itself, with its dates | Synopsis | Tom away to 2026-10-20; Sarah covers approvals |
 | Kind of record | Tags: one of user, project, reference, event | user |
 | Date created | The page's own created time, which Notion sets (`created_time` in the page's answer) | 2026-09-30 |
 | Date of the last change | Saved | 2026-10-05 |

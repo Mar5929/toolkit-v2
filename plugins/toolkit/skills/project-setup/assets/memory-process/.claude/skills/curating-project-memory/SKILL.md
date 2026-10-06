@@ -1,6 +1,6 @@
 ---
 name: curating-project-memory
-description: 'Keeps project memory true and small: saves what no other file holds (a fact about a person or the client, an unchecked claim, a lesson, where to find something, an event, a job run), sends any other fact to its home, keeps Current State current, corrects or retires what is wrong, writes "from now on" instructions to the rules, and finds or tidies what was recorded. Use when the owner asks to keep, correct, forget, or find something, or reports a fact, a date, or what someone said.'
+description: 'Keeps project memory true: saves what no other file holds (a fact about a person or the client, an event, a job run), sends any other fact to its home, keeps Current State current, writes "from now on" instructions to the rules, and finds or tidies what was recorded. Use when the owner asks to keep, correct, forget, or find something, or reports a fact, a date, what someone said, or how a job ran. Not for a decision; use filing-project-records. Not for a to-do; use running-work-item-lifecycle.'
 ---
 
 # Curating project memory
@@ -14,8 +14,9 @@ Record what a later session must know and no record shows yet, in the same turn,
 | What happened in the turn | Where it goes |
 | --- | --- |
 | You did work for the owner that is no work item | Its project task, ticked when it is done (`running-work-item-lifecycle`). With no project task: an event record, or a row in its recurring job's record (`references/saving.md`). |
-| You gave the owner a result that is only in the chat, such as an agenda, a draft, or an analysis | The file where it belongs, when the root `AGENTS.md` gives it a home. Otherwise an event record that holds the result in a few lines (`references/saving.md`, "An event"). |
-| The owner started work that is not finished and is no work item | A line under Now in Current State (`references/current-state.md`) |
+| You gave the owner a result that is only in the chat, such as an agenda, a draft, or an analysis | The file where it belongs, when the root `AGENTS.md`, "Where information goes", gives it a home. Otherwise an event record that holds the result in a few lines (`references/saving.md`, "An event"). |
+| A recurring job ran, or the owner reported that it ran or failed | A run row in the job's record, written before any question about it (`references/saving.md`, "A recurring job and its runs") |
+| The owner started a piece of work that is not finished and is no work item | A line under Now in Current State (`references/current-state.md`) |
 | The owner named a date or a deadline | A line under Coming up |
 | Somebody owes something | A project task with who owes it (`running-work-item-lifecycle`), and a line under Waiting on when work waits on it |
 | You asked the owner a question, and the turn ends before he answers | About a work item: its Questions and Answers row (`running-work-item-lifecycle`). Otherwise a line under Waiting on: "Owner: <the question in a few words> (asked <date>)" |
@@ -31,13 +32,7 @@ Record what a later session must know and no record shows yet, in the same turn,
 
 ## When to search memory
 
-The root `AGENTS.md`, "Where information goes", names three moments to search memory. Search it (`references/finding.md`) at each of these too:
-
-- before you name who does or decides something, or plan a date: a record may say who is away and who covers;
-- before a deployment or a data load, as before a recurring job: its record holds the earlier runs, their problems, and the fixes;
-- before you answer what happened before, or what is known about a subject.
-
-In a project whose memory is not shown at the start of a session, this search is the only way a record is seen.
+The root `AGENTS.md`, "Where information goes", lists the moments to search memory. Search as `references/finding.md` says. In a project whose memory is not shown at the start of a session, this search is the only way a record is seen.
 
 ## Out of date, or no longer needed
 
@@ -49,7 +44,7 @@ Never say a memory is deleted when it is not.
 
 - When the "Memory approval" line in `PROJECT.md` is missing or still shows its prompt, use `onboarding`.
 - His own request to keep, change, or forget something, or his yes to your question, is the approval. Act at once.
-- `onboarding`: anything you inferred gets one question first: "Save to memory: <one-line summary>?". Save after his yes.
+- `onboarding`: anything you inferred gets one question first: "Save to memory: <one-line summary>?". It becomes a current record only after his yes.
 - `trusted`: a fact you inferred and can name a source for is saved without asking, and reported in one line, unless it is on the list below. A fact with no source gets the `onboarding` question.
 - In both modes, ask first for:
   - an instruction you inferred: "Add to the project rules: <one line>?";
@@ -57,7 +52,7 @@ Never say a memory is deleted when it is not.
   - more than five records at once;
   - retiring or deleting a memory he did not ask you to forget;
   - a change to this policy.
-- No question in either mode: a lesson, an event record, a run row of a recurring job (a failed run too), and a change to Current State alone. They record what happened, not a judgment. Report each in one line.
+- No question in either mode: a lesson, an event record, a run row of a recurring job (a failed run too), and a change to Current State alone. They record what happened, not a judgment. Report each in one line. An event or a run row that holds more about a named person than the person's attendance or work role still gets the question for that part.
 - A question is never the only trace: the session can end before he answers. In the same turn as the question, add its line under "Waiting on" in Current State, "Owner: save to memory? <the fact in one line> (asked <date>)", and keep the save as a proposal (`references/saving.md`, "Proposals").
 - When he changes the mode, change the "Memory approval" line in `PROJECT.md`, as Hand-offs says, never `.claude/rules/owner-preferences.md`.
 
@@ -83,6 +78,6 @@ Never say a memory is deleted when it is not.
 | --- | --- |
 | [references/memory-criteria.md](references/memory-criteria.md) | Deciding whether something is worth keeping, where its home is, and which kind of record it is. |
 | [references/saving.md](references/saving.md) | Keeping, correcting, or forgetting anything: a fact, an unchecked claim, a lesson, an event, a run of a recurring job, a "from now on" instruction, a proposal, or a delete. |
-| [references/current-state.md](references/current-state.md) | Reading, changing, or pruning Current State, or answering "where are we". |
+| [references/current-state.md](references/current-state.md) | Reading, changing, or pruning Current State. |
 | [references/finding.md](references/finding.md) | The owner asks what was recorded or what happened before, or you need a remembered fact. |
 | [references/tidying.md](references/tidying.md) | Reviewing or cleaning up all memory. |

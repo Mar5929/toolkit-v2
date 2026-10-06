@@ -52,7 +52,7 @@ ntn api v1/pages -d @record.json < /dev/null | jq -r '.id, .url'
 
 - Leave out Work item IDs and Work items when the page relates to no work item, and Work items alone when the work items are not in Notion.
 - Leave out Review By when the fact has no end. Notion sets the page's created time; Saved is the date of the last change.
-- Synopsis states the fact itself, with its dates, in at most 70 characters.
+- Synopsis states the fact itself, with its dates, in one short line.
 
 ## Adding to a concept page
 

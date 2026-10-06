@@ -4,7 +4,7 @@ The exact commands that read memory from `memory/`. They only read.
 
 - Start each command with the `MAIN=` line from `SKILL.md`, "Every time", step 1.
 - Replace `billing|invoice` with the words to search, joined by `|`. Replace `WI-031` with the work item ID, written as the tracker shows it (`WI-031`, `WI-31`, or `#12`).
-- Keep the flags as written. They skip the seed, the folder's `AGENTS.md` and `CLAUDE.md`, and the index `MEMORY.md`.
+- Keep the flags as written. They skip the blank form, the folder's `AGENTS.md` and `CLAUDE.md`, and the index `MEMORY.md`.
 - A command lists file names. Open a file to read it.
 
 ## Every file's summary and status
@@ -22,7 +22,7 @@ grep -rHE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclu
 grep -rliE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=MEMORY.md 'billing|invoice' "$MAIN/memory"
 ```
 
-This also searches `CURRENT_STATE.md`. The host's own search tool can skip `memory/`, because Git ignores it: use this command.
+This also searches `CURRENT_STATE.md`. `memory/` is only in the main checkout, so the host's own search tool misses it from a worktree: use this command.
 
 ## By work item
 

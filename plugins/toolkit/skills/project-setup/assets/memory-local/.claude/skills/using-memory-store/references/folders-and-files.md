@@ -5,7 +5,7 @@
 - The memory folder
 - File names and prefixes
 - Size limits
-- Making a file from the seed
+- Making a file from the blank form
 - Renaming, retiring, and deleting
 - Current State
 
@@ -16,7 +16,7 @@ memory/                                  in the main checkout only; Git ignores 
 ├── AGENTS.md, CLAUDE.md                 the folder's own guide; part of the setup, not a memory
 ├── CURRENT_STATE.md                     what is true now; the start-of-session hook prints it
 ├── MEMORY.md                            the index; the same hook rebuilds it; never edited by hand
-├── project_topic_template.md            the seed for a memory file; never a memory
+├── project_topic_template.md            the blank form for a memory file; never a memory
 ├── user_team_availability.md            a concept: facts about people (user_)
 ├── project_client_plans.md              a concept: one area of the project or the client (project_)
 ├── reference_open_items_sheet.md        a concept: where to find something, and why to open it (reference_)
@@ -37,16 +37,16 @@ memory/                                  in the main checkout only; Git ignores 
 
 - The name is `<prefix>_<name>.md`: lower-case words joined by underscores, naming the concept, not one fact. An event that happened once ends its name with its date: `event_client_meeting_2026-10-05.md`. A recurring job's file has no date in its name.
 - A file with none of these four prefixes is left out of the index. `feedback_` and `decision_` are retired prefixes: an old file with one is marked as `record-format.md`, "Marks for what is not current", says once its content has moved.
-- `CURRENT_STATE.md`, `MEMORY.md`, and the seed have fixed names and no prefix of the four.
+- `CURRENT_STATE.md`, `MEMORY.md`, and the blank form have fixed names and no prefix of the four.
 
 ## Size limits
 
 - A concept file holds about 20 sections or 300 lines at most. A bigger one is two concepts.
-- The file name before `.md` and the `description` together hold at most 70 characters: the index line is cut there.
+- A file name is at most 60 characters before `.md`.
 
-## Making a file from the seed
+## Making a file from the blank form
 
-1. Copy the seed to the new name, with `MAIN` set as in `SKILL.md`: `cp "$MAIN/memory/project_topic_template.md" "$MAIN/memory/project_client_plans.md"`.
+1. Copy the blank form to the new name, with `MAIN` set as in `SKILL.md`: `cp "$MAIN/memory/project_topic_template.md" "$MAIN/memory/project_client_plans.md"`.
 2. Set `name` to the file name without `.md`, `metadata.type` to its prefix, `created` and `updated` to today, and `status` to the real status (`record-format.md`, "Status"). `template` never stays.
 3. Fill every header field and the first section with real, sourced text. Keep `## Gotchas and lessons` last, holding "None yet.". A recurring job also gets its `## Runs` section (`record-format.md`, "The Runs table").
 4. Remove the fill-in guide comment, the final template comment, and every angle-bracket prompt.

@@ -9,7 +9,7 @@ Finding only reads. A wrong or old fact is fixed through `references/saving.md`.
 3. **The work item.** When memory points to an item, or the question is about one: its Questions and Answers hold that item's own decisions, and its requirements hold what was agreed (`using-work-tracker`).
 4. Current State says what is happening now, never what was decided. It is shown at the start of a session; to read it again, use `using-memory-store`.
 
-A search of the project's files with the host's search tool can skip the work items and memory. Search each with its own skill before you say nothing is recorded.
+A search of the project's files does not always reach the work items and memory. Search each with its own skill before you say nothing is recorded.
 
 ## What happened, and when
 
@@ -31,7 +31,7 @@ Read each hit whole, in this turn, and check its state:
 - Retired: history. Leave it out unless he asks for history.
 - Past its "check or remove by" date: say so, and check it before you act on it.
 
-Before you act on a remembered claim about something that changes (a vendor, a process, a person's role), check its date and its source. Say so when it was last verified more than six months ago, or never.
+Before you act on a remembered claim about something that changes (a vendor, a process, a person's role), check its date and its source. Say so when its last check is older than `references/tidying.md`, "Stale records", allows, or it was never checked.
 
 ## Answering
 

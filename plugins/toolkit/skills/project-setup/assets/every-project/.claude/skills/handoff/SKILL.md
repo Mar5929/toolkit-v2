@@ -53,16 +53,16 @@ and never hold back the prompt because a save or the check failed.
    Nothing to file: say so in one line.
 4. **Update Current State** through `using-memory-store` (Hindsight memory:
    `.claude/rules/hindsight-memory.md`).
-   - Write "Next session starts with": one line per thread this session
-     worked on. A work item: its ID and "read its Current state". A thread
-     that is no work item: the thread, where work stopped, and the next
-     step.
+   - Write "Next session starts with": one line per piece of work this
+     session worked on. A work item: its ID and "read its Current state".
+     A piece of work that is no work item: what it is and its next step.
    - A line under Now for one of this session's work items that is missing
      or no longer true: add or correct it as `running-work-item-lifecycle`
      says.
    - Check every other line, and remove each one that is no longer true,
-     as `curating-project-memory`, "Current State", says: a thread that
-     ended, a date that passed, a thing owed that was delivered.
+     as `curating-project-memory` says (its Current State reference,
+     "Removing what is no longer true"): a piece of work that ended, a
+     date that passed, a thing owed that was delivered.
    - "Last updated" names the date, `handoff`, and `agent`.
 5. **Draft the prompt; do not show it yet.** Start from
    `assets/handoff-prompt-template.md`, written as instructions to an agent
