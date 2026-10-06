@@ -131,35 +131,40 @@ thing").
 A project with local or Notion memory gets two skills (Mike, 2026-10-01):
 `curating-project-memory`, the process, the same for both, which never names
 a storage tool; and its own version of `using-memory-store`, storage
-only. Memory holds where work stopped (Current State) and pointers: the ID
-of a record and a link to it. It never holds a fact, a decision, or a term
-(Mike, 2026-10-05). Every entry carries the date it was created and the
-date it last changed. `check-skills.mjs` matches these rows by folder.
+only. Memory is the Davis-based design, restored on 2026-10-05
+(`dev/research/layout-audit/MEMORY-RESTORE-SPEC.md`): Current State, and one
+record per concept in four kinds (`user_`, `project_`, `reference_`,
+`event_`). It holds only what no other project file holds: never a decision
+more than one work item needs, a project term, or how the system works.
+Every record carries the date it was created and the date it last changed,
+and a record that is true only for a while a "check or remove by" date.
+`check-skills.mjs` matches these rows by folder.
 
 ### 4.1 The process (`assets/memory-process/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `curating-project-memory` | `assets/memory-process/.claude/skills/curating-project-memory/` | Decides what project memory keeps, so no fact is kept twice: sends a fact to its home, adds or removes a pointer to a record, writes a standing instruction to the owner's preferences file, and prunes Current State. Use whenever the owner asks to keep, correct, or forget something or gives a standing instruction, such as "remember this" or "from now on", or a hook reminder names this skill. Not for a handoff; use handoff. |
+| `curating-project-memory` | `assets/memory-process/.claude/skills/curating-project-memory/` | Keeps project memory true and small: saves what no other file holds (a fact about a person or the client, an unchecked claim, a lesson, where to find something, an event, a job run), sends any other fact to its home, keeps Current State current, corrects or retires what is wrong, writes "from now on" instructions to the rules, and finds or tidies what was recorded. Use when the owner asks to keep, correct, forget, or find something, or reports a fact, a date, or what someone said. |
 
 ### 4.2 Local files and Obsidian (`assets/memory-local/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-memory-store` | `assets/memory-local/.claude/skills/using-memory-store/` | Reads and writes Current State and the list of pointers as two local files in the memory folder, so every skill stores memory the same way. Use when Current State or a pointer must be read, added, changed, or removed, such as "what does memory point to". Not for deciding what a line says or what to keep; use curating-project-memory. Only for projects with local memory. |
+| `using-memory-store` | `assets/memory-local/.claude/skills/using-memory-store/` | Saves, finds, and changes project memory records and Current State as Markdown files in the memory folder, so every skill reads and writes memory the same way. Use when a memory record or Current State must be read, saved, searched, renamed, retired, or deleted, such as "which memory files link to WI-031" or "update Current State". Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with local memory. |
 
 ### 4.3 Notion in Lore's layout (`assets/memory-notion/`)
 
 Lore's database definitions are in its `assets/schema/`, and their columns,
 views, and page layout in `references/database-layout.md` and
 `references/views-and-layout.md`. Project-setup's
-`references/notion-build/setup.md` sends them. A pointer is one page of the
-Memories database. The databases stay as Lore has them; Topics, Entities,
-and Facts are not written.
+`references/notion-build/setup.md` sends them. A memory record is one page
+of the Memories database, with the same four kinds as local memory. The
+databases stay as Lore has them; the Topics database, the `decision` tag,
+and the glossary page are not written.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-memory-store` | `assets/memory-notion/.claude/skills/using-memory-store/` | Reads and writes Current State and pointers in Notion, on the Current state page and in Lore's Memories database, so every skill stores memory the same way. Use when Current State or a pointer must be read, added, changed, or removed, such as "what does memory point to". Not for deciding what a line says or what to keep; use curating-project-memory. Only for projects with Notion memory. |
+| `using-memory-store` | `assets/memory-notion/.claude/skills/using-memory-store/` | Stores and finds this project's memory records and Current State in Notion, in Lore's databases and the Current state page, so every memory lands in the right column and page section. Use when a memory record or Current State must be read, saved, changed, searched, linked to a work item, merged, or deleted, such as "update the Current state page". Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with Notion memory. |
 
 ### 4.4 Hindsight
 
@@ -267,15 +272,17 @@ of one skill never meet.
   `publish-docs` alone.
 - `filing-project-records` and `curating-project-memory` for "remember
   this" and "we decided": a decision goes to `filing-project-records`.
-  "Remember this" goes to `curating-project-memory`, which sends the fact
-  to its home and adds at most a pointer.
+  "Remember this" goes to `curating-project-memory`, which sends a fact
+  that has a home to that home and keeps in memory only what no other
+  project file holds.
 - `running-work-item-lifecycle` and `braindump`: a brain dump he asks only to plan
   goes to `running-work-item-lifecycle`; one he wants played back first goes to
   `braindump`.
 - `curating-project-memory` and `using-memory-store`: deciding what to
   keep, correct, or forget goes to `curating-project-memory`, which hands
-  each read and write to `using-memory-store`; only a lookup opens
-  `using-memory-store` alone ("what does memory point to").
+  each read and write to `using-memory-store`; only a lookup or a plain
+  write opens `using-memory-store` alone ("which memory files link to
+  WI-031").
 - `handoff` and `curating-project-memory`: the owner ends the session, or
   wants one thing kept.
 - `curating-project-memory` and Claude Code's built-in `update-config` for
@@ -284,7 +291,7 @@ of one skill never meet.
   hook.
 - `using-notion-cli` and the two Notion storage skills: how to run `ntn`,
   or a Notion call that failed, opens `using-notion-cli`; a work item or a
-  pointer to read or save opens the storage skill, which uses it.
+  memory record to read or save opens the storage skill, which uses it.
 - `handoff` and `running-work-item-lifecycle` for "check it": a pasted handoff
   prompt ("check this handoff") goes to `handoff`; testing a work item goes
   to `running-work-item-lifecycle` (the Testing Loop).

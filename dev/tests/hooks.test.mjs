@@ -14,8 +14,8 @@ const repo = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const assets = join(repo, 'plugins/toolkit/skills/project-setup/assets');
 const hooks = join(assets, 'every-project/.claude/hooks');
 const settings = join(assets, 'settings');
-// The starter pointer table: memory/MEMORY.md as a new project with local memory gets it.
-const STARTER_POINTERS = readFileSync(join(assets, 'memory-local/memory/MEMORY.md'), 'utf8');
+// The starter index: memory/MEMORY.md as a new project with local memory gets it.
+const STARTER_INDEX = readFileSync(join(assets, 'memory-local/memory/MEMORY.md'), 'utf8');
 const scratch = mkdtempSync(join(tmpdir(), 'tkv2-hooks-'));
 process.on('exit', () => rmSync(scratch, { recursive: true, force: true }));
 const gitPath = dirname(execFileSync('which', ['git'], { encoding: 'utf8' }).trim());
@@ -32,7 +32,7 @@ function project(files = {}) {
   writeFileSync(join(dir, '.gitignore'), 'memory/\n');
   git('add', '.gitignore');
   git('commit', '-q', '-m', 'Start');
-  const memory = { 'MEMORY.md': STARTER_POINTERS, ...files };
+  const memory = { 'MEMORY.md': STARTER_INDEX, ...files };
   for (const [name, text] of Object.entries(memory)) if (text !== null) writeFileSync(join(dir, 'memory', name), text);
   return { dir, git };
 }
@@ -46,58 +46,84 @@ function hook(file, input, args = [], env = {}) {
 
 const today = new Date().toISOString().slice(0, 10);
 const state = (date = today, extra = '') => `# Current state\n\nLast updated: ${date}, handoff, agent\n\n## Now\n\n- WI-031 in build.\n${extra}`;
-const POINTER_HEAD = '| What it points to | ID | Link | Created | Last changed |\n| --- | --- | --- | --- | --- |\n';
-const pointers = (...rows) => `# Memory pointers\n\n${POINTER_HEAD}${rows.map((row) => `| ${row.join(' | ')} |\n`).join('')}`;
-const DEC = ['The decision on which workspace a request belongs to', 'DEC-004', 'DECISIONS.md', '2026-10-05', '2026-10-05'];
-/** Every file in a project's memory/ folder, as name and text, to prove the hook wrote nothing. */
+/** One memory file: its header, then its title. `fields` holds header lines such as status. */
+const record = (description, fields = '', title = '') => `---\nname: x\ndescription: ${description}\ncreated: 2026-10-01\nupdated: 2026-10-05\ncheck_by: none\n${fields}---\n\n${title}Body.\n`;
+const INDEX_HEAD = 'Memory index (files in memory/; open one before you rely on it):';
+/** Every file in a project's memory/ folder, as name and text, to prove what the hook wrote. */
 const snapshot = (dir) => readdirSync(join(dir, 'memory')).sort().map((name) => [name, readFileSync(join(dir, 'memory', name), 'utf8')]);
 
-test('session-start, local: prints Current State, then MEMORY.md as it is, and writes no file', () => {
-  const table = pointers(DEC, ['The security rule for shared records', 'SEC-04', 'system/security-model.md', '2026-10-01', '2026-10-03']);
-  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': table });
-  const before = snapshot(dir);
+test('session-start, local: rebuilds MEMORY.md grouped by prefix and prints Current State and one line per file', () => {
+  const { dir } = project({
+    'CURRENT_STATE.md': state(),
+    'user_team_availability.md': record('Tom away to 2026-10-20; Sarah covers approvals', 'status: current\n', '# Team availability\n\n'),
+    'project_client_plans.md': record('"Two more clinics open in 2027 (client, not checked)"', 'status: current\n'),
+    'reference_open_items_sheet.md': record("'Open items sheet shared with the client: where it is'", 'status: current\n'),
+    'event_weekly_account_load.md': record('Weekly account load: one row per run', 'status: current\n'),
+    'project_proposed.md': record('Proposal: the API allows 100 calls a minute', 'status: needs-review\n'),
+    'project_old.md': record('An old fact', 'status: retired\n'),
+    'project_replaced.md': record('A replaced fact', 'status: superseded\n'),
+    'project_topic_template.md': record('The seed', 'status: template\n'),
+    'decision_old.md': record('A decision record from before the one-home layout', 'status: current\n'),
+    'notes.md': 'A file with no prefix.\n',
+    'project_no_header.md': '# No header\n',
+  });
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
   assert.equal(code, 0);
-  assert.equal(out, `Current State:\n${state().trim()}\n\nMemory pointers (memory/MEMORY.md):\n${table.trim()}\n`);
-  assert.deepEqual(snapshot(dir), before, 'no file in memory/ was written, added, or removed');
+  assert.equal(out, `Current State:\n${state().trim()}\n\n${INDEX_HEAD}\n`
+    + '- user_team_availability: Tom away to 2026-10-20; Sarah covers approvals\n'
+    + '- project_client_plans: Two more clinics open in 2027 (client, not checked\n'
+    + '- project_proposed: Proposal: the API allows 100 calls a minute\n'
+    + '- reference_open_items_sheet: Open items sheet shared with the client: whe\n'
+    + '- event_weekly_account_load: Weekly account load: one row per run\n');
+  const index = readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8');
+  assert.match(index, /^<!-- Generated file: .*Do not edit it by hand\. -->\n\n# Memory index\n/);
+  assert.match(index, /## User\n\n- \[\[user_team_availability\]\]: Tom away to 2026-10-20; Sarah covers approvals\n\n## Project\n\n- \[\[project_client_plans\]\]: Two more clinics/);
+  assert.match(index, /- \[\[reference_open_items_sheet\]\]: Open items sheet shared with the client: where it is\n/, 'the file keeps the whole description');
+  assert.match(index, /## Event\n\n- \[\[event_weekly_account_load\]\]: .*\n\n## Other memory views\n\n- \[Current state\]\(CURRENT_STATE\.md\)\n$/);
+  assert.doesNotMatch(index + out, /project_old|project_replaced|topic_template|decision_old|notes|no_header|Decision|glossary/i);
+  assert.ok(out.split('\n').every((row) => row.length <= 74), 'a long index line is cut at 74 characters');
   assert.doesNotMatch(out, /compacted|Prune it/);
 });
 
-test('session-start, local: a new project prints the starter MEMORY.md and leaves it byte for byte', () => {
-  const { dir } = project({ 'CURRENT_STATE.md': state() });
+test('session-start, local: with no memory files the index is the starter MEMORY.md byte for byte', () => {
+  const { dir } = project({ 'CURRENT_STATE.md': state(), 'project_topic_template.md': readFileSync(join(assets, 'memory-local/memory/project_topic_template.md'), 'utf8') });
+  const before = snapshot(dir);
   const { out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
-  assert.ok(out.endsWith(`\n\nMemory pointers (memory/MEMORY.md):\n${STARTER_POINTERS.trim()}\n`));
-  assert.match(out, /\| What it points to \| ID \| Link \| Created \| Last changed \|/, 'the starter file is the pointer table');
-  assert.equal(readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8'), STARTER_POINTERS);
+  assert.ok(out.endsWith(`\n\n${INDEX_HEAD}\nNo memory files yet.\n`));
+  assert.equal(readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8'), STARTER_INDEX);
+  assert.deepEqual(snapshot(dir), before, 'an index that did not change is not written again');
 });
 
-test('session-start, local: a text the old hook would have replaced is printed and kept', () => {
-  // Before the one-home layout the hook rebuilt MEMORY.md from the other files in memory/.
-  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': 'A hand-written note.\n', 'decision_old.md': '---\nname: decision_old\ndescription: An old record\n---\n\n# Old\n' });
-  const { out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
-  assert.ok(out.endsWith('Memory pointers (memory/MEMORY.md):\nA hand-written note.\n'));
-  assert.doesNotMatch(out, /decision_old|Memory index|Generated file/);
-  assert.equal(readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8'), 'A hand-written note.\n');
-});
-
-test('session-start, local: with no MEMORY.md, or an empty one, it prints Current State only and creates nothing', () => {
-  for (const text of [null, '', '\n\n']) {
-    const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': text });
-    const before = snapshot(dir);
+test('session-start, local: a missing MEMORY.md, or one in another form, is written as the generated index', () => {
+  for (const text of [null, '', 'A hand-written note.\n', '# Memory pointers\n\n| What it points to | ID | Link | Created | Last changed |\n| --- | --- | --- | --- | --- |\n']) {
+    const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': text, 'project_billing.md': record('How invoices are sent', 'status: current\n') });
     const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
     assert.equal(code, 0);
-    assert.equal(out, `Current State:\n${state().trim()}\n`, JSON.stringify(text));
-    assert.deepEqual(snapshot(dir), before);
-    assert.equal(existsSync(join(dir, 'memory', 'MEMORY.md')), text !== null);
+    assert.ok(out.endsWith(`${INDEX_HEAD}\n- project_billing: How invoices are sent\n`), JSON.stringify(text));
+    const index = readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8');
+    assert.match(index, /^<!-- Generated file: /);
+    assert.match(index, /## User\n\n\n## Project\n\n- \[\[project_billing\]\]: How invoices are sent\n\n## Reference\n\n\n## Event\n\n\n## Other memory views\n/);
   }
 });
 
-test('session-start, local: a missing or empty CURRENT_STATE.md prints one line naming the folder, then the pointers', () => {
-  for (const files of [{}, { 'CURRENT_STATE.md': '\n' }]) {
-    const { dir } = project({ 'MEMORY.md': pointers(DEC), ...files });
+test('session-start, local: when MEMORY.md cannot be written (a sandbox), it still prints the new index', () => {
+  const { dir } = project({ 'CURRENT_STATE.md': state(), 'project_billing.md': record('How invoices are sent', 'status: current\n') });
+  chmodSync(join(dir, 'memory', 'MEMORY.md'), 0o444);
+  chmodSync(join(dir, 'memory'), 0o555);
+  try {
     const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
     assert.equal(code, 0);
-    assert.match(out, /^memory\/CURRENT_STATE\.md is missing or empty in .+\/project-\d+\.\n\nMemory pointers \(memory\/MEMORY\.md\):\n# Memory pointers/);
+    assert.ok(out.endsWith(`${INDEX_HEAD}\n- project_billing: How invoices are sent\n`));
+    assert.equal(readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8'), STARTER_INDEX, 'the file could not be changed');
+  } finally { chmodSync(join(dir, 'memory'), 0o755); }
+});
+
+test('session-start, local: a missing or empty CURRENT_STATE.md prints one line naming the folder, then the index', () => {
+  for (const files of [{}, { 'CURRENT_STATE.md': '\n' }]) {
+    const { dir } = project({ 'project_billing.md': record('How invoices are sent', 'status: current\n'), ...files });
+    const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
+    assert.equal(code, 0);
+    assert.match(out, /^memory\/CURRENT_STATE\.md is missing or empty in .+\/project-\d+\.\n\nMemory index \(files in memory\/; open one before you rely on it\):\n- project_billing: /);
     assert.doesNotMatch(out, /Prune it/);
   }
 });
@@ -110,7 +136,7 @@ test('session-start: from inside a git worktree it reads memory/ in the main che
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: join(worktree) }, ['--memory', 'local']);
   assert.equal(code, 0);
   assert.match(out, /Main checkout line\./);
-  assert.match(out, /Memory pointers \(memory\/MEMORY\.md\):\n# Memory pointers/);
+  assert.ok(out.endsWith(`${INDEX_HEAD}\nNo memory files yet.\n`));
 });
 
 test('session-start: after compact it adds the re-read line first', () => {
@@ -132,8 +158,15 @@ test('session-start: asks for a prune when Current State is too long or too old'
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /Current State is \d+ days old\. Prune it with the curating-project-memory skill\./);
   const long = project({ 'CURRENT_STATE.md': state(today, '- line\n'.repeat(40)) });
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: long.dir }, ['--memory', 'hindsight']).out, /Current State is \d+ lines \(limit: under 40\)\. Prune it with a direct edit, as \.claude\/rules\/hindsight-memory\.md says\./);
-  const unfilled = project({ 'CURRENT_STATE.md': 'Last updated: `<YYYY-MM-DD, source, and person or agent>`\n' });
-  assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: unfilled.dir }, ['--memory', 'local']).out, /Prune it/);
+  const wordy = project({ 'CURRENT_STATE.md': state(today, `- ${'word '.repeat(330)}\n`) });
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: wordy.dir }, ['--memory', 'local']).out, /\nCurrent State is 1,?\d{3} characters \(limit: 1,600\)\. Prune it with the curating-project-memory skill\.\n/);
+  // A new project's page holds its prompts and no date: it is long, and it is not measured.
+  const starter = readFileSync(join(assets, 'memory-local/memory/CURRENT_STATE.md'), 'utf8');
+  assert.ok(starter.length > 1600);
+  for (const text of [starter, 'Last updated: `<YYYY-MM-DD, source, and person or agent>`\n']) {
+    const unfilled = project({ 'CURRENT_STATE.md': text });
+    assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: unfilled.dir }, ['--memory', 'local']).out, /Prune it/);
+  }
 });
 
 test('session-start: Current State last updated 7 days ago is not old; 8 days ago is', () => {
@@ -145,11 +178,11 @@ test('session-start: Current State last updated 7 days ago is not old; 8 days ag
 });
 
 test('session-start: with no --memory it reads local memory', () => {
-  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': pointers(DEC) });
+  const { dir } = project({ 'CURRENT_STATE.md': state(), 'project_billing.md': record('How invoices are sent', 'status: current\n') });
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir });
   assert.equal(code, 0);
   assert.equal(out, hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']).out);
-  assert.match(out, /^Current State:[\s\S]*Memory pointers \(memory\/MEMORY\.md\):/);
+  assert.match(out, /^Current State:[\s\S]*Memory index \(files in memory\/[^\n]*\n- project_billing: /);
 });
 
 test('session-start: from a subfolder of the project it still reads memory/ at the top', () => {
@@ -185,9 +218,9 @@ test('session-start, hindsight: prints Current State only, the one memory file s
 });
 
 test('session-start, hindsight: a MEMORY.md left from local memory is not read and not changed', () => {
-  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': 'untouched\n' });
+  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': 'untouched\n', 'project_billing.md': record('How invoices are sent', 'status: current\n') });
   const { out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'hindsight']);
-  assert.doesNotMatch(out, /Memory pointers|untouched/);
+  assert.doesNotMatch(out, /Memory index|untouched|project_billing/);
   assert.equal(readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8'), 'untouched\n');
 });
 
@@ -209,13 +242,15 @@ function fakeNtn(script) {
 
 test('session-start, notion: prints the Current state page read with ntn, and no file from memory/', () => {
   // A project with Notion memory has no memory/ folder. One left from local memory is not read.
-  const { dir } = project({ 'CURRENT_STATE.md': 'A local file that must not be printed.\n', 'MEMORY.md': pointers(DEC) });
+  const { dir } = project({ 'CURRENT_STATE.md': 'A local file that must not be printed.\n', 'project_billing.md': record('How invoices are sent', 'status: current\n') });
+  const before = snapshot(dir);
   const bin = fakeNtn(`printf '%s' '${JSON.stringify({ object: 'page_markdown', markdown: `Last updated: ${today}, agent\n\n## Now\n\n- WI-7 in design.` })}'`);
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH: `${bin}:${baseEnv.PATH}` });
   assert.equal(code, 0);
   assert.equal(readFileSync(join(bin, 'args'), 'utf8').trim(), 'api v1/pages/abc123/markdown');
   assert.match(out, /^Current State:\nLast updated: .*\n\n## Now\n\n- WI-7 in design\.\n$/);
-  assert.doesNotMatch(out, /Memory pointers|must not be printed/);
+  assert.doesNotMatch(out, /Memory index|project_billing|must not be printed/);
+  assert.deepEqual(snapshot(dir), before, 'no file in memory/ was written');
   const bare = project({ 'MEMORY.md': null });
   rmSync(join(bare.dir, 'memory'), { recursive: true });
   const again = hook('session-start.mjs', { source: 'startup', cwd: bare.dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH: `${bin}:${baseEnv.PATH}` });
@@ -251,10 +286,10 @@ test('session-start: outside a Git repository it reads memory/ in the session fo
   }
   mkdirSync(join(plain, 'memory'));
   writeFileSync(join(plain, 'memory', 'CURRENT_STATE.md'), state());
-  writeFileSync(join(plain, 'memory', 'MEMORY.md'), pointers(DEC));
+  writeFileSync(join(plain, 'memory', 'project_billing.md'), record('How invoices are sent', 'status: current\n'));
   const found = hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'local']);
   assert.equal(found.code, 0);
-  assert.equal(found.out, `Current State:\n${state().trim()}\n\nMemory pointers (memory/MEMORY.md):\n${pointers(DEC).trim()}\n`);
+  assert.equal(found.out, `Current State:\n${state().trim()}\n\n${INDEX_HEAD}\n- project_billing: How invoices are sent\n`);
   assert.equal(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'hindsight']).out, `Current State:\n${state().trim()}\n`);
   assert.equal(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, 'The Notion Current state page could not be read here. Read it with the using-memory-store skill.\n');
   for (const input of ['not json', '']) {
@@ -267,18 +302,41 @@ test('session-start: outside a Git repository it reads memory/ in the session fo
   assert.match(gone.out, /^memory\/CURRENT_STATE\.md is missing or empty in .+no-such-folder\.\n$/);
 });
 
-test('session-start: output stays under the 10,000-character hook limit', () => {
-  const rows = [];
-  for (let i = 1; i <= 200; i++) rows.push([`A long description of what pointer ${i} leads a later session to`, `DEC-${String(i).padStart(3, '0')}`, 'DECISIONS.md', '2026-10-01', '2026-10-05']);
-  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': pointers(...rows) });
-  const before = snapshot(dir);
+/** A Current State with every part at its line limit, and the page at its 1,600 characters. */
+function fullState() {
+  const line = (n) => `- ${`Line ${n} of this part, written out to the length a real line can have`.padEnd(76, '.')}`;
+  const part = (name, count) => `## ${name}\n\n${Array.from({ length: count }, (_, i) => line(i + 1)).join('\n')}\n`;
+  return `# Current state\n\nLast updated: ${today}, handoff, agent\n\n${[['Now', 5], ['Coming up', 3], ['Waiting on', 4], ['Standing jobs and shared files', 3], ['Next session starts with', 3]].map(([name, count]) => part(name, count)).join('\n')}`;
+}
+
+test('session-start: 30 memory files and a full Current State print whole, under 4,000 characters', () => {
+  const files = { 'CURRENT_STATE.md': fullState() };
+  const page = fullState().trim();
+  assert.ok(page.length > 1550 && page.length <= 1600 && page.split('\n').length === 36, `the page is at its limits: ${page.length} characters, ${page.split('\n').length} lines`);
+  // Each name and description together hold 70 characters, the limit the storage skill gives.
+  for (let i = 1; i <= 30; i++) {
+    const name = `${['user', 'project', 'reference', 'event'][i % 4]}_record_number_${String(i).padStart(2, '0')}`;
+    files[`${name}.md`] = record('d'.repeat(70 - name.length), 'status: current\n');
+  }
+  const { dir } = project(files);
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
   assert.equal(code, 0);
-  assert.ok(out.length < 10000, `output is ${out.length} characters`);
+  assert.ok(out.length < 4000, `output is ${out.length} characters`);
+  assert.doesNotMatch(out, /Cut short|Prune it/);
+  assert.equal(out.match(/^- (?:user|project|reference|event)_record_number_\d\d: d+$/gm).length, 30, 'every file has its whole line');
+  assert.ok(out.split('\n').every((row) => !row.startsWith('- user_') || row.length === 74));
+});
+
+test('session-start: more files than fit are cut between two lines, under 4,000 characters', () => {
+  const files = { 'CURRENT_STATE.md': state() };
+  for (let i = 1; i <= 200; i++) files[`project_a_long_name_for_record_${String(i).padStart(3, '0')}.md`] = record('A long description of what this record holds for a later session', 'status: current\n');
+  const { dir } = project(files);
+  const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
+  assert.equal(code, 0);
+  assert.ok(out.length < 4000, `output is ${out.length} characters`);
   assert.match(out, /^Current State:/);
-  assert.match(out, /\[Cut short to fit the hook limit\. Read the rest yourself: the files in memory\/ in the main checkout\.\]\n$/);
-  assert.match(out, /\| 2026-10-05 \|\n\[Cut short/, 'the cut falls between two rows');
-  assert.deepEqual(snapshot(dir), before, 'the long table itself is not changed');
+  assert.match(out, /\n- project_a_long_name_for_record_\d{3}: A long description of what this reco\n\[Cut short to fit the hook limit\. Read the rest yourself: memory\/MEMORY\.md\.\]\n$/, 'the cut falls between two lines');
+  assert.equal(readFileSync(join(dir, 'memory', 'MEMORY.md'), 'utf8').match(/^- \[\[project_a_long/gm).length, 200, 'the file holds every line');
 });
 
 // One example per phrase group: the eleven keep groups, then the decision phrases.
@@ -302,10 +360,10 @@ const MATCHES = [
   ['Go with option B.', 'decision'],
 ];
 
-const SKILLS_LINE = "Before you answer, check this project's skills and use every one that fits this message.\n";
+const SKILLS_LINE = "Before you answer, check this project's skills and use every one that fits this message. Before you end the turn, record what it produced, as \"Every session\" in the root AGENTS.md says: a result that is only in the chat is lost.\n";
 // The parts of the hint. The hook holds the same words; these tests fix them.
 const HOME = 'is filed where the root AGENTS.md says, under "Where information goes"';
-const DECIDES = ` The curating-project-memory skill decides whether anything is saved: what is kept ${HOME}.`;
+const DECIDES = ` The curating-project-memory skill decides whether anything is saved: what is kept ${HOME}. A fact that fits no file there is a user_ or project_ memory record.`;
 const HINDSIGHT = ` What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight memory is for.`;
 const DECISION = ' For a decision, the filing test in the root AGENTS.md says whether it goes in the work item or in DECISIONS.md.';
 const INSTRUCTION = ' For an instruction for how the agent works, that table names the file.';
@@ -652,7 +710,7 @@ test('plugin switches: every old claude-toolkit plugin is off in both hosts; Cod
 // the limits below are the sizes as built.
 test('size limit: each hook command stays small', () => {
   // validate-records.mjs: the owner's limit for the record check is 280 lines (CHECKS-SPEC.md).
-  const limits = { 'session-start.mjs': 54, 'prompt-reminder.mjs': 65, 'codex-after-commit.mjs': 20, 'validate-records.mjs': 280 };
+  const limits = { 'session-start.mjs': 76, 'prompt-reminder.mjs': 65, 'codex-after-commit.mjs': 20, 'validate-records.mjs': 280 };
   assert.deepEqual(readdirSync(hooks).sort(), Object.keys(limits).sort(), 'exactly four hook commands');
   for (const [file, max] of Object.entries(limits)) {
     const lines = readFileSync(join(hooks, file), 'utf8').trimEnd().split('\n');

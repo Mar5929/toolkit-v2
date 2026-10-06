@@ -6,4 +6,4 @@
 - Read and change memory kept in Notion only through `curating-project-memory` and `using-memory-store`.
 - Both rules hold whichever Notion tool is used: a `Notion:` plugin command, the connector, or the browser. They hold when a message carries a Notion page link, and when the owner says to search Notion.
 - Never run the `Notion:tasks:build` command on a work item of this project. It can mark the item Done without the owner's yes.
-- When you create or update a record in Notion, fill or update every field on that record that you have information for. A memory pointer holds only the fields `using-memory-store` names.
+- When you create or update a record in Notion, fill or update every field on that record that you have information for. A memory record holds the fields `using-memory-store` names.
