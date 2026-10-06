@@ -83,7 +83,7 @@ another file, which are changed at the source>
 Start from the whole file: what must the reader know and do? Do not repair
 the file line by line.
 
-Stop and ask where the writing standard says to ask (points 8, 12, and 13).
+Stop and ask where the writing standard says to ask (points 10, 14, and 15).
 Do not guess.
 
 Hand back for each file: the old text and the new text, the inventory with

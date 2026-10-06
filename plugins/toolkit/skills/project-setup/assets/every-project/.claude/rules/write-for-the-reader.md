@@ -13,8 +13,10 @@ The reader opens the result alone. The reader was not in this chat and cannot as
 
 - Use common words, and the exact name the system uses, the same every time.
 - Never use a picture word, an idiom, or a joke in place of the real name. Write "the only setting you can change", not "the only lever".
-- Say a thing in plain words before you give it a name. When a name is needed, use one the reader can already see, such as a folder name or a field name. Keep a made-up word only when both fail, and then explain it once, where it first appears, in one clause with an example.
-- Write whole sentences, one idea each. Never cut a sentence down to a label and a colon. Write "When a save fails, start your reply with 'Not saved'", not "A save that failed: 'Not saved'".
+- Say a thing in plain words before you give it a name. A word is made up when a dictionary does not have it, or when it has its own meaning only in this project. When a name is needed, use one the reader can already see, such as a folder name or a field name. Keep a made-up word only when both fail, and then explain it once, where it first appears, in one clause with an example.
+- Write whole sentences. A sentence holds one idea, or two that belong together. A third idea starts a new sentence. Never cut a sentence down to a label and a colon. Write "When a save fails, start your reply with 'Not saved'", not "A save that failed: 'Not saved'".
+- Put the main point first. A paragraph or a section starts with the sentence that states its point. What supports it comes after.
+- Be specific. Name the thing, the person, or the number: write "the save failed because the file was locked", not "there were problems". Never write "this" or "that" without the word it stands for.
 - Short means no sentence the reader does not need. It never means fewer words inside a sentence that stays. When clear and short disagree, choose clear.
 - Write about the subject, not about the document or the chat that produced it. Quote the chat only when the exact words are the fact, and then say who said them and when.
 - Keep every fact, number, name, date, and quotation exactly as it is.
