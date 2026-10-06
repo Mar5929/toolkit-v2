@@ -258,11 +258,12 @@ node --test 'dev/tests/*.test.mjs'
   naming an AI, and no AI named in a comment, file header, manifest, README,
   commit, or pull request.
 - **Plain English.** Every skill, rule, agent guide, project document, and
-  artifact follows the writing rule, `document-clarity-standard.md`:
-  whole sentences, real names, and no metaphors. The rule does not cover
-  replies to the owner, which follow the output style, or text sent to
-  another person, which follows `humanize-outbound-text.md`. Helper agents and Codex never see the output style, so
-  a helper's brief gives it the path of the writing rule.
+  artifact follows the writing rule, `document-clarity-standard.md`.
+  Prose uses whole sentences and real names. Artifact text uses the fewest
+  clear words. Replies to the owner follow the output style. Text sent to
+  another person follows `humanize-outbound-text.md`; an artifact sent to
+  that person follows both rules. Helper agents and Codex never see the
+  output style, so a helper's brief gives it the path of the writing rule.
   - The writing rule (Mike, 2026-10-06). He found the skill text hard
     to follow and agreed with this statement: "The skills are organized
     correctly and their rules are right. The wording is the problem: it was
