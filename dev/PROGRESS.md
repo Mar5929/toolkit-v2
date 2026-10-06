@@ -2,15 +2,15 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## Two skills removed, version 0.9.3 (2026-10-06, ready to merge)
+## Two skills removed, version 0.9.3 (landed 2026-10-06)
 
 Work item TKV-28. Mike, 2026-10-06: "Delete the Explain Simply skill and the
 Choosing Outside Tools skill. That should absolutely not be a skill. That
 just needs to be something that's just a simple file that's referenced in the
 toolkit v2 but doesn't get installed into projects."
 
-- Built on the branch `claude/remove-two-skills`. Mike asked to merge the
-  open pull requests on 2026-10-06.
+- Mike asked to merge the open pull requests on 2026-10-06. Pull request 24
+  landed as commit `09160592`.
 - `explain-simply` is removed from `every-project/`. A project now gets 9
   shared skills. `project-setup`'s `references/update.md`, "Retired skills",
   tells "update the toolkit" to remove the folder from an existing project.
@@ -21,7 +21,7 @@ toolkit v2 but doesn't get installed into projects."
   agent in another project is no longer told that the list exists.
 - Every check in `AGENTS.md`, "Checks", passed on the branch.
 - The routing test was not run for this change. The description rewrite
-  landed in PR 25. The writing rule rename landed in PR 26. This branch
+  landed in PR 25, and the writing rule rename landed in PR 26. The merge
   includes both changes and raises the version to 0.9.3.
 
 ## Document clarity standard (2026-10-06)
