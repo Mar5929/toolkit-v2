@@ -8,7 +8,6 @@ Three things to know before you use the calls:
 - Each call returns pages by their Status, as follows:
   - "Pages about a subject" and "Pages linked to a work item" return pages with the Status accepted or proposed. To see history too, take the Status clause out.
   - "Pages by date" returns only pages with the Status accepted.
-  - "The open proposals" returns only pages with the Status proposed.
   - "A page by its key" and "Every page" have no Status clause, so they return pages of every Status.
 - The Current state page is not read with these calls. `current-state-page.md` says how to read it.
 
@@ -18,7 +17,6 @@ Three things to know before you use the calls:
 - Pages about a subject
 - Pages linked to a work item
 - Pages by date
-- The open proposals
 - Every page
 - Reading a page
 
@@ -75,17 +73,6 @@ To find what happened since a day, do two things:
 
 1. Find the pages changed on or after that day. Use this clause in place of the Review By clause: `{"property":"Saved","date":{"on_or_after":"2026-10-05"}}`.
 2. Read the Runs table of each `event_` page of a recurring job, for rows of those days.
-
-## The open proposals
-
-A proposal is a whole page or a section inside another page.
-
-- A proposal page has Status "proposed". The call below finds those pages.
-- A proposal inside another page starts `**Proposal, not approved yet:**`. To find one, read the body of each candidate page.
-
-```bash
-ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"property":"Status","select":{"equals":"proposed"}}}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.properties["Record Key"].rich_text[0].plain_text // "")"'
-```
 
 ## Every page
 

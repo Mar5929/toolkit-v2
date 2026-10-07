@@ -6,9 +6,7 @@ The project keeps its memory in one system: the one named on the "Memory" line i
 
 ## When to review memory
 
-- Review memory after each of these: an explicit request to remember or forget, a correction, a meaningful discovery, a significant fix or episode, a change of people, tools, or references, a focus shift, a finished work item, and a handoff.
-- Review memory also when the owner reports what another person said, for example the client, a developer, or a vendor.
-- Review memory also when a job ran, and when a dated event was set or its date passed.
+- Review memory in every turn in which something changes what is true, or in which something happened or you gave a result that a later session would need. `AGENTS.md`, sections "Your job as the agent" and "Where information goes", say what to do.
 - In every review, also check that every line of the project's Current State is still true.
 - A reminder that a hook prints is not a decision to save. Do not save on every hook reminder or on every turn.
 - A review can end with nothing saved.
@@ -17,11 +15,9 @@ The project keeps its memory in one system: the one named on the "Memory" line i
 
 - Write the owner's instructions for how the agent works in `.claude/rules/owner-preferences.md`, never in memory.
 - Never save in memory a fact that `AGENTS.md`, section "Where information goes", keeps in a place outside memory. When a review finds such a fact that is not filed yet, file it in that place.
-- When the owner said no to a save, keep that save nowhere else: not in the project's Current State, not in another memory record, and not in a list of pending saves.
+- When the owner told you to forget something or not to keep it, keep it nowhere else: not in the project's Current State and not in another memory record.
 
 ## The owner's yes
 
-- Save, correct, forget, and clean up memory only with `managing-project-memory`, which says when a save needs the owner's yes. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
-- The "Memory approval" line in `PROJECT.md`, section "Toolkit settings", holds the value `onboarding` or `trusted`. Only an explicit instruction from the owner changes that value.
+- Save, correct, forget, and clean up memory only with `managing-project-memory`, which says when to ask the owner. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
 - The owner's yes covers only the change and the meaning that you showed. Silence is never a yes.
-- A question about a save that the owner has not answered stays a proposal. Do not rely on what the proposal says.

@@ -214,7 +214,7 @@ The project's Current State is the project's one short page of what is true now.
 
 - Decide the line in this skill, in the form that the project's memory gives for a line under Now. Now is one of the parts of the project's Current State.
 - Add, change, or remove the line as the table in "Work that another skill does" says.
-- In the same write, make "Next session starts with" name the work item: its ID and "read its Current state". A work item's Current state is the five lines at the top of the work item that say where it stands.
+- In the same write, or in the turn in which the session starts work on a work item whose line is already there, make "Next session starts with" name the work item: its ID and "read its Current state". A work item's Current state is the five lines at the top of the work item that say where it stands.
 
 ### Never delete a part of a work item
 

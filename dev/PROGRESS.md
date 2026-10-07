@@ -2,6 +2,60 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## One goal for keeping the records, version 0.9.12 (2026-10-07)
+
+Work item TKV-33. Mike named one Davis session as the example to follow:
+the agent kept memory up to date with no question to him. He then approved
+one goal for the agent, and decided that the toolkit states general rules
+and does not list what to do in each small situation
+(`reference/how-the-owner-works-with-agents.md`, "What the owner wants from
+the agent, in his words").
+
+- The starter root `AGENTS.md`, "Your job as the agent", holds the goal word
+  for word, with one line of examples. The "Before a turn ends" bullet is
+  gone.
+- `managing-project-memory` follows from the goal. Removed: the table of 11
+  situations, the two approval modes and the setting "Memory approval" (the
+  "Toolkit settings" lines go from 11 to 10), the question "Save to memory:
+  <one line>?", the saves that waited for his yes, and the lists "Always ask
+  first" and "Never ask". A fact that the agent concluded itself is saved
+  and marked as not confirmed.
+- The agent keeps `PROJECT.md` current without asking. It still asks before
+  it deletes a memory record, changes a rule file, changes what the project
+  is for or its scope, or cleans up all of memory, and when two facts
+  disagree.
+- `publish-docs` may commit an edit that the root guide tells the agent to
+  make without asking.
+- `update.md` removes the old setting from an existing project and asks the
+  owner about saves that were still waiting.
+- `dev/evals/keeping-project-records/` is the test set: 32 evals from the
+  situations of the Davis rule and 4 for the edges of the goal, with a
+  scratch project. No eval has run in a live session.
+- `reference/memory-in-toolkit-v2-and-in-davis.md` compares memory in
+  Toolkit V2 at version 0.9.9 with memory in Davis.
+
+Two separate reviewers read the change, one against the wording review and
+the document clarity standard, and one against the best practices review
+with eight walk-throughs and ten evals. Their findings were fixed, each
+reviewer read the fixes, and the points from that second read were fixed
+and not read a third time.
+
+Open for Mike:
+
+- The reminder hook `prompt-reminder.mjs` still prints that words in notes
+  or a transcript "decide nothing". A change to a hook needs his yes. The
+  smallest change is three lines in the hook and three in its test.
+- A background helper for memory, as Davis has. The rewrite keeps the main
+  agent doing every save before it replies.
+- When notes he pastes say that he decided something, the toolkit records
+  an Open decision and asks him in one line to confirm. Eval 26 expects
+  that.
+
+Still to do: two evals for a turn that changes no fact (a job done with no
+work item, and a result given only in the reply); trimming the edge-case
+sentences in the short path of `managing-work-items`, with the test set as
+the check; a live run of the evals.
+
 ## The filechanges skill, version 0.9.11 (2026-10-07)
 
 Mike asked for a command: "I need to see exactly what files you changed and
@@ -159,8 +213,9 @@ going to be different." A project that needs a narrower rule changes its own
 copy of the rule.
 
 A switch built into the guard, for one session and 12 hours, was built
-first and is parked on the branch `sandbox-checks-switch`. Mike chose the
-instruction over it. That branch is not merged.
+first and never merged. Mike chose the instruction over it. Its branch was
+removed on 2026-10-07, and its changes are kept as
+`dev/archive/research/sandbox-checks-switch.patch`.
 ## Small work items, working files, and the owner's usage record, version 0.9.8 (2026-10-07)
 
 Work item TKV-30. Mike had an agent read his own messages in the session

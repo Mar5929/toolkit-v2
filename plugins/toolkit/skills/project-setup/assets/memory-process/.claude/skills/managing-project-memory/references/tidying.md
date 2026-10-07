@@ -2,14 +2,13 @@
 
 Use this file when you review or clean up all of memory. The goal is that memory stays small and true.
 
-Work in this order: the project's Current State first, then duplicates, proposals, links, stale records, memory records in the wrong place, lessons that should become rules, and the owner's rules. Make a plan first, ask the owner, and only then change anything.
+Work in this order: the project's Current State first, then duplicates, links, stale records, memory records in the wrong place, lessons that should become rules, and the owner's rules. Make a plan first, ask the owner, and only then change anything.
 
 ## Contents
 
 - Plan first, then ask
 - The project's Current State
 - Duplicates and merges
-- Proposals waiting for the owner
 - Links to work items
 - Links between memory records
 - Stale records
@@ -50,10 +49,6 @@ Three more rules apply to merges:
 - When two event records are for one recurring job, merge them into one, and keep every row of both Runs tables.
 
 When a memory record is past the size limit that `references/memory-store.md` gives, move the sections of one sub-topic to a new memory record. Link the two under "Related memories", and correct every link that led to a section you moved.
-
-## Proposals waiting for the owner
-
-Put each proposal on the plan as a yes-or-no question, with its one-line reason. Handle the owner's yes or no as `references/saving.md`, section "Proposals: a save the owner has not answered", says.
 
 ## Links to work items
 

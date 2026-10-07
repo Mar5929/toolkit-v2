@@ -6,5 +6,4 @@ An iPhone app for logging money transactions. Mike is the owner. This is a scrat
 
 - Tracker: `local`
 - Memory: `local`
-- Memory approval: `onboarding`
 - Work item ID prefix: `WI`

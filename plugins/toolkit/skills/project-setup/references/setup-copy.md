@@ -100,14 +100,13 @@ Make these four changes in the copied files.
 - Leave every example ID in the copied files as it is, whatever prefix the owner chose. The example IDs are `WI-31`, `WI-031`, `[[WI-031]]`, `DEC-001`, `SRC-###`, and `SEC-04`. The skills read the real prefix from "Toolkit settings".
 - Fill every line of `PROJECT.md`, section "Toolkit settings". The table below gives the value for each line.
   - Write each value inside the backticks, in place of the prompt, for example ``- Tracker: `local` ``.
-  - The section has the same 11 lines in every project. Keep every line and every label exactly as written, because the skills read these lines.
+  - The section has the same 10 lines in every project. Keep every line and every label exactly as written, because the skills read these lines.
   - On a line for a choice the owner did not make, write the value `not used`, for example ``- Hindsight bank: `not used` ``.
 
 | Line | Value |
 | --- | --- |
 | Tracker | `local`, `notion`, or `github` |
 | Memory | `local`, `notion`, or `hindsight` |
-| Memory approval | With local or Notion memory, write `onboarding`. Only the owner changes it to `trusted`. With Hindsight memory, write `not used`. |
 | Work item ID prefix | With local work items, write the prefix the owner confirmed, for example `WI`. With work items in Notion, leave the prompt for the Notion step. With GitHub Issues, write `not used`. |
 | Notion work items | With work items in Notion, leave the prompt for the Notion step, which writes nested bullets under the label line. Otherwise write `not used`. |
 | GitHub repository | With work items in GitHub Issues, leave the prompt for the GitHub step. Otherwise write `not used`. |
@@ -149,7 +148,7 @@ The starting text is `assets/owner-preferences.md`, which is outside `every-proj
 Run each check below. Each of these commands only reads.
 
 - `grep -n '<Project name>' <copy>/AGENTS.md <copy>/README.md <copy>/PROJECT.md` shows only fill-in guide comment lines, and never a heading.
-- `command grep -c -E '^- (Tracker|Memory|Memory approval|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md` prints 11. `command grep` runs the system grep. In Claude Code, plain grep skips the folders that the copied `.gitignore` names.
+- `command grep -c -E '^- (Tracker|Memory|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md` prints 10. `command grep` runs the system grep. In Claude Code, plain grep skips the folders that the copied `.gitignore` names.
 - `jq empty <copy>/.claude/settings.json` prints nothing, which means that the JSON is valid.
 - Run `ls -A <skill folder>/assets/every-project`, the same command for each folder you copied, and `ls -A <copy>`. The last list holds every name of the other lists except `.agents`, plus `memory` with Hindsight memory, and no other name.
 - `test -x <copy>/.githooks/pre-commit && echo executable` prints `executable`.

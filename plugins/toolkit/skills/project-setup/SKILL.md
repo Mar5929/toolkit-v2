@@ -63,7 +63,7 @@ The project is set up when `PROJECT.md` has a filled "Toolkit settings" section 
   - Put back a toolkit file that is missing in `work-items/` or `memory/`, as `references/finishing.md`, "Final checks", says.
   - The session-start check may rebuild `memory/MEMORY.md`, which is a generated file.
 - **An update or a check in a project set up before the current folder layout.** Say that the project has the earlier layout, and list what [references/one-home-layout.md](references/one-home-layout.md) would move. The current folder layout keeps information the whole project needs in five places, as files in the repository: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`.
-- **Change a setup choice.** A setup choice is where work items are kept, where memory is kept, or the Memory approval mode. Follow `references/update.md`, "Changing a setup choice".
+- **Change a setup choice.** A setup choice is where work items are kept or where memory is kept. Follow `references/update.md`, "Changing a setup choice".
 
 ### Hindsight: the dashboard, or a new computer
 

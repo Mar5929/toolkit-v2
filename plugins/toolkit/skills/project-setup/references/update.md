@@ -39,6 +39,7 @@ This file uses five names:
   - The renamed rule
   - Old hook entries
   - The questions before a sandbox change
+  - The Memory approval line and saves that waited for the owner's yes
   - Old Hindsight entries
   - Files from the retired toolkit program
   - An old pre-commit Git hook
@@ -46,7 +47,6 @@ This file uses five names:
 - 6. A project set up before the current folder layout
 - 7. Checks and report
 - Changing a setup choice
-  - The Memory approval line
   - Where work items or memory are kept
 
 ## Before you start
@@ -116,7 +116,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 | Missing files | every `>f+++++++` line | List the missing files, then copy them into the project. |
 | Ignore files | `.gitignore`, `.ignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. Ask no question. The change only adds lines, and the owner's request to update the toolkit is the owner's yes to it. |
 | `AGENTS.md` | the root file | Follow "Updating AGENTS.md" below. |
-| `PROJECT.md`, "Toolkit settings" | | Make the section hold the 11 lines of the setup copy's section, with the same labels, in the same order. |
+| `PROJECT.md`, "Toolkit settings" | | Make the section hold the 10 lines of the setup copy's section, with the same labels, in the same order. |
 | Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/README.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
 | Rules in `.claude/rules/` | | Show the owner what differs. |
 | Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, the output style, `.githooks/pre-commit`, the Salesforce guards and `tools/` | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
@@ -139,8 +139,8 @@ Most rows have special cases. They are listed under the table, in "Special cases
   - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Do not use `-a`, because `-a` would give the project folder the temporary folder's private permissions.
   - Copy into the main checkout after the branch was merged (section 7, step 5), and only when the setup copy has the folder. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
 - **`PROJECT.md`, "Toolkit settings".**
-  - Add each line that the project's section lacks, with the value `not used`. With local or Notion memory, a missing "Memory approval" line gets `onboarding` instead.
-  - Keep every value the section has, the "Memory approval" value included.
+  - Add each line that the project's section lacks, with the value `not used`.
+  - Keep the value of every line that stays. Section 4, "The Memory approval line and saves that waited for the owner's yes", names the one line that goes.
   - When the section has a `### Notion` heading with ids under it, move the ids under the two fixed Notion lines, "Notion work items" and "Notion memory", as `notion-build/work-setup.md`, "Recording the links in PROJECT.md", says. That section shows the form of the "Notion work items" line, and says which file shows the form of the "Notion memory" line.
   - Show the owner the section before and after.
 - **Rules in `.claude/rules/`.** "Whether a difference is the owner's edit" below says whether a rule holds an edit of the owner's.
@@ -309,6 +309,22 @@ Tell the owner that in one line. After the owner's yes, make these two changes:
 
 The guard still blocks production and an org that it cannot classify.
 
+### The Memory approval line and saves that waited for the owner's yes
+
+An earlier version of the toolkit asked the owner before some saves to memory. It held a line "Memory approval" in `PROJECT.md`, section "Toolkit settings". It kept a save that waited for the owner's yes as a proposal. The toolkit no longer uses the line, and it no longer keeps proposals.
+
+- Remove the "Memory approval" line from "Toolkit settings".
+- Look for proposals in a project with local or Notion memory. A proposal is one of these:
+  - a file in `memory/` whose header holds `status: needs-review`;
+  - a page of the Notion Memories database with the Status "proposed";
+  - a section of a file or a page whose first line starts `**Proposal, not approved yet:**`.
+
+  With local memory, `command grep -rnE '^status: *"?needs-review|Proposal, not approved yet:' <main checkout>/memory` lists them. With Notion memory, the query under "Every page" in `references/searching.md` of the memory skill prints the status of each page; read the body of each page for the section line.
+- List each proposal in the numbered table, and ask the owner whether to keep it. Make each change with `managing-project-memory`.
+  - When the owner keeps a proposal, make it current. Set the status of the file to `current`, or the Status of the page to "accepted". Remove "Proposal:" or "Proposal, not approved yet:" from the start of its one-line summary, and remove the line that starts `**Proposal, not approved yet:**`. Record "Approved by <owner> on <date>" as what allowed the save. For a proposal that is a section, leave the status as it is, and add "Approved by <owner> on <date>." to the section's "Evidence and limits" line.
+  - When the owner drops a proposal, remove the section, or delete the file or the page.
+- After the owner answers about a proposal, remove its line under "Waiting on" in the project's Current State. That line starts "Owner: save to memory?". When such a line names no proposal, put its question in the numbered table, and remove the line after the owner answers. A line that starts "Owner: add to the project rules?" stays until the owner answers it.
+
 ### Old Hindsight entries
 
 A `hindsight` entry in `.mcp.json`, or a `[mcp_servers.hindsight]` table in `.codex/config.toml`, shows that the project was set up for the old Hindsight server on the Mac. List it, and follow "A project on the old Mac server" in `hindsight-on-vps.md`. That section says what to tell the owner and when the old entries are removed.
@@ -365,11 +381,7 @@ Do these in order.
 
 ## Changing a setup choice
 
-Change a setup choice only when the owner asks, for example "move memory to Notion". The two kinds of change are below.
-
-### The Memory approval line
-
-The Memory approval line holds `onboarding` or `trusted`, in a project with local or Notion memory. It changes only on the owner's own words. Edit that line in `PROJECT.md`, "Toolkit settings", and commit the change with `publish-docs`. Nothing else changes.
+Change a setup choice only when the owner asks, for example "move memory to Notion". A setup choice is where work items are kept or where memory is kept.
 
 ### Where work items or memory are kept
 

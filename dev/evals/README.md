@@ -44,3 +44,7 @@ pocket-ledger/
 | tracking 1, save an answer | WI-031, Q-05, with Q-06 still open. |
 | tracking 2, what waits on Mike | WI-031 (two) and WI-033 (one); WI-032 and the decoy do not count. |
 | tracking 3, sub-item level | A new item under WI-032 is level 3; the next one down would be level 4. |
+
+## The test set for keeping the project's records
+
+`keeping-project-records/` is a separate set of 36 prompts. It tests whether an agent keeps a project's records up to date from one general goal, with no list of situations in its instructions. The set has its own scratch project, `fixtures/pocket-ledger-records/`, because the scratch project above is written in older forms. `keeping-project-records/README.md` says how to build that scratch project, how to run one eval, and how to score a run.

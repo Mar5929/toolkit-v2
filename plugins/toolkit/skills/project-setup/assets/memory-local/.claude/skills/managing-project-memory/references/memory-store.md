@@ -7,7 +7,7 @@ Two names are used in every file of these storage instructions:
 - A memory record is what memory holds about one subject, such as the client's plans or one meeting. Here it is one file in `memory/`.
 - The project's Current State is the project's one short page of what is true now. Here it is the file `memory/CURRENT_STATE.md`.
 
-These storage instructions cover how to store memory. Open `references/memory-process.md` to decide what to keep, whether a change needs the owner's yes, and what to tell the owner.
+These storage instructions cover how to store memory. Open `references/memory-process.md` to decide what to keep, when to ask the owner, and what to tell the owner.
 
 ## Contents
 
@@ -33,7 +33,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 - `CURRENT_STATE.md` holds what is true now. The session-start hook prints it at the start of a session. `references/folders-and-files.md`, section "The project's Current State", says how to change it.
 - `project_topic_template.md` is the template for a memory file. It has `status: template`. Copy it to make a new file. Never write a memory record into it.
 
-`managing-project-memory` calls a memory record current, proposed, replaced, or retired. When you read or set a status, open `references/record-format.md`, section "Status". It gives the `status` value that a file stores for each of those four words.
+`managing-project-memory` calls a memory record current, replaced, or retired. When you read or set a status, open `references/record-format.md`, section "Status". It gives the `status` value that a file stores for each of those three words.
 
 ## Steps for every read and every save
 
@@ -72,7 +72,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 
 | For | Use |
 | --- | --- |
-| Deciding what to save, when to save it, and whether it needs the owner's yes; what each part of the project's Current State holds, and its limits | `managing-project-memory` |
+| Deciding what to save, when to save it, and when to ask the owner; what each part of the project's Current State holds, and its limits | `managing-project-memory` |
 | What a work item's line says under Now, which is a part of the project's Current State | `managing-work-items` |
 
 ## References
@@ -80,5 +80,5 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 | File | Open it when |
 | --- | --- |
 | [references/folders-and-files.md](folders-and-files.md) | You need to see how the folder looks; choose a file name and prefix; make a file from the template; rename, retire, or delete a file; check the size limits; or read or change the project's Current State. |
-| [references/record-format.md](record-format.md) | You write or check a file. It gives the header fields and dates, the statuses, how to mark a proposal or a memory record that was replaced or retired, the body labels, the links to memory files and work items, the lessons, the Runs table of a recurring job, and the list that says when a file is right. |
+| [references/record-format.md](record-format.md) | You write or check a file. It gives the header fields and dates, the statuses, how to mark a memory record that was replaced or retired, the body labels, the links to memory files and work items, the lessons, the Runs table of a recurring job, and the list that says when a file is right. |
 | [references/searching.md](searching.md) | You need to find or read memory. It gives the commands for every file's summary and status, a search by topic, by work item, by status, or by date, the lessons, and the links to a file. |

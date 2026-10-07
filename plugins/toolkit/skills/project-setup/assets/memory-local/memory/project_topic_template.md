@@ -9,7 +9,7 @@ metadata:
 status: template
 source: <Person, conversation, or document with absolute date>
 last_verified: <YYYY-MM-DD or unknown>
-authorization: <"Approved by <owner> on YYYY-MM-DD", "Trusted grant, YYYY-MM-DD", "Logged by the agent on YYYY-MM-DD", or "Proposed by the agent on YYYY-MM-DD; not approved">
+authorization: <"Approved by <owner> on YYYY-MM-DD" or "Logged by the agent on YYYY-MM-DD">
 work_items:
   - "<Link to each related work item; see the fill-in guide>"
 supersedes: none

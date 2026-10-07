@@ -52,7 +52,7 @@ It never holds any of these:
 A memory record of the type project holds three things:
 
 - a lasting fact about the project or the client that fits no other file;
-- a claim someone made that is not checked yet, with who said it;
+- a claim that is not checked yet, with who said it or what you concluded it from;
 - a lesson that is not proven yet, with the dates it was seen.
 
 It never holds a decision, a system rule, a term, a requirement, work item status, an instruction for the agent, or a code summary.
@@ -86,7 +86,7 @@ On or after that date, check the fact. Then correct it or retire it. `references
 
 ## Never save in a memory record
 
-- Secrets, credentials, sensitive personal data, transcripts, scratch reasoning, raw logs, dropped guesses, or unsupported claims with no person or document named as their source.
+- Secrets, credentials, sensitive personal data, transcripts, scratch reasoning, raw logs, dropped guesses, or a claim that names neither who said it nor what you concluded it from.
 - A fact that the same change already saves in the place where it is kept. The one exception is a short memory record of the type reference that says where that record is, when a later session needs it.
 - The live status of a work item, a pending approval, unshipped requirements, the steps of a procedure, or a restatement of code.
-- A candidate for memory that the owner rejected, offered again under a new name or in wider wording. A rejection stands until the owner changes it.
+- Something that the owner told you to forget or not to keep, saved again under a new name or in wider wording. The owner's no stands until the owner changes it.

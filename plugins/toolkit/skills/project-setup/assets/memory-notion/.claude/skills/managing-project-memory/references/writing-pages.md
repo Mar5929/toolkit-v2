@@ -12,7 +12,6 @@ This file says how to create, change, mark, link, merge, and delete a page of Me
 - A run of a recurring job
 - Correcting a fact
 - Replacing a page
-- A proposal
 - Retiring and bringing back
 - Deleting a page
 - Linking a page to work items
@@ -122,22 +121,6 @@ The page of a new job gets the table with its header row and its first run.
    ```
 
 A page with the wrong prefix is replaced the same way. Make a new page under the right key, and then replace the old page.
-
-## A proposal
-
-A proposal is a save that the owner has not said yes to. Mark it so that nobody relies on it.
-
-- Mark a new page with Status "proposed", Authorization `Proposed by the agent on <date>; not approved`, and a Synopsis that starts "Proposal, not approved yet:".
-- A proposal inside an existing page is a new section. Its first line is `**Proposal, not approved yet:** asked on <date>. Do not rely on this until the owner says yes.`
-
-To remove the marks:
-
-- For a page: set Status "accepted" and Authorization `Approved by <owner> on <date>`, and take the proposal words off the Synopsis.
-- For a section: remove its proposal line, and add "Approved by <owner> on <date>." to its Evidence and limits line.
-
-To drop a proposal, remove the section, or delete the proposal page as "Deleting a page" says.
-
-To find the open proposals, use `searching.md`, section "The open proposals".
 
 ## Retiring and bringing back
 

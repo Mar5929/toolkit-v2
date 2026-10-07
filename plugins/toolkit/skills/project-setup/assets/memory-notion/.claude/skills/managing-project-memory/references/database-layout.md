@@ -52,7 +52,7 @@ One page of Memories is one of three things: one subject, one thing that happene
 | Status | Status (see "Status") | accepted |
 | Who or what said it | Source note | The owner, 2026-09-30, kickoff call |
 | Last checked against its source | Last verified: `YYYY-MM-DD`, or `unknown` | 2026-09-30 |
-| What allowed the save | Authorization: `Approved by <owner> on <date>`, `Trusted grant, <date>`, `Logged by the agent on <date>`, or `Proposed by the agent on <date>; not approved` | Approved by the owner on 2026-09-30 |
+| What allowed the save | Authorization: `Approved by <owner> on <date>`, for a save that the owner asked for or said yes to, or `Logged by the agent on <date>`, for every other save | Approved by the owner on 2026-09-30 |
 | Work item IDs | Work item IDs (text), and the Work items relation when work items are in Notion | IML-3 |
 | The page it replaced, and the page that replaced it | Supersedes (relation), and Superseded by (the key as text) | |
 | Anything else | Other fields, as JSON | |
@@ -74,12 +74,11 @@ The first column is the word that `managing-project-memory` uses for the status 
 | Word in `managing-project-memory` | Status column |
 | --- | --- |
 | current | accepted |
-| proposed (the memory record needs review) | proposed |
 | replaced (another page replaced this page) | superseded |
 | retired | deprecated |
 
-- A Status that the owner changed by hand counts. Read "deprecated" as retired, and read "proposed" as needing review.
-- Lore's other options, informational and rejected, are not used.
+- A Status that the owner changed by hand counts. Read "deprecated" as retired.
+- Lore's other options, informational and rejected, are not used. A page with the Status "proposed" was saved by an earlier version of the toolkit: do not rely on it, and "update the toolkit" asks the owner about it.
 
 ## The page body
 

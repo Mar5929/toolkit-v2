@@ -13,7 +13,8 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 
 - Where memory is kept
 - Steps for every read and every save
-- Rules and mistakes to avoid
+- Rules
+- Mistakes to avoid
 - Work that another skill does
 - References
 
@@ -32,7 +33,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 - The ids of the databases and pages are in `PROJECT.md`, section "Toolkit settings": the nested bullets under the fixed line "Notion memory". Never search the workspace for them.
 - Lore's own saving and hooks stay off. Lore is not installed or run.
 
-`managing-project-memory` calls a memory record current, proposed, replaced, or retired. When you read or set a status, open `references/database-layout.md`, section "Status". It gives the option of the Status column that a page stores for each of those four words.
+`managing-project-memory` calls a memory record current, replaced, or retired. When you read or set a status, open `references/database-layout.md`, section "Status". It gives the option of the Status column that a page stores for each of those three words.
 
 ## Steps for every read and every save
 
@@ -58,7 +59,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 
 | For | Use |
 | --- | --- |
-| Deciding what to save, when to save it, and whether it needs the owner's yes; what each part of the project's Current State holds, and its limits | `managing-project-memory` |
+| Deciding what to save, when to save it, and when to ask the owner; what each part of the project's Current State holds, and its limits | `managing-project-memory` |
 | What a work item's line says under Now, which is a part of the project's Current State | `managing-work-items` |
 | Every Notion read or write: sign-in, Codex, the shape of every call, and errors | `using-notion-cli` |
 | Finding a work item's page id | `managing-work-items` |
@@ -68,8 +69,8 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 | File | Open it when |
 | --- | --- |
 | [references/database-layout.md](database-layout.md) | You need to check which column holds which part of a memory record, what a status or a work item link means, or how the page body is laid out. |
-| [references/writing-pages.md](writing-pages.md) | You save something: a new page for a subject, a new section, a lesson, a run of a recurring job, a correction, a replacement, a proposal, retiring, bringing back, deleting, linking to work items, or merging two pages about one subject. |
-| [references/searching.md](searching.md) | You need to find or read memory: a page by its key, by subject, by work item, by status, or by date, the open proposals, or every page. |
+| [references/writing-pages.md](writing-pages.md) | You save something: a new page for a subject, a new section, a lesson, a run of a recurring job, a correction, a replacement, retiring, bringing back, deleting, linking to work items, or merging two pages about one subject. |
+| [references/searching.md](searching.md) | You need to find or read memory: a page by its key, by subject, by work item, by status, or by date, or every page. |
 | [references/current-state-page.md](current-state-page.md) | You read or change the Current state page. |
 | [references/views-and-layout.md](views-and-layout.md) | You check the views, the column order, or the page layout of the databases, or send a schema file to create or add to them. |
 | [assets/concept-record.md](../assets/concept-record.md) | You write the body of a new page for a subject, or a new section. |
