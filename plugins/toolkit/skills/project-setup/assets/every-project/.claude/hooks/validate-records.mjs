@@ -6,7 +6,7 @@
 // on stdin). --all: when the agent stops (Stop JSON on stdin). --staged: before a commit.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
-import { basename, dirname, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, posix, relative as rel, resolve, sep } from 'node:path';
 
 const STATUS = ['Open', 'Decided', 'Superseded', 'Withdrawn'];
 const SECTIONS = ['Overview', 'Content', 'Open questions', 'Changelog'];
@@ -30,6 +30,7 @@ const read = (path) => (existsSync(path) ? readFileSync(path, 'utf8') : ''); // 
 const fail = (error, where = '') => console.error(`validate-records.mjs did not run${where}.`
   + ` Its own error: ${String(error).split('\n')[0]}`);
 const real = (path) => { try { return realpathSync(path); } catch { return path; } };
+const relative = (from, to) => rel(from, to).split(sep).join('/'); // "/" on Windows too
 function list(d) { try { return readdirSync(d, { withFileTypes: true }); } catch { return []; } }
 // The text of a comment is not checked. Its lines stay, so line numbers hold.
 const lines = (text) => text.replace(/<!--[\s\S]*?-->/g, (c) => c.replace(/./g, '')).split('\n');
@@ -166,7 +167,7 @@ function check(top, main) {
     : f.isDirectory() ? walk(join(dir, f.name)) : /\.md$/.test(f.name) ? [join(dir, f.name)] : []));
   for (const path of main ? walk(join(main, 'work-items')) : []) {
     const text = read(path);
-    const front = text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
+    const front = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
     const value = (key) => front.match(new RegExp(`^${key}: *"?([^"\\n]*?)"? *$`, 'm'))?.[1] ?? '';
     const [id, file] = [value('id'), relative(main, path)];
     if (!id || basename(path) === 'DESIGN.md') continue;
@@ -203,9 +204,9 @@ function check(top, main) {
   const local = main ? [['work-items', main], ['memory', main]] : [];
   for (const [name, root] of [['', top], ...inside, ...local]) {
     if (existsSync(join(root, name, 'AGENTS.md'))
-      && read(join(root, name, 'CLAUDE.md')).trim() !== '@AGENTS.md') add(join(name, 'CLAUDE.md'),
-      0, 'this folder has an AGENTS.md, so its CLAUDE.md holds exactly one line: @AGENTS.md.',
-      'Restore that line.');
+      && read(join(root, name, 'CLAUDE.md')).trim() !== '@AGENTS.md') add(
+      posix.join(name, 'CLAUDE.md'), 0, 'this folder has an AGENTS.md, so its CLAUDE.md holds',
+      'exactly one line: @AGENTS.md. Restore that line.');
   }
   // Check 12: the list of integration documents.
   const listed = lines(read(join(top, I))).map((row) => row.match(/^\|[^|]*?([\w.-]+\.md)/)?.[1]);
