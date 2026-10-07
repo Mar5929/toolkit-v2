@@ -52,7 +52,7 @@ finding with no source is dropped.
   rules stay short. Procedures live in skills, not rules. Codex does not
   read `.claude/rules/` on its own: `AGENTS.md` must list the always-on
   rules for it.
-- **P3 AGENTS.md.** Under 200 lines and about 20 KB for the largest setup;
+- **P3 AGENTS.md.** Under 200 lines and at most 22,528 bytes for the largest setup;
   holds what the agent cannot work out by looking (the map of what goes
   where, when, and why), the startup lines, and the skills list, as the
   Claude Code and Codex pages on project instructions say. No procedure

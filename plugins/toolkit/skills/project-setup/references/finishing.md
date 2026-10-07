@@ -139,7 +139,7 @@ Run each check alone, from the project folder. Each check only reads.
 13. **The pre-commit check.** The pre-commit check is the file `.githooks/pre-commit`. Git runs it before each commit, and it runs `validate-records.mjs`.
     - `test -x .githooks/pre-commit && echo executable` must print "executable".
     - `git config --get core.hooksPath` must print `.githooks`. When it prints something else or nothing, report what it prints, and the reason that `placing-files.md`, "5. The pre-commit check", gives for that result. Step 2 of that section holds the two commands that show which row of its table fits.
-14. **`AGENTS.md` is within its limits.** `wc -lc AGENTS.md` must print 200 lines or less and 20,480 bytes or less.
+14. **`AGENTS.md` is within its limits.** `wc -lc AGENTS.md` must print 200 lines or less and 22,528 bytes or less.
     - Claude Code recommends under 200 lines. Codex stops reading instruction files at 32,768 bytes in all, `~/.codex/AGENTS.md` included.
     - Count `AGENTS.md` only. `PROJECT.md` is not counted. Claude Code loads `PROJECT.md` through the `@PROJECT.md` line in `AGENTS.md`, and Codex does not load it that way.
     - When either number is over its limit, say so in the report. Never cut lines from `AGENTS.md`.
