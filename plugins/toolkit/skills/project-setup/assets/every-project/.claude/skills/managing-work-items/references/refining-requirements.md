@@ -20,6 +20,8 @@ The Requirements section of the work item template gives the form of a requireme
 
 ## Steps
 
+These steps are the full path. A small work item that takes the short path does steps 1 and 2 only. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is, when it takes the short path, and how to play the request back to the owner in place of steps 3 to 11.
+
 1. Start the work item, or continue it.
    - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
    - For an existing work item with open questions, say in one line what is settled, and then ask the first open question again. Never start the interview over.

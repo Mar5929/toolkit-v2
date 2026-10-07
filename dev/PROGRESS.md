@@ -46,6 +46,58 @@ With both fixes tried, every test passed on Windows except the 6 in
 `org-guard.test.mjs`, which the branch `sandbox-checks-switch` fixes.
 Nothing here was run on a Mac.
 
+## Small work items, working files, and the owner's usage record, version 0.9.8 (2026-10-07)
+
+Work item TKV-30. Mike had an agent read his own messages in the session
+files of two real projects: Davis (17 files, ongoing support for one client)
+and Dragonfly (43 files, a Salesforce org merge). The findings are in
+`reference/how-the-owner-works-with-agents.md`. Its folder, `reference/`, is
+a new top-level folder that no plugin ships. With his yes, on 2026-10-07:
+
+- **A short path for a small work item** (at most one phase, one or two
+  tasks, no sub-items, no Designing). The agent plays the goal back and the
+  owner's yes approves the requirements, with no interview and no
+  requirements analyst. One closing question, "Approve this result and mark
+  <ID> Done?", takes the place of the result approval, the move-up question,
+  and the Done question. The stops for a merge and for a deploy stay.
+  `lifecycle-rules.md`, "A small work item", holds the steps;
+  `refining-requirements.md`, `building.md`, `testing-loop.md`, and
+  `closing.md` point to it or hold their part.
+- **One project phase, "P01 — Ongoing support"**, for a project with no
+  planned order of work. The agent never asks whether it is done.
+- **`working-files/<ID>-<short-slug>/`** in every project, kept out of Git,
+  for files exported, downloaded, or made while working. The agent deletes one only when
+  the owner asks. Mike: "This way is fine for now"; he may revisit putting
+  these files inside the work item's own folder. `delivery/AGENTS.md` now
+  keeps a client handoff file that holds real records out of Git.
+- The checker can check a file that Git does not track: `testing-loop.md`,
+  step 2, and one paragraph in `acceptance-checker-brief.md`.
+- "Update the toolkit" now adds missing lines to a project's `.gitignore`
+  and `.ignore` (`update.md`, row "Ignore files"), so an existing project
+  gets `/working-files/`.
+
+Two separate reviewers read the change, one against the wording review and
+one against the best practices review with three walk-throughs of a small
+work item. Their findings were fixed, and each reviewer read the fixes. The smaller
+points from that second read were fixed and were not read a third time.
+
+Mike decided on 2026-10-07 when the separate checker runs for a small work
+item on the short path ("your recommendation"): only when the result changes
+production, changes an environment other people use, gives a number, a list
+of records, or a finding to a person outside the project, or changes a rule
+in `system/`. Otherwise the main agent checks its own work and shows the
+proof. This is one exception to his decision of 2026-09-28 that the checker
+always runs.
+
+Also on 2026-10-07 he had the limit of five memory records saved without a
+question removed from `memory-process.md` ("I don't think we need a
+limit").
+
+Not changed, by his choice: which tests run on a Salesforce deploy
+(Salesforce's own skills), and ClickUp as a tracker (maybe a skill later). A
+way to turn the Salesforce sandbox checks off for one session is separate
+work in another session.
+
 ## The agent's job in the starter AGENTS.md, version 0.9.7 (2026-10-07)
 
 Mike read the starter root `AGENTS.md` in an editor page and left three
