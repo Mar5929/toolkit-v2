@@ -2,7 +2,7 @@
 // SessionStart hook for Claude Code and Codex: prints Current State; with local memory it also
 // rebuilds memory/MEMORY.md and prints one line per memory file. An error prints one line; exit 0.
 // Usage: node session-start.mjs --memory local|notion|hindsight [--page <Current state page id>]
-import { execFileSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
@@ -26,7 +26,7 @@ try {
   const git = attempt(() => execFileSync('git', ['rev-parse', '--git-common-dir'], opts).trim());
   const dir = join(git ? dirname(resolve(opts.cwd, git)) : opts.cwd, 'memory');
   const read = (file) => attempt(() => readFileSync(join(dir, file), 'utf8'));
-  const page = () => execFileSync('ntn', ['api', `v1/pages/${arg('page')}/markdown`], opts);
+  const page = () => execSync(`ntn api v1/pages/${arg('page')}/markdown`, opts);
   const state = String(memory === 'notion' ? attempt(() => JSON.parse(page()).markdown)
     : read('CURRENT_STATE.md')).trim();
   // A prune request (40 lines or more, or over 7 days old), printed first so it is never cut off.

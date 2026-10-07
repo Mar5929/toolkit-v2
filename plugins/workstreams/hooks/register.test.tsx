@@ -42,6 +42,10 @@ const chatFiles = (id: string, title: string, chat: Partial<Chat>) => ({
     JSON.stringify({ customTitle: title }),
 })
 
+// Claude Code gives the disk a full path in the computer's own form. On Windows
+// "/Users/me" arrives as "C:\Users\me", so the disk keeps every path with "/" and no drive.
+const plain = (path: string) => path.replace(/\\/g, '/').replace(/^[A-Za-z]:(?=\/)/, '')
+
 // A chat with id "here", and a disk held in memory.
 const world = (
   on: On,
@@ -58,18 +62,18 @@ const world = (
     value: [{ id: 'workstreams', title: 'Workstreams', isShown: true, isFocused: false }],
   }))
   on('fs.write', async (_, e) => {
-    disk.set(e.path, e.text)
+    disk.set(plain(e.path), e.text)
 
     return { value: undefined }
   })
   on('fs.read', async (_, e) =>
-    disk.has(e.path) ? { value: disk.get(e.path) } : { deny: 'No such file.' },
+    disk.has(plain(e.path)) ? { value: disk.get(plain(e.path)) } : { deny: 'No such file.' },
   )
   on('fs.list', async (_, e) => ({
     value: [...disk.keys()]
-      .filter(path => path.startsWith(`${e.path}/`))
+      .filter(path => path.startsWith(`${plain(e.path)}/`))
       .map(path => ({
-        name: path.slice(`${e.path}/`.length),
+        name: path.slice(`${plain(e.path)}/`.length),
         kind: 'file',
         size: 1,
         mtimeMs: NOW,
@@ -374,10 +378,10 @@ test('saves under the Windows home folder', async ($, on) => {
 
   await $.tool.call({ tool: 'mcp__workstreams__report', name: 'Fix', status: 'odd', next: 'Go.' })
 
-  // This test runs on a Mac, where a path starting "C:" is not a full path,
-  // so the test's disk sees it with the current folder in front.
+  // On a Mac a path starting "C:" is not a full path, so the test's disk sees it
+  // with the current folder in front. On Windows it is the whole path.
   const path = [...disk.keys()][0] ?? ''
-  expect(path.endsWith('C:\\Users\\me/.claude/workstreams/C--Users-me-proj/here.json')).toBe(true)
+  expect(path.endsWith('/Users/me/.claude/workstreams/C--Users-me-proj/here.json')).toBe(true)
   // A status the tool does not know counts as in progress.
   expect(saved(disk, path).streams).toMatchObject([{ name: 'Fix', status: 'in_progress' }])
 })

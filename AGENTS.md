@@ -256,6 +256,18 @@ node --test 'dev/tests/*.test.mjs'
   name it; nothing checks the choice written beside a folder.
 - Keep the quotes around the test pattern, so Node reads it, not the shell.
   A folder name instead of a pattern fails on the Node 25 installed here.
+- The checks and tests need LF line endings, because they split files at
+  the line ends and compare copies byte for byte. `.gitattributes` in the
+  root keeps LF in every checkout, also on Windows, where Git would
+  otherwise write CRLF. A checkout made on Windows before that file was
+  added still has CRLF. `check-skills.mjs` then stops and prints the two
+  commands that fix the checkout.
+- The tests run on Windows and on a Mac. `dev/tests/support.mjs` holds what
+  differs between the two: the form of `PATH`, where `sh` is, and how a
+  stand-in for a command such as `ntn` is made. A new test takes these from
+  that file, and never writes `/bin/sh` or joins a `PATH` with `:` itself.
+  Two tests in `validate-records-cases.test.mjs` are skipped on Windows,
+  because `chmod` cannot make a file unreadable there.
 - Codex has no validate command. To prove Codex accepts the plugin, install
   it into a scratch Codex home, never Mike's own:
   `CODEX_HOME=<scratch folder> codex plugin marketplace add <this folder>`,
@@ -380,6 +392,8 @@ node --test 'dev/tests/*.test.mjs'
     (2026-10-05) kept the command at 279 lines. Their tests are in a second
     file, `dev/tests/validate-records-cases.test.mjs` (242 lines), so the
     first test file stays at 279: tell him about those 242 lines of tests.
+    The fix for Windows paths (his yes, 2026-10-07) took the command to 280
+    lines, so it is at the limit and has no room left.
   - With it comes `.githooks/pre-commit`, a 6-line shell file every project
     gets (his yes with the same size, 2026-10-05). It runs the fourth
     command before a commit and stops the commit only on a finding. Git
