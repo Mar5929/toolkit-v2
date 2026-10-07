@@ -2,7 +2,7 @@
 
 Use this file to test a finished build against the Acceptance Criteria of every requirement. The job is done when the checker has passed the result and the owner has approved it.
 
-- The checker is a separate agent, the acceptance checker, that tests the result. It always runs.
+- The checker is a separate agent, the acceptance checker, that tests the result. It runs for every work item, with one exception: "A small work item" below says when it runs for a small work item on the short path.
 - Fixing and testing repeat in this State until the checker passes the result. Then the owner approves the result.
 - Nothing in this file merges, deploys, or marks the work item Done.
 
@@ -14,6 +14,7 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - A parent is checked as a whole, across its sub-items. Each sub-item keeps its own result approval.
 2. Run the checks in the work item's worktree, at its head commit, and never on the default branch. The head commit is the latest commit on the work item's branch, which `git -C <worktree> rev-parse HEAD` prints.
    - A work item whose only changes are documents committed with `publish-docs` has no worktree. Check the default branch at the commit that `publish-docs` reported, and give the checker that commit.
+   - A result that Git does not track, such as a load file or a file made for the client, has no commit. Check the file where it is. On the checker's input line "Folder, branch, and commit to check", give the file's full path and its SHA-256 hash, and write "none" for the branch and the commit.
    - Commit every build change first, with no AI credit, because the checker checks a commit.
    - Run the project's tests, which `AGENTS.md`, section "Commands", names. Also run every check of the Acceptance Criteria that you can run. Keep each command and its exact result line.
    - A check that needs something you lack, such as a real device, a sign-in, or the owner looking at a screen, is "not run". Say what would run it. Never report such a check as passed.
@@ -23,7 +24,7 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - Commit the plan on the work item's branch, staged by name, before the checker starts.
    - Never save the test plan where the work items are kept.
    - When there is no test plan, the checker gets "Test plan: none".
-4. Start the checker, every time, as `acceptance-checker-brief.md` says. Start it on the exact head commit after the test plan commit. Give it every requirement that is not dropped, whole, with its Acceptance Criteria. Read its report yourself.
+4. Start the checker, every time, as `acceptance-checker-brief.md` says. For a small work item, "A small work item" below says when to start it. Start it on the exact head commit after the test plan commit. Give it every requirement that is not dropped, whole, with its Acceptance Criteria. Read its report yourself.
    - When a defect is outside the requirements and breaks the flow, fix it. The flow is the steps that the person who uses the result goes through, from start to finish.
    - When a defect is outside the requirements and does not break the flow, add it as a new Backlog work item, and show it as a gap with that work item's ID.
    - When no helper can start, run the checks yourself, record "Independent check: none, <why>", and say so on the first line of the reply.
@@ -32,7 +33,7 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - **A failure needs the owner's decision (a requirement that reads two ways, a fix that changes what the owner approved or spends money), or the same failure comes back after a second fix.** Add a Questions and Answers row with your recommendation, set `waiting_on` to the owner, and ask.
    - **A failure shows that a requirement is wrong or missing.** Handle it as a change to a requirement, as `refining-requirements.md`, step 7, says. Never change the build to avoid the failure.
 6. Record each check after the checker's report.
-   - Add a Recent History row in this form: "Independent check of commit `<short hash>`: <each requirement's verdict>. Evidence: <test plan path, test command and result line>. Gaps: <gaps, or none>."
+   - Add a Recent History row in this form: "Independent check of commit `<short hash>`: <each requirement's verdict>. Evidence: <test plan path, test command and result line>. Gaps: <gaps, or none>." For a result that Git does not track, name the file's path and its SHA-256 hash in place of the commit.
    - Set a phase to Done when its tasks and its sub-items are done and the check confirmed its exit result.
 7. Ask for the result approval.
    - Add the row "Do you approve this result? <ID> at commit <short hash>: <each requirement's verdict and the gaps, in one line>.", with the requirement IDs that were checked in its Affects column.
@@ -43,6 +44,29 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - After a yes, set `result_approved` to `YYYY-MM-DD by <name>`, add a Recent History row that names the Q-ID, and move the work item to Reflecting. An instruction to go on, such as "ship it", that the owner gives after you showed the result is the owner's yes.
    - After a "no" or a change, record the owner's words in the same way, add a task for each problem the owner named, and go to step 5.
    - Handle a changed requirement with `refining-requirements.md`, which gives the steps for a change to a requirement.
+
+## A small work item
+
+Check a small work item that takes the short path with steps 1 to 6 above. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is, when it takes the short path, and gives its steps. Two things differ on the short path.
+
+**When the checker runs.** In step 4, start the checker only when the result does one of the four things below. In each of them, a mistake would be costly to undo, or would reach a person outside the project.
+
+- It changes a production system, or it is a file of records that the owner will load into one. A deploy and a data load are examples.
+- It changes an environment that other people use, such as a shared test environment.
+- It gives a number, a list of records, or a finding to a person outside the project. A count in an email to the client is an example.
+- It builds or changes what a rule in `system/` says. Only a checker's verdict lets `filing-project-records` mark such a rule Built.
+
+The checker never reads a production system. When the result was made from records of one, give the checker the paths of the working files that hold those records, on the input line "Working files".
+
+For any other result, start no checker. Run the checks of step 2 yourself, fix what fails as step 5 says, and run the checks again until every check passes or a failure needs the owner. Then set the phase to Done, as step 6 says, and do these three things in place of the Recent History row of step 6:
+
+- Add the Recent History row "Independent check: none, small item. Checked commit `<short hash>` myself. Evidence: <test command and result line, or what you saw>." For a result that Git does not track, name the file's path and its SHA-256 hash in place of the commit.
+- Say on the first line of the reply that shows the result that no separate checker ran.
+- Where `deploying.md` names the commit that the checker passed, use the commit that the "Independent check: none" row names. When `deploying.md` says to start the checker on a new head, run your own check again on that head, and add a new row.
+
+The owner's standing merge instruction does not cover a merge that no checker passed. Ask the owner about each such merge into the default branch.
+
+**The approval.** Steps 7 and 8 do not apply. The one closing question in `closing.md`, section "Closing a small work item", takes their place.
 
 ## Showing the result
 
@@ -57,9 +81,9 @@ Keep the reply short, and give its parts in this order:
 
 ## Mistakes to avoid
 
-- The checker runs before every result approval, whoever built the change. The owner decided this rule on 2026-09-28.
-  - When the owner asks to skip the checker, say that it always runs, as the owner decided, and ask whether the owner wants to change that decision.
+- The checker runs before every result approval, whoever built the change. The owner decided this rule on 2026-09-28. On 2026-10-07 the owner made one exception: a small work item that takes the short path, as "A small work item" above says.
+  - When the owner asks to skip the checker where this file says that it runs, say that it runs, as the owner decided, and ask whether the owner wants to change that decision.
   - When the owner does change the decision, give the owner's words to `managing-project-memory`, which writes the line in `.claude/rules/owner-preferences.md`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `managing-project-memory`.
-- A commit after the check needs a new checker.
+- A commit after the check needs a new checker. A change to a result that Git does not track needs a new check too.
 - A change after the owner's yes to the result needs a new check, and a new yes from the owner to what changed.
 - In Codex, each Git write, such as the test plan commit, follows `building.md`, section "Git writes in Codex".

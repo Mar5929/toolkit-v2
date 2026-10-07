@@ -145,6 +145,11 @@ project folder, for what lasts longer than one work item:
 - `reference/`: outside documentation, and the record of the system as it is
   today.
 
+Every project also has `working-files/`, which Git does not track. It holds
+the files the agent exports, downloads, or makes while it works, such as an
+export of records or a draft, in one folder per work item. The agent
+deletes a file there only when you ask.
+
 It shows you the plan and waits for your yes. Then it copies the starter
 project's files, the skills for your answers, the hooks, and the settings
 into the project. It turns on a check of the project's records that runs
@@ -298,6 +303,15 @@ records your words and the date.
   whether it changed `system/` or `DECISIONS.md`.
 - An independent checker agent tests the work before you are asked to
   approve it. Only you mark an item Done.
+- A small work item, with one or two tasks, takes a short path. The agent
+  plays the goal back to you, and your yes approves the requirements.
+  Your yes to one question at the end approves the result and marks the
+  item Done. For a small work item, the checker runs only when the result
+  changes production, changes an environment other people use, gives a
+  number, a list of records, or a finding to someone outside the project,
+  or changes a rule in `system/`.
+- A project with no planned phases, such as ongoing support for a client,
+  gets one phase, "Ongoing support", that stays open.
 - "From now on" instructions become a line in the project's
   `.claude/rules/owner-preferences.md`.
 - An action item from a meeting is saved as a project task with who owes
@@ -377,6 +391,12 @@ The agent never does these for you. It tells you when each one is needed.
   `every-project/` (the files, skills, and hooks every project gets), one
   or more folders for each choice, and `settings/`.
 - `plugins/workstreams/`: the workstream panel.
+- `reference/how-the-owner-works-with-agents.md`: what you ask agents to do
+  in your real projects, in your own words, one section per project. It is
+  not installed anywhere.
+- `reference/davis-memory-system.md`: how memory is kept in your Davis
+  project: its files, hooks, and rule, and the 32 kinds of event that start
+  its memory helper. It is not installed anywhere.
 - `dev/`: the goal, progress, design, research, checks, and test runs. It is
   not installed anywhere.
 - `ai-external-knowledge/`: saved copies of the official Claude Code, Codex,
