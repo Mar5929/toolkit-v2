@@ -1,6 +1,6 @@
 {
   "name": "workstreams",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "Shows the pieces of work this project's Claude chats report, the chat handling each one, and each chat's state, in a side panel. Open it with /streams. Claude Code only.",
   "author": {
     "name": "Mike Rihm",
