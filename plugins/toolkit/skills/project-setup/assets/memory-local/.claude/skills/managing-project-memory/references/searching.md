@@ -47,18 +47,13 @@ grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclu
 
 ## By status
 
-This command finds the files with the status `needs-review`:
+This command finds the files with the status `retired`:
 
 ```bash
-grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=MEMORY.md '^status: *"?needs-review"?' "$MAIN/memory"
+grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=MEMORY.md '^status: *"?retired"?' "$MAIN/memory"
 ```
 
-- To search for another status, replace `needs-review` with `current`, `superseded`, or `retired`. `record-format.md`, section "Status", says what each status means.
-- A proposal is a whole file or a single section. Both carry the words `Proposal, not approved yet:`. This command finds both:
-
-```bash
-grep -rn --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=MEMORY.md 'Proposal, not approved yet:' "$MAIN/memory"
-```
+- To search for another status, replace `retired` with `current` or `superseded`. `record-format.md`, section "Status", says what each status means.
 
 ## By date
 

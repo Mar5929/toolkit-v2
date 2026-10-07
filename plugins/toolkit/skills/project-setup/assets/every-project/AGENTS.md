@@ -13,9 +13,13 @@ The owner named in `PROJECT.md` dictates most messages with voice-to-text, so wo
 In the session the owner writes to, you run this project, and the owner works with you as a team. The owner makes the decisions, adds context, answers your questions, and gives input. You do the rest, including the technical work:
 
 - Run the project's work: the project's phases, each work item from start to close, and the project tasks, with `managing-work-items`.
-- Keep the project's records and memory accurate, with nothing out of date or repeated, and in the form that the skill for each one points to. Use `filing-project-records` for records and `managing-project-memory` for memory; in a Hindsight project, follow `.claude/rules/hindsight-memory.md` for memory.
+- Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents, and `managing-project-memory` for memory; in a Hindsight project, follow `.claude/rules/hindsight-memory.md` for memory.
 - Follow the steps those skills and rules set. Do not make up your own process.
 - Guide the owner: tell the owner what you need from the owner, and by when.
+
+You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner in one line what you saved. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
+
+For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
 
 ## Every session
 
@@ -28,7 +32,6 @@ In the session the owner writes to, you run this project, and the owner works wi
 - When a turn concerns a work item, find the work item, read its Current state (the five lines at its top), and use `managing-work-items` for the requested work.
   - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's Current State names.
   - Stop at the first check that finds one. Ask the owner only when it finds two.
-- Before a turn ends, record what a later session must know and no record holds. `managing-project-memory/references/memory-process.md`, "Before a turn ends", lists what to record and where. In a Hindsight project, follow `.claude/rules/hindsight-memory.md` instead.
 
 ## Project map
 
@@ -38,7 +41,7 @@ In the session the owner writes to, you run this project, and the owner works wi
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
-| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, the work item ID prefix, and links. | Ask the owner first. Commit with `publish-docs`. |
+| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, the work item ID prefix, and links. | Keep its facts current as they change. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
 | `PROJECT-ROADMAP.md` (local work items) | The plan at project level: the project's phases in order, and the top-level work items (with no parent) that belong to each phase. | `managing-work-items` decides the change. |
 | `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
 | `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in `work-items/` or `memory/`: they come from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
@@ -73,7 +76,7 @@ In the session the owner writes to, you run this project, and the owner works wi
 | `reference/outside-docs/` | Documentation captured from outside the project, such as vendor and product documentation, one folder per topic. `INDEX.md` lists the topics. | As for `reference/`. |
 | `reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
-| `working-files/` | Files that you export or download from a system, or make, while you work and that are not a finished result, such as an export of records, a draft, a script, or a helper agent's report. One folder per work item, named with its ID and a short form of its title: `working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them, because they may hold real records. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
+| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named with its ID and a short form of its title: `working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
 | `force-app/`, `sfdx-project.json`, `.forceignore` (Salesforce) | The Salesforce metadata this project builds and deploys, in `force-app/`, and the two files that tell Salesforce tools how to treat this repository. `force-app/` is made when the first metadata is added. | The Salesforce rules in `.claude/rules/`; `sf-component-tracker` before building. `.claude/rules/salesforce-project.md` names the official Salesforce skills. |
 | `tools/` (Salesforce) | Scripts for Salesforce work. `tools/kb/` lists which parts of the org read and write each other, to show what a change affects. `tools/permissions/` holds the tool that keeps permission sets in Git. | `.claude/rules/salesforce-project.md` says where each command is. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
@@ -121,7 +124,10 @@ To find what was decided before, read `DECISIONS.md`, then `system/`, then the w
 Ask the owner, and record the answer, before you:
 
 - take a step of a work item that needs the owner's yes (`managing-work-items/references/lifecycle-rules.md`, "When to stop for the owner's yes", lists them);
-- do anything that cannot be undone, spend money, sign in, or change an account.
+- do anything that cannot be undone, spend money, sign in, or change an account;
+- change a file that the Project map marks "Only with the owner's yes", or change what `PROJECT.md` says the project is for or its scope.
+
+When the owner's own words state the change, those words are the yes.
 
 ## Which skill
 

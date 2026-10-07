@@ -98,7 +98,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 14 possible project skill names stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
 | `ai-external-knowledge/` | Official pages, captured with Firecrawl, one folder per source: `claude-code/`, `codex/`, `openai-plugins/`, `anthropic-agent-skills/`, `anthropic-engineering/`, and `hindsight/`. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address and capture date. Not shipped. |
-| `reference/` (root of this repository) | `how-the-owner-works-with-agents.md`: the record of what Mike asks agents to do in his real projects, with his own words. It names people by role only. Add a section for each project that is studied. `davis-memory-system.md`: how the memory system of his Davis project works, as its files were on 2026-10-07. Not shipped (Mike, 2026-10-07: "I don't want it to be buried under 'dev'"). |
+| `reference/` (root of this repository) | `how-the-owner-works-with-agents.md`: the record of what Mike asks agents to do in his real projects, with his own words. It names people by role only. Add a section for each project that is studied. `davis-memory-system.md`: how the memory system of his Davis project works, as its files were on 2026-10-07. `memory-in-toolkit-v2-and-in-davis.md`: a comparison of memory in Toolkit V2 at version 0.9.9 with memory in Davis. Not shipped (Mike, 2026-10-07: "I don't want it to be buried under 'dev'"). |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
 | `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. One copied text has its source elsewhere: the writing rule ("Shared texts" under Rules). |
 | `dev/tools/check-skills.mjs` | Checks every skill the `toolkit` plugin holds and every skill `project-setup` copies into a project, and the setup folders (see "Checks"). |
@@ -172,7 +172,7 @@ add", is the only table of choices and folders; a new folder under
   `salesforce-delivery.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`).
 - No file under `<setup>assets/` holds a setup marker (`<!-- if ... -->`,
   `<!-- endif -->`): `check-skills.mjs` fails on one. Setup fills only
-  blanks: the project name, the prompts the owner answers, and the 11 lines
+  blanks: the project name, the prompts the owner answers, and the 10 lines
   of "Toolkit settings" in `PROJECT.md`, which are the same lines in every
   project (a line for a choice the owner did not make holds `not used`).
   The settings files (`.claude/settings.json`, `.codex/hooks.json`,
@@ -727,9 +727,36 @@ node --test 'dev/tests/*.test.mjs'
     ask before those commands on production when the guard did not run (no
     Node, hooks turned off, or the hook cancelled). That second check is
     gone.
-  - A switch built into the guard, for one session and 12 hours, is parked
-    on the branch `sandbox-checks-switch` and is not merged. Mike chose the
-    instruction over it.
+  - A switch built into the guard, for one session and 12 hours, was built
+    first and never merged. Mike chose the instruction over it. Its branch
+    was removed on 2026-10-07. Its changes are kept as one patch file,
+    `dev/archive/research/sandbox-checks-switch.patch`, which also holds a
+    stand-in for `sf` that lets the guard tests run on Windows.
+- **One goal for keeping the records** (Mike, 2026-10-07). The starter root
+  `AGENTS.md`, section "Your job as the agent", holds the goal he approved
+  word for word: the agent keeps the project's records, in the same turn,
+  without being asked and without asking. Change a word of it only with his
+  yes. The goal is stated in that one file, and the skills point to it.
+  - The toolkit states the process and the goal in general rules. It does
+    not list what to do in each small situation. His words: "We're really
+    just trying to define what our process is and make sure the agent
+    follows our process, rather than trying to define the behavior of an
+    agent." Under the goal there is one line of examples, and no table of
+    situations.
+  - What stays detailed: where each kind of information is kept, the form of
+    a record, and the short list "Ask the owner first".
+  - Gone since this change: the setting "Memory approval" and its two
+    values, the question "Save to memory: <one line>?", the saves that
+    waited for his yes, and the table "Before a turn ends".
+  - Situations belong in the test set, `dev/evals/keeping-project-records/`
+    (36 evals; 32 come from the Davis rule in
+    `reference/davis-memory-system.md`). Never copy a situation from there
+    into an instruction for the agent. When a test shows that the agent
+    misses one kind of change, add it as an example under the goal, with his
+    yes.
+  - Not changed, and waiting for his yes: the reminder hook
+    `prompt-reminder.mjs` still prints that words in notes or a transcript
+    "decide nothing".
 - **Jira is deferred** by Mike: no Jira skills now.
 - **Read-only sources.** Never change
   `/Users/michaelrihm/Documents/Projects/claude-toolkit`,

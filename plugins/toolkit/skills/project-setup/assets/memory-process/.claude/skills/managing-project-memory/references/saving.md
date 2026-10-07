@@ -2,7 +2,7 @@
 
 Use this file when you keep something in memory, correct it, or forget it. It gives the steps for each kind of save, and the line to give the owner after each save.
 
-`references/memory-process.md`, section "The owner's yes before a save", says when a save needs the owner's yes. Its section "A memory record that is out of date or no longer needed" says when a memory record is retired or deleted.
+`references/memory-process.md`, section "When to ask the owner", says when to ask the owner before a save. Its section "A memory record that is out of date or no longer needed" says when a memory record is retired or deleted.
 
 ## Contents
 
@@ -16,7 +16,6 @@ Use this file when you keep something in memory, correct it, or forget it. It gi
 - A shared file
 - Correcting a fact
 - "Forget that", retiring, and deleting
-- Proposals: a save the owner has not answered
 - The owner's instructions
 - Reply lines
 
@@ -25,10 +24,6 @@ Use this file when you keep something in memory, correct it, or forget it. It gi
 Before you save, test whether memory is the place for the fact. Use `references/memory-criteria.md`, section "First find the place where the fact is kept", and the table in the root `AGENTS.md`, section "Where information goes".
 
 - When the fact is kept in a place outside memory, save it in that place, with the skill that the root `AGENTS.md` names for that place. Then tell the owner where the fact is.
-  - The owner's request to remember the fact is the owner's yes to write it in that place.
-  - Show the owner a change to `PROJECT.md` before you save the change.
-- A decision, a term, or a rule of the system never becomes a memory record. Give it to `filing-project-records`.
-- A to-do, a reminder, or an action item is a project task, or a task in its work item. Give it to `managing-work-items`. When it carries a date, the date also goes under "Coming up" in the project's Current State, as `references/current-state.md` says.
 - When nothing qualifies for a save, save nothing. A reminder that a hook prints is only a hint. A hook is a small command that Claude Code or Codex runs by itself at set moments.
 
 ## Find the subject's memory record first
@@ -51,15 +46,15 @@ Search before every save. Search for the fact's words and their synonyms, and re
 - Each section says four things: what to remember, why it matters, how to apply it, and where it came from, with its date and what is uncertain.
 - The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary to one line of about 100 characters or fewer.
 - A fact that is true only for a while gets a "check or remove by" date. `references/memory-criteria.md`, section "A fact that is true only for a while", says which date.
-- Record what allowed the save, as one of these three: "Approved by <owner> on <date>", "Trusted grant, <date>", or "Proposed by the agent on <date>; not approved".
+- Record what allowed the save. Write "Approved by <owner> on <date>" when the owner asked for the save or said yes to it. Write "Logged by the agent on <date>" for every other save.
 - When several independent things call for a save, group them into one save.
 - Read the memory record back. When the save changes the project's Current State, update the project's Current State as `references/current-state.md` says.
 
 ## An unchecked claim
 
-An unchecked claim is something a person said that nobody checked, such as "another developer says the API allows 100 calls a minute". It goes in the memory record of the type project for the subject it is about, as its own section. The section holds three things:
+An unchecked claim is a statement that nobody has confirmed. It is something a person said that nobody checked, such as "another developer says the API allows 100 calls a minute", or something that you concluded and that no source states. It goes in the memory record of the type project for the subject it is about, as its own section. The section holds three things:
 
-- what was claimed, who said it, to whom, and the date;
+- what was claimed, the date, and who said it and to whom, or what you concluded it from;
 - the words "Not checked." and what would check the claim;
 - a "check or remove by" date, 30 days ahead unless the owner names one.
 
@@ -91,7 +86,7 @@ An event is one of two things:
 - work done for the owner that no work item, project task, commit, or filed record shows;
 - anything else that happened and that a later session must know, such as a meeting, a call, or an outage.
 
-Make one event record for it, in the same turn, and ask no question first. The event record holds four things:
+Make one event record for it. The event record holds four things:
 
 - the date, and who took part;
 - what was done or what happened;
@@ -109,11 +104,10 @@ A recurring job is a job that the team runs again and again, such as a weekly da
 - a first section that says what the job is, when it runs, who runs it, and the exact steps or the file that holds the steps;
 - a section "Runs" with one row per run. `references/memory-store.md` gives the form of the table.
 
-Add a row in the turn in which the run happens or the owner reports it. The owner may report a run in words such as "the weekly load ran fine" or "the nightly job broke again".
+Add a row for each run. The owner may report a run in words such as "the weekly load ran fine" or "the nightly job broke again".
 
 - A failed run gets a row too, with the error and the fix.
-- Ask no question before you add the row. Report the row in one line.
-- When the owner reports a run without its detail, write the row first: the date, the owner's words, and "not known yet" in each cell that the owner did not give. Then ask for what is missing, and complete the row with the owner's answer.
+- When the owner reports a run without its detail, write the row with the date and the owner's words, and write "not known yet" in each cell that the owner did not give. Complete the row when the detail is known.
 - When the job has no event record yet, make one with what is known. Add the job's line under "Standing jobs and shared files" in the project's Current State, as `references/current-state.md` says.
 - When another record, such as a work item, already shows an earlier run, the row for that run holds only the date and that record's ID.
 
@@ -146,29 +140,11 @@ A shared file is a file kept outside the project's records that people keep up t
 Delete a memory record in these cases:
 
 - the owner says to delete it;
-- it is a proposal that the owner said no to;
 - it holds a secret or an email address. In this case, ask the owner first.
 
 In your reply, say whether the deleted memory record can be brought back. `references/memory-store.md` says whether it can.
 
 When you find a secret or an email address in memory, remove that text at once, and tell the owner.
-
-## Proposals: a save the owner has not answered
-
-A proposal is a save that needs the owner's yes and does not have it yet. Keep such a save as a proposal in the same turn in which you ask "Save to memory: <one line>?", so that the save is not lost when the session ends before the owner answers. Do so for every such question, also for one about a fact found in a document that the owner shared.
-
-Two kinds of save are never kept as a proposal in memory. Each of them gets only its line under "Waiting on", which step 1 below describes:
-
-- a rule you inferred;
-- a save that holds more about a named person than attendance, work role, when the person is away, or who covers. The line for this save names the person and leaves those details out until the owner's yes.
-
-1. Add one line under "Waiting on" in the project's Current State: "Owner: save to memory? <the fact in one line> (asked <date>)".
-   - For a rule, the line is "Owner: add to the project rules? <one line>".
-   - Several open proposals share one line that names each of them.
-   - Remove each proposal from the line as the owner answers it, and remove the line when none is left.
-2. Save the proposal in the place where it would be kept after the owner's yes, and mark it as proposed. `references/memory-store.md` says how.
-3. When the owner says yes, remove the marks, mark the memory record as current, and record "Approved by <owner> on <date>".
-4. When the owner says no, remove the proposal. When the owner gives a general rule about what to keep, write that rule in the project rules under "Memory", and check later candidates against it.
 
 ## The owner's instructions
 
@@ -183,7 +159,7 @@ Write a line that the owner dictates with the steps below alone. For every other
    - When the owner asks to change or remove an instruction, change or remove that bullet.
 2. When the owner's words say that the instruction is for every project, add the bullet to the files that the root `AGENTS.md` names for every project, in place of this project's file. The root `AGENTS.md` names those files in the section "Where information goes", in the row for the owner's preference. Ask "This project or all projects?" only when the owner's words leave it unclear.
 3. A request that a problem never happens again, such as "don't let that happen again", is an instruction. Write the bullet as the check or the step that prevents the problem. In the bullet, name the record that explains the problem by its ID: a DEC, a work item, or a memory record. Show the owner the bullet in your reply.
-4. When you inferred an instruction, ask first: "Add to the project rules: <one line>?". In the same turn, add its line under "Waiting on" in the project's Current State, as step 1 of "Proposals: a save the owner has not answered" says.
+4. When you inferred an instruction that the owner did not give, ask first: "Add to the project rules: <one line>?". A rule file changes only with the owner's yes.
 5. When `managing-work-items` closes a work item and the owner agreed to keep a lesson from it as a rule, write that rule in the same way. Its bullet ends with the work item's ID in place of "in chat".
 
 ## Reply lines
@@ -201,7 +177,6 @@ The line for each kind of save:
 - A lesson: "Noted a lesson in memory: <heading> (in <title>). Say 'forget that' to undo."
 - An event or a run: "Logged in memory: <title>, <date>."
 - A rule: "Added to the project rules (<area>): <instruction>. Say 'forget that' to undo."
-- A proposal: "Not approved yet. Save to memory: <one line>? (Kept as a proposal in <title>.)"
 - A retire: "Retired from memory: <title>. Say 'bring it back' to restore it."
 - A delete: "Deleted from memory, as you said: '<the owner's words>'." Then say whether the memory record can be brought back.
 - A failed save: "Not saved: <reason>." Keep the text that you tried to save, tell the owner the fix, and try the save again in this session as soon as the fix is made.

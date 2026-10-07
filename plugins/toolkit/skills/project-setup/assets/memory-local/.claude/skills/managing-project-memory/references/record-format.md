@@ -31,16 +31,14 @@ The header is the block of fields between the two `---` lines at the top of the 
 | `status` | One of the values under "Status". |
 | `source` | The person, conversation, or document that the fact came from, with its absolute date. |
 | `last_verified` | The date the fact was last checked against its source, or `unknown`. |
-| `authorization` | What allowed the save, in one of the four forms under this table. |
+| `authorization` | What allowed the save, in one of the two forms under this table. |
 | `work_items` | One entry for each related work item, in the form that "Links to work items" gives, or `[]` when no work item applies. |
 | `supersedes` | The name of the file that this file replaces, or `none`. |
 
 - `check_by` is for the whole file. When a single section has its own date, that section carries a `**Check or remove by:**` line.
 - `authorization` has one of these forms:
-  - `Approved by <owner> on <date>`
-  - `Trusted grant, <date>`
-  - `Proposed by the agent on <date>; not approved`
-  - `Logged by the agent on <date>`, for an event or a run that the agent logged.
+  - `Approved by <owner> on <date>`, for a save that the owner asked for or said yes to.
+  - `Logged by the agent on <date>`, for every other save.
 - Keep any other field that Claude Code, Codex, or an import wrote.
 - A file that was made before the fields `created` and `check_by` existed gets both at its next change. Set `created` to the oldest date that the file shows, and set `check_by: none`.
 
@@ -51,7 +49,6 @@ The first column is the value of the `status` field. The second column is the wo
 | `status` | Word in `managing-project-memory` | Meaning | In the index |
 | --- | --- | --- | --- |
 | `current` | current | The file is in use. | Listed. |
-| `needs-review` | proposed | A new file that the owner has not approved. Never rely on it. | Listed, with a description that starts "Proposal:". |
 | `superseded` | replaced | Another file replaced this file. The first line of this file's body names that file. | Left out. |
 | `retired` | retired | The file is no longer used for answers, and it is kept only as history. Nothing replaces it. | Left out. |
 | `template` | (none) | Only the template has this value. | Left out. |
@@ -64,17 +61,12 @@ Find the case in the first column. The other three columns give what to write in
 
 | Case | Status | Description starts | Body |
 | --- | --- | --- | --- |
-| A new file that the owner has not approved | `needs-review` | `Proposal:` | First line under the title: `**Proposal, not approved yet:** asked on <date>. Do not rely on this until the owner says yes.` |
-| A new section in a current file, when the owner has not approved the section | The file's status does not change. | The file's description does not change. | The section's first line: `**Proposal, not approved yet:** asked on <date>. Do not rely on this until the owner says yes.` |
 | Another file replaced this file | `superseded` | `Superseded by <file>:` | First line under the title: `**Superseded by:** [<title>](<file>.md) on <date>.` |
 | The file is no longer used for answers, and nothing replaces it | `retired` | `Retired <date>:` | First line under the title: `**Retired:** <date>. <reason, in the owner's words when the owner gave one>` |
 | A `feedback_` file whose content moved to the rules and to the memory records of its subjects, or a `decision_` file whose decision moved to `DECISIONS.md` | `superseded` | `Moved on <date>:` | First line under the title: `**Superseded by:** <where it moved, with the DEC ID for a decision>, on <date>.` |
 
 - A file with the status `superseded` or `retired` keeps its body as history.
 - In a file that replaces another file, set `supersedes:` to the name of the file it replaces.
-- When the owner approves a proposal, remove each mark.
-  - For a file: set `status: current` and `authorization: Approved by <owner> on <date>`, and remove `Proposal:` from the start of the description.
-  - For a section: remove its proposal line, and add "Approved by <owner> on <date>." to its **Evidence and limits** line.
 
 ## Body layout
 

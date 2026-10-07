@@ -33,7 +33,6 @@ A writer who meets a made-up word that is not in this list adds a row in the sam
 | a memory, memories | a memory record | P | "memory record" | 23 / 63 | No |
 | brief, job block | a helper's instructions; its filled-in inputs | N, P | Keep "brief"; "the list of inputs" | 23 / 41 | Six file names, one heading |
 | lives, lands, wins, fresh | is kept; is merged; is used; read again | P | Those verbs | 21 / 47 | No |
-| proposal | a save the owner has not said yes to | K | Keep | 20 / 46 | Reply line, index prefix |
 | Hand-offs, hand to | work another skill does | P | "Work that another skill does"; "give", "ask" | 19 / 22 | Cited twice |
 | host | Claude Code or Codex | P | Name them | 16 / 26 | No |
 | concept | the subject of a memory record | P | "subject" | 16 / 54 | `concept-record.md` |
@@ -47,7 +46,6 @@ A writer who meets a made-up word that is not in this list adds a row in the sam
 | blank form | a template | N | "template" | 10 / 20 | No |
 | prune, tidy | remove lines no longer true; clean up | P | Those words | 10 / 15 | `session-start.mjs` prints "Prune" |
 | pointer | a record's ID in a work item | N | "the record's ID in the work item" | 8 / 15 | No |
-| onboarding, trusted | ask before an inferred save; save sourced facts unasked | N | Keep as "Memory approval" values; never for setup | 8 / 11 | `PROJECT.md` line |
 | delivered (a rule) | a work item built it | N | "built what the rule says" | 7 / 12 | No |
 | filing test | the test in "Where information goes" | N | "the test for that" | 6 / 6 | `prompt-reminder.mjs` prints it |
 | "This skill holds the process" | an author's rule | P | Say what the skill is for | 6 / 6 | No |

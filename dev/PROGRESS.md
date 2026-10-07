@@ -48,8 +48,9 @@ going to be different." A project that needs a narrower rule changes its own
 copy of the rule.
 
 A switch built into the guard, for one session and 12 hours, was built
-first and is parked on the branch `sandbox-checks-switch`. Mike chose the
-instruction over it. That branch is not merged.
+first and never merged. Mike chose the instruction over it. Its branch was
+removed on 2026-10-07, and its changes are kept as
+`dev/archive/research/sandbox-checks-switch.patch`.
 ## Small work items, working files, and the owner's usage record, version 0.9.8 (2026-10-07)
 
 Work item TKV-30. Mike had an agent read his own messages in the session

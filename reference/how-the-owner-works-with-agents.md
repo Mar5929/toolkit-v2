@@ -155,7 +155,7 @@ On 2026-10-07 the owner said of the four rules above: "I should just be able to 
 
 This comparison was made against the starter files on 2026-10-07, and not in a live project.
 
-- Toolkit V2 already handles these parts of the work as well as the project did, or better: transcripts in `sources/`; the single work item file; the design beside the work item and then `system/security-model.md`; the two writing rules; the question before a save to memory, which fits on one line ("Save to memory: <one line>?"); `publish-docs` for documents; the component tracker and the deployment record; no tracker program.
+- Toolkit V2 already handles these parts of the work as well as the project did, or better: transcripts in `sources/`; the single work item file; the design beside the work item and then `system/security-model.md`; the two writing rules; `publish-docs` for documents; the component tracker and the deployment record; no tracker program.
 - Did not fit, and changed in version 0.9.8: working files had no named place, and the workbook drafts, earlier copies of the workbook, patch scripts, helper agents' reports, and meeting agendas now go in `working-files/`; a small request went through six stops for the owner's yes, and it now takes a short path.
 - Does not fit yet: the Salesforce safety rules above. A way to turn the sandbox checks off for one session is being built as separate work.
 - Handled by a setup choice or by the project itself: a second computer (Notion or GitHub for work items, Notion or Hindsight for memory); DevOps Center (Salesforce's own skills); the second repository and the two read-only orgs (the project's own guide).

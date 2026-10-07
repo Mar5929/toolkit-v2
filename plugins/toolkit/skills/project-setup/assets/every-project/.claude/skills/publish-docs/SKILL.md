@@ -34,7 +34,7 @@ Run each Git command on its own, with `git -C <folder>`, which names the folder 
    - "Refused files" below does not refuse the file.
    - Git does not ignore the file. Run `git -C <main> check-ignore <file>`. When the command prints the path, Git ignores the file.
 
-   Save only an edit that the owner asked for or said yes to, or an edit that another skill tells you to save with this skill, for example `filing-project-records`. That request, yes, or instruction also covers the push in step 7.
+   Save only an edit that the owner asked for or said yes to, an edit that the root `AGENTS.md` tells you to make without asking, or an edit that another skill tells you to save with this skill, for example `filing-project-records`. That request, yes, or instruction also covers the push in step 7.
 2. **Look first.** Run these three commands, each on its own:
 
    ```text

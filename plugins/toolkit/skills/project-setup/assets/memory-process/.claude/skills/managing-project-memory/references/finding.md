@@ -34,13 +34,11 @@ For a question about what was done or what changed in a period, such as "what di
 Read each hit whole, in this turn, and check its status:
 
 - Current: it is a fact.
-- Proposed: a proposed memory record and a proposed section are not facts.
-- An unchecked claim and an entry under "Gotchas and lessons" are not facts either.
 - Replaced: answer from the memory record that replaces it.
 - Retired: it is history. Leave it out unless the owner asks for history.
 - Past its "check or remove by" date: say so, and check it before you act on it.
 
-When you mention a proposed memory record, a proposed section, an unchecked claim, or a lesson, say what it is.
+An unchecked claim and an entry under "Gotchas and lessons" are not facts, whatever the status of their memory record. When you mention one, say what it is.
 
 Some remembered claims are about something that changes, such as a vendor, a process, or a person's role. Before you act on such a claim, check its date and its source. Tell the owner when the claim was never checked, or when its last check is older than `references/tidying.md`, section "Stale records", allows.
 

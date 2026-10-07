@@ -275,7 +275,7 @@ description.
 | --- | --- |
 | A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the memory index: one line per memory record, which the hook rebuilds in `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
 | You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
-| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved, and asks you first. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved and where. The agent saves it without asking you first, and tells you in one line what it saved. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
 | The agent edits a file | The record check runs: 15 checks on the form of `DECISIONS.md`, `system/`, `sources/`, and local work items, such as an ID used twice or a rule marked approved with no decision behind it. The agent is told what is wrong and fixes it. |
@@ -317,6 +317,12 @@ records your words and the date.
 - An action item from a meeting is saved as a project task with who owes
   it: you, the agent, or a named other person, such as the client or a
   vendor.
+- The agent keeps the project's records without being asked. When something
+  changes what is true, it puts each new fact where it belongs, corrects
+  every record the change made wrong, and tells you in one line what it
+  saved. It asks you only when it cannot tell which of two things is true,
+  or before a step on the "Ask the owner first" list in the project's
+  `AGENTS.md`.
 - A fact that fits no other file, such as who is away or what the client
   plans, is a memory record. A fact that is true only for a while is
   checked or removed on its date.
