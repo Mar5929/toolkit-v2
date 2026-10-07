@@ -2,11 +2,10 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## The checks on Windows (2026-10-07, branch `claude/musing-pike-2aba34`)
+## The checks and two hook commands on Windows, version 0.9.10 (2026-10-07)
 
-Not shipped, so the version did not change. The checks under "Checks" in
-`AGENTS.md` failed on Mike's Windows computer on an unchanged `main`. What
-was wrong, and what changed:
+The checks under "Checks" in `AGENTS.md` failed on Mike's Windows computer
+on an unchanged `main`. What was wrong, and what changed:
 
 - Line endings. Git on Windows wrote every file with CRLF, and the check
   tools and tests split files at `\n` and compare copies byte for byte. A
@@ -29,24 +28,39 @@ was wrong, and what changed:
   (`C:\Users\me\...`), and the disk was keyed by `/Users/me/...`. The fix
   is in the test file only (477 to 481 lines). The mod did not change.
 
-Waiting for Mike's yes, because both are changes to hook commands that
-ship to projects:
+Two hook commands that ship to projects were wrong on Windows. Mike said
+yes to both fixes on 2026-10-07, after he was told the sizes:
 
-- `validate-records.mjs` compares paths with `/`, and Windows gives `\`.
-  So on Windows the check after an edit says nothing for any file in a
+- `validate-records.mjs` compared paths with `/`, and Windows gives `\`.
+  So on Windows the check after an edit said nothing for any file in a
   folder (`system/`, `sources/`, `work-items/`, `memory/`), and a worktree
-  session reports work item findings it should not. 20 tests fail for this
-  reason. The fix was tried and then taken out again: 4 changed lines and 1
-  new line, 279 to 280 lines, which is the limit.
-- `session-start.mjs` starts `ntn` without a shell. On Windows `ntn` is
+  session reported work item findings it should not. 20 tests failed for
+  this reason. The command now turns each path into its `/` form, and it
+  reads a work item saved with CRLF. It went from 279 to 280 lines, which
+  is the limit: there is no room left.
+- `session-start.mjs` started `ntn` without a shell. On Windows `ntn` is
   `ntn.cmd`, which cannot be started that way, so a project with Notion
-  memory never gets its Current state page printed. 2 tests fail for this
-  reason. The fix was tried and then taken out again: 2 changed lines, 76
-  lines before and after.
+  memory never got its Current state page printed. 2 tests failed for this
+  reason. The command now starts `ntn` through the shell, on a Mac too. It
+  is still 76 lines.
 
-With both fixes tried, every test passed on Windows except the 6 in
-`org-guard.test.mjs`, which the branch `sandbox-checks-switch` fixes.
-Nothing here was run on a Mac.
+An existing project gets both fixes at its next "update the toolkit",
+which replaces the hook commands. Codex needs no new trust: it trusts the
+entry in `.codex/hooks.json`, and no entry changed.
+
+Still open:
+
+- `org-guard.test.mjs` fails 6 of 10 tests on Windows, because its stand-in
+  `sf` is a shell script. The parked branch `sandbox-checks-switch` holds
+  the fix.
+- A checkout made on Windows before `.gitattributes` needs the two commands
+  above once: the main checkout, and the worktree `sandbox-checks-switch`
+  after its work is committed.
+- Nothing here was run on a Mac.
+- Not checked: whether Codex runs its hook entries on Windows. The
+  helper-agent reminder in the Claude Code settings runs `echo` with no
+  shell, which on Windows needs an `echo.exe` on `PATH`; Git for Windows
+  provides one on Mike's computer.
 
 
 ## Sandbox questions the owner turns off and on, version 0.9.9 (2026-10-07)

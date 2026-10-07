@@ -392,6 +392,8 @@ node --test 'dev/tests/*.test.mjs'
     (2026-10-05) kept the command at 279 lines. Their tests are in a second
     file, `dev/tests/validate-records-cases.test.mjs` (242 lines), so the
     first test file stays at 279: tell him about those 242 lines of tests.
+    The fix for Windows paths (his yes, 2026-10-07) took the command to 280
+    lines, so it is at the limit and has no room left.
   - With it comes `.githooks/pre-commit`, a 6-line shell file every project
     gets (his yes with the same size, 2026-10-05). It runs the fourth
     command before a commit and stops the commit only on a finding. Git
