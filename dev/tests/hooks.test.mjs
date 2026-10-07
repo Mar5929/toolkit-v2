@@ -581,12 +581,18 @@ test('codex-after-commit: other commands and bad input print nothing', () => {
 });
 
 test('codex-after-commit: a long run of git options stays fast', () => {
-  // The limit is for the pattern, which took minutes when it was slow. Starting Node alone can
-  // take over a second on a busy Windows computer, so the limit leaves room for that.
-  for (const command of [`git${' --a'.repeat(40)} status`, `git${' -c -a'.repeat(40)} status`]) {
+  // The limit is for the pattern, which took minutes when it was slow. Starting Node alone can take
+  // seconds on a busy Windows computer, so each command is timed against a plain one, and the
+  // fastest of three runs counts.
+  const fastest = (command) => Math.min(...[1, 2, 3].map(() => {
     const started = Date.now();
     assert.equal(hook('codex-after-commit.mjs', { tool_name: 'Bash', tool_input: { command } }).out, '');
-    assert.ok(Date.now() - started < 5000,`${command.slice(0, 20)}... took ${Date.now() - started} ms`);
+    return Date.now() - started;
+  }));
+  const plain = fastest('git status');
+  for (const command of [`git${' --a'.repeat(40)} status`, `git${' -c -a'.repeat(40)} status`]) {
+    const extra = fastest(command) - plain;
+    assert.ok(extra < 1000, `${command.slice(0, 20)}... took ${extra} ms longer than "git status"`);
   }
   for (const command of ['git --git-dir=/a/.git commit', 'git -C a -c b=c --no-pager commit --amend']) {
     assert.equal(hook('codex-after-commit.mjs', { tool_name: 'Bash', tool_input: { command } }).out, AFTER_COMMIT, command);

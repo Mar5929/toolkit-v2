@@ -20,8 +20,10 @@ was wrong, and what changed:
   (48 lines, new) now holds what differs on Windows, and `hooks.test.mjs`,
   `validate-records.test.mjs`, and `validate-records-cases.test.mjs` use
   it. Two tests that need a file `chmod` made unreadable are skipped on
-  Windows. The timing limit in "codex-after-commit: a long run of git
-  options stays fast" went from 1 second to 5.
+  Windows. The test "codex-after-commit: a long run of git options stays
+  fast" now times each command against a plain `git status`, and the
+  fastest of three runs counts, because starting Node alone can take
+  seconds on a busy Windows computer.
 - `claude plugin test ./plugins/workstreams` failed 12 of 14 tests on
   Windows. Claude Code gives the test's disk a full Windows path
   (`C:\Users\me\...`), and the disk was keyed by `/Users/me/...`. The fix
