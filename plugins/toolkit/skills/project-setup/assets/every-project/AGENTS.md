@@ -33,7 +33,7 @@ In the session the owner writes to, you run this project, and the owner works wi
 ## Project map
 
 - A row marked "local work items", "local memory", "Hindsight memory", "Salesforce", or "optional" is present only in a project set up that way.
-- Git does not track `work-items/` and `memory/`. They exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them.
+- Git does not track `work-items/`, `memory/`, and `working-files/`. They exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them.
 - Work items are kept in one place: local files, Notion, or GitHub Issues. Never copy a work item into another of these or a list of your own. Name a work item by its ID, never by a folder path.
 
 | Location | What it holds | When you change it |
@@ -73,6 +73,7 @@ In the session the owner writes to, you run this project, and the owner works wi
 | `reference/outside-docs/` | Documentation captured from outside the project, such as vendor and product documentation, one folder per topic. `INDEX.md` lists the topics. | As for `reference/`. |
 | `reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
+| `working-files/` | Files that you export or download from a system, or make, while you work and that are not a finished result, such as an export of records, a draft, a script, or a helper agent's report. One folder per work item, named with its ID and a short form of its title: `working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them, because they may hold real records. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
 | `force-app/`, `sfdx-project.json`, `.forceignore` (Salesforce) | The Salesforce metadata this project builds and deploys, in `force-app/`, and the two files that tell Salesforce tools how to treat this repository. `force-app/` is made when the first metadata is added. | The Salesforce rules in `.claude/rules/`; `sf-component-tracker` before building. `.claude/rules/salesforce-project.md` names the official Salesforce skills. |
 | `tools/` (Salesforce) | Scripts for Salesforce work. `tools/kb/` lists which parts of the org read and write each other, to show what a change affects. `tools/permissions/` holds the tool that keeps permission sets in Git. | `.claude/rules/salesforce-project.md` says where each command is. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
@@ -103,6 +104,9 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | Outside documentation | `reference/outside-docs/` |
 | An analysis of how the system works today, for the owner or a work item | Write it to `reference/current-system/` before you reply (`reference/AGENTS.md`). |
 | A release, deployment, data migration, or client handoff | `delivery/` |
+| A finished file made for the client, or for the owner to pass on, such as a report or a spreadsheet | `delivery/client-handoffs/` |
+| A finished file of records that the owner loads into a system | `delivery/migrations/`. Never commit it. |
+| A file exported, downloaded, or made while working that is not a finished result, such as an export of records or a draft | `working-files/`, in the folder of its work item |
 | A test plan | `tests/` |
 | A lesson that is not proven yet | The work item's Notes. Closing the work item decides whether the lesson is kept for the whole project. With no work item open: memory |
 | A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory: `managing-project-memory` |

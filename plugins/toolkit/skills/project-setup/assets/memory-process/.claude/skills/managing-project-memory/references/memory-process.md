@@ -84,7 +84,6 @@ With both values, ask the owner before each of these:
 
 - an instruction you inferred. Ask "Add to the project rules: <one line>?";
 - anything about a named person, or personal details, that the owner did not ask you to remember;
-- more than five memory records at once;
 - retiring or deleting a memory record that the owner did not ask you to forget;
 - a change to the rules under "The owner's yes before a save".
 

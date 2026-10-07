@@ -21,6 +21,8 @@ Design acceptance checks: <the "Acceptance checks" table of the design's
   selected option's Requirement coverage>
 Test plan: <the text of tests/<ID>-test-plan.md, or "none">
 Test commands: <the project's commands>
+Working files: <the paths of the files that hold the production records that
+  the result was made from, or "none">
 ```
 
 ## Brief for the helper
@@ -34,6 +36,8 @@ You check whether a finished result does what the owner asked. You did not build
 ### Check
 
 First check that you are looking at the exact commit that was named, from the folder you were given. Run `git -C <folder> status`, `git -C <folder> rev-parse HEAD`, and `git -C <folder> log --oneline -5`. If the commit differs, say so first. Then check the commit you found, and name it in the verdict.
+
+When you were given the full path of a file and its SHA-256 hash, and no commit, the result is a file that Git does not track. Skip the three Git commands above, and skip the diff. Check that the file has the hash you were given, and say so first if it does not. Then check that file where it is, and name its path in the verdict where this brief asks for the commit.
 
 - Run the project's tests, and every check you can run for the Acceptance Criteria of each requirement. Copy each command and its result line exactly.
 - For each requirement, read every line of its Acceptance Criteria, and give one of these four verdicts:

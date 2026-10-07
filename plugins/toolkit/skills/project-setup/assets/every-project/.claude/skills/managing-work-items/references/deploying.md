@@ -8,6 +8,7 @@ Before you start:
 - Read `PROJECT.md` for the owner's name and, in a Salesforce project, for the org aliases.
 - Ask every question as a Questions and Answers row, with `waiting_on` set to the owner.
 - In Codex, every Git write and every call that needs the network follows `building.md`, section "Git writes in Codex".
+- For a small work item on the short path, `testing-loop.md`, section "A small work item", says which commit to use when no checker ran, and `closing.md`, section "Closing a small work item", says how to finish after this file.
 
 In this file, the head of a branch is the latest commit on that branch. The checker is the separate agent that tested the result in the Testing Loop.
 

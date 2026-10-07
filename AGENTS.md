@@ -66,6 +66,9 @@ chat handling each one, and each chat's state. It uses no Notion. See
   descriptions, and bodies, each with its source page.
 - `dev/ARCHITECTURE.md` describes the retired program. Read it only for
   history.
+- `reference/how-the-owner-works-with-agents.md`: what Mike asks agents to
+  do in his real projects, taken from his own session messages, one section
+  per project. Read it before you propose a change to how a project runs.
 
 ## Layout
 
@@ -91,6 +94,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 14 possible project skill names stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
 | `ai-external-knowledge/` | Official pages, captured with Firecrawl, one folder per source: `claude-code/`, `codex/`, `openai-plugins/`, `anthropic-agent-skills/`, `anthropic-engineering/`, and `hindsight/`. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address and capture date. Not shipped. |
+| `reference/` (root of this repository) | `how-the-owner-works-with-agents.md`: the record of what Mike asks agents to do in his real projects, with his own words. It names people by role only. Add a section for each project that is studied. Not shipped (Mike, 2026-10-07: "I don't want it to be buried under 'dev'"). |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
 | `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. One copied text has its source elsewhere: the writing rule ("Shared texts" under Rules). |
 | `dev/tools/check-skills.mjs` | Checks every skill the `toolkit` plugin holds and every skill `project-setup` copies into a project, and the setup folders (see "Checks"). |
@@ -172,9 +176,9 @@ add", is the only table of choices and folders; a new folder under
   takes the Salesforce entries out of a project that is not a Salesforce
   project.
 - `every-project/.ignore` is a project file (added 2026-10-05, for Mike to confirm). It holds two lines that make ripgrep, and with it Claude Code's Grep and Glob tools, read `work-items/` and `memory/`, which `.gitignore` hides from them. Without it a session that searched the project missed an earlier record in a work item in 2 of 2 live runs; with it, it found the record (`dev/test-runs/memory-restore.md`). It changes nothing in this repository: `every-project/` holds neither folder.
-- `every-project/.gitignore` is a project file. It keeps the lines `/memory/`
-  and `/work-items/`, which apply only inside `every-project/`, where neither
-  folder exists. So `memory-local/memory/` and `work-local/work-items/` are
+- `every-project/.gitignore` is a project file. It keeps the lines
+  `/memory/`, `/work-items/`, and `/working-files/`, which apply only inside
+  `every-project/`, where none of the three folders exists. So `memory-local/memory/` and `work-local/work-items/` are
   not hidden from this repository's Git: stage a new file there by name.
 - Some skill templates are copies of model files (`dev/SKILL-INDEX.md`,
   section 8). `check-skills.mjs` fails when one differs from its project
@@ -464,9 +468,11 @@ node --test 'dev/tests/*.test.mjs'
   `dev/build-shared/`: `writing-harness-files/references/writing-rule.md`
   copies the starter rule `document-clarity-standard.md`, so the
   owner's rule stays where a project gets it ("Plain English" above).
-- **`dev/` is not shipped.** Claude Code installs only `plugins/toolkit/` and
-  `plugins/workstreams/`, and Codex only `plugins/toolkit/`. Nothing shipped
-  reads a file under `dev/`.
+- **`dev/` and the root `reference/` folder are not shipped.** Claude Code
+  installs only `plugins/toolkit/` and `plugins/workstreams/`, and Codex only
+  `plugins/toolkit/`. Nothing shipped reads a file under `dev/` or under this
+  repository's root `reference/`. The `reference/` folder that every project
+  gets is a different folder, in the starter project.
 - **Skills.** A skill is a folder: `SKILL.md`, plus `references/`,
   `assets/` (templates), and `examples/` as needed. No scripts inside
   skills: steps are file edits, `git`, `gh`, `ntn`, or MCP tool calls.

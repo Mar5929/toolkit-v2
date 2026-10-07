@@ -53,7 +53,8 @@ A client handoff has no status.
 ## What must stay true
 
 - Set a Status from what happened. Never set Deployed, Complete, or Released before the checks passed.
-- Never commit a file that holds real records: a data load file or a backup. Keep the `.gitignore` in any folder that has one.
+- Never commit a file that holds real records, such as a data load file, a backup, or a list of contacts made for the client. Keep the `.gitignore` in any folder that has one.
+  - For a client handoff that includes such a file, or a file that `publish-docs` does not commit, such as a spreadsheet: put the file beside `HANDOFF.md` in the main checkout, and add the file's name to a `.gitignore` in that handoff's folder. Then commit `HANDOFF.md` and that `.gitignore`. Never commit the file. The main checkout is the first path that `git worktree list` prints; a file that Git does not track is lost when its worktree is removed.
 - A source, which is anything the project received and keeps, goes in `sources/`, not here. A record here names it by SRC-###.
 - A question that is still open goes in the work item, or in `DECISIONS.md` when more than one work item needs it. A record here names it by its ID.
 
