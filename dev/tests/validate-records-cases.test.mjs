@@ -241,3 +241,16 @@ test('review of the second fixes, note 8: in a worktree session, a record of the
   chmodSync(join(dir, 'DECISIONS.md'), 0o644);
   clean(stop(), 'readable again');
 });
+
+test('Windows: a work item saved with CRLF line endings is read, and a session folder given with a lower-case drive letter still gets its edit checked', () => {
+  const dir = project();
+  put(dir, W, item('DEC-001').replace('status: In progress', 'status: Done').replaceAll('\n', '\r\n'));
+  assert.match(run(dir, ['--all']).err, /WI-001\.md: the work item is closed, but its Moved up line is empty/, 'the top of a CRLF work item is read');
+  if (!WINDOWS) return;
+  // Windows tools write one folder as C:\project and as c:\project. Both are the same folder.
+  const lower = dir[0].toLowerCase() + dir.slice(1);
+  assert.notEqual(lower, dir, 'the scratch folder starts with an upper-case drive letter');
+  change(dir, 'DECISIONS.md', 'Status: Decided', 'Status: Approved');
+  const edited = run(dir, [], { cwd: lower, hook_event_name: 'PostToolUse', tool_name: 'Write', tool_input: { file_path: join(dir, 'DECISIONS.md') } });
+  assert.match(edited.err, /DEC-001 has Status "Approved"/, 'the edit is checked');
+});

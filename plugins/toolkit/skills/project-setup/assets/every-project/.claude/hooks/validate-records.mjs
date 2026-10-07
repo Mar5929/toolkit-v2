@@ -250,7 +250,7 @@ try {
     return [real(git[0]), real(dirname(resolve(at, git[1])))];
   } catch { return [cwd, cwd]; } }; // no Git repository: the folder the command ran in
   const [top, main] = repo(edited.map(dirname).find((dir) => existsSync(dir)) ?? cwd);
-  if (repo(cwd)[1] !== main) process.exit(0); // an edit in another repository is not checked
+  if (relative(repo(cwd)[1], main)) process.exit(0); // an edit in another repository is not checked
   // After an edit, only the edited file's group is reported; for a patch that names no file, both.
   const local = (path) => /^(work-items|memory)\//.test(path);
   const tracked = /^(?!\.\.)(DECISIONS\.md$|system\/|sources\/|(.*\/)?(AGENTS|CLAUDE)\.md$)/;

@@ -44,6 +44,19 @@ yes to both fixes on 2026-10-07, after he was told the sizes:
   reason. The command now starts `ntn` through the shell, on a Mac too. It
   is still 76 lines.
 
+A separate reviewer checked both fixes against
+`dev/reviews/best-practices-review.md` and the captured hook pages. It
+found nothing that had to be fixed, and two things that should be. Both
+were done, with no new line in the command:
+
+- Windows tools write one folder as `C:\project` and as `c:\project`. The
+  command compared the two as text, so a session folder given with a
+  lower-case drive letter got no check after an edit. It now compares them
+  as paths.
+- The fix for a work item saved with CRLF had no test. A new test in
+  `validate-records-cases.test.mjs` covers it and the drive letter. That
+  file is now 256 lines.
+
 An existing project gets both fixes at its next "update the toolkit",
 which replaces the hook commands. Codex needs no new trust: it trusts the
 entry in `.codex/hooks.json`, and no entry changed.
@@ -56,6 +69,14 @@ Still open:
 - A checkout made on Windows before `.gitattributes` needs the two commands
   above once: the main checkout, and the worktree `sandbox-checks-switch`
   after its work is committed.
+- From the review, not changed: on Windows, an edit of an `AGENTS.md` or
+  `CLAUDE.md` on another drive, outside every repository, makes
+  `validate-records.mjs` report the project's findings. The findings are
+  true; only the moment is wrong. `session-start.mjs` now passes the
+  Current state page ID through a shell. The ID comes only from the hook's
+  own entry in the settings file, so the reviewer and the writer left it
+  as it is; cleaning it first would take the command to 77 lines, one over
+  its limit.
 - Nothing here was run on a Mac.
 - Not checked: whether Codex runs its hook entries on Windows. The
   helper-agent reminder in the Claude Code settings runs `echo` with no
