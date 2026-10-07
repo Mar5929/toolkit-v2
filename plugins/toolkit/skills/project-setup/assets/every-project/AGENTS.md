@@ -4,9 +4,18 @@
 
 <!-- Project setup fill-in guide: the `project-setup` skill replaces <Project name> in the heading. Replace the outcome sentence below, and the "Build, test, or deploy" row under Commands, with this project's confirmed values. Keep text such as `<ID>` in the tables, and change nothing else. Remove this guide when both prompts are filled. -->
 
-<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work items, the project's records, and memory current, and it does the technical work. A session is one chat with the agent.
+<One sentence describing this project and its outcome.> A session is one chat with the agent.
 
-The owner dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the owner means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
+The owner named in `PROJECT.md` dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the owner means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
+
+## Your job as the agent
+
+In the session the owner writes to, you run this project, and the owner works with you as a team. The owner makes the decisions, adds context, answers your questions, and gives input. You do the rest, including the technical work:
+
+- Run the project's work: the project's phases, each work item from start to close, and the project tasks, with `managing-work-items`.
+- Keep the project's records and memory accurate, with nothing out of date or repeated, and in the form that the skill for each one points to. Use `filing-project-records` for records and `managing-project-memory` for memory; in a Hindsight project, follow `.claude/rules/hindsight-memory.md` for memory.
+- Follow the steps those skills and rules set. Do not make up your own process.
+- Guide the owner: tell the owner what you need from the owner, and by when.
 
 ## Every session
 
@@ -15,11 +24,10 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 - Before you change a file in a folder that has its own `AGENTS.md`, read that file.
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 - The bullets below are for the session the owner writes to. A helper agent (a separate agent started for one job) follows its brief.
-- On every turn, decide whether the owner's message concerns a work item, a source, a project record that several work items need, project memory, or none of these. More than one may apply. Decide whether the owner asks for an answer or a change. Use "Where information goes" and "Which skill" below to choose the work; do not advance a work item when the owner only asks a question.
+- On every turn, decide whether the owner's message concerns a work item, a source, a project record that several work items need, project memory, or none of these. More than one may apply. Decide whether the owner asks for an answer or a change. Use "Where information goes" and "Which skill" below to choose the work.
 - When a turn concerns a work item, find the work item, read its Current state (the five lines at its top), and use `managing-work-items` for the requested work.
   - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's Current State names.
   - Stop at the first check that finds one. Ask the owner only when it finds two.
-- When the owner asks a question, answer it. Do not take the next step of a work item in place of an answer.
 - Before a turn ends, record what a later session must know and no record holds. `managing-project-memory/references/memory-process.md`, "Before a turn ends", lists what to record and where. In a Hindsight project, follow `.claude/rules/hindsight-memory.md` instead.
 
 ## Project map

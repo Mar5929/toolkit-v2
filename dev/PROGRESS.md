@@ -2,6 +2,35 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The agent's job in the starter AGENTS.md, version 0.9.7 (2026-10-07)
+
+Mike read the starter root `AGENTS.md` in an editor page and left three
+notes. With his yes, on 2026-10-07:
+
+- A new section, "Your job as the agent", sits before "Every session". It
+  says that the agent runs the project and the owner works with it as a
+  team, and it names the skills for work items, records, and memory. It
+  replaces the two sentences on the agent's role in the opening paragraph.
+  Mike's own line "There is nothing you and the user cannot do as a team!"
+  was left out at his choice, because it holds no instruction.
+- The two lines on answering a question were cut, because they repeated
+  each other. "Decide whether the owner asks for an answer or a change"
+  stays; `managing-work-items` still says not to advance a work item for a
+  question.
+- The size limit for a project's `AGENTS.md` in setup's final check and in
+  "update the toolkit" went from 20,480 to 22,528 bytes. The file is 20,768
+  bytes. Codex reads at most 32,768 bytes of instruction files in all,
+  `~/.codex/AGENTS.md` included.
+
+A separate reviewer checked the change against the wording and best
+practices reviews; its findings were fixed and it read the fixes. Open for
+Mike: the reviewer found "adds context" and "gives input" vague, and they
+stay until he decides. The new heading means an existing project gets a new
+`AGENTS.md` built at its next "update the toolkit" (`update.md`, "Updating
+AGENTS.md", second case). All checks passed, except
+`hooks.test.mjs` "when MEMORY.md cannot be written", which also fails on
+`main` in a container that runs as root.
+
 ## Work and memory skill merge, version 0.9.6 (2026-10-06)
 
 Work item TKV-29. Mike approved one `managing-work-items` skill and one
