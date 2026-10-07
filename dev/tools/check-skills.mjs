@@ -548,11 +548,11 @@ for (const f of walk(ASSETS)) {
   if (!section) report('error', COPY_FILE, 'has no section "## Salesforce entries in the settings file"; update this check when the section is renamed');
   else if (settings) {
     const listed = new Set([...section.replace(/\s+/g, ' ').matchAll(/`([^`]+)`/g)].map((m) => m[1]));
-    const rules = [...(settings.permissions?.deny ?? []), ...(settings.permissions?.ask ?? [])].filter((rule) => /^Bash\((?:sf|sfdx) /.test(rule));
+    const rules = [...(settings.permissions?.deny ?? []), ...(settings.permissions?.ask ?? [])].filter((rule) => /^(?:Bash|PowerShell)\((?:sf|sfdx) /.test(rule));
     const commands = Object.values(settings.hooks ?? {}).flat().flatMap((group) => group.hooks ?? []).map((hook) => [hook.command, ...(hook.args ?? [])].join(' '))
       .flatMap((text) => text.match(/tools\/[\w./-]+|guard-[\w-]+\.cjs/g) ?? []);
     for (const entry of [...rules, ...commands]) if (!listed.has(entry)) report('error', COPY_FILE, `"Salesforce entries in the settings file" does not name ${entry}, which ${shown(settingsFile)} holds: setup would leave it in a project that is not a Salesforce project`);
-    for (const entry of listed) if (/^Bash\((?:sf|sfdx) |^tools\/|^guard-/.test(entry) && ![...rules, ...commands].includes(entry)) report('error', COPY_FILE, `"Salesforce entries in the settings file" names ${entry}, which ${shown(settingsFile)} does not hold`);
+    for (const entry of listed) if (/^(?:Bash|PowerShell)\((?:sf|sfdx) |^tools\/|^guard-/.test(entry) && ![...rules, ...commands].includes(entry)) report('error', COPY_FILE, `"Salesforce entries in the settings file" names ${entry}, which ${shown(settingsFile)} does not hold`);
   }
 }
 

@@ -20,8 +20,7 @@ Two things apply to the whole file:
    `sf project deploy validate -x delivery/deployments/WI-031-account-merge/package.xml -o <sandbox alias>`
 
 2. Then deploy to the sandbox, when the work item needs a sandbox deploy. The command is `sf project deploy start`, with the same `-x` and `-o`.
-   - In Claude Code, ask "Deploy WI-031 to `<sandbox alias>`?" as a Questions and Answers row, and run the command after the owner's yes.
-   - In Codex, give the owner the exact command, and ask the owner to run it and to tell you the result.
+   - Ask "Deploy WI-031 to `<sandbox alias>`?" as a Questions and Answers row, and run the command after the owner's yes. When the owner has turned the sandbox questions off, as `.claude/rules/salesforce-org-safety.md` says, run the command without this question, and add the Recent History row "Deployed to `<sandbox alias>`: the sandbox questions are off."
    - Give the manual steps to the owner in order, with what to check after each step.
 3. For production, the owner runs the deploy and tells you the result. Give the owner all of these:
    - the exact command, with `-o <production alias>`;
