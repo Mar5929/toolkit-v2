@@ -76,6 +76,12 @@ const INDEX = path.join(ROOT, 'dev/SKILL-INDEX.md');
 const ASSETS = path.join(SETUP, 'assets');
 const COPY_FILE = path.join(SETUP, 'references/setup-copy.md');
 const REPO_SETTINGS = path.join(ROOT, '.claude/settings.json');
+// The checks split files at "\n" and compare copies byte for byte, so they need LF line endings.
+// .gitattributes keeps LF on every computer. A checkout made before that file still has CRLF on Windows.
+if (fs.readFileSync(INDEX, 'utf8').includes('\r\n')) {
+  console.log('check-skills: failed. The files in this checkout have Windows line endings (CRLF), and the checks and tests need LF.\nCommit or set aside every change, then run these two commands once in this checkout:\n  git rm --cached -r -q .\n  git reset --hard');
+  process.exit(1);
+}
 // The one folder under assets/ that holds no project files: the settings snippets.
 const NOT_PROJECT_FOLDERS = ['settings'];
 // The table the agent acts on: each choice and the folders setup copies for it (setup-copy.md, "Folders the choices add").

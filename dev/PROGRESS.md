@@ -2,6 +2,50 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The checks on Windows (2026-10-07, branch `claude/musing-pike-2aba34`)
+
+Not shipped, so the version did not change. The checks under "Checks" in
+`AGENTS.md` failed on Mike's Windows computer on an unchanged `main`. What
+was wrong, and what changed:
+
+- Line endings. Git on Windows wrote every file with CRLF, and the check
+  tools and tests split files at `\n` and compare copies byte for byte. A
+  new `.gitattributes` in the root (`* text=auto eol=lf`) keeps LF in every
+  checkout. `check-skills.mjs` went from 15 errors to none with no other
+  change. It now stops with the two commands that fix a checkout made
+  before that file. The main checkout and the other open worktrees on the
+  Windows computer need those two commands once, after this is merged.
+- The tests built a `PATH` joined with `:`, called `/bin/sh` and `which`,
+  and made stand-in commands as shell scripts. `dev/tests/support.mjs`
+  (48 lines, new) now holds what differs on Windows, and `hooks.test.mjs`,
+  `validate-records.test.mjs`, and `validate-records-cases.test.mjs` use
+  it. Two tests that need a file `chmod` made unreadable are skipped on
+  Windows. The timing limit in "codex-after-commit: a long run of git
+  options stays fast" went from 1 second to 5.
+- `claude plugin test ./plugins/workstreams` failed 12 of 14 tests on
+  Windows. Claude Code gives the test's disk a full Windows path
+  (`C:\Users\me\...`), and the disk was keyed by `/Users/me/...`. The fix
+  is in the test file only (477 to 481 lines). The mod did not change.
+
+Waiting for Mike's yes, because both are changes to hook commands that
+ship to projects:
+
+- `validate-records.mjs` compares paths with `/`, and Windows gives `\`.
+  So on Windows the check after an edit says nothing for any file in a
+  folder (`system/`, `sources/`, `work-items/`, `memory/`), and a worktree
+  session reports work item findings it should not. 20 tests fail for this
+  reason. The fix was tried and then taken out again: 4 changed lines and 1
+  new line, 279 to 280 lines, which is the limit.
+- `session-start.mjs` starts `ntn` without a shell. On Windows `ntn` is
+  `ntn.cmd`, which cannot be started that way, so a project with Notion
+  memory never gets its Current state page printed. 2 tests fail for this
+  reason. The fix was tried and then taken out again: 2 changed lines, 76
+  lines before and after.
+
+With both fixes tried, every test passed on Windows except the 6 in
+`org-guard.test.mjs`, which the branch `sandbox-checks-switch` fixes.
+Nothing here was run on a Mac.
+
 ## The agent's job in the starter AGENTS.md, version 0.9.7 (2026-10-07)
 
 Mike read the starter root `AGENTS.md` in an editor page and left three

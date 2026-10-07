@@ -1,14 +1,15 @@
 // Tests for the three project hook commands and their settings snippets.
 // Run from the repository root: node --test dev/tests/hooks.test.mjs
 // Every run works in a temporary folder (a scratch Git repository with a memory/ folder) and
-// points HOME there, so nothing on this Mac outside that folder changes.
+// points HOME there, so nothing on this computer outside that folder changes.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { delimiter, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { SH, gitPath, standIn, testEnv } from './support.mjs';
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const assets = join(repo, 'plugins/toolkit/skills/project-setup/assets');
@@ -18,8 +19,7 @@ const settings = join(assets, 'settings');
 const STARTER_INDEX = readFileSync(join(assets, 'memory-local/memory/MEMORY.md'), 'utf8');
 const scratch = mkdtempSync(join(tmpdir(), 'tkv2-hooks-'));
 process.on('exit', () => rmSync(scratch, { recursive: true, force: true }));
-const gitPath = dirname(execFileSync('which', ['git'], { encoding: 'utf8' }).trim());
-const baseEnv = { HOME: scratch, PATH: `${gitPath}:/usr/bin:/bin`, GIT_CONFIG_NOSYSTEM: '1' };
+const baseEnv = testEnv(scratch, gitPath);
 
 let count = 0;
 /** A new scratch project: a Git repository with one commit and a memory/ folder kept out of Git.
@@ -124,7 +124,7 @@ test('session-start, local: a missing or empty CURRENT_STATE.md prints one line 
     const { dir } = project({ 'project_billing.md': record('How invoices are sent', 'status: current\n'), ...files });
     const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
     assert.equal(code, 0);
-    assert.match(out, /^memory\/CURRENT_STATE\.md is missing or empty in .+\/project-\d+\.\n\nMemory index \(files in memory\/; open one before you rely on it\):\n- \[x\]\(project_billing\.md\): /);
+    assert.match(out, /^memory\/CURRENT_STATE\.md is missing or empty in .+[\\/]project-\d+\.\n\nMemory index \(files in memory\/; open one before you rely on it\):\n- \[x\]\(project_billing\.md\): /);
     assert.doesNotMatch(out, /no longer true/);
   }
 });
@@ -201,7 +201,7 @@ test('session-start and prompt-reminder: a reader that closed the output gets ex
   for (const [file, input, args] of runs) {
     // ":" exits at once, so the hook writes into a closed pipe. The exit code goes to stderr.
     const script = `{ "${process.execPath}" "${join(hooks, file)}" ${args}; echo "exit=$?" >&2; } | :`;
-    const result = spawnSync('/bin/sh', ['-c', script], { input: JSON.stringify(input), encoding: 'utf8', env: baseEnv });
+    const result = spawnSync(SH, ['-c', script],{ input: JSON.stringify(input), encoding: 'utf8', env: baseEnv });
     assert.equal(result.stderr, 'exit=0\n', file);
   }
 });
@@ -226,24 +226,25 @@ test('session-start, hindsight: a missing CURRENT_STATE.md prints one line and e
   const { dir } = project({ 'MEMORY.md': null });
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'hindsight']);
   assert.equal(code, 0);
-  assert.match(out, /^memory\/CURRENT_STATE\.md is missing or empty in .+\/project-\d+\.\n$/);
+  assert.match(out, /^memory\/CURRENT_STATE\.md is missing or empty in .+[\\/]project-\d+\.\n$/);
 });
 
 /** A folder holding a stand-in `ntn` command that prints what the test gives it. */
-function fakeNtn(script) {
+function fakeNtn(result) {
   const bin = join(scratch, `bin-${++count}`);
   mkdirSync(bin);
-  writeFileSync(join(bin, 'ntn'), `#!/bin/sh\necho "$@" > "${bin}/args"\n${script}\n`);
-  chmodSync(join(bin, 'ntn'), 0o755);
+  standIn(bin, 'ntn', result);
   return bin;
 }
+/** The PATH of a hook run that finds the stand-in `ntn` first. */
+const withNtn = (bin) => ({ PATH: [bin, baseEnv.PATH].join(delimiter) });
 
 test('session-start, notion: prints the Current state page read with ntn, and no file from memory/', () => {
   // A project with Notion memory has no memory/ folder. One left from local memory is not read.
   const { dir } = project({ 'CURRENT_STATE.md': 'A local file that must not be printed.\n', 'project_billing.md': record('How invoices are sent', 'status: current\n') });
   const before = snapshot(dir);
-  const bin = fakeNtn(`printf '%s' '${JSON.stringify({ object: 'page_markdown', markdown: `Last updated: ${today}, agent\n\n## Now\n\n- WI-7 in design.` })}'`);
-  const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH: `${bin}:${baseEnv.PATH}` });
+  const bin = fakeNtn({ out: JSON.stringify({ object: 'page_markdown', markdown: `Last updated: ${today}, agent\n\n## Now\n\n- WI-7 in design.` }) });
+  const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], withNtn(bin));
   assert.equal(code, 0);
   assert.equal(readFileSync(join(bin, 'args'), 'utf8').trim(), 'api v1/pages/abc123/markdown');
   assert.match(out, /^The project's Current State:\nLast updated: .*\n\n## Now\n\n- WI-7 in design\.\n$/);
@@ -251,7 +252,7 @@ test('session-start, notion: prints the Current state page read with ntn, and no
   assert.deepEqual(snapshot(dir), before, 'no file in memory/ was written');
   const bare = project({ 'MEMORY.md': null });
   rmSync(join(bare.dir, 'memory'), { recursive: true });
-  const again = hook('session-start.mjs', { source: 'startup', cwd: bare.dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH: `${bin}:${baseEnv.PATH}` });
+  const again = hook('session-start.mjs', { source: 'startup', cwd: bare.dir }, ['--memory', 'notion', '--page', 'abc123'], withNtn(bin));
   assert.equal(again.code, 0);
   assert.equal(again.out, out, 'the same with no memory/ folder at all');
   assert.equal(existsSync(join(bare.dir, 'memory')), false, 'no memory/ folder was created');
@@ -259,15 +260,15 @@ test('session-start, notion: prints the Current state page read with ntn, and no
 
 test('session-start, notion: an old or long Current state page gets the prune request naming the skill', () => {
   const { dir } = project({ 'MEMORY.md': null });
-  const bin = fakeNtn(`printf '%s' '${JSON.stringify({ markdown: 'Last updated: 2026-01-02, handoff, agent\n## Now\n- WI-7 in design.' })}'`);
-  const { out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH: `${bin}:${baseEnv.PATH}` });
+  const bin = fakeNtn({ out: JSON.stringify({ markdown: 'Last updated: 2026-01-02, handoff, agent\n## Now\n- WI-7 in design.' }) });
+  const { out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], withNtn(bin));
   assert.match(out, /^The project's Current State is \d+ days old\. Remove the lines that are no longer true with the managing-project-memory skill\.\nThe project's Current State:\nLast updated: 2026-01-02/);
 });
 
 test('session-start, notion: a failed or missing ntn prints one line and exits 0', () => {
   const { dir } = project();
-  const failing = fakeNtn('echo "401 unauthorized" >&2; exit 1');
-  for (const PATH of [`${failing}:${baseEnv.PATH}`, baseEnv.PATH]) {
+  const failing = fakeNtn({ err: '401 unauthorized\n', code: 1 });
+  for (const { PATH } of [withNtn(failing), baseEnv]) {
     const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH });
     assert.equal(code, 0);
     assert.equal(out, 'The Notion Current state page could not be read here. Read it with the managing-project-memory skill.\n');
@@ -580,10 +581,12 @@ test('codex-after-commit: other commands and bad input print nothing', () => {
 });
 
 test('codex-after-commit: a long run of git options stays fast', () => {
+  // The limit is for the pattern, which took minutes when it was slow. Starting Node alone can
+  // take over a second on a busy Windows computer, so the limit leaves room for that.
   for (const command of [`git${' --a'.repeat(40)} status`, `git${' -c -a'.repeat(40)} status`]) {
     const started = Date.now();
     assert.equal(hook('codex-after-commit.mjs', { tool_name: 'Bash', tool_input: { command } }).out, '');
-    assert.ok(Date.now() - started < 1000, `${command.slice(0, 20)}... took ${Date.now() - started} ms`);
+    assert.ok(Date.now() - started < 5000,`${command.slice(0, 20)}... took ${Date.now() - started} ms`);
   }
   for (const command of ['git --git-dir=/a/.git commit', 'git -C a -c b=c --no-pager commit --amend']) {
     assert.equal(hook('codex-after-commit.mjs', { tool_name: 'Bash', tool_input: { command } }).out, AFTER_COMMIT, command);
@@ -614,7 +617,7 @@ test('Claude Code settings snippets: the right commands, arguments, and texts fo
     assert.deepEqual(bash.hooks[0].args, ['${CLAUDE_PROJECT_DIR}/.claude/hooks/codex-after-commit.mjs']);
     assert.equal(agent.matcher, 'Agent');
     assert.equal(agent.hooks[0].command, 'echo');
-    const agentOut = execFileSync(agent.hooks[0].command, agent.hooks[0].args, { encoding: 'utf8' });
+    const agentOut = execFileSync(agent.hooks[0].command, agent.hooks[0].args, { encoding: 'utf8', env: baseEnv });
     assert.deepEqual(JSON.parse(agentOut), { hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: "A helper agent ran or was started. If it works on a work item or sub-item, update that item's status, Recent History, and Current state with managing-work-items once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing." } });
     for (const group of Object.values(h).flat()) for (const handler of group.hooks) {
       assert.equal(handler.type, 'command', 'only command hooks: the end-of-reply prompt hook is dropped');
@@ -660,7 +663,7 @@ test('Codex hook snippet commands run as written from a scratch project', () => 
   mkdirSync(join(dir, '.claude', 'hooks'), { recursive: true });
   for (const file of readdirSync(hooks)) writeFileSync(join(dir, '.claude', 'hooks', file), readFileSync(join(hooks, file)));
   const h = JSON.parse(readFileSync(join(settings, 'codex-hooks.local.json'), 'utf8')).hooks;
-  const sh = (command, input) => spawnSync('/bin/sh', ['-c', command], { cwd: dir, input: JSON.stringify(input), encoding: 'utf8', env: { ...baseEnv, PATH: `${dirname(process.execPath)}:${baseEnv.PATH}` } }).stdout;
+  const sh = (command, input) => spawnSync(SH, ['-c', command], { cwd: dir, input: JSON.stringify(input), encoding: 'utf8', env: { ...baseEnv, PATH: [dirname(process.execPath), baseEnv.PATH].join(delimiter) } }).stdout;
   assert.match(sh(h.SessionStart[0].hooks[0].command, { source: 'startup', cwd: dir }), /^The project's Current State:/);
   assert.match(sh(h.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /managing-project-memory/);
   assert.match(sh(JSON.parse(readFileSync(join(settings, 'codex-hooks.hindsight.json'), 'utf8')).hooks.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /hindsight-memory\.md/);
