@@ -2,23 +2,22 @@
 // for .githooks/pre-commit, and for the settings entries that run them.
 // Run from the repository root: node --test dev/tests/validate-records.test.mjs
 // Every run works in a temporary folder: a project copied from the starter folders, as a Git
-// repository. HOME points there, so nothing on this Mac outside that folder changes.
+// repository. HOME points there, so nothing on this computer outside that folder changes.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { cpSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { SH, WINDOWS, gitPath, scratchFolder, testEnv } from './support.mjs';
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const assets = join(repo, 'plugins/toolkit/skills/project-setup/assets');
 const HOOK = '.claude/hooks/validate-records.mjs';
 const script = join(assets, 'every-project', HOOK);
-const scratch = realpathSync(mkdtempSync(join(tmpdir(), 'tkv2-records-')));
+const scratch = scratchFolder('tkv2-records-');
 process.on('exit', () => rmSync(scratch, { recursive: true, force: true }));
-const gitPath = dirname(execFileSync('which', ['git'], { encoding: 'utf8' }).trim());
-const env = { HOME: scratch, PATH: `${dirname(process.execPath)}:${gitPath}:/usr/bin:/bin`, GIT_CONFIG_NOSYSTEM: '1' };
+const env = testEnv(scratch, dirname(process.execPath), gitPath);
 const git = (dir, ...args) => execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.com', ...args], { cwd: dir, env, encoding: 'utf8', stdio: 'pipe' });
 
 const put = (dir, file, text) => { mkdirSync(dirname(join(dir, file)), { recursive: true }); writeFileSync(join(dir, file), text); };
@@ -32,7 +31,7 @@ let count = 0;
  * the check itself. `local: true` adds local work items and local memory. One commit. */
 function fresh({ local = true } = {}) {
   const dir = join(scratch, `project-${++count}`);
-  cpSync(join(assets, 'every-project'), dir, { recursive: true, filter: (from) => !/\/\.(agents|claude)$/.test(from) });
+  cpSync(join(assets, 'every-project'), dir, { recursive: true, filter: (from) => !/[\\/]\.(agents|claude)$/.test(from) });
   put(dir, HOOK, readFileSync(script, 'utf8'));
   if (local) cpSync(join(assets, 'work-local/work-items'), join(dir, 'work-items'), { recursive: true });
   if (local) cpSync(join(assets, 'memory-local/memory'), join(dir, 'memory'), { recursive: true });
@@ -87,7 +86,7 @@ const claudeEdit = (dir, file) => run(dir, [], { session_id: 'abc123', cwd: dir,
 const codexEdit = (dir, file) => run(dir, [], { session_id: 'abc123', cwd: dir, hook_event_name: 'PostToolUse', turn_id: 't1', tool_name: 'apply_patch', tool_use_id: 'call_1', tool_input: { command: `*** Begin Patch\n*** Update File: ${file}\n@@\n-old\n+new\n*** End Patch\n` }, tool_response: 'Done' });
 const clean = (result, label) => assert.deepEqual(result, { code: 0, err: '', out: '' }, label);
 /** Every file under a folder with its text, to prove the check wrote nothing. */
-const snapshot = (dir) => readdirSync(dir, { recursive: true }).filter((name) => !name.startsWith('.git/')).sort().map((name) => [name, statSync(join(dir, name)).isFile() ? readFileSync(join(dir, name), 'utf8') : 'folder']);
+const snapshot = (dir) => readdirSync(dir, { recursive: true }).map((name) => name.replaceAll('\\', '/')).filter((name) => !name.startsWith('.git/')).sort().map((name) => [name, statSync(join(dir, name)).isFile() ? readFileSync(join(dir, name), 'utf8') : 'folder']);
 
 test('a new project straight from setup gives no finding in any mode', () => {
   for (const local of [true, false]) {
@@ -165,7 +164,7 @@ for (const [number, name, breakIt, file, finding, later] of BROKEN) {
 test('check 8: a commit that changes or deletes a filed original is stopped by .githooks/pre-commit', () => {
   const dir = good();
   const hook = join(dir, '.githooks/pre-commit');
-  assert.ok(statSync(join(assets, 'every-project/.githooks/pre-commit')).mode & 0o100, 'the starter file is executable');
+  assert.ok(WINDOWS || statSync(join(assets, 'every-project/.githooks/pre-commit')).mode & 0o100, 'the starter file is executable (Windows keeps no such mark on a file)');
   assert.ok(readFileSync(hook, 'utf8').trimEnd().split('\n').length <= 6);
   git(dir, 'config', 'core.hooksPath', '.githooks');
   add(dir, 'sources/SRC-001-kickoff-notes.md', 'A correction.\n');
@@ -272,7 +271,7 @@ test('settings snippets: Claude Code runs the check after Edit and Write and at 
     assert.deepEqual(patch.map((group) => group.hooks), [[{ type: 'command', command: 'node "$(git rev-parse --show-toplevel)/.claude/hooks/validate-records.mjs"', timeout: 10 }]]);
     assert.match(codex.description, /a check of the project's records after each file edit\.$/);
     // The Codex command runs as written, from a folder inside the project.
-    const ran = spawnSync('/bin/sh', ['-c', patch[0].hooks[0].command], { cwd: join(dir, 'system'), env, encoding: 'utf8', input: JSON.stringify({ cwd: join(dir, 'system'), tool_name: 'apply_patch', tool_input: { command: '*** Begin Patch\n*** Update File: ../DECISIONS.md\n*** End Patch\n' } }) });
+    const ran = spawnSync(SH, ['-c', patch[0].hooks[0].command], { cwd: join(dir, 'system'), env, encoding: 'utf8', input: JSON.stringify({ cwd: join(dir, 'system'), tool_name: 'apply_patch', tool_input: { command: '*** Begin Patch\n*** Update File: ../DECISIONS.md\n*** End Patch\n' } }) });
     assert.equal(ran.status, 2);
     assert.match(ran.stderr, /DEC-001 has Status "Approved"/);
   }

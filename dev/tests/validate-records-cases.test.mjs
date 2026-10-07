@@ -2,22 +2,23 @@
 // Run from the repository root: node --test dev/tests/validate-records-cases.test.mjs
 // The last two tests are from the review of the second round of fixes (blocker and note 8).
 // The first file, validate-records.test.mjs, is at its size limit, so new cases go here.
-// Every run works in a temporary folder. HOME points there, so nothing else on this Mac changes.
+// Every run works in a temporary folder. HOME points there, so nothing else on this computer changes.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
-import { chmodSync, cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { chmodSync, cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { WINDOWS, gitPath, scratchFolder, testEnv } from './support.mjs';
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const assets = join(repo, 'plugins/toolkit/skills/project-setup/assets');
 const HOOK = '.claude/hooks/validate-records.mjs';
-const scratch = realpathSync(mkdtempSync(join(tmpdir(), 'tkv2-record-cases-')));
+const scratch = scratchFolder('tkv2-record-cases-');
 process.on('exit', () => rmSync(scratch, { recursive: true, force: true }));
-const gitPath = dirname(execFileSync('which', ['git'], { encoding: 'utf8' }).trim());
-const env = { HOME: scratch, PATH: `${dirname(process.execPath)}:${gitPath}:/usr/bin:/bin`, GIT_CONFIG_NOSYSTEM: '1' };
+const env = testEnv(scratch, dirname(process.execPath), gitPath);
+// chmod cannot make a file unreadable on Windows, and root reads every file: both skip the two tests that need one.
+const CANNOT_HIDE = WINDOWS || process.getuid?.() === 0;
 const git = (dir, ...args) => execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.com', ...args], { cwd: dir, env, encoding: 'utf8', stdio: 'pipe' });
 const put = (dir, file, text) => { mkdirSync(dirname(join(dir, file)), { recursive: true }); writeFileSync(join(dir, file), text); };
 const get = (dir, file) => readFileSync(join(dir, file), 'utf8');
@@ -32,7 +33,7 @@ let count = 0;
  * one work item (WI-001) that names it. One commit on `main`. */
 function project() {
   const dir = join(scratch, `project-${++count}`);
-  cpSync(join(assets, 'every-project'), dir, { recursive: true, filter: (from) => !/\/\.(agents|claude)$/.test(from) });
+  cpSync(join(assets, 'every-project'), dir, { recursive: true, filter: (from) => !/[\\/]\.(agents|claude)$/.test(from) });
   put(dir, HOOK, readFileSync(join(assets, 'every-project', HOOK), 'utf8'));
   cpSync(join(assets, 'work-local/work-items'), join(dir, 'work-items'), { recursive: true });
   cpSync(join(assets, 'memory-local/memory'), join(dir, 'memory'), { recursive: true });
@@ -164,7 +165,7 @@ test('note 21: a reader that closed the output gets exit code 0 on the check\'s 
   assert.equal(code, 0);
 });
 
-test('note 22: a record that is there but cannot be read gives one line and exit code 0', { skip: process.getuid?.() === 0 }, () => {
+test('note 22: a record that is there but cannot be read gives one line and exit code 0', { skip: CANNOT_HIDE }, () => {
   const dir = project();
   put(dir, 'sources/SRC-001-notes.md', 'Notes.\n');
   chmodSync(join(dir, 'sources/README.md'), 0o000);
@@ -217,7 +218,7 @@ test('review of the second fixes, blocker: a worktree session writes a record in
   assert.doesNotMatch(missing.err, /SRC-001 is written/);
 });
 
-test('review of the second fixes, note 8: in a worktree session, a record of the main checkout that cannot be read does not lose the findings of the session\'s own checkout', { skip: process.getuid?.() === 0 }, () => {
+test('review of the second fixes, note 8: in a worktree session, a record of the main checkout that cannot be read does not lose the findings of the session\'s own checkout', { skip: CANNOT_HIDE }, () => {
   const dir = project();
   const session = join(dir, '.claude/worktrees/task');
   git(dir, 'worktree', 'add', '-q', session, '-b', 'claude/task');
@@ -239,4 +240,17 @@ test('review of the second fixes, note 8: in a worktree session, a record of the
   assert.match(one.err, new RegExp(`^${lost.source}`));
   chmodSync(join(dir, 'DECISIONS.md'), 0o644);
   clean(stop(), 'readable again');
+});
+
+test('Windows: a work item saved with CRLF line endings is read, and a session folder given with a lower-case drive letter still gets its edit checked', () => {
+  const dir = project();
+  put(dir, W, item('DEC-001').replace('status: In progress', 'status: Done').replaceAll('\n', '\r\n'));
+  assert.match(run(dir, ['--all']).err, /WI-001\.md: the work item is closed, but its Moved up line is empty/, 'the top of a CRLF work item is read');
+  if (!WINDOWS) return;
+  // Windows tools write one folder as C:\project and as c:\project. Both are the same folder.
+  const lower = dir[0].toLowerCase() + dir.slice(1);
+  assert.notEqual(lower, dir, 'the scratch folder starts with an upper-case drive letter');
+  change(dir, 'DECISIONS.md', 'Status: Decided', 'Status: Approved');
+  const edited = run(dir, [], { cwd: lower, hook_event_name: 'PostToolUse', tool_name: 'Write', tool_input: { file_path: join(dir, 'DECISIONS.md') } });
+  assert.match(edited.err, /DEC-001 has Status "Approved"/, 'the edit is checked');
 });
