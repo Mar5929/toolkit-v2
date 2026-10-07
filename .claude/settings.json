@@ -8,6 +8,7 @@
   ],
   "skillOverrides": {
     "braindump": "off",
+    "filechanges": "off",
     "filing-project-records": "off",
     "handoff": "off",
     "managing-project-memory": "off",

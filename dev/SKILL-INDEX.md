@@ -27,7 +27,7 @@ the routing rounds for the retired skills) is in Git history.
   rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
   `.rules` file, an output style, a plugin manifest or marketplace file, a
   mod, a subagent definition, or a helper-agent brief.
-- **9 shared skills** that every project gets.
+- **10 shared skills** that every project gets.
 - **The work tracking choice** adds selected reference files to the shared
   `managing-work-items` skill: local folders with Obsidian, Notion, or GitHub
   Issues. Jira is deferred by Mike: no Jira reference files.
@@ -37,9 +37,9 @@ the routing rounds for the retired skills) is in Git history.
 - **Notion**: work items or memory in Notion add `using-notion-cli`, once.
 - **Salesforce projects** add 3 skills, plus Salesforce's own skills
   (`forcedotcom/sf-skills`), which the owner installs.
-- A project has 9 + 1 = 10 skills with local or Notion memory, 11 when work
-  items or memory are in Notion. With Hindsight memory, it has 9 skills, or
-  10 with work items in Notion. Salesforce adds 3.
+- A project has 10 + 1 = 11 skills with local or Notion memory, 12 when work
+  items or memory are in Notion. With Hindsight memory, it has 10 skills, or
+  11 with work items in Notion. Salesforce adds 3.
 
 ## 1. The `toolkit` plugin's own skills (onboarding and harness files)
 
@@ -48,7 +48,7 @@ the routing rounds for the retired skills) is in Git history.
 | `project-setup` | `./` | Sets up, checks, updates, or moves a project onto Toolkit V2. It also changes the project's work or memory choice, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer. Use for requests such as "set up this project", "check the setup", or "update the toolkit". For new commits from Git, use pull-latest. The older claude-toolkit uses project-sync. |
 | `writing-harness-files` | `../writing-harness-files/` | Uses current official Claude Code and Codex guidance to write or change skills, rules, agent guides, hooks, settings, plugin files, and other harness files. Use before creating or editing one of these files. For toolkit setup, use project-setup. |
 
-## 2. Shared skills (every project, 9)
+## 2. Shared skills (every project, 10)
 
 The shared skills do not assume one tracker. Setup adds only the chosen
 tracker references inside `managing-work-items`. A project with local or
@@ -79,6 +79,7 @@ section 5):
 | `handoff` | `assets/every-project/.claude/skills/handoff/` | Updates this session's work items and the project's Current State, files decisions or sources left unfiled, and writes a checked, self-contained prompt for the next session or checks one the owner provides. Use when the owner ends a session, clears context, asks for a handoff prompt, or asks to check one. For a recap without a handoff, use session-summary. |
 | `braindump` | `assets/every-project/.claude/skills/braindump/` | Plays back the owner's loose ideas in simple words and waits for the owner's yes before starting work. Use when the owner asks "tell me what you heard", "play that back", or otherwise asks to check understanding first. When the owner asks only to plan the idea, use managing-work-items. |
 | `session-summary` | `assets/every-project/.claude/skills/session-summary/` | Puts the owner's requests, each result, and what still needs the owner in a table. Use when the owner asks to recap or summarize this session. For a prompt that lets a new session continue the work, use handoff. |
+| `filechanges` | `assets/every-project/.claude/skills/filechanges/` | Lists the files that the agent's last set of changes created, changed, renamed, or deleted, each with one short sentence on what changed. Use when the owner asks which files the agent just changed, such as "what files did you change?" or "list the files you just changed". For a recap of the whole session, use session-summary. |
 | `pull-latest` | `assets/every-project/.claude/skills/pull-latest/` | Fetches and merges new remote commits into the local repository while preserving local work and commit history. Use when the owner asks to "get the latest" or "sync with remote". For discarding local work, use reset-to-remote. For updating installed Toolkit V2 files, use project-setup. |
 | `reset-to-remote` | `assets/every-project/.claude/skills/reset-to-remote/` | Shows a plan, then makes the local repository match its remote by discarding local commits and removing branches whose remote branches are gone. Use only when the owner explicitly asks to "wipe local", "match remote exactly", or start fresh from the remote. For a routine update that keeps local work, use pull-latest. |
 | `merge-and-clean-up` | `assets/every-project/.claude/skills/merge-and-clean-up/` | Merges one approved GitHub pull request only after its checks and the merge-safety check pass. It then removes only that pull request's branches and worktree. Use when the owner names a pull request to merge or managing-work-items requests its merge. For an entire work item through merge and deployment, use managing-work-items. |
@@ -249,6 +250,10 @@ reference. Different backend instructions never meet in one project.
   what happened in this chat goes to `session-summary`; what happened in a
   period, such as yesterday or last week, goes to
   `managing-project-memory`, which reads the records.
+- `filechanges` and `session-summary` for "what did you change": the files
+  of the agent's last set of changes, one line each, go to `filechanges`;
+  every request of the whole session with its result goes to
+  `session-summary`.
 - `managing-work-items` and `braindump`: a brain dump he asks only to plan
   goes to `managing-work-items`; one he wants played back first goes to
   `braindump`.
