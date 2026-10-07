@@ -700,6 +700,36 @@ node --test 'dev/tests/*.test.mjs'
   `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`
   in `~/.zshenv`), never in a repository. Tests use only banks made for the
   test, with his yes, never his own.
+- **Sandbox questions** (Mike, 2026-10-07). In a Salesforce project the agent
+  asks before each deploy, data write, or `sf apex run` on a sandbox, unless
+  the owner turned those questions off. He turns them off and on by telling
+  the agent ("I just need the agent to execute stuff and just get stuff done
+  in the sandbox"; then "All right, turn it on"). The agent keeps his choice
+  as one line in the project's Current State, which every session reads at
+  its start. The rule is in one place, `salesforce-org-safety.md`, section
+  "The owner's yes for a sandbox change". While the questions are off, the
+  agent may also deploy a profile to a sandbox and delete metadata from one
+  through a deploy (his yes, 2026-10-07).
+  - No code asks before a sandbox change: the starter's `protected-orgs.json`
+    has `"sandboxAction": "allow"`, and the starter settings hold no `ask`
+    entry for an `sf` command. The guard still blocks production and an org
+    it cannot classify. This revisits the earlier design, in which a hook
+    asked before every sandbox change.
+  - `sf project delete source` stays forbidden on every org. The starter
+    settings refuse it in the Bash tool and in the PowerShell tool. The
+    `PowerShell(...)` entries have not had a live test.
+  - The rule is the same in Claude Code and Codex (Mike, 2026-10-07: "the
+    rule should just be standard across any model"). The earlier line that
+    said the owner runs every sandbox change in Codex is gone. In Codex the
+    guard no longer blocks `sf project delete source` on a sandbox; only the
+    rule forbids it there.
+  - One cost Mike was told: the seven `ask` entries also made Claude Code
+    ask before those commands on production when the guard did not run (no
+    Node, hooks turned off, or the hook cancelled). That second check is
+    gone.
+  - A switch built into the guard, for one session and 12 hours, is parked
+    on the branch `sandbox-checks-switch` and is not merged. Mike chose the
+    instruction over it.
 - **Jira is deferred** by Mike: no Jira skills now.
 - **Read-only sources.** Never change
   `/Users/michaelrihm/Documents/Projects/claude-toolkit`,

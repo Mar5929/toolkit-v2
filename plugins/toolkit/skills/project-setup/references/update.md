@@ -38,6 +38,7 @@ This file uses five names:
   - Removed rules
   - The renamed rule
   - Old hook entries
+  - The questions before a sandbox change
   - Old Hindsight entries
   - Files from the retired toolkit program
   - An old pre-commit Git hook
@@ -296,6 +297,17 @@ A project may still hold two old hook entries:
 List each one the project holds. After the owner's yes, remove it and any group or event that it leaves empty. The snippet's handler replaces the Codex one.
 
 Leave the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`. It comes from the `salesforce` setup folder.
+
+### The questions before a sandbox change
+
+A Salesforce project may still ask the owner before each change to a sandbox in two places that the toolkit no longer uses: seven `permissions.ask` entries in `.claude/settings.json`, and `"sandboxAction": "ask"` in `.claude/protected-orgs.json`. The rule `.claude/rules/salesforce-org-safety.md`, section "The owner's yes for a sandbox change", now says when the agent asks, and the owner turns those questions off and on by telling the agent.
+
+Tell the owner that in one line. After the owner's yes, make these two changes:
+
+- In `.claude/settings.json`, remove these entries from `permissions.ask`: `Bash(sf project deploy start *)`, `Bash(sf data create *)`, `Bash(sf data update *)`, `Bash(sf data delete *)`, `Bash(sf data import *)`, `Bash(sf data upsert *)`, `Bash(sf apex run *)`. Claude Code asks for each of them whatever the rule says.
+- In `.claude/protected-orgs.json`, set `"sandboxAction"` to `"allow"`. Change no other value of that file: the lists `alwaysProtect` and `neverProtect` are the owner's.
+
+The guard still blocks production and an org that it cannot classify.
 
 ### Old Hindsight entries
 

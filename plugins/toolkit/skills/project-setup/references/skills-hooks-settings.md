@@ -80,7 +80,7 @@ Never change a snippet's hook commands or texts, because they are written to mat
 - When the file already has the toolkit's own hook handlers (an update, or a changed memory choice), show the owner the old and new handlers. Then remove the old ones and any group or event they leave empty, and merge the snippet. Never keep both.
   - When you cannot tell whether a handler is the toolkit's, ask the owner.
   - A new project's setup copy has none of them.
-- When the file holds an old end-of-reply check or an older Codex matcher, handle it as `update.md`, "4. What the toolkit no longer ships", says. That section lists what an earlier version of the toolkit put into a project and how to remove it. Never add an end-of-reply check.
+- When the file holds an old end-of-reply check, an older Codex matcher, or one of the seven `permissions.ask` entries for `sf` commands, handle it as `update.md`, "4. What the toolkit no longer ships", says. That section lists what an earlier version of the toolkit put into a project and how to remove it. Never add an end-of-reply check.
 - Add a plain value (text, a number, true or false) that the file does not have.
   - When the file already has that plain value with a different value, and the file is in the setup copy, take the snippet's value.
   - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `placing-files.md` and `update.md` send you to these rules for such a file.

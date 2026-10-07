@@ -66,18 +66,13 @@
       "Bash(git push * --force-with-lease*)",
       "Bash(sf project delete source *)",
       "Bash(sfdx force:source:delete *)",
-      "Bash(sf org delete *)"
+      "Bash(sf org delete *)",
+      "PowerShell(sf project delete source *)",
+      "PowerShell(sfdx force:source:delete *)"
     ],
     "ask": [
       "Bash(git reset --hard *)",
-      "Bash(git clean *)",
-      "Bash(sf project deploy start *)",
-      "Bash(sf data create *)",
-      "Bash(sf data update *)",
-      "Bash(sf data delete *)",
-      "Bash(sf data import *)",
-      "Bash(sf data upsert *)",
-      "Bash(sf apex run *)"
+      "Bash(git clean *)"
     ]
   },
   "skillListingBudgetFraction": 0.03
