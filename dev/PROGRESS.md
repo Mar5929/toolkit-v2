@@ -56,6 +56,35 @@ work item, and a result given only in the reply); trimming the edge-case
 sentences in the short path of `managing-work-items`, with the test set as
 the check; a live run of the evals.
 
+## The filechanges skill, version 0.9.11 (2026-10-07)
+
+Mike asked for a command: "I need to see exactly what files you changed and
+a short sentence of what the change was", as "/filechanges", shipped with
+the toolkit. His correction the same day: "It should just be which files it
+changed on its last set of changes. Not all the files changed int he
+session".
+
+- `filechanges` is a new shared project skill, the tenth. Every project set
+  up with the toolkit gets it. In Claude Code the owner types
+  `/filechanges`, and in Codex `$filechanges`. It is a project skill because
+  a skill inside the `toolkit` plugin would be typed `/toolkit:filechanges`.
+- The agent replies with one table, File and What changed, for the files it
+  changed since the owner's latest request for work. It checks the list
+  against Git so that no file is missed.
+- The skill index, the skills table and counts in setup, the README, the
+  "Which skill" table in the starter `AGENTS.md`, and the `skillOverrides`
+  list in this repository were updated.
+
+A separate reviewer read the change against the wording, overlap, and best
+practices reviews. Its findings were fixed: the skill no longer lists records
+that are not files, and it no longer removes a file from the list because
+Git does not show it. The reviewer has not read the fixes.
+
+Not run: the routing test in Claude Code and Codex, and a live run of the
+skill. `/filechanges` does not exist in this repository, where
+`skillOverrides` turns the project skills off, or in a project that is not
+on Toolkit V2 yet.
+
 ## The checks and two hook commands on Windows, version 0.9.10 (2026-10-07)
 
 The checks under "Checks" in `AGENTS.md` failed on Mike's Windows computer

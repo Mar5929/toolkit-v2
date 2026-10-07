@@ -217,7 +217,7 @@ are; the ones still in use are carried over into the Toolkit V2 form, and
 you see the first one before the rest are done. The changes are made on the
 agent's own branch and reach your main branch only after your yes.
 
-## Skills every project gets (9)
+## Skills every project gets (10)
 
 | Skill | What it does | You might say |
 | --- | --- | --- |
@@ -226,6 +226,7 @@ agent's own branch and reach your main branch only after your yes.
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
 | `session-summary` | Shows what you asked for in this chat and where each request landed. | "recap this chat" |
+| `filechanges` | Lists the files the agent changed in its last set of changes, with one short sentence on what changed in each. | `/filechanges` (in Codex, `$filechanges`), "what files did you change?" |
 | `pull-latest` | Brings your copy of the code up to date, safely. | "get the latest" |
 | `reset-to-remote` | Makes your copy an exact match of the remote copy. It deletes local changes, so it runs only when you clearly ask. | "wipe local" |
 | `merge-and-clean-up` | Merges an approved pull request and removes only its branches. | "merge and clean up" |
@@ -260,8 +261,8 @@ works: those are in `DECISIONS.md` and `system/`. Notion memory stores the
 same kinds in Lore's layout. `using-notion-cli` comes once, even with work
 items and memory both in Notion.
 
-A project with local or Notion memory has 10 skills, or 11 when work items
-or memory are in Notion. With Hindsight memory it has 9, or 10 when work
+A project with local or Notion memory has 11 skills, or 12 when work items
+or memory are in Notion. With Hindsight memory it has 10, or 11 when work
 items are in Notion. A Salesforce project adds three Toolkit Salesforce skills;
 the owner also installs Salesforce's own skills.
 When you ask where the work stands, the project's `AGENTS.md` routes the

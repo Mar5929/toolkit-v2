@@ -136,6 +136,6 @@ After the owner has answered the questions, say in a few lines what will happen,
 
 For the row "Notion (work, memory, or both)": when the Project template does not exist yet, ask about building it as a separate question. `notion.md`, "The owner's yes before anything is made", gives the words of that question.
 
-To give the skill count, add the numbers that apply to the owner's choices: 9 shared, plus 1 for local or Notion memory (none for Hindsight), plus 1 for Notion work items or memory (`using-notion-cli`, once), plus 3 for Salesforce. Every project already has `managing-work-items` among its nine shared skills; its work choice adds reference files inside that skill.
+To give the skill count, add the numbers that apply to the owner's choices: 10 shared, plus 1 for local or Notion memory (none for Hindsight), plus 1 for Notion work items or memory (`using-notion-cli`, once), plus 3 for Salesforce. Every project already has `managing-work-items` among its ten shared skills; its work choice adds reference files inside that skill.
 
 The owner's yes covers exactly what the plan names. Anything else that is created outside the folder later needs its own yes.
