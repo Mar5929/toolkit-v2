@@ -394,6 +394,9 @@ The agent never does these for you. It tells you when each one is needed.
 - `reference/how-the-owner-works-with-agents.md`: what you ask agents to do
   in your real projects, in your own words, one section per project. It is
   not installed anywhere.
+- `reference/davis-memory-system.md`: how memory is kept in your Davis
+  project: its files, hooks, and rule, and the 32 kinds of event that start
+  its memory helper. It is not installed anywhere.
 - `dev/`: the goal, progress, design, research, checks, and test runs. It is
   not installed anywhere.
 - `ai-external-knowledge/`: saved copies of the official Claude Code, Codex,

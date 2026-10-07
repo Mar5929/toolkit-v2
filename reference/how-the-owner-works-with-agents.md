@@ -84,7 +84,7 @@ What happened in that session:
 - The owner got one line at the end, and one warning that the memory index was getting large.
 - The helper ran for about 10 minutes and used about 200,000 tokens. The owner on cost: "I'm not worried about tokens."
 
-Two things the session did not prove. The recording gave wrong speaker names in places, and one person's name had a spelling that nobody had confirmed. The project also ran on a long rule that listed about 30 kinds of event that start the helper, so the session does not show that a short rule gives the same result.
+Two things the session did not prove. The recording gave wrong speaker names in places, and one person's name had a spelling that nobody had confirmed. The project also ran on a rule that lists 32 kinds of event that start the helper, and on a hook that reads each message from the owner and reminds the agent when the message matches one of 46 word patterns. So the session does not show that a short rule gives the same result. `davis-memory-system.md`, in this folder, records every part that made it run.
 
 ### How this fits Toolkit V2
 
