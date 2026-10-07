@@ -125,8 +125,7 @@ In a project that is not a Salesforce project, take the Salesforce entries out o
 
 - Delete the `Stop` hook group whose command runs `tools/kb/graph_freshness_hook.py`. Delete the `Stop` key too when nothing is left in it.
 - Delete the two `PreToolUse` handlers that run `guard-protected-orgs.cjs` and `guard-permission-set-deploy.cjs`. Then delete their group and the `PreToolUse` key when nothing is left.
-- Delete these entries from `permissions.deny`: `Bash(sf project delete source *)`, `Bash(sfdx force:source:delete *)`, `Bash(sf org delete *)`.
-- Delete these entries from `permissions.ask`: `Bash(sf project deploy start *)`, `Bash(sf data create *)`, `Bash(sf data update *)`, `Bash(sf data delete *)`, `Bash(sf data import *)`, `Bash(sf data upsert *)`, `Bash(sf apex run *)`.
+- Delete these entries from `permissions.deny`: `Bash(sf project delete source *)`, `Bash(sfdx force:source:delete *)`, `Bash(sf org delete *)`, `PowerShell(sf project delete source *)`, `PowerShell(sfdx force:source:delete *)`.
 - Keep every other entry: the Git deny and ask rules, `attribution`, `autoMemoryEnabled`, `enabledPlugins`, `outputStyle`, and `skillListingBudgetFraction`.
 
 `.gitignore` is copied whole in every project. Its lines for Salesforce tools ignore nothing in a project that has none of those files.

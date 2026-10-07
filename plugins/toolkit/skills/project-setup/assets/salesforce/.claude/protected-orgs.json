@@ -1,15 +1,15 @@
 {
-  "_comment": "Policy for .claude/hooks/guard-protected-orgs.cjs. Agents never deploy, validate, or run Apex or Flow tests against production. The guard blocks production orgs and orgs it cannot classify, and asks before sandbox changes (blocked in Codex, which cannot ask). A deploy validate or an Apex or Flow test run on a sandbox passes with no question. The owner runs production changes.",
+  "_comment": "Policy for .claude/hooks/guard-protected-orgs.cjs. Agents never deploy, validate, or run Apex or Flow tests against production. The guard blocks production orgs and orgs it cannot classify. It lets a change to a sandbox or scratch org pass with no question: the rule salesforce-org-safety.md says when the agent asks the owner first. The owner runs production changes.",
   "action": "deny",
   "unknownOrgAction": "ask",
-  "sandboxAction": "ask",
+  "sandboxAction": "allow",
   "confirmOrgDeleteAlways": true,
   "alwaysProtect": [],
   "neverProtect": [],
   "_fields": {
     "action": "deny = block commands against recognized production orgs; ask = confirm. This project uses deny. An Apex or Flow test run against production gets the same decision as a deploy.",
     "unknownOrgAction": "What to do when the target org can't be classified (not authenticated yet, sf CLI unavailable). Any value other than 'allow' treats the org like production and applies 'action'. 'allow' = let it through.",
-    "sandboxAction": "What to do when a deploy, data write, anonymous Apex run, or metadata delete targets a sandbox or scratch org. 'ask' = confirm, because the safety rule allows these only after the owner says yes (default). 'allow' = let it through silently. A deploy validate or an Apex or Flow test run on a sandbox always passes silently.",
+    "sandboxAction": "What to do when a deploy, data write, anonymous Apex run, or metadata delete targets a sandbox or scratch org. 'allow' = let it through with no question. This project uses allow: the safety rule says when the agent asks the owner first, and the owner turns those questions off and on by telling the agent. 'ask' = the guard also confirms each one. A deploy validate or an Apex or Flow test run on a sandbox always passes with no question.",
     "confirmOrgDeleteAlways": "true = any 'org delete' asks even for scratch/sandbox, since it's irreversible. Set false to only guard production.",
     "alwaysProtect": "Org aliases or usernames to always confirm, even if auto-detected as sandbox/scratch. Example: [\"target-build\"].",
     "neverProtect": "Org aliases or usernames to never confirm (escape hatch for a known throwaway scratch org). Wins over every other rule."

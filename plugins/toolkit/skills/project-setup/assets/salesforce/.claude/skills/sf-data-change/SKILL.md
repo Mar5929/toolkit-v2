@@ -12,10 +12,10 @@ No agent writes data to production. The owner runs the change. This skill produc
 | Operation | Production | Sandbox |
 |---|---|---|
 | Read (SOQL, export, describe) | Allowed | Allowed |
-| Create, update, upsert, delete data | Never | Only after the owner says yes in the same chat |
-| Anonymous Apex | Never | Only after the owner says yes in the same chat |
+| Create, update, upsert, delete data | Never | After the owner's yes, as `.claude/rules/salesforce-org-safety.md` says |
+| Anonymous Apex | Never | After the owner's yes, as `.claude/rules/salesforce-org-safety.md` says |
 
-- A yes covers one change, in the chat where it was given. It does not carry to the next change, session, or org. Ask again.
+- A yes covers one change, in the chat where it was given. It does not carry to the next change, session, or org. Ask again. The one exception is while the owner has turned these questions off: then follow `.claude/rules/salesforce-org-safety.md`, section "The owner's yes for a sandbox change".
 - No agent writes production data by CLI, API, anonymous Apex, or any tool that wraps them.
 
 ## Step 1: build the handoff

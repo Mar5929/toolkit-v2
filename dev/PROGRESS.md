@@ -48,6 +48,55 @@ With both fixes tried, every test passed on Windows except the 6 in
 `org-guard.test.mjs`, which the branch `sandbox-checks-switch` fixes.
 Nothing here was run on a Mac.
 
+
+## Sandbox questions the owner turns off and on, version 0.9.9 (2026-10-07)
+
+In the Dragonfly project Mike asked in 6 sessions for sandbox work without
+a question each time. He chose this on 2026-10-07: he tells the agent to
+stop asking, the choice holds in every session until he says to ask again,
+and no code is added.
+
+- `salesforce-org-safety.md` has a new section, "The owner's yes for a
+  sandbox change". The agent asks before each sandbox deploy, data write, or
+  `sf apex run`, unless the project's Current State holds the line "Sandbox
+  questions: off". The agent adds or removes that line only when he says so.
+  While it is there, the agent may also deploy a profile to a sandbox and
+  delete metadata from one through a deploy.
+- No code asks any more: `protected-orgs.json` has `"sandboxAction":
+  "allow"`, and the seven `ask` entries for `sf` commands are out of the
+  starter `settings.json` and out of the list in `setup-copy.md`.
+- `update.md`, "The questions before a sandbox change", gives an existing
+  Salesforce project both changes.
+- `sf-data-change`, `production-data-changes.md`,
+  `permissions-source-control.md`, and `salesforce-deploying.md` point to the
+  new section.
+- `dev/tests/org-guard.test.mjs`: four expected results changed from "ask"
+  to "allow". The guard's code is unchanged.
+- The starter settings now also refuse `sf project delete source` in the
+  PowerShell tool, and `check-skills.mjs` reads `PowerShell(...)` entries
+  as well as `Bash(...)` entries. A separate reviewer found that, with the
+  guard no longer asking, that command on a sandbox would have passed in
+  PowerShell. The reviewer's other findings were fixed too; the reviewer has
+  not read the fixes.
+
+Not verified on this Windows computer: 6 of the 10 guard tests fail here on
+an unchanged main, because the stand-in `sf` is a shell script, and the test
+that holds the four changed rows is one of them. Run the guard tests on the
+Mac before a merge.
+
+The rule is the same in Claude Code and Codex, by Mike's answer of
+2026-10-07 ("the rule should just be standard across any model"). The line
+that said the owner runs every sandbox change in Codex is removed from
+`salesforce-org-safety.md` and from `salesforce-deploying.md`.
+
+The line "Sandbox questions: off" covers every sandbox and scratch org of
+the project. Mike on which sandboxes it should cover: "Every project is
+going to be different." A project that needs a narrower rule changes its own
+copy of the rule.
+
+A switch built into the guard, for one session and 12 hours, was built
+first and is parked on the branch `sandbox-checks-switch`. Mike chose the
+instruction over it. That branch is not merged.
 ## Small work items, working files, and the owner's usage record, version 0.9.8 (2026-10-07)
 
 Work item TKV-30. Mike had an agent read his own messages in the session

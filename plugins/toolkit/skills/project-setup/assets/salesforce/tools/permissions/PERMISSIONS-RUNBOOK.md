@@ -110,8 +110,9 @@ the intended change.
 
 ## Procedure 3: deploy to a sandbox
 
-Sandbox only, and only with the owner's go-ahead in that same chat. The owner
-runs every production deploy.
+Sandbox only, with the owner's yes as `.claude/rules/salesforce-org-safety.md`,
+section "The owner's yes for a sandbox change", says. The owner runs every
+production deploy.
 
 1. **Preflight. Not optional, and the hook enforces it.**
    ```
