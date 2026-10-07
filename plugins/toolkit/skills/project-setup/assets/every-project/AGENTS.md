@@ -134,6 +134,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
 | The owner ends the session or clears context, or pastes a handoff to check | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
+| The owner asks which files you changed in your last set of changes, such as "what files did you change?" | `filechanges` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
 | Committing an approved document edit to the default branch | `publish-docs` |
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
