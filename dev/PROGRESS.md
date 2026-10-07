@@ -2,6 +2,88 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The checks and two hook commands on Windows, version 0.9.10 (2026-10-07)
+
+The checks under "Checks" in `AGENTS.md` failed on Mike's Windows computer
+on an unchanged `main`. What was wrong, and what changed:
+
+- Line endings. Git on Windows wrote every file with CRLF, and the check
+  tools and tests split files at `\n` and compare copies byte for byte. A
+  new `.gitattributes` in the root (`* text=auto eol=lf`) keeps LF in every
+  checkout. `check-skills.mjs` went from 15 errors to none with no other
+  change. It now stops with the two commands that fix a checkout made
+  before that file. The main checkout and the other open worktrees on the
+  Windows computer need those two commands once, after this is merged.
+- The tests built a `PATH` joined with `:`, called `/bin/sh` and `which`,
+  and made stand-in commands as shell scripts. `dev/tests/support.mjs`
+  (48 lines, new) now holds what differs on Windows, and `hooks.test.mjs`,
+  `validate-records.test.mjs`, and `validate-records-cases.test.mjs` use
+  it. Two tests that need a file `chmod` made unreadable are skipped on
+  Windows. The test "codex-after-commit: a long run of git options stays
+  fast" now times each command against a plain `git status`, and the
+  fastest of three runs counts, because starting Node alone can take
+  seconds on a busy Windows computer.
+- `claude plugin test ./plugins/workstreams` failed 12 of 14 tests on
+  Windows. Claude Code gives the test's disk a full Windows path
+  (`C:\Users\me\...`), and the disk was keyed by `/Users/me/...`. The fix
+  is in the test file only (477 to 481 lines). The mod did not change.
+
+Two hook commands that ship to projects were wrong on Windows. Mike said
+yes to both fixes on 2026-10-07, after he was told the sizes:
+
+- `validate-records.mjs` compared paths with `/`, and Windows gives `\`.
+  So on Windows the check after an edit said nothing for any file in a
+  folder (`system/`, `sources/`, `work-items/`, `memory/`), and a worktree
+  session reported work item findings it should not. 20 tests failed for
+  this reason. The command now turns each path into its `/` form, and it
+  reads a work item saved with CRLF. It went from 279 to 280 lines, which
+  is the limit: there is no room left.
+- `session-start.mjs` started `ntn` without a shell. On Windows `ntn` is
+  `ntn.cmd`, which cannot be started that way, so a project with Notion
+  memory never got its Current state page printed. 2 tests failed for this
+  reason. The command now starts `ntn` through the shell, on a Mac too. It
+  is still 76 lines.
+
+A separate reviewer checked both fixes against
+`dev/reviews/best-practices-review.md` and the captured hook pages. It
+found nothing that had to be fixed, and two things that should be. Both
+were done, with no new line in the command:
+
+- Windows tools write one folder as `C:\project` and as `c:\project`. The
+  command compared the two as text, so a session folder given with a
+  lower-case drive letter got no check after an edit. It now compares them
+  as paths.
+- The fix for a work item saved with CRLF had no test. A new test in
+  `validate-records-cases.test.mjs` covers it and the drive letter. That
+  file is now 256 lines.
+
+An existing project gets both fixes at its next "update the toolkit",
+which replaces the hook commands. Codex needs no new trust: it trusts the
+entry in `.codex/hooks.json`, and no entry changed.
+
+Still open:
+
+- `org-guard.test.mjs` fails 6 of 10 tests on Windows, because its stand-in
+  `sf` is a shell script. The parked branch `sandbox-checks-switch` holds
+  the fix.
+- A checkout made on Windows before `.gitattributes` needs the two commands
+  above once: the main checkout, and the worktree `sandbox-checks-switch`
+  after its work is committed.
+- From the review, not changed: on Windows, an edit of an `AGENTS.md` or
+  `CLAUDE.md` on another drive, outside every repository, makes
+  `validate-records.mjs` report the project's findings. The findings are
+  true; only the moment is wrong. `session-start.mjs` now passes the
+  Current state page ID through a shell. The ID comes only from the hook's
+  own entry in the settings file, so the reviewer and the writer left it
+  as it is; cleaning it first would take the command to 77 lines, one over
+  its limit.
+- Nothing here was run on a Mac.
+- Not checked: whether Codex runs its hook entries on Windows. The
+  helper-agent reminder in the Claude Code settings runs `echo` with no
+  shell, which on Windows needs an `echo.exe` on `PATH`; Git for Windows
+  provides one on Mike's computer.
+
+
 ## Sandbox questions the owner turns off and on, version 0.9.9 (2026-10-07)
 
 In the Dragonfly project Mike asked in 6 sessions for sandbox work without
