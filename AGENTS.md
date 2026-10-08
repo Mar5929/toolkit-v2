@@ -55,9 +55,29 @@ every time, also when he does not mention it.
 
 - Claude Code loads the rule by itself. In Codex, read it at the start of
   each session and again after compaction.
+- The agent also gets the rule's text again on every message. Claude Code
+  loads a rule once, at session start, and Mike wanted this rule in front
+  of the agent every time (2026-10-08: "create a small hook that runs on
+  every turn to paste in that message").
+  - In a project, the hook command `prompt-reminder.mjs` reads the project's
+    rule file and prints it on every message, in Claude Code and in Codex
+    ("Code limit" and "Hooks" under Rules).
+  - This repository has no hook commands of its own. One `UserPromptSubmit`
+    entry in its `.claude/settings.json` prints the starter rule on every
+    message in Claude Code, after the same first line that the hook command
+    prints. The entry runs `node -e` with a one-line script, so this
+    repository got no new code file.
+  - This repository has no hooks file for Codex. In Codex, the agent gets
+    the rule here only by reading it at the start of each session and again
+    after compaction, as the first bullet of this list says.
 - A helper agent may not load the rule: the built-in Explore and Plan
   agents of Claude Code do not, and no Codex helper does. So put the path of
-  the rule in every brief.
+  the rule in every brief. Do not count on a hook to print the rule for a
+  helper agent. The captured hooks page of Claude Code says that settings
+  hooks run inside a helper for tool events such as `PreToolUse`, and it
+  names `SubagentStart` as the event that adds text when a helper starts.
+  It does not say that `UserPromptSubmit` runs for the prompt a helper
+  gets, and this repository and the starter have no `SubagentStart` entry.
 - In this repository, "the whole project" in the rule means the whole
   toolkit: the filing system, memory, the work tracker, the project's
   records, the hook commands, setup and "update the toolkit", both hosts,
@@ -70,7 +90,18 @@ every time, also when he does not mention it.
 - The file is one comment line that names the starter rule, a blank line,
   and then the whole text of the rule every project gets,
   `<setup>assets/every-project/.claude/rules/evaluate-the-owners-request.md`.
-  Mike approved the rule's text on 2026-10-08: change a word of it only with
+  Mike approved the rule's text on 2026-10-08, and a longer text later the
+  same day, which he refined twice. The longer text says that the owner
+  always wants the best solution for the whole project. It has the agent
+  slow down and say what it thinks the goal is, learn what the system is
+  for and how the people who use it are meant to use it, look at their
+  whole process when a request changes how they use it, and show each
+  option with what it gains and what it costs. His reason, in his words:
+  "a lot of the times I'm moving very fast and I'm not thinking or
+  evaluating everything ... I want you to take a step back and ... slow me
+  down", and "if you keep adding these more and more like modular unit
+  requests, the whole process flow ends up being really choppy, and it's
+  not cohesive". Change a word of it only with
   his yes. Edit the starter rule, then copy it over the copy below those two
   lines. Never edit the copy. `check-skills.mjs` fails when the two differ.
 
@@ -151,7 +182,7 @@ such text.
 | `dev/tests/validate-records-cases.test.mjs` | More tests for `validate-records.mjs`, from the second review: a record saved to the default branch and then named in a work item, with a remote and from a worktree; a work item that still holds the template's prompts; text in backticks; a source kept outside Git; an edit in another repository; a closed output; an unreadable record; and the first line of the findings in each mode. From the review of those fixes: a record written in a save worktree by a session that works in its own worktree, and an unreadable record in the main checkout. New cases go here. |
 | `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. On a Mac the stand-in is a shell script; on Windows it is an `sf.cmd` that runs the same logic in Node. The file takes about four minutes on Windows. |
 | `dev/tests/permission-set-guard.test.mjs` | Tests the second Salesforce guard, `guard-permission-set-deploy.cjs`, in a scratch folder. No org is reached. |
-| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 15 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. |
+| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 15 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. The file also holds one hook entry, for `UserPromptSubmit`: it prints the starter rule `evaluate-the-owners-request.md` on every message ("The rule every agent follows here"). A test in `dev/tests/hooks.test.mjs` runs the entry's command with the same arguments, with the right path and with a wrong path. The entry has not been watched in a live session. |
 
 What a project gets from onboarding:
 
@@ -414,7 +445,12 @@ node --test 'dev/tests/*.test.mjs'
   `validate-records.mjs`, which has its own bullet below), the pre-commit
   file that runs the fourth, and the model's own
   Salesforce code (its two guards, its graph Stop hook, and `tools/`). Each
-  hook command does one job; can never break a session (on any error it
+  hook command does one job, with one exception. `prompt-reminder.mjs` does
+  three on every message: it tells the agent to check the project's skills,
+  it adds a hint when the message has a keep or decision phrase, and it
+  prints the owner's rule for every request (Mike's yes for that third job,
+  2026-10-08; the last sub-bullet below). Each hook command also can never
+  break a session (on any error it
   prints one line and exits normally); needs nothing installed beyond Node
   (Node 20 or newer, ES modules, no npm dependencies); is covered by
   `dev/tests/hooks.test.mjs` (the fourth by the two files below); and stays
@@ -448,6 +484,20 @@ node --test 'dev/tests/*.test.mjs'
     such as `commit-msg` or `pre-push`): with `core.hooksPath` set, Git
     stops running every hook in that folder
     (`<setup>references/placing-files.md`, "5. The pre-commit check").
+  - One more job for `prompt-reminder.mjs` (Mike's yes, 2026-10-08: "I love
+    the idea yes", then "yes this is good, build it"). On every message the
+    command also prints the text of the rule
+    `evaluate-the-owners-request.md`, after one line that names the rule's
+    file. It reads the project's rule file each time and holds no copy of
+    the text. So the rule file is the one place to change the rule, and a
+    project whose owner changed the rule prints the changed text. When the
+    rule file is missing or empty, the command prints what it printed
+    before it had this job. He was told that the command grows from 64
+    lines to about 70, plus about 15 lines of tests. It is 72 lines, and
+    `dev/tests/hooks.test.mjs` grew by 34 lines: 24 for the command, and 10
+    for a test of this repository's own settings entry. A test fails
+    when the command is over 72 lines. Tell him the size again before it
+    grows.
 - **Workstreams plugin** (Mike, 2026-10-03, work items TKV-12 and TKV-14).
   The one other piece of code the toolkit ships. The first version (TKV-12)
   listed Notion work items. Mike had it rebuilt the same day (TKV-14) so it
@@ -643,7 +693,33 @@ node --test 'dev/tests/*.test.mjs'
   command cuts longer output at 9,500 characters, between two lines, and
   names the files that hold the rest. A project with 30 memory records and
   a Current State at its line limits (under 40 lines) prints whole; a test
-  fails when it does not. It is 76 lines. `validate-records.mjs`
+  fails when it does not. It is 76 lines. `prompt-reminder.mjs` prints up
+  to three things on every message, in this order: one line that tells the
+  agent to check the project's skills; when the message has a keep or
+  decision phrase, one hint that says where such a thing is filed; and the
+  rule `.claude/rules/evaluate-the-owners-request.md`, after one line that
+  names that file and says that the owner's own file wins: "Where
+  owner-preferences.md says otherwise, that file wins". An instruction of
+  the owner's that begins "from now on" is filed in that file, which loads
+  once, and without this clause the text printed on every message would win
+  over it (Mike's yes, 2026-10-08). The rule comes last because it is many lines with its
+  own heading, and a line printed after it would read as part of the rule.
+  The command finds the rule from its own place in `.claude/hooks/`, and
+  not from the session's folder, so it works in both hosts and from inside
+  a Git worktree. With the starter rule its longest output is 3,576
+  characters, far below both limits. Its Codex entry sets no
+  `additionalContextLimit`, so Codex's default of about 2,500 tokens
+  applies to it. The command does not cut its output. The starter rule is
+  2,481 characters. When an owner makes the rule so long that the output
+  goes over a limit, each host gives the agent a preview and the path of a
+  file that holds the whole output. In Claude Code the preview is at most
+  the first 2,000 characters. In Codex it is the start and the end of the
+  output; the Codex page does not say how long. The two short reminders
+  come first and are at most 949 characters together, so the preview of
+  Claude Code holds them whole. The size of this output on every message is
+  Mike's choice (he asked for the rule on every message, 2026-10-08), so do
+  not shorten what the command prints to save tokens. It is 72 lines.
+  `validate-records.mjs`
   runs from three places: a `PostToolUse` entry in both hosts, a `Stop`
   entry in Claude Code only (Codex accepts only JSON output for `Stop`),
   and `.githooks/pre-commit`. In an update of a project that does not have

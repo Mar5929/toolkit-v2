@@ -44,6 +44,7 @@ A work choice adds tracker references, and a local or Notion memory choice adds 
 
 The four hook commands are in `every-project/.claude/hooks/`, so the setup copy has them in `<copy>/.claude/hooks/`: `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, and `validate-records.mjs`. A hook command is a command that Claude Code or Codex runs by itself at a fixed moment, for example at session start. Both Claude Code and Codex run the four commands from `.claude/hooks/`.
 
+- `prompt-reminder.mjs` runs on every message. It prints one line that tells the agent to check the project's skills, then a memory reminder when the message has a phrase such as "remember this", and then the whole text of the rule `.claude/rules/evaluate-the-owners-request.md`. It reads that rule file each time it runs, so the project's rule file is the only place where the rule's text is kept.
 - `validate-records.mjs` checks the form of the project's records (`DECISIONS.md`, `system/`, `sources/`, and local work items) and only reads.
 - The setup copy also has `.githooks/pre-commit`, which runs `validate-records.mjs` before each commit once the steps of `placing-files.md`, "5. The pre-commit check", are done.
 - A Salesforce project also gets the two guards in `.claude/hooks/` from the `salesforce` folder, and the scripts in `tools/`. The graph Stop hook runs those scripts.
