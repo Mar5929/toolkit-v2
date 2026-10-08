@@ -59,7 +59,14 @@ finding with no source is dropped.
   that belongs in a skill.
 - **P4 Hooks.** Each hook does one job, cannot break a session, and is
   the kind of thing the hook pages say hooks are for: something that must
-  happen every time. The Code limit in `dev/GOAL.md` holds.
+  happen every time. The Code limit in `dev/GOAL.md` holds. One exception
+  is approved, so do not report it as a finding: `prompt-reminder.mjs` does
+  three jobs on every message. It tells the agent to check the project's
+  skills, it adds a hint when the message has a keep or decision phrase,
+  and it prints the whole text of the rule `evaluate-the-owners-request.md`.
+  Mike said yes to the third job on 2026-10-08, and he asked for the rule
+  on every message, so the size of that output is his choice too
+  (`AGENTS.md`, "Code limit" and "Hooks").
 - **P5 Out of the box.** Each piece uses a built-in feature of Claude Code,
   Codex, Notion, GitHub, or Hindsight before anything the toolkit invents.
   No new script, no custom program.
