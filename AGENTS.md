@@ -47,6 +47,46 @@ panel. `/streams` lists the pieces of work the project's chats report, the
 chat handling each one, and each chat's state. It uses no Notion. See
 "Workstreams plugin" under Rules.
 
+## The rule every agent follows here
+
+Mike asked for one rule that every agent and every helper agent follows on
+every request: `.claude/rules/evaluate-the-owners-request.md`. Follow it
+every time, also when he does not mention it.
+
+- Claude Code loads the rule by itself. In Codex, read it at the start of
+  each session and again after compaction.
+- A helper agent may not load the rule: the built-in Explore and Plan
+  agents of Claude Code do not, and no Codex helper does. So put the path of
+  the rule in every brief.
+- In this repository, "the whole project" in the rule means the whole
+  toolkit: the filing system, memory, the work tracker, the project's
+  records, the hook commands, setup and "update the toolkit", both hosts,
+  and the projects that already use the toolkit. Mike, 2026-10-08:
+  "everything you or a sub agent does in this toolkitv2 project ... must
+  have the overall toolkit solution and suite of systems in mind. When
+  solutioning, you must think 'does this make sense for the overall toolkit,
+  the filing system, the memory system, the work tracker, the
+  project-wide-records etc. etc.'"
+- The file is one comment line that names the starter rule, a blank line,
+  and then the whole text of the rule every project gets,
+  `<setup>assets/every-project/.claude/rules/evaluate-the-owners-request.md`.
+  Mike approved the rule's text on 2026-10-08: change a word of it only with
+  his yes. Edit the starter rule, then copy it over the copy below those two
+  lines. Never edit the copy. `check-skills.mjs` fails when the two differ.
+
+## Two instructions for text that tells an agent what to do
+
+Mike gave both on 2026-10-08. They apply to every skill, rule, guide, hook
+text, and brief. Put both in the brief of every helper agent that writes
+such text.
+
+- Write the general rule. Do not add a sentence for each small case. The
+  text for a small work item got about ten such sentences in one day, and he
+  asked for them to be removed.
+- State the goal and the process. Do not tell the agent how to think. His
+  example of what not to write: "when the user says the phrase 'what do you
+  think' that means they want you to reason about the question".
+
 ## Read first
 
 - `dev/GOAL.md`: Mike's goal and his decisions. Read "Goal and finish list"
@@ -100,14 +140,15 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `ai-external-knowledge/` | Official pages, captured with Firecrawl, one folder per source: `claude-code/`, `codex/`, `openai-plugins/`, `anthropic-agent-skills/`, `anthropic-engineering/`, and `hindsight/`. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address and capture date. Not shipped. |
 | `reference/` (root of this repository) | `how-the-owner-works-with-agents.md`: the record of what Mike asks agents to do in his real projects, with his own words. It names people by role only. Add a section for each project that is studied. `davis-memory-system.md`: how the memory system of his Davis project works, as its files were on 2026-10-07. `memory-in-toolkit-v2-and-in-davis.md`: a comparison of memory in Toolkit V2 at version 0.9.9 with memory in Davis. Not shipped (Mike, 2026-10-07: "I don't want it to be buried under 'dev'"). |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
-| `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. One copied text has its source elsewhere: the writing rule ("Shared texts" under Rules). |
+| `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. Two copied texts have their source elsewhere: the writing rule, and this repository's copy of the rule `evaluate-the-owners-request.md` ("Shared texts" under Rules). |
+| `.claude/rules/evaluate-the-owners-request.md` | This repository's own copy of the starter rule of the same name ("The rule every agent follows here"). `check-skills.mjs` fails when the two differ. |
 | `dev/tools/check-skills.mjs` | Checks every skill the `toolkit` plugin holds and every skill `project-setup` copies into a project, and the setup folders (see "Checks"). |
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the rules list that the `AGENTS.md` of a project set up before the one-home layout holds. Dev only: nothing under `plugins/` imports it. |
 | `dev/tests/hooks.test.mjs` | Tests the first three hook commands and the settings snippets in scratch folders, and the size limit of every hook command. |
 | `dev/tests/validate-records.test.mjs` | Tests `validate-records.mjs`: a new project gives no finding, each of the 15 checks reports a broken record, and a real `git commit` is stopped through `.githooks/pre-commit`. It is at its size limit. |
 | `dev/tests/validate-records-cases.test.mjs` | More tests for `validate-records.mjs`, from the second review: a record saved to the default branch and then named in a work item, with a remote and from a worktree; a work item that still holds the template's prompts; text in backticks; a source kept outside Git; an edit in another repository; a closed output; an unreadable record; and the first line of the findings in each mode. From the review of those fixes: a record written in a save worktree by a session that works in its own worktree, and an unreadable record in the main checkout. New cases go here. |
-| `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
+| `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. On a Mac the stand-in is a shell script; on Windows it is an `sf.cmd` that runs the same logic in Node. The file takes about four minutes on Windows. |
 | `dev/tests/permission-set-guard.test.mjs` | Tests the second Salesforce guard, `guard-permission-set-deploy.cjs`, in a scratch folder. No org is reached. |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 15 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. |
 
@@ -219,9 +260,11 @@ node --test 'dev/tests/*.test.mjs'
   every reference over 100 lines, no command of the retired program (in the
   skills and in the hook commands of every setup folder), every shared copy
   equal to its source, every template copy equal to its project file, and
-  the copy of the writing rule in `writing-harness-files` equal to the rule
-  (its `RULE_COPIES` list: the copy is one comment line that names the
-  rule, a blank line, and then the rule's whole text).
+  each copy of a rule equal to the rule: the writing rule in
+  `writing-harness-files`, and this repository's own copy of
+  `evaluate-the-owners-request.md` in `.claude/rules/` (its `RULE_COPIES`
+  list: a copy is one comment line that names the rule, a blank line, and
+  then the rule's whole text).
   - It reads the setup folders from the table in
     `<setup>references/setup-copy.md`, "Folders the choices add". It fails
     when a folder under `<setup>assets/` other than `settings/` is in no
@@ -482,10 +525,12 @@ node --test 'dev/tests/*.test.mjs'
   because a skill reads only files inside its own folder. Edit the source in
   `dev/build-shared/`, then copy it over every copy (the first line of each
   copy names its source; `grep -rl 'dev/build-shared/<file>' plugins` lists
-  them). Never edit a copy. One copy has its source outside
-  `dev/build-shared/`: `writing-harness-files/references/writing-rule.md`
+  them). Never edit a copy. Two copies have their source outside
+  `dev/build-shared/`. `writing-harness-files/references/writing-rule.md`
   copies the starter rule `document-clarity-standard.md`, so the
   owner's rule stays where a project gets it ("Plain English" above).
+  This repository's `.claude/rules/evaluate-the-owners-request.md` copies
+  the starter rule of the same name ("The rule every agent follows here").
 - **`dev/` and the root `reference/` folder are not shipped.** Claude Code
   installs only `plugins/toolkit/` and `plugins/workstreams/`, and Codex only
   `plugins/toolkit/`. Nothing shipped reads a file under `dev/` or under this
@@ -769,8 +814,8 @@ node --test 'dev/tests/*.test.mjs'
   - A switch built into the guard, for one session and 12 hours, was built
     first and never merged. Mike chose the instruction over it. Its branch
     was removed on 2026-10-07. Its changes are kept as one patch file,
-    `dev/archive/research/sandbox-checks-switch.patch`, which also holds a
-    stand-in for `sf` that lets the guard tests run on Windows.
+    `dev/archive/research/sandbox-checks-switch.patch`. The guard tests
+    have run on Windows without it since version 0.9.14.
 - **One goal for keeping the records** (Mike, 2026-10-07). The starter root
   `AGENTS.md`, section "Your job as the agent", holds the goal he approved
   word for word: the agent keeps the project's records, in the same turn,
@@ -793,9 +838,10 @@ node --test 'dev/tests/*.test.mjs'
     into an instruction for the agent. When a test shows that the agent
     misses one kind of change, add it as an example under the goal, with his
     yes.
-  - Not changed, and waiting for his yes: the reminder hook
-    `prompt-reminder.mjs` still prints that words in notes or a transcript
-    "decide nothing".
+  - The reminder hook `prompt-reminder.mjs` no longer prints that words in
+    notes or a transcript "decide nothing" (his yes, 2026-10-08). It now
+    says that only the owner's own words are the owner's yes, and that the
+    agent records what a source says and files it.
 - **Jira is deferred** by Mike: no Jira skills now.
 - **Read-only sources.** Never change
   `/Users/michaelrihm/Documents/Projects/claude-toolkit`,

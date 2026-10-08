@@ -12,6 +12,7 @@ import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSy
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { WINDOWS } from './support.mjs';
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const model = join(repo, 'plugins/toolkit/skills/project-setup/assets/salesforce/.claude');
@@ -46,12 +47,24 @@ case "$*" in
 esac
 `;
 writeFileSync(join(bin, 'sf'), standIn, { mode: 0o755 });
+// Windows cannot run the shell script above, so there sf.cmd runs the same stand-in in Node.
+if (WINDOWS) {
+  writeFileSync(join(bin, 'sf-stand-in.cjs'), `const args = process.argv.slice(2).join(' ');
+require('fs').appendFileSync(${JSON.stringify(calls)}, args + '\\n');
+if (args === ${JSON.stringify(LOOKUPS[0])}) process.stdout.write('{"status":0,"result":[{"value":"' + (process.env.FAKE_SF_DEFAULT_ORG || '') + '"}]}\\n');
+else if (args === ${JSON.stringify(LOOKUPS[1])}) process.stdout.write(${JSON.stringify(JSON.stringify(orgs) + '\n')});
+else process.exitCode = 1;
+`);
+  writeFileSync(join(bin, 'sf.cmd'), `@"${process.execPath}" "${join(bin, 'sf-stand-in.cjs')}" %*\r\n`);
+}
+// The guard starts sf through cmd.exe there, which needs these three to find and run sf.cmd.
+const windowsEnv = WINDOWS ? { SystemRoot: process.env.SystemRoot, ComSpec: process.env.ComSpec, PATHEXT: '.COM;.EXE;.BAT;.CMD' } : {};
 
 /** Runs the guard the way a host does; returns { decision, reason }. Printing nothing means 'allow'. */
 function guard(command, { host = 'claude', defaultOrg = '' } = {}) {
   const res = spawnSync(process.execPath, [guardFile, ...(host === 'codex' ? ['--host', 'codex'] : [])], {
     cwd: project,
-    env: { PATH: bin, HOME: scratch, FAKE_SF_DEFAULT_ORG: defaultOrg },
+    env: { PATH: bin, HOME: scratch, FAKE_SF_DEFAULT_ORG: defaultOrg, ...windowsEnv },
     input: JSON.stringify({ hook_event_name: 'PreToolUse', tool_name: 'Bash', tool_input: { command } }),
     encoding: 'utf8',
   });
