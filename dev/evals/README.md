@@ -48,3 +48,7 @@ pocket-ledger/
 ## The test set for keeping the project's records
 
 `keeping-project-records/` is a separate set of 36 prompts. It tests whether an agent keeps a project's records up to date from one general goal, with no list of situations in its instructions. The set has its own scratch project, `fixtures/pocket-ledger-records/`, because the scratch project above is written in older forms. `keeping-project-records/README.md` says how to build that scratch project, how to run one eval, and how to score a run.
+
+## The test set for the short path of a small work item
+
+`small-work-item-short-path/` is a separate set of nine prompts. It tests whether an agent takes a small work item through the short path of `managing-work-items`: the play-back in place of the interview, the separate checker only when the result calls for it, and one closing question. It uses the scratch project `fixtures/pocket-ledger-records/`, and each run has up to four messages. `small-work-item-short-path/README.md` says how to run one eval and what the scratch project cannot show.

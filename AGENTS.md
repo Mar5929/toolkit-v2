@@ -82,7 +82,8 @@ such text.
 
 - Write the general rule. Do not add a sentence for each small case. The
   text for a small work item got about ten such sentences in one day, and he
-  asked for them to be removed.
+  asked for them to be removed. Version 0.9.15 removed them. The cases they
+  settled are now tests, in `dev/evals/small-work-item-short-path/`.
 - State the goal and the process. Do not tell the agent how to think. His
   example of what not to write: "when the user says the phrase 'what do you
   think' that means they want you to reason about the question".
@@ -837,7 +838,8 @@ node --test 'dev/tests/*.test.mjs'
     `reference/davis-memory-system.md`). Never copy a situation from there
     into an instruction for the agent. When a test shows that the agent
     misses one kind of change, add it as an example under the goal, with his
-    yes.
+    yes. A second set, `dev/evals/small-work-item-short-path/` (9 evals),
+    holds the situations for a small work item, under the same rule.
   - The reminder hook `prompt-reminder.mjs` no longer prints that words in
     notes or a transcript "decide nothing" (his yes, 2026-10-08). It now
     says that only the owner's own words are the owner's yes, and that the

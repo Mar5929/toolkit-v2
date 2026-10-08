@@ -91,13 +91,14 @@ A project phase (`P01`) and a work item's phase (`P1`) are different things. A p
 
 - A top-level work item gets its own phases in Refining Requirements.
 - A top-level work item goes under a project phase when the owner places it, and at the latest when it leaves Backlog. When the owner has named no project phase by then, ask which one, with your recommendation.
-  - In a project whose only phase is `P01 — Ongoing support`, put every top-level work item under that phase, and do not ask the owner which phase.
 - The project's phases change only with the owner's yes. Propose new project phases, or a change to them, as one question, with a one-line reason for each new phase and for each change.
 - When a project has no phases yet, propose them the first time a work item leaves Backlog.
-  - When the owner has no planned order of work, propose one project phase, `P01 — Ongoing support`. A project that handles a client's requests as they come in is an example.
 - When the first work item of a project phase leaves Backlog, set that project phase In Progress.
 - When the last open work item in a project phase becomes Done or Cancelled, ask the owner in your next reply whether the project phase is Done.
-  - Never ask this question about `P01 — Ongoing support`. That phase stays In Progress until the owner says that the support has ended.
+- A project whose owner has no planned order of work has one project phase, `P01 — Ongoing support`. A project that handles a client's requests as they come in is an example.
+  - Propose that phase when the project has no phases yet.
+  - While it is the project's only phase, put every top-level work item under it without asking the owner which phase.
+  - Never ask whether it is Done. It stays In Progress until the owner says that the support has ended.
 
 ### Tasks
 
@@ -143,45 +144,42 @@ A small work item has fewer stops. "A small work item" below says which stops st
 
 ## A small work item
 
-A small work item is a top-level work item with at most one phase, one or two tasks, and no sub-items. Count only the tasks that make the result. Do not count a merge, a deploy, or a data load, whoever runs it. Adding one line to an email template is an example of a small work item. Making one list of records for the owner to load is another.
+A small work item is a top-level work item with at most one phase, one or two tasks, and no sub-items. The tasks that count are the ones that build the result. A merge, a deploy, and a data load do not count, whoever runs them. Adding one line to an email template is an example of a small work item. Making one list of records for the owner to load is another.
 
-A small work item takes the short path below, unless it needs Designing. "Designing or Building after the requirements" above says when a work item needs Designing. The short path leaves out the interview. It asks one question at the end, where the full path asks three: the result approval, the question about what to keep for the whole project, and the question about marking the work item Done. The full path is all the steps that this skill describes outside this section.
+A small work item takes the short path, unless it needs Designing. "Designing or Building after the requirements" above says when a work item needs Designing. The short path is the six steps below. The full path is the process that this skill gives for every other work item.
 
-Decide whether the work item is small before you create it. It has no tasks yet, so use your judgment: from the owner's request, weigh whether the work will need more than one phase, more than two tasks, a sub-item, or Designing. The owner's words win over your decision. When the owner asks for the full process, use the full path, even for a small work item.
+The goal of the short path is to take a small work item to Done with fewer stops for the owner's yes. It asks one question before the work starts, in place of the interview. It asks one question when the result is ready, where the full path asks three.
+
+Every rule of this skill that the six steps do not change applies to a small work item as it is written. Stops 4 and 5 of "When to stop for the owner's yes" stay: each merge into the default branch, and each deploy to an environment that other people use.
+
+Decide from the owner's request whether the work item is small, before you create it. The owner's words win over your decision. When the owner asks for the full process, use the full path.
 
 1. Create the work item, as `references/refining-requirements.md`, steps 1 and 2, say. Then write what the interview would have written:
    - the goal, in the Overview;
    - for each requirement, its Goal, at least one line of Functional Requirements, and at least one line of Acceptance Criteria that a tester could check;
    - one phase, with its one or two tasks.
-2. Play the request back to the owner in one reply:
+2. Play the request back to the owner in one reply. This reply takes the place of steps 3 to 11 of `references/refining-requirements.md`.
    - Say the goal in one or two sentences, what you will hand over, and how you will check it.
    - Name anything you are unsure of.
-   - Name the project phase that the work item goes under. When the project has no phases yet, propose them in this reply, as "Phases" above says. The owner's yes to "Is that right?" also approves the project phase that you named or proposed.
+   - Name the project phase that the work item goes under. When the project has no phases yet, name the phases that you propose, as "Phases" above says.
    - Say "This is small, so I will skip the interview and ask you one question at the end."
    - End the reply with exactly "Is that right?"
 
-   Add that question as a Questions and Answers row, and set `waiting_on` to the owner, before the reply ends. Ask no other question, and start no requirements analyst helper.
+   Add that question as a Questions and Answers row, and set `waiting_on` to the owner, before the reply ends.
 3. Record the owner's answer in that row, with the owner's words and the date.
-   - After a yes, set `requirements_approved` to `YYYY-MM-DD by <name>`, add the Recent History row "Small item: short path.", and move the work item to Building.
+   - After a yes, set `requirements_approved` to `YYYY-MM-DD by <name>`, add the Recent History row "Small item: short path.", and move the work item to Building. The yes approves the requirements and the project phase, as the reply gave them.
    - After a correction, change the work item, and play the request back again in the same form.
 4. Build the tasks, as `references/building.md` says. When every task is done, move the work item to the Testing Loop.
-5. Check the result, as `references/testing-loop.md`, section "A small work item", says. That section says when the separate checker runs.
-6. Ask one closing question, as `references/closing.md`, section "Closing a small work item", says. That section gives the exact question. The owner's yes approves the result, and it is also the yes to mark the work item Done.
-7. After the owner's yes, close the work item with the same section of `references/closing.md`.
+5. Check the result, as `references/testing-loop.md`, section "A small work item", says. That section says when the separate checker runs, and what takes its place when it does not run.
+6. Ask one closing question, and close the work item after the owner's yes, as `references/closing.md`, section "Closing a small work item", says. That section gives the exact question. The owner's yes approves the result, and it is also the yes to mark the work item Done.
 
-A small work item on the short path enters the Testing Loop at the end of step 4. It leaves the Testing Loop only on the owner's answer to the closing question, and it never enters Reflecting. After a "no" it goes back to Building, as `references/closing.md` says. After a yes it goes to Deploying, or to Done when it has nothing to merge or deploy. On the short path, that yes meets "Move on when" for the Testing Loop, also when no separate checker ran.
+When the owner changes or adds a requirement and the work item is still small, record the change as `references/refining-requirements.md`, step 7, says. In place of the approval question of that step, and of the requirements analyst helper that the full path starts after such a change, play the change back in the form of step 2.
 
-Stops 4 and 5 of "When to stop for the owner's yes" stay on the short path: each merge into the default branch, and each deploy to an environment that other people use. A production deploy is still the owner's to run.
-
-When the owner changes or adds a requirement and the work item is still small, record the change as `references/refining-requirements.md`, step 7, says. In place of the approval question of that step, play the change back in the form of step 2. The owner's yes approves the changed requirement.
-
-Move the work item to the full path when the short path no longer fits it. That happens when the work item needs a second phase, a third task, a sub-item, or Designing.
+When a work item on the short path stops being small, or needs Designing, move it to the full path:
 
 - Tell the owner in one line.
 - Add the Recent History row "Short path ended: full path from <State>.", with the work item's State.
 - Continue with the file for that State. The owner's approval of the requirements still counts.
-- When the closing question is still open, mark its row "Superseded by Q-xx", where Q-xx is the row of the result approval question that takes its place. Then ask the three questions of the full path, each at its own step.
-- When the owner already said yes to the closing question and the result then changes, that yes no longer covers the result. Ask for the result approval again, as `references/testing-loop.md`, step 7, says.
 
 ## Rules that apply in every State
 
