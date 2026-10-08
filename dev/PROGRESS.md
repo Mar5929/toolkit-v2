@@ -2,6 +2,56 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Each row of filechanges links to the file, version 0.9.17 (2026-10-08, TKV-38)
+
+Mike asked for a link on each file in the `/filechanges` table: "each
+filechange should come with a link for me to open the file (and if the file
+is still on a branch or something the link should take that into account)".
+
+- Each file name in the table is now a link that opens a copy of the file
+  that holds the change. The skill says what "holds the change" means: the
+  file in that copy has the changed text now, whichever commit brought it
+  there.
+- A link to a copy on this computer uses the copy's full path. Mike's click
+  tests in the Claude Code desktop app on Windows showed why: a link with a
+  relative path opens the file from the folder where the session started,
+  so in a session that later worked in a worktree it opened the main
+  folder's copy, without the change. A link that climbs out with `../` did
+  not open. A Markdown link with a full path and forward slashes opened.
+- A copy that is only on a branch on the remote gets a web link to the
+  file's page on that branch. A deleted file gets no link.
+- Changes that the project's main folder does not hold get their own table,
+  one for each worktree and one for each branch that no folder on this
+  computer holds, under one line that says so and names where they are.
+- Two files changed: the skill's `SKILL.md` and its row in `README.md`. The
+  skill's description did not change, so the routing test did not run again.
+
+A separate reviewer read the first text and found nine gaps, which were
+fixed. After the click tests changed the link rule to the full path, the
+reviewer read the last text and found three things to fix and four smaller
+ones. Five were fixed: the meaning of "holds the change", how the tables
+are grouped when a worktree and its pushed branch both hold a change, the
+name of a deleted file in a host where a path in code form is a link, a
+file "outside the project" that could be read as a file in a worktree, and
+one sentence that was hard to read. The reviewer read the fixes and found
+them sound. It named one more case, a change that is only on a local branch
+that no folder holds, and the table rule now covers it with the reviewer's
+own words.
+
+Two findings were not turned into text. Two worktrees that change the same
+path is a case for the test set, and not a new sentence in the skill. The
+README row still says "each with a link that opens it", which is not true
+for a deleted file.
+
+All seven checks in `AGENTS.md` passed on the Mac: the three validations,
+the 14 plugin tests, `check-skills.mjs`, `check-rules.mjs` (three warnings,
+the same as before), and the 115 Node tests. This is the first full run on
+the Mac since version 0.9.10.
+
+Not tested: a full-path link to a file inside a worktree, a path with a
+space between `<` and `>`, any link in the terminal or the VS Code
+extension, a full path on a Mac, and any link in Codex.
+
 ## The rule to evaluate the owner's request is printed on every message, version 0.9.16 (2026-10-08)
 
 - Mike asked for the rule `.claude/rules/evaluate-the-owners-request.md` to
