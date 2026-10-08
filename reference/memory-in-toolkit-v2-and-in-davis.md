@@ -7,7 +7,7 @@ Davis and Toolkit V2 keep nearly the same things in nearly the same form: one me
 Mike asked for this report on 2026-10-07. He will use it to decide what Toolkit V2 should take from Davis. The report describes both systems and recommends nothing.
 
 - **Davis** means the files of the Davis project as `reference/davis-memory-system.md` records them. That file was written on 2026-10-07 from the Davis files. For this report the dispatch rule, the helper's definition, the reminder hook, and the hook settings were also opened in the Davis project.
-- **Toolkit V2** means the starter files on `main` at version 0.9.9. These are the files that setup copies into a project. Hindsight memory is not covered.
+- **Toolkit V2** means the starter files on `main` at version 0.9.9. These are the files that setup copies into a project. Hindsight memory is not covered. Two things changed after that version. Since version 0.9.12 the agent saves without asking Mike first. Since version 0.9.14 the hook's hint no longer says that a transcript "decides nothing": it says that only Mike's own words are his yes, and that the agent files a shared source and records what it says.
 - A **session** is one chat with the agent. A **turn** is one message from Mike, with the agent's work on it and its reply.
 - The **main agent** is the agent Mike talks to. A **helper agent** is a separate agent that the main agent starts for one job.
 - A **hook** is a small command that Claude Code or Codex runs by itself at set moments, such as the start of a session.

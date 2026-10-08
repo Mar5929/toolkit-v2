@@ -331,6 +331,11 @@ records your words and the date.
   gets one phase, "Ongoing support", that stays open.
 - "From now on" instructions become a line in the project's
   `.claude/rules/owner-preferences.md`.
+- Before it acts on a request, the agent checks the request against the
+  whole project. It tells you first when it sees a better way, a case you
+  did not cover, or something the request would break. The rule
+  `.claude/rules/evaluate-the-owners-request.md` says so, and every project
+  gets it.
 - An action item from a meeting is saved as a project task with who owes
   it: you, the agent, or a named other person, such as the client or a
   vendor.

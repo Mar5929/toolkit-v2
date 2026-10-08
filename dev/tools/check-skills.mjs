@@ -35,9 +35,10 @@
 //   - a file whose first line names a dev/build-shared/ source equals that source after the
 //     first line;
 //   - a skill asset copied from a project file (MODEL_COPIES) equals that file;
-//   - a skill file that is an exact copy of a project rule (RULE_COPIES) is one comment line that
-//     names the rule, a blank line, and then the rule's whole text: today the writing rule in
-//     writing-harness-files/references/writing-rule.md;
+//   - a file that is an exact copy of a project rule (RULE_COPIES) is one comment line that
+//     names the rule, a blank line, and then the rule's whole text: the writing rule in
+//     writing-harness-files/references/writing-rule.md, and this repository's own copy of the
+//     rule evaluate-the-owners-request.md, in .claude/rules/;
 //   - every folder under assets/ except settings/ is every-project or a folder that a row of
 //     the setup-copy.md table names, and every folder the table names exists;
 //   - a folder is in one row of that table, except notion-tools and memory-process, which two
@@ -125,10 +126,12 @@ const MODEL_COPIES = {
   [`${SHARED}/managing-work-items/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
 };
 
-// Skill files that are exact copies of a project rule: path from the repository root -> the rule it copies.
-// A plugin skill reads only files in its own folder, so it holds the rule's text itself. The rule is the source.
+// Files that are exact copies of a project rule: path from the repository root -> the rule it copies.
+// A plugin skill reads only files in its own folder, so it holds the rule's text itself. This repository
+// follows one starter rule itself, so its own .claude/rules/ holds a copy. The rule is the source.
 const RULE_COPIES = {
   'plugins/toolkit/skills/writing-harness-files/references/writing-rule.md': 'plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/document-clarity-standard.md',
+  '.claude/rules/evaluate-the-owners-request.md': 'plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/evaluate-the-owners-request.md',
 };
 
 const findings = [];

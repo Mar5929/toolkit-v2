@@ -2,6 +2,46 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## A rule to evaluate the owner's request, and new wording in the reminder hook, version 0.9.14 (2026-10-08)
+
+- Every project gets a new rule, `.claude/rules/evaluate-the-owners-request.md`
+  (Mike approved its text on 2026-10-08). Before the agent acts, it works
+  out what the owner is trying to achieve, checks the request against the
+  whole project, and judges whether the way the owner suggested is the best
+  one. It tells the owner about a better way, a case the request does not
+  cover, or a part the request would break, before it builds. It still
+  carries out a direct instruction when it found no reason to stop.
+- A new project gets the rule from setup. An existing project gets it at
+  its next "update the toolkit", as a missing file. Claude Code loads it by
+  itself. Codex reads it at session start, because the starter `AGENTS.md`
+  tells it to read every rule that has no `paths` line. No other starter
+  file changed for it.
+- This repository follows the same rule: `.claude/rules/evaluate-the-owners-request.md`
+  is an exact copy, and `check-skills.mjs` fails when it differs from the
+  starter rule. `AGENTS.md` has a new section, "The rule every agent
+  follows here", with two more instructions of his for text that tells an
+  agent what to do.
+- The reminder hook `prompt-reminder.mjs` has new wording in its hint about
+  words that are not the owner's own (his yes, 2026-10-08). It printed that
+  such words "decide nothing". It now prints that only the owner's own words
+  are the owner's yes, and that the agent files a shared source and records
+  what it says. The old
+  sentence disagreed with the goal in the starter `AGENTS.md`, which tells
+  the agent to save what a source says without asking. The command is still
+  64 lines. Its entry in `.codex/hooks.json` did not change, so Codex does
+  not ask him to trust it again.
+- The Salesforce guard tests now run on Windows (his yes, 2026-10-08: "ok
+  make them work"). `dev/tests/org-guard.test.mjs` failed 6 of its 10 tests
+  there, because the stand-in for `sf` was a shell script, which Windows
+  cannot run as a command. On Windows the test now also writes an `sf.cmd`
+  that runs the same logic in Node. The guard did not change, and the Mac
+  path of the test did not change. All 113 tests now run on Windows: 111
+  pass and 2 are skipped. Not run on a Mac. Older entries below that say
+  the six guard tests fail on Windows describe the time before this change.
+- Next: find out why the background memory helper in Davis is slow, and
+  show him a design for one in Toolkit V2; then remove the sentences for
+  small cases from the text for a small work item.
+
 ## Hindsight server without Ollama, and settings asked for each bank, version 0.9.13 (2026-10-07)
 
 Mike gave his record of the Hindsight server as it is since 2026-10-07. It
@@ -107,7 +147,8 @@ Open for Mike:
 
 - The reminder hook `prompt-reminder.mjs` still prints that words in notes
   or a transcript "decide nothing". A change to a hook needs his yes. The
-  smallest change is three lines in the hook and three in its test.
+  smallest change is three lines in the hook and three in its test. Done in
+  version 0.9.14.
 - A background helper for memory, as Davis has. The rewrite keeps the main
   agent doing every save before it replies.
 - When notes he pastes say that he decided something, the toolkit records
