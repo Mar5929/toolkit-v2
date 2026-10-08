@@ -2,6 +2,69 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Hindsight server without Ollama, and settings asked for each bank, version 0.9.13 (2026-10-07)
+
+Mike gave his record of the Hindsight server as it is since 2026-10-07. It
+is kept unedited as `dev/research/hindsight-vps-architecture.md`.
+
+- `hindsight-on-vps.md` now says: three services on the VPS and no Ollama;
+  the model `gpt-5.6-terra` at OpenAI through his ChatGPT subscription, with
+  a Codex sign-in kept only on the VPS; the text of each save goes to
+  OpenAI; every memory is written in English; observations are on for the
+  server and automatic consolidation is off; one API key opens every bank;
+  `refresh_token_reused` means the owner signs Hindsight in again.
+- It has a new part, "Projects with their own review of saved knowledge":
+  setup stops for Entrevest, Diligence Ready, CentraView, and Robin.
+- Setup asks the owner about six settings of the project's bank (Mike,
+  2026-10-07: "Each project should ask me if I want this if so. And ask me
+  other hindsight settings (on a per memory bank basis)"): observations,
+  whether every session is saved, the detail of a save, the summary on the
+  first message, the Git history, and the code survey. Observations are
+  on by default and built after every save (Mike, 2026-10-07: "Have auto
+  observations by default. I don't care about token usage."). Two more
+  defaults differ from the add-on's own, with his yes ("Sounds good"): a
+  save keeps detailed memories (`verbose`), and the Git history holds the
+  changes of each commit as well as its message (`full`). The other three
+  are the add-on's own. `hindsight-on-vps.md`, "The bank's
+  settings", has the table, the question, the commands, and a step to build
+  observations when he asks.
+- A Hindsight project gets a new file, `.claude/hindsight-bank-settings.json`
+  (in `memory-hindsight/`), which holds the answers. The server keeps its
+  `bank` part; the add-on keeps its `addOn` part on each computer, under
+  the bank's ID.
+- An existing Hindsight project gets the file, with the defaults, at its
+  next "update the toolkit", and is then asked the question once.
+- `README.md`, `interview.md`, `finishing.md`, `update.md`, `SKILL.md`,
+  `AGENTS.md`, and `dev/GOAL.md` say the same. The description of
+  `project-setup` is unchanged.
+- The rule `hindsight-memory.md` has one new bullet (Mike's yes,
+  2026-10-08). It names the settings file and says what the rule's
+  sentences about the add-on mean when the bank's settings turn the saves
+  at the end of a turn, or the summary on the first message, off. An
+  existing Hindsight project sees the difference at its next "update the
+  toolkit".
+- The starter `AGENTS.md` project map has no row for the settings file. The
+  file has 27 bytes left under its limit of 22,528, so the rule names the
+  settings file instead.
+
+A separate reviewer read the new text twice (the server facts, then the
+bank's settings), and a third reviewer read the fixes and the new rule
+bullet. All 22 findings were fixed; nobody has read the last 5 fixes.
+
+Not tested: the `jq` commands were not run, because this Windows computer
+has no `jq`. Run them on the Mac. The six Salesforce guard tests fail on
+this Windows computer, as they do on an unchanged `main`; the other 105
+tests pass. Run the guard tests on the Mac before a merge.
+
+Not tested against the server: the three new commands (the `PATCH` of a
+bank's settings, the `jq` that writes the bank's section, and the
+`POST .../consolidate`) are written from the captured Hindsight pages and
+were not run. Also not tested: that a bank's own setting turns automatic
+consolidation on while the server's setting is off. Test them on a bank
+made for the test, with Mike's yes.
+
+His record also connects a Codex agent to a bank's own MCP address; the
+toolkit keeps the add-on and tells the agent not to add that address.
 ## One goal for keeping the records, version 0.9.12 (2026-10-07)
 
 Work item TKV-33. Mike named one Davis session as the example to follow:

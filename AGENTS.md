@@ -90,7 +90,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` says how to get the current official guidance (the agents and skills Claude Code provides first, then the web address of the official page for each kind), `references/checklist.md` holds the practices and the check for each kind, and `references/rewrite-steps.md` the steps and checks for rewriting a file that exists, with the prompt for a team. `references/writing-rule.md` is an exact copy of the rule `document-clarity-standard.md`, which holds all the writing rules; `check-skills.mjs` fails when the copy and the rule differ. Never copied into a project. |
 | `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, the four hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), and `.githooks/pre-commit`, which runs the fourth before each commit. Edited here directly (see "The starter project"). |
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each adds the selected tracker references inside the shared `managing-work-items` skill. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
-| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds the `managing-project-memory` skill and its common process references for local or Notion memory. `memory-local/` and `memory-notion/` add their selected storage references inside that skill; `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md` (the index the session-start hook rebuilds), and `project_topic_template.md`, the blank form for a memory record. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
+| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds the `managing-project-memory` skill and its common process references for local or Notion memory. `memory-local/` and `memory-notion/` add their selected storage references inside that skill; `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md` (the index the session-start hook rebuilds), and `project_topic_template.md`, the blank form for a memory record. `memory-hindsight/` holds one rule, `hindsight-memory.md`, the file `.claude/hindsight-bank-settings.json` (the owner's choices for the project's bank), and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
 | `<setup>assets/notion-tools/` | `using-notion-cli` and the rule `notion-records.md`, for every project with work items or memory in Notion. |
 | `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and eleven rules. One of them, `salesforce-delivery.md`, holds the Salesforce lines for `delivery/` and loads only for files there (`paths: delivery/**`). |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
@@ -714,7 +714,28 @@ node --test 'dev/tests/*.test.mjs'
   session start. Toolkit text names that skill and never lists the tools.
   The server is his: an agent never changes it, and the facts an agent
   needs about it are in `<setup>references/hindsight-on-vps.md`, taken from
-  his own guide (`dev/research/hindsight-server-setup-guide.md`). The API key lives in
+  his own two records. `dev/research/hindsight-server-setup-guide.md` is how
+  he first built the server, with Ollama on the VPS.
+  `dev/research/hindsight-vps-architecture.md` (Mike, 2026-10-07) is the
+  server as it is now, and it wins where the two differ: no Ollama; the
+  model `gpt-5.6-terra` at OpenAI through his ChatGPT subscription, with a
+  Codex sign-in kept only on the VPS; every memory written in English;
+  observations on for the server and automatic consolidation off; one API
+  key that opens every bank. Mike, 2026-10-07, on observations being a
+  setting of one bank: "Each project should ask me if I want this if so.
+  And ask me other hindsight settings (on a per memory bank basis)". So
+  setup asks about six settings of the bank in one message, with a default
+  for each (`hindsight-on-vps.md`, "The bank's settings"). His default for
+  observations, the same day: "Have auto observations by default. I don't
+  care about token usage." So observations are on and built after every
+  save unless he says otherwise for a bank. The project keeps
+  the answers in `.claude/hindsight-bank-settings.json`, so every computer
+  gives the bank the same settings. He also said yes ("Sounds good") to
+  two more defaults that differ from the add-on's own: a save keeps
+  detailed memories (`verbose`), and the Git history holds the changes of
+  each commit as well as its message (`full`). Four of
+  his projects (Entrevest, Diligence Ready, CentraView, Robin) have their
+  own review of saved knowledge, and setup stops for them. The API key lives in
   `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`
   in `~/.zshenv`), never in a repository. Tests use only banks made for the
   test, with his yes, never his own.

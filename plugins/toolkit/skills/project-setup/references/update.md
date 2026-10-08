@@ -120,7 +120,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 | Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/README.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
 | Rules in `.claude/rules/` | | Show the owner what differs. |
 | Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, the output style, `.githooks/pre-commit`, the Salesforce guards and `tools/` | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
-| The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; the owner's own skills and rules | Never compare or change one of these. |
+| The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; `.claude/hindsight-bank-settings.json`; the owner's own skills and rules | Never compare or change one of these. |
 
 ### Special cases for the rows of the table
 
@@ -151,6 +151,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 - **The owner's own records.**
   - A memory record is each file in `memory/` whose name starts `user_`, `project_`, `reference_`, or `event_`. The one exception is `project_topic_template.md`: it is a template, and the "Other toolkit files" row covers it.
   - `memory/MEMORY.md` is the generated index. The session-start hook rebuilds it, so do not compare it either.
+  - `.claude/hindsight-bank-settings.json` holds the owner's choices for the project's Hindsight bank. A Hindsight project that has no such file gets the setup copy's file through the "Missing files" row. Section 5 then asks the owner about the bank's settings.
 
 ### Whether a difference is the owner's edit
 

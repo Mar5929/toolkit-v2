@@ -168,6 +168,22 @@ Claude Code and Codex. Setup shows you every change the add-on makes to
 your Claude Code and Codex settings before it installs it. Setup then opens
 the bank in the dashboard, `https://memory.mrihm-memory.com`.
 
+Hindsight on the VPS turns each saved session into memories with a model at
+OpenAI (`gpt-5.6-terra`), through your ChatGPT subscription. So the text of
+each save goes to OpenAI, and that work uses the same ChatGPT usage
+allowance as your own Codex sessions. Hindsight writes every memory in
+English.
+
+Setup asks you about six settings of the project's memory bank, in one
+message, each with a default: whether Hindsight builds observations
+(statements it puts together from several saved memories; on by default,
+built after every save), whether every
+session is saved, how much detail a save keeps, what the agent is shown on
+the first message of a session, how much of the Git history is saved, and
+whether the code is surveyed. Say "defaults" to keep them all. The answers
+are kept in the project, in `.claude/hindsight-bank-settings.json`, so
+every computer uses the same ones. To change one later, tell the agent.
+
 Start a new session afterwards, so the new files load. In Codex, also trust
 the project folder and its hooks (`/hooks`).
 
@@ -384,6 +400,9 @@ The agent never does these for you. It tells you when each one is needed.
   gives you. Never paste it into the chat.
 - **Sign in to the Hindsight dashboard** with its own access key, which is
   not the API key.
+- **Look after the Hindsight server**: its backups, its updates, and its
+  sign-in to ChatGPT. When a save fails because that sign-in stopped
+  working, the agent tells you, and you sign Hindsight in again on the VPS.
 - **Say yes or no** to anything outside the project folder or that cannot be
   undone: new Notion pages, a GitHub repository or labels, a Hindsight
   memory bank, the Hindsight add-on's changes to your Claude Code and Codex

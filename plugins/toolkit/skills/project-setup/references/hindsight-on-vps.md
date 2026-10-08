@@ -2,7 +2,7 @@
 
 Use this file for a project whose memory is kept in Hindsight. Hindsight runs on the owner's own server, a VPS at Hostinger, and each project has one bank there. A bank is one project's memory store on the Hindsight server. Open this file to set up a Hindsight project, to open a project's dashboard, to check a Hindsight project, or to connect a new computer. The file also says what runs where, what an agent never does on the server, and how the access key is handled.
 
-The setup of a project is done when its bank is on the server, the three Hindsight lines of `PROJECT.md` are filled, Hindsight's coding-agent add-on on this computer maps the project's folder to the bank, and the save-and-search check passes.
+The setup of a project is done when its bank is on the server, the three Hindsight lines of `PROJECT.md` are filled, Hindsight's coding-agent add-on on this computer maps the project's folder to the bank, the save-and-search check passes, and the bank has the settings that the owner chose.
 
 ## Contents
 
@@ -10,12 +10,19 @@ The setup of a project is done when its bank is on the server, the three Hindsig
 - The server is the owner's
 - The access key
 - Set up a project
+  - Projects with their own review of saved knowledge
   - 1. The server and the key
   - 2. The bank
   - 3. The settings lines
   - 4. The add-on
   - 5. Save and search
   - 6. Open the dashboard
+  - 7. The bank's settings
+- The bank's settings
+  - Ask the owner
+  - Apply the settings
+  - Change a setting later
+  - Build observations when the owner asks
 - Open the dashboard
 - Check a Hindsight project
 - A new computer
@@ -26,15 +33,23 @@ The setup of a project is done when its bank is on the server, the three Hindsig
 
 These facts are about the server:
 
-- The owner's Hostinger VPS runs four services with Docker Compose, from one folder, `/opt/hindsight`: the database (PostgreSQL), Ollama with its model, Hindsight, and Caddy.
-  - Ollama on the VPS turns saved text into memories.
-  - Never install Hindsight or Ollama on this Mac, never use Hindsight Cloud, and never ask for an OpenAI key.
+- The owner's Hostinger VPS runs three services with Docker Compose, from one folder, `/opt/hindsight`: the database (PostgreSQL), Hindsight, and Caddy.
+  - Hindsight uses a language model at OpenAI, `gpt-5.6-terra`, for all of its model work. That work includes turning saved text into memories and answering a question from memory (a reflect). With the choice `"reflect"` of the setting "Summary on the first message", the summary that the add-on adds on the first message of a session is a reflect. The model does not run on the VPS.
+  - Hindsight reaches that model through the owner's ChatGPT subscription. It signs in with a Codex sign-in of its own, which is kept only on the VPS. Hindsight's documentation describes this kind of sign-in as for personal development use.
+  - So the text of each save goes to OpenAI to be turned into memories, and for a reflect the question and the memories go there too. This work uses the usage allowance of the owner's ChatGPT subscription. The owner's own Codex sessions use the same allowance.
+  - The models that Hindsight searches the memories with run on the VPS.
+  - Never install Hindsight on this Mac, never install a model for it there (for example with Ollama), never use Hindsight Cloud, and never ask for an OpenAI key.
 - DNS sends two addresses to the VPS: the API address and the dashboard address. Caddy accepts HTTPS for both and passes each one to Hindsight.
-- Only ports 22, 80, and 443 of the VPS are open. The ports of the database, of Ollama, and of Hindsight itself are not public.
+- Only ports 22, 80, and 443 of the VPS are open. The ports of the database and of Hindsight itself are not public.
 - The API is `https://memory-api.mrihm-memory.com`. Every call except `/health` needs the API key, sent as `Authorization: Bearer <key>`.
 - The dashboard is `https://memory.mrihm-memory.com`. The dashboard asks for its own access key, which is separate from the API key, and signing in is the owner's step. A bank's page is `https://memory.mrihm-memory.com/banks/<URL-encoded bank ID>`.
 - Each project has one memory bank. The bank's ID is on the "Hindsight bank" line of `PROJECT.md`, section "Toolkit settings".
-- The server has observations turned off (`GET /version` shows `"observations":false`).
+- Hindsight writes every memory and every answer in English, also when the saved text or the question is in another language. It keeps names as they are.
+  - The setting covers every bank, and no bank can change it.
+  - The setting is an instruction to the model, not a check. So when a save held text in another language, read the memories it made before you rely on them.
+- By the server's own setting, Hindsight builds observations only on request. A bank's own settings can change that for the bank. An observation is a statement that Hindsight builds from several saved memories, and consolidation is the job that builds them.
+  - Automatic consolidation is off for the whole server. So a save starts a consolidation only in a bank whose own settings turn automatic consolidation on.
+  - In every other bank that has observations on, Hindsight consolidates only after a `POST /v1/default/banks/<bank>/consolidate`. Consolidation also uses the ChatGPT allowance.
 - The memory is kept only on the VPS. The VPS has weekly automatic backups at Hostinger. The toolkit adds no backup step, and nothing of the memory is copied to this Mac.
 
 These facts are about this computer:
@@ -52,21 +67,27 @@ These facts are about this computer:
   - At session start, it shows the agent the bank's knowledge pages and the guide to its tools. On the first message of a session, it adds a short summary from memory.
   - It fills a new bank from the Git history, and it keeps five knowledge pages in the bank up to date.
   - It surveys the code with the command line of Claude Code or Codex, on a new bank and again every 20 commits. In Claude Code, a survey uses the model haiku and costs at most US$2.
-- When the add-on recalls memories, it asks only for observations unless told otherwise, and the server makes none. So the add-on's settings ask for the `world` and `experience` types.
-- The add-on's bank template turns observations on for a bank, so the add-on's settings also set `defaultBankConfig.enable_observations` to `false`.
+- The owner chooses six settings for each bank, such as whether Hindsight builds observations for it. "The bank's settings" lists them. Setup writes the owner's choices to the server and into the add-on's settings, under the bank's ID.
+- The add-on's settings also hold two values for a bank that has no choices of its own yet:
+  - They set `defaultBankConfig.enable_observations` to `false`, because the add-on's bank template would otherwise turn observations on for the bank. With that setting at `false`, Hindsight consolidates nothing in the bank, by itself or on request.
+  - They ask for the `world` and `experience` types when the add-on recalls memories, because the add-on asks only for observations unless told otherwise.
 - The project's Current State stays in the local file `memory/CURRENT_STATE.md`. The project's Current State is the project's one short page of what is true now.
 
 ## The server is the owner's
 
 - An agent never signs in to the VPS, never runs a command on it, and never changes its files, its DNS records, or its firewall. Everything in this file reaches the server only through the API address.
 - When the server needs work (it is down, slow, out of space, or needs a newer Hindsight), stop and tell the owner what you saw. The work is the owner's.
-- Never run `docker compose down -v` on the server, and never give the owner that command, because `-v` deletes the volumes that hold the database and the model.
+- When a save or a reflect fails with `refresh_token_reused`, Hindsight's Codex sign-in on the VPS has stopped working. The health check and a search still pass then. Stop and tell the owner that Hindsight needs a new Codex sign-in in its own folder on the VPS (`/opt/hindsight/codex-auth`), and a restart after it. Both are the owner's steps.
+- Never copy a Codex sign-in file (`auth.json`) from this computer to the VPS, or from the VPS to this computer. The sign-in on the VPS belongs to Hindsight alone.
+- When a save or a reflect fails because the ChatGPT allowance is used up, stop and tell the owner.
+- Never run `docker compose down -v` on the server, and never give the owner that command, because `-v` deletes the volumes, and one of them holds the database.
 - Bringing back a backup is the owner's step in Hostinger.
 
 ## The access key
 
 The API key is kept in the `apiToken` field of `~/.hindsight/coding-agent.json`, which is the add-on's settings file. Only the owner can read that file (permissions 600), and the file is outside every repository.
 
+- The API key opens every bank on the server. A bank ID in an address chooses the bank, and it does not limit what the key can reach. So read, write, and delete only in this project's bank, unless the owner names another bank.
 - The add-on's hooks and MCP server read that file however Claude Code or Codex was started. The Claude desktop app and the Codex app may not read shell startup files such as `~/.zshrc`, so a key kept only in such a file can be missing in those apps.
 - The commands in this file read the key from the same file.
 
@@ -98,6 +119,17 @@ Use the fallback below only when the owner does not want the key in that file.
 Run each command alone. When the session runs in Codex, follow `SKILL.md`, "Mistakes to avoid": it says how to run a command that the Codex sandbox refuses, such as a network call or a write to a file in the home folder.
 
 In the commands below, `<auth>` stands for `-H "Authorization: Bearer $(jq -r .apiToken ~/.hindsight/coding-agent.json)"`. Write it out in full in each command, exactly so, and never write the key itself. `<main checkout>` stands for the main checkout, which is the project's main folder: the first path that `git worktree list` prints.
+
+### Projects with their own review of saved knowledge
+
+Four of the owner's projects have an approved review, in Notion and Lore, of knowledge before it is saved: Entrevest, Diligence Ready, CentraView, and Robin. The add-on saves every session to the bank without a review, so setting one of them up here would save knowledge without that review.
+
+When the project's name is one of the four, or the owner says that the project is one of them, stop before "1. The server and the key". Create no bank, and add no folder to the add-on's settings.
+
+1. Tell the owner that this project has an approved review of saved knowledge, and that the add-on saves every session without it.
+2. Give the owner the link to the Agent Contract, which is the Notion page that holds those projects' rules for saved knowledge: `https://app.notion.com/p/3e8a27b433e481c3bb83e05a5002c105`.
+3. Tell the owner that three settings in "The bank's settings" each stop one thing that the add-on saves by itself for one bank: "Save every session" stops the saves at the end of a turn, "Git history" stops the saves from Git, and "Code survey" stops the survey.
+4. Go on with "1. The server and the key" only after the owner says yes to a Hindsight bank for this project.
 
 ### 1. The server and the key
 
@@ -181,7 +213,7 @@ When an ID has a character other than a letter, digit, or hyphen, encode the ID 
      - After the owner's yes, remove the old Codex handlers in `~/.codex/hooks.json`. Show the handlers to the owner first.
    - The add-on is installed when each hooks file counts 3 or more and both MCP entries run `mcp-server.js` from `coding-agents`.
 2. Show the owner exactly what will change, and ask:
-   - In `~/.hindsight/coding-agent.json`, the settings below are written, with this project's folder and bank.
+   - In `~/.hindsight/coding-agent.json`, the settings below are written, with this project's folder and bank. "7. The bank's settings" adds the bank's own settings to the same file.
    - Only when the add-on is not installed yet, the installer adds the files and entries in "What runs where" (hooks, MCP servers, its skill, its program).
      - The installer keeps a copy of each file it changes the first time, as `<file>.hindsight-backup`.
      - Codex runs hooks only with its hooks feature on, under `[features]` in `~/.codex/config.toml`. The installer adds that section when the file has none. The key is `hooks`. The older key `codex_hooks`, which the add-on's own documentation names, still works.
@@ -212,7 +244,7 @@ This step proves the server, the key, and the bank. Save a test text with the co
 curl -s -m 30 -X POST <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/memories -d '{"items":[{"content":"Toolkit V2 set up the <Project name> project on <YYYY-MM-DD>. Its memory is the Hindsight bank <bank>.","context":"Toolkit V2 setup check","document_id":"toolkit-setup-check"}],"async":true}' | jq -r '.operation_id // .detail'
 ```
 
-Ollama on the VPS then extracts the memories. Check with the command below about every 20 seconds, until it prints `completed`. When it prints `failed`, stop and report.
+Hindsight then extracts the memories, with its model at OpenAI. Check with the command below about every 20 seconds, until it prints `completed`. When it prints `failed`, run the same command with `jq -r .error_message` in place of `jq -r .status`, then stop and report the reason. The server can print `completed` when part of the extraction failed, so the search below is the proof.
 
 ```text
 curl -s -m 20 <auth> https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/operations/<operation id> | jq -r .status
@@ -229,6 +261,80 @@ The check passes when a result names the bank. When the search prints an empty l
 ### 6. Open the dashboard
 
 Open the bank's page for the owner, as "Open the dashboard" below says.
+
+### 7. The bank's settings
+
+Give the bank the settings that the owner chose in the interview, as "Apply the settings" below says. When the owner was not asked about them yet, ask first, as "Ask the owner" below says.
+
+## The bank's settings
+
+Each bank has six settings that the owner chooses for that bank alone. Setup asks about all six in one message. The project keeps the answers in `.claude/hindsight-bank-settings.json`, a file in the repository, so that every computer gives the bank the same settings.
+
+The file has two parts. The `bank` part holds the settings that the server keeps for the bank. The `addOn` part holds the settings that the add-on keeps on each computer, under the bank's ID.
+
+| Setting | Key in the file | Choices | What the choice changes |
+| --- | --- | --- | --- |
+| Observations | `bank.enable_observations`, `bank.enable_auto_consolidation`, and `addOn.recallOptions.types` | Off. On, built only when the owner asks. On, built after every save. | An observation is a statement that Hindsight builds from several saved memories. Building observations uses the ChatGPT allowance: once for each request, or after every save. |
+| Save every session | `addOn.retainSessions` | `true` or `false` | With `false`, the add-on saves no session at the end of a turn. The bank then gets only the Git history, the code survey, and what the agent saves with the add-on's tools. |
+| Detail of a save | `addOn.retainExtractionMode` | `"concise"`, `"verbose"`, `"verbatim"`, or `"chunks"` | `"verbose"` keeps more detail, and uses several times the model work of `"concise"` on every save. `"verbatim"` stores the text as it is, and uses the model only to find names and dates in it. `"chunks"` stores the text as it is and uses no model. |
+| Summary on the first message | `addOn.autoInject` | `"reflect"`, `"pages"`, `"recall"`, or `"none"` | `"reflect"` asks the model for a summary in every session. `"pages"` adds the knowledge pages that match the message, and `"recall"` adds the memories that match it. Neither uses the model. `"none"` adds nothing. |
+| Git history | `addOn.gitIngest` | `"message"`, `"full"`, or `"none"` | `"message"` saves the commit messages. `"full"` also saves the changes of every commit, and Hindsight uses the model on each one. `"none"` saves nothing from Git. |
+| Code survey | `addOn.codebaseSurvey` | `true` or `false` | With `true`, the add-on surveys the code on a new bank and again every 20 commits. In Claude Code, a survey costs at most US$2. |
+
+The file that setup copies holds the default of each setting: observations on and built after every save, every session saved, `"verbose"`, `"reflect"`, `"full"`, and the code survey on.
+
+The choice for observations sets three values:
+
+| Observations | `bank.enable_observations` | `bank.enable_auto_consolidation` | `addOn.recallOptions.types` |
+| --- | --- | --- | --- |
+| Off | `false` | `false` | `["world", "experience"]` |
+| On, built only when the owner asks | `true` | `false` | `["observation", "world", "experience"]` |
+| On, built after every save | `true` | `true` | `["observation", "world", "experience"]` |
+
+### Ask the owner
+
+Show the owner the six settings in one table. For each setting, give its name, its choices in plain words, what each choice costs, and the default. Then ask one question: "Say 'defaults', or name what to change." Recommend the defaults.
+
+### Apply the settings
+
+In the commands below, `<settings file>` stands for the path of the project's `.claude/hindsight-bank-settings.json` in the folder you work in.
+
+1. Write the owner's answers into the file. Change only the values.
+2. Send the `bank` part to the server. The answer must show both fields with the file's values. When it shows anything else, stop and report what it printed.
+
+   ```text
+   curl -s -m 30 -X PATCH <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/config -d "$(jq -c '{updates: .bank}' '<settings file>')" | jq -c '.detail // (.overrides | {enable_observations, enable_auto_consolidation})'
+   ```
+
+3. Show the owner the `addOn` part, and say that it goes into `~/.hindsight/coding-agent.json`, under the bank's ID. After the owner's yes, write it:
+
+   ```text
+   jq --arg b '<bank>' --slurpfile s '<settings file>' '.banks = ((.banks // {}) + {($b): (((.banks // {})[$b] // {}) + $s[0].addOn)})' ~/.hindsight/coding-agent.json > ~/.hindsight/coding-agent.json.new && chmod 600 ~/.hindsight/coding-agent.json.new && mv ~/.hindsight/coding-agent.json.new ~/.hindsight/coding-agent.json
+   ```
+
+4. Check that the command below shows every key of the `addOn` part with the file's value:
+
+   ```text
+   jq --arg b '<bank>' '(.banks // {})[$b] | del(.. | .apiToken?)' ~/.hindsight/coding-agent.json
+   ```
+
+5. Tell the owner from when the new settings apply. The add-on's hooks read the settings each time they run, so they use the new settings from the owner's next message. The add-on's tools read the settings once, when a session starts, so they use the new settings from the next session.
+
+On a second computer, do only steps 3 to 5, because the server already keeps the `bank` part.
+
+### Change a setting later
+
+When the owner asks to change a setting of the bank, do steps 1 to 5 of "Apply the settings" again with the new answer.
+
+### Build observations when the owner asks
+
+Do this only for a bank whose observations are on, and only when the owner asks. When `bank.enable_observations` in the project's settings file is `false`, send nothing, and tell the owner that observations are off for this bank. Otherwise, start the consolidation with this command:
+
+```text
+curl -s -m 30 -X POST <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/consolidate -d '{}' | jq -r '.operation_id // .detail'
+```
+
+Then check the operation with the status command in "5. Save and search", until it prints `completed` or `failed`. Tell the owner the result. Hindsight can build no observation at all when the saved memories give it nothing to join.
 
 ## Open the dashboard
 
@@ -250,6 +356,14 @@ Use this section for "check the setup" and "update the toolkit". Each check only
 - Check that the three `PROJECT.md` lines in "3. The settings lines" each hold their value, not a prompt and not `not used`.
 - Check that the project has `.claude/rules/hindsight-memory.md`, and that `memory/` in the main checkout holds only `CURRENT_STATE.md`.
 - Do steps 1 and 5 of "4. The add-on".
+- Check the bank's settings:
+  - The project has `.claude/hindsight-bank-settings.json`.
+  - Step 4 of "Apply the settings" shows every key of the file's `addOn` part with the file's value. When that command prints `null`, this computer has no settings for the bank yet. When this update copied the file into the project, the owner was never asked: ask as "Ask the owner" says, and then apply the answers. When the project already had the file, do steps 3 to 5 of "Apply the settings" after the owner's yes.
+  - The command below shows the two fields of the file's `bank` part with the file's values:
+
+    ```text
+    curl -s -m 20 <auth> https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/config | jq -c '.detail // (.overrides | {enable_observations, enable_auto_consolidation})'
+    ```
 - In a session that has the add-on's tools, check that `hindsight_diagnose` shows the bank as `bank_id`, the API address as `api_url`, and `api_token_in_use` `true`. In a session without the tools, list this check as not done yet.
 - When a failure comes from this computer (no key, no add-on, the folder missing from the map), follow "A new computer".
 
@@ -259,7 +373,7 @@ The memory stays on the VPS, so nothing is copied. On the new computer, do these
 
 1. Check that Node and `jq` are installed (`command -v node npx jq`). Installing them is the owner's step.
 2. The owner enters the API key, as "The access key" says.
-3. Read the bank from each project's `PROJECT.md`, and follow "4. The add-on" with that project's folder on this computer and that bank. Install the add-on once. For each other project, only write the settings.
+3. Read the bank from each project's `PROJECT.md`, and follow "4. The add-on" with that project's folder on this computer and that bank. Install the add-on once. For each other project, only write the settings. Then do steps 3 to 5 of "Apply the settings" in each project.
 4. Run "Check a Hindsight project" in each project. Then three steps are the owner's: to trust the add-on's hooks in Codex `/hooks`, to start a new session, and to sign in to the dashboard in the owner's browser.
 
 ## A project on the old Mac server
@@ -285,3 +399,6 @@ Tell the owner. This skill has no step for moving memory between servers. When t
 - Copy a bank ID from `PROJECT.md`, and never type it again from memory. A save to a bank ID that the server does not have makes a new bank without asking.
 - The add-on finds a project by its folder path. After the owner moves or renames the folder, change the path in `mapPathToBank` and `optInPaths`, after the owner's yes. Until then the add-on does nothing in that folder.
 - Never add a `hindsight` server to a project's `.mcp.json` or `.codex/config.toml`, because a project server with that name replaces the add-on's in that project.
+- Never add the server's MCP address for one bank (`https://memory-api.mrihm-memory.com/mcp/<bank>/`) to Claude Code or Codex for a toolkit project. The add-on already gives the agent the tools for the project's bank.
+- Never send `POST .../consolidate`, and never change a setting of a bank, unless the owner asks. Consolidation uses the owner's ChatGPT allowance, and each setting is the owner's choice.
+- Never change the bank's section in `~/.hindsight/coding-agent.json` alone. Change the project's `.claude/hindsight-bank-settings.json`, then apply it, so that every computer gets the same settings.
