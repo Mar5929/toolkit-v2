@@ -24,7 +24,7 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - Commit the plan on the work item's branch, staged by name, before the checker starts.
    - Never save the test plan where the work items are kept.
    - When there is no test plan, the checker gets "Test plan: none".
-4. Start the checker, every time, as `acceptance-checker-brief.md` says. For a small work item, "A small work item" below says when to start it. Start it on the exact head commit after the test plan commit. Give it every requirement that is not dropped, whole, with its Acceptance Criteria. Read its report yourself.
+4. Start the checker, every time, as `acceptance-checker-brief.md` says. Start it on the exact head commit after the test plan commit. Give it every requirement that is not dropped, whole, with its Acceptance Criteria. Read its report yourself.
    - When a defect is outside the requirements and breaks the flow, fix it. The flow is the steps that the person who uses the result goes through, from start to finish.
    - When a defect is outside the requirements and does not break the flow, add it as a new Backlog work item, and show it as a gap with that work item's ID.
    - When no helper can start, run the checks yourself, record "Independent check: none, <why>", and say so on the first line of the reply.
@@ -47,24 +47,22 @@ Use this file to test a finished build against the Acceptance Criteria of every 
 
 ## A small work item
 
-Check a small work item that takes the short path with steps 1 to 6 above. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is, when it takes the short path, and gives its steps. Two things differ on the short path.
+Check a small work item that takes the short path with steps 1 to 6 above. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is and gives the steps of the short path. Two things differ on the short path.
 
 **When the checker runs.** In step 4, start the checker only when the result does one of the four things below. In each of them, a mistake would be costly to undo, or would reach a person outside the project.
 
-- It changes a production system, or it is a file of records that the owner will load into one. A deploy and a data load are examples.
+- It changes a production system. Examples are a deploy to production, and a file of records that the owner will load into production.
 - It changes an environment that other people use, such as a shared test environment.
 - It gives a number, a list of records, or a finding to a person outside the project. A count in an email to the client is an example.
 - It builds or changes what a rule in `system/` says. Only a checker's verdict lets `filing-project-records` mark such a rule Built.
 
-The checker never reads a production system. When the result was made from records of one, give the checker the paths of the working files that hold those records, on the input line "Working files".
+For any other result, start no checker. Your own checks of step 2 take the checker's place.
 
-For any other result, start no checker. Run the checks of step 2 yourself, fix what fails as step 5 says, and run the checks again until every check passes or a failure needs the owner. Then set the phase to Done, as step 6 says, and do these three things in place of the Recent History row of step 6:
-
-- Add the Recent History row "Independent check: none, small item. Checked commit `<short hash>` myself. Evidence: <test command and result line, or what you saw>." For a result that Git does not track, name the file's path and its SHA-256 hash in place of the commit.
+- Fix what fails and check again, as step 5 says, until every check passes or a failure needs the owner.
+- In step 6, in place of the row for the checker's report, add the Recent History row "Independent check: none, small item. Checked commit `<short hash>` myself. Evidence: <test command and result line, or what you saw>."
 - Say on the first line of the reply that shows the result that no separate checker ran.
-- Where `deploying.md` names the commit that the checker passed, use the commit that the "Independent check: none" row names. When `deploying.md` says to start the checker on a new head, run your own check again on that head, and add a new row.
-
-The owner's standing merge instruction does not cover a merge that no checker passed. Ask the owner about each such merge into the default branch.
+- Wherever this skill names the checker's verdict, the commit that the checker passed, or a new run of the checker, use your own check in its place, and record each new check in a new "Independent check: none, small item" row.
+  - One exception: the owner's standing merge instruction does not cover a merge that no checker passed. Ask the owner about each such merge into the default branch.
 
 **The approval.** Steps 7 and 8 do not apply. The one closing question in `closing.md`, section "Closing a small work item", takes their place.
 

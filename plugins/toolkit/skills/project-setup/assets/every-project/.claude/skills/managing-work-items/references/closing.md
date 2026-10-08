@@ -84,7 +84,7 @@ The Moved up line is a line in the work item's Overview. It answers one question
 
 Use this section after Deploying, or after Reflecting when the work item has nothing to merge or deploy.
 
-For a small work item on the short path whose owner answered the closing question, "Closing a small work item" below, step 8, says which of these steps to do.
+For a small work item on the short path, read "Closing a small work item" below, step 3, first. That step says which questions the owner has already answered.
 
 1. Check three things: that every change is merged, or the owner said to leave it on its branch; that the result of each deploy is recorded; and that every Roadmap phase that the work item completed says Done.
 2. Fill the Moved up line, as the section above says.
@@ -103,34 +103,21 @@ For a small work item on the short path whose owner answered the closing questio
 
 ## Closing a small work item
 
-Use this section for a small work item that takes the short path, in place of "Reflecting" and "Marking Done". `references/lifecycle-rules.md`, section "A small work item", says what a small work item is, when it takes the short path, and gives its steps. On the short path the work item gets one closing question, where the full path asks three. It stays in the Testing Loop until the owner answers that question.
+Use this section for a small work item that takes the short path. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is and gives the steps of the short path.
 
-Before you ask:
+On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the question in "Filling the Moved up line", step 2, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
 
-1. Go through the checklist in "Reflecting", steps 1 to 4. When no separate checker ran, compare each requirement in step 2 of that checklist with the Recent History row of your own check.
-2. List what the whole project may need to keep, as "Filling the Moved up line", step 1, says.
-
-Then ask the one closing question:
-
-3. Add the Questions and Answers row "Approve this result and mark <ID> Done?", with the real ID, and set `waiting_on` to the owner.
-4. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
-   - When the list from step 2 holds a decision, a rule to add, change, or retire, a project term, or a lesson, show each of those lines under "To keep for the whole project", with your recommendation and a one-line reason.
-   - When something is still to be merged or deployed, say what it is. Say that each merge and each deploy to an environment that other people use still gets its own question, and that a production deploy or a production data load is the owner's to run.
+1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then list what the whole project may need to keep, as "Filling the Moved up line", step 1, says.
+2. Ask the closing question. Add the Questions and Answers row "Approve this result and mark <ID> Done?", with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
+   - When "Filling the Moved up line", step 2, would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
+   - When a merge, a deploy, or a data load is still to come, say what it is and who runs it, and say that the owner's yes to the closing question does not cover it.
    - The last line of the reply is exactly "Approve this result and mark <ID> Done?"
-
-After the owner's yes:
-
-5. Save the owner's words and the date in the row, and set `result_approved` to `YYYY-MM-DD by <name>`. The yes also covers each line that you showed under "To keep for the whole project". For each of those lines, add one answered Questions and Answers row that holds the line, your recommendation, and the owner's words.
-6. When the work item has something to merge or deploy, or a data load that the owner runs, move it to Deploying and follow `deploying.md`. Its questions for a merge and for a deploy still apply. `deploying.md` ends by sending you to "Marking Done". For a small work item, come back to step 7 of this section instead.
-7. Finish "Filling the Moved up line", from its step 3. The question that its step 6 names is the closing question.
-8. Mark the work item Done with "Marking Done", steps 1, 4, 5, and 7. Skip its steps 2 and 3, and ask no second question, because the owner's yes in step 5 is the yes to mark the work item Done.
-
-After the owner's "no" or a change, record the owner's words in the row, add a task for each problem that the owner named, and move the work item back to Building.
-
-- When the work item is still small, fix each problem, check the result again as `testing-loop.md`, section "A small work item", says, and ask the closing question again in a new row.
-- When the short path no longer fits the work item, move it to the full path, as `references/lifecycle-rules.md`, section "A small work item", says.
-
-A change to the result after the owner's yes, such as a fix after a failed deploy, needs a new check and a new closing question.
+3. After the owner's yes, do these four things in order:
+   - Save the owner's words and the date in the row, and set `result_approved` to `YYYY-MM-DD by <name>`.
+   - Add one answered Questions and Answers row for each line that you showed under "To keep for the whole project", because the yes also covers those lines. The row holds the line, your recommendation, and the owner's words.
+   - When a merge, a deploy, or a data load is still to come, move the work item to Deploying, and follow `deploying.md`.
+   - Follow "Marking Done". The owner's yes has already answered the question in "Filling the Moved up line", step 2, for the lines that you showed, and the question in "Marking Done", step 3. Do not ask those questions again. Where those steps name their question's Q-ID, name the Q-ID of the closing question.
+4. After the owner's "no" or a change, record the owner's words in the row, add a task for each problem that the owner named, and move the work item back to Building. Continue with the short path from its step 4, in `references/lifecycle-rules.md`, section "A small work item", and ask the closing question in a new row. That section also says what to do when the work item stops being small.
 
 ## Cancelling a work item
 
