@@ -48,9 +48,12 @@ the 14 plugin tests, `check-skills.mjs`, `check-rules.mjs` (three warnings,
 the same as before), and the 115 Node tests. This is the first full run on
 the Mac since version 0.9.10.
 
-Not tested: a full-path link to a file inside a worktree, a path with a
-space between `<` and `>`, any link in the terminal or the VS Code
-extension, a full path on a Mac, and any link in Codex.
+Mike clicked one link on the Mac on 2026-10-08, in the Claude Code desktop
+app: a Markdown link with the full path of a file inside a worktree. It
+opened the file.
+
+Not tested: a path with a space between `<` and `>`, any link in the
+terminal or the VS Code extension, and any link in Codex.
 
 ## The rule to evaluate the owner's request is printed on every message, version 0.9.16 (2026-10-08)
 
