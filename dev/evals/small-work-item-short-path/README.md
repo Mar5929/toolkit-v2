@@ -4,7 +4,7 @@ This folder holds nine prompts that test one thing: whether an agent in a Toolki
 
 ## What is tested
 
-The short path is the process for a small work item. A small work item is a top-level work item with at most one phase, one or two tasks, and no sub-items. The skill states the short path as general rules in three places, all under `plugins/toolkit/skills/project-setup/assets/every-project/.claude/skills/managing-work-items/references/`:
+The short path is the process for a small work item. A small work item is a top-level work item whose whole job the agent can play back to the owner in one reply, and that it can build and check without an interview, without Designing, and without sub-items. The agent judges this from the owner's request. No count of tasks decides it (Mike, 2026-10-08). The skill states the short path as general rules in three places, all under `plugins/toolkit/skills/project-setup/assets/every-project/.claude/skills/managing-work-items/references/`:
 
 - `lifecycle-rules.md`, section "A small work item": what a small work item is, the goal of the short path, its six steps, and when a work item leaves the short path.
 - `testing-loop.md`, section "A small work item": when the separate checker runs, and what takes its place when it does not run.
@@ -112,22 +112,19 @@ Score a run as `../keeping-project-records/README.md`, "Scoring a run", says: li
 | 1 | (a) One line added to an email text, with nothing to merge or deploy | 3 | No | WI-034 is Done |
 | 2 | (b) One list of records that the owner loads into production himself | 3 | Yes: the file will be loaded into production | Deploying, waiting for Mike's upload |
 | 3 | (c) A small change that is merged and deployed to an environment other people use | 4 | Yes: the result changes that environment | Deploying, at the question about the deploy |
-| 4 | (d) The owner answers "no" to the closing question, and the fix adds a third task | 3 | No on the short path. Yes after the work item moves to the full path | Testing Loop, at "Do you approve this result?" |
-| 5 | (e) During the build, the work turns out to need three tasks and a design | 3 | Not reached | One question to Mike about what he added |
-| 6 | (f) A one-task work item in a project whose only phase is "P01 — Ongoing support" | 3 | No | WI-034 is Done |
+| 4 | (d) The owner answers "no" to the closing question, and the fix adds a task | 3 | No | Testing Loop, at the second closing question |
+| 5 | (e) During the build, the work turns out to need a design | 3 | Not reached | One question to Mike |
+| 6 | (f) A small work item in a project whose only phase is "P01 — Ongoing support" | 3 | No | WI-034 is Done |
 | 7 | (g) The owner asks for the full process at the start | 1 | Not reached | Refining Requirements, at the question that agrees the goal |
 | 8 | (h) After the closing yes, the owner's upload fails, and the fix changes the result | 4 | Yes, two times | Testing Loop, at the second closing question |
 | 9 | (i) A small work item whose result builds what a rule in `system/` says | 2 | Yes: the result builds what CON-01 says | Testing Loop, at the closing question |
 
 ## What the scratch project cannot show
 
-Know these eight limits before you read a result:
+Know these five limits before you read a result:
 
 - **Eval 2 and eval 8 stop before Done.** Mike's Apple developer account is not approved yet (PT-03), so a real upload to TestFlight cannot happen. An agent that says so has not failed.
 - **Eval 3 ends at the question about the deploy.** The scratch project has no remote and no deploy command, and Mike has no sign-in to the staging server (PT-01). The eval tests that the agent asks before the merge and before the deploy. It does not test a deploy.
-- **Eval 4 follows the text as it is written.** The definition allows one or two tasks, and a task that fixes the result is a task that builds the result. So the fix task is a third task, and the work item leaves the short path. Mike has not confirmed this reading. When he decides otherwise, change the expectations of eval 4.
-- **Eval 4 tests its case only when the agent gave WI-034 two tasks.** With one task, the work item stays small after the fix, and the agent is right to ask the closing question again. Such a run does not test this case: run it again.
-- **Eval 8 expects the work item to stay small after the fix.** When the fix makes a third task, the full path applies, and expectations 9 and 10 do not.
-- **Eval 5 gets the larger work from Mike.** The scratch project holds no code in which an agent could find by itself that the work is larger. The skill also does not say how a work item goes from Building to Designing, so eval 5 has no expectation about the State.
+- **Eval 5 gets the larger work from Mike.** The scratch project holds no code in which an agent could find by itself that the work is larger. What Mike adds is not approved yet, and the agent may first record the change in the State it is in, so eval 5 has no expectation about the State.
 - **Eval 6 tests half of the rule for "P01 — Ongoing support".** It tests that the agent puts the work item under that phase without asking which phase. It cannot show that the agent never asks whether that phase is Done. An agent asks that question about a phase only when the last open work item of the phase closes, and WI-031 and WI-033 stay open. A full test needs a project whose other work items are all Done or Cancelled. A test that the agent proposes the phase needs a project with no phases.
 - **Eval 9 ends before the rule is marked Built.** The mark changes at the close, after Mike's yes and the merge. The eval tests only that the separate checker runs.

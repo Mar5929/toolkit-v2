@@ -144,20 +144,20 @@ A small work item has fewer stops. "A small work item" below says which stops st
 
 ## A small work item
 
-A small work item is a top-level work item with at most one phase, one or two tasks, and no sub-items. The tasks that count are the ones that build the result. A merge, a deploy, and a data load do not count, whoever runs them. Adding one line to an email template is an example of a small work item. Making one list of records for the owner to load is another.
+A small work item is a top-level work item whose whole job you can play back to the owner in one reply, and that you can build and check without an interview, without Designing, and without sub-items. Adding one line to an email template is an example of a small work item. Making one list of records for the owner to load is another.
 
-A small work item takes the short path, unless it needs Designing. "Designing or Building after the requirements" above says when a work item needs Designing. The short path is the six steps below. The full path is the process that this skill gives for every other work item.
+A small work item takes the short path, unless the owner asks for the full process. The short path is the six steps below. The full path is the process that this skill gives for every other work item.
 
 The goal of the short path is to take a small work item to Done with fewer stops for the owner's yes. It asks one question before the work starts, in place of the interview. It asks one question when the result is ready, where the full path asks three.
 
 Every rule of this skill that the six steps do not change applies to a small work item as it is written. Stops 4 and 5 of "When to stop for the owner's yes" stay: each merge into the default branch, and each deploy to an environment that other people use.
 
-Decide from the owner's request whether the work item is small, before you create it. The owner's words win over your decision. When the owner asks for the full process, use the full path.
+Use your judgment to decide from the owner's request whether the work item is small, before you create it. "Designing or Building after the requirements" above says when a work item needs Designing. The owner's words win over your decision.
 
 1. Create the work item, as `references/refining-requirements.md`, steps 1 and 2, say. Then write what the interview would have written:
    - the goal, in the Overview;
    - for each requirement, its Goal, at least one line of Functional Requirements, and at least one line of Acceptance Criteria that a tester could check;
-   - one phase, with its one or two tasks.
+   - one phase, with its tasks.
 2. Play the request back to the owner in one reply. This reply takes the place of steps 3 to 11 of `references/refining-requirements.md`.
    - Say the goal in one or two sentences, what you will hand over, and how you will check it.
    - Name anything you are unsure of.
@@ -175,11 +175,12 @@ Decide from the owner's request whether the work item is small, before you creat
 
 When the owner changes or adds a requirement and the work item is still small, record the change as `references/refining-requirements.md`, step 7, says. In place of the approval question of that step, and of the requirements analyst helper that the full path starts after such a change, play the change back in the form of step 2.
 
-When a work item on the short path stops being small, or needs Designing, move it to the full path:
+A work item on the short path stops being small when the work turns out to need what the short path leaves out: an interview to settle the requirements, Designing, or sub-items. Then move it to the full path:
 
 - Tell the owner in one line.
-- Add the Recent History row "Short path ended: full path from <State>.", with the work item's State.
-- Continue with the file for that State. The owner's approval of the requirements still counts.
+- Add the Recent History row "Short path ended: full path from <State>.", with the State that the work item is in when it leaves the short path.
+- Set `delivery` to `not-offered`, unless a Questions and Answers row whose Affects column says `delivery` holds the owner's answer.
+- Continue with the file for that State. A work item that needs a design moves to Designing, also from Building. The owner's approval of the requirements still counts.
 
 ## Rules that apply in every State
 

@@ -66,9 +66,9 @@ Each finding names one check.
     good, clean, carefully, best practice, and the rest of the list in
     `VAGUE_RE` in `dev/tools/rule-lint.mjs`;
   - size and time words with no measure: large, small, big, recent, soon,
-    a few, several, often, long. Either define them in the same file ("large:
-    has sub-items or more than two tasks") or point to where they are
-    defined;
+    a few, several, often, long. Either define them in the same file, point
+    to where they are defined, or say that the agent judges and what it
+    judges by (W5);
   - a pronoun (it, this, that, they, them) that could point to two things;
   - "or" that could mean one of them or both;
   - a condition with no rule for the other case, where the other case can
