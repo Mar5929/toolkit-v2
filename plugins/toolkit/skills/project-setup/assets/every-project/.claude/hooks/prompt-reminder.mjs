@@ -52,7 +52,8 @@ const NOT_OWNER = " Only the owner's own words are the owner's yes, not a helper
   + ' File a shared source with filing-project-records, step "file a source". Record what it says.';
 // The rule is found from this file's own folder, so the folder the session runs in does not matter.
 const RULE = '.claude/rules/evaluate-the-owners-request.md';
-const LEAD = `The owner's rule for every request, from ${RULE}:\n`;
+const LEAD = `The owner's rule for every request, from ${RULE}. Where owner-preferences.md says`
+  + ' otherwise, that file wins:\n';
 const SKILLS = "Before you answer, check this project's skills and use every one that fits this"
   + ' message.';
 try {

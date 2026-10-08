@@ -13,21 +13,29 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   message in both hosts, has one more job: it prints the rule's text last,
   after one line that names the rule's file. For a message such as "hello"
   it prints the skills line, then "The owner's rule for every request, from
-  .claude/rules/evaluate-the-owners-request.md:", then the whole rule file.
+  .claude/rules/evaluate-the-owners-request.md. Where owner-preferences.md
+  says otherwise, that file wins:", then the whole rule file.
 - The command reads the project's rule file each time and holds no copy of
   the text. So the rule file is the one place to change the rule, and a
   project whose owner changed the rule prints the changed text. It finds
   the file from its own place in `.claude/hooks/`, so it works in both
   hosts and from inside a Git worktree. When the rule file is missing or
   empty, the command prints what it printed before.
-- The rule has a longer text, which he approved on 2026-10-08. It adds that
-  the owner always wants the best solution for the whole project, and that
-  the agent shows each option with what it gains and what it costs. This
-  repository's copy in `.claude/rules/` holds the same text.
+- The rule has a longer text, which he approved on 2026-10-08 and refined
+  twice the same day ("boom love it - build it" to the last draft). It says
+  that the owner always wants the best solution for the whole project. The
+  agent slows down and says what it thinks the goal is. It learns what the
+  system, process, or application is for and how the people who use it are
+  meant to use it. When a request changes how people use it, the agent
+  looks at their whole process from start to finish. It checks that what
+  the owner suggested fits how everything else is built, and it shows each
+  option with what it gains and what it costs. This repository's copy in
+  `.claude/rules/` holds the same text.
 - He was told that the command grows from 64 lines to about 70, plus about
-  15 lines of tests. It is 71 lines, and `dev/tests/hooks.test.mjs` grew by
-  24 lines. With the starter rule the longest output is 2,773 characters,
-  and a plain message gets 1,913. Claude Code's limit is 10,000 characters,
+  15 lines of tests. It is 72 lines, and `dev/tests/hooks.test.mjs` grew by
+  34 lines: 24 for the command, and 10 for a test of this repository's own
+  settings entry. With the starter rule the longest output is 3,576 characters,
+  and a plain message gets 2,716. Claude Code's limit is 10,000 characters,
   and Codex's is about 2,500 tokens for this entry.
 - No settings entry changed, in the snippets or in the starter
   `.claude/settings.json`. So Codex does not ask him to trust the hook
@@ -40,17 +48,39 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   own rule text.
 - This repository has no hook commands. Its `.claude/settings.json` has one
   new `UserPromptSubmit` entry that prints the starter rule on every message
-  in Claude Code, with `node -e` and no new code file. The entry's command
-  was run by hand with the same arguments: it printed the line and the rule
+  in Claude Code, with `node -e` and no new code file. A test runs the
+  entry's command with the same arguments: it prints the line and the rule
   with the right path, and nothing with a wrong path, with exit code 0 both
-  times. It has not been watched in a live session. Codex sessions in this
-  repository have no such entry.
-- Checked on Windows: `hooks.test.mjs`, `check-skills.mjs`,
-  `check-rules.mjs`, and `claude plugin validate` for the marketplace and
-  the `toolkit` plugin. Not run on a Mac.
-- Next: watch the new entry in a live Claude Code session in this
-  repository, and decide whether this repository also gets a hooks file for
-  Codex.
+  times. The same test fails when the line differs from the line the hook
+  command prints. The entry has not been watched in a live session. Codex
+  sessions in this repository have no such entry.
+- A separate reviewer read the change. It found the code and the tests
+  sound, and it found gaps in the documents, which are fixed: check 10 in
+  `finishing.md` did not say what a failed result means, "each hook command
+  does one job" was no longer true in two files, two sentences in
+  `AGENTS.md` could be read in two ways, and this repository's own entry
+  had no test. The review also raised two questions, and Mike answered both
+  on 2026-10-08. The last bullet of the rule said "or the owner gives a
+  direct instruction", so a direct instruction alone was enough to act. It
+  now says: "When you found nothing to raise, do the work. This also holds
+  for a direct instruction such as "merge it": say what you found first,
+  and otherwise do it." (his words: "sure that wording"). And an instruction
+  of his that begins "from now on" is filed in `owner-preferences.md`,
+  which loads once, while the hook prints the rule on every message. So the
+  line above the rule now ends "Where owner-preferences.md says otherwise,
+  that file wins:" (his "ok"). That clause took the command to 72 lines.
+- The evals in `dev/evals/` were not run with the new output.
+- Checked on Windows, on the branch after the merge of version 0.9.15:
+  `claude plugin validate` passes for the marketplace, `./plugins/toolkit`,
+  and `./plugins/workstreams`. `claude plugin test ./plugins/workstreams`
+  passes with 14 tests. The whole test folder ran on the final text with
+  115 tests: 113 pass, 2 are skipped, and 0 fail. `check-skills.mjs` passes
+  with 0 warnings, and `check-rules.mjs` passes with its 3 older size
+  warnings. Not run on a Mac.
+- Next: run the two eval sets in `dev/evals/` with the new output, to see
+  whether the agent now asks the owner more often than it should; watch the
+  new entry in a live Claude Code session in this repository; and decide
+  whether this repository also gets a hooks file for Codex.
 
 ## The text for a small work item without a sentence for each small case, version 0.9.15 (2026-10-08)
 
