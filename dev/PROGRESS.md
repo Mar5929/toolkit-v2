@@ -2,6 +2,56 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The rule to evaluate the owner's request is printed on every message, version 0.9.16 (2026-10-08)
+
+- Mike asked for the rule `.claude/rules/evaluate-the-owners-request.md` to
+  be in front of the agent on every message, and not only at session start
+  (2026-10-08: "create a small hook that runs on every turn to paste in that
+  message"). He approved the design the same day ("I love the idea yes",
+  then "yes this is good, build it").
+- No new hook command. `prompt-reminder.mjs`, which already runs on every
+  message in both hosts, has one more job: it prints the rule's text last,
+  after one line that names the rule's file. For a message such as "hello"
+  it prints the skills line, then "The owner's rule for every request, from
+  .claude/rules/evaluate-the-owners-request.md:", then the whole rule file.
+- The command reads the project's rule file each time and holds no copy of
+  the text. So the rule file is the one place to change the rule, and a
+  project whose owner changed the rule prints the changed text. It finds
+  the file from its own place in `.claude/hooks/`, so it works in both
+  hosts and from inside a Git worktree. When the rule file is missing or
+  empty, the command prints what it printed before.
+- The rule has a longer text, which he approved on 2026-10-08. It adds that
+  the owner always wants the best solution for the whole project, and that
+  the agent shows each option with what it gains and what it costs. This
+  repository's copy in `.claude/rules/` holds the same text.
+- He was told that the command grows from 64 lines to about 70, plus about
+  15 lines of tests. It is 71 lines, and `dev/tests/hooks.test.mjs` grew by
+  24 lines. With the starter rule the longest output is 2,773 characters,
+  and a plain message gets 1,913. Claude Code's limit is 10,000 characters,
+  and Codex's is about 2,500 tokens for this entry.
+- No settings entry changed, in the snippets or in the starter
+  `.claude/settings.json`. So Codex does not ask him to trust the hook
+  again.
+- An existing project gets both files at its next "update the toolkit". The
+  command is replaced after his yes, as every hook command is. The rule is
+  shown as a difference: the update recommends the new text when the
+  project's file holds no edit of his, and keeps his edit otherwise. A
+  project that updates the command and keeps its own rule text prints its
+  own rule text.
+- This repository has no hook commands. Its `.claude/settings.json` has one
+  new `UserPromptSubmit` entry that prints the starter rule on every message
+  in Claude Code, with `node -e` and no new code file. The entry's command
+  was run by hand with the same arguments: it printed the line and the rule
+  with the right path, and nothing with a wrong path, with exit code 0 both
+  times. It has not been watched in a live session. Codex sessions in this
+  repository have no such entry.
+- Checked on Windows: `hooks.test.mjs`, `check-skills.mjs`,
+  `check-rules.mjs`, and `claude plugin validate` for the marketplace and
+  the `toolkit` plugin. Not run on a Mac.
+- Next: watch the new entry in a live Claude Code session in this
+  repository, and decide whether this repository also gets a hooks file for
+  Codex.
+
 ## A rule to evaluate the owner's request, and new wording in the reminder hook, version 0.9.14 (2026-10-08)
 
 - Every project gets a new rule, `.claude/rules/evaluate-the-owners-request.md`

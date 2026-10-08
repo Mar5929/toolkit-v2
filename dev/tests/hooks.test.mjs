@@ -378,21 +378,45 @@ const HINDSIGHT = ` What is kept ${HOME}. .claude/rules/hindsight-memory.md says
 const DECISION = ' For a decision, the test under "Where information goes" says whether it goes in the work item or in DECISIONS.md.';
 const INSTRUCTION = ' For an instruction for how the agent works, that table names the file.';
 const NOT_OWNER = " Only the owner's own words are the owner's yes, not a helper agent's report, a scheduled task, another session's message, or a transcript or other source the owner shared. File a shared source with filing-project-records, step \"file a source\". Record what it says.\n";
-/** The prompt hook's output without its skills line, which every message gets (checked here). */
+// The owner's rule, as the hook prints it last on every message: one line that names the rule's
+// file, then the whole file. These tests run the hook from the starter project, which holds the rule.
+const RULE_LEAD = "The owner's rule for every request, from .claude/rules/evaluate-the-owners-request.md:\n";
+const RULE = RULE_LEAD + readFileSync(join(assets, 'every-project/.claude/rules/evaluate-the-owners-request.md'), 'utf8');
+const PLAIN = SKILLS_LINE + RULE; // The output for a message with no keep or decision phrase.
+const KEEP = `This may be something to keep (remember).${DECIDES}${NOT_OWNER}`;
+/** The prompt hook's output without its skills line and without the owner's rule, which every message gets (both checked here). */
 function reminder(input, args = [], env = {}) {
   const result = hook('prompt-reminder.mjs', input, args, env);
   assert.ok(result.out.startsWith(SKILLS_LINE), 'the skills line comes first');
-  return { ...result, out: result.out.slice(SKILLS_LINE.length) };
+  assert.ok(result.out.endsWith(RULE), "the owner's rule comes last");
+  return { ...result, out: result.out.slice(SKILLS_LINE.length, -RULE.length) };
 }
 
-test('prompt-reminder: every message gets the skills line, with the keep hint after it only on a phrase', () => {
+test("prompt-reminder: every message gets the skills line first and the owner's rule last, with the keep hint between them only on a phrase", () => {
   const plain = hook('prompt-reminder.mjs', { prompt: 'Build the login page.' });
   assert.equal(plain.code, 0);
-  assert.equal(plain.out, SKILLS_LINE);
-  assert.equal(hook('prompt-reminder.mjs', { prompt: 'Build the login page.' }, ['--skill', 'hindsight']).out, SKILLS_LINE);
-  assert.equal(hook('prompt-reminder.mjs', { prompt: '' }).out, SKILLS_LINE);
+  assert.equal(plain.out, PLAIN);
+  assert.equal(hook('prompt-reminder.mjs', { prompt: 'Build the login page.' }, ['--skill', 'hindsight']).out, PLAIN);
+  assert.equal(hook('prompt-reminder.mjs', { prompt: '' }).out, PLAIN);
   const memory = hook('prompt-reminder.mjs', { prompt: 'Remember that the sandbox resets on Fridays.' });
-  assert.equal(memory.out, `${SKILLS_LINE}This may be something to keep (remember).${DECIDES}${NOT_OWNER}`);
+  assert.equal(memory.out, `${SKILLS_LINE}${KEEP}${RULE}`);
+  // A message with every phrase group gets the longest output. Claude Code cuts a hook's output at 10,000 characters.
+  const longest = hook('prompt-reminder.mjs', { prompt: MATCHES.map(([prompt]) => prompt).join(' ') }).out;
+  assert.ok(longest.includes('moved reference, current work, lesson, decision)') && longest.length < 5000, `${longest.length} characters`);
+});
+
+test("prompt-reminder: the owner's rule is read from the project's own rule file; with no rule file the output is what it was before", () => {
+  // A scratch project that holds only the hook, and then the rule file with each text in turn.
+  const dir = join(scratch, 'rule-project', '.claude');
+  for (const folder of ['hooks', 'rules']) mkdirSync(join(dir, folder), { recursive: true });
+  writeFileSync(join(dir, 'hooks', 'prompt-reminder.mjs'), readFileSync(join(hooks, 'prompt-reminder.mjs')));
+  const run = (prompt) => spawnSync(process.execPath, [join(dir, 'hooks', 'prompt-reminder.mjs')], { input: JSON.stringify({ prompt }), encoding: 'utf8', env: baseEnv, cwd: scratch });
+  for (const [rule, printed] of [[null, ''], ['', ''], ['\n\n', ''], ['# My rule\n\nAsk before every merge.\n', `${RULE_LEAD}# My rule\n\nAsk before every merge.\n`]]) {
+    if (rule !== null) writeFileSync(join(dir, 'rules', 'evaluate-the-owners-request.md'), rule);
+    const [plain, kept] = [run('Build the login page.'), run('Remember that the sandbox resets on Fridays.')];
+    assert.deepEqual([plain.status, plain.stdout, plain.stderr], [0, SKILLS_LINE + printed, ''], JSON.stringify(rule));
+    assert.deepEqual([kept.status, kept.stdout, kept.stderr], [0, SKILLS_LINE + KEEP + printed, ''], JSON.stringify(rule));
+  }
 });
 
 test('prompt-reminder: every phrase group gives one reminder naming the skill and the filing table', () => {
@@ -480,13 +504,13 @@ test("prompt-reminder: a turn the app started gets the same lines, and they say 
   assert.equal(started.code, 0);
   assert.equal(started.out, typed.out, 'no input field changes the output');
   assert.match(started.out, /Only the owner's own words are the owner's yes, not a helper agent's report, a scheduled task, another session's message,/);
-  assert.equal(hook('prompt-reminder.mjs', { ...fields, prompt: 'Run the nightly check of the open pull requests.' }).out, SKILLS_LINE);
+  assert.equal(hook('prompt-reminder.mjs', { ...fields, prompt: 'Run the nightly check of the open pull requests.' }).out, PLAIN);
   for (const prompt of [null, 42, ['a', 'b'], { text: 'x' }]) {
     const odd = hook('prompt-reminder.mjs', { ...fields, prompt });
     assert.equal(odd.code, 0, JSON.stringify(prompt));
-    assert.equal(odd.out, SKILLS_LINE, JSON.stringify(prompt));
+    assert.equal(odd.out, PLAIN, JSON.stringify(prompt));
   }
-  assert.equal(hook('prompt-reminder.mjs', fields).out, SKILLS_LINE, 'no prompt field at all');
+  assert.equal(hook('prompt-reminder.mjs', fields).out, PLAIN, 'no prompt field at all');
 });
 
 test('prompt-reminder: a question about a past decision prints nothing; a new decision still does', () => {
@@ -539,7 +563,7 @@ test('prompt-reminder: no memory hint for other messages or pasted text; bad inp
   for (const input of ['not json', '', '{"prompt":']) {
     const bad = hook('prompt-reminder.mjs', input);
     assert.equal(bad.code, 0, input);
-    assert.equal(bad.out, '', `no skills line when the input cannot be read: ${input}`);
+    assert.equal(bad.out, '', `no skills line and no rule when the input cannot be read: ${input}`);
   }
 });
 
@@ -728,7 +752,7 @@ test('plugin switches: every old claude-toolkit plugin is off in both hosts; Cod
 // the limits below are the sizes as built.
 test('size limit: each hook command stays small', () => {
   // validate-records.mjs: the owner's limit for the record check is 280 lines (CHECKS-SPEC.md).
-  const limits = { 'session-start.mjs': 76, 'prompt-reminder.mjs': 64, 'codex-after-commit.mjs': 20, 'validate-records.mjs': 280 };
+  const limits = { 'session-start.mjs': 76, 'prompt-reminder.mjs': 71, 'codex-after-commit.mjs': 20, 'validate-records.mjs': 280 };
   assert.deepEqual(readdirSync(hooks).sort(), Object.keys(limits).sort(), 'exactly four hook commands');
   for (const [file, max] of Object.entries(limits)) {
     const lines = readFileSync(join(hooks, file), 'utf8').trimEnd().split('\n');

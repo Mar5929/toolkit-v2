@@ -291,7 +291,7 @@ description.
 | When | What happens |
 | --- | --- |
 | A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the memory index: one line per memory record, which the hook rebuilds in `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
-| You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
+| You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. It is also shown the whole text of the rule `.claude/rules/evaluate-the-owners-request.md` again. The hook reads that file each time, so to change the rule you edit that one file. |
 | You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved and where. The agent saves it without asking you first, and tells you in one line what it saved. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
@@ -335,7 +335,8 @@ records your words and the date.
   whole project. It tells you first when it sees a better way, a case you
   did not cover, or something the request would break. The rule
   `.claude/rules/evaluate-the-owners-request.md` says so, and every project
-  gets it.
+  gets it. A hook shows the agent this rule again on every message you
+  send.
 - An action item from a meeting is saved as a project task with who owes
   it: you, the agent, or a named other person, such as the client or a
   vendor.
