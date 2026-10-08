@@ -52,6 +52,61 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   repository, and decide whether this repository also gets a hooks file for
   Codex.
 
+## The text for a small work item without a sentence for each small case, version 0.9.15 (2026-10-08)
+
+On 2026-10-07 the short path for a small work item, in `managing-work-items`,
+got about ten sentences that each settled one small case. Mike asked for them
+to be removed ("Fix this absolutely. You must have another agent verify the
+work too."). His instruction for such text: write the general rule, and do
+not add a sentence for each small case.
+
+- Five reference files of the skill changed: `lifecycle-rules.md`,
+  `testing-loop.md`, `closing.md`, `refining-requirements.md`, and
+  `deploying.md`. 30 sentences were removed or joined into general
+  statements. The section in `lifecycle-rules.md` now states the goal of the
+  short path and gives it in six steps.
+- No decision of his about the short path changed: what a small work item
+  is, the play-back in place of the interview, one closing question, when
+  the separate checker runs, the questions before a merge and a deploy, the
+  move to the full path, no delivery offer, and the phase
+  `P01 — Ongoing support`.
+- Three general statements carry what the removed sentences said. Every
+  rule of the skill that the six steps do not change applies to a small
+  work item as it is written. Where the skill names the checker's verdict,
+  the commit that the checker passed, or a new run of the checker, the
+  agent's own check takes its place, with one exception: the owner's
+  standing merge instruction does not cover a merge that no checker passed.
+  After the closing yes the agent follows "Marking Done" and does not ask
+  again the questions that the yes already answered.
+- One word changed that also applies to the full path. `deploying.md` said
+  that a fix after a failed deploy goes back to the Testing Loop "when the
+  fix changes code". It now says "when the fix changes the result", as
+  `testing-loop.md` already did. The same line now also names a failed data
+  load.
+- One thing the agent now does differently: a lesson that first appears
+  after the closing yes, such as one from a deploy, gets its own question.
+  Before, it got no answer.
+- A new test set, `dev/evals/small-work-item-short-path/`, holds nine
+  situations for the short path. They are for testing only and are never
+  copied into the agent's instructions. No eval existed for the short path
+  before.
+- A separate verifier read the rewrite: every removed sentence, the three
+  general statements in every place they apply, nine walk-throughs against
+  the old text, every cross-reference, the writing rule, and the fit with
+  the rest of the toolkit. It had 12 findings, 2 of them places where an
+  agent could act differently than before. All were fixed, and the verifier
+  read the fixes. Its 4 small points from that second read were fixed and
+  not read a third time.
+- Not run: the nine evals in a live session.
+
+Open for Mike:
+
+- Does a task that fixes the result count toward "one or two tasks"? As
+  written, it does, so a two-task work item whose fix is a third task moves
+  to the full path.
+- The skill does not say how a work item that leaves the short path during
+  Building gets to Designing.
+
 ## A rule to evaluate the owner's request, and new wording in the reminder hook, version 0.9.14 (2026-10-08)
 
 - Every project gets a new rule, `.claude/rules/evaluate-the-owners-request.md`
@@ -208,7 +263,7 @@ Open for Mike:
 Still to do: two evals for a turn that changes no fact (a job done with no
 work item, and a result given only in the reply); trimming the edge-case
 sentences in the short path of `managing-work-items`, with the test set as
-the check; a live run of the evals.
+the check (done in version 0.9.15); a live run of the evals.
 
 ## The filechanges skill, version 0.9.11 (2026-10-07)
 
