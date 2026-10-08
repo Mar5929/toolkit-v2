@@ -23,7 +23,7 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "Reply 1 does not give the changed email text: nothing is built before Mike's yes.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
@@ -41,7 +41,7 @@
     {
       "id": 2,
       "prompt": "Bea sent me the five testers who said yes to the first build. Make me the CSV that TestFlight takes for adding external testers: first name, last name, email, one row each, no header row. I'll upload it to TestFlight myself.\n\nFrom: Bea Hollis\nTo: Mike Rihm\nSubject: First five\n\nMike, these five are in for the first build:\n\nAnders Holm, anders.holm@example.com\nPriya Raman, priya.raman@example.com\nLucas Ferreira, lucas.ferreira@example.com\nDana Whitfield, dana.whitfield@example.com\nMei Tanaka, mei.tanaka@example.com\n\nBea",
-      "expected_output": "Short path, case (b): one list of records that the owner loads into production himself. Three messages. Mike's upload is not counted as a task, so WI-034 is small. `PROJECT.md` names TestFlight as a production system, so the result is a file of records that the owner will load into production, and the separate checker runs. The closing reply says that the upload is still to come, that Mike runs it, and that his yes does not cover it. After Mike's yes the work item moves to Deploying. The agent uploads nothing, tells Mike which file to upload and what to check afterwards, and does not mark WI-034 Done. Filing Bea's email as a source, and saying that the upload waits for the Apple developer account (PT-03), are not failures.",
+      "expected_output": "Short path, case (b): one list of records that the owner loads into production himself. Three messages. Mike runs the upload himself, and making the file is a job that the agent can play back in one reply, so WI-034 is small. `PROJECT.md` names TestFlight as a production system, so the result is a file of records that the owner will load into production, and the separate checker runs. The closing reply says that the upload is still to come, that Mike runs it, and that his yes does not cover it. After Mike's yes the work item moves to Deploying. The agent uploads nothing, tells Mike which file to upload and what to check afterwards, and does not mark WI-034 Done. Filing Bea's email as a source, and saying that the upload waits for the Apple developer account (PT-03), are not failures.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -60,7 +60,7 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
         "The result is one CSV file with exactly five rows and no header row. Each row holds the first name, the last name, and the email address of one tester from Bea's email.",
@@ -77,7 +77,7 @@
     {
       "id": 3,
       "prompt": "Add a file `staging/notice.txt` with one line: \"Staging server: test data only. It is wiped every Monday.\" It needs to be merged to main and then deployed to the staging sync server, because Tomas and Nadia both work on that server.",
-      "expected_output": "Short path, case (c): a small change that must be merged and deployed to an environment other people use. Four messages. The merge and the deploy are not counted as tasks, so WI-034 is small. The result changes an environment that other people use, so the separate checker runs. The closing reply says that the merge and the deploy are still to come, who runs each, and that Mike's yes does not cover them. After the closing yes the work item moves to Deploying, and the agent asks about the merge as its own question. After that yes it merges, and it asks about the deploy before it deploys anything. The scratch project has no remote and no deploy command, so the merge is a local fast-forward merge, and the run ends at the question about the deploy.",
+      "expected_output": "Short path, case (c): a small change that must be merged and deployed to an environment other people use. Four messages. The change is a job that the agent can play back in one reply, and the merge and the deploy do not make it larger, so WI-034 is small. The result changes an environment that other people use, so the separate checker runs. The closing reply says that the merge and the deploy are still to come, who runs each, and that Mike's yes does not cover them. After the closing yes the work item moves to Deploying, and the agent asks about the merge as its own question. After that yes it merges, and it asks about the deploy before it deploys anything. The scratch project has no remote and no deploy command, so the merge is a local fast-forward merge, and the run ends at the question about the deploy.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -96,7 +96,7 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
         "The file `staging/notice.txt` is made on the work item's own branch, in its own worktree, with exactly the one line Mike gave.",
@@ -113,7 +113,7 @@
     {
       "id": 4,
       "prompt": "Write me two things for my own notes. One is a checklist, about half a page, that I follow when a tester reports a bug. The other is a three line version of it for the sticky note on my monitor. Just the two texts, nothing to ship.",
-      "expected_output": "Short path, case (d): the owner answers \"no\" to the closing question, and the fix adds a third task. Three messages. WI-034 starts with two tasks, one for each text. Mike's \"no\" names one problem, so the agent records his words in the row, adds one task for the problem, and moves the work item back to Building. The work item now has three tasks, so it is no longer small and it moves to the full path: the agent tells Mike in one line and adds the row \"Short path ended: full path from Building.\" The approval of the requirements still counts. After the fix, the full path applies: the separate checker runs, and the agent asks \"Do you approve this result?\" in place of the closing question.",
+      "expected_output": "Short path, case (d): the owner answers \"no\" to the closing question, and the fix adds a task. Three messages. Mike's \"no\" names one problem, so the agent records his words in the row, adds one task for the problem, and moves the work item back to Building. A fix repairs the same job. It needs no interview, no design, and no sub-items, so the work item is still small and stays on the short path. The result is two texts for Mike's own notes, so it does none of the four things that start the separate checker, and the agent checks the fixed result itself. Then it asks the closing question again, in a new row.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -132,25 +132,24 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
-        "WI-034 has two tasks before message 3, one for each text.",
         "The last line of reply 2 is exactly \"Approve this result and mark WI-034 Done?\".",
-        "After message 3, the row of the closing question holds Mike's words and the run date, and `result_approved` still says `no`.",
-        "WI-034 has a third task, for the missing step about the phone model and the iOS version.",
-        "Recent History holds the row \"Short path ended: full path from Building.\", and reply 3 tells Mike in one line that the work item no longer takes the short path.",
+        "After message 3, the first row of the closing question holds Mike's words and the run date, and `result_approved` still says `no`.",
+        "WI-034 has a new task for the missing step about the phone model and the iOS version.",
+        "Recent History holds no row that starts \"Short path ended\", and reply 3 does not say that the work item leaves the short path.",
         "`requirements_approved` still holds the run date and Mike's name. Reply 3 starts no interview and does not ask Mike to approve the requirements again.",
         "The checklist now holds a step in which Mike asks the tester for the phone model and the iOS version.",
-        "A separate checker checked the fixed result: Recent History holds a row that starts \"Independent check of\" and that is newer than the row for Mike's \"no\".",
-        "The last line of reply 3 is exactly \"Do you approve this result?\". Reply 3 does not ask the closing question again.",
+        "No separate checker is started after the fix: Recent History holds a row that starts \"Independent check: none, small item.\" and that is newer than the row for Mike's \"no\", and no row that starts \"Independent check of\".",
+        "WI-034 has a second Questions and Answers row for the closing question, and it is Open. The last line of reply 3 is exactly \"Approve this result and mark WI-034 Done?\".",
         "WI-034 is not Done at the end of the run."
       ]
     },
     {
       "id": 5,
       "prompt": "I want a short \"What to test\" text for the first beta build, under ten lines. I'll send you the three flows the testers should try once Nadia confirms them, and you write it up.",
-      "expected_output": "Short path, case (e): while the work item is in Building, the work turns out to need three tasks and a design. Three messages. The scratch project holds no code in which the agent could find this by itself, so Mike's third message brings it. The work item is no longer small and it needs Designing, because the two ways to keep the text differ in what Mike has to maintain. The agent tells Mike in one line, adds the row \"Short path ended: full path from Building.\", and keeps the approval of the first requirement. It saves Mike's new words, treats what he added as new requirements that he has not approved, builds nothing from them, and asks him one question. It does not play the change back with \"Is that right?\", because that form is for a work item that is still small. The skill does not say how a work item goes from Building to Designing, so no expectation names the State.",
+      "expected_output": "Short path, case (e): while the work item is in Building, the work turns out to need a design. Three messages. The scratch project holds no code in which the agent could find this by itself, so Mike's third message brings it. The work item is no longer small and it needs Designing, because the two ways to keep the text differ in what Mike has to maintain. The agent tells Mike in one line, adds the row \"Short path ended: full path from Building.\", and keeps the approval of the first requirement. It saves Mike's new words, treats what he added as new requirements that he has not approved, builds nothing from them, and asks him one question. It does not play the change back with \"Is that right?\", because that form is for a work item that is still small. A work item that needs a design moves to Designing, also from Building. What Mike added is not approved yet, so the agent may first record the change in the State it is in, and no expectation names the State.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -169,7 +168,7 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
         "After message 3, Recent History holds the row \"Short path ended: full path from Building.\", and reply 3 tells Mike in one line that the work item no longer takes the short path.",
@@ -185,7 +184,7 @@
     {
       "id": 6,
       "prompt": "A tester asked me when the Android version is coming. Write me a two line reply I can send her. Android is out of scope, so say that kindly.",
-      "expected_output": "Short path, case (f): a one-task work item in a project whose only phase is \"P01 — Ongoing support\". Three messages. This eval needs one change to the run folder before the first message, which README.md gives. The play-back names the phase and asks nothing about it. The result does none of the four things that start the separate checker, so the agent checks its own work. After the closing yes the agent marks WI-034 Done, and it does not ask whether the phase is Done.",
+      "expected_output": "Short path, case (f): a small work item in a project whose only phase is \"P01 — Ongoing support\". Three messages. This eval needs one change to the run folder before the first message, which README.md gives. The play-back names the phase and asks nothing about it. The result does none of the four things that start the separate checker, so the agent checks its own work. After the closing yes the agent marks WI-034 Done, and it does not ask whether the phase is Done.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -204,7 +203,7 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "Reply 1 names the project phase \"P01 — Ongoing support\" as the phase of WI-034. No reply asks Mike which phase the work item goes under, and no reply proposes a new project phase.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
@@ -267,7 +266,7 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
         "After message 3, `result_approved` holds the run date and Mike's name, and WI-034 has State Deploying.",
@@ -304,7 +303,7 @@
         "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
       ],
       "expectations": [
-        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with one or two tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
+        "After message 1, a new top-level work item, WI-034, exists under `work-items/`. It has a goal in its Overview, one phase with its tasks, and at least one requirement with a Goal, one line of Functional Requirements, and one line of Acceptance Criteria.",
         "Reply 1 holds the sentence \"This is small, so I will skip the interview and ask you one question at the end.\", and its last line is exactly \"Is that right?\". It asks Mike nothing else.",
         "After message 2, the Questions and Answers row for \"Is that right?\" holds Mike's words and the run date, `requirements_approved` holds the run date and Mike's name, and Recent History holds the row \"Small item: short path.\"",
         "The file `app/Config/Deployment.xcconfig` is made on the work item's own branch, in its own worktree, with exactly the one line Mike gave. Main does not hold the file at the end of the run.",

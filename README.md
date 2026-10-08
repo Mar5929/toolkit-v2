@@ -320,13 +320,15 @@ records your words and the date.
   whether it changed `system/` or `DECISIONS.md`.
 - An independent checker agent tests the work before you are asked to
   approve it. Only you mark an item Done.
-- A small work item, with one or two tasks, takes a short path. The agent
+- A small work item takes a short path. The agent judges from your request
+  whether the work is small: a job it can play back to you in one reply and
+  build without an interview, a design, or a split into parts. The agent
   plays the goal back to you, and your yes approves the requirements.
   Your yes to one question at the end approves the result and marks the
   item Done. For a small work item, the checker runs only when the result
   changes production, changes an environment other people use, gives a
   number, a list of records, or a finding to someone outside the project,
-  or changes a rule in `system/`.
+  or builds or changes what a rule in `system/` says.
 - A project with no planned phases, such as ongoing support for a client,
   gets one phase, "Ongoing support", that stays open.
 - "From now on" instructions become a line in the project's

@@ -105,11 +105,11 @@ every time, also when he does not mention it.
   his yes. Edit the starter rule, then copy it over the copy below those two
   lines. Never edit the copy. `check-skills.mjs` fails when the two differ.
 
-## Two instructions for text that tells an agent what to do
+## Three instructions for text that tells an agent what to do
 
-Mike gave both on 2026-10-08. They apply to every skill, rule, guide, hook
-text, and brief. Put both in the brief of every helper agent that writes
-such text.
+Mike gave all three on 2026-10-08. They apply to every skill, rule, guide,
+hook text, and brief. Put all three in the brief of every helper agent that
+writes such text.
 
 - Write the general rule. Do not add a sentence for each small case. The
   text for a small work item got about ten such sentences in one day, and he
@@ -118,6 +118,16 @@ such text.
 - State the goal and the process. Do not tell the agent how to think. His
   example of what not to write: "when the user says the phrase 'what do you
   think' that means they want you to reason about the question".
+- Do not put a count or a limit where the agent should use its judgment.
+  Say what the step is for, and let the agent decide. A small work item was
+  defined as "at most one phase, one or two tasks, and no sub-items", and
+  the agent then asked him whether a task that fixes the result counts. His
+  words: "Why are we hardcoding the number of tasks to determine whether it
+  is small? ... We cannot be solutioning and desiging like this where are
+  processes are so rigid and limiting the agent's reasoning". Version 0.9.18
+  defines a small work item by what the short path leaves out, and the agent
+  judges it. When a question to him is about the edge of a count or a limit,
+  first ask whether the count should be there at all.
 
 ## Read first
 

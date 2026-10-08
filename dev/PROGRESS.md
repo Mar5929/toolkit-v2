@@ -2,6 +2,63 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## A small work item is judged by the agent, version 0.9.18 (2026-10-08)
+
+The agent asked Mike whether a task that fixes the result counts toward the
+"one or two tasks" of a small work item. His answer: "Why are we hardcoding
+the number of tasks to determine whether it is small? ... We cannot be
+solutioning and desiging like this where are processes are so rigid and
+limiting the agent's reasoning". He approved the replacement the same day
+("yes build it").
+
+- A small work item is no longer "at most one phase, one or two tasks, and
+  no sub-items". It is a top-level work item whose whole job the agent can
+  play back to the owner in one reply, and can build and check without an
+  interview, without Designing, and without sub-items. The agent judges this
+  from the owner's request, and the owner's words win
+  (`lifecycle-rules.md`, "A small work item").
+- A work item on the short path stops being small when the work turns out
+  to need what the short path leaves out: an interview to settle the
+  requirements, Designing, or sub-items. It continues with the file for the
+  State it is in. A work item that needs a design moves to Designing, also
+  from Building. Before, the text did not say how it got there. On leaving
+  the short path, `delivery` goes back to `not-offered`, so that the offer
+  of helper agents is made for a work item that has grown.
+- A task that fixes the result repairs the same job, so it changes nothing.
+  The sentence about which tasks count is gone.
+- The second count in the skill is gone too. In Building, the offer that
+  helper agents build the work item was made when the plan had "sub-items,
+  more than one phase, or more than two tasks". It is now made when the work
+  item is not small (`building.md`). The Recent History row for a small work
+  item is now "Small item, so no delivery offer."
+- The test set `dev/evals/small-work-item-short-path/` agrees with the new
+  text. Eval 4 expected a fix task to move the work item to the full path;
+  it now expects the work item to stay on the short path, with the agent's
+  own check and a second closing question. Three limits in its README that
+  were about the count are gone.
+- `AGENTS.md` holds a third instruction for text that tells an agent what to
+  do: do not put a count or a limit where the agent should use its
+  judgment. `README.md` no longer says "with one or two tasks".
+
+A separate reviewer read the change and walked three cases through the
+text. It found one thing that had to be fixed: "<State>" in the row "Short
+path ended: full path from <State>." could be read as the State the work
+item leaves or the State it moves to. It is now the State the work item is
+in when it leaves the short path. Three smaller findings were also fixed:
+a small work item that the owner sends down the full process is still
+small and gets no delivery offer; a work item that leaves the short path
+can get the offer; and the wording review no longer gives "more than two
+tasks" as its example of how to define "large". The README now says that
+the checker runs when the result "builds or changes what a rule in
+`system/` says", as the skill does.
+
+All seven checks in `AGENTS.md` passed on the Mac. Not run: the nine evals
+of the test set, with the new text.
+
+This revisits one line of what he approved on 2026-10-07 in version 0.9.8.
+It answers the first two questions that the session of 2026-10-08 left for
+him, so neither is open.
+
 ## Each row of filechanges links to the file, version 0.9.17 (2026-10-08, TKV-38)
 
 Mike asked for a link on each file in the `/filechanges` table: "each

@@ -40,11 +40,11 @@ The Questions and Answers rows whose Affects column says `delivery` hold the own
 The offer is the question whether helper agents build the work item. It is first made in Refining Requirements, as `refining-requirements.md`, step 4, says. Handle these seven cases in Building:
 
 - **The owner gives the work item to the agent in the owner's own words,** for example "you drive". Those words are the owner's yes. Add an answered row for it, and do not ask the offer.
-- **`delivery` is `not-offered`, the owner has not given the work item to the agent, and the plan has sub-items, more than one phase, or more than two tasks.** Make the offer now.
+- **`delivery` is `not-offered`, the owner has not given the work item to the agent, and the work item is not small.** Make the offer now.
   - Add the offer as an open row with your recommendation, and set `waiting_on` to the owner.
   - Make the last line of the reply exactly "Would you like agents to take responsibility for delivering this, with you acting as product owner?"
   - Build nothing until the owner answers.
-- **The work item is small.** `references/lifecycle-rules.md`, section "A small work item", gives the definition of a small work item. A small work item gets no offer. Set `delivery: owner-led`, and add a Recent History row: "Small item: at most one phase, one or two tasks, no sub-items, so no delivery offer." The owner's own later "you drive" still counts.
+- **The work item is small.** `references/lifecycle-rules.md`, section "A small work item", gives the definition of a small work item. A small work item gets no offer. Set `delivery: owner-led`, and add a Recent History row: "Small item, so no delivery offer." The owner's own later "you drive" still counts.
 - **The owner says yes.** Set `delivery: agent-led`.
   - A yes widens nothing. It allows no merge, deployment, spending, publishing, or sign-in beyond what the owner already allowed. Every point in `references/lifecycle-rules.md`, section "When to stop for the owner's yes", still applies.
   - The yes holds across sessions, for this goal only.
