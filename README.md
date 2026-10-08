@@ -242,7 +242,7 @@ agent's own branch and reach your main branch only after your yes.
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
 | `session-summary` | Shows what you asked for in this chat and where each request landed. | "recap this chat" |
-| `filechanges` | Lists the files the agent changed in its last set of changes, with one short sentence on what changed in each. | `/filechanges` (in Codex, `$filechanges`), "what files did you change?" |
+| `filechanges` | Lists the files the agent changed in its last set of changes, each with a link that opens it and one short sentence on what changed. | `/filechanges` (in Codex, `$filechanges`), "what files did you change?" |
 | `pull-latest` | Brings your copy of the code up to date, safely. | "get the latest" |
 | `reset-to-remote` | Makes your copy an exact match of the remote copy. It deletes local changes, so it runs only when you clearly ask. | "wipe local" |
 | `merge-and-clean-up` | Merges an approved pull request and removes only its branches. | "merge and clean up" |
