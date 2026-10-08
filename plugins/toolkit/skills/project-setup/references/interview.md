@@ -76,9 +76,11 @@ Recommend local memory with Obsidian, because it is private, fast, and needs no 
 
 - When work items are in Notion, recommend Notion memory in place of local memory. Work and memory then sit together and link to each other, and the owner can read both on a phone.
 - Offer Hindsight by name, for search by meaning across past sessions. Hindsight here is the owner's Hindsight server on the owner's VPS. Nothing is installed on this Mac except Hindsight's coding-agent add-on.
-- When the owner picks Hindsight, do two things in this order:
-  1. Explain that setup in plain words. Take the facts from `hindsight-on-vps.md`, "What runs where", which lists what runs on the server and what runs on this computer.
+- When the project is one that `hindsight-on-vps.md`, "Projects with their own review of saved knowledge", names, tell the owner what that section says before the owner picks Hindsight.
+- When the owner picks Hindsight, do three things in this order:
+  1. Explain that setup in plain words. Take the facts from `hindsight-on-vps.md`, "What runs where", which lists what runs on the server and what runs on this computer. Say that the text of each saved session goes to OpenAI, through the owner's ChatGPT subscription, to be turned into memories.
   2. Ask whether to create a separate memory bank for this project (or to use the one this project already has), and recommend yes. A memory bank is one project's store of memory on the Hindsight server. When the owner says no, ask question 3 again.
+  3. Ask about the six settings of this project's bank, as `hindsight-on-vps.md`, "The bank's settings", "Ask the owner", says. Setup applies the answers after it creates the bank.
 
 Memory holds two things. The first is where the project stands now. That part is called the project's Current State: the project's one short page of what is true now. The second is what no other project file holds: facts about people and the client, where to find things, and what happened. Decisions, terms, sources, and the description of the system are never memory. With every choice, they are files in the repository.
 
@@ -86,7 +88,7 @@ Memory holds two things. The first is where the project stands now. That part is
 | --- | --- | --- | --- |
 | Local with Obsidian | `local` | Most projects. | Memory is Markdown files in `memory/`, which Git ignores. The files are on this computer only. They are the project's Current State, and one file per subject. The session-start hook shows the project's Current State and one line per file. |
 | Notion, in Lore's layout | `notion` | Work items are in Notion, or the owner reads memory on a phone. | Memory is a "Current state" page, and a Memory page that holds Lore's databases, where each subject is a page. A session is shown only the "Current state" page at its start, and it searches the pages when it needs them. This choice needs `ntn` signed in. |
-| Hindsight | `hindsight` | Search by meaning across past sessions matters. | Memory is on the owner's Hindsight server on the VPS, with one memory bank per project, and never on Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, saves each session to the bank. The project gets no memory skills: the agent uses the add-on's tools. The project's Current State is the local file `memory/CURRENT_STATE.md`. |
+| Hindsight | `hindsight` | Search by meaning across past sessions matters. | Memory is on the owner's Hindsight server on the VPS, with one memory bank per project, and never on Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, saves each session to the bank. Hindsight turns the saved text into memories with a model at OpenAI, through the owner's ChatGPT subscription. The project gets no memory skills: the agent uses the add-on's tools. The project's Current State is the local file `memory/CURRENT_STATE.md`. |
 
 Lore's layout, in the second row, is the set of Notion databases that Notion memory uses.
 
@@ -131,7 +133,7 @@ After the owner has answered the questions, say in a few lines what will happen,
 | Notion (work, memory, or both) | "make this project's pages in your Notion from the Project template in your Projects database" |
 | GitHub Issues | "create the work item labels in <owner>/<repository> that it does not have yet (up to 30: each item's State, type, priority, who it waits on, who builds it, and your approvals; its other labels stay as they are)" |
 | GitHub Issues, when there is no GitHub repository yet | Also say "create the private repository <owner>/<name>; after the setup commit I'll ask before I push the default branch to it" |
-| Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it" |
+| Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it; the bank gets the settings you chose" |
 | Local work and local memory | "nothing outside this folder" |
 
 For the row "Notion (work, memory, or both)": when the Project template does not exist yet, ask about building it as a separate question. `notion.md`, "The owner's yes before anything is made", gives the words of that question.

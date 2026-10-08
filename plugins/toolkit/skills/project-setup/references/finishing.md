@@ -115,7 +115,7 @@ Run each check alone, from the project folder. Each check only reads.
    - `memory/` only with local memory or Hindsight memory. With local memory, `memory/` holds `AGENTS.md`, `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md`, and `project_topic_template.md`. With Hindsight memory, `memory/` holds only `CURRENT_STATE.md`;
    - `tools/` and `sfdx-project.json` only in a Salesforce project;
    - `SOUL.md` only when the owner keeps one;
-   - `.claude/rules/hindsight-memory.md` only with Hindsight memory;
+   - `.claude/rules/hindsight-memory.md` and `.claude/hindsight-bank-settings.json` only with Hindsight memory;
    - `.claude/rules/notion-records.md` only with work items or memory in Notion.
 2. **Skills.** `ls .claude/skills` must show exactly the list of skills for the owner's choices, and each skill folder must hold a `SKILL.md`. `skills-hooks-settings.md`, "Skills", gives the list for each choice.
 3. **Project records.** The project must hold all of these, whatever the owner chose for work items and for memory:

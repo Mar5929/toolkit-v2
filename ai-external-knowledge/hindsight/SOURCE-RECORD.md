@@ -10,7 +10,7 @@
 
 ## Project use
 
-Read before writing or changing the Toolkit V2 Hindsight skill and its setup steps (`plugins/toolkit/skills/project-setup/references/hindsight-on-vps.md`): the tools the add-on gives an agent, the core operations, how a memory bank is made and mapped to a project folder, how the server is set up, and how a memory is changed or deleted. The owner's own server guide is `dev/research/hindsight-server-setup-guide.md`.
+Read before writing or changing the Toolkit V2 Hindsight skill and its setup steps (`plugins/toolkit/skills/project-setup/references/hindsight-on-vps.md`): the tools the add-on gives an agent, the core operations, how a memory bank is made and mapped to a project folder, how the server is set up, and how a memory is changed or deleted. The owner's own server guide is `dev/research/hindsight-server-setup-guide.md`. His record of the server as it is since 2026-10-07 is `dev/research/hindsight-vps-architecture.md`.
 
 ## Coverage
 

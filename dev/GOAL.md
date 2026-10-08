@@ -873,6 +873,29 @@ Interview answers (Mike, 2026-09-29, the interview session):
   `owner-preferences.md` in a Hindsight project. Model commit f10d19a. The
   code scan's US$2 is the add-on's own default cap per scan, not a toolkit
   limit; whether to keep the scan is still open.
+- Hindsight server changed (Mike, 2026-10-07, his record
+  `dev/research/hindsight-vps-architecture.md`). This replaces "Hindsight
+  and Ollama on a Hostinger VPS" and "because observations are off on the
+  VPS" above. Ollama is off the VPS. Hindsight's model is `gpt-5.6-terra`
+  at OpenAI, through his ChatGPT subscription, with a Codex sign-in of its
+  own kept only on the VPS; still no OpenAI key. Every memory is written in
+  English. Observations are on for the server and automatic consolidation
+  is off, so an agent must request consolidation. One API key opens every
+  bank. His words on four projects: "For Entrevest, Diligence Ready,
+  CentraView, and Robin, follow the live Agent Contract and routing rules
+  before writing durable knowledge. A new bank or automatic capture hook
+  must not bypass the approved Notion and Lore review flow."
+- Hindsight settings are asked per bank (Mike, 2026-10-07). Asked whether
+  a bank the toolkit sets up should turn observations on, he answered: "IS
+  this a per memory bank setting? Each project should ask me if I want this
+  if so. And ask me other hindsight settings (on a per memory bank basis)".
+  It is a setting of one bank. So setup asks about the bank's settings and
+  keeps the answers in the project. His default for observations: "Have
+  auto observations by default. I don't care about token usage." The
+  agent picked five more settings to ask and recommended two changed
+  defaults: a save keeps detailed memories (`verbose`), and the Git history
+  holds the changes of each commit as well as its message (`full`). The
+  other three keep the add-on's own default. His answer: "Sounds good."
 - Work tracking rebuilt (Mike, 2026-10-01): two skills, chosen over one
   work skill with storage inside. `managing-work-items` holds the process
   and never names a storage tool; `tracking-work-items` holds storage only,

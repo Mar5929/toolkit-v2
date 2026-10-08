@@ -65,9 +65,9 @@ The project is set up when `PROJECT.md` has a filled "Toolkit settings" section 
 - **An update or a check in a project set up before the current folder layout.** Say that the project has the earlier layout, and list what [references/one-home-layout.md](references/one-home-layout.md) would move. The current folder layout keeps information the whole project needs in five places, as files in the repository: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`.
 - **Change a setup choice.** A setup choice is where work items are kept or where memory is kept. Follow `references/update.md`, "Changing a setup choice".
 
-### Hindsight: the dashboard, or a new computer
+### Hindsight: the dashboard, the bank's settings, or a new computer
 
-This case fits when the owner asks to open a project's Hindsight dashboard. It also fits when a Hindsight project is set up but this computer lacks its key or the add-on, which happens on a new computer. Follow [references/hindsight-on-vps.md](references/hindsight-on-vps.md), "Open the dashboard" or "A new computer".
+This case fits when the owner asks to open a project's Hindsight dashboard. It also fits when the owner asks to change a setting of the project's Hindsight bank, or to build observations in it. It also fits when a Hindsight project is set up but this computer lacks its key or the add-on, which happens on a new computer. Follow [references/hindsight-on-vps.md](references/hindsight-on-vps.md), "Open the dashboard", "The bank's settings", or "A new computer".
 
 ### SOUL.md in a project that is set up
 
@@ -136,7 +136,7 @@ These are the mistakes that are easy to make during setup, each with the rule th
 - Make nothing outside the project folder without the owner's yes: no Notion page, no GitHub repository or label, no Hindsight bank, and no install. The plan the owner approved covers only what it named.
 - Only two other kinds of file are written outside the project folder:
   - The temporary folders: the one that `references/setup-copy.md`, "Make the temporary folder", makes for the setup copy, and a folder for a Notion body.
-  - The Hindsight add-on's files and settings, after the owner's yes, as `references/hindsight-on-vps.md`, "4. The add-on", says.
+  - The Hindsight add-on's files and settings, after the owner's yes, as `references/hindsight-on-vps.md`, "4. The add-on" and "Apply the settings", say.
 - Never save a path, a file list, or a diff in a file.
 - Remove each temporary folder once its step is done, and the setup copy after the final checks, so that nothing from setup is left in `/tmp`, `$TMPDIR`, or the session scratchpad.
 
@@ -174,7 +174,7 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 | [references/notion-build/setup.md](references/notion-build/setup.md) | Memory is in Notion: you need the memory steps of a new project, the links in `PROJECT.md`, how to bring memory up to date, and how to build the memory part of a template. Lore's databases, columns, views, and request files are in the Notion files added to `managing-project-memory` from `assets/memory-notion/.claude/skills/`. |
 | [references/notion-build/project-page.md](references/notion-build/project-page.md), [references/notion-build/work-item-page.md](references/notion-build/work-item-page.md), [references/notion-build/memory-page.md](references/notion-build/memory-page.md) | You build the Notion template: these three files hold the text of the project page, of the work item template, and of the Memory page. |
 | [references/github.md](references/github.md) | Work items are in GitHub Issues: you need the sign-in, the repository, the labels, how to bring a project up to date, and the checks. |
-| [references/hindsight-on-vps.md](references/hindsight-on-vps.md) | Memory is in Hindsight: you need what runs on the VPS and what an agent never does there, the access key, the bank, the coding-agent add-on, the save-and-search check, how to open the dashboard, how to check a Hindsight project, and the steps for a new computer. |
+| [references/hindsight-on-vps.md](references/hindsight-on-vps.md) | Memory is in Hindsight: you need what runs on the VPS and what an agent never does there, the access key, the bank, the coding-agent add-on, the save-and-search check, the six settings the owner chooses for a bank, how to open the dashboard, how to check a Hindsight project, and the steps for a new computer. |
 | [references/salesforce.md](references/salesforce.md) | The project is a Salesforce project: you need the check of Salesforce's skills, the org aliases, and the API version. |
 | [references/finishing.md](references/finishing.md) | Step 8: you need the prompts in the copied files, `SOUL.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
 | [references/update.md](references/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice: you need the new setup copy, what to do with each kind of file that differs, whether a difference is the owner's edit, how to turn on the command that checks the records, `validate-records.mjs`, what the toolkit no longer ships, the services, the checks, and the report. |

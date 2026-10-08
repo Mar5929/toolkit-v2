@@ -16,6 +16,10 @@ This project's memory is Hindsight, on the owner's server, in the bank named und
 - Never store where work stands now in Hindsight with a tool. The work items and `memory/CURRENT_STATE.md` hold it.
 - In `.claude/rules/memory-review-and-save.md`, "The owner's yes" does not apply to what the add-on saves by itself, without asking. "When to review memory" applies to the project's Current State.
 - To see the bank, open the "Hindsight dashboard" link under "Toolkit settings" in `PROJECT.md`.
+- The owner chooses the settings of this project's bank, and `.claude/hindsight-bank-settings.json` holds them. Two of them change what this rule says about the add-on:
+  - When `retainSessions` is `false`, the add-on saves no session at the end of a turn. Do not tell the owner that it does. Where this rule says that the add-on saves something, save that text yourself with the add-on's tools, in the same turn.
+  - When `autoInject` is `"none"`, the add-on adds nothing to your context on the first message of a session.
+- Change a setting of the bank only when the owner asks. To change it, use the `project-setup` skill.
 - Never open or show `~/.hindsight/coding-agent.json` or its `.hindsight-backup` copy whole, with any tool: they hold the API key. To list the Hindsight project folders, run `jq -r '.mapPathToBank // {} | to_entries[] | "\(.key) \(.value)"' ~/.hindsight/coding-agent.json`.
 
 ## The project's Current State
