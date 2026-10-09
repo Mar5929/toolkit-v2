@@ -29,6 +29,6 @@ git log --oneline -10
 - Stage paths by name. Never run `git add -A`, `git add .`, or `git commit -a`.
 - Read the full staged diff.
 - Before you take a sequential number (a work item ID, a DEC-###, an SRC-###, a rule ID in `system/`), check every folder where work items are kept, every worktree, and the remote. When you find later that the same number was used twice, renumber only your own.
-- Merge implementation work through a pull request, and only with the owner's yes. The owner may have written a standing merge instruction in `.claude/rules/owner-preferences.md`. `managing-work-items`, in `references/deploying.md`, says when that instruction counts as the yes.
+- Merge implementation work through a pull request, and only with the owner's yes. A standing merge instruction in `.claude/rules/owner-preferences.md` counts as that yes only under the conditions that `managing-work-items` gives in `references/deploying.md`, section "What a merge into the default branch needs".
 - Before a merge, do the merge-safety check: compare `git diff --name-only <default-branch>...<branch>` with `git status` in the main checkout. When a file is in both, stop, name the file, and ask the owner.
 - After the merge, remove your worktree and branch.

@@ -300,6 +300,8 @@ A project may still hold two old hook entries:
 
 List each one the project holds. After the owner's yes, remove it and any group or event that it leaves empty. The snippet's handler replaces the Codex one.
 
+The `description` in `.codex/hooks.json` may hold an earlier text of the toolkit. That text is the sentence that starts "Toolkit V2 hooks for this project in Codex:". Replace that sentence with the snippet's text, and keep every other sentence of the `description`. Do not add the snippet's text after the earlier one.
+
 Leave the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`. It comes from the `salesforce` setup folder.
 
 ### The questions before a sandbox change

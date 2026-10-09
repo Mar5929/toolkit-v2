@@ -1,6 +1,6 @@
 # Review and Save Project Memory
 
-This rule applies to the main agent. It says when to review project memory, what never goes in memory, and which skill changes memory. To review memory is to decide whether anything should be saved, corrected, or forgotten.
+This rule applies to the main agent. It says when to review project memory, what never goes in memory, which skill changes memory, and what the owner's yes covers. To review memory is to decide whether anything should be saved, corrected, or forgotten.
 
 The project keeps its memory in one system: the one named on the "Memory" line in `PROJECT.md`, section "Toolkit settings". Never save project memory in the memory feature of Claude Code (auto-memory) or of Codex (Codex Memories), or in the memory of another plugin.
 
@@ -19,5 +19,5 @@ The project keeps its memory in one system: the one named on the "Memory" line i
 
 ## The owner's yes
 
-- Save, correct, forget, and clean up memory only with `managing-project-memory`. That skill makes a save without asking, and it says which changes need the owner's yes first. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+- Save, correct, forget, and clean up memory only with `managing-project-memory`. With that skill you save without asking, and the skill says which changes need the owner's yes first. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
 - When a change needs the owner's yes, the yes covers only the change and the meaning that you showed. Silence is never a yes.

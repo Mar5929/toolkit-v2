@@ -57,7 +57,7 @@ When this session's folder is not the main checkout, read and write `DECISIONS.m
 
 ## Writing a record's ID in a work item
 
-A work item that needs a record holds the record's ID, and never a copy of the record's text. An ID goes into a work item only after this skill has filed the record. This skill then writes the ID with `managing-work-items`, or gives the ID to the step of `managing-work-items` that asked for the record, and that step writes it.
+A work item that needs a record holds the record's ID, and never a copy of the record's text. An ID goes into a work item only after this skill has saved the record, or has saved the work item's ID on a record that already exists. Each step of this skill says who writes the ID: the step writes it with `managing-work-items`, or the step gives it to the step of `managing-work-items` that asked for the record, and that step writes it.
 
 ### Where the ID goes
 
