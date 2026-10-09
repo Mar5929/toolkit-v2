@@ -4,7 +4,7 @@ Use this file when you deploy a work item in a Salesforce project. It gives the 
 
 Two things apply to the whole file:
 
-- `.claude/rules/salesforce-org-safety.md` says who may run which command. When that rule and this file differ, follow the rule.
+- `.claude/rules/salesforce-agent-permissions.md` and `.claude/rules/salesforce-org-safety.md` say who may run which command. When those rules and this file differ, follow the rules.
 - A project that keeps its client files in `engagement/` uses `engagement/deployment/` wherever this file says `delivery/deployments/` or `delivery/releases/`.
 
 ## Before any deploy
@@ -20,7 +20,7 @@ Two things apply to the whole file:
    `sf project deploy validate -x delivery/deployments/WI-031-account-merge/package.xml -o <sandbox alias>`
 
 2. Then deploy to the sandbox, when the work item needs a sandbox deploy. The command is `sf project deploy start`, with the same `-x` and `-o`.
-   - Ask "Deploy WI-031 to `<sandbox alias>`?" as a Questions and Answers row, and run the command after the owner's yes. When the owner has turned the sandbox questions off, as `.claude/rules/salesforce-org-safety.md` says, run the command without this question, and add the Recent History row "Deployed to `<sandbox alias>`: the sandbox questions are off."
+   - `.claude/rules/salesforce-agent-permissions.md` says whether you ask first. When it says Allowed, run the command without a question, and add the Recent History row "Deployed to `<sandbox alias>`: allowed by salesforce-agent-permissions.md." When it says Ask first, ask "Deploy WI-031 to `<sandbox alias>`?" as a Questions and Answers row, and run the command after the owner's yes.
    - Give the manual steps to the owner in order, with what to check after each step.
 3. For production, the owner runs the deploy and tells you the result. Give the owner all of these:
    - the exact command, with `-o <production alias>`;

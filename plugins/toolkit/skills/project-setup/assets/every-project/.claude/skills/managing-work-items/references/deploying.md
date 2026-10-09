@@ -73,7 +73,7 @@ Deploy only when the result must go beyond the default branch. In a Salesforce p
 
   Do what each one says before you run the command, and name each one you applied in the deployment record.
 - Use only the deploy command in `AGENTS.md`, section "Commands", or in `PROJECT.md`. When neither gives one, ask the owner how this project deploys.
-- Each deploy needs the owner's yes.
+- Each deploy needs the owner's yes, unless a rule of the project allows that deploy without a question.
 - Never run a production deploy or data load. Give the owner the exact command, what it deploys, and what to check afterwards. Record the owner's report in the owner's words.
 - Write the work item's deployment record in `delivery/deployments/`, with the date and time the deploy ran, and each manual step with who did it.
   - A release of several work items together also gets a release plan and release notes in `delivery/releases/`.

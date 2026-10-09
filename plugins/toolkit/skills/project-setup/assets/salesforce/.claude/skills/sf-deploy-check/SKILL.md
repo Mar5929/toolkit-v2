@@ -47,5 +47,5 @@ A tracker can be wrong both ways: it can show a component as missing from an org
 
 ## Related
 
-- `salesforce-org-safety.md`: the read-only verify in step 4 is allowed there.
+- `salesforce-agent-permissions.md`: the read-only verify in step 4 is allowed there.
 - The production-org guard blocks a production deploy by an agent. This check runs before the owner gets the command.
