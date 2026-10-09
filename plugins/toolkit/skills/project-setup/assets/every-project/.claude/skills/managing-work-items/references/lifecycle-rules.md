@@ -232,6 +232,10 @@ Text in angle brackets is a prompt, and never content. The templates hold prompt
 - Real content may hold angle brackets, for example code such as `Map<Id, Account>`.
 - A design keeps its prompts until it is approved. `references/designing.md` says when they are removed.
 
+### The owner's rule for every request
+
+The rule `.claude/rules/evaluate-the-owners-request.md` asks you to state the goal and to check a request against the whole project before you act. In a work item, follow the rule through the steps of this skill, and do each check once. The reply that agrees the goal with the owner is the rule's statement of the goal. Raise what the rule asks you to raise as a question or as a design option, in the form that the step gives.
+
 ## Starting a helper
 
 A helper is a separate agent that the main agent starts for one job. Start every helper as a new agent that does not see this session. Never start a helper as a fork, which is a helper that starts with a copy of this session.
