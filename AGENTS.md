@@ -1019,11 +1019,13 @@ node --test 'dev/tests/*.test.mjs'
     cohesion audit (TKV-43, finding 9) moves the Salesforce hooks and the
     `sf` permission rules there from `every-project/.claude/settings.json`.
     Until then, put no new Salesforce line into the every-project file.
-  - The two variables. `SFDX_AUTO_DEPLOY` is `0`: the hook command
-    `sf-deploy-gate auto-deploy` of `salesforce-development` deploys each
-    saved file under `force-app/` to the default org when the variable is
-    exactly `1`. It does that outside the agent's shell, so the org guard
-    and the permission set check never see the deploy.
+  - The two variables. `SFDX_AUTO_DEPLOY` is `0`: when the variable is
+    exactly `1`, the hook command `sf-deploy-gate auto-deploy` of
+    `salesforce-development` deploys each saved file under `force-app/` to a
+    sandbox or scratch org (the org that `SFDX_AUTO_DEPLOY_ORG` names, or
+    the default org). The script skips production and an org it cannot
+    classify. It deploys outside the agent's shell, so the deploy passes
+    neither the org guard nor the permission set check.
     `SF_DISABLE_TELEMETRY` is `true`, which turns the plugin's telemetry
     off, as he chose. Both of the plugin's telemetry scripts
     (`scripts/sf_telemetry.py` and `scripts/telemetry-flush.js`) treat any
@@ -1041,28 +1043,58 @@ node --test 'dev/tests/*.test.mjs'
     install more plugins, `/salesforce-development:plugin-recommendations`.
   - Codex is unchanged in this work item: for Codex the owner installs
     Salesforce's skills with `npx skills add forcedotcom/sf-skills`.
-  - What Claude Code's pages say, as captured on 2026-10-05 in
-    `ai-external-knowledge/claude-code/`. A project's `enabledPlugins`
-    entry wins over the same entry in the user's settings
-    (`settings-reference.md`, "`enabledPlugins`"). Claude Code reads
-    `extraKnownMarketplaces` and most `env` values from a project's file
-    only after the folder is trusted (`settings-reference.md`;
-    `settings.md`, "A committed key doesn't reach teammates"). An `env`
-    value reaches every subprocess Claude Code starts, and a hook process
-    inherits that environment (`settings-reference.md`, "`env`";
-    `hooks.md`). A project's settings turn a plugin on but do not install
-    it, and `/plugin` then shows the install command
-    (`plugins-troubleshooting.md`).
-  - What those pages do not say. They state the last rule for a plugin
-    "from an external source such as a GitHub repository or an npm package".
-    The seven plugins are folders inside the marketplace's own repository,
-    and no captured page says whether Claude Code installs such a plugin by
-    itself, or what the trust dialog shows about plugins. The pages that
-    hold those rules (`/docs/en/plugins/org`, `/docs/en/plugins/loading`,
-    `/docs/en/plugins/install`) are not captured. So the toolkit's text has
-    the agent check which plugins a computer has.
-  - Nothing of this has been installed or run in a live session, on a Mac
-    or on Windows.
+  - What Claude Code's pages say (`ai-external-knowledge/claude-code/`,
+    captured 2026-10-05; `plugins-org.md` captured 2026-10-08).
+    - A project's `enabledPlugins` entry wins over the same entry in the
+      user's settings (`settings-reference.md`, "`enabledPlugins`";
+      `mods/plugins-loading.md`, "Find where a plugin is enabled").
+    - Claude Code reads `extraKnownMarketplaces` and most `env` values from
+      a project's file only after the folder is trusted
+      (`settings-reference.md`; `plugins-org.md`, "Require plugins per
+      repository").
+    - The marketplace lists each of the seven plugins by a relative path
+      (`./plugins/builder/...`). Two pages say that such a plugin needs no
+      install: it "loads from the marketplace copy once the repository's
+      `extraKnownMarketplaces` entries apply" (`plugins-org.md`), and "A
+      relative-path plugin needs no install record because it loads from the
+      marketplace itself" (`mods/plugins-loading.md`, "Enabled in project
+      settings but not installed"). The test below did not show that.
+    - An `env` value reaches every subprocess Claude Code starts, and a hook
+      process inherits that environment (`settings-reference.md`, "`env`";
+      `hooks.md`). A saved change to `env` reaches the running session. In a
+      session that the Claude desktop app starts, a variable of the app's
+      own launch environment wins.
+    - `claude plugin disable <ID> --scope user` is the command for the step
+      once on each computer. It is in `mods/plugins-cli-reference.md`,
+      "plugin disable", and in the command's own help on Claude Code
+      2.1.289.
+  - What was tested (the session that owns TKV-44, 2026-10-08, on a Mac, in
+    the test sign-in, Claude Code 2.1.289). A scratch Salesforce project
+    held the snippet and `disableAllHooks: true`, and each session was
+    started with `claude -p`, so with no screen. Four runs:
+    - With the folder not trusted, none of the seven plugins loaded, and the
+      marketplace `salesforce` was not registered.
+    - With the folder marked trusted (`hasTrustDialogAccepted: true` in the
+      test sign-in's `.claude.json`), the result was the same.
+    - After `claude plugin marketplace add forcedotcom/sf-skills`, the
+      marketplace was listed, and still none of the seven loaded.
+    - After `claude plugin install dx-devops@salesforce --scope project`,
+      that one plugin loaded (8 skills, "Scope: project"), and the other six
+      did not. The install changed nothing in the project's settings file
+      except the order of its keys.
+  - So the toolkit's text has the agent check with
+    `claude plugin marketplace list` and `claude plugin list`, and give the
+    owner the two commands for whatever is missing. The owner runs them or
+    says that the agent may.
+  - What was not tested: an interactive session, where Claude Code may ask
+    the owner about the marketplace and the plugins when the owner trusts
+    the folder; Windows; the plugins' own hooks, which were turned off in
+    the test; and a whole setup or update of a project with the snippet.
+  - Earlier setups told the owner to run
+    `npx skills add forcedotcom/sf-skills`, so copies of Salesforce's skills
+    may sit in `~/.claude/skills` or a project's `.claude/skills` and load
+    beside the plugins. Setup and "update the toolkit" look there, tell the
+    owner what they found, and change nothing without the owner's yes.
 - **One goal for keeping the records** (Mike, 2026-10-07). The starter root
   `AGENTS.md`, section "Your job as the agent", holds the goal he approved
   word for word: the agent keeps the project's records, in the same turn,

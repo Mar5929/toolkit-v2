@@ -62,7 +62,7 @@ Read before deciding whether any part of Toolkit V2 should be a mod, and before 
   - `builtin-mods-readme.md` ends with "Early access: hooks modules load only where function hooks are enabled", which the documentation no longer says.
   - The three sample READMEs say each sample "was built and tested on 2.1.280".
 - The two parent-folder pages that this record once called out of date, `../hooks.md` and `../settings-reference.md`, were captured again on 2026-10-05. See `../SOURCE-RECORD.md`.
-- Not captured, although the mods pages link to them: the organization and managed-settings pages (`/docs/en/plugins/org`, `/docs/en/managed-settings`, `/docs/en/server-managed-settings`), the sandboxing, Remote Control, cloud session, WSL, cross-session messaging, prompt caching, keybindings, and environment variable pages, and the source code of the built-in and sample mods. They are about administration or neighboring features, not about writing a mod.
+- Not captured, although the mods pages link to them: the managed-settings pages (`/docs/en/managed-settings`, `/docs/en/server-managed-settings`; the organization page `/docs/en/plugins/org` was captured on 2026-10-08 as `../plugins-org.md`), the sandboxing, Remote Control, cloud session, WSL, cross-session messaging, prompt caching, keybindings, and environment variable pages, and the source code of the built-in and sample mods. They are about administration or neighboring features, not about writing a mod.
 - Firecrawl use for this capture: 27 scrapes and 1 map, including pages read for comparison and not kept (`llms.txt`, and the live `hooks` and `settings-reference` pages).
 
 ## What changed since 2026-10-02

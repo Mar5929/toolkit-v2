@@ -36,7 +36,7 @@ Each choice adds the skills in the table below. `setup-copy.md`, "Folders the ch
 Two rows name another file of this skill:
 
 - In the row "Memory in Hindsight", `hindsight-on-vps.md`, "What runs where", describes the add-on and the tools it gives the agent.
-- In the row "Salesforce", `salesforce.md`, "Salesforce's skills", names the Salesforce plugins that the project turns on in Claude Code. It also says how to check that they are installed on this computer, what to ask the owner once on each computer, and what the owner installs for Codex.
+- In the row "Salesforce", `salesforce.md`, "Salesforce's skills", names the Salesforce plugins that the project turns on in Claude Code. It also says how to check that this computer has them, what to ask the owner once on each computer, and what the owner installs for Codex.
 
 A work choice adds tracker references, and a local or Notion memory choice adds store references. The finished `managing-work-items` folder contains one `SKILL.md` and one selected `references/work-tracker.md`. With local or Notion memory, the finished `managing-project-memory` folder contains one `SKILL.md` and one selected `references/memory-store.md`. Hindsight adds no Toolkit memory skill.
 

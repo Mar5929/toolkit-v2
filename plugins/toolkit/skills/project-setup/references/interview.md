@@ -98,7 +98,7 @@ Any mix of the work tracking choice and the memory choice works, for example wor
 
 When `sfdx-project.json` answered this question, skip the question. When the file is absent, ask the question and recommend no.
 
-When the answer is yes, the project gets the Salesforce rules and skills, the org guards, `tools/`, and the Salesforce templates inside `delivery/`. Its Claude Code settings also turn on the Salesforce plugins that the owner uses, for this project only. `salesforce.md`, "Salesforce's skills", names those plugins. It also says how setup checks that they are installed, what setup asks the owner once on each computer, and what the owner installs for Codex.
+When the answer is yes, the project gets the Salesforce rules and skills, the org guards, `tools/`, and the Salesforce templates inside `delivery/`. Its Claude Code settings also turn on the Salesforce plugins that the owner uses, for this project only. `salesforce.md`, "Salesforce's skills", names those plugins. It also says how setup checks that a computer has them, what setup asks the owner once on each computer, and what the owner installs for Codex.
 
 For a Salesforce project, ask for the org aliases, one question per message. Before the first of these questions, show the aliases on this computer with `sf org list`, which only reads.
 

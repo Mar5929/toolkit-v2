@@ -305,9 +305,18 @@ gets them:
   the plugins' checks. It never changes your own settings without your yes.
   Another Salesforce project on that computer then has the plugins only
   after "update the toolkit" has run in it.
-- You install a plugin that a computer does not have yet, with the command
-  that setup gives you. Setup also tells you the command that turns down the
-  plugin's suggestions to install more plugins.
+- The first time you open the project on a computer, you accept what Claude
+  Code asks about the folder and about Salesforce's marketplace. The agent
+  then checks that the computer has the marketplace and the seven plugins,
+  and gives you the commands for whatever is missing. In a test on
+  2026-10-08, the project's settings alone did not put a plugin onto a
+  computer that lacked it.
+- Setup tells you the command that turns down the plugin's suggestions to
+  install more plugins.
+- Earlier setups told you to run `npx skills add forcedotcom/sf-skills`, so
+  copies of Salesforce's skills may sit in a skills folder and load beside
+  the plugins. Setup and "update the toolkit" look for them, tell you what
+  they found, and change nothing without your yes.
 - For Codex, you install Salesforce's skills with
   `npx skills add forcedotcom/sf-skills`, as before.
 

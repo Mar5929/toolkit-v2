@@ -141,7 +141,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
     - The settings keep the automatic deploy of the plugin `salesforce-development` off and turn its telemetry off in this project.
     - Nothing changes on the rest of this computer without a question of its own.
 
-    `salesforce.md`, "Salesforce's skills", says what each entry is for, and holds the steps that follow the merge. Check that this computer has the plugins, and tell the owner the command for the plugin's install suggestions. The question about turning Salesforce's plugins off for the rest of the computer waits until the branch was merged (section 7, step 5).
+    `salesforce.md`, "Salesforce's skills", says what each entry is for, and holds the steps that follow the merge. Tell the owner the command for the plugin's install suggestions. Look for copies of Salesforce's skills that an earlier setup left, as its part "Copies of Salesforce's skills from an earlier setup" says, and put what you find in the numbered table. Two steps wait until the branch was merged (section 7, step 5): the check that this computer has Salesforce's marketplace and the plugins, and the question about turning Salesforce's plugins off for the rest of the computer.
 - **Missing files.** Copy the missing files in two parts.
   - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Do not use `-a`, because `-a` would give the project folder the temporary folder's private permissions.
   - Copy into the main checkout after the branch was merged (section 7, step 5), and only when the setup copy has the folder. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
@@ -396,7 +396,7 @@ Do these in order.
 
    Then run the final checks on these two folders, and run `validate-records.mjs` again (`node .claude/hooks/validate-records.mjs --all < /dev/null`). The expected result is that it prints nothing.
 
-   In a Salesforce project, this is also the point for the question in `salesforce.md`, "Once on each computer: the plugins are turned off for every other project". The project's default branch now turns its plugins on, so turning them off for the rest of the computer no longer takes them from this project.
+   In a Salesforce project, this is also the point for two steps of `salesforce.md`: the check in "The first time the project is opened on a computer", and then the question in "Once on each computer: the plugins are turned off for every other project". The project's main folder now turns its plugins on, so turning them off for the rest of the computer no longer takes them from this project.
 6. Remove the worktree and the branch, then the temporary folder.
 
 ## Changing a setup choice

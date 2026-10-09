@@ -30,21 +30,31 @@ What was built:
 - `salesforce.md`, "Salesforce's skills", is rewritten. It names the seven
   plugins, says why automatic deploy is off (a deploy by that hook would not
   go through the org guard or the permission set check) and that telemetry
-  is off by Mike's choice, and says what the owner sees the first time the
-  project is opened on a computer. It holds the step for once on each
+  is off by Mike's choice. It says what the owner does the first time the
+  project is opened on a computer, and has the agent check with
+  `claude plugin marketplace list` and `claude plugin list` that the
+  computer has the marketplace and the seven plugins. For whatever is
+  missing, the agent gives the owner the commands
+  `claude plugin marketplace add forcedotcom/sf-skills` and
+  `claude plugin install <name>@salesforce --scope project`. It holds the step for once on each
   computer: the agent lists Salesforce's plugins that are on for the whole
   computer, asks the owner, and runs `claude plugin disable <ID> --scope
   user` only after the owner's yes. It gives the command for the plugin's
   install suggestions. For Codex the line with
-  `npx skills add forcedotcom/sf-skills` stays.
+  `npx skills add forcedotcom/sf-skills` stays, and the check runs in every
+  Salesforce project. Setup and an update also look for copies of
+  Salesforce's skills that an earlier setup left in `~/.claude/skills` or
+  the project's `.claude/skills`, tell the owner, and change nothing without
+  the owner's yes.
 - `finishing.md` (final check 19, the owner's steps, the report),
   `interview.md` (question 4 and the plan), `SKILL.md` (step 7 and the
   References row), the rule `salesforce-project.md`, `README.md`, and
   `dev/SKILL-INDEX.md` say the same.
 - `update.md`: an existing Salesforce project gets the snippet through the
-  "Settings" row, with what the owner is told. The question about the rest
-  of the computer waits until the update's branch was merged, because before
-  that the project's main folder does not turn the plugins on yet.
+  "Settings" row, with what the owner is told. The check that the computer
+  has the plugins and the question about the rest of the computer wait until the
+  update's branch was merged, because before that the project's main folder
+  does not turn the plugins on yet.
 - The question to the owner says one thing the decision did not name:
   another Salesforce project on the same computer loses the plugins until
   "update the toolkit" has run in it.
@@ -73,8 +83,33 @@ What was checked:
   `scripts/sf_telemetry.py` and `scripts/telemetry-flush.js` both treat any
   value of `SF_DISABLE_TELEMETRY` that is not empty as off.
 - `claude plugin disable --help` on Claude Code 2.1.289 shows the option
-  `--scope user`. `claude plugin list` prints a Scope and a Status line for
-  each plugin.
+  `--scope user`, and so does the captured page
+  `mods/plugins-cli-reference.md`. `claude plugin list` prints a Scope and a
+  Status line for each plugin.
+- The official pages. Three of the four pages about how a plugin reaches a
+  computer were already captured, in `ai-external-knowledge/claude-code/mods/`
+  (`plugins-loading.md`, `plugins-install.md`, `plugins-cli-reference.md`),
+  and the first commit (37d00b06) was written without them. The fourth,
+  `/docs/en/plugins/org`, was captured with Firecrawl on 2026-10-08 as
+  `ai-external-knowledge/claude-code/plugins-org.md`. Two of the pages say
+  that a plugin the marketplace lists by a relative path, as all seven are,
+  loads from the marketplace copy with no install.
+- A live test by the session that owns TKV-44 (2026-10-08, on a Mac, in the
+  test sign-in, Claude Code 2.1.289) did not show that. A scratch Salesforce
+  project held the snippet and `disableAllHooks: true`, and each session was
+  started with `claude -p`, so with no screen.
+  - Run 1, folder not trusted: none of the seven plugins loaded, and the
+    marketplace `salesforce` was not registered.
+  - Run 2, folder marked trusted (`hasTrustDialogAccepted: true` in the test
+    sign-in's `.claude.json`): the same.
+  - Run 3, after `claude plugin marketplace add forcedotcom/sf-skills`: the
+    marketplace was listed, and still none of the seven loaded.
+  - Run 4, after `claude plugin install dx-devops@salesforce --scope
+    project`: that one plugin loaded (8 skills, "Scope: project"), and the
+    other six did not. The install changed nothing in the project's
+    settings file except the order of its keys.
+
+  So the install step stays, and the text has the agent check first.
 - The two `jq` commands of the new check, on a scratch file that joins the
   every-project settings and the two Claude Code snippets.
 - All seven checks of `AGENTS.md`, "Checks", pass: the three
@@ -84,18 +119,20 @@ What was checked:
 
 What was not tested:
 
-- Nothing here has been installed or run in a live session, on a Mac or on
-  Windows. No project was set up or updated with the snippet. No plugin was
-  turned off or on, and no session was started with these settings.
-- Whether Claude Code installs by itself a plugin that a project's settings
-  turn on, when the plugin is a folder inside the marketplace's repository.
-  The captured pages state the rule only for a plugin from an external
-  source. The text has the agent check with `claude plugin list`.
+- An interactive session with these settings, where Claude Code may ask the
+  owner about the marketplace and the plugins when the owner trusts the
+  folder. The four runs above had no screen.
+- Windows.
+- The plugins' own hooks, which were turned off in the test. So nobody has
+  seen that `SFDX_AUTO_DEPLOY` at `0` keeps the automatic deploy off, or
+  that the telemetry stays off.
+- A whole setup or update of a project with the snippet, and the step that
+  turns the plugins off for a computer.
 - Whether the two `env` values reach the plugins' hook commands in the
   Claude desktop app, where a variable of the app's own launch environment
-  wins. Final check 19 reads both values in a session.
-- The separate wording review and best-practices review of the changed text
-  ("Wording and overlap review" in `AGENTS.md`) have not been done.
+  wins. Final check 19 reads both values.
+- The text of the second commit, which follows the review of the first, has
+  not had a separate review of its own.
 
 ## The order of the Hindsight setup steps, version 0.9.21 (2026-10-08)
 

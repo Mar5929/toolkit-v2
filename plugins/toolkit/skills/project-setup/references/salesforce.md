@@ -6,6 +6,7 @@ The job of this file is done when all of these are true:
 
 - the owner knows which of Salesforce's plugins the project turns on in Claude Code, and which of them this computer still lacks;
 - the owner has been asked whether to turn Salesforce's plugins off for the rest of this computer, when they are on there;
+- the owner knows whether Salesforce's skills are installed for Codex, and whether an earlier setup left copies of them that Claude Code would load a second time;
 - `PROJECT.md` holds the org aliases;
 - the API version is written in the two files that hold it.
 
@@ -23,6 +24,7 @@ Everything else a Salesforce project needs comes with the `salesforce` setup fol
   - Once on each computer: the plugins are turned off for every other project
   - The plugin's install suggestions
   - Codex: the owner installs the skills
+  - Copies of Salesforce's skills from an earlier setup
 - The org aliases
 - The API version
 - Mistakes to avoid
@@ -40,7 +42,7 @@ The settings snippet `claude-settings-salesforce.json` puts three things into th
 - **The marketplace.** The entry `salesforce` under `extraKnownMarketplaces` names the repository. With it, Claude Code can find the plugins on a computer where the owner never added that marketplace.
 - **The seven plugins that the owner uses**, each set to `true` under `enabledPlugins`: `salesforce-development`, `dx-devops`, `experience-lwc`, `integration`, `salesforce-code-quality`, `platform-lightning-widgets`, and `platform-trust-security`. The marketplace holds ten more plugins, and the project turns none of them on. Add or remove a plugin only when the owner asks.
 - **Two environment variables** under `env`. Claude Code gives them to every command that it starts in the project, and the hook commands of the plugins are among those commands.
-  - `SFDX_AUTO_DEPLOY` is `0`. When that variable is `1`, a hook command of `salesforce-development` deploys each file that is saved under `force-app/` to the default org. That deploy does not go through the agent's shell, so the project's org guard and its permission set check never see it. The value `0` keeps that hook command off. In a session that the Claude desktop app starts, a variable that the app's own launch environment already sets wins over the project's value, so final check 19 in `finishing.md` reads both values in a session.
+  - `SFDX_AUTO_DEPLOY` is `0`. When that variable is `1`, a hook command of `salesforce-development` deploys each file that is saved under `force-app/` to a sandbox or scratch org: the org that `SFDX_AUTO_DEPLOY_ORG` names, or the default org. That deploy does not go through the agent's shell, so it passes neither the project's org guard nor its permission set check. The value `0` keeps that hook command off. In a session that the Claude desktop app starts, a variable that the app's own launch environment already sets wins over the project's value, so final check 19 in `finishing.md` reads both values in a session.
   - `SF_DISABLE_TELEMETRY` is `true`. The plugin `salesforce-development` collects usage data unless this variable is set. The owner chose to turn that off.
 
 The project turns the plugins on itself, and the owner keeps them off for the rest of the computer. The reason is that the hook commands of these plugins run on every command and every file edit in each project where the plugins are on, which slows a project that has no Salesforce work. In Claude Code, an `enabledPlugins` entry in a project's settings wins over the same entry in the owner's own settings, `~/.claude/settings.json`. So a plugin that is off for the computer is still on in this project.
@@ -49,22 +51,27 @@ This project's rules, its three `sf-*` skills, and its two guards still decide w
 
 ### The first time the project is opened on a computer
 
-Tell the owner what happens the first time this project is opened in Claude Code on a computer. Claude Code's documentation says these two things:
+The project's settings turn the plugins on, but a computer must also have the marketplace `salesforce` and the plugins themselves. Tell the owner what the owner does the first time this project is opened in Claude Code on a computer: the owner opens the project, and accepts what Claude Code asks about the folder and about the marketplace `salesforce`. Claude Code reads the marketplace and the two environment variables from the project's settings only after the owner has trusted the folder.
 
-- Claude Code reads the marketplace and the two environment variables from the project's settings only after the owner accepts the trust dialog for the project folder. It then adds the marketplace `salesforce` when the computer does not have it yet.
-- The project's settings turn a plugin on, but they do not install it. A plugin that the computer lacks is shown in `/plugin`, on the Errors tab, with the line `Plugin "<name>" is enabled in project settings but isn't installed here`.
+Then check what this computer has, with two commands that change nothing:
 
-Claude Code's documentation states the second point for a plugin that is fetched from a repository of its own. Salesforce's plugins are folders inside the marketplace's repository, and the documentation does not say whether Claude Code installs such a plugin by itself. So check which of the plugins this computer has, and assume neither result.
+- `claude plugin marketplace list` must list the marketplace `salesforce`.
+- `claude plugin list` must show each plugin of the snippet, with the status enabled.
 
-`claude plugin list` prints every plugin that is installed on this computer, with its scope and its status, and it changes nothing. For each plugin of the snippet that the list lacks, give the owner this command. The owner runs it in a terminal, in the project folder:
+In an update, run the two commands after the branch was merged, because the project's main folder holds the new settings only then.
+
+When the marketplace or a plugin is missing, give the owner the commands for what is missing. The owner runs them in a terminal, in the project folder, or tells you to run them:
 
 ```text
+claude plugin marketplace add forcedotcom/sf-skills
 claude plugin install <name>@salesforce --scope project
 ```
 
-The owner then types `/reload-plugins` in the session, or starts a new session.
+The first command is for a missing marketplace. The second command is run once for each missing plugin. The owner then starts a new session, because a session loads its plugins when it starts.
 
-Setup never installs a plugin itself. When a plugin of the snippet is not installed yet, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
+Do the check, and assume neither result. Claude Code's documentation says that a plugin which is a folder inside the marketplace's repository, as these are, loads from the marketplace with no install. In a test of the toolkit, in sessions with no screen, no plugin of the snippet loaded until it was installed with the command above.
+
+Setup installs nothing unless the owner says so. When the marketplace or a plugin is still missing at the end of setup, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
 
 ### Once on each computer: the plugins are turned off for every other project
 
@@ -104,7 +111,7 @@ With `low` in place of `off`, the plugin proposes less often. With no word after
 
 ### Codex: the owner installs the skills
 
-Codex does not read the project's Claude Code settings, so nothing above reaches Codex. Do this check when setup runs in Codex, or when the owner says that the project is also worked on in Codex.
+Codex does not read the project's Claude Code settings, so nothing above reaches Codex. Do this check in every Salesforce project, because every project is set up for Codex too.
 
 Look for Salesforce's skills in `~/.agents/skills` and in the project's `.claude/skills`, which Codex reads through the `.agents/skills` link. When they are not there, tell the owner and give the owner this command, which the owner runs:
 
@@ -112,7 +119,13 @@ Look for Salesforce's skills in `~/.agents/skills` and in the project's `.claude
 npx skills add forcedotcom/sf-skills
 ```
 
-Setup never installs them itself. When the owner has not installed them yet, add a line to the report, and add a "Waiting on" line to the project's Current State, as for a plugin that is not installed.
+Setup never installs them itself. When the owner has not installed them yet, add a line to the report, and add a "Waiting on" line to the project's Current State, as for a plugin that is missing.
+
+### Copies of Salesforce's skills from an earlier setup
+
+Earlier versions of setup told the owner to run `npx skills add forcedotcom/sf-skills` for Claude Code too. That command may have put copies of Salesforce's skills into `~/.claude/skills` or into the project's `.claude/skills`. Claude Code loads such a copy beside the plugin that holds the same skill, and then lists that skill twice.
+
+Look in both folders for skills that come from `forcedotcom/sf-skills`. The project's three `sf-*` skills are the toolkit's own, and they are not such copies. Tell the owner what you found, and let the owner decide what happens to the copies. Change nothing in either folder without the owner's yes.
 
 ## The org aliases
 
