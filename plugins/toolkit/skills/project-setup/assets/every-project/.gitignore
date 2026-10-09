@@ -7,10 +7,3 @@
 .localdevserver/
 .claude/worktrees/
 *.log
-__pycache__/
-.claude/.permset-preflight/
-tools/kb/out/
-tools/kb/_freshness_stamp.json
-tools/kb/_drift_pending.md
-tools/kb/_prev-*.json
-*.pyc

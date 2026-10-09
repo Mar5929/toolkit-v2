@@ -69,8 +69,9 @@ This table is for files in `.claude/rules/`. "Same name" means that Toolkit V2 h
 | `ai-external-knowledge.md` | Compare | `reference/AGENTS.md` |
 | `plain-english-artifacts.md` | Compare | `document-clarity-standard.md` |
 | `humanize-outbound-text.md` | Compare | Same name |
-| `dependency-graph.md` | Compare | Same name in a Salesforce project; nothing otherwise |
-| `component-tracker.md`, `permissions-source-control.md` | Compare | Same name (Salesforce) |
+| `dependency-graph.md` | Kept | Nothing: the rule belongs to the project's own `tools/kb/` |
+| `component-tracker.md` | Compare | Same name (Salesforce) |
+| `permissions-source-control.md` | Kept | Nothing: the rule belongs to the project's own `tools/permissions/` |
 | `salesforce-safety-guardrails.md` | Compare | `salesforce-org-safety.md` for the limits that are the same in every project, and `salesforce-agent-permissions.md` for a line that only this project needs |
 | `salesforce-change-clarify.md` | Compare | `salesforce-agent-permissions.md`, "Confirm with the owner first" |
 | `production-data.md`, `data-change-handoff.md` | Compare | The `sf-data-change` skill, and `salesforce-agent-permissions.md` for who may change data in which org |
@@ -97,12 +98,12 @@ This table is for files in `.claude/hooks/`. Each file has an entry in `.claude/
 | `knowledge-completion.mjs`, `spec-check-reminder.mjs`, `style-handshake.mjs`, and any `style-reminder`, `writing-guard`, `explain-simply-reminder`, `work-item-stage-reminder`, or `memory-pr-hook` file | Delete | Nothing: Toolkit V2 adds no end-of-reply check and no per-message style check |
 | A `.test.mjs` or `.test.js` file for a hook above, and `.claude/hooks/README.md` | Delete | Nothing |
 | `.claude/style-reminder.json`, `.claude/writing-guard.json` | Delete | Nothing |
-| `guard-protected-orgs.js`, `guard-permission-set-deploy.js` (Salesforce guards) | Compare | `guard-protected-orgs.cjs`, `guard-permission-set-deploy.cjs` |
-| `.claude/protected-orgs.json` | Carry | Same name: the owner's org names and actions are kept, and a setting that only the Toolkit V2 file has is added |
+| `guard-protected-orgs.js`, `guard-permission-set-deploy.js` (Salesforce guards) | Delete | The entries of `permissions.deny` for each production org (`salesforce.md`, "The refuse list for production") |
+| `.claude/protected-orgs.json` | Delete | The same entries. An org named in `alwaysProtect` gets entries after the owner confirms that it is production |
 | `no-ai-attribution-guard.mjs` | Kept | Nothing in the project: it is a machine-wide hook |
 
-- A guard that differs from the old toolkit's copy may block more than the Toolkit V2 guard. Put it under "Your call", and recommend keeping it running until the owner has seen what each guard blocks.
-- Never leave a Salesforce project without a production guard. The new guard and its settings entry go in, and the new guard's check passes, before the old guard comes out. `move-over.md`, step 5, gives this order under "Delete".
+- A guard that differs from the old toolkit's copy holds a change that the project made itself. Put it under "Your call": the owner may keep it.
+- Never leave a Salesforce project with nothing that refuses a change to production. The entries of `permissions.deny` go in before an old guard comes out. `move-over.md`, step 5, gives this order under "Delete".
 
 This table is for the other entries of `.claude/settings.json`. The file's one Update line says which entries are removed, added, and kept.
 
@@ -124,7 +125,7 @@ This table is for the other entries of `.claude/settings.json`. The file's one U
 | `.agents/skills/` as a real folder of copies | Update | A link to `.claude/skills` (`placing-files.md`, step 4, says how to make it) |
 | `.claude/output-styles/plain-english.md` | Compare | Same name |
 | `.claude/output-styles/terse.md`, `plain-language.md` | Kept when `outputStyle` names it; otherwise Compare | Nothing |
-| `tools/kb/`, `tools/permissions/` (Salesforce graph and permission set tools) | Compare | Same names |
+| `tools/kb/`, `tools/permissions/` (Salesforce graph and permission set tools), with the rules `dependency-graph.md` and `permissions-source-control.md` | Kept | Nothing: the toolkit no longer ships these tools, and they stay in the project as its own |
 | `.system-guide.json`, and the System Guide pages (usually `knowledge/system/`) | Your call | `system/` and `reference/current-system/`. The list under this table gives the recommendation. |
 | `.toolkit-memory.json` | Delete, after step 6 of `move-over.md` | "Toolkit settings" in `PROJECT.md` |
 | A folder's own `AGENTS.md` with a `CLAUDE.md` beside it holding `@AGENTS.md` | Kept | Check it for old names, as the row for the owner's own files in `move-over.md`, step 3, says |

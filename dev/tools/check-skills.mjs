@@ -53,7 +53,7 @@
 //     and each kind has a "## " section in its references/checklist.md;
 //   - the Salesforce entries that setup-copy.md tells setup to take out of a project's
 //     .claude/settings.json are the Salesforce entries every-project/.claude/settings.json holds:
-//     each sf or sfdx permission rule, and each hook command under tools/ or named guard-*;
+//     each sf or sfdx permission rule;
 //   - no project path is in two setup folders, except the two storage skills named above;
 //   - no file under assets/ holds a setup marker ("<!-- if " or "<!-- endif"): a choice decides
 //     which files a project gets, never which lines inside a file;

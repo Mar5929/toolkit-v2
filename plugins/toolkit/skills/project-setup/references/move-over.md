@@ -214,7 +214,7 @@ Do these seven points in order, so that nothing is removed before what replaces 
    - Before you remove a file, check that it is still as it was when you listed it. A file that changed since then stays: ask the owner again.
    - Remove a file that Git tracks with `git rm`. Remove any other file with `rm`, with the exact path from the list.
    - Remove a hook command and its settings entry in the same step.
-   - Remove a guard only after its replacement is in the settings and the replacement's own check has passed.
+   - Remove a Salesforce guard of the older toolkit only after the entries for the production org are in `permissions.deny` (`salesforce.md`, "The refuse list for production").
 7. **Check.** Run `git status --short` in the worktree. It must list only paths that are on approved lines. When it lists any other path, put that path back with `git restore <path>` and tell the owner.
 
 ## 6. Carry over the old records

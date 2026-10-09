@@ -57,8 +57,8 @@ perfectly valid permission set: validation passes, preview shows one row saying
 the component will deploy, and the deploy then removes 400 grants exactly as
 instructed. None of these commands can warn you.
 
-That gap is why `permsets.py preflight` exists, and why the deploy guard hook
-blocks a deploy that has not been preflighted.
+That gap is why `permsets.py preflight` exists, and why the rule
+`permissions-source-control.md` forbids a deploy that has not been preflighted.
 
 ## Procedure 1: bring a permission set into git
 
@@ -126,10 +126,6 @@ before a sandbox deploy. The owner runs every production deploy.
    preflight run before a long review does not cover the deploy after it.
    Re-run it.
 
-   The deploy guard reads the whole command string. It also fires when a deploy
-   command appears as quoted text inside another command, such as a commit
-   message. Put that text in a file and pass the file by path. Never edit or
-   disable the hook to get past a block.
 
 2. **Confirm the API version pair.** The deploy prints a line like
    `Deploying v<N> metadata with SOAP API v<N> connection`. Both must match
@@ -190,7 +186,5 @@ side whole, then re-apply the other side's change as a fresh edit.
 - `.claude/rules/salesforce-agent-permissions.md` and
   `.claude/rules/salesforce-org-safety.md`, what any agent may do against
   an org.
-- `.claude/hooks/guard-permission-set-deploy.cjs`, which blocks an unpreflighted
-  deploy.
 - Toolkit reference `salesforce-permissions-research.md`, the evidence and
   sources behind every claim here.

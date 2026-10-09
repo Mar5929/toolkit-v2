@@ -4,7 +4,7 @@ This file says which Salesforce facts setup records in a Salesforce project: the
 
 The setup copy is the project's finished files, built in a temporary folder before anything is put into the project.
 
-Everything else a Salesforce project needs comes with the `salesforce` setup folder: the rules, the three `sf-*` skills, the two org guards, the Salesforce templates in `delivery/`, and `tools/`. A setup folder is a folder in this skill's `assets/` that holds project files at the paths a project has them. Salesforce's own skills come from Salesforce, not from setup.
+Everything else a Salesforce project needs comes with the `salesforce` setup folder: the rules, the three `sf-*` skills, and the Salesforce templates in `delivery/`. A setup folder is a folder in this skill's `assets/` that holds project files at the paths a project has them. Salesforce's own skills come from Salesforce, not from setup.
 
 ## Salesforce's skills
 
@@ -13,7 +13,7 @@ Salesforce publishes its own skills in the GitHub repository `forcedotcom/sf-ski
 - **Check that they are installed.** In Claude Code they come as plugins of that repository's marketplace, `salesforce`. The owner uses these seven: `salesforce-development`, `dx-devops`, `experience-lwc`, `integration`, `salesforce-code-quality`, `platform-lightning-widgets`, and `platform-trust-security`. In Codex they are skills, which `npx skills add forcedotcom/sf-skills` installs. Tell the owner what is missing.
 - **Ask the owner what to have on or off**, in one message, and change only what the owner says:
   - whether Salesforce's plugins are on for the whole computer or only in Salesforce projects. Their hooks run on every command and every file edit wherever the plugins are on;
-  - the automatic deploy of `salesforce-development` (`SFDX_AUTO_DEPLOY`). It deploys each saved file to an org, and that deploy does not pass through the project's org guard;
+  - the automatic deploy of `salesforce-development` (`SFDX_AUTO_DEPLOY`). It deploys each saved file to an org, and nothing in the project checks that deploy;
   - the usage data that the same plugin sends (`SF_DISABLE_TELEMETRY`).
 
 When Salesforce's skills are still missing at the end of setup, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
@@ -36,7 +36,20 @@ Use only the aliases the owner names for this project.
 - The owner's step "Connect the project's Salesforce org" then gets a "Waiting on" line in the project's Current State, and the report lists the line as a prompt left. `finishing.md`, "The project's Current State", says how to write the "Waiting on" line.
 - When the owner gives an instruction about what an agent may do in an org (for example "don't use those" about the other orgs), write it into `.claude/rules/salesforce-agent-permissions.md`, in the place that the first bullets of that file give.
 
-Leave `.claude/protected-orgs.json` as copied, because the guard finds production orgs itself and blocks them. `.claude/rules/salesforce-agent-permissions.md` says what an agent may do in each kind of org, in Claude Code and in Codex.
+`.claude/rules/salesforce-agent-permissions.md` says what an agent may do in each kind of org, in Claude Code and in Codex.
+
+## The refuse list for production
+
+For each production org that the owner names, add entries to `permissions.deny` in the project's `.claude/settings.json`, so that Claude Code refuses a command that changes that org. Claude Code matches an entry against the text of a command, and `*` stands for any text.
+
+- Write two entries for each kind of command that changes an org: one for the org's name at the end of the command, and one for the name in the middle. For a deploy to the org `acme-prod`, the two entries are `Bash(sf project deploy * acme-prod)` and `Bash(sf project deploy * acme-prod *)`.
+- The kinds of command are a deploy or a deploy validation (`sf project deploy`), each data change (`sf data create`, `sf data update`, `sf data upsert`, `sf data delete`, and `sf data import`), anonymous Apex and an Apex test run (`sf apex run`), and a Flow test run (`sf flow run`).
+- Write no entry for a command that only reads, such as `sf data query` or `sf project retrieve`.
+- When the owner gives the production username as well as the alias, write the same entries for the username.
+- On Windows, write each entry a second time with `PowerShell(` in place of `Bash(`.
+- When no production org is known yet, write no entry. Add the entries when the owner names the org.
+
+Tell the owner in one line which org Claude Code now refuses. The list stops a command that names production plainly, and it is not a full check. Codex has no such list. `.claude/rules/salesforce-org-safety.md` forbids every change to production in both.
 
 ## The API version
 

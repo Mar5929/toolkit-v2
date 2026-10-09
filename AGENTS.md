@@ -81,6 +81,7 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 | `.claude/settings.json`, `.claude/rules/` | The settings and the one rule for sessions that work on this repository. |
 | `ai-external-knowledge/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
 | `reference/` (root of this repository) | Records of how Mike works in his real projects. |
+| `salesforce-tools/` | Two Python tools for a Salesforce project, with the rule for each. Not shipped: a project that wants one adds it as its own. |
 | `dev/` | Goal, progress, research, reviews, test runs, evals, the check tools in `dev/tools/`, and the tests in `dev/tests/`. |
 
 Only `plugins/toolkit/` is shipped. Nothing shipped reads a file under `dev/`, the root `reference/`, or `ai-external-knowledge/`.
@@ -157,7 +158,7 @@ node --test 'dev/tests/*.test.mjs'
 - **Salesforce.** What an agent may do in an org is stated in three places, and no other file states a permission again.
   - `salesforce-org-safety.md` holds the limits that are the same in every project.
   - `salesforce-agent-permissions.md` holds the owner's choices for one project.
-  - The guard and `.claude/protected-orgs.json` block production and an org the guard cannot classify, whatever the owner's file says. No code asks before a change to a sandbox.
+  - The refuse list, `permissions.deny` in the project's `.claude/settings.json`, makes Claude Code refuse a command that changes an org and names a production org. Setup writes its entries (`<setup>references/salesforce.md`). The toolkit ships no guard script.
   - For Salesforce's own plugins, setup checks that they are installed and asks the owner what to have on or off. The toolkit ships no settings for them.
 - **Tests stay in scratch folders.** Point `HOME`, `CLAUDE_CONFIG_DIR`, and `CODEX_HOME` at a temporary folder. Never write to Mike's real `~/.claude`, `~/.codex`, Notion pages, or Hindsight banks.
   - Live test sessions sign in through two fixed test homes: `CLAUDE_CONFIG_DIR=~/.toolkit-v2-test-homes/claude` and `CODEX_HOME=~/.toolkit-v2-test-homes/codex`. Reuse them, and never delete either folder. Signing in is Mike's step; never copy his own sign-in files.

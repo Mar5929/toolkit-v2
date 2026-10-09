@@ -154,7 +154,7 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 ### What setup never does
 
 - Never change anything in this skill's `assets/` folder, because it is the source for every project.
-- Never write a script into a project. The only code a project runs is the three hook commands and, in a Salesforce project, the code of the `salesforce` setup folder: the two guards, the graph Stop hook, and the scripts in `tools/`.
+- Never write a script into a project. The only code a project runs is the three hook commands.
 - Never make setup a work item.
 - Jira is not offered yet.
 - A Hindsight project gets no memory skill from the toolkit. Hindsight's coding-agent add-on brings its own skill and tools, and the project's rule `.claude/rules/hindsight-memory.md` says what the project keeps where.

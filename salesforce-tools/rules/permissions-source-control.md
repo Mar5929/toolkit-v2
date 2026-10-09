@@ -31,7 +31,6 @@ A permission set retrieve is complete since API 40.0. A permission set deploy re
 - `salesforce-agent-permissions.md` says in which orgs you may deploy, and when you ask the owner first. The owner runs production.
 - Never skip the conflict check (`--ignore-conflicts`, or the same option in any deploy tool) on a permission file.
 - Profiles are excluded from these steps. `salesforce-agent-permissions.md` says whether you may deploy a profile.
-- Never edit or disable `.claude/hooks/guard-permission-set-deploy.cjs`. If the hook matches quoted text in another command, put the text in a file.
 
 ## After a deploy
 
