@@ -7,7 +7,9 @@ This project's memory is Hindsight, on the owner's server, in the bank named und
 - Before you search, store, or correct a memory, open the add-on's skill `hindsight-coding-agent`, which says how to use its tools. Codex has no such skill: there, follow the guide the add-on shows at session start.
 - This project does not install `managing-project-memory`. When `AGENTS.md`, a rule, a skill, or a hook names that skill, follow this file instead. For the project's Current State, follow "The project's Current State" below.
 - When the owner says "remember this", file the fact where it is kept, and tell the owner the add-on saves this session at the end of the turn.
-- When a recurring job ran, or another thing happened, make no event record. Save the date, what ran or happened, and the result with the add-on's tools, in the same turn. Your reply alone is not enough, because the bank's filter for saved sessions (`sessionFilter` in `.claude/hindsight-bank-settings.json`) can tell the model to make no memory from a report of what you did. When the job has a `delivery/` record, write the run there.
+- When a recurring job ran, or another thing happened, make no event record. Save the date, what ran or happened, and the result with the add-on's tools, in the same turn.
+  - Your reply alone is not enough, because the bank's filter for saved sessions can tell the model to make no memory from a report of what you did.
+  - When the job has a `delivery/` record, write the run there.
 - The add-on cannot delete a memory. When the owner says "forget that", or a memory in the bank is wrong, save a correction with its tool `hindsight_ingest_document`, titled "Correction: <topic>".
 - Deleting a memory is the owner's step, on the bank's page in the dashboard: say which memory. Never say a memory is deleted when it is not.
 - When the owner says "clean up memory", remove the lines of the project's Current State that are no longer true, as the last section says, save a correction for each memory you checked and found wrong, and list for the owner the memories only the owner can delete. Change nothing else in the bank.
