@@ -57,6 +57,12 @@ A last run took each command from the text of `<ref>`, filled in only the placeh
 
 A review of the change found that the test save of "6. Save and search" named no kind of save. On a bank that the add-on has prepared, the server then reads the text with the add-on's mission for a Git commit. The item now names the kind `document`. The save, status, and search commands ran from the text of `<ref>` against a new test bank that the add-on had prepared: the save completed after 10 seconds, and the search returned one memory that names the bank. The test bank was deleted afterwards.
 
+## One saved record stays one record (2026-10-09)
+
+Mike chose that agents save a record on purpose. One record of five sentences about a weekly export was saved three times to a new test bank, as a document, once under each setting for the detail of a save. With `concise` it became three memories. With `verbatim` and with `chunks` it stayed one memory, stored as written. `verbatim` uses the model to find names and dates in the record, and `chunks` uses no model. The test bank was deleted afterwards.
+
+The commands in the sections above are from toolkit 0.9.21. Since toolkit 0.9.28 the reference gives no commands.
+
 ## Not tested
 
 - A real project folder, the installer, and a save of a real session through the filter. No run saved a session, so no run shows how well the model follows the filter paragraph.

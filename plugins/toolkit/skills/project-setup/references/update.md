@@ -32,6 +32,7 @@ This file uses five names:
   - Updating AGENTS.md
   - Turning on validate-records.mjs and the pre-commit file
 - 4. What the toolkit no longer ships
+  - The settings file of a Hindsight bank
   - Retired skills
   - Renamed skills
   - Files dropped from a skill
@@ -121,7 +122,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 | Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/README.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
 | Rules in `.claude/rules/` | | Show the owner what differs. |
 | Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, the output style, `.githooks/pre-commit`, the Salesforce guards and `tools/` | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
-| The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; `.claude/rules/salesforce-agent-permissions.md`; `.claude/hindsight-bank-settings.json`; the owner's own skills and rules | Never compare or change one of these. |
+| The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; `.claude/rules/salesforce-agent-permissions.md`; the owner's own skills and rules | Never compare or change one of these. |
 
 ### Special cases for the rows of the table
 
@@ -147,13 +148,13 @@ Most rows have special cases. They are listed under the table, in "Special cases
 - **Rules in `.claude/rules/`.** "Whether a difference is the owner's edit" below says whether a rule holds an edit of the owner's.
   - When a rule holds no edit of the owner's, recommend the toolkit's version.
   - When a rule holds an edit of the owner's, the edit stays unless the owner says to take the toolkit's version.
+  - In `hindsight-memory.md`, the lines under "What this project saves in Hindsight" are the owner's choices. Keep the project's lines in every update.
   - A project with no `owner-preferences.md` gets the setup copy's file through the "Missing files" row. A project that has `owner-preferences.md` follows the row "The owner's own records". The same holds for `salesforce-agent-permissions.md` in a Salesforce project.
 - **Other toolkit files.** "Whether a difference is the owner's edit" below says whether a file holds an edit of the owner's. When a file holds no edit of the owner's, recommend the toolkit's version.
 - **The owner's own records.**
   - A memory record is each file in `memory/` whose name starts `user_`, `project_`, `reference_`, or `event_`. The one exception is `project_topic_template.md`: it is a template, and the "Other toolkit files" row covers it.
   - `memory/MEMORY.md` is the generated index. The session-start hook rebuilds it, so do not compare it either.
   - `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices about what an agent may do in each kind of Salesforce org. A Salesforce project that has no such file gets the setup copy's file through the "Missing files" row. Section 4, "The owner's choices for Salesforce orgs", then moves the project's earlier choices into it.
-  - `.claude/hindsight-bank-settings.json` holds the owner's choices for the project's Hindsight bank. A Hindsight project that has no such file gets the setup copy's file through the "Missing files" row. Section 5 then asks the owner about the bank's settings.
 
 ### Whether a difference is the owner's edit
 
@@ -226,6 +227,10 @@ The entry in `.codex/hooks.json` is new, and the `description` there changed, so
 ## 4. What the toolkit no longer ships
 
 Each part of this section is about one thing that an earlier setup put into a project and that the toolkit no longer ships. Each part says how to recognise the thing and what to do with it.
+
+### The settings file of a Hindsight bank
+
+A Hindsight project set up before toolkit 0.9.28 holds `.claude/hindsight-bank-settings.json`, with the owner's choices for the project's bank. The choices are now kept in plain words in the rule `.claude/rules/hindsight-memory.md`, section "What this project saves in Hindsight". Show the owner what the file holds and what the new rule would say, and ask which the owner wants. After the owner's yes, write the owner's choices into that section, and remove the file.
 
 ### Retired skills
 
@@ -341,7 +346,7 @@ An earlier version of the toolkit asked the owner before some saves to memory. I
 
 ### Old Hindsight entries
 
-A `hindsight` entry in `.mcp.json`, or a `[mcp_servers.hindsight]` table in `.codex/config.toml`, shows that the project was set up for the old Hindsight server on the Mac. List it, and follow "A project on the old Mac server" in `hindsight-on-vps.md`. That section says what to tell the owner and when the old entries are removed.
+A `hindsight` entry in `.mcp.json`, or a `[mcp_servers.hindsight]` table in `.codex/config.toml`, shows that the project was set up for the old Hindsight server on the Mac. List it, and tell the owner that this project's memory is on that old server, and that the toolkit has no step for moving memory between servers. When the owner says to use the VPS from now on, set the project up as `hindsight-on-vps.md` says, and remove the old entries after the owner's yes.
 
 ### Files from the retired toolkit program
 
@@ -361,7 +366,7 @@ Look for a `pre-commit` Git hook of this copy of the repository whose text names
 Do each line that fits the project. Each line names the section that holds the steps.
 
 - For a Notion project, follow `notion.md`, "Updating a Notion project". That section says which Notion steps bring the project up to the current template.
-- For a Hindsight project, run "Check a Hindsight project" in `hindsight-on-vps.md`. Fix each failure only after the owner's yes. Name the server the project uses in the report.
+- For a Hindsight project, do the check under "Check a Hindsight project, or connect a new computer" in `hindsight-on-vps.md`. Fix each failure only after the owner's yes. Name the server the project uses in the report.
 - For a GitHub Issues project, follow `github.md`, "Bringing a project up to date". Add missing labels only after the owner's yes.
 - For local work items that were set up before toolkit 0.6.0, follow `earlier-versions.md`, "Work items from Stage to State". Such work items have a `stage:` line.
 - For every project that was set up before toolkit 0.8.0, follow `earlier-versions.md`, "The levels structure (toolkit 0.8.0)". Do it after the service step for the place where the project keeps its work items.
@@ -412,9 +417,9 @@ A choice decides which files a project has, never which lines inside a file. So 
    - A new memory choice also replaces the toolkit's hook handlers in `.claude/settings.json` and `.codex/hooks.json` with the new choice's snippets (`skills-hooks-settings.md`, "Merge rules"). The owner trusts the changed Codex hooks again in `/hooks`.
 4. Run the service step for the new choice (`notion.md`, `github.md`, or `hindsight-on-vps.md`).
    - When the project already has work items or memory in Notion and adds the other one, make no second project page. Follow `notion-build/work-setup.md`, "Adding work items or memory later".
-   - When memory moved out of Hindsight, after the owner's yes also remove the project folder from `mapPathToBank` and `optInPaths` in `~/.hindsight/coding-agent.json`, so that Hindsight's coding-agent add-on stops saving there.
+   - When memory moved out of Hindsight, after the owner's yes also remove the project's folder from the settings of Hindsight's coding-agent add-on, so that the add-on is switched off there.
 5. Move the records one at a time, with a preview of each record and the owner's yes, and read each record back in its new place. Delete nothing from the place where the work items were kept before, or from the old memory system.
-   - When the records go into Hindsight, the add-on's tools load only in the next session. So write each record with one `POST .../memories`, as `hindsight-on-vps.md`, "6. Save and search", shows, with `document_id` set to the record's ID and `async` `true`. Read the record back with that file's search command after its operation is `completed`.
+   - When the records go into Hindsight, the add-on's tools load only in the next session. So save each record through the server's API, with the record's ID as the ID of the saved document, and read the record back with a search after the save has finished.
 6. After the records are moved and the owner says yes to the list, install the new choice's merged skill folder from the setup copy and remove the old choice's files. Check for owner edits before replacing or removing a skill file. The selected `references/work-tracker.md` or `references/memory-store.md` then contains the new choice's instructions. Remove a retired storage-skill folder only after checking it for owner edits and getting the owner's yes.
    - The list is every file of the old choice's setup folders that no setup folder of the new choices holds. `(cd <skill folder>/assets/<folder> && find . -type f)` prints a folder's files, and `setup-copy.md`, "Folders the choices add", names the folders of each choice. `<skill folder>` is the folder that holds this skill's `SKILL.md`.
    - Memory that moved to Hindsight keeps `memory/CURRENT_STATE.md`.

@@ -75,12 +75,12 @@ The ID prefix of the work items depends on the choice:
 Recommend local memory with Obsidian, because it is private, fast, and needs no server.
 
 - When work items are in Notion, recommend Notion memory in place of local memory. Work and memory then sit together and link to each other, and the owner can read both on a phone.
-- Offer Hindsight by name, for search by meaning across past sessions. Hindsight here is the owner's Hindsight server on the owner's VPS. Nothing is installed on this Mac except Hindsight's coding-agent add-on.
+- Offer Hindsight by name, for search by meaning across the records that the agent saved. Hindsight here is the owner's Hindsight server on the owner's VPS. Nothing is installed on this Mac except Hindsight's coding-agent add-on.
 - When the project is one that `hindsight-on-vps.md`, "Projects with their own review of saved knowledge", names, tell the owner what that section says before the owner picks Hindsight.
 - When the owner picks Hindsight, do three things in this order:
-  1. Explain that setup in plain words. Take the facts from `hindsight-on-vps.md`, "What runs where", which lists what runs on the server and what runs on this computer. Say that the text of each saved session goes to OpenAI, through the owner's ChatGPT subscription, to be turned into memories.
+  1. Explain that setup in plain words. Take the facts from `hindsight-on-vps.md`, "How the owner's Hindsight is set up". Say that the text of each save goes to OpenAI, through the owner's ChatGPT subscription.
   2. Ask whether to create a separate memory bank for this project (or to use the one this project already has), and recommend yes. A memory bank is one project's store of memory on the Hindsight server. When the owner says no, ask question 3 again.
-  3. Ask about the seven settings of this project's bank, as `hindsight-on-vps.md`, "The bank's settings", "Ask the owner", says. Setup writes the answers into the add-on's settings in the same command that switches the add-on on for the project's folder, and sends the rest to the server before the first session is saved.
+  3. Show the owner the defaults for the bank and ask whether the owner wants them, as `hindsight-on-vps.md`, "The defaults, and the one question to the owner", says.
 
 Memory holds two things. The first is where the project stands now. That part is called the project's Current State: the project's one short page of what is true now. The second is what no other project file holds: facts about people and the client, where to find things, and what happened. Decisions, terms, sources, and the description of the system are never memory. With every choice, they are files in the repository.
 
@@ -88,7 +88,7 @@ Memory holds two things. The first is where the project stands now. That part is
 | --- | --- | --- | --- |
 | Local with Obsidian | `local` | Most projects. | Memory is Markdown files in `memory/`, which Git ignores. The files are on this computer only. They are the project's Current State, and one file per subject. The session-start hook shows the project's Current State and one line per file. |
 | Notion, in Lore's layout | `notion` | Work items are in Notion, or the owner reads memory on a phone. | Memory is a "Current state" page, and a Memory page that holds Lore's databases, where each subject is a page. A session is shown only the "Current state" page at its start, and it searches the pages when it needs them. This choice needs `ntn` signed in. |
-| Hindsight | `hindsight` | Search by meaning across past sessions matters. | Memory is on the owner's Hindsight server on the VPS, with one memory bank per project, and never on Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, saves each session to the bank. Hindsight turns the saved text into memories with a model at OpenAI, through the owner's ChatGPT subscription. The project gets no memory skills: the agent uses the add-on's tools. The project's Current State is the local file `memory/CURRENT_STATE.md`. |
+| Hindsight | `hindsight` | Search by meaning across the saved records matters. | Memory is on the owner's Hindsight server on the VPS, with one memory bank per project, and never on Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, connects Claude Code and Codex to the bank. The agent saves a record on purpose. Hindsight does its model work with a model at OpenAI, through the owner's ChatGPT subscription. The project gets no memory skills: the agent uses the add-on's tools. The project's Current State is the local file `memory/CURRENT_STATE.md`. |
 
 Lore's layout, in the second row, is the set of Notion databases that Notion memory uses.
 

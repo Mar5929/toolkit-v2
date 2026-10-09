@@ -115,7 +115,7 @@ Run each check alone, from the project folder. Each check only reads.
    - `memory/` only with local memory or Hindsight memory. With local memory, `memory/` holds `AGENTS.md`, `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md`, and `project_topic_template.md`. With Hindsight memory, `memory/` holds only `CURRENT_STATE.md`;
    - `tools/` and `sfdx-project.json` only in a Salesforce project;
    - `SOUL.md` only when the owner keeps one;
-   - `.claude/rules/hindsight-memory.md` and `.claude/hindsight-bank-settings.json` only with Hindsight memory;
+   - `.claude/rules/hindsight-memory.md` only with Hindsight memory;
    - `.claude/rules/notion-records.md` only with work items or memory in Notion.
 2. **Skills.** `ls .claude/skills` must show exactly the list of skills for the owner's choices, and each skill folder must hold a `SKILL.md`. `skills-hooks-settings.md`, "Skills", gives the list for each choice.
 3. **Project records.** The project must hold all of these, whatever the owner chose for work items and for memory:
@@ -155,7 +155,7 @@ Run each check alone, from the project folder. Each check only reads.
     - The "Notion memory" line in `PROJECT.md` must hold every bullet that `notion-build/setup.md` lists under "Recording the links in PROJECT.md".
     - The "Current state" page must show its first lines. Read the page with `ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown`.
 22. **Services: GitHub Issues.** Do the checks under "Checks after either" in `github.md`.
-23. **Services: Hindsight.** Do the checks under "Check a Hindsight project" in `hindsight-on-vps.md`.
+23. **Services: Hindsight.** Do the check under "Check a Hindsight project, or connect a new computer" in `hindsight-on-vps.md`.
 24. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
 
 ### After the checks
@@ -196,7 +196,7 @@ The table lists the steps that the owner does. Say each one plainly, with the re
 | Trust the hooks in Codex: type `/hooks` and trust them. | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file that the hook runs is not reviewed again. | Always. Again after "update the toolkit" changes an entry in `.codex/hooks.json`. With Hindsight, also the hooks of Hindsight's coding-agent add-on, after the add-on is installed |
 | Install Salesforce's own skills. `salesforce.md`, "Salesforce's skills", says where they come from in each host. | Salesforce publishes its own skills for Salesforce work. Setup never installs them. | Salesforce, when they are not installed yet |
 | Connect the project's Salesforce org (`sf org login web --alias <alias>`) and tell the agent the alias. | The agent never picks or signs in to an org itself. | Salesforce, when the project's org does not exist yet or is not connected |
-| Enter the Hindsight API key in the owner's own Terminal window, with the two lines in `hindsight-on-vps.md` ("The access key"), never in the session. | The add-on and setup read the key from `~/.hindsight/coding-agent.json`. The agent never sees the key. | Hindsight, when the key is not set yet |
+| Enter the Hindsight API key in the owner's own Terminal window, with the command that the agent gives, never in the session. | The add-on and setup read the key from `~/.hindsight/coding-agent.json`. The agent never sees the key. | Hindsight, when the key is not set yet |
 | Sign in to the Hindsight dashboard with its own access key. | The dashboard asks for that key, not the API key, before it shows the bank. The bank is this project's store of memory on the Hindsight server. | Hindsight, the first time the owner opens the dashboard |
 | Open the project folder as an Obsidian vault. | The owner can then browse the project's records, and local work items and memory, with their links. The project's `README.md` says how. | Optional |
 | Start a new session in each of Claude Code and Codex. | The skills, hooks, and settings load at session start. | Always |
