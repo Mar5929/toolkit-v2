@@ -2,6 +2,24 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The root AGENTS.md is cleaned up (2026-10-09)
+
+Mike found the root `AGENTS.md` a mess: every change had added lines to it,
+and none had tidied it. His words: "You're just continually adding ... more
+and more lines, and you're not actually cleaning or keeping things tidy. I
+need you to clean up the agent cmd drastically." Nothing shipped changed, so
+the version stays 0.9.27.
+
+- The file went from 1,057 lines (81 KB) to 169 lines (23 KB). His own top
+  section, with his six guiding design principles, is unchanged.
+- Each rule is now a line or two. The dates, his words, the sizes he was
+  told, and what earlier versions did are no longer in it. The whole earlier
+  file is kept as `dev/archive/AGENTS-before-cleanup-2026-10-09.md`.
+- A new section, "Keep this file short", says what belongs in the file and
+  where history goes, so the file does not grow again.
+- `check-skills.mjs` now expects the list of the kinds of harness file once
+  in `AGENTS.md`, where it expected it twice.
+
 ## Salesforce's plugins: setup checks and asks, version 0.9.27 (2026-10-09)
 
 Mike found the Salesforce plugin setup of version 0.9.23 far larger than

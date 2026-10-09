@@ -12,5 +12,10 @@ under `plugins/`, and `dev/research/` for present instructions.
 | `research/` | Drafts and research for the retired program or superseded approaches. `sandbox-checks-switch.patch` is the unmerged first version of the sandbox switch (2026-10-07), as a patch against commit 4c3c3cf. |
 | `reviews/` | Completed review reports. The reusable review checklists remain in `dev/reviews/`. |
 
+`AGENTS-before-cleanup-2026-10-09.md` is the root `AGENTS.md` as it was before
+the clean-up of 2026-10-09 (1,057 lines). It holds the dates, Mike's words,
+and the sizes behind each rule that the short file now states in a line or
+two.
+
 Archived documents may describe commands, paths, or product decisions that
 were later changed. Their original text is evidence, not current procedure.

@@ -49,7 +49,7 @@
 //   - the starter root AGENTS.md is within the line and byte limits that references/finishing.md
 //     makes setup check in every new project, and references/update.md gives the same limits;
 //   - the list of the kinds of harness file in writing-harness-files/SKILL.md is, word for word,
-//     in the repository AGENTS.md (twice) and README.md; each kind is in that skill's description;
+//     in the repository AGENTS.md and README.md; each kind is in that skill's description;
 //     and each kind has a "## " section in its references/checklist.md;
 //   - the Salesforce entries that setup-copy.md tells setup to take out of a project's
 //     .claude/settings.json are the Salesforce entries every-project/.claude/settings.json holds:
@@ -532,7 +532,7 @@ for (const f of walk(ASSETS)) {
   const list = flat(skillFile).match(/It is one of these kinds: (a skill, .*?, or a [^.]+)\./)?.[1];
   if (!list) report('error', skillFile, 'has no sentence "It is one of these kinds: a skill, ..., or a ...": update this check when the sentence changes');
   else {
-    for (const [file, times] of [[path.join(ROOT, 'AGENTS.md'), 2], [path.join(ROOT, 'README.md'), 1]]) {
+    for (const [file, times] of [[path.join(ROOT, 'AGENTS.md'), 1], [path.join(ROOT, 'README.md'), 1]]) {
       const found = flat(file).split(list).length - 1;
       if (found < times) report('error', file, `holds the list of the kinds of harness file ${found} time${found === 1 ? '' : 's'}, word for word as ${shown(skillFile)} gives it; it must hold it ${times === 1 ? 'once' : 'twice'}`);
     }
