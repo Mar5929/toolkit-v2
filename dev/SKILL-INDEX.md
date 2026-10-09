@@ -36,7 +36,9 @@ the routing rounds for the retired skills) is in Git history.
   Toolkit memory skill.
 - **Notion**: work items or memory in Notion add `using-notion-cli`, once.
 - **Salesforce projects** add 3 skills, plus Salesforce's own skills
-  (`forcedotcom/sf-skills`), which the owner installs.
+  (`forcedotcom/sf-skills`). In Claude Code the project's settings turn on
+  the seven Salesforce plugins Mike uses; for Codex the owner installs the
+  skills.
 - A project has 10 + 1 = 11 skills with local or Notion memory, 12 when work
   items or memory are in Notion. With Hindsight memory, it has 10 skills, or
   11 with work items in Notion. Salesforce adds 3.
@@ -160,10 +162,14 @@ once.
 
 ## 6. Salesforce projects (3)
 
-Salesforce's own skills (`forcedotcom/sf-skills`, installed with
-`npx skills add forcedotcom/sf-skills`) answer Salesforce platform questions.
+Salesforce's own skills (`forcedotcom/sf-skills`) answer Salesforce platform
+questions. In Claude Code they come from seven plugins of Salesforce's
+marketplace, which the project's own settings turn on (Mike, 2026-10-08;
+`AGENTS.md`, "Salesforce plugins"). For Codex they are installed with
+`npx skills add forcedotcom/sf-skills`.
 Toolkit V2 ships no Salesforce architect skill (Mike, 2026-10-02); setup only
-checks that Salesforce's skills are installed and gives him the command. The
+checks that a computer has Salesforce's plugins and the skills for Codex,
+and gives him the commands for what is missing. The
 three skills below are Mike's own project skills: they arrive with the
 `salesforce` folder, and a change to them needs Mike's yes. The `.agents/skills` link in `every-project/` points to `.claude/skills`;
 onboarding removes it from the setup copy and makes the project's own link.

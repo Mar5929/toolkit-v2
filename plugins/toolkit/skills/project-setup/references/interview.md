@@ -98,7 +98,7 @@ Any mix of the work tracking choice and the memory choice works, for example wor
 
 When `sfdx-project.json` answered this question, skip the question. When the file is absent, ask the question and recommend no.
 
-When the answer is yes, the project gets the Salesforce rules and skills, the org guards, `tools/`, and the Salesforce templates inside `delivery/`. Setup then checks that Salesforce's own skills are installed. `salesforce.md`, "Salesforce's skills", says how to check and what to tell the owner when they are not installed.
+When the answer is yes, the project gets the Salesforce rules and skills, the org guards, `tools/`, and the Salesforce templates inside `delivery/`. Its Claude Code settings also turn on the Salesforce plugins that the owner uses, for this project only. `salesforce.md`, "Salesforce's skills", names those plugins. It also says how setup checks that a computer has them, what setup asks the owner once on each computer, and what the owner installs for Codex.
 
 For a Salesforce project, ask for the org aliases, one question per message. Before the first of these questions, show the aliases on this computer with `sf org list`, which only reads.
 
@@ -124,6 +124,7 @@ After the owner has answered the questions, say in a few lines what will happen,
 - Say that you will copy the project files for the owner's choices into this folder, with the skills and the 4 small hook commands, for both Claude Code and Codex (setup writes `.codex/` in every project, with no question). Give the skill count. The end of this section says how to count the skills.
 - Say that you will turn on the check of the project's records before each commit (the Git setting `core.hooksPath`, in this copy of the repository).
 - Say that you will turn the older claude-toolkit plugins off for this project only.
+- For a Salesforce project, say that the project's settings will turn on Salesforce's plugins for this project in Claude Code, with the plugin's automatic deploy and its telemetry off. `salesforce.md`, "Salesforce's skills", names the plugins.
 - Say that every project gets `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/` as files in this folder, whatever the owner chose.
 - Name every thing that will be created outside the project folder. The table gives the words to say for each choice.
 
@@ -133,6 +134,7 @@ After the owner has answered the questions, say in a few lines what will happen,
 | GitHub Issues | "create the work item labels in <owner>/<repository> that it does not have yet (up to 30: each item's State, type, priority, who it waits on, who builds it, and your approvals; its other labels stay as they are)" |
 | GitHub Issues, when there is no GitHub repository yet | Also say "create the private repository <owner>/<name>; after the setup commit I'll ask before I push the default branch to it" |
 | Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it; the bank gets the settings you chose" |
+| Salesforce | "when Salesforce's plugins are on for this whole computer, turn them off in your own Claude Code settings, so that only Salesforce projects run them; I'll name each one and ask you again before I change it" |
 | Local work and local memory | "nothing outside this folder" |
 
 For the row "Notion (work, memory, or both)": when the Project template does not exist yet, ask about building it as a separate question. `notion.md`, "The owner's yes before anything is made", gives the words of that question.

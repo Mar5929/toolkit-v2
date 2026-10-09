@@ -1,0 +1,23 @@
+{
+  "env": {
+    "SFDX_AUTO_DEPLOY": "0",
+    "SF_DISABLE_TELEMETRY": "true"
+  },
+  "extraKnownMarketplaces": {
+    "salesforce": {
+      "source": {
+        "source": "github",
+        "repo": "forcedotcom/sf-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "dx-devops@salesforce": true,
+    "experience-lwc@salesforce": true,
+    "integration@salesforce": true,
+    "platform-lightning-widgets@salesforce": true,
+    "platform-trust-security@salesforce": true,
+    "salesforce-code-quality@salesforce": true,
+    "salesforce-development@salesforce": true
+  }
+}
