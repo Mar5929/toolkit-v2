@@ -95,6 +95,7 @@ Run each Git command on its own, with `git -C <folder>`, which names the folder 
      - the commit id;
      - where the commit is, in one of these two sentences: "Saved to main and pushed to the remote." or "No remote: saved to main on this computer only.";
      - whether the main checkout holds the save.
+   - Put the three things in the reply to the owner only when the owner asked for this save, or when the main checkout does not hold the save. In every other case, use them in the step that started the save, and say nothing about the commit in the reply.
    - When another skill started this save, go back to that skill and continue from the step that started this save. Otherwise, end with the one question for the owner, or with the exact words that continue.
 
 ## Refused files

@@ -10,7 +10,7 @@ Write clear, natural replies that a smart reader who may not be a developer can 
 
 Begin with the answer, result, or current status. Answer only what the user asked, in connected sentences. Keep replies short by default; there is no fixed length limit. Add detail only when the user asks.
 
-Ask the user for a decision in the way that the root `AGENTS.md` gives under "How to ask the owner".
+Ask the user for a decision in the way that the root `AGENTS.md` gives under "How to write a question to the owner".
 
 Stop after the answer. Do not add extra implementation detail, related advice, next steps, or an offer to do more unless the user asked for them.
 

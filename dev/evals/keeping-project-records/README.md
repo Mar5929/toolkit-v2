@@ -6,7 +6,7 @@ This folder holds 36 prompts that test one thing: whether an agent in a Toolkit 
 
 Mike approved this goal for the agent on 2026-10-07:
 
-> You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner in one line what you saved. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
+> You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner what you saved, in one short line for each record you changed. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
 
 The goal is in the starter's root guide, `plugins/toolkit/skills/project-setup/assets/every-project/AGENTS.md`, section "Your job as the agent". "Where information goes" and "Ask the owner first" are two more sections of that file. Every expectation in `evals.json` names the place that those two sections give for the fact, as they were on 2026-10-07.
 
@@ -145,7 +145,7 @@ The date of the run is "the run date" in the expectations.
 How to read a result:
 
 - A failed eval from 1 to 32 means that the goal did not catch that situation, or that it put the fact in the wrong place. The repair is a change to the goal or to the general process.
-- Three expectations repeat in most evals, and each one is a sentence of the goal: the reply says in one line what was saved, the agent asks nothing about saving, and the record names where the fact came from. When one of these three fails in many evals, that sentence of the goal is not working, and no single situation is the cause.
+- Three expectations repeat in most evals, and each one is a sentence of the goal: the reply says what was saved in one short line for each record that changed, the agent asks nothing about saving, and the record names where the fact came from. When one of these three fails in many evals, that sentence of the goal is not working, and no single situation is the cause.
 - The root guide may give a few examples under the goal. An eval whose situation is one of those examples tests the example, and not the goal alone. Name those evals when you report a result.
 - A question about the work is not a question about saving. An agent that asks Mike which design to pick has not failed "asks Mike no question about whether or where to save it".
 - A change that no expectation names is not a failure. Report it when it made a record wrong.

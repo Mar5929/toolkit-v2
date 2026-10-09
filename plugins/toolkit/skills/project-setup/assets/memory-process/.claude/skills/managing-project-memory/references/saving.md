@@ -164,19 +164,20 @@ Write a line that the owner dictates with the steps below alone. For every other
 
 ## Reply lines
 
-Give the owner one line for each save. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link.
+Give the owner one short line for each record you changed, in the form below, and add nothing else about the save. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link. The line for a correction gives the old text and the words that undo it, and the line for a retire gives the words that restore the record, because each of these changes takes something away. No other line gives undo words.
 
 After the lines, give the next step. The next step is the question that still waits for the owner. When no question waits, it is the exact words that continue the work: "Say 'keep going' and I'll <next action>."
 
 The line for each kind of save:
 
-- A new memory record: "Saved to memory: <title>. Say 'forget that' to undo."
-- A new section: "Saved to memory: <section heading> (in <title>). Say 'forget that' to undo."
+- A new memory record: "Saved to memory: <title>."
+- A new section: "Saved to memory: <section heading> (in <title>)."
 - A correction: "Updated in memory: <title>. It said: "<old text>". Say 'undo that' to put it back."
-- A fact saved in a place outside memory: "Recorded in <file or record, with its ID>. Memory holds no copy."
-- A lesson: "Noted a lesson in memory: <heading> (in <title>). Say 'forget that' to undo."
+- A fact saved in a place outside memory: "Recorded in <file or record, with its ID>."
+- A lesson: "Noted a lesson in memory: <heading> (in <title>)."
 - An event or a run: "Logged in memory: <title>, <date>."
-- A rule: "Added to the project rules (<area>): <instruction>. Say 'forget that' to undo."
+- A change to the project's Current State: "Updated the project's Current State: <what changed, in a few words>."
+- A rule: "Added to the project rules (<area>): <instruction>."
 - A retire: "Retired from memory: <title>. Say 'bring it back' to restore it."
 - A delete: "Deleted from memory, as you said: '<the owner's words>'." Then say whether the memory record can be brought back.
 - A failed save: "Not saved: <reason>." Keep the text that you tried to save, tell the owner the fix, and try the save again in this session as soon as the fix is made.

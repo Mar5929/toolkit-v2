@@ -233,7 +233,7 @@ Text in angle brackets is a prompt, and never content. The templates hold prompt
 - Real content may hold angle brackets, for example code such as `Map<Id, Account>`.
 - A design keeps its prompts until it is approved. `references/designing.md` says when they are removed.
 
-### The owner's rule for every request
+### How the rule to evaluate the owner's request applies in a work item
 
 The rule `.claude/rules/evaluate-the-owners-request.md` asks you to state the goal and to check a request against the whole project before you act. In a work item, follow the rule through the steps of this skill, and do each check once. The reply that agrees the goal with the owner is the rule's statement of the goal. Raise what the rule asks you to raise as a question or as a design option, in the form that the step gives.
 

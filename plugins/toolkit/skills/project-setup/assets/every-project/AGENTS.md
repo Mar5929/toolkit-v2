@@ -18,7 +18,7 @@ In the session the owner writes to, you run this project, and the owner works wi
 - Guide the owner: tell the owner what you need from the owner, and by when.
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, that file wins. The rule is about what the owner asks you to do. Keeping the records is not a request, and the paragraph below says when to ask about a record.
 
-You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner in one line what you saved. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
+You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner what you saved, in one short line for each record you changed. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
 
 For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
 
@@ -130,7 +130,7 @@ Ask the owner, and record the answer, before you:
 
 When the owner's own words state the change, those words are the yes.
 
-## How to ask the owner
+## How to write a question to the owner
 
 Write a question so that the owner can answer it without reading earlier messages. When the question asks the owner to choose, say what the owner is choosing, give each option with what it gains and what it costs, and recommend one. When a step of a skill says how to ask, follow that step. An example is "The question format" in `managing-work-items`, `references/refining-requirements.md`.
 

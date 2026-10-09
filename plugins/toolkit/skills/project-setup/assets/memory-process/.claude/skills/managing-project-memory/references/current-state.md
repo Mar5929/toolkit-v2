@@ -89,7 +89,7 @@ Before you remove a line for something that happened and that a later session mu
 The session-start hook asks for these steps when it prints that the project's Current State is too long or too old.
 
 1. Read the project's Current State. Read the status of every work item that it names, with `managing-work-items`. Read each project task that it names.
-2. Remove every line that is no longer true. These removals do not go on the plan that `references/tidying.md` describes. Tell the owner what you removed. Remove each of these:
+2. Remove every line that is no longer true. These removals do not go on the plan that `references/tidying.md` describes. Tell the owner what you removed, in the one line that `references/saving.md`, section "Reply lines", gives for the project's Current State. Remove each of these:
    - under "Now", a finished or cancelled work item, or a piece of work that ended;
    - a line under "Coming up" whose date has passed;
    - a line under "Waiting on" that was answered or delivered, or whose project task is done, or whose decision is no longer Open;
