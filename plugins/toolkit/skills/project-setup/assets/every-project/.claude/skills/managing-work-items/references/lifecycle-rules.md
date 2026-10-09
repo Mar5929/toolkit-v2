@@ -5,7 +5,7 @@ Use this reference to take one work item from an idea to Done. The goal is that 
 This reference says what each State means, how work is divided into levels, what to do in each State, and when to stop for the owner's yes. Two neighbouring jobs belong to other skills:
 
 - **Reading and saving a work item.** For every read and every save, use the installed `references/work-tracker.md`, which says where this project keeps its work items.
-- **Writing `DECISIONS.md`, `system/`, or `sources/`.** `filing-project-records` writes those three places, and it also writes the ID of one of their records into a work item. Never write those three places, or such an ID, with this skill. The root `AGENTS.md`, section "Where information goes", gives the test for what belongs in those three places.
+- **Writing `DECISIONS.md`, `system/`, or `sources/`.** `filing-project-records` writes those three places. Never write those three places with this skill. Write the ID of one of their records into a work item only when `filing-project-records` has filed the record and given you the ID. The root `AGENTS.md`, section "Where information goes", gives the test for what belongs in those three places.
   - When a work item must follow a rule or a decision that already exists, give the ID of the rule or decision and the work item to `filing-project-records`. It writes the ID into the work item.
 
 ## Contents
@@ -135,7 +135,7 @@ Stop and ask the owner before each of these six steps. Record the owner's yes on
 2. Choosing the design, at the end of Designing.
 3. Approving the finished result, at the end of the Testing Loop, after the separate checker has tested it.
 4. Each merge into the default branch, in Deploying.
-   - A merge that the owner's standing merge instruction in `.claude/rules/owner-preferences.md` covers needs no new yes from the owner.
+   - A merge that the owner's standing merge instruction in `.claude/rules/owner-preferences.md` covers needs no new yes from the owner. `references/deploying.md`, section "What a merge into the default branch needs", says when the instruction covers a merge.
    - A merge that a helper makes into the work item's own branch needs no yes from the owner. "Starting a helper" below says what a helper is.
 5. Each deploy to an environment that other people use, such as a test or staging environment. A production deploy is the owner's to run.
    - A deploy that a rule of the project allows without a question needs no new yes from the owner.

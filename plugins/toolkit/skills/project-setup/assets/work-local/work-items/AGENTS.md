@@ -66,8 +66,6 @@ Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status
 
 | Change | Use |
 | --- | --- |
-| Find, read, create, save, search, move, nest, archive, or rename a work item; change a header field or a section | `managing-work-items` |
-| Decide a State, what to save, or an approval; the project's phases and project tasks | `managing-work-items` |
-| Close or cancel a work item | `managing-work-items`, which has the steps for closing a work item |
+| Anything about a work item, the project's phases, or the project tasks: find, read, create, save, search, move, nest, archive, or rename a work item; change a header field or a section; decide a State, what to save, or an approval; close or cancel a work item | `managing-work-items` |
 | A source that the work item was given | `filing-project-records`, step "file a source" |
 | A decision or a rule that another work item needs | `filing-project-records`, step "record a decision" or "update a system document" |

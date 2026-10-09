@@ -2,6 +2,50 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## One statement for each of four rules, version 0.9.24 (2026-10-09)
+
+Phase P2 of TKV-43 (`dev/research/toolkit-cohesion-audit.md`, findings 7 and
+10). Mike said yes to the phase and its choices on 2026-10-09, and yes to
+the meaning of the two changed rule sentences the same day.
+
+- When a standing merge instruction counts as the owner's yes is stated in
+  one place, `managing-work-items`, `references/deploying.md`, "What a merge
+  into the default branch needs". The rule `shared-repository-work.md` said
+  that it counts with no condition; it now names that section. Stop 4 of
+  `lifecycle-rules.md` names it too.
+- Which deploys need the owner's yes is stated in one place, stop 5 of
+  `lifecycle-rules.md`: each deploy to an environment that other people
+  use. `deploying.md` said "each deploy" and now points to stop 5. Mike
+  chose the list of stops. So a deploy to an environment that nobody else
+  uses no longer needs his yes inside a work item.
+- Who writes a record's ID into a work item reads the same in
+  `filing-project-records/SKILL.md`, `lifecycle-rules.md`, `closing.md`, and
+  `update-system-doc.md`: the filing skill saves the record first, and each
+  of its steps says who writes the ID. What the agent does is unchanged.
+- `reference/AGENTS.md` no longer gives a wrong reason for "never commit the
+  file without the owner's yes". The owner's reason for that rule is not
+  recorded anywhere; ask him when the wording work reaches that file.
+- The rule `memory-review-and-save.md` no longer reads as if every save
+  waits for the owner's yes.
+- In the folder guides `work-items/AGENTS.md` and `memory/AGENTS.md`, the
+  rows of "Which skill to use" that all named one skill are one row.
+- The description of the Codex hooks, in the three `codex-hooks.*.json`
+  snippets, names what the prompt hook prints today. `update.md`, "Old hook
+  entries", tells an update to replace an earlier description and not to
+  add the new one after it. Codex may ask the owner to trust the hooks
+  again in a project after the update.
+- Kept on purpose: the name `codex-after-commit.mjs`, although the command
+  also runs in Claude Code. A rename touches about 12 files, needs a step
+  in "update the toolkit" for every project, and makes Codex ask for trust
+  again (Mike's yes, 2026-10-09).
+- Waits for TKV-49: naming the skill `writing-harness-files` in the starter
+  root guide.
+- Tested: every check in `AGENTS.md`, "Checks". A separate agent reviewed
+  the change, and its findings are fixed.
+- Not tested: a live session, and "update the toolkit" in an existing
+  project.
+- Still open from the audit: phases P3 to P5 of TKV-43.
+
 ## A Salesforce project turns on the Salesforce plugins itself, version 0.9.23 (2026-10-08, TKV-44)
 
 Mike decided on 2026-10-08 to "turn the Salesforce plugins on only in
