@@ -2,6 +2,46 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Hindsight saves the owner's list, and the code survey is on, version 0.9.35 (2026-10-09)
+
+Mike asked what Hindsight does during a session and found that it took almost
+nothing in and gave nothing useful back. He set what it saves, in the words of
+the original toolkit's knowledge manual, and said that the toolkit's own
+records do not change: "Hindsight just saves extra stuff."
+
+- The rule `hindsight-memory.md` now tells the agent to save lasting project
+  facts, decisions, lessons, events, and constraints. A memory must pass three
+  tests: it concerns this project, it has lasting significance, and it comes
+  from the owner or from work done with the owner. A significant failure that
+  the agent found and fixed itself may be saved without passing them.
+- Hindsight is an extra store. Every fact is still filed where the starter
+  `AGENTS.md`, "Where information goes", keeps it. The line "Never save a
+  decision" is gone from the rule.
+- The defaults in `hindsight-on-vps.md`: the code survey is on, because three
+  of the add-on's five knowledge pages are written from it. The Git history
+  stays out (Mike: "I don't want git commit messages stored in memory").
+  Sessions are still not saved by themselves, a record is still stored as
+  written, and observations stay on.
+- Two more defaults, for the owner's server: the add-on waits 60 seconds for
+  the summary at the start of a session, and its hook for the first message
+  has 90 seconds. Measured on 2026-10-09: a summary came back in under 32
+  seconds, and the add-on's own limit of 20 seconds had failed 13 times out
+  of 13.
+- One more default: a line in the add-on's guide that says nothing is saved
+  by itself, because the add-on's built-in guide says the opposite.
+- This repository's bank `toolkit-v2` has these settings on Mike's computer
+  since 2026-10-09, and the root `AGENTS.md` says what to save and when to
+  check: when the agent updates this file before it stops.
+
+Open for Mike:
+
+- He deletes the bank `toolkit-v2` in the dashboard, to start it empty. The
+  add-on makes it again at the next session start, with the settings above.
+- Codex asks him to trust its changed hook again, in `/hooks`.
+- The model on his server takes about 30 seconds for a summary. A lower
+  reasoning effort for summaries is a setting on the server, his step.
+- Not tested: a setup of a real project from the short file.
+
 ## Setup no longer rebuilds the Notion template, version 0.9.34 (2026-10-09)
 
 The last of the five cuts that Mike approved on 2026-10-09. His words when he

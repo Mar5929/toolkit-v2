@@ -27,7 +27,7 @@ Go through this list in order. For each line, check whether it is already true, 
 2. The owner has said which defaults to keep ("The defaults, and the one question to the owner" below).
 3. The project has its own bank on the server. Before you create a bank, list the banks, and ask the owner about a bank that already has the ID you would use. Create the bank with its name and nothing else.
 4. The three Hindsight lines of `PROJECT.md`, section "Toolkit settings", hold the bank's ID, the API address, and the link to the bank's page.
-5. The add-on is installed for Claude Code and Codex, and its settings name the owner's server. The add-on is switched on only in the folders that its settings list, and it maps the project's main checkout to the bank. The main checkout is the first path that `git worktree list` prints. The owner's choices for the bank are in the add-on's settings, under the bank's ID.
+5. The add-on is installed for Claude Code and Codex, and its settings name the owner's server. The add-on is switched on only in the folders that its settings list, and it maps the project's main checkout to the bank. The main checkout is the first path that `git worktree list` prints. The owner's choices for the bank are in the add-on's settings, under the bank's ID. The add-on's hook for the first message has the time limit the owner chose, in Claude Code and in Codex.
 6. The bank on the server shows the owner's choices.
 7. The setup's test text comes back in a search of the bank. Save one short test text once: at the first setup, or in the next session when the bank was not prepared at setup. In every later check, only search for it, and save nothing.
 8. The project's rule `.claude/rules/hindsight-memory.md`, section "What this project saves in Hindsight", says what the owner chose.
@@ -38,10 +38,13 @@ Three steps are the owner's, and the report at the end of setup names them: to t
 
 These are the owner's defaults for a new bank. Show them to the owner in one message, in plain words, and ask: "Do you want these defaults?" Change only what the owner names. A project may differ from the defaults in any way the owner asks for.
 
-- **Nothing is saved by itself.** The add-on does not save sessions. The agent saves a record on purpose, as the project's rule `hindsight-memory.md` says.
+- **No session is saved by itself.** The add-on does not save sessions. The agent saves a record on purpose: lasting facts, decisions, lessons, events, and constraints, as the project's rule `hindsight-memory.md` says.
 - **A record is stored as it was written.** The add-on's setting for the detail of a save is `verbatim`. With the add-on's own default, Hindsight splits one record into several short memories.
-- **The Git history is not imported, and the code is not surveyed.** An agent can read both itself.
+- **The Git history is not imported.**
+- **The add-on surveys the code.** It reads the code and saves a description of how the code is built, once and again as the code changes. The bank's knowledge pages about the parts of the code, its terms, and its conventions are written from that description. The survey runs as a separate agent on this computer and uses the owner's Claude or Codex allowance.
 - **Observations are on, and Hindsight builds them after every save.**
+- **The add-on waits long enough for the summary at the start of a session.** On a session's first message, the add-on asks the server for a summary of what the bank holds about that message. The owner's server needs about 30 seconds for it, and the add-on waits 20 seconds unless its settings say otherwise. Set the add-on's wait to 60 seconds for the bank, and the time limit of the add-on's hook for the first message to 90 seconds, in Claude Code and in Codex.
+- **The add-on's guide tells the agent that no session is saved by itself.** The add-on's built-in guide says that the session is saved when it ends. Add one line to the add-on's guide for the bank that says the agent saves on purpose, as the project's rule says.
 
 Every other setting stays as the add-on ships it, unless the owner asks for a change.
 

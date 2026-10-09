@@ -119,11 +119,14 @@ that work uses the same ChatGPT usage allowance as your own Codex sessions.
 Hindsight writes every memory in English.
 
 Setup shows you the defaults for the project's memory bank and asks one
-question: "Do you want these defaults?" By default nothing is saved by
-itself: the agent saves a record on purpose, only for what no other
-project file holds, and Hindsight stores the record as it was written. The
-Git history is not imported, the code is not surveyed, and observations
-(statements that Hindsight forms from several saved records) are on. Your
+question: "Do you want these defaults?" By default no session is saved by
+itself: the agent saves a record on purpose, and Hindsight stores the record
+as it was written. The agent saves lasting project facts, decisions,
+lessons, events, and constraints. Hindsight is an extra store: each fact is
+still filed in its project record. The Git history is not imported. The
+add-on surveys the code and saves a description of how it is built, and
+observations (statements that Hindsight forms from several saved records)
+are on. Your
 choices are kept in plain words in the project's rule
 `.claude/rules/hindsight-memory.md`, which you can edit. To change one
 later, tell the agent.

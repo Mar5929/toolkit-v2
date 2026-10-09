@@ -82,7 +82,7 @@ Recommend local memory with Obsidian, because it is private, fast, and needs no 
   2. Ask whether to create a separate memory bank for this project (or to use the one this project already has), and recommend yes. A memory bank is one project's store of memory on the Hindsight server. When the owner says no, ask question 3 again.
   3. Show the owner the defaults for the bank and ask whether the owner wants them, as `hindsight-on-vps.md`, "The defaults, and the one question to the owner", says.
 
-Memory holds two things. The first is where the project stands now. That part is called the project's Current State: the project's one short page of what is true now. The second is what no other project file holds: facts about people and the client, where to find things, and what happened. Decisions, terms, sources, and the description of the system are never memory. With every choice, they are files in the repository.
+Memory holds two things. The first is where the project stands now. That part is called the project's Current State: the project's one short page of what is true now. The second is what no other project file holds: facts about people and the client, where to find things, and what happened. Decisions, terms, sources, and the description of the system are files in the repository with every choice. Local and Notion memory never hold them. Hindsight is an extra store, and also saves a lasting decision.
 
 | Choice | "Memory" value | Good when | What to know |
 | --- | --- | --- | --- |
