@@ -2,6 +2,62 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The writing rule names the new reader and asks for fuller headings, version 0.9.24 (2026-10-09, TKV-50)
+
+Mike asked on 2026-10-08 for a team of agents to scan every shipped
+instruction file, so that the wording is "easily understood by a stranger
+or someone that hasn't been a part of the chat sessions that designed the
+toolkit". He asked for the writing rule to be made fit for that goal first.
+
+What changed in this version:
+
+- The writing rule, `document-clarity-standard.md`, has five additions, and
+  Mike approved the words of each. Its opening sentence names "a reader who
+  is new to the project". "Use common words" has an example. One new line
+  says to write an abbreviation in full the first time. The heading rule
+  says that a heading must say enough for a reader who sees only the
+  heading. One new line says to organize a document so that a reader can
+  find a thing from the headings alone.
+- The copy of the rule in the skill `writing-harness-files`,
+  `references/writing-rule.md`, has the same five additions.
+- Check W5 of `dev/reviews/wording-review.md` no longer tells a writer to
+  say "what to weigh". It now asks the text to state the goal that the
+  agent's decision serves. Mike asked on 2026-10-08 for instructions that
+  state the process and do not tell the agent how to think. The clause of
+  W4 that points to W5 changed with it.
+- `AGENTS.md`, "Plain English", records the five additions with Mike's
+  words, and the three additions that he declined.
+
+What the scan found is in `dev/reviews/2026-10-08-wording-scan/`. Read
+`SUMMARY.md` there first. No other shipped file changed.
+
+- Seven readers read the shipped instruction files twice. The first pass
+  asked whether a reader who is new to the project can follow the text.
+  Three checkers
+  then opened all 7 High and 402 Medium findings: 398 are real, and 2 are
+  High. The second pass looked for text that scripts the agent in place of
+  stating the process. It found 117 places, and no second agent has checked
+  them.
+- `DECISIONS-FOR-THE-OWNER.md` holds the decisions that the fixes wait for.
+  Decision 1 is closed: Mike had approved all five additions. The Main
+  Orchestrator session decided decision 6, the new wording of W5.
+
+Next:
+
+- No shipped file changes without Mike's yes for that change or that area,
+  given in the session of TKV-50 (Mike, 2026-10-09: "I want to make sure
+  that the agents aren't just running wild and making a bunch of content
+  updates, which would break a lot of the toolkit"). He sees a
+  before-and-after before a rewrite merges.
+- The fixes are made one area at a time, in the order that `SUMMARY.md`
+  gives, and that file names what each area waits for. No fix that changes
+  what an instruction says starts before the live tests give a clean
+  baseline (work item TKV-51).
+- The heading rule, read word for word, fails most of the 389 shipped
+  headings of one or two words, such as the sections of a record template.
+  Decision 13 asks Mike where the rule stops. Until he answers, rename no
+  heading that is part of the form of a record.
+
 ## A Salesforce project turns on the Salesforce plugins itself, version 0.9.23 (2026-10-08, TKV-44)
 
 Mike decided on 2026-10-08 to "turn the Salesforce plugins on only in

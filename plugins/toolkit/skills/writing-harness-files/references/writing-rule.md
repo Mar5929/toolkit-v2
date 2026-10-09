@@ -2,7 +2,7 @@
 
 # Document Clarity Standard
 
-Write documents and the words inside artifacts so that someone who was not in the session can understand them after one read.
+Write documents and the words inside artifacts so that a reader who is new to the project, and who was not in the session, can understand them after one read.
 
 An artifact is something made for a person to look at, such as a diagram, chart, dashboard, mockup, slide deck, published page, or report. These are examples; the standard also covers the words in other finished visuals and presentations. Follow it for titles, headings, labels, notes, captions, and body text.
 
@@ -14,7 +14,7 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 
 ## Words and names
 
-- Use common words.
+- Use common words. For example, write "use", not "utilize", and "start", not "initiate".
 - Use the exact name the system uses for a thing, and use the same name every time.
 - Name the thing directly. Do not replace its name with a metaphor, idiom, or joke. For example, write "the only setting you can change", not "the only lever".
 - Say a thing in plain words before you give it a name.
@@ -22,8 +22,9 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 - A made-up word is new or has a meaning that exists only in this project. If plain words and a visible name do not work, explain the made-up word when it first appears. Use one clause and an example.
 - Plain never means vaguer. When you replace a word, the new words must name the subject at least as exactly as the old word did.
 - Keep an ordinary word that is exact, such as "outbound" or "criteria". An exact ordinary word is not a made-up word.
+- Write an abbreviation in full the first time it appears, unless it is more common than its full form, such as "ID" or "URL".
 - Give every file and label a name that says its subject. A reader who sees only the name must know what it is about. For example, `memory-criteria.md` says its subject, and `what-to-keep.md` does not.
-- Give every heading a name in ordinary words that tells the reader what the section covers. Leave out words that do not help identify the content.
+- Give every heading a name in ordinary words that tells the reader what the section covers. Leave out words that do not help identify the content. The heading must say enough for a reader who sees only the heading to know what the section holds. For example, write "How the agent asks the owner for a decision", not "Asking".
 - Be specific. Name the thing, the person, or the number. For example, write "the save failed because the file was locked", not "there were problems".
 - Make the subject of "this", "that", "it", and "they" clear. When two subjects could fit, repeat the name.
 - Name the source of a claim when the source matters. For example, name the test and its result instead of writing "tests show".
@@ -67,6 +68,7 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 - Start from the whole document. First work out what the reader must know and what the reader must do. Then write that in the plainest order and words. Do not fix a document one line at a time.
 - Choose the form that serves the reader's job. A tutorial helps someone learn by doing, a procedure helps someone complete a task, a reference gives facts to look up, and an explanation gives the reasons behind a choice. Put each kind of content where its reader will look for it.
 - Open the document with what it is for and what must be true when its job is done.
+- Organize the document so that a reader can find a thing from the headings alone. Give each section one subject, and put everything about that subject in that section. Put the sections in the order the reader needs them.
 - When another skill or file does a neighbouring job, say in one sentence which one does which part.
 - Give each instruction its own sentence. The sentence says who does what, and when.
 - When one point needs several rules, give the main rule first. Then give each special case on its own line.

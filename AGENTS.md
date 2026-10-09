@@ -450,6 +450,20 @@ node --test 'dev/tests/*.test.mjs'
     before-and-after examples. It is never a list of bans: he rejected one,
     because a ban could be read as "remove the statement of what the skill
     is and its goal".
+  - Five additions to the writing rule (Mike, 2026-10-08, work item TKV-50,
+    version 0.9.24). He asked that every shipped file be "easily understood
+    by a stranger or someone that hasn't been a part of the chat sessions
+    that designed the toolkit", and that "Document layouts need to be
+    organized and be clear and use ordinary language and just say what the
+    section is about". The rule's opening sentence now names "a reader who
+    is new to the project". The rule gives an example for "Use common
+    words", and has a line on abbreviations and a line on organizing a
+    document. Its heading rule says that a heading must say enough for a
+    reader who sees only the heading. His words about a heading that was
+    too short: "'how to ask the owner' doesn't give enough context. Idk
+    what that means looking at it." He declined three other additions:
+    unneeded words, saying each thing once, and describing how things work
+    now. Do not add them.
 - **Challenge the current design** (Mike, 2026-10-04). Inspect current files
   to understand existing behavior. Recommend the clearest end-to-end
   lifecycle, filing locations, record schemas, and procedures even when they
