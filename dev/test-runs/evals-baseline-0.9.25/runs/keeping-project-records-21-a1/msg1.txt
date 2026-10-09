@@ -1,0 +1,1 @@
+If the phone and the server ever disagree about the category list, the server wins, full stop. The phone only keeps a copy, and I don't want categories edited on the phone at all for now. Does anything in transaction entry go against that?

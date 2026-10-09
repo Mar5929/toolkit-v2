@@ -1,0 +1,168 @@
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:28:24
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+@@ -26,4 +25,5 @@
+ 
+ ## Next session starts with
+ 
++- WI-032: read its Current state.
+ - WI-031: read its Current state.
+--- reference/current-system/sync-server.md	1969-12-31 19:00:00
++++ reference/current-system/sync-server.md	2026-10-09 10:28:06
+@@ -0,0 +1,38 @@
++# Sync server
++
++This file records how the sync server works today. Tomas Lindqvist builds and hosts the sync server, and its code is in his repository `pocket-ledger-server`. Nobody on this project has tested what this file says: every fact below is what Tomas wrote.
++
++## What this area does today
++
++The sync server stores each user's transactions and computes the monthly totals (`PROJECT.md`, "Systems and environments"). The Pocket Ledger iPhone app is its only client.
++
++## Components
++
++| Component | Role | Where it is | Evidence |
++| --- | --- | --- | --- |
++| Rate limit | Limits how many requests the server accepts from one phone | Sync server (production), on Render | Tomas Lindqvist's email, SRC-002 |
++
++## Data and flow
++
++Not recorded yet.
++
++## How it runs
++
++- The server accepts at most 60 requests a minute from one phone. (SRC-002)
++- When a phone sends more, the server answers with HTTP status 429 and drops the request. The server does not queue the request, so the phone must send it again. (SRC-002)
++- The 429 answer has no `Retry-After` header. The phone must wait a full minute by itself before it sends again. (SRC-002)
++- Tomas set the limit up on the first day of the server, and it is live on production. (SRC-002)
++- Tomas supports the server and decides how it is built and hosted. (`PROJECT.md`, "People and ownership")
++
++## Known gaps
++
++- Nobody on this project has seen the limit work. Mike can read the production logs, and has no sign-in to the staging server yet (PT-01).
++- SRC-002 does not say whether one request can carry several transactions. If one request carries one transaction, a phone can send at most 60 transactions a minute.
++- SRC-002 does not say whether the limit counts every request from the phone, or only the requests that send transactions.
++- SRC-002 does not say whether the staging server has the same limit.
++- SRC-002 does not say how the server tells one phone from another, or whether the minute starts with the first request or runs on the clock.
++- Tomas can confirm each of these.
++
++## Last verified
++
++2026-10-09, production, from Tomas Lindqvist's email (SRC-002). Recorded by the agent. Not tested.
+--- sources/README.md	2026-10-09 10:05:01
++++ sources/README.md	2026-10-09 10:27:55
+@@ -5,3 +5,4 @@
+ | ID | Date received | From | What it is | Where kept | Used by |
+ | --- | --- | --- | --- | --- | --- |
+ | SRC-001 | 2026-09-29 | Bea Hollis | Email: how she will run the beta tester group, and her question about testers outside the United States | [SRC-001-beta-group-email.md](SRC-001-beta-group-email.md) | DEC-002 |
++| SRC-002 | 2026-10-09 | Tomas Lindqvist | Email: the rate limit on the sync server, 60 requests a minute from one phone | [SRC-002-sync-server-rate-limit-email.md](SRC-002-sync-server-rate-limit-email.md) | WI-032 |
+--- sources/SRC-002-sync-server-rate-limit-email.md	1969-12-31 19:00:00
++++ sources/SRC-002-sync-server-rate-limit-email.md	2026-10-09 10:27:55
+@@ -0,0 +1,7 @@
++From: Tomas Lindqvist
++To: Mike Rihm
++Subject: Rate limit on the sync server
++
++Mike, one thing to know before you build sync. The server takes at most 60 requests a minute from one phone. Past that it answers with a 429 and drops the request, it does not queue it. There is no retry-after header, so the phone has to wait a full minute by itself. I set it up this way on day one and it is live on production now.
++
++Tomas
+--- work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:28:19
+@@ -5,13 +5,13 @@
+ state: Refining Requirements
+ status: Preparing
+ parent: WI-031
+-waiting_on: "agent"
++waiting_on: "owner"
+ priority: medium
+ delivery: not-offered
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-032: Offline sync
+@@ -22,15 +22,15 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** Every question is answered (Q-01 to Q-04), and four requirements are written. Mike has not approved them yet.
++**Where it stands:** Four requirements are written, and Mike has not approved them yet. Tomas reported a rate limit on the sync server (SRC-002) that R-02 does not allow for, so Q-05 is open.
+ 
+-**Next action:** Agent: check that the requirements are complete, then ask Mike to approve them.
++**Next action:** Waiting on the owner: Q-05 (may sync take longer than 1 minute when many changes are waiting). After his answer: change R-02, then check that the requirements are complete.
+ 
+-**Waiting on:** Nothing.
++**Waiting on:** The owner: Q-05, and T01.
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** [[WI-031]] (parent).
+ 
+@@ -40,12 +40,20 @@
+ 
+ **Sub-items:** None.
+ 
+-No tasks yet. The tasks are written after Mike approves the requirements.
++- [ ] **T01 — Ask Tomas how the rate limit counts requests** · Not Started  
++  **Work:** Mike asks Tomas three things that SRC-002 does not say: whether one request can carry several transactions, whether the limit counts every request from the phone or only the requests that send transactions, and whether the staging server has the same limit.  
++  **Deliverable:** Tomas's answers, filed as a source.  
++  **Done when:** The three answers are in `reference/current-system/sync-server.md`.  
++  **Who does it:** owner  
++  **Depends on:** None.
+ 
++The other tasks are written after Mike approves the requirements.
++
+ ## Recent History
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | SRC-002 filed: Tomas's email about the rate limit on the sync server. Q-05 asked. T01 added. | R-02 may need a condition for a large number of waiting changes. R-01, R-03, and R-04 stay as they are. The check of the requirements waits for Q-05. |
+ | 2026-09-30 | Q-03 and Q-04 answered | R-04 written. Every question is answered. Next: check that the requirements are complete. |
+ | 2026-09-29 | Q-01 and Q-02 answered | Goal agreed. R-01 to R-03 written. |
+ | 2026-09-28 | Created as a sub-item of [[WI-031]] at Mike's request | Interview started. |
+@@ -110,6 +118,7 @@
+ 
+ | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
+ |---|---|---|---|---|---|---|---|
++| Q-05 | The sync server accepts at most 60 requests a minute from one phone, and it drops a request over the limit (SRC-002). When more changes are waiting than the server accepts in one minute, may sync take longer than 1 minute, as long as every change arrives and the user does nothing?<br>Recommended: yes. Keep "within 1 minute" for up to 50 waiting changes, and above 50 let sync continue at the speed the server allows, because the limit makes 1 minute impossible above 60 and your subway trip leaves far fewer than 50.<br>Watch out: after a long time offline, the server and a second phone show an incomplete list for a few minutes.<br>Not yet covered: whether one request can carry several transactions (T01). If it can, the 50 can be much higher. | | | | R-02 | Open | owner |
+ | Q-04 | What have we not talked about yet that could change this? Recommended: nothing, if the four requirements are right. | "Nothing else comes to mind." | 2026-09-30 | no | R-01 to R-04 | Answered | owner |
+ | Q-03 | When the same transaction is edited on two phones before they sync, which edit wins? Recommended: the most recent edit, because asking the user to choose is slow and rare. | "Most recent wins. Don't bother the user." | 2026-09-30 | yes | R-04 | Answered | owner |
+ | Q-02 | How soon after the connection returns must sync finish? Recommended: within 1 minute, because users check the list right after leaving a dead zone. | "1 minute is fine." | 2026-09-29 | yes | R-02 | Answered | owner |
+@@ -120,10 +129,11 @@
+ ### Context
+ 
+ - Mike loses signal on the subway every day, for about 20 minutes each way (Q-01).
++- The sync server accepts at most 60 requests a minute from one phone, and drops a request over the limit (SRC-002). The details and the open points are in `reference/current-system/sync-server.md`.
+ 
+ ### Sources
+ 
+-- None.
++- SRC-002: email from Tomas Lindqvist about the rate limit on the sync server, received 2026-10-09. Taken from it: Q-05, T01.
+ 
+ ### Lessons not proven yet
+ 
+@@ -135,3 +145,4 @@
+ 
+ - **For R-02 and R-03:** Keep a queue of unsent transactions on the phone, with an ID on each one, so the server can tell when it gets a transaction a second time.
+ - **For R-04:** Stamp each edit with the time it was made.
++- **For R-02 and R-03:** Send the waiting transactions at a pace under the server's limit (SRC-002). When the server still answers 429, keep the transaction in the queue and send it again after a minute.

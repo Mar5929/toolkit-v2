@@ -1,0 +1,24 @@
+Filing Tomas's notes as a source now, then linking them from the offline sync work item.
+
+Tomas's sync notes are filed as SRC-002, word for word, and the offline sync work item (WI-032) now tells whoever picks it up to read them first.
+
+What I saved:
+
+- Recorded in `sources/SRC-002-sync-notes.md`, with its row in `sources/README.md`: Tomas Lindqvist's sync notes, received 2026-10-09 from you in chat.
+- Recorded in WI-032: SRC-002 is listed under Notes, Sources, and Next action now starts with "read SRC-002 before anything else". Your sentence is quoted in its history.
+- Updated the project's Current State: removed the "Waiting on Bea Hollis: PT-02" line, because PT-02 was marked Done on 2026-10-01, and added WI-032 under "Next session starts with".
+
+Two things about the notes that nobody has confirmed yet:
+
+- **The notes are filed as Tomas's statements, not as approved rules.** I did not write them into `system/` or the requirements. The four requirements in WI-032 have not been checked against them yet.
+- **The notes leave one gap for "the latest edit wins" (WI-032, R-04).** Point 4 says the server answers with the time it stored each transaction. The notes do not say how the server chooses between two edits of the same transaction. A phone that edited first but synced last would win if the server goes by stored time, which is the opposite of what you asked for in Q-03. I noted this in WI-032 as a question for Tomas before the design.
+
+Point 2 (the phone gives every transaction its ID) also touches WI-031, because the entry screen is where a transaction is created. I have not added anything to WI-031 yet.
+
+Sources
+- SRC-002: Tomas's four points on batches, transaction IDs, sending a failed batch again, and the stored time.
+- WI-032, R-03, R-04, and Q-03: the no-duplicates requirement and "Most recent wins."
+- `work-items/PROJECT-TASKS.md`, PT-02: Done on 2026-10-01.
+- `PROJECT.md`, "People and ownership": Tomas decides how the server is built.
+
+Say "keep going" and I'll check the four WI-032 requirements against SRC-002 and bring you what needs your approval.

@@ -1,0 +1,87 @@
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:35:22
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+@@ -26,4 +25,5 @@
+ 
+ ## Next session starts with
+ 
++- WI-033: read its Current state.
+ - WI-031: read its Current state.
+--- sources/README.md	2026-10-09 10:05:01
++++ sources/README.md	2026-10-09 10:35:09
+@@ -5,3 +5,4 @@
+ | ID | Date received | From | What it is | Where kept | Used by |
+ | --- | --- | --- | --- | --- | --- |
+ | SRC-001 | 2026-09-29 | Bea Hollis | Email: how she will run the beta tester group, and her question about testers outside the United States | [SRC-001-beta-group-email.md](SRC-001-beta-group-email.md) | DEC-002 |
++| SRC-002 | 2026-10-09 | Tomas Lindqvist | Email: his view of the charting library comparison, that Swift Charts is the right choice | [SRC-002-swift-charts-email.md](SRC-002-swift-charts-email.md) | WI-033 |
+--- sources/SRC-002-swift-charts-email.md	1969-12-31 19:00:00
++++ sources/SRC-002-swift-charts-email.md	2026-10-09 10:35:09
+@@ -0,0 +1,7 @@
++From: Tomas Lindqvist
++To: Mike Rihm
++Subject: Charts
++
++Mike, I read the chart comparison you forwarded. Swift Charts is the right call, I use it for the server dashboard too. As far as I'm concerned that one is finished, go ahead and close it out.
++
++Tomas
+--- work-items/WI-033-charting-library/WI-033.md	2026-10-09 10:05:01
++++ work-items/WI-033-charting-library/WI-033.md	2026-10-09 10:35:22
+@@ -11,7 +11,7 @@
+ requirements_approved: 2026-09-29 by Mike
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-033: Pick a charting library
+@@ -22,7 +22,7 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** The comparison is written, under Notes, "Solution options and considerations". A separate checker tested it against R-01 and R-02, and both pass.
++**Where it stands:** The comparison is written, under Notes, "Solution options and considerations". A separate checker tested it against R-01 and R-02, and both pass. Tomas Lindqvist read the comparison and agrees with Swift Charts (SRC-002). His view is not the approval: only Mike approves the result.
+ 
+ **Next action:** Waiting on the owner: Q-04 (approve the finished result). After his answer: Agent: run the closing steps.
+ 
+@@ -30,7 +30,7 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** Project phase P01. DEC-001.
+ 
+@@ -59,6 +59,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Tomas Lindqvist wrote that he agrees with Swift Charts and that the work item can be closed (SRC-002) | Nothing changes. Tomas may decide only how the server is built and hosted (`PROJECT.md`), so Q-04 stays open for Mike. Asked Mike Q-04 again. |
+ | 2026-09-30 | A separate checker tested the comparison: R-01 and R-02 pass | Asked Mike to approve the result (Q-04). |
+ | 2026-09-30 | Comparison written, using DEC-001 (iOS 17 and newer) | Sent to the checker. |
+ | 2026-09-29 | Q-03 answered: requirements approved | Moved to Building. |
+@@ -110,7 +111,7 @@
+ 
+ ### Sources
+ 
+-- None.
++- SRC-002: email from Tomas Lindqvist about the comparison, 2026-10-09. Taken from it: nothing. He agrees with the recommendation; Q-04 stays open.
+ 
+ ### Lessons not proven yet
+ 

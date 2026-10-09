@@ -1,0 +1,20 @@
+Tomas's sync notes are filed as SRC-002, unchanged, and the offline sync work item (WI-032) now tells whoever picks it up to read them first.
+
+What I saved:
+
+- `sources/SRC-002-sync-notes.md`: the notes exactly as you pasted them, committed to main on this computer (the repository has no remote).
+- `sources/README.md`: the row for SRC-002, from Tomas Lindqvist, received 2026-10-09 through you in chat, used by WI-032.
+- WI-032: SRC-002 is listed under its Sources, its Next action now starts with "read SRC-002 before anything else", and its history has a row with your instruction.
+
+Filing the notes does not make them rules of the project. Two things I found while reading them:
+
+- **The notes reach beyond offline sync.** Point 2 says the phone gives every transaction its ID. That also binds logging a transaction (WI-031), because the entry screen is where a transaction is created.
+- **The notes do not cover edits.** WI-032's Requirement 4 says the most recent edit wins. The notes say the server answers with the time it stored a transaction, and they do not say how an edit is sent or which time decides the winner. This is a question for Tomas, and I have not recorded it as a question yet.
+
+Sources:
+
+- SRC-002: Tomas's four sync points.
+- WI-032: its four requirements, its Next action, and that it is a sub-item of WI-031.
+- `PROJECT.md`: Tomas may decide how the server is built.
+
+Do you want me to write Tomas's four points as draft rules in `system/integrations/`, so that WI-031 and any later work item follow them too? I recommend yes: it costs one short document that you approve later, and without it the points are binding only for someone who opens WI-032.

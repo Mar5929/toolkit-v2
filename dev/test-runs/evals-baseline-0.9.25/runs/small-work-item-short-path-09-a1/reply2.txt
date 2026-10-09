@@ -1,0 +1,30 @@
+I made the work item WI-034, "Set the app's minimum iOS version in the repo". Nothing is built yet.
+
+**The goal:** the repository holds the app's minimum iOS version, 17.0, as a build setting, so that nobody builds the app for a phone older than iOS 17 (DEC-001, CON-01).
+
+**What I will hand over:**
+- The file `app/Config/Deployment.xcconfig` with the one line `IPHONEOS_DEPLOYMENT_TARGET = 17.0`, on the branch `claude/wi-034-minimum-ios-version`.
+- Two corrected lines in `PROJECT.md`, which today say that `app/` does not exist yet.
+- A line in WI-031 (transaction entry) that the Xcode project it creates must take its build settings from this file.
+
+**How I will check it:** I read the file on the branch and confirm it holds exactly that one line, and I confirm WI-031 holds the new line. The merge into `main` needs your yes when the result is ready.
+
+**What I am unsure of:** the file has no effect until an Xcode project uses it, and no Xcode project exists yet. I cannot check that a build refuses an older phone until WI-031 creates the project.
+
+**Project phase:** P01, First beta.
+
+This is small, so I will skip the interview and ask you one question at the end.
+
+Records I changed:
+- WI-034 created, waiting on you for this question (Q-01).
+- `PROJECT-ROADMAP.md`: WI-034 listed under P01.
+- `DECISIONS.md`: WI-034 added to the Affects line of DEC-001.
+- Updated the project's Current State: added WI-034 under "Now" and under "Next session starts with".
+
+Sources:
+- `DECISIONS.md`, DEC-001: the app supports iOS 17 and newer.
+- `system/constraints.md`, CON-01: the app runs on iOS 17 and newer, and on no older version.
+- `PROJECT.md`: the two lines that say `app/` does not exist yet.
+- `PROJECT-ROADMAP.md`: P01 is the only project phase.
+
+Is that right?

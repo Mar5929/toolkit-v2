@@ -1,0 +1,24 @@
+WI-034 is no longer a small work item, so it has left the short path. It now needs an interview and a design before anything is built, and nothing is written yet.
+
+**What I found**
+
+- **Bundling alone does not meet your need.** Text that is only bundled in the app changes only when you ship a new build. To change it without a new build, the app has to fetch it from somewhere, such as Tomas's server. A bundled copy can still serve as the text for a first open with no connection. You choose between the options in the design step.
+- **"Edit a purchase" is not decided yet.** In WI-031, the question whether a user can change or delete a saved transaction is still open (Q-05). The text cannot describe that flow until you answer it.
+- **Nadia's confirmation.** I took the three flows as confirmed by Nadia, because you gave them after the call with her. Your message does not say so in words.
+
+**Saved**
+
+- WI-034: recorded your change of plan as Q-02, added R-02 (the text is shown inside the app) and R-03 (the text can change without a new build), both not approved yet.
+- WI-034: ticked P1-T01 with the three flows, and noted the two storage options under Notes.
+- WI-031: added a note that you named "edit a purchase" as a beta flow, and that this does not answer its Q-05.
+
+**Sources**
+
+- WI-031, Q-05 and R-03: editing and deleting a saved transaction is not decided.
+- WI-032, R-01: the app must work with no internet connection.
+- `PROJECT.md`, "People and ownership": Tomas decides how the server is built.
+
+Q-03: So the goal is: a beta tester sees which three flows to try, both in TestFlight and inside the app the first time the tester opens a new build, and you can change that text without shipping a new build?
+Recommended: yes, because it joins the text you already approved with the two things you added today.
+Watch out: this makes the work an app feature and probably a server change, so it no longer fits in one sitting, and the in-app part may not be ready by 2026-11-20.
+Not yet covered: whether the in-app text is for beta builds only, and whether the TestFlight text and the in-app text are the same text.

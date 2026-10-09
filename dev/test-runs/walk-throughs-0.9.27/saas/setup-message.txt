@@ -1,0 +1,3 @@
+set up this project
+
+Answers to your interview questions: the project is named Tidepool, the owner is Mike Rihm, work items are local with the prefix WI, memory is local, the project is not a Salesforce project, and it keeps no SOUL.md. For anything else, use these facts: Tidepool is a small help desk web application sold as a subscription; Mike Rihm is the owner and only developer; it has a staging environment and a production environment. Ask me nothing more: where a fact is not given here, write that it is not known yet.

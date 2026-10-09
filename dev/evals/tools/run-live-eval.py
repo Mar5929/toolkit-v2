@@ -60,14 +60,22 @@ def send(run, message, session, out):
     env = dict(os.environ, CLAUDE_CONFIG_DIR=TEST_HOME)
     with open(out, 'w') as f, open(out + '.err', 'w') as e:
         subprocess.run(cmd, cwd=run, env=env, stdin=subprocess.DEVNULL, stdout=f, stderr=e)
-    result = None
+    # The reply is every block of text that the agent wrote to the owner in the turn, in order.
+    # The stream's own "result" field holds only the last block.
+    result, blocks = None, []
     for line in open(out):
         try:
             row = json.loads(line)
         except ValueError:
             continue
+        if row.get('type') == 'assistant' and not row.get('parent_tool_use_id'):
+            for part in row.get('message', {}).get('content', []):
+                if part.get('type') == 'text' and part.get('text', '').strip():
+                    blocks.append(part['text'].strip())
         if row.get('type') == 'result':
             result = row
+    if result and blocks:
+        result['result'] = '\n\n'.join(blocks)
     return result
 
 

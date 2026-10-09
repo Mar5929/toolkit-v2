@@ -1,0 +1,1 @@
+Write me a two-line text for the TestFlight "What to test" box of the second build. The entry screen is faster, and the day's list now shows a total at the bottom.

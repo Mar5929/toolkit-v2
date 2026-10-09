@@ -1,0 +1,1 @@
+Change of plan on the monthly totals. The phone works them out itself now. The server just stores transactions and doesn't compute anything, Tomas already took that code out.

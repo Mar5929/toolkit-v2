@@ -1,0 +1,10 @@
+$ git log --all --oneline --decorate 6a077df46f1a4104f88b3a77ef27c40c9254b9ce..
+fe33b41 (HEAD -> main) Record DEC-003 and ARC-01: the phone works out the monthly totals; correct PROJECT.md
+
+$ git branch --all -vv
+* main fe33b41 Record DEC-003 and ARC-01: the phone works out the monthly totals; correct PROJECT.md
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/keeping-project-records-24-a1 fe33b41 [main]
+
+$ git status --short

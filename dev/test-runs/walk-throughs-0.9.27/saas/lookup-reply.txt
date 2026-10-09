@@ -1,0 +1,55 @@
+**Organization accounts (WI-001) is at the start of requirements work.** Two rules are approved, three questions wait on you, and billing is the only part in Production. No work item has approved requirements, a design, or an approved result yet.
+
+## Approved
+
+- **Goal of WI-001:** you confirmed it on 2026-10-09 (WI-001, Q-01).
+- **CON-01:** Tidepool bills the organization, never an individual user, and each organization has one subscription (DEC-001).
+- **SEC-01:** an organization admin can change the organization's plan, and a member cannot (DEC-002).
+
+## Still open
+
+- **WI-001, organization accounts:** Refining Requirements. It waits on you for Q-05, which project phase it goes under. The requirements interview starts after that.
+- **WI-002, authentication:** Refining Requirements, not started. It waits for the interview.
+- **WI-003, billing:** Refining Requirements. It waits on you for Q-02: what version 0.9.0 holds and what the 14 staging checks cover. The work item records no approved requirements, design, or build for what was released.
+- **WI-004, support:** Refining Requirements. It waits on you for DEC-003: whether a ticket belongs to the user who opened it or to the organization. You said you would talk to the support lead first (task T01).
+
+## In Production today
+
+Billing only, as version 0.9.0, deployed on the morning of 2026-10-09. Authentication and support are not released.
+
+This comes from your report in a session. I did not run or see the deployment. The record does not show:
+
+- the commit that was deployed, or who ran it;
+- any checks after the deployment;
+- how staging build 0.8.2, which passed 14 of 14 checks, relates to version 0.9.0;
+- how Production tells an admin from a member, given that authentication, which provides those roles, is not released.
+
+CON-01 and SEC-01 are marked Approved, not Built, so the records do not confirm that Production enforces them.
+
+## Files
+
+Paths are from the project folder.
+
+- `work-items/WI-001-organization-accounts/WI-001.md`
+- `work-items/WI-001-organization-accounts/WI-002-organization-accounts-authentication/WI-002.md`
+- `work-items/WI-001-organization-accounts/WI-003-organization-accounts-billing/WI-003.md`
+- `work-items/WI-001-organization-accounts/WI-004-organization-accounts-support/WI-004.md`
+- `DECISIONS.md`
+- `system/constraints.md`
+- `system/security-model.md`
+- `delivery/deployments/WI-003-billing-production/DEPLOYMENT-RECORD.md`
+- `PROJECT-ROADMAP.md`
+
+## Sources
+
+- WI-001: goal, Q-01, Q-05, state, and history.
+- WI-002: state and next action.
+- WI-003: Q-02, the staging and Production reports, and the unchecked note on admin and member roles.
+- WI-004: Q-01, T01, and state.
+- `DECISIONS.md`: DEC-001 and DEC-002 are Decided, and DEC-003 is Open.
+- `system/constraints.md`: CON-01, Approved.
+- `system/security-model.md`: SEC-01, Approved.
+- `delivery/deployments/WI-003-billing-production/DEPLOYMENT-RECORD.md`: what was and was not reported about the deployment.
+- `PROJECT-ROADMAP.md`: the project has no phases yet.
+
+**First question for you (WI-001, Q-05):** which project phase does WI-001 go under? The project has no phases yet. I recommend adding one phase, "P01 — Organization accounts", and putting WI-001 under it, because it is the only planned work the records name. If you plan other work before or after it, tell me, so the phases show that order.

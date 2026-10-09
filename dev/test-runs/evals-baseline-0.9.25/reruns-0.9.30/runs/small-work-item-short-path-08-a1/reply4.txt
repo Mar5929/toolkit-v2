@@ -1,0 +1,27 @@
+Your approval is recorded. WI-034 is not Done yet: it waits on your import of the file into TestFlight, which only you can run.
+
+**What you do:**
+1. In App Store Connect, open Pocket Ledger, then TestFlight, then your external testing group.
+2. Add testers, choose the option to import testers from a CSV file, and pick `delivery/migrations/testflight-testers/testflight-external-testers-2026-10-09.csv`.
+3. Check that the group then lists four testers: Anders Holm, Priya Raman, Dana Whitfield, and Mei Tanaka.
+4. Tell me what happened, including any error the import window shows.
+
+I took step 2 from Apple's help page. I have not seen the screens, so the menu names in step 1 may differ.
+
+After your report I record it and set WI-034 to Done under the yes you just gave, with no new question.
+
+Two things may stop the import:
+- **Apple account:** it needs your approved developer account. PT-03 was still in progress on 2026-10-02, and I have no newer record.
+- **The format:** nobody has confirmed the three columns against Apple. If the import window asks for a different form, tell me and I will remake the file.
+
+Bea's email is still filed as SRC-002. Your "Yes" answered the closing question only, so I left it. Say "remove it" if you want the copy taken out.
+
+What I saved:
+- WI-034: your approval of the result (Q-02), and the move to Deploying, waiting on your import.
+
+Sources:
+- `managing-work-items`, "Closing a small work item" and "A deployment": a data load still to come moves the work item to Deploying, and the owner runs a production load himself.
+- `work-items/PROJECT-TASKS.md`, PT-03: In Progress as of 2026-10-02.
+- https://developer.apple.com/help/app-store-connect/test-a-beta-version/invite-external-testers: testers can be imported from a CSV file.
+
+Tell me the result of the import.

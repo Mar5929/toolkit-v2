@@ -1,0 +1,25 @@
+The customer ID decision is recorded: DEC-002 is now Decided, with Helen as the person who decided and your agreement noted.
+
+- Recorded in `sources/`: SRC-003, Helen's email, unchanged.
+- Recorded in `DECISIONS.md`: DEC-002 is Decided on 2026-10-09. The merged org uses Northwind's ERP customer number, and Baltic's legacy account ID stays in a read-only field for two years after cutover and is then dropped.
+- Recorded in `system/data-model.md`: two approved rules, DAT-01 (the customer ID) and DAT-02 (the legacy ID field and its two-year life).
+- Updated the project's Current State: the "Waiting on" line for Helen now names only DEC-001, the ownership model.
+
+Two things are not recorded as facts:
+
+- **Helen's reason:** her email gives none, so DEC-002 says so.
+- **The date the legacy field is dropped:** it is two years after cutover, and the cutover date is not set. With go-live by the end of June 2027, that is about mid-2029. Nothing tracks this yet.
+
+The decision leaves one gap. Every Baltic Account now needs a Northwind ERP customer number, and nothing recorded says whether Baltic's customers exist in Northwind's ERP or who assigns those numbers. The Account migration and the ERP integration both depend on the answer.
+
+Still waiting from earlier:
+- Your yes to commit `reference/current-system/account-ownership.md`.
+- Whether to make a Discovery work item for the Account ownership analysis.
+
+Sources:
+- SRC-003: Helen's decision.
+- `DECISIONS.md`, DEC-002 and DEC-001: the question and what is still open.
+- `PROJECT.md`, "People and ownership": Helen decides the customer ID.
+- `system/data-model.md`, DAT-01 and DAT-02: the two new rules.
+
+Should I record the gap as an open question in `DECISIONS.md`: "How does each Baltic Freight Account get a Northwind ERP customer number?" I recommend yes, because two pieces of work need the answer before they can be planned.

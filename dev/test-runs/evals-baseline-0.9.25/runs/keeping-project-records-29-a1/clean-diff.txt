@@ -1,0 +1,140 @@
+--- DECISIONS.md	2026-10-09 10:05:01
++++ DECISIONS.md	2026-10-09 10:32:27
+@@ -46,11 +46,11 @@
+ 
+ ## DEC-002: Testers outside the United States
+ 
+-- Status: Open
++- Status: Decided
+ - Raised: 2026-09-29, Bea Hollis
+-- Decided: not yet
+-- Decision: Do people who live outside the United States join the first beta?
+-- Why: A tester in another country needs another currency, and the first version may support US dollars only.
++- Decided: 2026-10-09, Mike
++- Decision: No. Nobody who lives outside the United States joins the first beta.
++- Why: A tester in another country needs another currency. Mike, in chat on 2026-10-09: "I don't want to deal with other currencies yet."
+ - Affects: WI-031
+ - Replaces or replaced by: none
+ - Sources: SRC-001
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:32:55
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -16,9 +16,7 @@
+ 
+ ## Waiting on
+ 
+-- Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- memory/project_beta_group.md	2026-10-09 10:05:01
++++ memory/project_beta_group.md	2026-10-09 10:32:55
+@@ -2,7 +2,7 @@
+ name: project_beta_group
+ description: The beta group has 12 testers, and all of them live in the United States, as of 2026-09-29
+ created: 2026-09-29
+-updated: 2026-09-29
++updated: 2026-10-09
+ check_by: none
+ metadata:
+   type: project
+@@ -22,7 +22,7 @@
+ 
+ **Why:** The number of testers is the number of TestFlight invitations that Mike sends. Where the testers live decides which currencies the first beta needs.
+ 
+-**How to apply:** Use this number when Mike asks how big the beta is or how many invitations to send. Whether a person outside the United States may join is an open decision, DEC-002.
++**How to apply:** Use this number when Mike asks how big the beta is or how many invitations to send. Nobody who lives outside the United States joins the first beta (DEC-002, decided by Mike on 2026-10-09).
+ 
+ **Evidence and limits:** SRC-001, Bea's email of 2026-09-29. Nobody has compared the number with the tester sheet since then.
+ 
+--- work-items/PROJECT-TASKS.md	2026-10-09 10:05:01
++++ work-items/PROJECT-TASKS.md	2026-10-09 10:32:55
+@@ -26,3 +26,9 @@
+   **Done when:** Every tester on the beta tester sheet can install the build.  
+   **Who does it:** owner  
+   **Depends on:** PT-03, and WI-031 Done.
++- [ ] **PT-05 — Tell Bea that nobody outside the United States joins the first beta** · Not Started  
++  **Work:** Mike gives Bea Hollis the answer to the question in her email (SRC-001): nobody outside the United States joins the first beta (DEC-002), so her cousin in Toronto waits.  
++  **Deliverable:** The answer, in a message from Mike to Bea.  
++  **Done when:** Bea has the answer. On 2026-10-09 no record shows whether Mike has told her yet.  
++  **Who does it:** owner  
++  **Depends on:** None.
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:32:55
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -22,15 +22,15 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** The goal, the entry speed, and the required fields are settled (Q-01, Q-03, Q-04). Editing and currencies are still open.
++**Where it stands:** The goal, the entry speed, the required fields, and the currency are settled (Q-01, Q-03, Q-04, Q-06). Editing is still open.
+ 
+ **Next action:** Waiting on the owner: Q-05 (editing or deleting a saved transaction). After his answer: finish R-03.
+ 
+-**Waiting on:** The owner: Q-05, Q-06.
++**Waiting on:** The owner: Q-05.
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002.
+ 
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Q-06 answered. DEC-002 decided: nobody outside the United States joins the first beta | R-01 complete: US dollars only. Still waiting on Mike for Q-05. |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+@@ -77,19 +78,20 @@
+ 
+ ### Requirement 1: Required fields
+ 
+-- **Original verbatim requirement:** "Amount, date, category. Notes are optional." (Mike, 2026-09-30, Q-04)
++- **Original verbatim requirement:** "Amount, date, category. Notes are optional." (Mike, 2026-09-30, Q-04) "I don't want to deal with other currencies yet." (Mike, 2026-10-09, Q-06)
+ - **Goal:** Every saved transaction holds what the reports group by.
+ 
+ **Functional Requirements**
+ 
+ 1. The app saves a transaction only when it has an amount, a date, and a category.
+ 2. Notes are optional.
+-3. Which currencies a user may enter is not decided yet (Q-06).
++3. Every amount is in US dollars. The first version supports no other currency (Q-06).
+ 
+ **Acceptance Criteria:**
+ 
+ 1. When the amount, the date, or the category is missing, the app blocks the save and shows a message that names the missing field.
+ 2. A transaction with empty notes saves.
++3. The entry screen shows the amount in US dollars and gives no way to choose another currency.
+ 
+ ### Requirement 2: Fast entry
+ 
+@@ -123,7 +125,7 @@
+ | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
+ |---|---|---|---|---|---|---|---|
+ | Q-05 | Can a user change or delete a transaction after saving it? Recommended: yes to both, because people mistype amounts. |  |  |  | R-03 | Open | owner |
+-| Q-06 | Which currencies must the first version support? Recommended: US dollars only, because the beta testers are in the United States and other currencies need exchange rates. |  |  |  | R-01 | Open | owner |
++| Q-06 | Which currencies must the first version support? Recommended: US dollars only, because the beta testers are in the United States and other currencies need exchange rates. | "Nobody outside the US in the first beta, I don't want to deal with other currencies yet." | 2026-10-09 | yes | R-01 | Answered | owner |
+ | Q-04 | Which fields must every transaction have? Recommended: amount, date, category, because reports group by all three. | "Amount, date, category. Notes are optional." | 2026-09-30 | yes | R-01 | Answered | owner |
+ | Q-03 | How fast should logging a transaction feel? Recommended: under 10 seconds from opening the app, because slow entry means people stop logging. | "Under 10 seconds. That is the whole point." | 2026-09-29 | yes | R-02 | Answered | owner |
+ | Q-02 | Does the first version need an Android app? Recommended: no, iPhone only, because it halves the work of the first release. | "iPhone only for now." | 2026-09-28 | yes | R-01, R-02 | Answered | owner |

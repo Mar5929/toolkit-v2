@@ -1,0 +1,10 @@
+$ git log --all --oneline --decorate 6a077df46f1a4104f88b3a77ef27c40c9254b9ce..
+fdc612d (HEAD -> main) DEC-001: add WI-034 to Affects
+
+$ git branch --all -vv
+* main fdc612d DEC-001: add WI-034 to Affects
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/small-work-item-short-path-07-a1 fdc612d [main]
+
+$ git status --short

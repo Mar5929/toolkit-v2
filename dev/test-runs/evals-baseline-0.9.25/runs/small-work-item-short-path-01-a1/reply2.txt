@@ -1,0 +1,33 @@
+No separate checker ran, because this is a small work item; I checked the result myself.
+
+The welcome email now tells a new tester to send feedback to Bea. Here is the full new text for your drafts:
+
+```text
+Subject: Welcome to the Pocket Ledger beta
+
+Hi,
+
+Thanks for joining the beta. You'll get an invite from TestFlight when the first build is ready. Install it and log every purchase for a week.
+
+Send your feedback to Bea, not to me.
+
+Mike
+```
+
+**Evidence:** R-01 is met. A comparison of the old and new text shows the added line "Send your feedback to Bea, not to me." and the empty line that separates it from your sign-off. Every other word is as you gave it. The humanizer rules found nothing to change in the new line.
+
+**Gaps:**
+- The line names Bea by her first name and gives no email address, because you gave none. A tester who does not know how to reach Bea would still have to ask.
+- Nothing was sent, merged, or deployed. The email is only in this reply and in WI-034 until you paste it into your drafts.
+
+Nothing from this work item needs to be kept for the whole project.
+
+Saved:
+- WI-034: your approval of the requirements (Q-01), the text before and after the change, my check, and the closing question (Q-02).
+- `PROJECT-ROADMAP.md`: WI-034 is listed under project phase P01, committed to main on this computer.
+
+Sources:
+- WI-034, R-01 and Q-01: the requirement, and your approval of the playback.
+- `PROJECT.md`, "People and ownership": Bea Hollis collects the testers' feedback.
+
+Approve this result and mark WI-034 Done?

@@ -1,0 +1,32 @@
+The Apple account no longer blocks anything, so the next thing to look at is WI-031 (transaction entry). The first beta build on 2026-11-20 (PT-04) now depends only on WI-031 being Done, and WI-031 waits on two answers from you.
+
+**Work items**
+- **WI-031, transaction entry:** Refining Requirements, waiting on you. Required fields and the 10-second entry speed are settled. Two questions are open:
+  - Q-05: can a user change or delete a saved transaction?
+  - Q-06: which currencies must the first version support?
+- **WI-032, offline sync (part of WI-031):** Refining Requirements, my turn. All four requirements are written. I check that they are complete, then ask you to approve them.
+- **WI-033, pick a charting library:** Testing Loop, waiting on you. The comparison recommends Swift Charts and a separate checker passed both requirements. Q-04 asks you to approve the result.
+
+**Open decision**
+- **DEC-002, testers outside the United States:** open since 2026-09-29, and today is its check-again date. It affects Q-06, because a tester in another country needs another currency.
+
+**Project tasks**
+- **PT-01, staging server sign-in steps:** Tomas owes it, asked 2026-09-30. Its check-again date, 2026-10-07, has passed with no answer recorded.
+- **PT-04, send the first beta build:** yours, on 2026-11-20. Not started.
+
+**Dates**
+- 2026-10-23: design review of the entry screen with Nadia. It has not passed.
+- 2026-11-20: first beta build goes to the testers.
+
+**Saved**
+- Recorded in the project tasks: PT-03 (enroll in the Apple Developer Program) is Done, 2026-10-09, from your message.
+- Recorded in `PROJECT.md`: the TestFlight row now says Apple approved your developer account on 2026-10-09. It is committed to main on this computer; the repository has no remote.
+- Updated the project's Current State: removed the Apple enrollment line, and removed the PT-02 line because Bea finished the phone models on 2026-10-01.
+
+**Sources**
+- `work-items/PROJECT-TASKS.md`: PT-01, PT-02, PT-03, PT-04 and what PT-04 depends on.
+- WI-031, WI-032, WI-033: each one's Current state and open questions.
+- `DECISIONS.md`: DEC-002.
+- The project's Current State: the two dates and the check-again dates.
+
+Q-05 for WI-031: can a user change or delete a transaction after saving it? I recommend yes to both, because people mistype amounts. Allowing it adds an edit screen and a delete action to build. Refusing it saves that work and leaves a user with no way to fix a wrong entry.

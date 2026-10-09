@@ -1,0 +1,14 @@
+Bea sent me the four testers who can start this week. Make me the CSV that TestFlight takes for adding external testers: first name, last name, email, one row each, no header row. I'll upload it to TestFlight myself.
+
+From: Bea Hollis
+To: Mike Rihm
+Subject: This week's four
+
+Mike, these four can start this week:
+
+Anders Holm, anders.holm@example.com
+Priya Raman, priya.raman@example.com
+Dana Whitfield, dana.w@example.com
+Mei Tanaka, mei.tanaka@example.com
+
+Bea

@@ -1,0 +1,21 @@
+The goal is agreed, and your billing decision is recorded as DEC-001 (Decided) with the system rule CON-01 (Approved). Both are committed to `main` on this computer.
+
+What I saved:
+
+- **WI-001:** the goal is written in the Overview. Your two answers are saved as Q-01 and Q-04, and the billing requirement (R-02) now points to CON-01.
+- **`DECISIONS.md`:** DEC-001, "The organization is the billing entity", with your words as the reason.
+- **`system/constraints.md`:** CON-01, "Tidepool bills the organization, and never an individual user. Each organization has one subscription."
+- **WI-002, WI-003, WI-004:** each now names DEC-001 and CON-01 as records it must follow. WI-003 (billing) also points its requirement to CON-01.
+
+One case the decision does not cover yet: what happens to a subscription that a single user holds today. I will ask that in the billing interview.
+
+Sources:
+- DEC-001 and CON-01 (`system/constraints.md`): your billing decision, as filed in this turn.
+- WI-001, Q-01 and Q-04: your two answers.
+- `PROJECT-ROADMAP.md`: the project has no phases yet.
+
+WI-001 has left the Backlog, so it needs a project phase, and the project has none yet.
+
+Q-05: Which project phase does WI-001 go under?
+Recommended: add one project phase, "P01 — Organization accounts", and put WI-001 under it, because organization accounts is the only planned work that the project's records name.
+Watch out: if you plan other work before or after organization accounts, the phases should show that order, so tell me that work now.

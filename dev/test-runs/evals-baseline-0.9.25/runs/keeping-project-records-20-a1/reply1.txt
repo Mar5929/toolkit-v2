@@ -1,0 +1,36 @@
+No, the acceptance check for the no-duplicates requirement (WI-032, R-03) is not good enough yet. It reads: "The tester cuts the connection in the middle of a send and restores it. The server holds each transaction once."
+
+It has three gaps:
+
+- **It does not say how to count "once".** With your ID rule, the check can now be exact: one server record for each transaction ID, and no ID missing.
+- **A connection cut by hand rarely hits the moment that makes a duplicate.** A duplicate happens only when the server has saved the send but its confirmation never reaches the phone, so the phone sends again. One cut at a random moment will usually pass even when the fault is there.
+- **It checks only the server.** Your original problem was "two coffees in the list", which is the day's list on the phone.
+
+**Q-05:** Shall I replace the Acceptance Criteria of R-03 with these three checks?
+
+1. The tester logs 5 transactions offline, then makes the server save a send while its confirmation does not reach the phone, so the phone sends again. The tester does this 3 times.
+2. Afterwards the server holds exactly one record for each of the 5 transaction IDs (DAT-01), and none is missing.
+3. The day's list on the phone shows each of the 5 once.
+
+Recommended: yes, because these checks test the one case that produced your two coffees, and anyone can count the result.
+
+Watch out: check 1 needs a way to block the confirmation on the staging server. You have no staging sign-in yet (PT-01), and Tomas will probably have to provide that way.
+
+Not yet covered: no-duplicates now depends on an ID never being used twice. Nothing says yet what happens when the app is reinstalled and the counter starts again, or when the counter passes 999999. A repeated ID would make the server treat a new transaction as one it already holds.
+
+What I saved:
+
+- `DECISIONS.md`: DEC-003, Decided by you today, with the form of a transaction's ID and that the phone makes it.
+- `system/data-model.md`: rule DAT-01, Approved, with the same rule and that all matching uses this ID.
+- WI-032 (offline sync): names DEC-003 and DAT-01, holds Q-05, and now waits on you. R-03 itself is unchanged until you answer.
+- WI-031 (transaction entry): names DEC-003 and DAT-01.
+- The project's Current State: the next session starts with WI-032 as well as WI-031.
+
+The command that checks the form of the records did not run (it stopped with a read error), so I checked the two entries against the required form by reading them.
+
+Sources:
+
+- WI-032, R-03 and Q-01: the present acceptance check and your "two coffees" words.
+- `PROJECT.md` and the project's Current State: you have no staging sign-in yet (PT-01), and Tomas runs the server.
+
+Shall I replace the Acceptance Criteria of R-03 with these three checks?

@@ -995,10 +995,18 @@ node --test 'dev/tests/*.test.mjs'
     work item covers it, the agent asks in one short line whether to make a
     work item, says which it recommends, and waits. It does not ask when the
     owner has already said, when the turn only answers a question, when
-    the whole result of the work is text in the agent's reply, or when the
-    guide's own tables send the request somewhere other than a work item,
-    such as a to-do, a source to file, or "get the latest".
-  - Mike has not yet confirmed the third of those four cases, the result that is
+    the whole result of the work is text in the agent's reply, when the
+    request is only to save or correct a fact or a project task in the
+    project's records, or when one skill of the "Which skill" table other
+    than `managing-work-items` does the whole request, such as "get the
+    latest". From version 0.9.25 to 0.9.27 the fourth case read: the guide's
+    tables send the request somewhere other than a work item. In the
+    baseline run of 2026-10-09 the agent then made a file of records for
+    the owner with no question, in two runs of two, because "Where
+    information goes" names a folder for such a file. That table names a
+    place for the result of almost every job, so the case no longer points
+    to it.
+  - Mike has not yet confirmed the third of those five cases, the result that is
     only text in the reply, such as a short draft. It was put to him on
     2026-10-09 through the Main Orchestrator session, which said to build it
     until he answers. Without it, the agent asks the question before every

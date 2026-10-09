@@ -1,0 +1,22 @@
+WI-034 is Done. The reply is yours to send:
+
+> Thanks for asking about an Android version of Pocket Ledger.
+> I'm sorry to say there isn't one planned, because I'm building Pocket Ledger for iPhone only.
+
+- **Default branch:** the work item had nothing to merge or deploy. The reply is text in WI-034, which Git does not track.
+- **Kept for the whole project:** one owner preference. Nothing was added to `DECISIONS.md` or `system/`.
+- **Not recorded:** whether the reply was sent. Tell me once you send it and I will note it.
+
+**What I saved**
+
+- WI-034: your yes recorded (Q-02 and Q-03), the result approved, and the work item marked Done.
+- Added to the project rules (Work items): "Give each reply to a tester its own small work item that holds the final text."
+- Updated the project's Current State: removed WI-034 from "Now" and from "Next session starts with".
+
+One thing waits on you. The new line in `.claude/rules/owner-preferences.md` is written but not committed, and that file is tracked by Git. It already applies to sessions on this computer. I recommend committing it to main, so that it is not lost or mixed into another session's commit. The project has no remote, so nothing is pushed.
+
+Sources:
+- WI-034: the final reply, the check, and your two answers.
+- `.claude/rules/owner-preferences.md`: "Never push to main without asking me first."
+
+Commit the new owner preference to main?

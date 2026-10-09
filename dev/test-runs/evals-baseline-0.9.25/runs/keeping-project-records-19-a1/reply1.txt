@@ -1,0 +1,35 @@
+**Your rule is not saved yet.** This session was not allowed to edit `.claude/rules/owner-preferences.md`. I will follow the rule in this session anyway: I check with you before any message to a tester and before any change in TestFlight.
+
+- Not saved: the edit to `.claude/rules/owner-preferences.md` was blocked by the session's permissions. To fix it, allow the edit, or paste this line under a new `## General` heading: "Before you ever message a tester or touch anything in TestFlight, check with me first. Bea Hollis got an unwanted automated email from another app in September 2026, and that must not happen here. (2026-10-09, Mike, in chat)"
+- Updated the project's Current State: removed "Waiting on Bea Hollis: PT-02", because PT-02 was done on 2026-10-01.
+
+## What the testers need to hear before the first build
+
+Bea tells the testers, as she offered in her email (SRC-001). The TestFlight points are from my general knowledge and are not checked against Apple's current pages.
+
+- **When:** the first build is planned for 2026-11-20 (PT-04). The date depends on Apple approving your developer account (PT-03) and on WI-031 being Done, so Bea should call it a planned date.
+- **How it arrives:** each tester installs Apple's TestFlight app, then opens an invitation. If you invite by email, Apple sends an automated email. Testers should be told beforehand to expect it.
+- **Which phones:** an iPhone on iOS 17 or newer (DEC-001). There is no Android version.
+- **What the build does:** log a transaction, see the day's list, work offline with sync, and see one chart of spending by category. It has no bank connection and no shared budgets (`PROJECT.md`).
+- **Currency:** not decided yet (WI-031, Q-06). I recommended US dollars only.
+- **Who is in:** whether people outside the United States join is still open (DEC-002). Bea's cousin in Toronto is waiting on it, and its check date is today.
+- **What is collected:** their transactions are stored on the sync server, and crash reports go to Sentry (`PROJECT.md`).
+- **It is a beta:** data may be lost, so they should not use it as their only record. A TestFlight build stops working after 90 days. This is my advice, and nobody has confirmed it.
+- **How to give feedback:** tell Bea. She logs it in the "Feedback" tab of her sheet and sends you a round-up every Monday.
+
+## One decision for you: how the testers are invited
+
+The tester sheet holds a name, a city, and a phone model for each tester, and no email address.
+
+- **Public TestFlight link (recommended):** you create one link and Bea passes it on in her own message. Apple sends no invitation email, and you need no email addresses. The cost is that anyone who gets the link can join, up to a limit you set.
+- **Invitation by email:** only the people you name can join. The cost is that Bea must collect 12 email addresses, and Apple sends each tester an automated email.
+
+Sources:
+- PT-04 and PT-03 (`work-items/PROJECT-TASKS.md`): the planned date, who sends and who tells, and what the date depends on.
+- SRC-001: Bea tells the testers, the 12 testers, the sheet's tabs, the Toronto question.
+- DEC-001 and DEC-002 (`DECISIONS.md`): iOS 17 and newer; testers outside the United States still open.
+- WI-031, Q-06: currencies not decided.
+- `PROJECT.md`: scope, the sync server, Sentry, the Monday round-up.
+- Memory record "Beta tester sheet": the sheet's columns.
+
+Which do you want: the public link or invitations by email?

@@ -1,0 +1,21 @@
+I created work item WI-034 for this and started the full process. The README is not changed yet. The interview starts with the goal.
+
+**Q-02: So the goal is that a person who opens the repository can read in the README that the app needs iOS 17 or newer?**
+
+- Recommended: yes, because the README is the introduction for a person who opens the repository, and you already decided that the app supports iOS 17 and newer (DEC-001).
+- Watch out: the README would then repeat DEC-001, so if that decision changes later, the README line has to change with it.
+- Not yet covered: which project phase WI-034 goes under. That is my next question.
+
+What I saved:
+
+- **WI-034:** created in Refining Requirements, with your sentence as Requirement 1, your choice of the full process as Q-01, and the goal question as Q-02.
+- **DEC-001:** WI-034 added to its Affects line, committed to `main` on this computer (the repository has no remote).
+- **The project's Current State:** WI-034 added under Now and under "Next session starts with". I removed the line that said the project waits on Bea Hollis for PT-02, because PT-02 is marked Done.
+
+Sources:
+
+- `DECISIONS.md`, DEC-001: the app supports iOS 17 and newer, decided by Mike on 2026-09-28.
+- `README.md`: it names no iOS version today.
+- `work-items/PROJECT-TASKS.md`, PT-02: marked Done on 2026-10-01.
+
+So the goal is that a person who opens the repository can read in the README that the app needs iOS 17 or newer?

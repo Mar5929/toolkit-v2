@@ -1,0 +1,25 @@
+I created WI-034 for this change. I have not written the new line yet, because the work item's steps have me confirm the request with you first.
+
+**Goal:** a new beta tester who reads the welcome email knows to send feedback to Bea Hollis, and not to you.
+
+**What I will hand over:** the full email with one line added and every other word unchanged, here in the reply. WI-034 will keep the text before and after the change, which is your record.
+
+**How I will check it:** I will compare the old and new text to confirm that the only difference is the one added line, and I will run the new text through the humanizer so that it reads in your voice.
+
+**What I am unsure of:** the project holds no email address for Bea. I plan to write the line with her name only, on the assumption that the testers already know how to reach her because she signed them up (SRC-001). If you want her address in the line, give it to me with your answer.
+
+**Project phase:** P01 — First beta.
+
+This is small, so I will skip the interview and ask you one question at the end.
+
+Saved:
+- Created WI-034, "Beta welcome email, send feedback to Bea", waiting on you for Q-01.
+- Updated the project's Current State: added WI-034, and removed the line that waited on Bea for PT-02, because PT-02 was done on 2026-10-01.
+
+Sources:
+- `PROJECT.md`, "People and ownership": Bea Hollis is the beta coordinator and collects the testers' feedback.
+- SRC-001 (Bea's email of 2026-09-29): Bea signed up the testers and records their feedback in her sheet.
+- `PROJECT-ROADMAP.md`: P01 — First beta is the project's only phase.
+- `work-items/PROJECT-TASKS.md`, PT-02: done on 2026-10-01.
+
+Is that right?

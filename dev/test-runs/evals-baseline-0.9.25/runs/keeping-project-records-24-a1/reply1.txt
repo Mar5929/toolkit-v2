@@ -1,0 +1,22 @@
+The change is recorded: the phone works out the monthly totals, and the server only stores transactions.
+
+What I saved:
+
+- **`DECISIONS.md`:** new entry DEC-003, Decided by you today, with that decision.
+- **`system/architecture.md`:** new rule ARC-01, marked Approved, which says the same as a rule of the system.
+- **`PROJECT.md`:** the production server's row no longer says it computes the monthly totals, and the iPhone app's row now says the app works them out.
+- **WI-032 (offline sync):** DEC-003 and ARC-01 are on its Related items line, with a history row. No requirement changed.
+
+Two things in DEC-003 are not confirmed:
+
+- **The reason:** you gave none, so the entry says so.
+- **Tomas's removal of the code:** it is recorded as what you told me today. Nobody has checked it in his repository `pocket-ledger-server`.
+
+One effect on WI-032 (offline sync): its requirements only cover sending transactions from the phone to the server. A second phone can only work out the right totals if it also receives the transactions logged on the first phone. I noted this in the WI-032 history for its design.
+
+Sources:
+- `PROJECT.md`, "Systems and environments": the old line that said the server computes the monthly totals.
+- WI-032: its four requirements, which cover sending to the server only.
+- `DECISIONS.md`: no earlier entry covered the monthly totals, so DEC-003 replaces nothing.
+
+Why did you move the totals to the phone? I will add your reason to DEC-003.

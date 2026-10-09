@@ -1,0 +1,20 @@
+Here is the note, written in your voice:
+
+> Hi everyone, the first Pocket Ledger beta build goes out on November 20th.
+> I'll send your TestFlight invitation that day, and Bea will let you know when it's ready to install.
+
+November 20th still depends on two things that are not finished: Apple approving your developer account (PT-03) and the transaction logging work item (WI-031) reaching Done. If you would rather not promise a firm date yet, change "goes out on" to "is planned for".
+
+Records I changed:
+
+- Updated in memory: Beta group (`memory/project_beta_group.md`). It said: "The beta group has 12 testers. All 12 live in the United States. This was true on 2026-09-29." It now says 15 testers, with three added by Bea from her running club, and it marks where those three live and their phone models as not checked. Say "undo that" to put it back.
+- Updated the project's Current State: removed the "Waiting on" line for Bea and the testers' phone models, because PT-02 was done on 2026-10-01.
+
+Two "check again" dates in the project's Current State have arrived: Tomas's sign-in steps for the staging server (PT-01, 2026-10-07) and your answer on testers outside the United States (DEC-002, today).
+
+Sources:
+- `work-items/PROJECT-TASKS.md`, PT-04: you upload the build on 2026-11-20, Bea tells the testers, and the task depends on PT-03 and WI-031. PT-02: done on 2026-10-01.
+- `memory/project_beta_group.md` and SRC-001: the earlier count of 12, all in the United States, and that you send the TestFlight invitations.
+- `DECISIONS.md`, DEC-002: whether people outside the United States join the first beta is still open.
+
+Do the three new testers all live in the United States? If any of them does not, DEC-002 now needs your answer before November 20th, because the first version may support US dollars only.

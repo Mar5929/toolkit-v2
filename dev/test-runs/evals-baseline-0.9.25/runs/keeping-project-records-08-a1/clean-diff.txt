@@ -1,0 +1,66 @@
+--- PROJECT.md	2026-10-09 10:05:01
++++ PROJECT.md	2026-10-09 10:22:35
+@@ -19,7 +19,7 @@
+ | Sync server (production) | Stores each user's transactions and computes the monthly totals | Hosted on Render | Tomas's repository `pocket-ledger-server` | Tomas deploys; Mike can read the logs |
+ | Sync server (staging) | A copy of the sync server for testing sync | Hosted on Render | Tomas's repository `pocket-ledger-server` | Mike has no sign-in yet (PT-01) |
+ | TestFlight | Sends beta builds to the testers | Apple, production | App Store Connect | Mike's Apple developer account, once Apple approves it (PT-03) |
+-| Sentry | Collects crash reports from beta builds | Sentry cloud | The Sentry project `pocket-ledger-ios` | Mike's Sentry account |
++| Firebase Crashlytics | Collects crash reports from beta builds. It replaced Sentry, which Mike removed (Mike, in chat, 2026-10-09) | Firebase, Google's cloud | The Firebase project; Mike has not given its name | Mike's Google account. Mike: "it's on the same Google account as everything else" |
+ 
+ ## People and ownership
+ 
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:22:28
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:22:28
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -30,7 +30,7 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002.
+ 
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike said in chat that he removed Sentry: crash reports now go to Firebase Crashlytics | The Context note under Notes now names Firebase Crashlytics. No requirement changed. |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+@@ -135,7 +136,7 @@
+ 
+ - The starting request, in Mike's words on 2026-09-28: "I want people to be able to log a transaction fast on their phone. Amount, what it was for, done."
+ - Categories for the first version: Groceries, Rent, Transport, Eating out, Other (P1-T01).
+-- Crash reports from beta builds go to Sentry (`PROJECT.md`, "Systems and environments").
++- Crash reports from beta builds go to Firebase Crashlytics (`PROJECT.md`, "Systems and environments"). Mike removed Sentry and said so in chat on 2026-10-09.
+ 
+ ### Sources
+ 

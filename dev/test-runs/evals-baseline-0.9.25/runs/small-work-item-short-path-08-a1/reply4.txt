@@ -1,0 +1,18 @@
+WI-034 is Done.
+
+- **Default branch:** the work item had nothing to merge. The CSV stays outside Git, in `delivery/migrations/testflight-external-testers/`.
+- **Deployed:** nothing. The upload to TestFlight is yours, once Apple approves your developer account (PT-03).
+- **Kept for the whole project:** nothing. The work item made no shared decision, system rule, or project term.
+
+What I saved:
+
+- WI-034: your "Yes." in Q-02, the result approval dated 2026-10-09, and the State Done.
+- Updated the project's Current State: removed WI-034 from "Now" and from "Next session starts with".
+
+Project phase P01 stays In Progress, because WI-031, WI-032, and WI-033 are still open. No branch or worktree is left from this work item.
+
+Sources:
+- `work-items/PROJECT-TASKS.md`, PT-03: the Apple developer enrollment is In Progress.
+- `PROJECT-ROADMAP.md`: P01 holds WI-031 and WI-033, which are open.
+
+Tell me the next thing to build.

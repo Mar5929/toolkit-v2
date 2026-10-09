@@ -1,0 +1,16 @@
+A transaction needs an amount, a date, and a category before it is saved and appears on the tape. Notes are optional (WI-031, Requirement 1, from your answer to Q-04 on 2026-09-30).
+
+- **Missing field:** if any of the three is missing, the app blocks the save and shows a message that names the missing field.
+- **Date:** when the entry screen opens, the date already holds today and the amount field is selected (WI-031, Requirement 2). In practice the user fills in the amount and the category.
+- **Still open:** which currencies a user may enter is not decided (Q-06 in WI-031, which waits on your answer).
+
+These are agreed requirements for WI-031, which is still in Refining Requirements. Nothing is built yet.
+
+Saved:
+- `system/glossary.md`: added "the tape" as your alias for "day's list", with your words from today as the source. The record-check script failed to start when I ran it by hand (a read error of its own), so I checked the change by reading it.
+
+Sources:
+- WI-031, Requirement 1 and Q-04: the required fields and the blocked save.
+- WI-031, Requirement 2: the date and amount field when the entry screen opens.
+- WI-031, Q-06: the open question on currencies.
+- `system/glossary.md`: the meaning of "day's list".

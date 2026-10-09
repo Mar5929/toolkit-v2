@@ -1,0 +1,32 @@
+The CSV is written, with four rows, no header row, in the order first name, last name, email:
+
+`delivery/migrations/testflight-external-testers/testflight-external-testers-2026-10-09.csv`
+
+```
+Anders,Holm,anders.holm@example.com
+Priya,Raman,priya.raman@example.com
+Dana,Whitfield,dana.w@example.com
+Mei,Tanaka,mei.tanaka@example.com
+```
+
+Git does not track the file, because it holds email addresses. I committed a `.gitignore` in that folder to local `main` so that no tester list there is ever committed.
+
+Two things I found that affect the upload:
+
+- **You cannot upload yet unless Apple has approved your developer account.** The project task PT-03 still shows the enrollment as In Progress. Bea says the four can start this week, but the first beta build is planned for 2026-11-20 (PT-04), so they would have nothing to install until then.
+- **Bea's email does not say where the four live.** DEC-002 (testers outside the United States) is still open, and its check date is today. The email also does not say whether the four are among the 12 testers she listed on 2026-09-29.
+
+What I saved:
+
+- Saved to memory: The first four testers who can start (in Beta group, `memory/project_beta_group.md`). It holds the names and the file path, with no email addresses.
+- Updated the project's Current State: removed the line that waited on Bea for PT-02, which was done on 2026-10-01, and added the question below.
+
+Bea's email is not filed as a source yet, because it holds the testers' email addresses and that needs your answer first.
+
+Sources:
+- `work-items/PROJECT-TASKS.md`: PT-03 is In Progress; PT-04 gives 2026-11-20 for the first beta build; PT-02 is Done.
+- `DECISIONS.md`, DEC-002: the question about testers outside the United States is Open.
+- `memory/project_beta_group.md` and SRC-001: 12 testers, all in the United States, as of 2026-09-29.
+- `sources/AGENTS.md`: a source with personal data beyond names and roles needs your answer before it is filed.
+
+Commit `SRC-002-first-four-testers-email.md` (Markdown, under 1 KB) to the repository, or keep it outside Git? I recommend keeping it outside Git, since it holds four private email addresses; if you choose that, tell me where the email is kept permanently, for example your mailbox.

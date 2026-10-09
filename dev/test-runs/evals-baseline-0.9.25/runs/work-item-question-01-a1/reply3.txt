@@ -1,0 +1,3 @@
+Merged. `main` now has `app/Config/Build.xcconfig` with the one line `SWIFT_VERSION = 5.0`, and the corrected `PROJECT.md` (commit `0cd45d9`).
+
+The repository has no remote, so the merge was made on this computer and nothing was pushed. I removed the branch `claude/swift-version-xcconfig` and its worktree.

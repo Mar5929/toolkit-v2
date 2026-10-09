@@ -1,0 +1,28 @@
+Yes. It changes Requirement 2 of offline sync (WI-032), and the other three requirements stay as they are.
+
+- **R-01, works with no signal:** no change. The limit only matters once the phone is back online.
+- **R-02, sends within 1 minute:** this one can no longer always hold. The server takes 60 requests a minute from one phone and drops anything above that (SRC-002). If more changes are waiting than the server accepts in a minute, sync cannot finish in 1 minute. If the app goes over the limit, it must wait a full minute before it sends again, which also breaks the promise. Your subway trip leaves only a few transactions, so the everyday case and the current test with 3 transactions still pass.
+- **R-03, no duplicates:** no change to the wording. A dropped request is one more kind of interrupted send, and R-03 already covers a send that is tried again.
+- **R-04, latest edit wins:** no change.
+
+Tomas's email leaves three things open that decide how often the limit matters: whether one request can carry several transactions, whether the limit counts every request from the phone or only the sends, and whether the staging server has the same limit. I need you to ask Tomas these before you approve the requirements.
+
+Nobody on this project has tested the limit. Everything above rests on what Tomas wrote.
+
+What I saved:
+
+- Recorded in `sources/`: Tomas's email as SRC-002.
+- Recorded in `reference/current-system/sync-server.md`: the limit and the open points. This file is not committed yet; say "commit it" and I will.
+- Recorded in WI-032: the question Q-05 below, the task T01 (you ask Tomas the three things), and the source. WI-032 now waits on you.
+- Updated the project's Current State: removed the line for PT-02 (the testers' phone models), which was done on 2026-10-01, and the next session now starts with WI-032.
+
+Sources:
+
+- SRC-002: Tomas's email, for the limit of 60 requests a minute, the dropped requests, and the one-minute wait.
+- WI-032: the four requirements, and your subway trip of about 20 minutes (Q-01).
+- `work-items/PROJECT-TASKS.md`: PT-02 is done.
+
+Q-05: When more changes are waiting than the server accepts in one minute, may sync take longer than 1 minute, as long as every change arrives and the user does nothing?
+Recommended: yes. Keep "within 1 minute" for up to 50 waiting changes, and above 50 let sync continue at the speed the server allows, because the limit makes 1 minute impossible above 60 and your subway trip leaves far fewer than 50.
+Watch out: after a long time offline, the server and a second phone show an incomplete list for a few minutes.
+Not yet covered: whether one request can carry several transactions. If it can, the 50 can be much higher.

@@ -1,0 +1,9 @@
+The next round-up is due Wednesday, 2026-10-14. Today is Friday, 2026-10-09, so that is five days away.
+
+Saved:
+- `PROJECT.md`, "Operating conventions": Bea sends the round-up every Wednesday, from your correction today. The line notes that it replaces "every Monday" from 2026-09-28.
+
+No other record named Monday, so nothing else needed correcting.
+
+Sources:
+- `PROJECT.md`, "Operating conventions": that Bea sends you a weekly round-up of the testers' feedback.

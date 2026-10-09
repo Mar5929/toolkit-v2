@@ -1,0 +1,222 @@
+--- PROJECT-ROADMAP.md	2026-10-09 10:05:01
++++ PROJECT-ROADMAP.md	2026-10-09 10:08:33
+@@ -27,6 +27,7 @@
+ 
+ - [[WI-031]] Transaction entry
+ - [[WI-033]] Pick a charting library
++- [[WI-034]] Beta welcome email, send feedback to Bea
+ 
+ ## Open project-level planning questions
+ 
+@@ -35,3 +36,4 @@
+ ## Planning changes
+ 
+ - 2026-09-28, Mike at the kickoff: the project starts with one phase, the first beta.
++- 2026-10-09, Mike in chat: "Yes, that's right." to the playback of WI-034, which named P01. WI-034 was added to P01.
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:09:19
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- work-items/WI-034-beta-welcome-email/WI-034.md	1969-12-31 19:00:00
++++ work-items/WI-034-beta-welcome-email/WI-034.md	2026-10-09 10:09:19
+@@ -0,0 +1,164 @@
++---
++id: WI-034
++title: Beta welcome email, send feedback to Bea
++type: task
++state: Done
++status: Done
++parent: none
++waiting_on: "none"
++priority: medium
++delivery: not-offered
++requirements_approved: 2026-10-09 by Mike
++design: none
++result_approved: 2026-10-09 by Mike
++updated: 2026-10-09
++---
++
++# WI-034: Beta welcome email, send feedback to Bea
++
++## Overview
++
++<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step; Moved up stays empty until the item is closed. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
++
++**Goal:** A new beta tester who reads the welcome email knows to send feedback to Bea Hollis, and not to Mike. The work item also keeps a record of what changed in the email.
++
++### Current state
++
++<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a state or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to one or two sentences. -->
++
++**Where it stands:** Done on 2026-10-09: the welcome email has the added line "Send your feedback to Bea, not to me.", R-01 is met by the agent's own check, and Mike approved the result (Q-02). Nothing to merge or deploy.
++
++**Next action:** None. Finished.
++
++**Waiting on:** Nothing.
++
++**Blockers:** None.
++
++**Last updated:** 2026-10-09, the agent.
++
++**Related items:** Project phase P01.
++
++**Moved up:** Nothing: the work item changed one line of an email that Mike keeps in his own drafts. It added no decision, no rule in `system/`, no project term, and no lesson.
++
++## Roadmap
++
++<!-- Only a top-level item (`parent: none`) has a Roadmap, with at least one phase. A sub-item has no phases: delete this whole Roadmap section, and use the sub-item form at the end of Tasks. -->
++
++A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
++
++<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
++
++| Phase | Outcome | Status | Exit result | Sub-items |
++|---|---|---|---|---|
++| P1 — Add the feedback line | The welcome email tells a tester to send feedback to Bea | Done | Mike has the full new text, and the acceptance criteria of R-01 are met | None. |
++
++## Tasks
++
++<!-- A top-level item: under each phase heading, add that phase's tasks only, and delete the sub-item form at the end of this section. A sub-item: delete the phase headings and their tasks, and keep only the sub-item form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
++
++### P1 — Add the feedback line
++
++- [x] **P1-T01 — Write the new line and the full new email** · Done  
++  **Work:** Add one line to the welcome email that tells the tester to send feedback to Bea Hollis, and not to Mike. Run the new text through `humanizer`, in Mike's voice.  
++  **Deliverable:** The full new email text, in the reply to Mike and under Notes, Context, beside the text before the change.  
++  **Done when:** The new text differs from the old text by exactly one added line, and that line meets R-01.  
++  **Who does it:** agent  
++  **Depends on:** None.
++
++## Recent History
++
++<!-- Add one row, newest first, for each of these changes: a state, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
++
++| Date | Change or decision | Effect on the work |
++|---|---|---|
++| 2026-10-09 | Marked Done at the owner's yes (Q-02). | None. Finished. |
++| 2026-10-09 | Moved up line filled: nothing to keep for the whole project. No question was needed. | None. |
++| 2026-10-09 | Nothing to merge or deploy: Deploying skipped. | Went to Marking Done. |
++| 2026-10-09 | Q-02 answered: result approved, and the yes to mark WI-034 Done. | `result_approved` set. |
++| 2026-10-09 | Closing question asked (Q-02) | Waiting on Mike. |
++| 2026-10-09 | Independent check: none, small item. No commit: Git does not track the result. Checked the file `working-files/WI-034-beta-welcome-email/welcome-email-after.txt` (SHA-256 `b1eed580446a1b55cbba41a8fec04d20fa8f98257f6d4ebe57272908e383ed02`) myself. Evidence: `diff welcome-email-before.txt welcome-email-after.txt` printed `6a7,8`, `> Send your feedback to Bea, not to me.`, and one empty line. R-01: met. Gaps: the empty line that separates the new line from the sign-off is a second added line; the `humanizer` rules found nothing to change in the new line. | P1 set to Done. |
++| 2026-10-09 | P1-T01 done. Proof: the new text differs from the old text by the line "Send your feedback to Bea, not to me." and the empty line after it. Both texts are under Notes, Context. | Moved to the Testing Loop. |
++| 2026-10-09 | Small item: short path. | Moved to Building. |
++| 2026-10-09 | Q-01 answered: requirements and project phase P01 approved. `PROJECT-ROADMAP.md` lists WI-034 under P01, commit `ce05bec`. | Mike gave no email address for Bea, so the line names her only. |
++| 2026-10-09 | Created from the owner's request. | The request was played back to Mike (Q-01). |
++
++## Requirements
++
++<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word, never reworded; when they are not the owner's words in this chat, name who said them and where (a source by its SRC-###). In each numbered list, write one line per thing that must be true, exact enough to check. Who or what a requirement applies to, and where it does not apply, are lines of its Functional Requirements. Each Acceptance Criteria line is one thing someone can observe. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
++
++### Requirement 1: One line that sends feedback to Bea
++
++- **Original verbatim requirement:** "Here's the welcome email I send to each new beta tester. Add one line that tells them to send their feedback to Bea, not to me. Just give me the new text back, I keep it in my own drafts, so there's nothing to ship. Make a work item for it though, I want a record of what I changed in that email."
++- **Goal:** A tester who reads the welcome email sends feedback to Bea Hollis, and not to Mike.
++
++**Functional Requirements**
++
++1. The email gains exactly one new line. The line tells the tester to send feedback to Bea, and not to Mike.
++2. Every other line of the email stays word for word as Mike gave it: the subject, the greeting, the paragraph, and the sign-off.
++3. The agent gives Mike the full new text in the reply. Mike keeps the email in his own drafts, so the agent sends nothing and commits nothing.
++4. The work item keeps the text before the change and the text after the change.
++
++**Acceptance Criteria:**
++
++1. The new text holds one line that names Bea as the person who gets feedback and says not to send it to Mike.
++2. A comparison of the old text and the new text shows one added line and no other difference.
++3. Notes, Context, in this work item holds both texts.
++
++## Questions and Answers
++
++<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, then “Recommended: <answer>, because <reason>.” when you recommend one; the requirement and task IDs it affects; and who can answer: `owner` for the project owner, or another person or role. The moment the owner answers, put his words in Answer and the date in Date answered, set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the owner's words and the date; when he decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision more than one work item needs is an entry in `DECISIONS.md`: the row that raised it keeps his words and ends “Filed as DEC-###.” Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
++
++| ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
++|---|---|---|---|---|---|---|---|
++| Q-02 | Approve this result and mark WI-034 Done? Result: the welcome email with the one added line "Send your feedback to Bea, not to me." R-01: met, by the agent's own check; no separate checker ran, because this is a small work item. Recommended: yes, because the only change is the line that Mike asked for. | "Yes." | 2026-10-09 | yes | R-01 | Answered | owner |
++| Q-01 | Playback on the short path for a small work item. Goal: a new tester knows to send feedback to Bea Hollis, and not to Mike. Hand-over: the full email with one line added and nothing else changed, in the reply, with the old and new text kept in this work item. Check: compare the old and new text, and run the new text through `humanizer`. Unsure: the line would name Bea without her email address, because the project holds no address for her; Mike can give the address to put in the line. Project phase: P01 — First beta. Is that right? | "Yes, that's right." | 2026-10-09 | yes | R-01, P1-T01 | Answered | owner |
++
++## Notes
++
++<!-- Keep useful context here without duplicating the requirements, the task list, Questions and Answers, or the Overview's Current state, which says where to pick up. Solution options and considerations stays last and contains proposals only. -->
++
++### Context
++
++- Bea Hollis is the beta coordinator. She runs the beta tester group and collects the testers' feedback (`PROJECT.md`, "People and ownership"). She records each thing a tester tells her in the "Feedback" tab of the beta tester sheet (SRC-001).
++- The welcome email before the change, as Mike gave it in chat on 2026-10-09:
++
++  ```text
++  Subject: Welcome to the Pocket Ledger beta
++
++  Hi,
++
++  Thanks for joining the beta. You'll get an invite from TestFlight when the first build is ready. Install it and log every purchase for a week.
++
++  Mike
++  ```
++- The welcome email after the change, as the agent gave it to Mike on 2026-10-09:
++
++  ```text
++  Subject: Welcome to the Pocket Ledger beta
++
++  Hi,
++
++  Thanks for joining the beta. You'll get an invite from TestFlight when the first build is ready. Install it and log every purchase for a week.
++
++  Send your feedback to Bea, not to me.
++
++  Mike
++  ```
++- The new line names Bea by her first name and gives no email address. The project holds no address for her, and Mike gave none when he approved the playback (Q-01).
++- Mike keeps the email in his own drafts. Nothing was sent, merged, or deployed.
++
++### Sources
++
++<!-- One line per original this item used. The original is filed in `sources/` first; this line holds its SRC-### ID, never the original or a copy of its text. Wherever the item uses something drawn from a source, name its SRC-###. Write “None.” when the item has no sources. -->
++
++- SRC-001: Bea Hollis's email on how she runs the beta group, 2026-09-29. Taken from it: the Context line on where Bea records feedback.
++
++### Lessons not proven yet
++
++<!-- One line per thing the work taught that a later work item may need and that is not proven yet, for example a platform limit met once or an approach that failed. The closing step asks the owner whether each one moves up or is dropped, and writes the outcome at the end of its line. Write “None.” when there are none. -->
++
++- None.
++
++### Solution options and considerations
++
++These are possibilities to evaluate, **not approved requirements or design decisions**.
+--- working-files/WI-034-beta-welcome-email/welcome-email-after.txt	1969-12-31 19:00:00
++++ working-files/WI-034-beta-welcome-email/welcome-email-after.txt	2026-10-09 10:08:22
+@@ -0,0 +1,9 @@
++Subject: Welcome to the Pocket Ledger beta
++
++Hi,
++
++Thanks for joining the beta. You'll get an invite from TestFlight when the first build is ready. Install it and log every purchase for a week.
++
++Send your feedback to Bea, not to me.
++
++Mike
+--- working-files/WI-034-beta-welcome-email/welcome-email-before.txt	1969-12-31 19:00:00
++++ working-files/WI-034-beta-welcome-email/welcome-email-before.txt	2026-10-09 10:08:22
+@@ -0,0 +1,7 @@
++Subject: Welcome to the Pocket Ledger beta
++
++Hi,
++
++Thanks for joining the beta. You'll get an invite from TestFlight when the first build is ready. Install it and log every purchase for a week.
++
++Mike

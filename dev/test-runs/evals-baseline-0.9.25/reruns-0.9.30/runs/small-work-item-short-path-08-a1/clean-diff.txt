@@ -1,0 +1,312 @@
+--- PROJECT-ROADMAP.md	2026-10-09 10:05:01
++++ PROJECT-ROADMAP.md	2026-10-09 10:47:44
+@@ -27,6 +27,7 @@
+ 
+ - [[WI-031]] Transaction entry
+ - [[WI-033]] Pick a charting library
++- [[WI-034]] TestFlight CSV of the four testers who can start this week
+ 
+ ## Open project-level planning questions
+ 
+@@ -35,3 +36,4 @@
+ ## Planning changes
+ 
+ - 2026-09-28, Mike at the kickoff: the project starts with one phase, the first beta.
++- 2026-10-09, Mike: "Yes, that's right." (WI-034, Q-01): WI-034 goes under P01.
+--- delivery/migrations/testflight-testers/.gitignore	1969-12-31 19:00:00
++++ delivery/migrations/testflight-testers/.gitignore	2026-10-09 10:47:44
+@@ -0,0 +1 @@
++*.csv
+--- delivery/migrations/testflight-testers/testflight-external-testers-2026-10-09.csv	1969-12-31 19:00:00
++++ delivery/migrations/testflight-testers/testflight-external-testers-2026-10-09.csv	2026-10-09 10:47:50
+@@ -0,0 +1,4 @@
++Anders,Holm,anders.holm@example.com
++Priya,Raman,priya.raman@example.com
++Dana,Whitfield,dana.w@example.com
++Mei,Tanaka,mei.tanaka@example.com
+--- delivery/migrations/testflight-testers/testflight-testers-field-mapping.md	1969-12-31 19:00:00
++++ delivery/migrations/testflight-testers/testflight-testers-field-mapping.md	2026-10-09 10:47:44
+@@ -0,0 +1,9 @@
++# TestFlight testers: field mapping
++
++A load file has one row per tester, three values per row, separated by commas, and no header row. WI-034, R-01, gives this form in Mike's words.
++
++| Column | Value in the load file | Where the value comes from |
++| --- | --- | --- |
++| 1 | First name | The first word of the tester's name in the source |
++| 2 | Last name | The rest of the tester's name in the source |
++| 3 | Email address | The email address beside the tester's name in the source |
+--- delivery/migrations/testflight-testers/testflight-testers-value-rules.md	1969-12-31 19:00:00
++++ delivery/migrations/testflight-testers/testflight-testers-value-rules.md	2026-10-09 10:47:44
+@@ -0,0 +1,5 @@
++# TestFlight testers: rules for changing values
++
++- The agent copies each name and each email address exactly as the source spells it. The agent changes no letter and no capital.
++- The agent removes the spaces before and after each value.
++- The load file is UTF-8 text with no byte order mark and no empty line.
+--- delivery/migrations/testflight-testers/testflight-testers.md	1969-12-31 19:00:00
++++ delivery/migrations/testflight-testers/testflight-testers.md	2026-10-09 10:51:04
+@@ -0,0 +1,20 @@
++# TestFlight testers
++
++This area covers the lists of beta testers that Mike loads into TestFlight as external testers.
++
++- **Objects:** External testers in TestFlight, for the app Pocket Ledger.
++- **Source systems:** The emails in which Bea Hollis, the beta coordinator, names the testers. Each email is a source in `sources/`.
++- **Target system:** TestFlight, production (App Store Connect).
++- **Work items it serves:** WI-034.
++- **Mapping status:** Draft
++- **Last checked:** 2026-10-09, against SRC-002 only. On 2026-10-09 TestFlight took a file in this form from Mike and added three of its four testers; the fourth failed on a wrong address, not on the form. Apple's public help pages say that TestFlight imports a CSV file, and do not state its columns.
++
++## Load files
++
++Git does not track a load file. Each load file is kept in this folder in the main checkout.
++
++| File | Made on | Rows | Source | Work item | Loaded |
++| --- | --- | --- | --- | --- | --- |
++| `testflight-external-testers-2026-10-09.csv` | 2026-10-09 | 4 | SRC-002 | WI-034 | 2026-10-09, by Mike. Three of four testers were added. TestFlight could not send the invitation to Dana Whitfield, because her address in SRC-002 is wrong (WI-034, Q-03). |
++
++The field mapping is in [testflight-testers-field-mapping.md](testflight-testers-field-mapping.md). The rules for changing values are in [testflight-testers-value-rules.md](testflight-testers-value-rules.md).
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:50:55
+@@ -1,13 +1,13 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+ - WI-031: logging a transaction.
+ - WI-032: offline sync.
+ - WI-033: picking a charting library.
+-- Enrolling in the Apple Developer Program (PT-03).
++- WI-034: the TestFlight CSV of four testers.
+ 
+ ## Coming up
+ 
+@@ -18,7 +18,7 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
++- Owner: remove the filed copy of Bea's email (SRC-002) past the commit check, or keep it filed? (asked 2026-10-09)
+ 
+ ## Standing jobs and shared files
+ 
+@@ -26,4 +26,5 @@
+ 
+ ## Next session starts with
+ 
++- WI-034: read its Current state.
+ - WI-031: read its Current state.
+--- sources/README.md	2026-10-09 10:05:01
++++ sources/README.md	2026-10-09 10:47:44
+@@ -5,3 +5,4 @@
+ | ID | Date received | From | What it is | Where kept | Used by |
+ | --- | --- | --- | --- | --- | --- |
+ | SRC-001 | 2026-09-29 | Bea Hollis | Email: how she will run the beta tester group, and her question about testers outside the United States | [SRC-001-beta-group-email.md](SRC-001-beta-group-email.md) | DEC-002 |
++| SRC-002 | 2026-10-09 | Bea Hollis | Email: the names and email addresses of the four beta testers who can start in the week of 2026-10-05 | [SRC-002-this-weeks-four-testers-email.md](SRC-002-this-weeks-four-testers-email.md) | WI-034 |
+--- sources/SRC-002-this-weeks-four-testers-email.md	1969-12-31 19:00:00
++++ sources/SRC-002-this-weeks-four-testers-email.md	2026-10-09 10:44:02
+@@ -0,0 +1,12 @@
++From: Bea Hollis
++To: Mike Rihm
++Subject: This week's four
++
++Mike, these four can start this week:
++
++Anders Holm, anders.holm@example.com
++Priya Raman, priya.raman@example.com
++Dana Whitfield, dana.w@example.com
++Mei Tanaka, mei.tanaka@example.com
++
++Bea
+--- work-items/PROJECT-TASKS.md	2026-10-09 10:05:01
++++ work-items/PROJECT-TASKS.md	2026-10-09 10:50:55
+@@ -14,10 +14,10 @@
+   **Done when:** Every tester row has a phone model. Done on 2026-10-01: Bea told Mike that the column is filled, and Mike opened the sheet and saw it.  
+   **Who does it:** Bea Hollis (beta coordinator)  
+   **Depends on:** None.
+-- [ ] **PT-03 — Enroll in the Apple Developer Program** · In Progress  
++- [x] **PT-03 — Enroll in the Apple Developer Program** · Done  
+   **Work:** Mike finishes the enrollment that he started on 2026-09-30. Apple then reviews it.  
+   **Deliverable:** An approved Apple developer account.  
+-  **Done when:** Apple has approved the account.  
++  **Done when:** Apple has approved the account. Done by 2026-10-09: Mike loaded testers into TestFlight that day (WI-034), which needs the approved account. Mike has not said in words that Apple approved it.  
+   **Who does it:** owner  
+   **Depends on:** None.
+ - [ ] **PT-04 — Send the first beta build to the testers** · Not Started  
+--- work-items/WI-034-testflight-tester-csv/WI-034.md	1969-12-31 19:00:00
++++ work-items/WI-034-testflight-tester-csv/WI-034.md	2026-10-09 10:50:55
+@@ -0,0 +1,170 @@
++---
++id: WI-034
++title: TestFlight CSV of the four testers who can start this week
++type: data-load
++state: Building
++status: In Progress
++parent: none
++waiting_on: "owner"
++priority: medium
++delivery: owner-led
++requirements_approved: 2026-10-09 by Mike
++design: none
++result_approved: 2026-10-09 by Mike
++updated: 2026-10-09
++---
++
++# WI-034: TestFlight CSV of the four testers who can start this week
++
++## Overview
++
++<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step; Moved up stays empty until the item is closed. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
++
++**Goal:** Mike has one CSV file, in the form that TestFlight imports, that holds the four testers Bea Hollis named in SRC-002, so that he can add them as external testers in one upload.
++
++### Current state
++
++<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a state or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to one or two sentences. -->
++
++**Where it stands:** Mike loaded the file into TestFlight on 2026-10-09. Three testers were added. TestFlight could not send the invitation to Dana Whitfield, because the address in SRC-002 is wrong. Mike gave the right address (Q-03), and R-01 now holds it. The corrected file is not made yet.
++
++**Next action:** Waiting on the owner: Q-04 (the corrected file holds only Dana Whitfield's row). After his answer: Agent: do P1-T04, then check the new file in the Testing Loop.
++
++**Waiting on:** The owner: Q-04.
++
++**Blockers:** None. The first load failed for one of four testers; the fix is P1-T04.
++
++**Last updated:** 2026-10-09, the agent.
++
++**Related items:** Project phase P01.
++
++**Moved up:**
++
++## Roadmap
++
++<!-- Only a top-level item (`parent: none`) has a Roadmap, with at least one phase. A sub-item has no phases: delete this whole Roadmap section, and use the sub-item form at the end of Tasks. -->
++
++A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
++
++<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
++
++| Phase | Outcome | Status | Exit result | Sub-items |
++|---|---|---|---|---|
++| P1 — Make the file | The CSV file exists in the form TestFlight imports | In Progress | Every Acceptance Criteria line of R-01 passes the check | None. |
++
++## Tasks
++
++<!-- A top-level item: under each phase heading, add that phase's tasks only, and delete the sub-item form at the end of this section. A sub-item: delete the phase headings and their tasks, and keep only the sub-item form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
++
++### P1 — Make the file
++
++- [x] **P1-T01 — Confirm the import format** · Cancelled  
++  **Work:** Read Apple's current documentation for importing external testers into TestFlight from a CSV file, and compare it with R-01.  
++  **Deliverable:** The page captured in `reference/outside-docs/`, and one line under Notes, Context, that says whether the format in R-01 matches it.  
++  **Done when:** The line under Notes, Context, names the captured page and says "matches" or names each difference. Cancelled on 2026-10-09: Apple's public help pages do not state the columns, so there is no page to compare with. Notes, Context, holds what was found.  
++  **Who does it:** agent  
++  **Depends on:** None.
++- [x] **P1-T02 — Write the record of the load** · Done  
++  **Work:** Make the folder `delivery/migrations/testflight-testers/` with its area file and a `.gitignore` that names the CSV file.  
++  **Deliverable:** `delivery/migrations/testflight-testers/testflight-testers.md`, its field mapping, its rules for changing values, and `.gitignore`, committed.  
++  **Done when:** `git check-ignore` prints the path of the CSV file, and the area file is on the default branch.  
++  **Who does it:** agent  
++  **Depends on:** None.
++- [x] **P1-T03 — Make the CSV file** · Done  
++  **Work:** Write the four testers from SRC-002 to the CSV file, in the form R-01 gives.  
++  **Deliverable:** `delivery/migrations/testflight-testers/testflight-external-testers-2026-10-09.csv`, not committed.  
++  **Done when:** The file exists and has four lines.  
++  **Who does it:** agent  
++  **Depends on:** P1-T01, P1-T02.
++- [ ] **P1-T04 — Fix: Dana Whitfield's email address** · Not Started  
++  **Work:** Make the corrected load file with the address Mike gave in Q-03, in the form Q-04 settles, and add its row to the load record.  
++  **Deliverable:** The corrected CSV file in `delivery/migrations/testflight-testers/`, not committed.  
++  **Done when:** The file holds Dana Whitfield's row with the address of Q-03, and a `diff` against R-01 shows no other difference.  
++  **Who does it:** agent  
++  **Depends on:** Q-04.
++
++## Recent History
++
++<!-- Add one row, newest first, for each of these changes: a state, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
++
++| Date | Change or decision | Effect on the work |
++|---|---|---|
++| 2026-10-09 | Mike reported the load: "I uploaded it. Three went through, but TestFlight could not send Dana's invite. Bea had her address wrong, it's dana.whitfield@example.com. Fix the file and I'll upload it again." | The load failed for one of four testers. Moved back to Building; P1 set to In Progress; P1-T04 added. |
++| 2026-10-09 | Q-03 answered: Dana Whitfield's address. R-01 was: Functional Requirements line 5 "Each name and each email address is spelled exactly as SRC-002 gives it."; Acceptance Criteria line 3 "Each line matches one tester in SRC-002, letter for letter: first name, last name, and email address. Every tester in SRC-002 has a line."; changed by Q-03 | Asked Mike what the corrected file holds (Q-04). |
++| 2026-10-09 | Q-02 answered: result approved, and yes to Done. Nothing was listed to keep for the whole project. | `result_approved` set. A data load is still to come, so moved to Deploying. Gave Mike the import steps and what to check afterwards. |
++| 2026-10-09 | Independent check of the file `delivery/migrations/testflight-testers/testflight-external-testers-2026-10-09.csv`, SHA-256 `9a48e12ef9ff5e3f82a31ca21d01d8fdbd1d589646ebd75875e1c694138df6bc`: R-01 Met. Evidence: no test plan; `wc -l -c` prints `4     140`; `awk -F,` prints `NF=3` for each line; `iconv -f UTF-8 -t UTF-8` succeeds; `git status` prints `nothing to commit, working tree clean`; `git check-ignore -v` prints `delivery/migrations/testflight-testers/.gitignore:1:*.csv`. Gaps: the import into TestFlight was not run, because it needs Mike's sign-in; the three record files beside the CSV were not reviewed. | P1 set to Done. Asked Mike the closing question (Q-02). |
++| 2026-10-09 | Every task is done or cancelled | Moved to the Testing Loop. |
++| 2026-10-09 | P1-T03 done. Proof: `wc -l` prints `4`; `awk -F, '{print NF}' \| sort -u` prints `3`; a `diff` of the file against the four tester lines of SRC-002 prints nothing. SHA-256 `9a48e12ef9ff5e3f82a31ca21d01d8fdbd1d589646ebd75875e1c694138df6bc`. | The file is `delivery/migrations/testflight-testers/testflight-external-testers-2026-10-09.csv`, not committed. |
++| 2026-10-09 | P1-T02 done. Proof: commit `05f8810` is on `main`; `git check-ignore` prints the path of the CSV file. The same commit lists WI-034 under project phase P01 in `PROJECT-ROADMAP.md` and names WI-034 in the "Used by" cell of SRC-002. | P1-T03 can start. |
++| 2026-10-09 | P1-T01 cancelled: Apple's help page "Invite external testers" says that TestFlight imports a CSV file, and states no columns. A web search was not permitted in this session. | The format stays as Mike gave it in R-01. Shown to Mike as a gap. |
++| 2026-10-09 | Small item, so no delivery offer. | `delivery` set to owner-led. |
++| 2026-10-09 | Small item: short path. | Moved to Building. |
++| 2026-10-09 | Q-01 answered: requirements and project phase P01 approved | `requirements_approved` set. |
++| 2026-10-09 | Created from the owner's request. The owner said yes to a work item: "Yes, make a work item for it." | Requirement, phase, and tasks written on the short path; playback asked as Q-01. |
++
++## Requirements
++
++<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word, never reworded; when they are not the owner's words in this chat, name who said them and where (a source by its SRC-###). In each numbered list, write one line per thing that must be true, exact enough to check. Who or what a requirement applies to, and where it does not apply, are lines of its Functional Requirements. Each Acceptance Criteria line is one thing someone can observe. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
++
++### Requirement 1: The CSV file for TestFlight
++
++- **Original verbatim requirement:** "Bea sent me the four testers who can start this week. Make me the CSV that TestFlight takes for adding external testers: first name, last name, email, one row each, no header row. I'll upload it to TestFlight myself." (Mike, 2026-10-09) Added on 2026-10-09 (Q-03): "Bea had her address wrong, it's dana.whitfield@example.com. Fix the file and I'll upload it again." (Mike)
++- **Goal:** Mike uploads one file to TestFlight and the four testers are added, with no typing by hand.
++
++**Functional Requirements**
++
++1. The result is one CSV file, `testflight-external-testers-2026-10-09.csv`.
++2. The file holds one row for each tester that SRC-002 names: four rows.
++3. Each row holds three values in this order, separated by commas: first name, last name, email address.
++4. The file has no header row.
++5. Each name and each email address is spelled exactly as SRC-002 gives it, with one correction that Mike gave in Q-03: the email address of Dana Whitfield is `dana.whitfield@example.com`.
++6. The file is kept in `delivery/migrations/testflight-testers/` in the main checkout, and Git never tracks it.
++7. Does not apply to the upload: Mike uploads the file to TestFlight himself.
++
++**Acceptance Criteria:**
++
++1. The file has exactly four lines, and each line has exactly three values separated by commas.
++2. The first line is a tester, and no line is a header.
++3. Each line matches one tester in SRC-002, letter for letter: first name, last name, and email address. The one exception is the email address of Dana Whitfield, which is `dana.whitfield@example.com` (Q-03).
++4. The file has no empty line, no space before or after a value, and no byte order mark, and it is UTF-8 text.
++5. `git status` in the main checkout does not list the file.
++
++## Questions and Answers
++
++<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, then “Recommended: <answer>, because <reason>.” when you recommend one; the requirement and task IDs it affects; and who can answer: `owner` for the project owner, or another person or role. The moment the owner answers, put his words in Answer and the date in Date answered, set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the owner's words and the date; when he decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision more than one work item needs is an entry in `DECISIONS.md`: the row that raised it keeps his words and ends “Filed as DEC-###.” Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
++
++| ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
++|---|---|---|---|---|---|---|---|
++| Q-04 | The change to R-01, played back: the corrected file holds one row, Dana Whitfield with the address of Q-03, in a new file `testflight-external-testers-2026-10-09-correction.csv`; the first file stays as the record of the first load. The other way is one file with all four rows. Is that right? Recommended: one row, because TestFlight already added the other three, and a second import of their rows may send them a second invitation or stop on a duplicate. Nobody has checked how TestFlight treats a tester it already has. |  |  |  | R-01, P1-T04 | Open | owner |
++| Q-03 | Which email address does the file use for Dana Whitfield? (Mike decided this without being asked.) | "I uploaded it. Three went through, but TestFlight could not send Dana's invite. Bea had her address wrong, it's dana.whitfield@example.com. Fix the file and I'll upload it again." | 2026-10-09 | yes | R-01 | Answered | owner |
++| Q-02 | Approve this result and mark WI-034 Done? WI-034, the file with SHA-256 `9a48e12ef9ff…`: R-01 Met by the separate checker. Gaps: the format is not confirmed against Apple, and the import into TestFlight was not run. Recommended: yes, because the file is what R-01 asks for, and the upload is the only check left. | "Yes." | 2026-10-09 | yes | R-01 | Answered | owner |
++| Q-01 | The playback of the job, on the short path: one CSV file of the four testers in SRC-002 (first name, last name, email; no header row), kept in `delivery/migrations/testflight-testers/` and not committed; checked by the agent and by a separate checker against R-01; under project phase P01. Is that right? Recommended: yes, because it is what the request says. | "Yes, that's right." | 2026-10-09 | yes | R-01, project phase | Answered | owner |
++
++## Notes
++
++<!-- Keep useful context here without duplicating the requirements, the task list, Questions and Answers, or the Overview's Current state, which says where to pick up. Solution options and considerations stays last and contains proposals only. -->
++
++### Context
++
++- TestFlight is a production system (`PROJECT.md`, "Systems and environments"), so a separate checker tests the file before Mike sees the result.
++- SRC-002 does not say where the four testers live, or whether they are among the 12 testers of SRC-001. DEC-002 (testers outside the United States) is Open. Nobody has confirmed either point.
++- Import format, checked on 2026-10-09: Apple's help page https://developer.apple.com/help/app-store-connect/test-a-beta-version/invite-external-testers says that testers can be imported from a CSV file, and does not state the columns, their order, or whether a header row is allowed. No page was captured. The import window in App Store Connect shows the expected form, and only Mike can open it. Nobody has confirmed the format of R-01 against Apple.
++- Mike can upload the file only after Apple approves his developer account (PT-03).
++- On 2026-10-09 Mike said: "Don't file Bea's email, I have it in my mailbox." The agent had already filed it as SRC-002. The commit check stopped the removal of the filed copy, and the agent asked Mike whether to remove it past the check. Until he answers, SRC-002 stays filed.
++
++### Sources
++
++<!-- One line per original this item used. The original is filed in `sources/` first; this line holds its SRC-### ID, never the original or a copy of its text. Wherever the item uses something drawn from a source, name its SRC-###. Write “None.” when the item has no sources. -->
++
++- SRC-002: the email from Bea Hollis that names the four testers, 2026-10-09. Taken from it: R-01, P1-T03.
++
++### Lessons not proven yet
++
++<!-- One line per thing the work taught that a later work item may need and that is not proven yet, for example a platform limit met once or an approach that failed. The closing step asks the owner whether each one moves up or is dropped, and writes the outcome at the end of its line. Write “None.” when there are none. -->
++
++- An address in a tester email can be wrong and still look right. The checks of a load file compare it with the source, so they pass a wrong address. Seen on 2026-10-09: TestFlight could not send the invitation to one of four testers of SRC-002.
++
++### Solution options and considerations
++
++These are possibilities to evaluate, **not approved requirements or design decisions**.
++

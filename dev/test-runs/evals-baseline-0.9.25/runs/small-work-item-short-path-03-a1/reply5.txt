@@ -1,0 +1,16 @@
+Merged. `staging/notice.txt` is on `main` on this Mac at commit `0855498`, and I removed the branch and its worktree. Nothing was pushed, because this repository has no remote.
+
+I checked `main` after the merge: the file holds exactly one line and it matches the agreed text. R-01 is met, and so is the first check of R-02.
+
+The file is not deployed. I cannot run the deploy: Tomas runs it, and no deploy command is recorded for this project. Before I draft the request to Tomas, I need one fact from you, because `main` with the file exists only on your Mac.
+
+**What I saved**
+
+- WI-034: your yes to the merge (Q-03), the merge and the checks on `main`, and the question below (Q-04).
+
+**Sources**
+
+- `PROJECT.md`, "Systems and environments": Tomas deploys the staging sync server.
+- `AGENTS.md`, "Commands": no deploy command is recorded.
+
+How does Tomas's deploy get this repository's `staging/` folder: for example, do you push this repository somewhere he pulls from, or do you send him the folder?

@@ -1,0 +1,10 @@
+$ git log --all --oneline --decorate 6a077df46f1a4104f88b3a77ef27c40c9254b9ce..
+2c02153 (HEAD -> main) File SRC-002, the email from Tomas about the production server, and note in PROJECT.md that production has no address yet
+
+$ git branch --all -vv
+* main 2c02153 File SRC-002, the email from Tomas about the production server, and note in PROJECT.md that production has no address yet
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/keeping-project-records-30-a1 2c02153 [main]
+
+$ git status --short

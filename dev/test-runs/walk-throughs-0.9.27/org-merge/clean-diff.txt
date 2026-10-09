@@ -1,0 +1,521 @@
+--- DECISIONS.md	2026-10-09 10:36:26
++++ DECISIONS.md	2026-10-09 10:46:14
+@@ -33,4 +33,35 @@
+ - Sources: <SRC-### for each source it is based on, or "none">
+ -->
+ 
+-No entries yet. Replace this line with the first entry.
++## DEC-001: How the merged org sets an Account's owner
++
++- Status: Open
++- Raised: 2026-10-09, Priya Nair, in the Accounts workshop
++- Decided: not yet
++- Decision: Does the merged org set an Account's owner by territory, as Priya Nair proposed, or in another way?
++- Why: The two orgs set the owner differently today, so the merged org needs one way. It decides who owns each migrated Baltic Freight Account and what the automation that assigns owners does. The proposal is not agreed: Dan Okoye wants to see first what it does to the Accounts his sales reps own. Helen Brandt decides this (`PROJECT.md`, "People and ownership"; she confirmed it on a call on 2026-10-09).
++- Affects: WI-001
++- Replaces or replaced by: none
++- Sources: SRC-001
++
++## DEC-002: Which customer ID the merged org uses
++
++- Status: Superseded
++- Raised: 2026-10-09, the Accounts workshop (Mike Rihm, Priya Nair, Dan Okoye)
++- Decided: 2026-10-09, Helen Brandt, by email (SRC-003); Mike Rihm agreed in chat on 2026-10-09
++- Decision: The merged org uses Northwind Supply's ERP customer number as the customer ID. Baltic Freight's legacy account ID is kept in a read-only field for two years after cutover, and is then dropped.
++- Why: Helen Brandt gave no reason in her email. The question had to be answered because three things depend on it: the Account migration, the ERP integration, and the reports. Helen Brandt decides this (`PROJECT.md`, "People and ownership"; she confirmed it on a call on 2026-10-09).
++- Affects: WI-001, DAT-01, DAT-02
++- Replaces or replaced by: replaced by DEC-003
++- Sources: SRC-001, SRC-003
++
++## DEC-003: The customer ID, and who can edit the legacy ID field
++
++- Status: Decided
++- Raised: 2026-10-09, Helen Brandt, by email (SRC-004)
++- Decided: 2026-10-09, Helen Brandt, by email (SRC-004); Mike Rihm agreed in chat on 2026-10-09
++- Decision: The merged org uses Northwind Supply's ERP customer number as the customer ID. Baltic Freight's legacy account ID is kept in a field for two years after cutover, and is then dropped. During the first year after cutover the Finance team can edit that field, and it is read-only for everyone else. During the second year it is read-only for everyone.
++- Why: Helen Brandt wrote: "Finance needs to correct some of the Baltic legacy IDs during the first year." She kept the rest of DEC-002: "The two years stay." Helen Brandt decides this (`PROJECT.md`, "People and ownership").
++- Affects: WI-001, DAT-01, DAT-02
++- Replaces or replaced by: replaces DEC-002
++- Sources: SRC-003, SRC-004
+--- PROJECT-ROADMAP.md	2026-10-09 10:37:29
++++ PROJECT-ROADMAP.md	2026-10-09 10:39:32
+@@ -1,7 +1,5 @@
+ # Project roadmap
+ 
+-<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, the phase table, and the phase heading with this project's real text. Keep one table row and one matching ## heading per phase, with the same ID and name. Under each heading, list the phase's top-level work items. Remove the example row and heading, and this guide, after setup. -->
+-
+ This file is the project's roadmap in a project that tracks its work items in local files: the project's phases, in order, and the top-level work items in each phase. Each work item holds its own requirements, phases, tasks, and history. The `managing-work-items` skill reads and changes this file.
+ 
+ ```text
+@@ -18,23 +16,62 @@
+ 
+ | Phase | Intended outcome | Exit condition | Depends on | Status |
+ | --- | --- | --- | --- | --- |
+-| P01 — <Phase name> | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` | Not Started |
++| P01 — Discovery | Not known yet | Not known yet | None | Not Started |
++| P02 — Design | Not known yet | Not known yet | P01 | Not Started |
++| P03 — Build | Not known yet | Not known yet | P02 | Not Started |
++| P04 — Test | Not known yet | Not known yet | P03 | Not Started |
++| P05 — Cutover | Not known yet | Not known yet | P04 | Not Started |
+ 
+-## P01 — <Phase name>
++## P01 — Discovery
+ 
+-**Outcome:** `<Result of the phase, larger than one work item.>`  
+-**Exit condition:** `<Observable evidence that the phase is complete.>`  
+-**Dependencies:** `<Real prerequisites, or none known.>`  
++**Outcome:** Not known yet.  
++**Exit condition:** Not known yet.  
++**Dependencies:** None known.  
+ **Work items:**
+ 
+-- `<[[WI-031]] and the item's title, one line per top-level work item in this phase, or “None yet.”>`
++- None yet.
+ 
+-## Open project-level planning questions
++## P02 — Design
+ 
+-<!-- Put only questions about phase scope, order, dependencies, or milestones here. Work-item questions go in the item's Questions and Answers. Replace this prompt with real questions or write “None open.” -->
++**Outcome:** Not known yet.  
++**Exit condition:** Not known yet.  
++**Dependencies:** P01 — Discovery.  
++**Work items:**
+ 
+-- `<Question about phase scope, order, dependencies, or milestones; identify who can answer it.>`
++- None yet.
+ 
++## P03 — Build
++
++**Outcome:** Not known yet.  
++**Exit condition:** Not known yet.  
++**Dependencies:** P02 — Design.  
++**Work items:**
++
++- None yet.
++
++## P04 — Test
++
++**Outcome:** Not known yet.  
++**Exit condition:** Not known yet.  
++**Dependencies:** P03 — Build.  
++**Work items:**
++
++- None yet.
++
++## P05 — Cutover
++
++**Outcome:** Not known yet.  
++**Exit condition:** Not known yet.  
++**Dependencies:** P04 — Test.  
++**Work items:**
++
++- None yet.
++
++## Open project-level planning questions
++
++- What is the intended outcome and the exit condition of each phase, P01 to P05? Mike Rihm can answer.
++- What is the target end date of each phase, given that the merged org has to be live by the end of June 2027? Mike Rihm can answer.
++
+ ## Planning changes
+ 
+-- `<Date and source>: <Material approved change to project outcome, phase scope, or sequence.>`
++- 2026-10-09, Mike Rihm, in chat, reporting the kickoff: "Phases I want, in this order: Discovery, Design, Build, Test, Cutover." Added the project phases P01 to P05 in that order.
+--- PROJECT.md	2026-10-09 10:37:29
++++ PROJECT.md	2026-10-09 10:46:14
+@@ -2,28 +2,32 @@
+ 
+ ## Purpose and intended outcome
+ 
+-- Purpose: Northwind Supply, the client, is merging the Salesforce org of Baltic Freight into its own Salesforce org. The business reason for the merge is not known yet.
+-- Intended outcome: This project merges the Salesforce org of Baltic Freight into the Salesforce org of Northwind Supply, for the client Northwind Supply. What success means in detail is not known yet.
++- Purpose: Northwind Supply, the client, is merging the Salesforce org of Baltic Freight into its own Salesforce org. Northwind Supply bought Baltic Freight, and that is the business reason for the merge (Mike Rihm, in chat, reporting the kickoff, 2026-10-09).
++- Intended outcome: This project merges the Salesforce org of Baltic Freight into the Salesforce org of Northwind Supply, for the client Northwind Supply. The merged org has to be live by the end of June 2027 (Mike Rihm, in chat, reporting the kickoff, 2026-10-09). The owner reported that cutover has happened and that the merged org is live (Mike Rihm, in chat; the cutover was on a Saturday, and its date is not confirmed: WI-001 Q-02). What else success means is not known yet.
+ 
+ ## Scope and boundaries
+ 
+-- In scope: The merge of the Baltic Freight Salesforce org into the Northwind Supply Salesforce org. Which business capabilities it covers is not known yet.
+-- Outside scope: Not known yet.
++- In scope: The merge of the Baltic Freight Salesforce org into the Northwind Supply Salesforce org. It covers Accounts, Contacts, Opportunities, and the ERP integration (Mike Rihm, in chat, reporting the kickoff, 2026-10-09).
++- Outside scope: Marketing Cloud, and the customer portals of both orgs (Mike Rihm, in chat, reporting the kickoff, 2026-10-09).
+ - Constraints: the approved rules that cover several areas of the system are in [system/constraints.md](system/constraints.md).
+ 
+ ## Systems and environments
+ 
+ | System or org | Purpose | Environment | Source of truth | Access notes |
+ | --- | --- | --- | --- | --- |
+-| Northwind Supply Salesforce org | The org that Baltic Freight's org is merged into | Not known yet: production org and sandboxes will be named later | Not known yet | Not connected on this computer; no alias yet |
+-| Baltic Freight Salesforce org | The org that is merged into Northwind Supply's org | Not known yet: production org and sandboxes will be named later | Not known yet | Not connected on this computer; no alias yet |
++| Northwind Supply Salesforce org | The org that Baltic Freight's org is merged into. About 1,000 users (Mike Rihm, in chat, 2026-10-09; not checked in the org). | A UAT sandbox exists, and Priya Nair tested in it on 2026-10-09 (Mike Rihm, in chat, 2026-10-09). The owner did not say which org it belongs to; the agent assumed this org, because Priya Nair is its admin. The production org and the other sandboxes are not named yet. | Not known yet | Not connected on this computer; no alias yet |
++| Baltic Freight Salesforce org | The org that is merged into Northwind Supply's org. About 1,000 users (Mike Rihm, in chat, 2026-10-09; not checked in the org). The owner loaded 48,212 of its Accounts into the Northwind Supply production org at cutover (Mike Rihm, in chat; the cutover was on a Saturday, and its date is not confirmed: WI-001 Q-02). | Not known yet: production org and sandboxes will be named later | Not known yet | Not connected on this computer; no alias yet |
++| ERP system | The system that the ERP integration in scope connects to Salesforce. Its name, and which of the two orgs it is connected to today, are not known yet. | Not known yet | Not known yet | Not known yet |
+ 
+ ## People and ownership
+ 
+ | Role | Person or team | Responsibility | May decide | Source / last confirmed |
+ | --- | --- | --- | --- | --- |
+ | Owner | Mike Rihm | Consultant who runs the project; makes the project's decisions | Every decision: requirements, designs, results, merges, and Done | Setup, 2026-10-09 |
+-| Client | Northwind Supply | The client the project is for | Not known yet | Mike Rihm, in chat, 2026-10-09 |
++| Client | Northwind Supply | The client the project is for | Decides through its people in the rows below | Helen Brandt, on a call, reported by Mike Rihm in chat, 2026-10-09 |
++| Sponsor | Helen Brandt (Northwind Supply) | VP of Sales Operations at Northwind Supply; the project's sponsor | Which customer ID the merged org uses (DEC-003, which replaced DEC-002), and the ownership model for the merged org (DEC-001) | Role: Mike Rihm, in chat, reporting the kickoff, 2026-10-09. May decide: Helen Brandt, on a call, reported by Mike Rihm in chat, 2026-10-09 |
++| Salesforce admin, Northwind Supply | Priya Nair (Northwind Supply) | Salesforce admin of the Northwind Supply org | Field-level setup in the Northwind Supply org, and nothing wider | Role: Mike Rihm, in chat, reporting the kickoff, 2026-10-09. May decide: Helen Brandt, on a call, reported by Mike Rihm in chat, 2026-10-09 |
++| Sales operations lead, Baltic Freight | Dan Okoye (Baltic Freight) | Sales operations lead at Baltic Freight; knows the Baltic Freight org; advises | Nothing on his own | Role: Mike Rihm, in chat, reporting the kickoff, 2026-10-09. May decide: Helen Brandt, on a call, reported by Mike Rihm in chat, 2026-10-09 |
+ 
+ Keep this table short. Write no biography and no contact details.
+ 
+--- memory/CURRENT_STATE.md	2026-10-09 10:37:29
++++ memory/CURRENT_STATE.md	2026-10-09 10:46:14
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-09, setup, agent
++Last updated: 2026-10-09 by this computer's clock, Helen Brandt's email (SRC-004), agent
+ 
+ ## Now
+ 
+@@ -8,14 +8,14 @@
+ 
+ ## Coming up
+ 
+-- None.
++- 2026-10-16: PT-02 due, Dan Okoye sends the export of Baltic Freight's Account owners. The date is assumed from "by Friday" (SRC-001).
+ 
+ ## Waiting on
+ 
+ - Owner: connect the project's Salesforce org (`sf org login web --alias <alias>`) and tell the agent the alias; the production orgs and sandboxes are not named yet. Setup step; remove this line when it is done.
+-- Owner: install Salesforce's own skills (`forcedotcom/sf-skills`) in Claude Code and Codex. Setup step; remove this line when it is done.
+-- Owner: trust the project folder and its hooks (`/hooks`) in Codex. Setup step; remove this line when it is done.
++- Owner: install Salesforce's own skills (`forcedotcom/sf-skills`) in Claude Code and Codex, and trust the project folder and its hooks (`/hooks`) in Codex. Setup steps; remove each when it is done.
+ - Owner: say yes to committing the setup files, then start a new session in Claude Code and Codex. Setup step; remove this line when it is done.
++- Helen Brandt (client): DEC-001 (how the merged org sets an Account's owner). Raised 2026-10-09; check when PT-02 arrives.
+ 
+ ## Standing jobs and shared files
+ 
+@@ -23,4 +23,4 @@
+ 
+ ## Next session starts with
+ 
+-- Ask the owner for the first thing to build.
++- WI-001: read its Current state.
+--- memory/project_baltic_freight_accounts.md	1969-12-31 19:00:00
++++ memory/project_baltic_freight_accounts.md	2026-10-09 10:43:42
+@@ -0,0 +1,38 @@
++---
++name: project_baltic_freight_accounts
++description: Unchecked claim of 2026-10-09 by Dan Okoye that about 30% of Baltic Freight's Accounts have an owner who has left the company
++created: 2026-10-09
++updated: 2026-10-09
++check_by: 2026-11-08
++metadata:
++  type: project
++status: current
++source: Dan Okoye, in the Accounts workshop of 2026-10-09, in the notes Mike Rihm gave in chat on 2026-10-09 (SRC-001)
++last_verified: unknown
++authorization: Logged by the agent on 2026-10-09
++work_items:
++  - "[[WI-001]]"
++supersedes: none
++---
++
++# Baltic Freight Accounts
++
++## Share of Accounts whose owner has left the company
++
++**Remember:** On 2026-10-09, in the Accounts workshop, Dan Okoye said to Mike Rihm and Priya Nair that he thinks about 30% of the Accounts in the Baltic Freight org have an owner who has left the company. This is a claim, not a fact.
++
++**Why:** The share decides how many migrated Accounts need a new owner, whatever DEC-001 decides. Planning the Account migration on a wrong number would misjudge that work.
++
++**How to apply:** Never state the 30% as a fact. When the export of Baltic Freight's Account owners arrives (PT-02), count the Accounts whose owner is an inactive user. Then write the checked number in `reference/current-system/account-ownership.md` and remove this section.
++
++**Evidence and limits:** Not checked. Dan Okoye said it, and the notes say "Nobody has checked that number." The export in PT-02, or a query of the Baltic Freight org once it is connected, would check it.
++
++**Related memories:** None.
++
++**Authoritative records:** [[WI-001]]; SRC-001; PT-02; DEC-001; `reference/current-system/account-ownership.md`.
++
++**Check or remove by:** 2026-11-08
++
++## Gotchas and lessons
++
++None yet.
+--- reference/current-system/account-ownership.md	1969-12-31 19:00:00
++++ reference/current-system/account-ownership.md	2026-10-09 10:41:07
+@@ -0,0 +1,36 @@
++# Account ownership today
++
++This file records how each of the two Salesforce orgs sets the owner of an Account today. Nothing here was observed by the agent in an org: both orgs are not connected yet. Every statement comes from the Accounts workshop of 2026-10-09 (SRC-001).
++
++## What this area does today
++
++- Northwind Supply org: the territory sets an Account's owner. A flow assigns the owner when the Account's billing state changes. Evidence: Priya Nair showed the flow in the workshop (SRC-001).
++- Baltic Freight org: the owner of an Account is the user who created it. Evidence: stated in the workshop (SRC-001); not seen in the org.
++- Baltic Freight org: nobody reassigns an Account to another owner. Evidence: Dan Okoye said so in the workshop (SRC-001); not seen in the org.
++
++## Components
++
++| Component | Role | Where it is | Evidence |
++| --- | --- | --- | --- |
++| A flow that assigns the Account owner by territory. Its name is not known yet. | Sets the owner when the billing state of an Account changes | Northwind Supply org | Priya Nair showed it in the workshop (SRC-001) |
++
++## Data and flow
++
++- Northwind Supply org: a change of an Account's billing state starts the flow, and the flow sets the Account's owner from the territory.
++- Baltic Freight org: the owner is set when the Account is created and does not change afterwards (Dan Okoye, SRC-001).
++
++## How it runs
++
++Not known yet.
++
++## Known gaps
++
++- The name of the Northwind Supply flow, how a territory is defined, and how a territory maps to an owner are not known.
++- Whether the flow also runs when an Account is created is not known.
++- Whether the Baltic Freight org has any automation on the Account owner is not known.
++- How many Baltic Freight Accounts have an owner who has left the company is not checked. The export in project task PT-02 would check it.
++- To confirm all of the above, read the flow and the Account data in each org once the orgs are connected.
++
++## Last verified
++
++2026-10-09. Environment: not named in the workshop notes; Priya Nair showed the Northwind Supply flow on screen. Source: SRC-001. Reported by Mike Rihm, Priya Nair, and Dan Okoye; not checked in an org by the agent.
+--- sources/README.md	2026-10-09 10:36:26
++++ sources/README.md	2026-10-09 10:46:14
+@@ -4,5 +4,7 @@
+ 
+ | ID | Date received | From | What it is | Where kept | Used by |
+ | --- | --- | --- | --- | --- | --- |
+-
+-No sources yet. Remove this line with the first row.
++| SRC-001 | 2026-10-09 | Mike Rihm | Meeting notes: the Accounts workshop of 2026-10-09 with Mike Rihm, Priya Nair, and Dan Okoye, on Account ownership and the customer ID | [SRC-001-accounts-workshop-notes.md](SRC-001-accounts-workshop-notes.md) | DEC-001, DEC-002, WI-001 |
++| SRC-002 | 2026-10-09 | The Accounts workshop; Mike Rihm gave its location | Video recording of the Accounts workshop of 2026-10-09 | Kept outside Git, because it must not leave the client's SharePoint (SRC-001): the client's SharePoint, Projects/Org Merge/Workshops/2026-10-09-accounts.mp4. Open it in SharePoint with access from the client. | none yet |
++| SRC-003 | 2026-10-09 | Helen Brandt, by email to Mike Rihm | Email "Customer ID": Helen Brandt's decision on which customer ID the merged org uses | [SRC-003-customer-id-decision-email.md](SRC-003-customer-id-decision-email.md) | DEC-002, DEC-003, DAT-01, DAT-02, WI-001 |
++| SRC-004 | 2026-10-09 | Helen Brandt, by email to Mike Rihm, who forwarded it | Email "Legacy ID": Helen Brandt's change to the customer ID decision, so that the Finance team can edit the legacy ID field in the first year | [SRC-004-legacy-id-change-email.md](SRC-004-legacy-id-change-email.md) | DEC-003, DAT-02, WI-001 |
+--- sources/SRC-001-accounts-workshop-notes.md	1969-12-31 19:00:00
++++ sources/SRC-001-accounts-workshop-notes.md	2026-10-09 10:40:46
+@@ -0,0 +1,8 @@
++Accounts workshop. Mike, Priya Nair, Dan Okoye.
++
++- Northwind org: an Account's owner is set by territory. A flow assigns it when the billing state changes. Priya showed the flow.
++- Baltic org: the owner is whoever created the Account. Dan says nobody reassigns them. Dan thinks about 30% of their Accounts have an owner who has left the company. Nobody has checked that number.
++- Priya proposed territory-based ownership for the merged org. Not agreed, Dan wants to see what it does to his reps' books first.
++- Open: which customer ID does the merged org use, Northwind's ERP customer number or Baltic's legacy account ID? Three things depend on it: the Account migration, the ERP integration, and the reports.
++- Dan sends an export of Baltic's Account owners by Friday.
++- Recording is in the client's SharePoint, Projects/Org Merge/Workshops/2026-10-09-accounts.mp4. It can't leave SharePoint.
+--- sources/SRC-003-customer-id-decision-email.md	1969-12-31 19:00:00
++++ sources/SRC-003-customer-id-decision-email.md	2026-10-09 10:42:29
+@@ -0,0 +1,7 @@
++From: Helen Brandt
++To: Mike Rihm
++Subject: Customer ID
++
++Mike, decided. The merged org uses Northwind's ERP customer number as the customer ID. Baltic's legacy account ID is kept in a read-only field for two years after cutover, then we drop it.
++
++Helen
+--- sources/SRC-004-legacy-id-change-email.md	1969-12-31 19:00:00
++++ sources/SRC-004-legacy-id-change-email.md	2026-10-09 10:46:14
+@@ -0,0 +1,7 @@
++From: Helen Brandt
++To: Mike Rihm
++Subject: Legacy ID
++
++Mike, Finance needs to correct some of the Baltic legacy IDs during the first year. So the legacy ID field has to be editable by the Finance team for the first year after cutover, not read-only. The two years stay.
++
++Helen
+--- system/data-model.md	2026-10-09 10:36:26
++++ system/data-model.md	2026-10-09 10:46:14
+@@ -2,18 +2,30 @@
+ 
+ <!-- Keep this guide. This document holds the data the system keeps: each object or table, its important fields, and how records relate to each other. Rule IDs: DAT-01, DAT-02, and so on. The Status values, the form of a rule, and the marks are in `system/AGENTS.md`. Change this document with `filing-project-records`, step "update a system document". -->
+ 
+-- Status: Not started
+-- Last changed via: none
+-- Governs: not set
++- Status: Approved
++- Last changed via: DEC-003
++- Governs: the data of the merged Salesforce org; so far, the customer ID on an Account
+ 
+ ## Overview
+ 
+-Not written yet.
++The merged Salesforce org is the Northwind Supply org after the Baltic Freight org is merged into it. The rules below say which data the merged org keeps and how it identifies a customer.
+ 
+ ## Content
+ 
+-No rules yet.
++### DAT-01: The customer ID is the Northwind Supply ERP customer number
+ 
++- Mark: Approved (DEC-003)
++- Rule: The merged org uses Northwind Supply's ERP customer number as the customer ID.
++- Conditions and exceptions: None
++- Source: DEC-003, SRC-003
++
++### DAT-02: The Baltic Freight legacy account ID is kept for two years, and the Finance team can edit it in the first year
++
++- Mark: Approved (DEC-003)
++- Rule: The merged org keeps Baltic Freight's legacy account ID in a field for two years after cutover. During the first year after cutover, the Finance team can edit the field, and it is read-only for every other user. During the second year, it is read-only for every user. After the two years, the field is dropped.
++- Conditions and exceptions: None
++- Source: DEC-003, SRC-003, SRC-004
++
+ ## Open questions
+ 
+ None.
+@@ -22,3 +34,5 @@
+ 
+ | Date | Change | DEC | Work item |
+ | --- | --- | --- | --- |
++| 2026-10-09 | Changed DAT-02: the Finance team can edit the legacy ID field in the first year after cutover. DAT-01 keeps its wording and now names DEC-003 as its Source, because DEC-003 replaced DEC-002 | DEC-003 | WI-001 |
++| 2026-10-09 | Added DAT-01 and DAT-02, both Approved | DEC-002 | none |
+--- work-items/PROJECT-TASKS.md	2026-10-09 10:36:26
++++ work-items/PROJECT-TASKS.md	2026-10-09 10:41:49
+@@ -2,9 +2,16 @@
+ 
+ <!-- Fill-in guide: this file holds the project's tasks that belong to no work item, in one plain list with no phases: an administrative task, a to-do the owner asked to keep, and an action item from a meeting or a message, whoever owes it. Each task is a checkbox block in the same form as a work item's task, with the ID PT-01, then the next unused number; IDs are never reused. A new task goes at the end. Change the checkbox only when the Done when check is met. Replace the example task with the first real one. Keep this guide. -->
+ 
+-- [ ] **PT-01 — <Task name>** · Not Started  
+-  **Work:** <The action to take.>  
+-  **Deliverable:** <The file, decision, or other result.>  
+-  **Done when:** <The observable completion check.>  
+-  **Who does it:** <agent | owner | the name of another person who owes it, with the party, such as “Sarah Chen (client)”>  
+-  **Depends on:** <Task ID or “None.”>
++- [x] **PT-01 — Find out who decides what** · Done  
++  **Work:** Find out which decisions each person at the client may make: Helen Brandt (sponsor), Priya Nair, and Dan Okoye, and Northwind Supply as the client. Tell the agent. The owner said at the kickoff report on 2026-10-09: "I don't know yet who decides what, I'll find out."  
++  **Deliverable:** The "May decide" cell of each of those rows in `PROJECT.md`, "People and ownership".  
++  **Done when:** No "May decide" cell in `PROJECT.md` says "Not known yet". No due date was named.  
++  **Who does it:** owner  
++  **Depends on:** None.
++
++- [ ] **PT-02 — Export of Baltic Freight's Account owners** · Not Started  
++  **Work:** Dan Okoye sends Mike Rihm an export of the Account owners in the Baltic Freight org (SRC-001). When it arrives, the agent files it as a source.  
++  **Deliverable:** The export, filed in `sources/`.  
++  **Done when:** The export is filed as a source. Due Friday 2026-10-16. The notes say "by Friday" and the workshop was on Friday 2026-10-09, so the agent assumed the next Friday; the owner has not confirmed the date.  
++  **Who does it:** Dan Okoye (Baltic Freight)  
++  **Depends on:** None.
+--- work-items/WI-001-baltic-account-migration/WI-001.md	1969-12-31 19:00:00
++++ work-items/WI-001-baltic-account-migration/WI-001.md	2026-10-09 10:46:14
+@@ -0,0 +1,128 @@
++---
++id: WI-001
++title: Move Baltic's Accounts into Northwind's org
++type: data-load
++state: Backlog
++status: Not Started
++parent: none
++waiting_on: "owner"
++priority: medium
++delivery: not-offered
++requirements_approved: no
++design: none
++result_approved: no
++updated: 2026-10-09
++---
++
++# WI-001: Move Baltic's Accounts into Northwind's org
++
++## Overview
++
++<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step; Moved up stays empty until the item is closed. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
++
++**Goal:**
++
++### Current state
++
++<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a state or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to one or two sentences. -->
++
++**Where it stands:** The owner reported that cutover happened on a Saturday, that the owner loaded 48,212 Baltic Freight Accounts into production, and that Priya Nair found the counts matching on the Sunday. This file still says Backlog, with no approved requirements and no approved result, because the work was done outside this work item's steps.
++
++**Next action:** Waiting on the owner: Q-02 (the date of the cutover). After his answer: write the date in the records, and ask whether to close this work item through the closing steps.
++
++**Waiting on:** The owner: Q-02.
++
++**Blockers:** None.
++
++**Last updated:** 2026-10-09, the agent.
++
++**Related items:** No project phase yet. DEC-001, DEC-003, DAT-01, DAT-02.
++
++**Moved up:**
++
++## Roadmap
++
++<!-- Only a top-level item (`parent: none`) has a Roadmap, with at least one phase. A sub-item has no phases: delete this whole Roadmap section, and use the sub-item form at the end of Tasks. -->
++
++A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
++
++<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
++
++| Phase | Outcome | Status | Exit result | Sub-items |
++|---|---|---|---|---|
++
++## Tasks
++
++<!-- A top-level item: under each phase heading, add that phase's tasks only, and delete the sub-item form at the end of this section. A sub-item: delete the phase headings and their tasks, and keep only the sub-item form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
++
++## Recent History
++
++<!-- Add one row, newest first, for each of these changes: a state, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
++
++| Date | Change or decision | Effect on the work |
++|---|---|---|
++| 2026-10-09 | Helen Brandt changed the legacy ID rule by email (SRC-004), and the owner agreed: the Finance team can edit the legacy ID field in the first year after cutover. DEC-003 replaced DEC-002, and DAT-02 changed. | Related items now names DEC-003. R-01 names DAT-02 by ID, so its text did not change. The owner reported earlier that production is live; in the UAT test the field was read-only for a standard user. Whether the Finance team can edit the field in production is not known, and no work covers that change yet. |
++| 2026-10-09 | The owner reported in chat: "Cutover happened on Saturday. I ran the production load myself, 48,212 Baltic Accounts. Priya checked the counts on Sunday morning and they match. The merged org is live and uses the ERP customer number everywhere." The date of that Saturday is not known: this computer's clock said 2026-10-09 when the report was recorded, the same date as the kickoff and the UAT test in this file, so the clock cannot give it (Q-02). The agent saw none of it, and no load file, backup, mapping, or count check is filed. | State stays Backlog until the owner says how to close it. DAT-01 and DAT-02 stay Approved and are not marked Built. Q-01 stays Open. `waiting_on` set to the owner for Q-02. |
++| 2026-10-09 | The owner reported a mapping test that Priya Nair ran in the UAT sandbox on 2026-10-09: 1,000 of 1,000 sample Accounts came across with the right ERP customer number, and the legacy ID field was read-only for a standard user. Production has not been touched. The agent did not see the test or its output, and no evidence is filed. | State stays Backlog. The test concerns DAT-01 and DAT-02, which stay Approved and are not marked Built. No requirement is approved, so nothing was accepted against this work item. |
++| 2026-10-09 | Related records named: DEC-001, DEC-002, DAT-01, DAT-02, SRC-001, SRC-003. | The work item follows DAT-01 and DAT-02, and DEC-001 is still Open. |
++| 2026-10-09 | Created from the owner's request. | In Backlog. The owner said not to start the interview yet. |
++
++## Requirements
++
++<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word, never reworded; when they are not the owner's words in this chat, name who said them and where (a source by its SRC-###). In each numbered list, write one line per thing that must be true, exact enough to check. Who or what a requirement applies to, and where it does not apply, are lines of its Functional Requirements. Each Acceptance Criteria line is one thing someone can observe. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
++
++### Requirement 1: Move Baltic Freight's Accounts into the Northwind Supply org
++
++- **Original verbatim requirement:** "Make a work item for moving Baltic's Accounts into Northwind's org under the customer ID rule."
++- **Goal:**
++
++**Functional Requirements**
++
++1. The migrated Accounts follow the customer ID rules DAT-01 and DAT-02.
++2. Does not apply to the ERP integration or to the reports. The owner said on 2026-10-09: "the ERP integration and the reports each get their own item later."
++
++**Acceptance Criteria:**
++
++## Questions and Answers
++
++<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, then “Recommended: <answer>, because <reason>.” when you recommend one; the requirement and task IDs it affects; and who can answer: `owner` for the project owner, or another person or role. The moment the owner answers, put his words in Answer and the date in Date answered, set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the owner's words and the date; when he decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision more than one work item needs is an entry in `DECISIONS.md`: the row that raised it keeps his words and ends “Filed as DEC-###.” Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
++
++| ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
++|---|---|---|---|---|---|---|---|
++| Q-02 | Which date was the Saturday of the cutover? The project's records are all dated 2026-10-09 and cannot give it. The date sets when the two years of DAT-02 end. |  |  |  | R-01 | Open | owner |
++| Q-01 | How does each Baltic Freight Account get a Northwind Supply ERP customer number, which DAT-01 requires? Nothing recorded says whether Baltic Freight's customers exist in Northwind Supply's ERP, or who assigns the numbers. Raised by the agent on 2026-10-09; not asked in an interview yet. |  |  |  | R-01 | Open | Not known yet: the owner, or a person the owner names |
++
++## Notes
++
++<!-- Keep useful context here without duplicating the requirements, the task list, Questions and Answers, or the Overview's Current state, which says where to pick up. Solution options and considerations stays last and contains proposals only. -->
++
++### Context
++
++- What is known on 2026-10-09 is listed here. Nothing below was checked in an org, because neither org is connected.
++- How each org sets an Account's owner today is in `reference/current-system/account-ownership.md`. That file is written and not committed yet.
++- Not known for DAT-02: which users are the Finance team, how they get edit access, and the date the first year ends, which depends on Q-02.
++- Who owns each migrated Account depends on DEC-001, which is Open. Helen Brandt decides it.
++- Dan Okoye's claim about how many Baltic Freight Accounts have an owner who has left is not checked. It is in the memory record "Baltic Freight Accounts".
++- Project task PT-02 is Dan Okoye's export of Baltic Freight's Account owners. It would check that claim.
++- Each org has about 1,000 users (`PROJECT.md`, "Systems and environments"). The owner reported that 48,212 Baltic Freight Accounts were loaded. Whether that is every Account in the Baltic Freight org is not known.
++- The mapping test of 2026-10-09 in the UAT sandbox is in Recent History. Not known: who built the mapping and the legacy ID field, how the 1,000 sample Accounts were chosen, where each ERP customer number came from (Q-01), and whether any user other than a standard user can edit the legacy ID field.
++- Not recorded for the production load: the load file, the backup taken before it, the field mapping, how Priya Nair checked the counts, and who owns each loaded Account while DEC-001 is Open. `delivery/migrations/` holds no record of this load.
++- Cutover is the last project phase, P05, and the merged org has to be live by the end of June 2027 (`PROJECT.md`).
++
++### Sources
++
++<!-- One line per original this item used. The original is filed in `sources/` first; this line holds its SRC-### ID, never the original or a copy of its text. Wherever the item uses something drawn from a source, name its SRC-###. Write “None.” when the item has no sources. -->
++
++- SRC-001: notes of the Accounts workshop, 2026-10-09. Taken from it: the Context lines on Account ownership.
++- SRC-003: Helen Brandt's email with the customer ID decision, 2026-10-09. Taken from it: R-01.
++- SRC-004: Helen Brandt's email that changes the legacy ID rule, 2026-10-09. Taken from it: R-01, through DAT-02.
++
++### Lessons not proven yet
++
++<!-- One line per thing the work taught that a later work item may need and that is not proven yet, for example a platform limit met once or an approach that failed. The closing step asks the owner whether each one moves up or is dropped, and writes the outcome at the end of its line. Write “None.” when there are none. -->
++
++None.
++
++### Solution options and considerations
++
++These are possibilities to evaluate, **not approved requirements or design decisions**.

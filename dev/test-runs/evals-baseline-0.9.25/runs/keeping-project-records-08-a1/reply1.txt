@@ -1,0 +1,14 @@
+One open work item mentioned Sentry: WI-031 (transaction entry). Its Notes had the line "Crash reports from beta builds go to Sentry". WI-032 (offline sync), WI-033 (charting library), the project tasks, `DECISIONS.md`, `system/`, and memory do not mention it.
+
+`PROJECT.md` also listed Sentry as the crash report system, so I corrected that too.
+
+- Recorded in WI-031: the Notes line now names Firebase Crashlytics, with a Recent History row dated 2026-10-09. No requirement changed.
+- Recorded in `PROJECT.md`, "Systems and environments": the Sentry row is now a Firebase Crashlytics row, sourced to you, in chat, 2026-10-09. This is committed to `main` on this computer; the repository has no remote, so nothing was pushed.
+- Updated the project's Current State: removed "Bea Hollis: PT-02 (the testers' phone models)" from "Waiting on", because PT-02 was marked Done on 2026-10-01.
+
+What is the name of the Firebase project? The `PROJECT.md` row says you have not given it yet.
+
+Sources:
+- WI-031, Notes, Context: the Sentry line.
+- `PROJECT.md`, "Systems and environments": the Sentry row.
+- `work-items/PROJECT-TASKS.md`, PT-02: Done on 2026-10-01.

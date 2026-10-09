@@ -1,0 +1,12 @@
+$ git log --all --oneline --decorate 3e6b4b5b309abbfd5c979a19ec95fb937347f933..
+e990c60 (HEAD -> main) WI-034: record the result of the first TestFlight load
+05f8810 WI-034: record of the TestFlight tester load; list WI-034 under P01
+62461bc File SRC-002: Bea Hollis email naming four beta testers
+
+$ git branch --all -vv
+* main e990c60 WI-034: record the result of the first TestFlight load
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/rerun/runs/small-work-item-short-path-08-a1 e990c60 [main]
+
+$ git status --short

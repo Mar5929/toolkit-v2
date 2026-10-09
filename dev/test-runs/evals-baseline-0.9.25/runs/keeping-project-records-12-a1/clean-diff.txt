@@ -1,0 +1,63 @@
+--- sources/README.md	2026-10-09 10:05:01
++++ sources/README.md	2026-10-09 10:23:52
+@@ -5,3 +5,4 @@
+ | ID | Date received | From | What it is | Where kept | Used by |
+ | --- | --- | --- | --- | --- | --- |
+ | SRC-001 | 2026-09-29 | Bea Hollis | Email: how she will run the beta tester group, and her question about testers outside the United States | [SRC-001-beta-group-email.md](SRC-001-beta-group-email.md) | DEC-002 |
++| SRC-002 | 2026-10-09 | Tomas Lindqvist, pasted by Mike in chat | Notes: how the phone must talk to the sync server (batch size, transaction IDs, a batch sent again, the stored time) | [SRC-002-sync-notes.md](SRC-002-sync-notes.md) | WI-032 |
+--- sources/SRC-002-sync-notes.md	1969-12-31 19:00:00
++++ sources/SRC-002-sync-notes.md	2026-10-09 10:23:52
+@@ -0,0 +1,6 @@
++Sync notes, Tomas Lindqvist
++
++1. The phone sends its changes in batches of at most 50 transactions.
++2. Every transaction carries the ID the phone gave it. The server never makes up an ID.
++3. If a batch fails halfway, the phone sends the whole batch again. The server ignores any transaction ID it already has.
++4. The server answers with the time it stored each transaction.
+--- work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:24:05
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-032: Offline sync
+@@ -22,15 +22,15 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** Every question is answered (Q-01 to Q-04), and four requirements are written. Mike has not approved them yet.
++**Where it stands:** Every question is answered (Q-01 to Q-04), and four requirements are written. Mike has not approved them yet. Tomas Lindqvist's notes on how the phone must talk to the sync server are filed as SRC-002 and are not yet compared with the requirements.
+ 
+-**Next action:** Agent: check that the requirements are complete, then ask Mike to approve them.
++**Next action:** Agent: read SRC-002 before anything else, check the four requirements against it, then ask Mike to approve them.
+ 
+ **Waiting on:** Nothing.
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** [[WI-031]] (parent).
+ 
+@@ -46,6 +46,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike gave the project Tomas Lindqvist's sync notes, filed as SRC-002. Mike: "Anybody picking up offline sync needs to read this before anything else." | Next action now starts with reading SRC-002 and checking R-01 to R-04 against it. No requirement changed. |
+ | 2026-09-30 | Q-03 and Q-04 answered | R-04 written. Every question is answered. Next: check that the requirements are complete. |
+ | 2026-09-29 | Q-01 and Q-02 answered | Goal agreed. R-01 to R-03 written. |
+ | 2026-09-28 | Created as a sub-item of [[WI-031]] at Mike's request | Interview started. |
+@@ -123,7 +124,7 @@
+ 
+ ### Sources
+ 
+-- None.
++- SRC-002: Tomas Lindqvist's notes on how the phone must talk to the sync server, received 2026-10-09. Read it before any other work on this work item (Mike, 2026-10-09). Taken from it: nothing yet.
+ 
+ ### Lessons not proven yet
+ 

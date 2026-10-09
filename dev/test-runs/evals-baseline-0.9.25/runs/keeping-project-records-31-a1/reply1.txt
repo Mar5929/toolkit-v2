@@ -1,0 +1,24 @@
+The staging sign-in is recorded as done, and the next step on offline sync (WI-032) is mine: check that its four requirements are complete, then ask you to approve them.
+
+**Where WI-032 stands**
+
+- All four interview questions are answered (Q-01 to Q-04), and four requirements are written. You have not approved them yet.
+- The four requirements are: the app works with no signal, it sends by itself within 1 minute of the connection returning, a transaction never reaches the server twice, and the most recent edit wins when two phones edited the same transaction.
+- After your approval, the tasks get written and the work item moves to Designing or Building. I will recommend one when I ask for approval.
+- WI-032 did not wait on the staging sign-in. It was not listed as a blocker.
+
+**What I saved**
+
+- Recorded in `work-items/PROJECT-TASKS.md`, PT-01: Done on 2026-10-09. Tomas walked you through the sign-in on a call and you signed in.
+- Recorded in `PROJECT.md`, the "Sync server (staging)" row: it now says you have a sign-in. It said: "Mike has no sign-in yet (PT-01)".
+- Updated the project's Current State: removed the "Waiting on" line for Tomas (PT-01), and the line for Bea Hollis (PT-02), which had been done since 2026-10-01.
+
+One "Waiting on" line is left, and its check-again date is today: DEC-002, whether to allow testers outside the United States, which waits on your decision.
+
+Sources:
+- WI-032: its Current state, the four requirements, and Q-01 to Q-04.
+- `work-items/PROJECT-TASKS.md`: PT-01 and PT-02.
+- The project's Current State: the "Waiting on" lines.
+- `DECISIONS.md`: DEC-002 is still Open.
+
+Say "keep going" and I'll check that the WI-032 requirements are complete and then ask you to approve them.

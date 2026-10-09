@@ -1,0 +1,58 @@
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:34:28
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- memory/project_sync_server_hosting.md	1969-12-31 19:00:00
++++ memory/project_sync_server_hosting.md	2026-10-09 10:34:28
+@@ -0,0 +1,37 @@
++---
++name: project_sync_server_hosting
++description: Unchecked claim, 2026-10-09: the sync server's hosting bill may roughly double in January 2027, when the free tier ends
++created: 2026-10-09
++updated: 2026-10-09
++check_by: 2026-11-08
++metadata:
++  type: project
++status: current
++source: Mike, in chat, 2026-10-09, reporting what he thinks Tomas Lindqvist said at the end of a call
++last_verified: unknown
++authorization: Logged by the agent on 2026-10-09
++work_items: []
++supersedes: none
++---
++
++# Sync server hosting
++
++## Hosting cost from January 2027 (unchecked claim)
++
++**Remember:** Mike thinks Tomas Lindqvist said that the hosting bill for the sync server roughly doubles in January, when the free tier runs out. Mike reported this on 2026-10-09 and said he is not sure he heard it right. Mike did not give the date of the call, the current amount of the bill, or which service the free tier belongs to.
++
++**Why:** A higher hosting bill from January 2027 is a cost for Mike, and it starts about six weeks after the first beta build goes out on 2026-11-20 (PT-04).
++
++**How to apply:** Never state this as a fact. When hosting cost comes up, say that the claim is unchecked. When Tomas confirms or corrects it, save the confirmed fact in the place where it is kept, and remove this section.
++
++**Evidence and limits:** Not checked. Mike, in chat, 2026-10-09: "I think Tomas said the hosting bill roughly doubles in January, when the free tier runs out. Not sure I heard that right, it was at the end of a call." Tomas stating the amounts and the date in writing would check it. The year 2027 is the agent's reading of "January".
++
++**Related memories:** None.
++
++**Authoritative records:** `PROJECT.md`, "Systems and environments": the sync server is hosted on Render, and Tomas looks after its hosting.
++
++**Check or remove by:** 2026-11-08
++
++## Gotchas and lessons
++
++None yet.

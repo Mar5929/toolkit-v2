@@ -1,0 +1,97 @@
+--- DECISIONS.md	2026-10-09 10:05:01
++++ DECISIONS.md	2026-10-09 10:28:31
+@@ -54,3 +54,14 @@
+ - Affects: WI-031
+ - Replaces or replaced by: none
+ - Sources: SRC-001
++
++## DEC-003: The phone works out the monthly totals
++
++- Status: Decided
++- Raised: 2026-10-09, Mike
++- Decided: 2026-10-09, Mike
++- Decision: The iPhone app works out the monthly totals itself. The sync server only stores transactions and computes nothing.
++- Why: Mike gave no reason. Mike said on 2026-10-09 that Tomas Lindqvist already removed the code that computed the totals from the server; nobody has checked that in the repository `pocket-ledger-server`.
++- Affects: WI-032, ARC-01
++- Replaces or replaced by: none
++- Sources: none
+--- PROJECT.md	2026-10-09 10:05:01
++++ PROJECT.md	2026-10-09 10:28:31
+@@ -15,8 +15,8 @@
+ 
+ | System or org | Purpose | Environment | Source of truth | Access notes |
+ | --- | --- | --- | --- | --- |
+-| Pocket Ledger iPhone app | Where a user logs and views transactions | Built with Xcode on Mike's Mac | `app/` in this repository, made when the first work item reaches Building | Mike builds every version himself |
+-| Sync server (production) | Stores each user's transactions and computes the monthly totals | Hosted on Render | Tomas's repository `pocket-ledger-server` | Tomas deploys; Mike can read the logs |
++| Pocket Ledger iPhone app | Where a user logs and views transactions; it works out the monthly totals (DEC-003) | Built with Xcode on Mike's Mac | `app/` in this repository, made when the first work item reaches Building | Mike builds every version himself |
++| Sync server (production) | Stores each user's transactions; it computes nothing (DEC-003) | Hosted on Render | Tomas's repository `pocket-ledger-server` | Tomas deploys; Mike can read the logs |
+ | Sync server (staging) | A copy of the sync server for testing sync | Hosted on Render | Tomas's repository `pocket-ledger-server` | Mike has no sign-in yet (PT-01) |
+ | TestFlight | Sends beta builds to the testers | Apple, production | App Store Connect | Mike's Apple developer account, once Apple approves it (PT-03) |
+ | Sentry | Collects crash reports from beta builds | Sentry cloud | The Sentry project `pocket-ledger-ios` | Mike's Sentry account |
+--- system/architecture.md	2026-10-09 10:04:26
++++ system/architecture.md	2026-10-09 10:28:31
+@@ -2,18 +2,23 @@
+ 
+ <!-- Keep this guide. This document holds the main parts of the system, what each part is responsible for, and how the parts connect. Rule IDs: ARC-01, ARC-02, and so on. The Status values, the form of a rule, and the marks are in `system/AGENTS.md`. Change this document with `filing-project-records`, step "update a system document". -->
+ 
+-- Status: Not started
+-- Last changed via: none
+-- Governs: not set
++- Status: Approved
++- Last changed via: DEC-003
++- Governs: The iPhone app, the sync server, and which of the two does which work.
+ 
+ ## Overview
+ 
+-Not written yet.
++Pocket Ledger has two main parts. The iPhone app is where a user logs and views transactions. The sync server keeps each user's transactions. The rules below say which part is responsible for what.
+ 
+ ## Content
+ 
+-No rules yet.
++### ARC-01: The phone works out the monthly totals
+ 
++- Mark: Approved (DEC-003)
++- Rule: The iPhone app works out the monthly totals from the transactions it holds. The sync server stores transactions and computes nothing.
++- Conditions and exceptions: None
++- Source: DEC-003
++
+ ## Open questions
+ 
+ None.
+@@ -22,3 +27,4 @@
+ 
+ | Date | Change | DEC | Work item |
+ | --- | --- | --- | --- |
++| 2026-10-09 | Added ARC-01: the phone works out the monthly totals, and the sync server only stores transactions. | DEC-003 | none |
+--- work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:28:36
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-032: Offline sync
+@@ -30,9 +30,9 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+-**Related items:** [[WI-031]] (parent).
++**Related items:** [[WI-031]] (parent). DEC-003, ARC-01.
+ 
+ **Moved up:**
+ 
+@@ -46,6 +46,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike decided that the phone works out the monthly totals and the server only stores transactions (DEC-003, ARC-01) | No requirement changes. The design must keep on the phone every transaction that a month's totals need. |
+ | 2026-09-30 | Q-03 and Q-04 answered | R-04 written. Every question is answered. Next: check that the requirements are complete. |
+ | 2026-09-29 | Q-01 and Q-02 answered | Goal agreed. R-01 to R-03 written. |
+ | 2026-09-28 | Created as a sub-item of [[WI-031]] at Mike's request | Interview started. |

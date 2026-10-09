@@ -1,0 +1,26 @@
+I have not changed the file yet, because the best fix differs from the one you asked for and you should choose.
+
+The goal as I understand it: Dana Whitfield gets her TestFlight invitation, and the other three are left as they are.
+
+How it stands today: the file has four rows, and three of those testers are already invited. If I only correct Dana's address, you upload all four rows again. I have not checked how TestFlight treats rows that are already invited; it may report them as errors or send the invitations again.
+
+- **A. A new file with only Dana's row, with the right address (recommended).** The upload adds one tester and touches nobody else. The first file stays as the record of what you uploaded today. The cost is that the four testers are then spread over two files.
+- **B. Correct Dana's row in the four-row file, and upload all four again.** One file holds the right list. The cost is the unknown above for the three who are already invited.
+
+With either choice, check TestFlight for a tester entry with Dana's wrong address and delete it if it is there.
+
+WI-034 is Done, so this fix has no work item. I recommend a small one (WI-035), because the file goes into TestFlight and a work item gives it the separate check.
+
+What I saved:
+
+- Updated in memory: Beta group. It said: "Mike uploads it himself. Nobody has confirmed that he uploaded it." Say 'undo that' to put it back. It now holds the upload, the three invitations, and that Dana's failed; it holds no email address.
+- WI-034: a Recent History row for the upload result, and a lesson that a typed list of addresses can hold a wrong one.
+- Updated the project's Current State: added this question under "Waiting on".
+
+PT-03 (the Apple developer enrollment) still says In Progress. Your upload suggests Apple approved the account, but you did not say so, so I left it open.
+
+Sources:
+- WI-034: it is Done, and its file matched Bea's email as you pasted it.
+- `work-items/PROJECT-TASKS.md`, PT-03: In Progress.
+
+A or B, and do you want the work item?

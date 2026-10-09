@@ -1,0 +1,161 @@
+--- DECISIONS.md	2026-10-09 10:05:01
++++ DECISIONS.md	2026-10-09 10:26:12
+@@ -54,3 +54,14 @@
+ - Affects: WI-031
+ - Replaces or replaced by: none
+ - Sources: SRC-001
++
++## DEC-003: The form of a transaction's ID and who makes it
++
++- Status: Decided
++- Raised: 2026-10-09, Mike
++- Decided: 2026-10-09, Mike
++- Decision: A transaction's ID is the phone's device ID, a dash, and a six-digit counter, for example D7F2-000123. The phone makes the ID and the server never does. Everything that matches transactions with each other uses this ID.
++- Why: Mike, in chat, 2026-10-09: "The phone makes it and the server never does. Everything that matches transactions up has to use that." He gave the rule so that later work does not get the ID wrong.
++- Affects: WI-031, WI-032, DAT-01
++- Replaces or replaced by: none
++- Sources: none
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:26:39
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -26,4 +26,5 @@
+ 
+ ## Next session starts with
+ 
++- WI-032: read its Current state.
+ - WI-031: read its Current state.
+--- system/data-model.md	2026-10-09 10:04:26
++++ system/data-model.md	2026-10-09 10:26:12
+@@ -2,18 +2,23 @@
+ 
+ <!-- Keep this guide. This document holds the data the system keeps: each object or table, its important fields, and how records relate to each other. Rule IDs: DAT-01, DAT-02, and so on. The Status values, the form of a rule, and the marks are in `system/AGENTS.md`. Change this document with `filing-project-records`, step "update a system document". -->
+ 
+-- Status: Not started
+-- Last changed via: none
+-- Governs: not set
++- Status: Approved
++- Last changed via: DEC-003
++- Governs: The data that the iPhone app and the sync server keep about a transaction.
+ 
+ ## Overview
+ 
+-Not written yet.
++A transaction is one purchase that a user logged. The iPhone app creates each transaction, and the sync server stores a copy. This document holds the rules for the data of a transaction that both sides must follow.
+ 
+ ## Content
+ 
+-No rules yet.
++### DAT-01: Transaction ID
+ 
++- Mark: Approved (DEC-003)
++- Rule: A transaction's ID is the phone's device ID, a dash, and a six-digit counter, for example D7F2-000123. The phone makes the ID. The server never makes an ID. Every part of the system that matches one transaction with another, such as sync finding a transaction that the server already holds, uses this ID.
++- Conditions and exceptions: None
++- Source: DEC-003
++
+ ## Open questions
+ 
+ None.
+@@ -22,3 +27,4 @@
+ 
+ | Date | Change | DEC | Work item |
+ | --- | --- | --- | --- |
++| 2026-10-09 | Added DAT-01, the form of a transaction's ID and who makes it. | DEC-003 | none |
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:26:29
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -32,7 +32,7 @@
+ 
+ **Last updated:** 2026-09-30, the agent.
+ 
+-**Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002.
++**Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002, DEC-003, DAT-01.
+ 
+ **Moved up:**
+ 
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike gave the form of a transaction's ID. Filed as DEC-003 and DAT-01 | The app makes each transaction's ID on the phone, as DAT-01 says. No requirement changed. |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+--- work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:26:29
+@@ -5,13 +5,13 @@
+ state: Refining Requirements
+ status: Preparing
+ parent: WI-031
+-waiting_on: "agent"
++waiting_on: "owner"
+ priority: medium
+ delivery: not-offered
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-032: Offline sync
+@@ -22,17 +22,17 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** Every question is answered (Q-01 to Q-04), and four requirements are written. Mike has not approved them yet.
++**Where it stands:** Four requirements are written, and Mike has not approved them yet. Mike gave the form of a transaction's ID on 2026-10-09 (DEC-003, DAT-01). The agent proposed stronger Acceptance Criteria for R-03, and Q-05 asks Mike whether to use them.
+ 
+-**Next action:** Agent: check that the requirements are complete, then ask Mike to approve them.
++**Next action:** Waiting on the owner: Q-05 (replace the Acceptance Criteria of R-03). After his answer: write the agreed criteria in R-03, check that the requirements are complete, then ask Mike to approve them.
+ 
+-**Waiting on:** Nothing.
++**Waiting on:** Mike: Q-05, asked 2026-10-09.
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+-**Related items:** [[WI-031]] (parent).
++**Related items:** [[WI-031]] (parent). DEC-003, DAT-01.
+ 
+ **Moved up:**
+ 
+@@ -46,6 +46,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike gave the form of a transaction's ID. Filed as DEC-003 and DAT-01. Mike asked whether the acceptance check of R-03 is good enough; Q-05 asked | Sync matches transactions by the ID in DAT-01. R-03 is unchanged until Mike answers Q-05. Waiting on Mike. |
+ | 2026-09-30 | Q-03 and Q-04 answered | R-04 written. Every question is answered. Next: check that the requirements are complete. |
+ | 2026-09-29 | Q-01 and Q-02 answered | Goal agreed. R-01 to R-03 written. |
+ | 2026-09-28 | Created as a sub-item of [[WI-031]] at Mike's request | Interview started. |
+@@ -110,6 +111,7 @@
+ 
+ | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
+ |---|---|---|---|---|---|---|---|
++| Q-05 | Shall I replace the Acceptance Criteria of R-03 with these three checks? (1) The tester logs 5 transactions offline, then makes the server save a send while its confirmation does not reach the phone, so the phone sends again. The tester does this 3 times. (2) Afterwards the server holds exactly one record for each of the 5 transaction IDs (DAT-01), and none is missing. (3) The day's list on the phone shows each of the 5 once. Recommended: yes, because the present check does not say how to count "once", and a connection cut by hand rarely hits the one moment that makes a duplicate. |  |  |  | R-03 | Open | owner |
+ | Q-04 | What have we not talked about yet that could change this? Recommended: nothing, if the four requirements are right. | "Nothing else comes to mind." | 2026-09-30 | no | R-01 to R-04 | Answered | owner |
+ | Q-03 | When the same transaction is edited on two phones before they sync, which edit wins? Recommended: the most recent edit, because asking the user to choose is slow and rare. | "Most recent wins. Don't bother the user." | 2026-09-30 | yes | R-04 | Answered | owner |
+ | Q-02 | How soon after the connection returns must sync finish? Recommended: within 1 minute, because users check the list right after leaving a dead zone. | "1 minute is fine." | 2026-09-29 | yes | R-02 | Answered | owner |
+@@ -133,5 +135,5 @@
+ 
+ These are possibilities to evaluate, **not approved requirements or design decisions**.
+ 
+-- **For R-02 and R-03:** Keep a queue of unsent transactions on the phone, with an ID on each one, so the server can tell when it gets a transaction a second time.
++- **For R-02 and R-03:** Keep a queue of unsent transactions on the phone, with the ID that DAT-01 gives on each one, so the server can tell when it gets a transaction a second time.
+ - **For R-04:** Stamp each edit with the time it was made.

@@ -1,0 +1,1 @@
+One more thing for offline sync. A transaction that the server doesn't have yet should show a small "not synced" badge in the day's list, so people know it hasn't gone up.

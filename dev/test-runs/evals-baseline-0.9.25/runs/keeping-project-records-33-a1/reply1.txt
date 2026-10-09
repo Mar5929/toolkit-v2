@@ -1,0 +1,22 @@
+I can't give you a number yet. The two counts disagree, nothing on record says which is right, and I can't open Bea's sheet from here. Don't send invites against 14, 11, or the 12 from her September email.
+
+Three things matter for the count:
+
+- **Which list is complete.** Bea decides who is in the group, so 14 may be right and the sheet may be three rows behind. Tomas may also have miscounted, or Bea may be counting people who have not fully signed up. Only Bea can say.
+- **The number to use.** Once Bea confirms the "Testers" tab is complete, the number of rows on that tab is the number of invites. The first-build task (PT-04) sends to every tester on the sheet.
+- **Testers outside the United States.** The group was 12, all in the US, on 2026-09-29. If either of the two new people is Bea's cousin in Toronto, you still have to decide whether non-US testers join the first beta (DEC-002, open, and due for a check today).
+
+No invites can go out today in any case. Apple has not yet approved your developer account (PT-03), and the first build is planned for 2026-11-20.
+
+- Saved to memory: Two counts that disagree, 2026-10-09 (in Beta group, `memory/project_beta_group.md`). Both counts are marked as not checked.
+- Updated in memory: Beta group. It said: "Use this number when Mike asks how big the beta is or how many invitations to send." It now says 12 was only the size on 2026-09-29. Say 'undo that' to put it back.
+- Updated the project's Current State: added the tester-count question under "Waiting on", and removed the PT-02 line (Bea's phone models), which was done on 2026-10-01.
+
+Sources:
+- `memory/project_beta_group.md` and SRC-001: 12 testers, all in the United States, on 2026-09-29; the Toronto cousin.
+- `PROJECT.md`, "People and ownership": Bea decides who is in the beta group.
+- `work-items/PROJECT-TASKS.md`: PT-02 done, PT-03 in progress, PT-04 sends to every tester on the sheet.
+- `DECISIONS.md`, DEC-002: testers outside the United States, still open.
+- The project's Current State: the 2026-11-20 date for the first beta build.
+
+Can you ask Bea whether the "Testers" tab lists all 14 people, and tell me what she says?

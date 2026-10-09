@@ -1,0 +1,31 @@
+Saving the badge requirement to WI-032 is done; I am running the record check once more before I reply.
+
+I added the badge to WI-032 (offline sync) as Requirement 5. It is written, not approved, and has one open question for you.
+
+The goal as I understand it: a user can see in the day's list which transactions have not reached the server yet.
+
+What Requirement 5 says now:
+
+- In the day's list, a transaction that the server does not have yet shows a small "not synced" badge.
+- The badge goes away when the server has the transaction, and the user does nothing to remove it.
+- The check: in airplane mode a tester logs a transaction and sees the badge. With airplane mode off, the server shows the transaction within 1 minute and the badge is gone.
+
+Your request leaves one case open. Requirement 1 lets a user edit a transaction with no signal, so the server can hold a transaction while its latest change has not gone up.
+
+Q-05: Does the "not synced" badge also show on a transaction that the server already has, when the user changed it and the change has not reached the server yet?
+Recommended: yes, because the server then still holds the old amount, and the user cannot see that without the badge.
+Watch out: the badge then means "something here has not gone up", for a new transaction and for a change alike, and the user cannot tell the two cases apart.
+Not yet covered: a deleted transaction. Whether a user can delete at all is still open in WI-031 (Q-05 there), so I left that case out for now.
+
+What I saved:
+
+- WI-032: Requirement 5, question Q-05, and its Current state, which now waits on you for Q-05.
+- WI-032, Notes: Nadia Okafor decides the look and the place of the badge, and the day's list itself belongs to WI-031.
+
+Sources:
+
+- WI-032: Requirements 1 to 4, the 1-minute sync time (R-02), and that the requirements are not approved yet.
+- WI-031: the day's list is in its phase P2, and its Q-05 on editing and deleting is open.
+- `PROJECT.md`, "People and ownership": Nadia Okafor decides the layout and the colors of a screen.
+
+Does the badge also show on a transaction whose change has not reached the server yet?

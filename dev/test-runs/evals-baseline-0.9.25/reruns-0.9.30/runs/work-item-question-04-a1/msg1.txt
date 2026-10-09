@@ -1,0 +1,1 @@
+How many open questions does transaction entry still have, and which of them wait on me?

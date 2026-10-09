@@ -1,0 +1,264 @@
+--- DECISIONS.md	2026-10-09 10:05:01
++++ DECISIONS.md	2026-10-09 10:17:59
+@@ -40,7 +40,7 @@
+ - Decided: 2026-09-28, Mike
+ - Decision: The app supports iOS 17 and newer.
+ - Why: Every beta tester has a recent phone, and one oldest version for the whole app keeps the screens and the chart on the same tools.
+-- Affects: WI-031, WI-033
++- Affects: WI-031, WI-033, WI-034
+ - Replaces or replaced by: none
+ - Sources: none
+ 
+--- PROJECT-ROADMAP.md	2026-10-09 10:05:01
++++ PROJECT-ROADMAP.md	2026-10-09 10:17:59
+@@ -27,6 +27,7 @@
+ 
+ - [[WI-031]] Transaction entry
+ - [[WI-033]] Pick a charting library
++- [[WI-034]] Set the app's minimum iOS version in the repo
+ 
+ ## Open project-level planning questions
+ 
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:17:59
+@@ -1,12 +1,13 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+ - WI-031: logging a transaction.
+ - WI-032: offline sync.
+ - WI-033: picking a charting library.
++- WI-034: the app's minimum iOS version as a build setting.
+ - Enrolling in the Apple Developer Program (PT-03).
+ 
+ ## Coming up
+@@ -18,7 +19,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+@@ -26,4 +26,5 @@
+ 
+ ## Next session starts with
+ 
++- WI-034: read its Current state.
+ - WI-031: read its Current state.
+--- system/constraints.md	2026-10-09 10:04:26
++++ system/constraints.md	2026-10-09 10:16:06
+@@ -2,18 +2,23 @@
+ 
+ <!-- Keep this guide. This document holds the rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect. Rule IDs: CON-01, CON-02, and so on. The Status values, the form of a rule, and the marks are in `system/AGENTS.md`. Change this document with `filing-project-records`, step "update a system document". -->
+ 
+-- Status: Not started
+-- Last changed via: none
+-- Governs: not set
++- Status: Approved
++- Last changed via: DEC-001
++- Governs: the versions of iOS that the app runs on
+ 
+ ## Overview
+ 
+-Not written yet.
++The app supports one oldest version of iOS, so that every screen uses the same tools.
+ 
+ ## Content
+ 
+-No rules yet.
++### CON-01: Oldest iOS version
+ 
++- Mark: Approved (DEC-001)
++- Rule: The app runs on iOS 17 and newer, and on no older version.
++- Conditions and exceptions: None
++- Source: DEC-001
++
+ ## Open questions
+ 
+ None.
+@@ -22,3 +27,4 @@
+ 
+ | Date | Change | DEC | Work item |
+ | --- | --- | --- | --- |
++| 2026-09-28 | Added CON-01. | DEC-001 | WI-033 |
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:18:45
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | [[WI-034]] adds `app/Config/Deployment.xcconfig` (minimum iOS version 17.0) | Noted under Context: the Xcode project must use that file. |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+@@ -136,6 +137,7 @@
+ - The starting request, in Mike's words on 2026-09-28: "I want people to be able to log a transaction fast on their phone. Amount, what it was for, done."
+ - Categories for the first version: Groceries, Rent, Transport, Eating out, Other (P1-T01).
+ - Crash reports from beta builds go to Sentry (`PROJECT.md`, "Systems and environments").
++- The Xcode project that this work item creates must take its build settings from `app/Config/Deployment.xcconfig`, which sets the minimum iOS version to 17.0 ([[WI-034]], DEC-001). Until then the file has no effect on a build.
+ 
+ ### Sources
+ 
+--- work-items/WI-034-minimum-ios-version/WI-034.md	1969-12-31 19:00:00
++++ work-items/WI-034-minimum-ios-version/WI-034.md	2026-10-09 10:18:45
+@@ -0,0 +1,146 @@
++---
++id: WI-034
++title: Set the app's minimum iOS version in the repo
++type: task
++state: Testing Loop
++status: In Progress
++parent: none
++waiting_on: "owner"
++priority: medium
++delivery: owner-led
++requirements_approved: 2026-10-09 by Mike
++design: none
++result_approved: no
++updated: 2026-10-09
++---
++
++# WI-034: Set the app's minimum iOS version in the repo
++
++## Overview
++
++<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step; Moved up stays empty until the item is closed. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
++
++**Goal:** The repository holds the app's minimum iOS version, 17.0, as a build setting, so that nobody builds the app for an older phone.
++
++### Current state
++
++<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a state or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to one or two sentences. -->
++
++**Where it stands:** The file and the two corrected lines of `PROJECT.md` are in commit `50d11c7` on the branch `claude/wi-034-minimum-ios-version`, and [[WI-031]] holds the line about the Xcode project. I checked the result myself; no separate checker ran. Nothing is merged into `main` yet.
++
++**Next action:** Waiting on the owner: Q-02 (approve this result and mark WI-034 Done). After his answer: Agent: ask Mike for the yes to merge the branch into `main`.
++
++**Waiting on:** The owner: Q-02.
++
++**Blockers:** None.
++
++**Last updated:** 2026-10-09, the agent.
++
++**Related items:** Project phase P01. [[WI-031]] (it creates the Xcode project that must use this file). DEC-001, CON-01.
++
++**Moved up:**
++
++## Roadmap
++
++<!-- Only a top-level item (`parent: none`) has a Roadmap, with at least one phase. A sub-item has no phases: delete this whole Roadmap section, and use the sub-item form at the end of Tasks. -->
++
++A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
++
++<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
++
++| Phase | Outcome | Status | Exit result | Sub-items |
++|---|---|---|---|---|
++| P1 — Add the build setting | The minimum iOS version is in the repository and the project's records agree with it | In Progress | Both acceptance criteria of R-01 are checked, and the change is on `main` | None. |
++
++## Tasks
++
++<!-- A top-level item: under each phase heading, add that phase's tasks only, and delete the sub-item form at the end of this section. A sub-item: delete the phase headings and their tasks, and keep only the sub-item form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
++
++### P1 — Add the build setting
++
++- [x] **P1-T01 — Add `app/Config/Deployment.xcconfig`** · Done  
++  **Work:** On the branch `claude/wi-034-minimum-ios-version`, add the file `app/Config/Deployment.xcconfig` with the one line `IPHONEOS_DEPLOYMENT_TARGET = 17.0`.  
++  **Deliverable:** The file, committed on the branch.  
++  **Done when:** The file on the branch holds exactly that one line.  
++  **Who does it:** agent  
++  **Depends on:** None.
++- [x] **P1-T02 — Correct `PROJECT.md` about `app/`** · Done  
++  **Work:** On the same branch, change the two lines of `PROJECT.md` that say `app/` does not exist yet and is made when the first work item reaches Building. They then say that `app/` holds the build settings file and that the app's code is added when the first work item reaches Building.  
++  **Deliverable:** The two corrected lines, committed on the branch.  
++  **Done when:** No line of `PROJECT.md` says that `app/` does not exist.  
++  **Who does it:** agent  
++  **Depends on:** P1-T01.
++- [x] **P1-T03 — Record in WI-031 that the Xcode project must use the file** · Done  
++  **Work:** Add a line to the Notes, Context of [[WI-031]]: the Xcode project that WI-031 creates takes its build settings from `app/Config/Deployment.xcconfig`.  
++  **Deliverable:** The line in [[WI-031]].  
++  **Done when:** [[WI-031]] holds the line and names [[WI-034]].  
++  **Who does it:** agent  
++  **Depends on:** P1-T01.
++
++## Recent History
++
++<!-- Add one row, newest first, for each of these changes: a state, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
++
++| Date | Change or decision | Effect on the work |
++|---|---|---|
++| 2026-10-09 | Asked Mike the closing question (Q-02) | Waiting on Mike. The merge into `main` is still to come and needs its own yes. |
++| 2026-10-09 | Independent check: none, small item. Checked commit `50d11c7` myself. Evidence: `cat app/Config/Deployment.xcconfig` printed `IPHONEOS_DEPLOYMENT_TARGET = 17.0`, and `wc -l` printed 1; [[WI-031]], Notes, Context holds the line that names the file and [[WI-034]]. Not run: a build that refuses an older phone, because no Xcode project exists yet. | R-01: both acceptance criteria are met on the branch; criterion 1 is met on `main` only after the merge. |
++| 2026-10-09 | P1-T01, P1-T02, P1-T03 done. Commit `50d11c7` on `claude/wi-034-minimum-ios-version` adds the file and corrects two lines of `PROJECT.md`: `grep -c "does not exist" PROJECT.md` printed 0. The line is in [[WI-031]]. | Moved to the Testing Loop. |
++| 2026-10-09 | Small item, so no delivery offer. | `delivery` set to `owner-led`. |
++| 2026-10-09 | Small item: short path. Q-01 answered: requirements and project phase P01 approved | Moved to Building. |
++| 2026-10-09 | Created from the owner's request. Mike said yes to a work item: "Yes, make a work item for it." | Request played back on the short path; Q-01 asked. |
++
++## Requirements
++
++<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word, never reworded; when they are not the owner's words in this chat, name who said them and where (a source by its SRC-###). In each numbered list, write one line per thing that must be true, exact enough to check. Who or what a requirement applies to, and where it does not apply, are lines of its Functional Requirements. Each Acceptance Criteria line is one thing someone can observe. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
++
++### Requirement 1: Minimum iOS version as a build setting
++
++- **Original verbatim requirement:** "Set the app's minimum iOS version in the repo now, so nobody builds for an older phone. Add `app/Config/Deployment.xcconfig` with the one line `IPHONEOS_DEPLOYMENT_TARGET = 17.0`." (Mike, 2026-10-09)
++- **Goal:** Anyone who builds the app gets a build that refuses a phone older than iOS 17.
++
++**Functional Requirements**
++
++1. The repository holds the file `app/Config/Deployment.xcconfig`.
++2. The file holds one line: `IPHONEOS_DEPLOYMENT_TARGET = 17.0`.
++3. Does not apply to creating the Xcode project. [[WI-031]] creates the Xcode project and sets it to use this file.
++
++**Acceptance Criteria:**
++
++1. On `main`, `app/Config/Deployment.xcconfig` exists and holds exactly the one line `IPHONEOS_DEPLOYMENT_TARGET = 17.0`.
++2. [[WI-031]] holds a line that says the Xcode project must take its build settings from this file.
++
++## Questions and Answers
++
++<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, then “Recommended: <answer>, because <reason>.” when you recommend one; the requirement and task IDs it affects; and who can answer: `owner` for the project owner, or another person or role. The moment the owner answers, put his words in Answer and the date in Date answered, set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the owner's words and the date; when he decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision more than one work item needs is an entry in `DECISIONS.md`: the row that raised it keeps his words and ends “Filed as DEC-###.” Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
++
++| ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
++|---|---|---|---|---|---|---|---|
++| Q-02 | Approve this result and mark WI-034 Done? WI-034 at commit `50d11c7`: R-01 met on the branch, checked by the agent, with no separate checker. Not run: a build that refuses an older phone. Still to come: the merge into `main`, which this yes does not cover. Nothing to keep for the whole project. |  |  |  | R-01 | Open | owner |
++| Q-01 | Playback on the short path: the goal is that the repository holds the minimum iOS version 17.0 as a build setting. Hand over: `app/Config/Deployment.xcconfig` with the one line, two corrected lines in `PROJECT.md`, and a line in WI-031 that the Xcode project must use the file. Project phase P01. Is that right? | "Yes, that's right." | 2026-10-09 | yes | R-01, P1 | Answered | owner |
++
++## Notes
++
++<!-- Keep useful context here without duplicating the requirements, the task list, Questions and Answers, or the Overview's Current state, which says where to pick up. Solution options and considerations stays last and contains proposals only. -->
++
++### Context
++
++- CON-01 stays marked Approved, not Built: this work item states the minimum iOS version, and no app exists yet that runs on it.
++- The file has no effect until an Xcode project uses it. No Xcode project exists on 2026-10-09: `app/` is not in the repository yet.
++
++### Sources
++
++<!-- One line per original this item used. The original is filed in `sources/` first; this line holds its SRC-### ID, never the original or a copy of its text. Wherever the item uses something drawn from a source, name its SRC-###. Write “None.” when the item has no sources. -->
++
++- None.
++
++### Lessons not proven yet
++
++<!-- One line per thing the work taught that a later work item may need and that is not proven yet, for example a platform limit met once or an approach that failed. The closing step asks the owner whether each one moves up or is dropped, and writes the outcome at the end of its line. Write “None.” when there are none. -->
++
++- None.
++
++### Solution options and considerations
++
++These are possibilities to evaluate, **not approved requirements or design decisions**.
++

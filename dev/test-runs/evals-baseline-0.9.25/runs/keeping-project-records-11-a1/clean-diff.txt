@@ -1,0 +1,62 @@
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:23:42
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,11 +18,11 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+ - Beta tester sheet: Bea Hollis updates it when a tester joins or leaves; `reference_beta_tester_sheet.md` says where it is.
++- Screen designs (Figma): Nadia Okafor keeps every screen design in one file; `reference_screen_designs_figma.md` says where it is.
+ 
+ ## Next session starts with
+ 
+--- memory/reference_screen_designs_figma.md	1969-12-31 19:00:00
++++ memory/reference_screen_designs_figma.md	2026-10-09 10:23:28
+@@ -0,0 +1,36 @@
++---
++name: reference_screen_designs_figma
++description: Every screen design is in Nadia's one Figma file; look there for any screen, as of 2026-10-09
++created: 2026-10-09
++updated: 2026-10-09
++check_by: none
++metadata:
++  type: reference
++status: current
++source: Mike, in chat, 2026-10-09
++last_verified: unknown
++authorization: Approved by Mike on 2026-10-09
++work_items:
++  - "[[WI-031]]"
++supersedes: none
++---
++
++# Screen designs in Figma
++
++## Where the screen designs are
++
++**Remember:** Nadia Okafor put every screen design of the app into one Figma file: https://example.com/figma/pocket-ledger-screens. Mike said on 2026-10-09 that this file is the place to look for any screen from now on.
++
++**Why:** No file in the repository holds the screen designs, and the Figma file is hard to find without the link.
++
++**How to apply:** Open this file when Mike or a helper agent needs the design of a screen, for example the entry screen of [[WI-031]]. A design in the file is Nadia's work. It is an agreed requirement only when the work item or `DECISIONS.md` says so.
++
++**Evidence and limits:** Mike, in chat, 2026-10-09. The agent has not opened the link, so which screens the file holds and how it is organized are not checked.
++
++**Related memories:** None.
++
++**Authoritative records:** WI-031.
++
++## Gotchas and lessons
++
++None yet.
