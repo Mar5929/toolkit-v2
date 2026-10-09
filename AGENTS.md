@@ -2,6 +2,8 @@
 
 The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
 
+After you change, add, or delete files, end your reply with the list of those files, each as a link, with one plain sentence on what changed and why (Mike, 2026-10-09: "I need to see the list of files that you changed or added ... a simple sentence on why").
+
 This repository builds Toolkit V2 for Mike Rihm, a solo developer. The agent
 runs each of his projects; Mike only decides and steers. `README.md` explains
 it for Mike.
