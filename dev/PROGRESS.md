@@ -2,14 +2,14 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## Salesforce's plugins: setup checks and asks, version 0.9.26 (2026-10-09)
+## Salesforce's plugins: setup checks and asks, version 0.9.27 (2026-10-09)
 
 Mike found the Salesforce plugin setup of version 0.9.23 far larger than
 what he asked for. His words: "It literally just should be two lines when
 we're setting up the project ... 'Hey, do we want those turned off or on?'
 That's it." `AGENTS.md` holds his decision ("Salesforce's own skills and
-plugins" under Rules) and the wider principle ("The toolkit is a framework,
-not the setup of every tool").
+plugins" under Rules). Principles 1, 2, and 6 at the top of that file are
+the wider rule.
 
 - `<setup>references/salesforce.md`, "Salesforce's skills", is now one short
   section: check that Salesforce's skills are installed, and ask the owner
@@ -24,6 +24,24 @@ not the setup of every tool").
 - A project that was updated to 0.9.23 or later keeps the settings that
   version merged in. They do no harm, and nothing removes them.
 - Not tested live: a setup of a Salesforce project with this text.
+
+## The workstreams plugin is removed, version 0.9.26 (2026-10-09)
+
+Mike decided on 2026-10-09 to remove the `workstreams` plugin, the side panel
+for Claude Code. He was shown the line "Workstreams panel: 651 lines. You
+asked for this one." in a list of the custom code the toolkit ships, and
+answered: "have another session delete this". His reason: "We can't have all
+this custom code and stuff in this toolkit."
+
+- The folder `plugins/workstreams/` is deleted, and the marketplace for
+  Claude Code lists only `toolkit`.
+- `AGENTS.md`, `README.md`, and two references of `project-setup`
+  (`skills-hooks-settings.md` and `old-toolkit-pieces.md`) no longer name
+  the plugin. The two `claude plugin` commands for it are out of "Checks".
+- Three files carry the version now: the two `toolkit` manifests and the
+  marketplace for Claude Code.
+- Nothing replaces the panel. Earlier entries of this file and the files
+  under `dev/research/` and `dev/test-runs/` still describe it, as history.
 
 ## The agent asks whether a job gets a work item, version 0.9.25 (2026-10-09, TKV-51)
 
@@ -155,8 +173,8 @@ the meaning of the two changed rule sentences the same day.
 
 ## A Salesforce project turns on the Salesforce plugins itself, version 0.9.23 (2026-10-08, TKV-44)
 
-Version 0.9.26 removed everything this section says was built (see the
-section for 0.9.26 above). What was read and tested then still holds.
+Version 0.9.27 removed everything this section says was built (see the
+section for 0.9.27 above). What was read and tested then still holds.
 
 Mike decided on 2026-10-08 to "turn the Salesforce plugins on only in
 Salesforce projects". On his Windows computer Salesforce's plugins were on

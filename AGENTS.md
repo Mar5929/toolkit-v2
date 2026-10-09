@@ -4,6 +4,22 @@ The user dictates most messages with voice-to-text, so words may be misheard, mi
 
 After you change, add, or delete files, end your reply with the list of those files, each as a link, with one plain sentence on what changed and why (Mike, 2026-10-09: "I need to see the list of files that you changed or added ... a simple sentence on why").
 
+## Mike's principles for building the toolkit
+
+Mike has stated these many times, in every session of this project. They come from his own messages between 2026-09-29 and 2026-10-09. Read them before you design or change anything, and check your work against them before you show it to him. When a piece of work goes against one of them, stop and tell him before you build. Put this list in the brief of every helper agent.
+
+1. **The toolkit is a framework, and it stops there.** It gives a project general procedures and policies, and it names what should be installed. Every project is different, so the toolkit does not try to cover each one. Mike, 2026-10-09: "Every project is completely different, and the toolkit should just provide the overall framework", and "We don't really want to go beyond that, with maybe one or two exceptions".
+2. **Build the simplest thing that does the job.** Do not over-engineer. When a piece grows past what Mike asked for, or needs one case after another, stop and tell him its size before you go on. Mike, 2026-10-01: "we can't overengineer this", and "I asked you a million times to not over-architect this". Mike, 2026-10-09, about 120 lines of setup steps: "Literally, all this should be two lines".
+3. **Rules and skills, not custom code.** The rule files say what the agent may and may not do. Code, checks, and hard blocks are the rare exception, and each one needs Mike's yes first, with its size ("Code limit" under Rules). Mike, 2026-09-29: "Why did you write code to create the phases? ... This should just be a data model with a couple of skills or something that the agent understands." Mike, 2026-10-08: "our job in this toolkit is not to solve every single possible scenario and hand all these automated scripts and checks. We literally just need like the rule files that we have that say what the agent can and can't do". Mike, 2026-10-09: "We can't have all this custom code and stuff in this toolkit."
+4. **A skill holds Mike's procedures, policies, rules, templates, and the order of the steps.** It does not tell the agent how to reason, and it does not explain what the agent already knows. Every line must be something the agent would get wrong without it. Mike, 2026-10-01: "This is operating procedures and templates and instructions. You're not telling the agent how to reason", and "What is the template? Just give it the template and tell it where to store it." Mike, 2026-10-08: "We're really just trying to define what our process is and make sure the agent follows our process, rather than trying to define the behavior of an agent."
+5. **State the goal and the general rule, and let the agent judge.** Write no sentence for each small case, no table of phrases, and no count or limit where the agent should use its judgment. Say a thing as exactly as it needs to be said, and no more exactly. Trigger words are only insurance: the process must also start without them. Mike, 2026-10-08: "Why are we hardcoding the number of tasks to determine whether it is small? ... We cannot be solutioning and desiging like this where are processes are so rigid and limiting the agent's reasoning". Mike, 2026-09-30: "This should not just become sort of a matrix grid of trigger words that I have to sort of remember", and "It shouldn't be that if I don't say a specific trigger word, then it never happens in the first place". Mike, 2026-10-02: "you say it as explicitly as you need to without saying extra things".
+6. **An outside tool gets a line or two.** Name the tool, have the agent check that it is installed, and name the settings to turn on or off. The toolkit does not set the tool up, ship it, or build again what the tool already does. Mike, 2026-10-09: "The toolkit does not need to handle the actual setup of this and write all these setting files." Mike, 2026-10-03: "I don't want the toolkit V2 to ship all of these complex things for me. I just want it to keep track of the list of these plugins for me". Mike, 2026-10-05, about a Hindsight version of the memory skills: "I think Hindsight already does this."
+7. **Mike stays free inside a project.** He can change how the agent behaves on the spot, as a preference, and nothing the toolkit ships may lock him in. A sandbox is never hard-blocked: the agent asks first, and after his yes it deploys, fixes failures, and deploys again until it works. Mike, 2026-10-09: "in Dragonfly, I can't be limited", and "If I need to do something on the fly, maybe ask the agent to behave differently, like a preference." Mike, 2026-10-02: "We don't want to hard-block deleting memories".
+8. **Follow the official Claude Code and Codex pages, and use what they already provide.** Do not invent a way to build a skill, a rule, or a hook, and do not build what a built-in skill, plugin, or tool already does. Mike, 2026-10-01: "I'm giving you the official Claude Code and Anthropic documentation. We just need to follow it". Mike, 2026-10-05: "they must always be written using the most up to date claude code and codex best practices and up to date documentation".
+9. **Step back and look at the whole toolkit before you design.** Ask whether this is the right approach at all, and whether Mike's request is the best way to reach his goal. Each thing has one home, no two skills overlap, and the same structure holds wherever work or memory is kept. Mike, 2026-09-30: "You should always be taking that sort of perspective of stepping back before we're about to design something technically and saying, 'Is this the right approach to do this?'" Mike, 2026-10-08: "I want you to think about whether this is really the best request in the first place."
+10. **Mike can read and change every file himself.** Write in plain, ordinary English that a person who was in none of the sessions can follow, with headings that say what each section holds. Put no if-then blocks for setup choices inside a file. Mike, 2026-10-05: "I want to be able to just look at files and be able to modify them myself".
+11. **Explain it first, then build only what was agreed.** Before you build, tell Mike in a few plain lines what you will build and which parts it has. Build that and nothing more. Hold to what he already decided, and say so when a new idea goes against an earlier decision. Mike, 2026-09-29: "Can you just explain to me what you're going to build before you actually build it, please?" Mike, 2026-10-03: "What is the requirement, and how are you going to build it? What are the components you're going to build?"
+
 This repository builds Toolkit V2 for Mike Rihm, a solo developer. The agent
 runs each of his projects; Mike only decides and steers. `README.md` explains
 it for Mike.
@@ -42,12 +58,6 @@ practices ... and tell it to use the installed skills". The writing rules
 are not written there: they are in one rule ("Plain English" under Rules).
 The skill holds an exact copy of it, `references/writing-rule.md`, which
 `check-skills.mjs` compares with the rule. A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. It is text only.
-
-One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
-Code only. It is a mod: code that runs inside Claude Code and draws a side
-panel. `/streams` lists the pieces of work the project's chats report, the
-chat handling each one, and each chat's state. It uses no Notion. See
-"Workstreams plugin" under Rules.
 
 ## The rule every agent follows here
 
@@ -131,21 +141,6 @@ writes such text.
   judges it. When a question to him is about the edge of a count or a limit,
   first ask whether the count should be there at all.
 
-## The toolkit is a framework, not the setup of every tool
-
-Mike, 2026-10-09, after a setup step for Salesforce's plugins had grown to a
-settings file and about 250 lines of steps: "Every project is completely
-different, and the toolkit should just provide the overall framework: 'Hey,
-here are the things, here are the different general procedures and policies,
-and here are the different things that we want to make sure are installed.'
-We don't really want to go beyond that, with maybe one or two exceptions."
-
-- A setup step for a tool the toolkit does not ship is a line or two: check
-  that it is installed, and ask the owner about the settings that matter.
-  The agent in the project does what the owner answers.
-- Before you hand him a change, compare its size with what he asked for.
-  When it is much larger, say so and give him the short version first.
-
 ## Read first
 
 - `dev/GOAL.md`: Mike's goal and his decisions. Read "Goal and finish list"
@@ -179,9 +174,8 @@ We don't really want to go beyond that, with maybe one or two exceptions."
 
 | Path | What is there |
 | --- | --- |
-| `.claude-plugin/marketplace.json` | The `toolkit-v2` marketplace for Claude Code. It lists two plugins, `toolkit` and `workstreams`. |
-| `.agents/plugins/marketplace.json` | The marketplace for Codex, with `policy` and `category`. It lists only `toolkit`: Codex cannot run a mod. |
-| `plugins/workstreams/` | The `workstreams` plugin: its manifest, the mod in `hooks/register.tsx`, its tests in `hooks/register.test.tsx`, and the types of its stored values in `types/index.d.ts`. Claude Code writes `tsconfig.json` and `.claude-plugin/types/` there when it loads the plugin from this folder; `tsconfig.json` is kept in Git so it does not show as a new file, and the `types/` folder ignores itself. |
+| `.claude-plugin/marketplace.json` | The `toolkit-v2` marketplace for Claude Code. It lists one plugin, `toolkit`. |
+| `.agents/plugins/marketplace.json` | The marketplace for Codex, with `policy` and `category`. It lists `toolkit`. |
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/placing-files.md`, "5. The pre-commit check", is the one place that says how `core.hooksPath` is set. `references/update.md` is "update the toolkit"; two parts of it are in their own files: `references/one-home-layout.md` brings a project set up before the one-home layout to it, and `references/earlier-versions.md` holds the changes from toolkit 0.6.0, 0.8.0, and 0.8.1. |
@@ -297,8 +291,6 @@ Run them from the repository root before you hand work back.
 ```bash
 claude plugin validate .
 claude plugin validate ./plugins/toolkit
-claude plugin validate ./plugins/workstreams
-claude plugin test ./plugins/workstreams
 node dev/tools/check-skills.mjs
 node dev/tools/check-rules.mjs
 node --test 'dev/tests/*.test.mjs'
@@ -306,10 +298,6 @@ node --test 'dev/tests/*.test.mjs'
 
 - `claude plugin validate .` checks the marketplace; `./plugins/toolkit`
   checks the plugin, its manifest, and its skill.
-- `claude plugin validate ./plugins/workstreams` reads the mod the way
-  Claude Code will and lists what it hooks and calls. `claude plugin test`
-  runs `hooks/register.test.tsx` without a session, on the terminal and the
-  desktop app.
 - `check-skills.mjs` checks project-setup, every skill under it, and the
   plugin's other skill (`writing-harness-files`): only
   `name` and `description` in the frontmatter, `name` equal to the folder
@@ -531,80 +519,6 @@ node --test 'dev/tests/*.test.mjs'
     for a test of this repository's own settings entry. A test fails
     when the command is over 72 lines. Tell him the size again before it
     grows.
-- **Workstreams plugin** (Mike, 2026-10-03, work items TKV-12 and TKV-14).
-  The one other piece of code the toolkit ships. The first version (TKV-12)
-  listed Notion work items. Mike had it rebuilt the same day (TKV-14) so it
-  works in every project with no Notion: he was told about 450 lines, and it
-  was about 540 lines (`register.tsx`, `types/index.d.ts`) plus about 290
-  lines of tests. With the Dismiss buttons (his yes, 2026-10-03, told about
-  45 more lines) it was about 620 lines plus about 370 lines of tests. With
-  the Done button and one card per chat (his yes and his idea, 2026-10-03,
-  told about 30 more lines) it was about 650 lines plus about 415 lines of
-  tests. With plain names, the About line, the labelled layout, and
-  collapsible cards (his yes, 2026-10-04, told about 70 more lines) it is
-  about 715 lines plus about 475 lines of tests. Tell him the size again
-  before it grows.
-  - It is installed once per computer in Claude Code. Nothing of it is copied
-    into a project, so the code limit for projects stands.
-  - Each chat reports its own work. The plugin gives the agent one tool,
-    `mcp__workstreams__report`, and one short instruction at the start of
-    each chat. The agent sends a name, an "about" text, a status, and the
-    next step. Mike switches between many chats and needs reminding what each
-    piece of work is (2026-10-04), so the name is a subject line of 8 words
-    or fewer in his own plain words, and "about" is one or two plain
-    sentences, 30 words or fewer, on what he asked for and why. Neither holds
-    a ticket number, a file name, or a technical term. The first "about" is
-    kept; later reports change only the status and the next step. This
-    costs a few tokens per report, plus the instruction and the tool's
-    listing in every chat. A piece of work is Mike's "workstream" (his words,
-    2026-10-03: "a significant piece of work ... a work item or some large
-    task that I'm tracking"). The instruction tells the agent to report only
-    those, never the steps inside one, a question, or a small chore. One chat
-    may report several, and a helper agent's report is not saved.
-  - The plugin also notes, at no token cost, whether each chat is working,
-    asking Mike a question, or stopped, his last message to it, and how many
-    helper agents it runs.
-  - Each chat saves its record in its own file,
-    `~/.claude/workstreams/<project>/<chat id>.json`, so no chat writes over
-    another. `/streams` reads every file of the project. A chat in a worktree
-    under the project's `.claude/worktrees/` folder counts as the same
-    project. A mod cannot delete a file, so these small files stay on disk;
-    the panel leaves out a chat that has not changed for 7 days. A chat that
-    is opened again takes up its saved record first.
-  - A chat's name is read from Claude Code's own
-    `~/.claude/projects/<folder>/<chat id>/custom-title.json` each time, so a
-    chat renamed in the sidebar shows its new name. A chat named "Main
-    Orchestrator" is listed first.
-  - The panel shows one card per chat, with that chat's pieces of work inside
-    it (Mike's layout, 2026-10-03 and 2026-10-04). A "Chat" label sits above
-    the chat's name and a "Workstreams" label above its work, so the two are
-    never confused. Each piece of work shows its name, then the lines About,
-    Status, and Next, always in that order; color is used only for status.
-    A card folds with Collapse and opens with Expand; a folded card still
-    says how many pieces of work it has and how many need him. The work
-    finished in the last day is listed below the cards.
-  - Mike's own presses are kept in one file for the project,
-    `_dismissed.json`, beside the chats' files, so every chat's panel shows
-    the same. "Mark done" moves a piece of work to the finished list. "Hide"
-    hides a piece of work. Collapse folds a card. "Dismiss chat" hides a chat
-    and its work: the panel is
-    not told when Mike archives a chat. A press on a piece of work holds
-    until the work is reported again. A dismissed chat shows again when Mike
-    writes to it or it reports work.
-  - It writes only its own files under `~/.claude/workstreams/`. It never
-    writes to a project, to Notion, or to a chat file, and it runs no other
-    program.
-  - A new job for it needs Mike's yes first, with its size.
-  - A mod can never break a session: Claude Code skips a hook that fails.
-    Keep every failure to one short line in the panel.
-  - Read `ai-external-knowledge/claude-code/mods/` and
-    `dev/research/claude-code-mods.md` before changing it. The mods API is
-    early access and may change between Claude Code releases.
-  - Live tests run in the test sign-in with
-    `--plugin-dir ./plugins/workstreams`; remove
-    `~/.toolkit-v2-test-homes/claude/workstreams` afterwards. Nothing here
-    has run on Windows; the plugin uses only Claude Code's own file calls
-    there.
 - **Shared texts.** Text several skills need is copied into each skill,
   because a skill reads only files inside its own folder. Edit the source in
   `dev/build-shared/`, then copy it over every copy (the first line of each
@@ -616,8 +530,7 @@ node --test 'dev/tests/*.test.mjs'
   This repository's `.claude/rules/evaluate-the-owners-request.md` copies
   the starter rule of the same name ("The rule every agent follows here").
 - **`dev/` and the root `reference/` folder are not shipped.** Claude Code
-  installs only `plugins/toolkit/` and `plugins/workstreams/`, and Codex only
-  `plugins/toolkit/`. Nothing shipped reads a file under `dev/` or under this
+  and Codex install only `plugins/toolkit/`. Nothing shipped reads a file under `dev/` or under this
   repository's root `reference/`. The `reference/` folder that every project
   gets is a different folder, in the starter project.
 - **Skills.** A skill is a folder: `SKILL.md`, plus `references/`,
@@ -781,8 +694,7 @@ node --test 'dev/tests/*.test.mjs'
   snippets pass none: renaming a memory skill changes only those files and
   needs no new trust.
 - **Versions.** Both `toolkit` manifests carry the same `name` and `version`.
-  Every shipped change raises `version` in both, in
-  `plugins/workstreams/.claude-plugin/plugin.json`, and `metadata.version` in
+  Every shipped change raises `version` in both, and `metadata.version` in
   `.claude-plugin/marketplace.json`, so the toolkit has one version number.
   - Codex runs its own copy, filed under the version
     (`~/.codex/plugins/cache/toolkit-v2/toolkit/<version>`). A change reaches
@@ -808,8 +720,6 @@ node --test 'dev/tests/*.test.mjs'
   of this plugin on 2026-10-06 ("The tool list" above). A third skill in
   this plugin needs Mike's yes
   first: every chat in both hosts reads each one's description.
-  `workstreams` is on for every folder in Claude Code only,
-  and its hooks run there ("Workstreams plugin" above says what they do).
 - **Rule files** live in the model and follow
   `dev/research/rules-best-practices.md` Part 1: one topic per file, a `# `
   heading, one specific instruction per bullet, `paths` frontmatter only
