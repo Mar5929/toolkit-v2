@@ -134,7 +134,7 @@ After the owner has answered the questions, say in a few lines what will happen,
 | Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it; the bank gets the settings you chose" |
 | Local work and local memory | "nothing outside this folder" |
 
-For the row "Notion (work, memory, or both)": when the Project template does not exist yet, ask about building it as a separate question. `notion.md`, "The owner's yes before anything is made", gives the words of that question.
+For the row "Notion (work, memory, or both)": when the Project template does not exist, stop and tell the owner, as `notion.md`, "The owner's yes before anything is made", says.
 
 To give the skill count, add the numbers that apply to the owner's choices: 10 shared, plus 1 for local or Notion memory (none for Hindsight), plus 1 for Notion work items or memory (`using-notion-cli`, once), plus 3 for Salesforce. Every project already has `managing-work-items` among its ten shared skills; its work choice adds reference files inside that skill.
 

@@ -27,7 +27,7 @@ Before toolkit 0.6.0, each work item had a stage (`01-discovery` to `14-spec-upd
 
 - In the same change, set the Status that goes with the new State. The Status and State table in `managing-work-items/references/lifecycle-rules.md` gives the Status for each State.
 - With local work items, change every work item in `work-items/`, sub-items and `archive/` included. A sub-item is a work item inside another work item. Replace the `stage:` line with a `state:` line, and set `status:` and `updated:` in the same edit.
-- With work items in Notion, change every row of Work Items, archived rows included. The Work Items database needs the State property and the Status options first. Add them in Notion after the owner's yes.
+- With work items in Notion, change every row of Work Items, archived rows included. The Work Items database needs the State property and the Status options first. `work-tracker-database-layout.md` lists them. Add them only as the owner says.
 - With work items in GitHub, change open issues only, after the `state:` labels exist. `github.md`, "Bringing a project up to date", step 3, says which label to add to each issue and which to remove. A closed issue's labels are ignored.
 - When a Next action ends ", with <skill>.", and the skill is one that the project no longer has, remove that ending, so that the Next action matches a form that the work item template gives. In Notion, change the Current state on the work item's page and the Next action property together.
 - Add a Recent History row to each changed work item: "Toolkit update: stage <old> is now State <new>." Change nothing else in the work item.

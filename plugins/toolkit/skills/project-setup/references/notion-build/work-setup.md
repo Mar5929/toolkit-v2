@@ -43,7 +43,7 @@ Never restore a template through the API (`in_trash` false). Notion's documentat
 
 When a template is in the trash, ask the owner to restore it from Trash in the Notion app, then run "Checks after any of these".
 
-When the Projects database has no "Project", not even in the trash, stop and tell the owner. The owner makes the template in the Notion app.
+When the Projects database has no "Project", not even in the trash, do what `notion.md`, "The owner's yes before anything is made", says.
 
 Never add real work to a template, because a copy takes everything on the template with it.
 
@@ -135,19 +135,19 @@ Notion can move a page, but it cannot move a database. So the three memory pages
 
 **Memory into Notion.** Use these steps when the project page holds the work items.
 
-1. Make a temporary row from "Project", as "A new project", steps 3 and 4, says. Title it "<Project name> (temporary, safe to delete)".
+1. Make a temporary row from "Project", as "A new project", steps 1, 3, and 4, says. Title it "<Project name> (temporary, safe to delete)".
 2. Add a "Project Memory" heading at the end of the project page, by sending `PATCH v1/blocks/<project-page-id>/children` with one `heading_1` block. Then move the temporary page's Memory page and "Current state" page to the project page. A Terminology glossary page stays on the temporary page.
 3. Move the temporary row to the trash, with `PATCH v1/pages/<id>` and `{"in_trash":true}`.
 4. Run `setup.md`, "A new project". Its four steps find the memory databases, name the project in Lore's Projects database, record the links, and fill the "Current state" page.
 5. The moved Memories, Facts, and Entities databases still link to the temporary Work Items database. Remove their "Work items" column and the Memories view "By work item", as "Removing the part a project keeps elsewhere" says for work items in steps 2 and 3.
-6. The memory databases now have no link to this project's work items. Tell the owner. Add a "Work items" relation from Memories, Facts, and Entities to this project's Work Items database only when the owner wants the link. Then fill the memory fields of the project's row, as "A new project", step 9, says.
+6. The memory databases now have no link to this project's work items. Add a "Work items" relation to each of Memories, Facts, and Entities, which points at this project's Work Items database. Send `PATCH v1/data_sources/<id>` with `{"properties":{"Work items":{"relation":{"data_source_id":"<work-items-data-source-id>","type":"dual_property","dual_property":{"synced_property_name":"<Memories, Facts, or Entities>"}}}}}`. The saving of memory uses that relation to link a record to a work item. This project's work item template has no "Linked memory" section. Tell the owner, who can add one in the Notion app. Then fill the memory fields of the project's row, as "A new project", step 9, says.
 
 **Work items into Notion.** Use these steps when the project page holds the memory.
 
 1. Make a new project page from "Project", as "A new project", steps 1 to 7, says. Run step 6 for the memory part, although memory is also in Notion.
 2. Copy the old page's Project brief text into the new page with one `update_content` call.
 3. Add a "Project Memory" heading at the end of the new page. Then move the old page's Memory page and "Current state" page to the new page, and also its Terminology glossary page when the old page has one.
-4. A "Work items" relation of the moved memory databases still points at the old page's databases. Tell the owner, and point it at this project's Work Items database only when the owner wants the link.
+4. The moved memory databases have no "Work items" relation, because setup removed it when the project kept only its memory in Notion. Add a "Work items" relation to each of Memories, Facts, and Entities, which points at this project's Work Items database. Send `PATCH v1/data_sources/<id>` with `{"properties":{"Work items":{"relation":{"data_source_id":"<work-items-data-source-id>","type":"dual_property","dual_property":{"synced_property_name":"<Memories, Facts, or Entities>"}}}}}`. The saving of memory uses that relation to link a record to a work item. This project's work item template has no "Linked memory" section. Tell the owner, who can add one in the Notion app.
 5. Copy the old row's field values into the new row. Then fill the work fields of the new row, as "A new project", step 9, says. In `PROJECT.md`, change the "Project page" bullet and add the work bullets, as "Recording the links in PROJECT.md" says.
 6. The old row now holds only its brief. Move the old row to the trash after the owner's yes.
 

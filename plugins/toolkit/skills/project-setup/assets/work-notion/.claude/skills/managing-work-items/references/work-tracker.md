@@ -60,7 +60,7 @@ This reference says where each part of a work item is stored in Notion. `using-n
 | Every Notion read or write: sign-in, Codex, the form of each call, and errors | `using-notion-cli` |
 | A source that the work item was given. A source is anything the project was given by someone else, such as a transcript or a client document. | `filing-project-records`, step "file a source" |
 | Moving the work items to another place where work items can be kept, such as local files or GitHub Issues | `project-setup` |
-| A missing database template | The owner: tell the owner, who restores or makes it in the Notion app |
+| A missing database template | Tell the owner. The owner restores it from Trash or makes it in the Notion app. |
 
 ## References
 

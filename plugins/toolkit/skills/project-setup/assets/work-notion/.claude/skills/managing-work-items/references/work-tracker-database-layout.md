@@ -79,7 +79,7 @@ Projects database (the owner's; its title column is "Project")
 | Phase order, Phase name | Rollups of Phase | Phase order is only for sorting views, and Phase name is only for the Phase column. |
 | Phase column | Formula | The work item's phase with its place in the plan ("02 · Build the form"), so that boards show phases in plan order. |
 
-When the project's memory is in Notion too, the memory setup adds the Memories, Facts, and Entities relations.
+When the project's memory is in Notion too, Work Items also has the Memories, Facts, and Entities relations.
 
 A change to the Status options replaces the whole list. Always send every option, each with its group. An option that is left out is deleted.
 

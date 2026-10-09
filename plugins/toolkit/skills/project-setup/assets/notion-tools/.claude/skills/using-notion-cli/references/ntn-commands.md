@@ -54,7 +54,6 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Priority":{"select":{"na
 ```
 
 - Property names in the body of a page call or a query may be the names that Notion shows, such as "Waiting on" and "Parent item".
-- A view's group-by setting and its column settings need property ids.
 - In JSON text, `"` is written `\"`, and a backslash is written `\\`.
 
 ## Reading properties

@@ -88,6 +88,6 @@ grep -n '{{' .claude/settings.json .codex/hooks.json
 
 ## Updating a Notion project
 
-Copying newer skill files changes nothing in Notion, and an update changes nothing there either. The project's databases, views, and work item template are the owner's.
+An update changes nothing in Notion. The project's databases, views, and work item template are the owner's.
 
 When a newer skill file names a property or a section that the project's Notion pages do not have, tell the owner in one short list. Change Notion only as the owner says.
