@@ -136,6 +136,12 @@ Most rows have special cases. They are listed under the table, in "Special cases
   - Delete no other entry.
   - Leave out the entries that run `validate-records.mjs` until "Turning on validate-records.mjs and the pre-commit file" below says to add them.
   - A changed Codex hook must be trusted again in `/hooks`. Tell the owner.
+  - In a Salesforce project whose `.claude/settings.json` lacks entries of the snippet `claude-settings-salesforce.json`, the merge adds them: Salesforce's plugin marketplace, the Salesforce plugins that the owner uses, and two environment variables. Put that change in the numbered table, and tell the owner these three things with it:
+    - The project now turns Salesforce's plugins on itself in Claude Code, so they no longer have to be on for the whole computer.
+    - The settings keep the automatic deploy of the plugin `salesforce-development` off and turn its telemetry off in this project.
+    - Nothing changes on the rest of this computer without a question of its own.
+
+    `salesforce.md`, "Salesforce's skills", says what each entry is for, and holds the steps that follow the merge. Tell the owner the command for the plugin's install suggestions. Look for copies of Salesforce's skills that an earlier setup left, as its part "Copies of Salesforce's skills from an earlier setup" says, and put what you find in the numbered table. Two steps wait until the branch was merged (section 7, step 5): the check that this computer has Salesforce's marketplace and the plugins, and the question about turning Salesforce's plugins off for the rest of the computer.
 - **Missing files.** Copy the missing files in two parts.
   - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Do not use `-a`, because `-a` would give the project folder the temporary folder's private permissions.
   - Copy into the main checkout after the branch was merged (section 7, step 5), and only when the setup copy has the folder. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
@@ -300,6 +306,8 @@ A project may still hold two old hook entries:
 
 List each one the project holds. After the owner's yes, remove it and any group or event that it leaves empty. The snippet's handler replaces the Codex one.
 
+The `description` in `.codex/hooks.json` may hold an earlier text of the toolkit. That text is the sentence that starts "Toolkit V2 hooks for this project in Codex:". Replace that sentence with the snippet's text, and keep every other sentence of the `description`. Do not add the snippet's text after the earlier one.
+
 Leave the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`. It comes from the `salesforce` setup folder.
 
 ### The questions before a sandbox change
@@ -389,6 +397,8 @@ Do these in order.
    - step 8 of `one-home-layout.md`, when that file ran.
 
    Then run the final checks on these two folders, and run `validate-records.mjs` again (`node .claude/hooks/validate-records.mjs --all < /dev/null`). The expected result is that it prints nothing.
+
+   In a Salesforce project, this is also the point for two steps of `salesforce.md`: the check in "The first time the project is opened on a computer", and then the question in "Once on each computer: the plugins are turned off for every other project". The project's main folder now turns its plugins on, so turning them off for the rest of the computer no longer takes them from this project.
 6. Remove the worktree and the branch, then the temporary folder.
 
 ## Changing a setup choice

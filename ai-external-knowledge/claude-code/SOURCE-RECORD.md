@@ -2,10 +2,10 @@
 
 - Publisher: Anthropic
 - Original documentation home: https://code.claude.com/docs/en/
-- Captured on: 2026-10-05. Every page was captured again that day, and 12 pages were added (see Notes). The earlier capture dates were 2026-09-27, 2026-09-29, and 2026-09-30.
+- Captured on: 2026-10-05. Every page was captured again that day, and 12 pages were added (see Notes). The earlier capture dates were 2026-09-27, 2026-09-29, and 2026-09-30. One page, `plugins-org.md`, was added on 2026-10-08.
 - Captured with: the Firecrawl CLI 1.24.3, `firecrawl scrape <page URL>.md --format rawHtml`, which returns the Markdown source the site publishes for each page, unchanged. The 2026-10-05 capture used the same command with `-o <file>`.
 - Claude Code version on the capture date: 2.1.289.
-- Pages: 33 (21 captured again on 2026-10-05, 12 added on 2026-10-05). The `mods/` folder has its own record.
+- Pages: 34 (21 captured again on 2026-10-05, 12 added on 2026-10-05, 1 added on 2026-10-08). The `mods/` folder has its own record.
 - Redistribution: Anthropic's published documentation, kept here as a private reference copy for this repository. Not shipped in any plugin.
 
 ## Project use
@@ -43,6 +43,7 @@ Read before writing or changing a Toolkit V2 skill, hook, plugin manifest, agent
 | `plugins-dependencies.md` | Constrain plugin dependency versions | https://code.claude.com/docs/en/plugins/dependencies |
 | `plugins-troubleshooting.md` | Plugin troubleshooting | https://code.claude.com/docs/en/plugins/troubleshooting |
 | `plugins-publish.md` | Publish plugins (share without a marketplace, your own marketplace, Anthropic's directory) | https://code.claude.com/docs/en/plugins/publish |
+| `plugins-org.md` | Manage Claude Code plugins for your organization (includes "Require plugins per repository": how a plugin that a repository's settings turn on reaches each computer) | https://code.claude.com/docs/en/plugins/org |
 | `worktrees.md` | Worktrees (parallel sessions in separate Git worktrees) | https://code.claude.com/docs/en/worktrees |
 | `agent-sdk-skills.md` | Agent SDK: Extend agents with skills | https://code.claude.com/docs/en/agent-sdk/skills |
 | `agent-sdk-subagents.md` | Agent SDK: Subagents | https://code.claude.com/docs/en/agent-sdk/subagents |
@@ -58,6 +59,7 @@ Read before writing or changing a Toolkit V2 skill, hook, plugin manifest, agent
 - Each captured file starts with a header naming its source URL and capture date.
 - A larger capture of this site (164 pages, captured 2026-09-22) is in `/Users/michaelrihm/Documents/Projects/claude-toolkit/ai-external-knowledge/claude-code/`. That folder belongs to another repository and is read-only from here.
 - 2026-09-29: `large-codebases.md`, `debug-your-config.md`, and `claude-directory.md` were added for the rules audit in `dev/research/rules-best-practices.md`. `memory.md` was captured again the same day: the live page had added the `/doctor prompt-audit` paragraph under "Write effective instructions" and the `includeGitInstructions` line under "Claude isn't following my CLAUDE.md".
+- 2026-10-08: `plugins-org.md` was added for the change that makes a Salesforce project turn on Salesforce's plugins in its own settings (`AGENTS.md`, "Salesforce plugins"). Three pages that the same change relies on are in the `mods/` folder and were not captured a second time: `mods/plugins-loading.md` (which settings file decides whether a plugin loads, and "Enabled in project settings but not installed"), `mods/plugins-install.md` (install scopes), and `mods/plugins-cli-reference.md` (`claude plugin disable` and its `--scope` option).
 - 2026-09-30: `agent-sdk-hooks.md` was added. Mike named it in the interview (Topic 6) as one of the two pages to read before building the hooks. It covers hooks written as code in an Agent SDK app; Toolkit V2 uses settings-file hooks (`hooks.md`). What it changes for the build is in `dev/research/skills-first-architecture.md`, section 6.
 
 ## Release notes
