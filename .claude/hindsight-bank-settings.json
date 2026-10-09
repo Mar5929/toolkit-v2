@@ -1,0 +1,20 @@
+{
+  "bank": {
+    "enable_observations": true,
+    "enable_auto_consolidation": true
+  },
+  "addOn": {
+    "retainSessions": true,
+    "retainExtractionMode": "concise",
+    "autoInject": "reflect",
+    "gitIngest": "none",
+    "codebaseSurvey": false,
+    "recallOptions": {
+      "types": [
+        "observation",
+        "world",
+        "experience"
+      ]
+    }
+  }
+}

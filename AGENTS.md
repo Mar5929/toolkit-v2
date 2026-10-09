@@ -871,6 +871,31 @@ node --test 'dev/tests/*.test.mjs'
   `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`
   in `~/.zshenv`), never in a repository. Tests use only banks made for the
   test, with his yes, never his own.
+- **This repository's own Hindsight bank** (Mike, 2026-10-08, as a trial of
+  Hindsight). This repository has a bank on his server, `toolkit-v2`. Its
+  dashboard page is `https://memory.mrihm-memory.com/banks/toolkit-v2`.
+  - Hindsight's add-on saves each session here to that bank at the end of
+    every turn, also a session in a worktree of this repository. The add-on
+    shows the agent a guide to its tools at session start, and its skill
+    `hindsight-coding-agent` says how to use them.
+  - The bank is for searching past sessions. It replaces no record: Mike's
+    decisions stay in `dev/GOAL.md`, progress in `dev/PROGRESS.md`, and the
+    rules in this file.
+  - The bank's settings are in `.claude/hindsight-bank-settings.json`. Change
+    one only when Mike asks: change that file, then apply it as
+    `<setup>references/hindsight-on-vps.md`, "Apply the settings", says.
+  - Mike chose what the bank gets (2026-10-08): the sessions, and nothing
+    from the Git history or a code survey, because an agent can read Git
+    itself. He found the first memories too many and too noisy.
+  - The bank's instruction for sessions ends with a filter that starts
+    "OWNER FILTER FOR THIS PROJECT". It tells Hindsight to keep decisions
+    with their reason, rules that were set, and problems with how they were
+    solved, and to skip live status and what an agent reported. The filter
+    is kept only on the server, in the bank's `retain_strategies`, under
+    `conversation`. Change it only when Mike asks.
+  - This repository is not a toolkit project, so it has no `PROJECT.md` and
+    no rule `hindsight-memory.md`. This bullet holds what those would hold.
+  - Never use this bank for a test. A test uses a bank made for the test.
 - **Sandbox questions** (Mike, 2026-10-07). In a Salesforce project the agent
   asks before each deploy, data write, or `sf apex run` on a sandbox, unless
   the owner turned those questions off. He turns them off and on by telling
