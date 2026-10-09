@@ -69,7 +69,7 @@ claude plugin install <name>@salesforce --scope project
 
 The first command is for a missing marketplace. The second command is run once for each missing plugin. The owner then starts a new session, because a session loads its plugins when it starts.
 
-Do the check, and assume neither result. Claude Code's documentation says that a plugin which is a folder inside the marketplace's repository, as these are, loads from the marketplace with no install. In a test of the toolkit, in sessions with no screen, no plugin of the snippet loaded until it was installed with the command above.
+Do the check, and assume neither result. Claude Code's documentation says that a plugin which is a folder inside the marketplace's repository, as these are, loads from the marketplace with no install. A test of the toolkit, in sessions with no screen, showed something else. The project's settings alone did not add the marketplace. Once the marketplace was added, Claude Code downloaded the plugins, and a plugin still loaded only after the install command above.
 
 Setup installs nothing unless the owner says so. When the marketplace or a plugin is still missing at the end of setup, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
 

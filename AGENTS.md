@@ -1082,6 +1082,16 @@ node --test 'dev/tests/*.test.mjs'
       that one plugin loaded (8 skills, "Scope: project"), and the other six
       did not. The install changed nothing in the project's settings file
       except the order of its keys.
+    - A second round from a clean state, with the folder marked trusted,
+      gave the same result. In two sessions with the snippet only, the
+      marketplace was not registered and nothing was downloaded. After the
+      marketplace was added, the next session downloaded all seven plugins
+      into the plugin cache (`plugins/cache/salesforce/<name>/0.2.0`) and
+      loaded none of them, and two more sessions loaded none.
+    - So in a session with no screen, a plugin that a project's settings
+      turn on is downloaded once the computer knows the marketplace, and it
+      loads only after an install for the project. The test sign-in was put
+      back to its state before the test.
   - So the toolkit's text has the agent check with
     `claude plugin marketplace list` and `claude plugin list`, and give the
     owner the two commands for whatever is missing. The owner runs them or

@@ -108,8 +108,20 @@ What was checked:
     project`: that one plugin loaded (8 skills, "Scope: project"), and the
     other six did not. The install changed nothing in the project's
     settings file except the order of its keys.
+  - A second round from a clean state, with the folder marked trusted. In
+    two sessions with the snippet only, the marketplace `salesforce` was
+    not registered, nothing was downloaded, and none of the seven plugins
+    loaded. After `claude plugin marketplace add forcedotcom/sf-skills`,
+    the next session downloaded all seven plugins into the sign-in's plugin
+    cache (`plugins/cache/salesforce/<name>/0.2.0`) and still loaded none of
+    them. Two more sessions after that loaded none.
 
-  So the install step stays, and the text has the agent check first.
+  So in a session with no screen, a plugin that a project's settings turn
+  on is downloaded once the computer knows the marketplace, and it loads
+  only after an install for the project. The install step stays, and the
+  text has the agent check first. The test sign-in is back to its state
+  before the test: the marketplace, the cache, and the trust entry were
+  removed, and the plugin and marketplace lists compare equal.
 - The two `jq` commands of the new check, on a scratch file that joins the
   every-project settings and the two Claude Code snippets.
 - All seven checks of `AGENTS.md`, "Checks", pass: the three
