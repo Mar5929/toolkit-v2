@@ -33,9 +33,9 @@ For example, each of these changes what is true: a new person or a changed role,
 - When a turn concerns a work item, find the work item, read its Current state (the five lines at its top), and use `managing-work-items` for the requested work.
   - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's Current State names.
   - Stop at the first check that finds one. Ask the owner only when it finds two.
-- When the owner asks for work and no work item covers it, ask the owner whether to make a work item, before you start the work. Ask in one short line that names the work and says whether you recommend a work item. Do not ask when the owner has already said whether to make one, when the turn only answers a question, or when the whole result of the work is text in your reply.
+- When the owner asks for work and no work item covers it, ask the owner whether to make a work item, before you start the work. Ask in one short line that names the work and says whether you recommend a work item. Do not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in your reply, or when "Where information goes" or "Which skill" sends the request somewhere other than a work item.
   - After a yes, use `managing-work-items`.
-  - After a no, do the work without a work item. Make every change to a file that Git tracks in a worktree of its own, on a branch of its own, and merge that branch into the default branch only after the owner's yes. The one exception is an edit that `publish-docs` commits to the default branch. `managing-work-items`, `references/building.md`, "Git for a build", gives the commands for the worktree and the branch. Name both for the job.
+  - After a no, do the work without a work item. `.claude/rules/shared-repository-work.md` still applies: it says where to make the change, and that a merge into the default branch needs the owner's yes.
 
 ## Project map
 

@@ -1156,9 +1156,11 @@ node --test 'dev/tests/*.test.mjs'
     and no other file states it again. When the owner asks for work and no
     work item covers it, the agent asks in one short line whether to make a
     work item, says which it recommends, and waits. It does not ask when the
-    owner has already said, when the turn only answers a question, or when
-    the whole result of the work is text in the agent's reply.
-  - Mike has not yet confirmed the third of those cases, the result that is
+    owner has already said, when the turn only answers a question, when
+    the whole result of the work is text in the agent's reply, or when the
+    guide's own tables send the request somewhere other than a work item,
+    such as a to-do, a source to file, or "get the latest".
+  - Mike has not yet confirmed the third of those four cases, the result that is
     only text in the reply, such as a short draft. It was put to him on
     2026-10-09 through the Main Orchestrator session, which said to build it
     until he answers. Without it, the agent asks the question before every
@@ -1169,8 +1171,15 @@ node --test 'dev/tests/*.test.mjs'
     play-back of the job, and he said yes to this: a change with no work
     item still goes on a branch and reaches the default branch only after
     his yes (both on 2026-10-08, to a numbered list of decisions: "Go with
-    your recommendations for all"). A project document is the exception,
-    because `publish-docs` commits it.
+    your recommendations for all"). The rule
+    `shared-repository-work.md` is the home of that Git rule, and the guide
+    points to it. Until this change the rule held the sentence "The one
+    exception to using your own worktree and branch is a one-file edit
+    asked for directly.", which had been there since the first build. In
+    the test run the agent gave those words as its reason for the commit to
+    the default branch. His decision replaces that exception, so the
+    sentence is gone. The rule also says now that a repository with no
+    remote merges on the computer, as `deploying.md` says.
   - The situations are tests: `dev/evals/work-item-question/` (5 evals)
     tests when the agent asks and what follows a no, and four of the nine
     evals in `dev/evals/small-work-item-short-path/` start with the question

@@ -16,18 +16,25 @@ with the record of the four evals that were run again for 0.9.22.
 - The starter root guide, section "Every session", has one new bullet. When
   the owner asks for work and no work item covers it, the agent asks in one
   short line whether to make a work item, says which it recommends, and
-  waits. It does not ask when the owner has already said, when the turn
-  only answers a question, or when the whole result of the work is text in
-  the agent's reply. Mike has not yet confirmed that third case: it was put
-  to him on 2026-10-09, and it is built until he answers, because without
-  it the agent asks before every quick draft. After a no, every change to a file that Git
-  tracks goes in a worktree and on a branch of its own, and reaches the
-  default branch only after the owner's yes. A project document is the
-  exception, because `publish-docs` commits it.
+  waits. It does not ask in four cases: the owner has already said, the
+  turn only answers a question, the whole result of the work is text in
+  the agent's reply, or the guide's own tables send the request somewhere
+  other than a work item. Mike has not yet confirmed the third case: it was
+  put to him on 2026-10-09, and it is built until he answers, because
+  without it the agent asks before every quick draft. After a no, the agent
+  does the work without a work item, and the guide points to the rule
+  `shared-repository-work.md`.
+- That rule lost one sentence: "The one exception to using your own
+  worktree and branch is a one-file edit asked for directly." In the test
+  run the agent gave those words as its reason for the commit to the
+  default branch. Mike's yes of 2026-10-08, that a change with no work item
+  still goes on a branch and reaches the default branch only after his yes,
+  replaces the exception. The rule also says now that a repository with no
+  remote merges on the computer, as `deploying.md` says.
 - Two lines of the guide changed so that they fit the new bullet: the row
   "A new request, idea, or bug" of "Where information goes" points to
   "Every session", and "How to write a question to the owner" now also
-  yields to a form that the guide itself gives. The guide is 24,292 bytes,
+  yields to a form that the guide itself gives. The guide is 24,310 bytes,
   under its limit of 24,576.
 - The tests follow the decision. Four of the nine short-path evals make or
   change a file, and they start with the question and Mike's yes. The
