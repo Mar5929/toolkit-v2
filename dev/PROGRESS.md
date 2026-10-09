@@ -2,6 +2,29 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Salesforce's plugins: setup checks and asks, version 0.9.26 (2026-10-09)
+
+Mike found the Salesforce plugin setup of version 0.9.23 far larger than
+what he asked for. His words: "It literally just should be two lines when
+we're setting up the project ... 'Hey, do we want those turned off or on?'
+That's it." `AGENTS.md` holds his decision ("Salesforce's own skills and
+plugins" under Rules) and the wider principle ("The toolkit is a framework,
+not the setup of every tool").
+
+- `<setup>references/salesforce.md`, "Salesforce's skills", is now one short
+  section: check that Salesforce's skills are installed, and ask the owner
+  what to have on or off (the plugins for the whole computer, the automatic
+  deploy of `salesforce-development`, and that plugin's usage data).
+- Removed: the settings snippet `claude-settings-salesforce.json`, its test
+  in `dev/tests/hooks.test.mjs`, its merge rules and check commands, final
+  check 19's six parts, the two extra owner's steps, the steps in
+  `update.md`, and the two added lines of the rule `salesforce-project.md`.
+  The other files that 0.9.23 changed for this are back at their text
+  before it, apart from the few words that name the new question.
+- A project that was updated to 0.9.23 or later keeps the settings that
+  version merged in. They do no harm, and nothing removes them.
+- Not tested live: a setup of a Salesforce project with this text.
+
 ## The agent asks whether a job gets a work item, version 0.9.25 (2026-10-09, TKV-51)
 
 The live tests of 2026-10-08 ran on version 0.9.18. Their three records are
@@ -131,6 +154,9 @@ the meaning of the two changed rule sentences the same day.
 - Still open from the audit: phases P3 to P5 of TKV-43.
 
 ## A Salesforce project turns on the Salesforce plugins itself, version 0.9.23 (2026-10-08, TKV-44)
+
+Version 0.9.26 removed everything this section says was built (see the
+section for 0.9.26 above). What was read and tested then still holds.
 
 Mike decided on 2026-10-08 to "turn the Salesforce plugins on only in
 Salesforce projects". On his Windows computer Salesforce's plugins were on

@@ -757,19 +757,6 @@ test('plugin switches: every old claude-toolkit plugin is off in both hosts; Cod
   assert.equal(toml.split('\n').filter((line) => line && !line.startsWith('#')).length, tables.length * 2 + 2, 'no other lines');
 });
 
-test('the Salesforce snippet: the marketplace, exactly the seven plugins the owner uses, and the two variables', () => {
-  const snippet = JSON.parse(readFileSync(join(settings, 'claude-settings-salesforce.json'), 'utf8'));
-  assert.deepEqual(Object.keys(snippet).sort(), ['enabledPlugins', 'env', 'extraKnownMarketplaces']);
-  const names = ['dx-devops', 'experience-lwc', 'integration', 'platform-lightning-widgets', 'platform-trust-security', 'salesforce-code-quality', 'salesforce-development'];
-  assert.deepEqual(snippet.enabledPlugins, Object.fromEntries(names.map((name) => [`${name}@salesforce`, true])));
-  assert.deepEqual(snippet.extraKnownMarketplaces, { salesforce: { source: { source: 'github', repo: 'forcedotcom/sf-skills' } } });
-  // The plugin's automatic deploy runs only for "1". Its telemetry is off for any value that is not empty.
-  assert.deepEqual(snippet.env, { SFDX_AUTO_DEPLOY: '0', SF_DISABLE_TELEMETRY: 'true' });
-  // The settings file every project gets holds none of these keys: each plugin entry comes from a snippet.
-  const starter = JSON.parse(readFileSync(join(assets, 'every-project/.claude/settings.json'), 'utf8'));
-  for (const key of Object.keys(snippet)) assert.equal(starter[key], undefined, `the every-project settings file holds no ${key}`);
-});
-
 // Lines are at most 100 characters, so the line counts are honest. The limits are the sizes with
 // every job kept; the line count was replaced by the Code limit rules (dev/GOAL.md, "Code limit");
 // the limits below are the sizes as built.
