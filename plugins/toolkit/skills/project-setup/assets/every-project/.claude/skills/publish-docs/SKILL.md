@@ -138,7 +138,7 @@ When to remove the copy depends on the remote:
 
 ## The main checkout
 
-The third thing that step 8 notes is whether the main checkout holds the save. The reason is that local work items and the command that checks the records, `.claude/hooks/validate-records.mjs`, look up a record's ID in the main checkout.
+The third thing that step 8 notes is whether the main checkout holds the save. The reason is that local work items are kept in the main checkout, and a work item must not name a record that the main checkout does not hold.
 
 ### With no remote
 

@@ -40,7 +40,6 @@ A source has no status. A row is never removed.
 - Never use a statement in a source as a decision or a rule. What the project decided from it goes in `DECISIONS.md` or `system/`.
 - When a record starts to use a source, add that record's ID to "Used by".
 - Outside documentation that the project captured from a public page is not a source. It goes in `reference/outside-docs/`.
-- `.claude/hooks/validate-records.mjs` checks the list and the files here after each edit and before each commit. Fix what it reports.
 
 ## Which skill to use
 

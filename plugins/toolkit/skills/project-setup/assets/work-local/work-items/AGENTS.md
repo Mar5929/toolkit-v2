@@ -60,7 +60,6 @@ Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status
 - A work item's folder holds no sources. A source is anything the project was given by someone else, such as a transcript or a client document. A source goes in `sources/`, and the work item holds the source's ID, in the form SRC-###.
 - When the owner put any other file in a work item's folder, leave the file there, and tell the owner that it is there.
 - Information that another work item needs is never kept only in this folder. That information is in `DECISIONS.md` or `system/`, and the work item holds the ID that the information has there.
-- The command `.claude/hooks/validate-records.mjs` checks the work items after each edit. Fix what the command reports.
 
 ## Which skill to use
 

@@ -98,7 +98,7 @@ This table is for files in `.claude/hooks/`. Each file has an entry in `.claude/
 | A `.test.mjs` or `.test.js` file for a hook above, and `.claude/hooks/README.md` | Delete | Nothing |
 | `.claude/style-reminder.json`, `.claude/writing-guard.json` | Delete | Nothing |
 | `guard-protected-orgs.js`, `guard-permission-set-deploy.js` (Salesforce guards) | Compare | `guard-protected-orgs.cjs`, `guard-permission-set-deploy.cjs` |
-| `.claude/protected-orgs.json` | Carry | Same name: the owner's org names and actions are kept, and a setting that only the Toolkit V2 file has is added, except as `update.md`, "The questions before a sandbox change", says |
+| `.claude/protected-orgs.json` | Carry | Same name: the owner's org names and actions are kept, and a setting that only the Toolkit V2 file has is added |
 | `no-ai-attribution-guard.mjs` | Kept | Nothing in the project: it is a machine-wide hook |
 
 - A guard that differs from the old toolkit's copy may block more than the Toolkit V2 guard. Put it under "Your call", and recommend keeping it running until the owner has seen what each guard blocks.
@@ -110,7 +110,7 @@ This table is for the other entries of `.claude/settings.json`. The file's one U
 | --- | --- | --- |
 | `env.CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` | Removed | Nothing: only the old `protocol-guard` plugin needed it |
 | `outputStyle` | Kept | The owner's choice stays, whatever it names |
-| `permissions.deny` and `permissions.ask` | Kept | The setup copy's missing entries are added, and none is removed, except as `update.md`, "The questions before a sandbox change", says |
+| `permissions.deny` and `permissions.ask` | Kept | The setup copy's missing entries are added. None is removed, except a `permissions.ask` entry for an `sf` command, which goes after the owner's yes: `.claude/rules/salesforce-agent-permissions.md` now says when the agent asks |
 | Any other entry: `env` values, hooks the owner added, MCP servers | Kept | |
 
 ## Tools, skills, and other agent files

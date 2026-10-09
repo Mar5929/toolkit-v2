@@ -71,7 +71,7 @@ The work item template gives the place for each ID:
 The time depends on where the project keeps its work items.
 
 - When work items are in Notion or GitHub, write the ID once the save is on the default branch.
-- When work items are local files, write the ID only after `publish-docs` reports that the main checkout holds the save. The command that checks the records, `.claude/hooks/validate-records.mjs`, looks the ID up there.
+- When work items are local files, write the ID only after `publish-docs` reports that the main checkout holds the save. A local work item is kept in the main checkout, so the record that it names must be there.
 - When work items are local files and `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item. Do this in its place:
   - Give `managing-project-memory` one line for "Waiting on" in the project's Current State. The project's Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
   - Tell the owner the same.

@@ -30,7 +30,7 @@ This file holds what an agent needs on every request in this repository, and not
 ## What this repository is
 
 - It builds Toolkit V2 for Mike Rihm, a solo developer. The agent runs each of his projects; Mike decides and steers. `README.md` explains the toolkit for Mike.
-- The toolkit is rules, skills, and four small hook commands. There is no custom program. It ships as one plugin, `toolkit`, for Claude Code and Codex, with two skills:
+- The toolkit is rules, skills, and three small hook commands. There is no custom program. It ships as one plugin, `toolkit`, for Claude Code and Codex, with two skills:
   - `project-setup` sets up a project by copying files: the folder every project gets, the folder for each of the owner's choices, and the settings. It also runs "check the setup" and "update the toolkit".
   - `writing-harness-files` holds the steps for writing or changing a harness file ("Harness files" under Rules).
 - Work on the toolkit is tracked in Notion, in the Toolkit V2 project (page ID `3edb381d-a176-81ee-b7dd-d0a6d662f9b2`). Its work items, with IDs starting TKV, are in the Work Items data source `b22b381d-a176-8301-a22c-0766e27d8dc9`.
@@ -72,7 +72,7 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 | `plugins/toolkit/` | The plugin: its two manifests (`.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`) and its two skills. |
 | `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json` | The `toolkit-v2` marketplace, for Claude Code and for Codex. |
 | `<setup>SKILL.md`, `<setup>references/` | Setup, "check the setup", "update the toolkit", and the move-over from the older toolkit. |
-| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files, the rules, the shared skills, the four hook commands, and `.githooks/pre-commit`. |
+| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files, the rules, the shared skills, and the three hook commands. |
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | The files for each choice of work tracker. |
 | `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The files for each choice of memory. |
 | `<setup>assets/notion-tools/`, `salesforce/`, `soul/` | The files for a project that uses Notion, for a Salesforce project, and for a project whose owner keeps `SOUL.md`. |
@@ -95,7 +95,7 @@ The folders under `<setup>assets/` together are the starter project: the source 
 - Two files are the owner's own from the first day: `owner-preferences.md` and, in a Salesforce project, `salesforce-agent-permissions.md`. Setup copies each once. "Update the toolkit" never compares or replaces them.
 - Skills sit under `.claude/skills/` in every setup folder, because Codex would otherwise load each one in every folder on the computer. This repository's `.claude/settings.json` turns each project skill off by name, and stops the starter project's instruction files from loading here.
 - Each folder guide, `AGENTS.md`, has a `CLAUDE.md` beside it that holds only `@AGENTS.md`. Never delete one.
-- After a change, run every check below and raise the version. A project gets the change when its owner says "update the toolkit" there. A file that was renamed or removed gets a line in `<setup>references/update.md`, so that an existing project loses the old one.
+- After a change, run every check below and raise the version. A project gets the change when its owner says "update the toolkit" there. `<setup>references/update.md`, "4. What the toolkit no longer ships", holds the one general rule for a file that an existing project still has and the toolkit no longer ships.
 
 ## Checks
 

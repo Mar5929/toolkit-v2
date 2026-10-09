@@ -17,7 +17,6 @@ Rules for an entry:
 - Never delete an entry. Never change the Decision text of a Decided entry: add a new entry, and set the old one to Superseded.
 - Name work items, rules, and sources by ID (WI-031, SEC-04, SRC-012). Never copy their text here.
 - Each work item under Affects of an Open or Decided entry names the DEC ID on its Related items line.
-- `.claude/hooks/validate-records.mjs` checks the entries after each edit and before each commit. Fix what it reports.
 
 Entry form:
 

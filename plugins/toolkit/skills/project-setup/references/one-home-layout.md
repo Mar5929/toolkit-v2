@@ -1,6 +1,6 @@
 # Bringing a project to the current folder layout
 
-Use this file during "update the toolkit", when the project was set up before the current folder layout. `update.md` runs this file from its section "6. A project set up before the current folder layout". This file says how to find the old layout, which plan the owner approves, where each old file or record goes, and the order of the moves.
+Use this file when a project was set up before the current folder layout. `SKILL.md`, "Which setup job to do", sends an update or a check of such a project here, and the move-over from the older toolkit uses the tables of this file. This file says how to find the old layout, which plan the owner approves, where each old file or record goes, and the order of the moves.
 
 The current folder layout is the layout in which information the whole project needs is kept in five places, as files in the repository: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`. A project that was set up before this layout holds the same facts in other places, and this file moves them. Memory keeps its records. Only the decision records and the glossary move out of memory, because each of them is now kept in the repository.
 
@@ -321,7 +321,6 @@ Each change has one place where you make it:
 
 - Change the files that Git tracks in your worktree.
 - Change `memory/`, `work-items/`, and the data files that Git ignores in the main checkout, and only in step 8, after the branch was merged. A work item or a memory record must never name a record that is not on the default branch.
-- Only one change is made in the main checkout earlier: a fix for a finding of the command that checks the records, `.claude/hooks/validate-records.mjs`, in step 7.
 
 Do the nine steps in this order.
 
@@ -334,7 +333,7 @@ Do the nine steps in this order.
    - First, remove each tracked old file that an approved row names, with `git rm`. When a file changed since you listed it, leave the file and ask again.
    - Then list every mention of an old path that is left in a tracked file: `command grep -rnE 'ai-external-knowledge/|delivery/(deployment|data|meeting-notes|references|communications|deliverables|archive)/|project-wide-records/|system-guide/|requirements/' . --exclude-dir=.git --exclude-dir=.claude`.
      In that list, a line that says "Carried over from" stays, and so does a source in `sources/`. Change each other line after the owner's yes.
-7. **Check, commit, and merge** as `update.md`, "7. Checks and report", says. The run of `validate-records.mjs` that the section asks for happens here, before the commit.
+7. **Check, commit, and merge** as `update.md`, "6. Checks and report", says.
    - Two findings are usual in a project on the old layout:
      - A closed work item has no filled Moved up line. The rules for a work item that is Done or Cancelled, above, give the line to write.
      - A `memory/` folder has an `AGENTS.md` and no `CLAUDE.md`. Copy `<copy>/memory/CLAUDE.md` into it.
@@ -351,4 +350,4 @@ Do the nine steps in this order.
    - List every mention of an old path in the work items and in memory, and change each one after the owner's yes: `command grep -rnE 'ai-external-knowledge/|delivery/(deployment|data|meeting-notes|references|communications|deliverables|archive)/|project-wide-records/|system-guide/|requirements/' <main>/work-items <main>/memory`.
    - Read back each work item and each memory file.
    - Remove each `references/` folder of a work item that an approved row names, with `rm` and the exact path. Remove an empty folder with `rmdir`. Never run `rm -r` on a folder that still holds a file.
-9. **Last check.** Run every command of "Find the old layout" again. Each hit is a row the owner turned down, a "Your call" row the owner has not answered, or a failure. Name each one in the report. Then run `node .claude/hooks/validate-records.mjs --all < /dev/null` in the main checkout. The command must print nothing. Fix what it prints, as `update.md`, "Turning on validate-records.mjs and the pre-commit file", says. That section says where to fix each kind of finding.
+9. **Last check.** Run every command of "Find the old layout" again. Each hit is a row the owner turned down, a "Your call" row the owner has not answered, or a failure. Name each one in the report.
