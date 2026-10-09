@@ -856,8 +856,9 @@ node --test 'dev/tests/*.test.mjs'
   key that opens every bank. Mike, 2026-10-07, on observations being a
   setting of one bank: "Each project should ask me if I want this if so.
   And ask me other hindsight settings (on a per memory bank basis)". So
-  setup asks about six settings of the bank in one message, with a default
-  for each (`hindsight-on-vps.md`, "The bank's settings"). His default for
+  setup asks about the settings of the bank in one message, with a default
+  for each (`hindsight-on-vps.md`, "The bank's settings"). There were six,
+  and there are seven since 2026-10-08. His default for
   observations, the same day: "Have auto observations by default. I don't
   care about token usage." So observations are on and built after every
   save unless he says otherwise for a bank. The project keeps
@@ -865,7 +866,21 @@ node --test 'dev/tests/*.test.mjs'
   gives the bank the same settings. He also said yes ("Sounds good") to
   two more defaults that differ from the add-on's own: a save keeps
   detailed memories (`verbose`), and the Git history holds the changes of
-  each commit as well as its message (`full`). Four of
+  each commit as well as its message (`full`). On 2026-10-08, after the
+  first bank made too many memories, he changed the default detail to short
+  (`concise`): "I would say short." The same day he said about the filter
+  paragraph on that bank: "That should sort of be the default for the new
+  projects." So the seventh setting is the filter for saved sessions: one
+  paragraph that setup adds to the end of the add-on's mission for a
+  session. The project's file keeps it as `sessionFilter`, and the default
+  is the paragraph from his bank `toolkit-v2`, word for word. Setup writes
+  no mission of its own into a bank, and it writes the bank's settings into
+  the add-on's settings in the same command that switches the add-on on for
+  the folder. The first live setup, on 2026-10-08, did neither. The add-on
+  prepared the bank with its own defaults 25 seconds before setup wrote his
+  choices, and it left its own three missions out because setup had written
+  two. `dev/test-runs/hindsight-setup-order.md` holds the tests of both
+  orders on a bank made for the test. Four of
   his projects (Entrevest, Diligence Ready, CentraView, Robin) have their
   own review of saved knowledge, and setup stops for them. The API key lives in
   `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`

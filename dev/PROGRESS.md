@@ -2,6 +2,51 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The order of the Hindsight setup steps, version 0.9.19 (2026-10-08)
+
+The first live Hindsight setup, of the bank `toolkit-v2`, left the bank
+without the settings Mike chose. Setup switched the add-on on for the folder
+first and wrote his choices 25 seconds later, and the add-on had prepared
+the bank with its own defaults in between. Setup had also written two
+missions into the bank, so the add-on left its own three out. Mike's answers
+on 2026-10-08: yes to a new order; the filter paragraph on his bank "should
+sort of be the default for the new projects"; the detail of a save "short";
+and yes to a throwaway test bank.
+
+- Setup creates a bank with a name only. It writes no mission
+  (`hindsight-on-vps.md`, "2. The bank").
+- One command writes the bank's own settings into the add-on's settings
+  together with the two entries that switch the add-on on for the folder
+  ("4. The add-on", step 4). The bank's settings are step 5 now, before the
+  save-and-search check.
+- Setup starts the add-on's own job when the add-on has not prepared the
+  bank yet, and sends the server's part of the settings only after that
+  ("Apply the settings", steps 3 and 4).
+- A bank has a seventh setting, the filter for saved sessions. The project's
+  file keeps it as `sessionFilter`. The default is the paragraph from Mike's
+  bank, word for word.
+- The default for the detail of a save is `concise`. It was `verbose`.
+- `dev/test-runs/hindsight-setup-order.md` holds the tests of the old and
+  the new order on a bank made for the test, which was deleted afterwards.
+
+- The test save of "6. Save and search" names the kind of save `document`.
+  On a prepared bank, a save with no kind named is read with the add-on's
+  mission for a Git commit.
+
+Open for Mike:
+
+- The rule `hindsight-memory.md` tells the agent to say in its reply what a
+  recurring job did, "so the add-on saves them". The default filter tells
+  the model to make no memory from a summary of what the agent reported. So
+  with the filter on, such a reply may leave no memory. The rule was not
+  changed: a change to what a rule means needs his yes.
+- The bank `toolkit-v2` still holds the two missions of the old setup. It
+  was not changed.
+- The filter paragraph says nothing about secrets or personal data. The
+  mission that setup used to write named both, and had no effect.
+- Not tested: a save of a real session through the filter, Codex, and the
+  installer in a real project.
+
 ## A small work item is judged by the agent, version 0.9.18 (2026-10-08)
 
 The agent asked Mike whether a task that fixes the result counts toward the

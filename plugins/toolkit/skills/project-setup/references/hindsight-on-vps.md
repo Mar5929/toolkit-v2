@@ -2,7 +2,7 @@
 
 Use this file for a project whose memory is kept in Hindsight. Hindsight runs on the owner's own server, a VPS at Hostinger, and each project has one bank there. A bank is one project's memory store on the Hindsight server. Open this file to set up a Hindsight project, to open a project's dashboard, to check a Hindsight project, or to connect a new computer. The file also says what runs where, what an agent never does on the server, and how the access key is handled.
 
-The setup of a project is done when its bank is on the server, the three Hindsight lines of `PROJECT.md` are filled, Hindsight's coding-agent add-on on this computer maps the project's folder to the bank, the save-and-search check passes, and the bank has the settings that the owner chose.
+The setup of a project is done when its bank is on the server, the three Hindsight lines of `PROJECT.md` are filled, Hindsight's coding-agent add-on on this computer maps the project's folder to the bank, the bank has the settings that the owner chose, and the save-and-search check passes.
 
 ## Contents
 
@@ -15,10 +15,11 @@ The setup of a project is done when its bank is on the server, the three Hindsig
   - 2. The bank
   - 3. The settings lines
   - 4. The add-on
-  - 5. Save and search
-  - 6. Open the dashboard
-  - 7. The bank's settings
+  - 5. The bank's settings
+  - 6. Save and search
+  - 7. Open the dashboard
 - The bank's settings
+  - The filter for saved sessions
   - Ask the owner
   - Apply the settings
   - Change a setting later
@@ -67,7 +68,13 @@ These facts are about this computer:
   - At session start, it shows the agent the bank's knowledge pages and the guide to its tools. On the first message of a session, it adds a short summary from memory.
   - It fills a new bank from the Git history, and it keeps five knowledge pages in the bank up to date.
   - It surveys the code with the command line of Claude Code or Codex, on a new bank and again every 20 commits. In Claude Code, a survey uses the model haiku and costs at most US$2.
-- The owner chooses six settings for each bank, such as whether Hindsight builds observations for it. "The bank's settings" lists them. Setup writes the owner's choices to the server and into the add-on's settings, under the bank's ID.
+- The add-on prepares a bank the first time its job runs for that bank. It writes its own missions into the bank, and the five kinds of save that it uses. On each later run, the job adds only what the bank lacks, and sets the detail of four of its kinds of save (`git`, `gitlog`, `conversation`, and `document`) again from the add-on's settings.
+  - A mission is an instruction that a bank holds for the model. A bank can hold one for saving (`retain_mission`), one for answering a question (`reflect_mission`), and one for building observations (`observations_mission`).
+  - A kind of save is a named group of settings for one sort of text. Hindsight calls it a retain strategy. The add-on's five are `git`, `gitlog`, `conversation`, `document`, and `survey`. The add-on saves a session with `conversation`. This file calls the mission of `conversation` the add-on's mission for a session.
+  - Each of the first four kinds has a mission of its own, and that mission replaces the bank's `retain_mission` for every save of that kind. So a `retain_mission` on the bank changes nothing in the sessions, the Git history, and the documents that the add-on saves.
+  - The add-on only adds what a bank does not have. When a bank already holds one mission, the add-on writes none of its three. So setup creates a bank with a name and nothing else.
+  - The add-on reads its settings each time it runs, and it prepares a bank with the settings that it finds on that first run. So the bank's own settings must be in the add-on's settings before the add-on can run in the project's folder.
+- The owner chooses seven settings for each bank, such as whether Hindsight builds observations for it. "The bank's settings" lists them. Setup writes the owner's choices into the add-on's settings, under the bank's ID, and to the server.
 - The add-on's settings also hold two values for a bank that has no choices of its own yet:
   - They set `defaultBankConfig.enable_observations` to `false`, because the add-on's bank template would otherwise turn observations on for the bank. With that setting at `false`, Hindsight consolidates nothing in the bank, by itself or on request.
   - They ask for the `world` and `experience` types when the add-on recalls memories, because the add-on asks only for observations unless told otherwise.
@@ -118,7 +125,7 @@ Use the fallback below only when the owner does not want the key in that file.
 
 Run each command alone. When the session runs in Codex, follow `SKILL.md`, "Mistakes to avoid": it says how to run a command that the Codex sandbox refuses, such as a network call or a write to a file in the home folder.
 
-In the commands below, `<auth>` stands for `-H "Authorization: Bearer $(jq -r .apiToken ~/.hindsight/coding-agent.json)"`. Write it out in full in each command, exactly so, and never write the key itself. `<main checkout>` stands for the main checkout, which is the project's main folder: the first path that `git worktree list` prints.
+In the commands below, `<auth>` stands for `-H "Authorization: Bearer $(jq -r .apiToken ~/.hindsight/coding-agent.json)"`. Write it out in full in each command, exactly so, and never write the key itself. `<main checkout>` stands for the main checkout, which is the project's main folder: the first path that `git worktree list` prints. `<settings file>` stands for the path of the project's `.claude/hindsight-bank-settings.json` in the folder you work in. That file holds the owner's choices for the bank ("The bank's settings").
 
 ### Projects with their own review of saved knowledge
 
@@ -172,13 +179,13 @@ Then check the key, with the command under "The access key". When that command p
    | No exact ID | Create it (step 4). |
 
    Check a bank with this list, never with `GET /v1/default/banks/<bank>/config`, because older servers answer `200` there for a deleted bank.
-4. Create the bank with this command. Leave any `'` out of the project name in the body:
+4. Create the bank with this command. The command gives the bank a name and nothing else, because the add-on writes its own missions only into a bank that holds none ("What runs where"). Leave any `'` out of the project name in the body:
 
    ```text
-   curl -s -m 30 -X PUT <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank> -d '{"name":"<Project name>","reflect_mission":"Memory for the <Project name> project.","retain_mission":"Keep project-wide decisions, lasting project facts, references, and lessons for <Project name>. Ignore chit-chat, live status, secrets, and personal data."}' | jq -c '{bank_id, name}'
+   curl -s -m 30 -X PUT <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank> -d '{"name":"<Project name>"}' | jq -c '{bank_id, name}'
    ```
 
-   A `PUT` to an existing ID changes that bank's name and missions, so send it only for an ID that the list showed free. Then run the list again. The ID must be in it.
+   A `PUT` to an existing ID changes that bank's name, so send it only for an ID that the list showed free. Then run the list again. The ID must be in it.
 
 ### 3. The settings lines
 
@@ -212,36 +219,46 @@ When an ID has a character other than a letter, digit, or hyphen, encode the ID 
      - After the owner's yes, remove the plugin with `claude plugin uninstall <name>`.
      - After the owner's yes, remove the old Codex handlers in `~/.codex/hooks.json`. Show the handlers to the owner first.
    - The add-on is installed when each hooks file counts 3 or more and both MCP entries run `mcp-server.js` from `coding-agents`.
-2. Show the owner exactly what will change, and ask:
-   - In `~/.hindsight/coding-agent.json`, the settings below are written, with this project's folder and bank. "7. The bank's settings" adds the bank's own settings to the same file.
+2. When `<settings file>` already holds the owner's choices for the bank's settings, as it does on a second computer, leave the file as it is. Otherwise, when the owner was not asked about the bank's settings yet, ask first, as "Ask the owner" below says. Then write the owner's choices into the file, and change only the values.
+3. Show the owner exactly what will change, and ask:
+   - In `~/.hindsight/coding-agent.json`, the settings below are written, with this project's folder, its bank, and the bank's own settings from `<settings file>`.
    - Only when the add-on is not installed yet, the installer adds the files and entries in "What runs where" (hooks, MCP servers, its skill, its program).
      - The installer keeps a copy of each file it changes the first time, as `<file>.hindsight-backup`.
      - Codex runs hooks only with its hooks feature on, under `[features]` in `~/.codex/config.toml`. The installer adds that section when the file has none. The key is `hooks`. The older key `codex_hooks`, which the add-on's own documentation names, still works.
-3. After the owner's yes, write the settings first, so that the installer never falls back to Hindsight Cloud:
+4. After the owner's yes, write the settings with the one command below. Write them before the install, so that the installer never falls back to Hindsight Cloud:
 
    ```text
-   jq --arg p '<main checkout>' --arg b '<bank>' '.serverMode = "self-hosted" | .apiUrl = "https://memory-api.mrihm-memory.com" | .optInOnly = true | .optInPaths = ((.optInPaths // []) + [$p] | unique) | .mapPathToBank = ((.mapPathToBank // {}) + {($p): $b}) | .recallOptions = ((.recallOptions // {}) + {types: ["world", "experience"]}) | .defaultBankConfig = ((.defaultBankConfig // {}) + {enable_observations: false})' ~/.hindsight/coding-agent.json > ~/.hindsight/coding-agent.json.new && chmod 600 ~/.hindsight/coding-agent.json.new && mv ~/.hindsight/coding-agent.json.new ~/.hindsight/coding-agent.json
+   jq --arg p '<main checkout>' --arg b '<bank>' --slurpfile s '<settings file>' '.serverMode = "self-hosted" | .apiUrl = "https://memory-api.mrihm-memory.com" | .optInOnly = true | .recallOptions = ((.recallOptions // {}) + {types: ["world", "experience"]}) | .defaultBankConfig = ((.defaultBankConfig // {}) + {enable_observations: false}) | .banks = ((.banks // {}) + {($b): (((.banks // {})[$b] // {}) + $s[0].addOn + {defaultBankConfig: $s[0].bank})}) | .optInPaths = ((.optInPaths // []) + [$p] | unique) | .mapPathToBank = ((.mapPathToBank // {}) + {($p): $b})' ~/.hindsight/coding-agent.json > ~/.hindsight/coding-agent.json.new && chmod 600 ~/.hindsight/coding-agent.json.new && mv ~/.hindsight/coding-agent.json.new ~/.hindsight/coding-agent.json
    ```
 
-4. When the add-on is not installed yet, install it for Claude Code and Codex with this command. To install it for only one of them, name only that one:
+   - The command writes the bank's own settings together with the two entries that switch the add-on on for the folder, `optInPaths` and `mapPathToBank`. Never write those two entries in an earlier command. On a computer that has the add-on, its hooks run in the folder from the moment the folder is in the map, and the add-on would prepare the bank with its own defaults.
+   - Under the bank's ID, the command writes the file's `addOn` part. It also writes the file's `bank` part there, as `defaultBankConfig`. The add-on sends the values of `defaultBankConfig` to the server when it prepares the bank.
+5. When the add-on is not installed yet, install it for Claude Code and Codex with this command. To install it for only one of them, name only that one:
 
    ```text
    npx -y @vectorize-io/hindsight-coding-agents install claude-code codex --server self-hosted --api-url https://memory-api.mrihm-memory.com
    ```
 
-   When the installer prints that a line must be added under an existing `[features]` section, add the line it names to `~/.codex/config.toml` after the owner's yes.
-5. Check these things:
+   When the installer prints that a line must be added under an existing `[features]` section, finish "5. The bank's settings" first. Then add the line it names to `~/.codex/config.toml` after the owner's yes.
+6. Check these things:
    - `jq 'del(.. | .apiToken?)' ~/.hindsight/coding-agent.json` shows `serverMode` `self-hosted`, the API address, `optInOnly` `true`, the main checkout in `optInPaths`, the main checkout mapped to the bank in `mapPathToBank`, `recallOptions.types` `["world","experience"]`, and `defaultBankConfig.enable_observations` `false`.
+   - Under `banks`, the same command shows the bank's ID with every key of the file's `addOn` part, and with the file's `bank` part as `defaultBankConfig`.
    - The commands in step 1 now find the add-on installed.
    - The project has no `hindsight` server of its own: `.mcp.json` has no `mcpServers.hindsight`, and `.codex/config.toml` has no `[mcp_servers.hindsight]`.
-6. The last steps are the owner's. In Codex, the owner trusts the add-on's hooks with `/hooks`. The owner starts a new session in Claude Code and in Codex, because both load hooks and MCP servers at session start.
+7. Go on with "5. The bank's settings" in the same turn, and do not wait for the owner in between. Two steps are left for the owner, and the report at the end of setup names them. In Codex, the owner trusts the add-on's hooks with `/hooks`. The owner starts a new session in Claude Code and in Codex, because both load hooks and MCP servers at session start.
 
-### 5. Save and search
+### 5. The bank's settings
 
-This step proves the server, the key, and the bank. Save a test text with the command below. The fixed `document_id` makes a second run replace the first save:
+Finish the bank's settings now, with steps 3 to 6 of "Apply the settings" below. In those steps the add-on prepares the bank, setup sends the owner's other choices to the server, and a check compares the bank with the file.
+
+Do these steps before the turn ends. The add-on saves the session at the end of the turn, and in a bank that is not prepared yet, that save gets neither the add-on's mission for a session nor the filter for saved sessions ("The filter for saved sessions" below).
+
+### 6. Save and search
+
+This step proves the server, the key, and the bank. Save a test text with the command below. The fixed `document_id` makes a second run replace the first save. The item names the kind of save `document`, which is the add-on's kind for a text that is neither a session nor a commit. With no kind named, the server would read the text with the add-on's mission for a Git commit:
 
 ```text
-curl -s -m 30 -X POST <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/memories -d '{"items":[{"content":"Toolkit V2 set up the <Project name> project on <YYYY-MM-DD>. Its memory is the Hindsight bank <bank>.","context":"Toolkit V2 setup check","document_id":"toolkit-setup-check"}],"async":true}' | jq -r '.operation_id // .detail'
+curl -s -m 30 -X POST <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/memories -d '{"items":[{"content":"Toolkit V2 set up the <Project name> project on <YYYY-MM-DD>. Its memory is the Hindsight bank <bank>.","context":"Toolkit V2 setup check","document_id":"toolkit-setup-check","strategy":"document"}],"async":true}' | jq -r '.operation_id // .detail'
 ```
 
 Hindsight then extracts the memories, with its model at OpenAI. Check with the command below about every 20 seconds, until it prints `completed`. When it prints `failed`, run the same command with `jq -r .error_message` in place of `jq -r .status`, then stop and report the reason. The server can print `completed` when part of the extraction failed, so the search below is the proof.
@@ -258,30 +275,27 @@ curl -s -m 60 -X POST <auth> -H 'Content-Type: application/json' https://memory-
 
 The check passes when a result names the bank. When the search prints an empty list, report it.
 
-### 6. Open the dashboard
+### 7. Open the dashboard
 
 Open the bank's page for the owner, as "Open the dashboard" below says.
 
-### 7. The bank's settings
-
-Give the bank the settings that the owner chose in the interview, as "Apply the settings" below says. When the owner was not asked about them yet, ask first, as "Ask the owner" below says.
-
 ## The bank's settings
 
-Each bank has six settings that the owner chooses for that bank alone. Setup asks about all six in one message. The project keeps the answers in `.claude/hindsight-bank-settings.json`, a file in the repository, so that every computer gives the bank the same settings.
+Each bank has seven settings that the owner chooses for that bank alone. Setup asks about all seven in one message. The project keeps the answers in `.claude/hindsight-bank-settings.json`, a file in the repository, so that every computer gives the bank the same settings.
 
-The file has two parts. The `bank` part holds the settings that the server keeps for the bank. The `addOn` part holds the settings that the add-on keeps on each computer, under the bank's ID.
+The file has three parts. The `bank` part holds the settings that the server keeps for the bank. The `addOn` part holds the settings that the add-on keeps on each computer, under the bank's ID. `sessionFilter` holds the filter for saved sessions, which the server keeps at the end of the add-on's mission for a session.
 
 | Setting | Key in the file | Choices | What the choice changes |
 | --- | --- | --- | --- |
 | Observations | `bank.enable_observations`, `bank.enable_auto_consolidation`, and `addOn.recallOptions.types` | Off. On, built only when the owner asks. On, built after every save. | An observation is a statement that Hindsight builds from several saved memories. Building observations uses the ChatGPT allowance: once for each request, or after every save. |
 | Save every session | `addOn.retainSessions` | `true` or `false` | With `false`, the add-on saves no session at the end of a turn. The bank then gets only the Git history, the code survey, and what the agent saves with the add-on's tools. |
-| Detail of a save | `addOn.retainExtractionMode` | `"concise"`, `"verbose"`, `"verbatim"`, or `"chunks"` | `"verbose"` keeps more detail, and uses several times the model work of `"concise"` on every save. `"verbatim"` stores the text as it is, and uses the model only to find names and dates in it. `"chunks"` stores the text as it is and uses no model. |
+| Detail of a save | `addOn.retainExtractionMode` | `"concise"`, `"verbose"`, `"verbatim"`, or `"chunks"` | `"concise"` keeps the fewest memories from each save. `"verbose"` keeps more detail: it makes more memories from every save, and uses several times the model work of `"concise"`. `"verbatim"` stores the text as it is, and uses the model only to find names and dates in it. `"chunks"` stores the text as it is and uses no model. No choice lies between `"concise"` and `"verbose"`. |
+| Filter for saved sessions | `sessionFilter` | The toolkit's paragraph, the owner's own paragraph, or `""` for no filter | The paragraph tells the model what to leave out when it turns a saved session into memories. "The filter for saved sessions" below says what the toolkit's paragraph leaves out. |
 | Summary on the first message | `addOn.autoInject` | `"reflect"`, `"pages"`, `"recall"`, or `"none"` | `"reflect"` asks the model for a summary in every session. `"pages"` adds the knowledge pages that match the message, and `"recall"` adds the memories that match it. Neither uses the model. `"none"` adds nothing. |
 | Git history | `addOn.gitIngest` | `"message"`, `"full"`, or `"none"` | `"message"` saves the commit messages. `"full"` also saves the changes of every commit, and Hindsight uses the model on each one. `"none"` saves nothing from Git. |
 | Code survey | `addOn.codebaseSurvey` | `true` or `false` | With `true`, the add-on surveys the code on a new bank and again every 20 commits. In Claude Code, a survey costs at most US$2. |
 
-The file that setup copies holds the default of each setting: observations on and built after every save, every session saved, `"verbose"`, `"reflect"`, `"full"`, and the code survey on.
+The file that setup copies holds the default of each setting: observations on and built after every save, every session saved, `"concise"`, the toolkit's paragraph as the filter, `"reflect"`, `"full"`, and the code survey on.
 
 The choice for observations sets three values:
 
@@ -291,40 +305,68 @@ The choice for observations sets three values:
 | On, built only when the owner asks | `true` | `false` | `["observation", "world", "experience"]` |
 | On, built after every save | `true` | `true` | `["observation", "world", "experience"]` |
 
+### The filter for saved sessions
+
+The add-on's mission for a session tells the model to record what was decided and what was changed. So a bank with no filter also gets the live status of work, for example "the agent merged pull request 41", which Git and the work items already hold.
+
+The filter is one paragraph that setup adds to the end of that mission, in the bank. The file's `sessionFilter` holds the paragraph. In the bank, the paragraph follows the words `OWNER FILTER FOR THIS PROJECT:`. Setup finds the paragraph by those words when it replaces it, so never change those words in the bank.
+
+- The toolkit's paragraph tells the model to make no memory from three things: the live status of work, anything that is true only for the moment, and a summary of what the agent reported, unless the owner then decided something from it. It tells the model to keep decisions with their reason, rules and conventions that were set, and problems with how they were resolved.
+- The filter is an instruction to the model, not a check. With the filter, the model saves fewer such things. It can still save one.
+- The filter covers only the sessions that the add-on saves. It does not cover the Git history, the code survey, or a document that the agent saves with the add-on's tools.
+- The filter does not change what the server stores of a session's text. It changes only which memories the model makes from that text.
+
 ### Ask the owner
 
-Show the owner the six settings in one table. For each setting, give its name, its choices in plain words, what each choice costs, and the default. Then ask one question: "Say 'defaults', or name what to change." Recommend the defaults.
+Show the owner the seven settings in one table. For each setting, give its name, its choices in plain words, what each choice costs, and the default. Below the table, show the toolkit's paragraph for the filter word for word. When the project's file already holds the owner's choices, also show the value that the file holds for each setting, and name each one that differs from the default. Then ask one question: "Say 'defaults', or name what to change." Recommend the defaults.
 
 ### Apply the settings
 
-In the commands below, `<settings file>` stands for the path of the project's `.claude/hindsight-bank-settings.json` in the folder you work in.
+At setup, "4. The add-on" has done steps 1 and 2, so start at step 3.
 
-1. Write the owner's answers into the file. Change only the values.
-2. Send the `bank` part to the server. The answer must show both fields with the file's values. When it shows anything else, stop and report what it printed.
-
-   ```text
-   curl -s -m 30 -X PATCH <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/config -d "$(jq -c '{updates: .bank}' '<settings file>')" | jq -c '.detail // (.overrides | {enable_observations, enable_auto_consolidation})'
-   ```
-
-3. Show the owner the `addOn` part, and say that it goes into `~/.hindsight/coding-agent.json`, under the bank's ID. After the owner's yes, write it:
-
-   ```text
-   jq --arg b '<bank>' --slurpfile s '<settings file>' '.banks = ((.banks // {}) + {($b): (((.banks // {})[$b] // {}) + $s[0].addOn)})' ~/.hindsight/coding-agent.json > ~/.hindsight/coding-agent.json.new && chmod 600 ~/.hindsight/coding-agent.json.new && mv ~/.hindsight/coding-agent.json.new ~/.hindsight/coding-agent.json
-   ```
-
-4. Check that the command below shows every key of the `addOn` part with the file's value:
+1. Write the owner's answers into `<settings file>`. Change only the values.
+2. Show the owner the file's `addOn` part and its `bank` part, and say that they go into `~/.hindsight/coding-agent.json`, under the bank's ID. After the owner's yes, write them with the command in "4. The add-on", step 4. Then check that the command below shows every key of the `addOn` part with the file's value, and the file's `bank` part as `defaultBankConfig`:
 
    ```text
    jq --arg b '<bank>' '(.banks // {})[$b] | del(.. | .apiToken?)' ~/.hindsight/coding-agent.json
    ```
 
-5. Tell the owner from when the new settings apply. The add-on's hooks read the settings each time they run, so they use the new settings from the owner's next message. The add-on's tools read the settings once, when a session starts, so they use the new settings from the next session.
+3. Read the bank's settings on the server:
 
-On a second computer, do only steps 3 to 5, because the server already keeps the `bank` part.
+   ```text
+   curl -s -m 20 <auth> https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/config | jq -c '.detail // (.overrides | {enable_observations, enable_auto_consolidation, retain_extraction_mode, missions: ([.reflect_mission, .retain_mission, .observations_mission] | map(select(. != null)) | length), kinds_of_save: ((.retain_strategies // {}) | map_values(.retain_extraction_mode)), session_filter: ((((.retain_strategies // {}).conversation.retain_mission // "") | split("OWNER FILTER FOR THIS PROJECT: ")[1]) // "")})'
+   ```
+
+   - When `kinds_of_save` lists `conversation`, the add-on has prepared the bank. Go on with step 4.
+   - When `kinds_of_save` is empty, start the add-on's own job for the folder with the command below. It is the job that the add-on's hooks start on the first message of a session. In Codex, write `codex` in place of `claude-code`.
+
+     ```text
+     (nohup node ~/.hindsight/coding-agents/dist/deepen.js --repo '<main checkout>' --harness claude-code > /dev/null 2>&1 &)
+     ```
+
+     - The job prepares the bank in its first seconds. After that it fills the bank from the Git history and surveys the code, as the bank's settings say, which can take many minutes. Do not wait for the job to end.
+     - Read the bank's settings again every few seconds. When `kinds_of_save` is still empty after a minute, stop, send nothing to the bank, and tell the owner what the read printed.
+4. Send the file's `bank` part, the detail of a save, and the filter for saved sessions to the server. The command prints `"sent"`:
+
+   ```text
+   BODY="$(curl -s -m 20 <auth> https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/config | jq -ce --slurpfile s '<settings file>' 'if .detail then error(.detail) else . end | (.overrides.retain_strategies // {}) as $r | $s[0].addOn.retainExtractionMode as $m | if (($r.conversation.retain_mission // "") == "") then error("the add-on has not prepared this bank yet") else {updates: ($s[0].bank + {retain_extraction_mode: $m, retain_strategies: ($r | with_entries(if (.key | IN("git", "gitlog", "conversation", "document")) then .value.retain_extraction_mode = $m else . end) | .conversation.retain_mission |= ((split("OWNER FILTER FOR THIS PROJECT:")[0] | sub("\\s+$"; "")) + (($s[0].sessionFilter // "") | if . == "" then "" else "\n\nOWNER FILTER FOR THIS PROJECT: " + . end)))})} end')" && curl -s -m 30 -X PATCH <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/config -d "$BODY" | jq -c '.detail // "sent"'
+   ```
+
+   - The command reads the bank's kinds of save and sends them back with two changes: the detail of the add-on's four kinds that use the model, and the filter for saved sessions at the end of the add-on's mission for a session. It keeps every other word of the add-on's missions.
+   - When the command prints "the add-on has not prepared this bank yet", it sent nothing. Go back to step 3.
+   - Never send these settings to a bank that the add-on has not prepared. When the add-on then prepares the bank, it turns observations on, whatever the owner chose.
+5. Read the bank's settings again, with the command in step 3, and compare them with the file. When a value differs, stop and report what the read printed.
+   - `enable_observations` and `enable_auto_consolidation` hold the values of the file's `bank` part.
+   - `retain_extraction_mode` holds the file's `addOn.retainExtractionMode`. Under `kinds_of_save`, `git`, `gitlog`, `conversation`, and `document` hold the same value, and `survey` holds `custom`.
+   - `session_filter` holds the file's `sessionFilter`.
+   - `missions` is 3 in a bank that the add-on prepared before anything else wrote a mission into it. A lower number shows that the bank held a mission first, as a bank does that was set up before toolkit 0.9.19, and that the add-on left its own missions out. Tell the owner that the bank holds the missions of the earlier setup, and not the add-on's three.
+6. Tell the owner from when the new settings apply. The server uses what step 4 sent from the next save. The add-on's hooks read the add-on's settings each time they run, so they use the new settings from the owner's next message. The add-on's tools read the settings once, when a session starts, so they use the new settings from the next session.
+
+On a second computer, do only step 2, and then compare as step 5 says, because the server already keeps the rest.
 
 ### Change a setting later
 
-When the owner asks to change a setting of the bank, do steps 1 to 5 of "Apply the settings" again with the new answer.
+When the owner asks to change a setting of the bank, do steps 1 to 6 of "Apply the settings" again with the new answer.
 
 ### Build observations when the owner asks
 
@@ -334,7 +376,7 @@ Do this only for a bank whose observations are on, and only when the owner asks.
 curl -s -m 30 -X POST <auth> -H 'Content-Type: application/json' https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/consolidate -d '{}' | jq -r '.operation_id // .detail'
 ```
 
-Then check the operation with the status command in "5. Save and search", until it prints `completed` or `failed`. Tell the owner the result. Hindsight can build no observation at all when the saved memories give it nothing to join.
+Then check the operation with the status command in "6. Save and search", until it prints `completed` or `failed`. Tell the owner the result. Hindsight can build no observation at all when the saved memories give it nothing to join.
 
 ## Open the dashboard
 
@@ -355,15 +397,12 @@ Use this section for "check the setup" and "update the toolkit". Each check only
 - Check that the bank on the "Hindsight bank" line is in the list in "2. The bank", step 3.
 - Check that the three `PROJECT.md` lines in "3. The settings lines" each hold their value, not a prompt and not `not used`.
 - Check that the project has `.claude/rules/hindsight-memory.md`, and that `memory/` in the main checkout holds only `CURRENT_STATE.md`.
-- Do steps 1 and 5 of "4. The add-on".
+- Do steps 1 and 6 of "4. The add-on".
 - Check the bank's settings:
   - The project has `.claude/hindsight-bank-settings.json`.
-  - Step 4 of "Apply the settings" shows every key of the file's `addOn` part with the file's value. When that command prints `null`, this computer has no settings for the bank yet. When this update copied the file into the project, the owner was never asked: ask as "Ask the owner" says, and then apply the answers. When the project already had the file, do steps 3 to 5 of "Apply the settings" after the owner's yes.
-  - The command below shows the two fields of the file's `bank` part with the file's values:
-
-    ```text
-    curl -s -m 20 <auth> https://memory-api.mrihm-memory.com/v1/default/banks/<bank>/config | jq -c '.detail // (.overrides | {enable_observations, enable_auto_consolidation})'
-    ```
+  - The file has a `sessionFilter` key. A file without that key comes from a setup before toolkit 0.9.19. The owner was then never asked about the filter for saved sessions: ask as "Ask the owner" says, and then apply the answer.
+  - The check in step 2 of "Apply the settings" passes. When its command prints `null`, this computer has no settings for the bank yet. When this update copied the file into the project, the owner was never asked: ask as "Ask the owner" says, and then apply the answers. When the project already had the file, do step 2 of "Apply the settings" after the owner's yes.
+  - The comparison in step 5 of "Apply the settings" passes. In an update, when a value differs, do steps 3 to 5 of "Apply the settings" after the owner's yes.
 - In a session that has the add-on's tools, check that `hindsight_diagnose` shows the bank as `bank_id`, the API address as `api_url`, and `api_token_in_use` `true`. In a session without the tools, list this check as not done yet.
 - When a failure comes from this computer (no key, no add-on, the folder missing from the map), follow "A new computer".
 
@@ -373,7 +412,7 @@ The memory stays on the VPS, so nothing is copied. On the new computer, do these
 
 1. Check that Node and `jq` are installed (`command -v node npx jq`). Installing them is the owner's step.
 2. The owner enters the API key, as "The access key" says.
-3. Read the bank from each project's `PROJECT.md`, and follow "4. The add-on" with that project's folder on this computer and that bank. Install the add-on once. For each other project, only write the settings. Then do steps 3 to 5 of "Apply the settings" in each project.
+3. Read the bank from each project's `PROJECT.md`, and follow "4. The add-on" with that project's folder on this computer and that bank. The installer runs once: for each project after the first, step 1 of that section finds the add-on installed, so step 5 installs nothing. Each project's `.claude/hindsight-bank-settings.json` already holds the owner's choices, and step 4 of that section writes them for this computer.
 4. Run "Check a Hindsight project" in each project. Then three steps are the owner's: to trust the add-on's hooks in Codex `/hooks`, to start a new session, and to sign in to the dashboard in the owner's browser.
 
 ## A project on the old Mac server
@@ -402,3 +441,5 @@ Tell the owner. This skill has no step for moving memory between servers. When t
 - Never add the server's MCP address for one bank (`https://memory-api.mrihm-memory.com/mcp/<bank>/`) to Claude Code or Codex for a toolkit project. The add-on already gives the agent the tools for the project's bank.
 - Never send `POST .../consolidate`, and never change a setting of a bank, unless the owner asks. Consolidation uses the owner's ChatGPT allowance, and each setting is the owner's choice.
 - Never change the bank's section in `~/.hindsight/coding-agent.json` alone. Change the project's `.claude/hindsight-bank-settings.json`, then apply it, so that every computer gets the same settings.
+- Never write a mission into a bank when you create it, and never send a setting to a bank that the add-on has not prepared. The add-on then leaves out its own missions, or turns observations on, whatever the owner chose. "Apply the settings" gives the order.
+- Never add a folder to `optInPaths` or `mapPathToBank` before the bank's own settings are in the same file. The one command in "4. The add-on", step 4, writes them together.
