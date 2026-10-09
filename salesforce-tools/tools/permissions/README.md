@@ -1,0 +1,5 @@
+# Permission set tool
+
+`permsets.py` is this project's permission set checker. Use [the runbook](PERMISSIONS-RUNBOOK.md) for fetch, verify, preflight, and deploy handling. The rule `permissions-source-control.md` requires a clean preflight before a permission set deploy.
+
+This model has no connected Salesforce org. In a copied project, verify retrieval behavior against that org and fill the runbook before using the tool.

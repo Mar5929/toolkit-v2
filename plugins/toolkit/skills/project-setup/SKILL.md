@@ -154,7 +154,7 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 ### What setup never does
 
 - Never change anything in this skill's `assets/` folder, because it is the source for every project.
-- Never write a script into a project. The only code a project runs is the three hook commands and, in a Salesforce project, the code of the `salesforce` setup folder: the two guards, the graph Stop hook, and the scripts in `tools/`.
+- Never write a script into a project. The only code a project runs is the three hook commands.
 - Never make setup a work item.
 - Jira is not offered yet.
 - A Hindsight project gets no memory skill from the toolkit. Hindsight's coding-agent add-on brings its own skill and tools, and the project's rule `.claude/rules/hindsight-memory.md` says what the project keeps where.
@@ -174,7 +174,7 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 | [references/notion-build/project-page.md](references/notion-build/project-page.md), [references/notion-build/work-item-page.md](references/notion-build/work-item-page.md), [references/notion-build/memory-page.md](references/notion-build/memory-page.md) | You build the Notion template: these three files hold the text of the project page, of the work item template, and of the Memory page. |
 | [references/github.md](references/github.md) | Work items are in GitHub Issues: you need the sign-in, the repository, the labels, how to bring a project up to date, and the checks. |
 | [references/hindsight-on-vps.md](references/hindsight-on-vps.md) | Memory is in Hindsight: you need how the owner's Hindsight is set up, what must be true when a project is set up for it, the defaults to offer the owner, the mistakes to avoid, how to check a Hindsight project or connect a new computer, and how to open the dashboard. |
-| [references/salesforce.md](references/salesforce.md) | The project is a Salesforce project: you need the check of Salesforce's skills and the question to the owner about them, the org aliases, and the API version. |
+| [references/salesforce.md](references/salesforce.md) | The project is a Salesforce project: you need the check of Salesforce's skills and the question to the owner about them, the org aliases, the refuse list for production, and the API version. |
 | [references/finishing.md](references/finishing.md) | Step 8: you need the prompts in the copied files, `SOUL.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
 | [references/update.md](references/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice: you need the new setup copy, what to do with each kind of file that differs, whether a difference is the owner's edit, what the toolkit no longer ships, the services, the checks, and the report. |
 | [references/one-home-layout.md](references/one-home-layout.md) | An update or a check finds a project set up before the current folder layout: you need how to find the old layout, the plan table, where each old file or record goes, and the order of the moves. |

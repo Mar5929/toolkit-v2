@@ -11,7 +11,7 @@ Two things apply to the whole file:
 
 - The work item's deployment folder and the component tracker must be current. `sf-component-tracker` says what the folder holds, and it keeps both current.
 - Before a deploy to a shared org (UAT, full copy, staging, production), `sf-deploy-check` must find nothing that would be deployed too early. Run the check on the exact set of components that will be deployed. When it finds something, stop and tell the owner which component.
-- A deploy that holds a permission set needs a clean `permsets.py preflight` first. `tools/permissions/PERMISSIONS-RUNBOOK.md` says how to run it.
+- Before a deploy that holds a permission set, confirm that the deploy removes no grant, as `.claude/rules/salesforce-org-safety.md` says.
 
 ## Validate, then deploy
 

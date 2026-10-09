@@ -2,6 +2,38 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## A Salesforce project runs no code of the toolkit's, version 0.9.33 (2026-10-09)
+
+Two more of the cuts that Mike approved on 2026-10-09.
+
+- **The two Salesforce guards are gone**: `guard-protected-orgs.cjs` (995
+  lines), `guard-permission-set-deploy.cjs` (237 lines),
+  `.claude/protected-orgs.json`, the Salesforce `.codex/hooks.json`, and
+  their two test files. Claude Code's own refuse list takes their place:
+  setup writes entries into `permissions.deny` for each production org that
+  the owner names (`salesforce.md`, "The refuse list for production"). A
+  test in a scratch project on 2026-10-09 showed the list refusing a
+  deploy, a data update, and an Apex test run that named the production
+  org, also inside `cd . && ...`, while a deploy to a sandbox with a
+  similar name and a query on production ran.
+- **Codex has no refuse list.** In Codex only the rule
+  `salesforce-org-safety.md` and the owner's file protect production. Mike
+  was told on 2026-10-09.
+- **The Salesforce Python tools are no longer shipped** (17,387 lines):
+  `tools/kb/` and `tools/permissions/`, with the rules `dependency-graph.md`
+  and `permissions-source-control.md` and the graph `Stop` hook. They are
+  now in `salesforce-tools/` in the root of this repository, which no
+  plugin ships. Its README says how a project adds one as its own.
+- `salesforce-org-safety.md` is Mike's own text. Its section "Enforcement"
+  went from ten bullets to four, three limits were reworded, and the limit
+  on a permission set deploy no longer names `permsets.py`.
+- The starter `.claude/settings.json` holds no hooks now, and a project
+  runs only the three hook commands.
+- Not tested live: a setup of a Salesforce project with this text, and the
+  entries on Windows (`PowerShell(...)`).
+- Work items: this replaces the small safety net planned in TKV-37, and
+  TKV-20 (three ways past the guard) no longer applies.
+
 ## The record check, the long list of final checks, and the old-version update steps are cut, version 0.9.32 (2026-10-09)
 
 Mike wrote six guiding principles into `AGENTS.md` on 2026-10-09. An audit of

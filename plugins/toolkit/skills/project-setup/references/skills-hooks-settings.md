@@ -45,7 +45,6 @@ A work choice adds tracker references, and a local or Notion memory choice adds 
 The three hook commands are in `every-project/.claude/hooks/`, so the setup copy has them in `<copy>/.claude/hooks/`: `session-start.mjs`, `prompt-reminder.mjs`, and `codex-after-commit.mjs`. A hook command is a command that Claude Code or Codex runs by itself at a fixed moment, for example at session start. Both Claude Code and Codex run the three commands from `.claude/hooks/`.
 
 - `prompt-reminder.mjs` runs on every message. It prints one line that tells the agent to check the project's skills, then a memory reminder when the message has a phrase such as "remember this", and then the whole text of the rule `.claude/rules/evaluate-the-owners-request.md`. It reads that rule file each time it runs, so the project's rule file is the only place where the rule's text is kept.
-- A Salesforce project also gets the two guards in `.claude/hooks/` from the `salesforce` folder, and the scripts in `tools/`. The graph Stop hook runs those scripts.
 
 ## Settings snippets
 
@@ -71,7 +70,7 @@ Never change a snippet's hook commands or texts, because they are written to mat
 ## Merge rules
 
 - Start from the file that `<copy>` already holds, after the Salesforce removals. `setup-copy.md`, "Salesforce entries in the settings file", lists the entries to take out in a project that is not a Salesforce project.
-  - When `<copy>` has no such file, the first snippet is the start. This is so for `.codex/hooks.json` in a project that is not a Salesforce project, and for `.codex/config.toml`.
+  - When `<copy>` has no such file, the first snippet is the start. This is so for `.codex/hooks.json` and for `.codex/config.toml`.
 - Replace the toolkit's own hook handlers. Never join the old ones and the new ones. A hook handler is one entry in a settings file that says what a hook runs. The toolkit's own hook handlers are:
   - a handler whose `args` or `command` names `session-start.mjs`, `prompt-reminder.mjs`, or `codex-after-commit.mjs`;
   - the `echo` handler in the `PostToolUse` group whose matcher is `Agent`;
@@ -83,9 +82,9 @@ Never change a snippet's hook commands or texts, because they are written to mat
 - Add a plain value (text, a number, true or false) that the file does not have.
   - When the file already has that plain value with a different value, and the file is in the setup copy, take the snippet's value.
   - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `placing-files.md` and `update.md` send you to these rules for such a file.
-- Never delete any other entry. The copied permission rules, the Git deny and ask rules, the Salesforce guards (and the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`), and the hooks that the owner added all stay.
+- Never delete any other entry. The copied permission rules, the Git deny and ask rules, the entries of `permissions.deny` for a production Salesforce org, and the hooks that the owner added all stay.
 - `.codex/hooks.json` holds only `description` and `hooks` at the top level.
-  - In a Salesforce project, the `description` is the text of the `salesforce` folder's file, one space, then the snippet's text. In any other project, the `description` is the snippet's text.
+  - The `description` is the snippet's text.
   - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. One sentence is the exception: a sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the snippet's text. List that change in the numbered table that the owner sees. `placing-files.md`, "3. Files the project already has", and `update.md` say how to show that table.
 - When the snippet sets a key that the file writes another way, leave the file as it is and ask the owner. Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table.
 

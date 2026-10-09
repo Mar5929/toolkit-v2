@@ -581,12 +581,11 @@ def cmd_fetch(args) -> int:
 
 
 def write_receipt(name: str, org: str, clean: bool, accepted: int = 0) -> None:
-    """Record that a preflight ran, so the deploy guard hook can see it.
+    """Record that a preflight ran, so a later reader can see it.
 
-    The hook at .claude/hooks/guard-permission-set-deploy.cjs blocks a deploy
-    whose permission set has no fresh clean receipt. Writing this is what lets a
-    checked deploy through. A stale receipt does not count: the org drifts, so a
-    preflight from hours ago proves nothing about now.
+    The rule permissions-source-control.md forbids a deploy whose permission
+    set has no fresh clean preflight. A stale receipt does not count: the org
+    drifts, so a preflight from hours ago proves nothing about now.
     """
     receipt_dir = REPO_ROOT / ".claude" / ".permset-preflight"
     try:

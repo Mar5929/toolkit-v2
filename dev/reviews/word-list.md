@@ -20,6 +20,7 @@ A writer who meets a made-up word that is not in this list adds a row in the sam
 | top-level item, sub-item, level | a work item with no parent; one inside another | K | Keep; explain once | 44 / 173 | Heading "Levels", cited 14 times |
 | Mark | the word on a rule: Draft, Approved, Built, Retired | N | Keep for rules only | 42 / 82 | Read by `validate-records.mjs` |
 | phase | a project phase groups work items; a work item's phase groups tasks | K | Never alone: say which | 38 / 246 | Notion property |
+| refuse list | `permissions.deny` in `.claude/settings.json`: Claude Code refuses a command that matches an entry | K | Keep; explain once in each file | 5 files | No |
 | Current State | the project's one short page of what is true now | K | Keep; explain once | 36 / 103 | File, Notion page, `session-start.mjs`, tests |
 | original | anything the project was given and keeps | N | "source" | 36 / 67 | 3 descriptions; one cited heading; text two hooks print, with tests |
 | main checkout | the project's main folder: the first path `git worktree list` prints | K | One name; drop "main project folder", "base worktree" | 36 / 118 | Hook text, tests |

@@ -709,32 +709,16 @@ test('Codex hook snippet commands run as written from a scratch project', () => 
   assert.equal(sh(h.PostToolUse[1].hooks[0].command, { tool_name: 'collaborationspawn_agent', tool_input: {} }), `${CODEX_HELPER}\n`);
 });
 
-test('the starter settings.json and the Salesforce Codex hooks name only commands the setup folders hold', () => {
+test('the starter settings.json holds no hooks of its own, and its refuse list holds the Git and Salesforce entries', () => {
   const starter = JSON.parse(readFileSync(join(assets, 'every-project/.claude/settings.json'), 'utf8'));
-  // The starter file holds the Salesforce entries; setup takes them out of a project that is not one.
-  assert.deepEqual(Object.keys(starter.hooks).sort(), ['PreToolUse', 'Stop']);
-  const commands = Object.values(starter.hooks).flat().flatMap((group) => group.hooks.map((h) => h.command));
-  assert.equal(commands.length, 3);
-  for (const command of commands) {
-    const file = command.match(/"\$CLAUDE_PROJECT_DIR\/([^"]+)"/)[1];
-    assert.ok(existsSync(join(assets, 'salesforce', file)), `${file} is in the salesforce folder`);
-  }
-  assert.equal(starter.hooks.PreToolUse[0].matcher, 'Bash|PowerShell');
+  // Setup merges the hooks from the settings snippets. The starter file ships none.
+  assert.equal(starter.hooks, undefined);
+  assert.ok(!existsSync(join(assets, 'salesforce/.codex/hooks.json')), 'the salesforce folder ships no Codex hooks');
+  assert.ok(starter.permissions.deny.includes('Bash(sf project delete source *)'));
   assert.equal(starter.autoMemoryEnabled, false);
   assert.equal(starter.outputStyle, 'Plain English');
   assert.ok(existsSync(join(assets, 'every-project/.claude/output-styles/plain-english.md')));
   for (const never of ['Bash(git add -A)', 'Bash(git add .)', 'Bash(git commit -a *)', 'Bash(git push --force *)']) assert.ok(starter.permissions.deny.includes(never), never);
-  const codex = JSON.parse(readFileSync(join(assets, 'salesforce/.codex/hooks.json'), 'utf8'));
-  assert.deepEqual(Object.keys(codex), ['description', 'hooks'], 'only description and hooks at the top level');
-  assert.deepEqual(Object.keys(codex.hooks), ['PreToolUse']);
-  assert.equal(codex.hooks.PreToolUse[0].matcher, '^Bash$');
-  const guards = codex.hooks.PreToolUse[0].hooks;
-  assert.deepEqual(guards.map((g) => g.command.match(/hooks\/([a-z-]+\.cjs)" --host codex$/)[1]), ['guard-protected-orgs.cjs', 'guard-permission-set-deploy.cjs']);
-  for (const g of guards) {
-    assert.equal(g.type, 'command');
-    assert.match(g.command, /^node "\$\(git rev-parse --show-toplevel\)\/\.claude\/hooks\//);
-    assert.ok(existsSync(join(assets, 'salesforce/.claude/hooks', g.command.match(/hooks\/([a-z-]+\.cjs)/)[1])));
-  }
 });
 
 test('plugin switches: every old claude-toolkit plugin is off in both hosts; Codex also raises the skills limit', () => {

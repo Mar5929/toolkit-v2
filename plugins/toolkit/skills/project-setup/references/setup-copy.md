@@ -72,17 +72,16 @@ Every file is copied whole. A choice decides which files a project gets, never w
 
 ## Never copied
 
-Remove from `<copy>` the files that no project gets. The setup folders hold project files, but three kinds of file that no project gets can also be in the setup copy. Remove the ones that are present, in `<copy>` only. Before you run each command, check that each path in it starts with the temporary folder.
+Remove from `<copy>` the files that no project gets. The setup folders hold project files, but two kinds of file that no project gets can also be in the setup copy. Remove the ones that are present, in `<copy>` only. Before you run each command, check that each path in it starts with the temporary folder.
 
 ```text
-rm -rf <copy>/.agents <copy>/tools/kb/out <copy>/tools/kb/_freshness_stamp.json <copy>/tools/kb/_drift_pending.md
-find <copy> \( -name __pycache__ -o -name .DS_Store -o -name '*.pyc' -o -name '*.log' -o -name '_prev-*.json' \) -prune -exec rm -rf {} +
+rm -rf <copy>/.agents
+find <copy> \( -name .DS_Store -o -name '*.log' \) -exec rm -f {} +
 ```
 
-The three kinds of file are these:
+The two kinds of file are these:
 
 - `.agents`: the `.agents/skills` in `every-project` is a link to the `.claude/skills` folder of `every-project`. `placing-files.md`, "4. The .agents/skills link", makes the project's own link after the copy.
-- The paths in `tools/kb/`, `_prev-*.json`, `__pycache__`, and `*.pyc`: the Salesforce tools write these files when they are run inside the toolkit's own `salesforce` folder.
 - `.DS_Store` and `*.log`: macOS and a local run leave these files in a folder.
 
 ## The project name and "Toolkit settings"
@@ -122,9 +121,8 @@ Keep the fill-in guide comment of the "Toolkit settings" section itself, because
 
 In a project that is not a Salesforce project, take the Salesforce entries out of `<copy>/.claude/settings.json`. A Salesforce project keeps them. `.claude/settings.json` is the settings file of Claude Code. Every project gets it, and it holds Salesforce entries.
 
-- Delete the `Stop` hook group whose command runs `tools/kb/graph_freshness_hook.py`. Delete the `Stop` key too when nothing is left in it.
-- Delete the two `PreToolUse` handlers that run `guard-protected-orgs.cjs` and `guard-permission-set-deploy.cjs`. Then delete their group and the `PreToolUse` key when nothing is left.
-- Delete these entries from `permissions.deny`: `Bash(sf project delete source *)`, `Bash(sfdx force:source:delete *)`, `Bash(sf org delete *)`, `PowerShell(sf project delete source *)`, `PowerShell(sfdx force:source:delete *)`.
+- Delete these entries from `permissions.deny`: `Bash(sf project delete source *)`, `Bash(sfdx force:source:delete *)`, `Bash(sf org delete *)`, `PowerShell(sf project delete source *)`, `PowerShell(sfdx force:source:delete *)`, `PowerShell(sf org delete *)`.
+- In a Salesforce project, also add the entries for each production org that the owner named, as `salesforce.md`, "The refuse list for production", says.
 - Keep every other entry: the Git deny and ask rules, `attribution`, `autoMemoryEnabled`, `enabledPlugins`, `outputStyle`, and `skillListingBudgetFraction`.
 
 `.gitignore` is copied whole in every project. Its lines for Salesforce tools ignore nothing in a project that has none of those files.
