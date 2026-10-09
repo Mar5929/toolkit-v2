@@ -6,6 +6,7 @@ Work in this order: the project's Current State first, then duplicates, links, s
 
 ## Contents
 
+- A helper reads memory in the background
 - Plan first, then ask
 - The project's Current State
 - Duplicates and merges
@@ -20,6 +21,15 @@ Work in this order: the project's Current State first, then duplicates, links, s
 - The owner's rules
 - The report
 
+## A helper reads memory in the background
+
+A clean-up reads every memory record whole, which takes time. So a helper does the reading and writes the plan, while you keep working with the owner. A helper is a separate agent that you start for one job, and that does not see this session.
+
+- Start one helper, in the background when your host can. In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose`. In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`, and call `wait_agent` before you end the turn.
+- Give the helper this message: "Read `.claude/skills/managing-project-memory/references/tidying.md` and `memory-store.md` in the same folder. You are the helper that its section "A helper reads memory in the background" describes. Skip that section, and start no helper. Follow the rest to review all of this project's memory. Change nothing. Return two lists: the changes that the file says do not go on the plan, and the plan, written as the file says. Write both for a reader who has not seen this session, as `.claude/rules/document-clarity-standard.md` says."
+- When the helper returns, make the changes on its first list yourself, which takes the place of doing "The project's Current State" first. Then show the owner the plan, as "Plan first, then ask" below says. The owner gives the yes to you. The helper never asks the owner.
+- When you cannot start a helper, do the whole clean-up yourself.
+
 ## Plan first, then ask
 
 - Read every memory record whole. `references/memory-store.md` says what in its layout is not a memory record (an index, a template), and what else to check there.
@@ -27,7 +37,7 @@ Work in this order: the project's Current State first, then duplicates, links, s
   - A contradiction between two memory records is a question on the list. Never settle a contradiction by date alone.
   - A delete is its own numbered line, and the line names the memory record. In every other case, retire the memory record or mark it as replaced, as `references/memory-process.md`, section "A memory record that is out of date or no longer needed", says.
 - Change nothing until the owner says yes. The owner's answer often comes in the next turn. Open this file again in that turn, because Codex does not keep a skill across turns.
-- Two changes do not go on the plan: removing lines of the project's Current State that are no longer true, and removing a secret or an email address at once.
+- These changes do not go on the plan: removing lines of the project's Current State that are no longer true, removing a secret or an email address at once, and the retirement or removal that "Stale records" below describes.
 
 ## The project's Current State
 
