@@ -93,7 +93,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 | Ignore files | `.gitignore`, `.ignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. Ask no question. The change only adds lines, and the owner's request to update the toolkit is the owner's yes to it. |
 | `AGENTS.md` | the root file | Follow "Updating AGENTS.md" below. |
 | `PROJECT.md`, "Toolkit settings" | | Make the section hold the 10 lines of the setup copy's section, with the same labels, in the same order. |
-| Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/README.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
+| Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/README.md`, `reference/outside-docs/INDEX.md`; in a Salesforce project, `.claude/protected-orgs.json` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
 | Rules in `.claude/rules/` | | Show the owner what differs. |
 | Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, the output style, the Salesforce guards and `tools/` | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
 | The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; `.claude/rules/salesforce-agent-permissions.md`; the owner's own skills and rules | Never compare or change one of these. |
@@ -168,14 +168,14 @@ Then compare the two lists. One of two cases applies.
 
 ## 4. What the toolkit no longer ships
 
-A project may hold something that an earlier setup put there and that the new setup copy does not have. Examples are a skill folder, a rule, a hook command with its entry in a settings file, a settings file of the toolkit's own, and a line of "Toolkit settings" in `PROJECT.md`.
+A project may hold something that an earlier setup put there and that the new setup copy does not have. Examples are a skill folder, a rule, a hook command with its entry in a settings file, a settings file of the toolkit's own, a line of "Toolkit settings" in `PROJECT.md`, and a Git hook in this copy's Git hooks folder with the Git setting `core.hooksPath` that points to it. The comparison in section 2 lists only what the setup copy holds, so look for these yourself.
 
 - List each one in the numbered table, with one line that says what it is. Remove it only after the owner's yes.
 - A skill, a rule, or a hook that the owner added is the owner's. When you cannot tell whether a thing came from the toolkit or from the owner, leave it and ask.
 - When the thing holds a choice or a line of the owner's, show it to the owner, and put it in the place that holds such a choice now before you remove the old one. For example, a choice about what an agent may do in a Salesforce org goes in `.claude/rules/salesforce-agent-permissions.md`, and an instruction for how the agent works goes in `.claude/rules/owner-preferences.md`.
 - Remove a hook command and its entry in the settings files in the same change, with any group or event that the entry leaves empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
-- Records are never such a thing. A work item, a memory record, a decision, a source, and any file in an old records folder is the owner's, and it stays.
+- This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records, such as `.work-items/` or `.memory/`, is the owner's, and it stays.
 
 ## 5. Services
 

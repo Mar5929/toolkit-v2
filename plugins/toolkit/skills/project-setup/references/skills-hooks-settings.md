@@ -66,7 +66,7 @@ Never try to turn off, in the project, a plugin from the owner's ChatGPT account
 
 The Notion snippets hold `{{CURRENT_STATE_PAGE_ID}}`. Leave it in the setup copy. The Notion memory setup fills it with the id of the Notion page named "Current state". `notion.md`, "The links in PROJECT.md", says when and where to put that id.
 
-Never change a snippet's hook commands or texts, because they are written to match the four hook commands.
+Never change a snippet's hook commands or texts, because they are written to match the three hook commands.
 
 ## Merge rules
 
@@ -79,14 +79,14 @@ Never change a snippet's hook commands or texts, because they are written to mat
 - When the file already has the toolkit's own hook handlers (an update, or a changed memory choice), show the owner the old and new handlers. Then remove the old ones and any group or event they leave empty, and merge the snippet. Never keep both.
   - When you cannot tell whether a handler is the toolkit's, ask the owner.
   - A new project's setup copy has none of them.
-- When the file holds an entry that an earlier version of the toolkit put there and the snippets no longer have, handle it as `update.md`, "4. What the toolkit no longer ships", says. Never add an end-of-reply check.
+- When the file holds an entry that an earlier version of the toolkit put there and the snippets no longer have, handle it as `update.md`, "4. What the toolkit no longer ships", says. Never add a `Stop` hook of type `prompt`.
 - Add a plain value (text, a number, true or false) that the file does not have.
   - When the file already has that plain value with a different value, and the file is in the setup copy, take the snippet's value.
   - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `placing-files.md` and `update.md` send you to these rules for such a file.
 - Never delete any other entry. The copied permission rules, the Git deny and ask rules, the Salesforce guards (and the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`), and the hooks that the owner added all stay.
 - `.codex/hooks.json` holds only `description` and `hooks` at the top level.
   - In a Salesforce project, the `description` is the text of the `salesforce` folder's file, one space, then the snippet's text. In any other project, the `description` is the snippet's text.
-  - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. List that change in the numbered table that the owner sees. `placing-files.md`, "3. Files the project already has", and `update.md` say how to show that table.
+  - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. One sentence is the exception: a sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the snippet's text. List that change in the numbered table that the owner sees. `placing-files.md`, "3. Files the project already has", and `update.md` say how to show that table.
 - When the snippet sets a key that the file writes another way, leave the file as it is and ask the owner. Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table.
 
 ## The older plugins, off in this project

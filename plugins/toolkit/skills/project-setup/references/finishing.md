@@ -111,7 +111,7 @@ Run each check alone, from the project folder. Each check only reads. The checks
 ### The checks
 
 1. **The settings files are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
-2. **The hook commands run.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`.
+2. **The session-start command runs.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`.
    - With Notion memory, add `--page <Current state page id>` to the command.
    - In Codex with Notion memory, run the command escalated. `SKILL.md`, "Mistakes to avoid", says how Codex runs a command that way. Inside the sandbox the command prints "could not be read here". That text comes from the sandbox, and it is not a setup failure.
 3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.

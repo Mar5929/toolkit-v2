@@ -99,10 +99,8 @@ deletes a file there only when you ask.
 
 It shows you the plan and waits for your yes. Then it copies the starter
 project's files, the skills for your answers, the hooks, and the settings
-into the project. It turns on a check of the project's records that runs
-before each commit (a Git setting in that copy of the project; when the
-project already has a Git hook of its own, or its own hooks folder, setup
-changes nothing there and tells you). It asks you to sign in where needed (`ntn login` for Notion,
+into the project.
+It asks you to sign in where needed (`ntn login` for Notion,
 `gh auth login` for GitHub), then sets up the Notion pages, the GitHub labels,
 or the Hindsight memory bank. It finishes by running its checks and offering
 to commit.
@@ -137,10 +135,7 @@ Later, say **"check the setup"** to see what differs (it changes nothing,
 except that it puts back a toolkit guide or template that is missing from
 `work-items/` or `memory/`), or
 **"update the toolkit"** to bring a project up to date. It shows every change
-first and never overwrites a file you changed without asking. The check
-before each commit is a setting of one copy of the project: in a new copy,
-or on another computer, "check the setup" says it is off and "update the
-toolkit" turns it on.
+first and never overwrites a file you changed without asking.
 
 A project set up before the five places above existed keeps the same facts
 elsewhere: shared questions, requirements, a system guide, decision records

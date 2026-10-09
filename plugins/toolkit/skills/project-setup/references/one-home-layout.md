@@ -334,7 +334,7 @@ Do the nine steps in this order.
    - Then list every mention of an old path that is left in a tracked file: `command grep -rnE 'ai-external-knowledge/|delivery/(deployment|data|meeting-notes|references|communications|deliverables|archive)/|project-wide-records/|system-guide/|requirements/' . --exclude-dir=.git --exclude-dir=.claude`.
      In that list, a line that says "Carried over from" stays, and so does a source in `sources/`. Change each other line after the owner's yes.
 7. **Check, commit, and merge** as `update.md`, "6. Checks and report", says.
-   - Two findings are usual in a project on the old layout:
+   - Before the commit, look for these two things in a project on the old layout, and fix them:
      - A closed work item has no filled Moved up line. The rules for a work item that is Done or Cancelled, above, give the line to write.
      - A `memory/` folder has an `AGENTS.md` and no `CLAUDE.md`. Copy `<copy>/memory/CLAUDE.md` into it.
    - Before the branch is merged, fetch, and compare `DECISIONS.md` and `sources/README.md` with the default branch. When another session took an ID in the meantime, renumber your own record and every mention of it.
