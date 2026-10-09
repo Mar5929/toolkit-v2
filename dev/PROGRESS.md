@@ -33,17 +33,18 @@ and yes to a throwaway test bank.
   On a prepared bank, a save with no kind named is read with the add-on's
   mission for a Git commit.
 
-Open for Mike:
-
-- The rule `hindsight-memory.md` tells the agent to say in its reply what a
+- The rule `hindsight-memory.md` told the agent to say in its reply what a
   recurring job did, "so the add-on saves them". The default filter tells
   the model to make no memory from a summary of what the agent reported. So
-  with the filter on, such a reply may leave no memory. The rule was not
-  changed: a change to what a rule means needs his yes.
+  the rule now tells the agent to save the run with the add-on's tools
+  (Mike, 2026-10-08: "Change it").
+- The filter paragraph names neither secrets nor personal data. Mike was
+  asked whether to add a clause for them, and said no (2026-10-08).
+
+Open for Mike:
+
 - The bank `toolkit-v2` still holds the two missions of the old setup. It
   was not changed.
-- The filter paragraph says nothing about secrets or personal data. The
-  mission that setup used to write named both, and had no effect.
 - Not tested: a save of a real session through the filter, Codex, and the
   installer in a real project.
 
