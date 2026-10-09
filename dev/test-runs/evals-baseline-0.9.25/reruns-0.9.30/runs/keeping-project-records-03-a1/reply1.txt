@@ -1,0 +1,29 @@
+Filing Nadia's email and correcting the records it changes; the draft follows right after.
+
+Here is the draft. It went through the humanizer.
+
+> **Subject:** Re: Wrapping up
+>
+> Hi Nadia,
+>
+> Thanks for letting me know, and thanks for all the work on Pocket Ledger. I'm glad the entry screen design is finished. I'll pick it up from the Figma file and take the call on the 23rd off my calendar.
+>
+> I'll find someone else for the remaining screens. It's been fun working with you too.
+>
+> Mike
+
+Her email changed several project facts, so I updated the records:
+
+- Recorded in `sources/`: SRC-002, Nadia's email, filed unchanged and committed to main on this computer.
+- Recorded in `PROJECT.md`, "People and ownership": the Designer role has nobody since 2026-10-02, and Nadia held it until then. That date is my reading of "last Friday".
+- Recorded in WI-031: the entry screen design is final in the Figma file, per Nadia (SRC-002). You have not confirmed the design here, and the email gives no link to the Figma file.
+- Recorded in the project tasks: PT-05, find a designer for the screens that are not designed yet, owed by you.
+- Updated the project's Current State: removed the 2026-10-23 design review call, removed the PT-02 line because PT-02 was done on 2026-10-01, and added PT-05 under "Waiting on".
+
+Sources:
+- SRC-002 (Nadia's email): her last day, the final design, the cancelled call, no more screens from her.
+- `PROJECT.md`, "People and ownership": Nadia was the Designer.
+- The project's Current State: the 2026-10-23 review call and the PT-02 line.
+- `work-items/PROJECT-TASKS.md`: PT-02 is Done.
+
+Who do you want to design the remaining screens (PT-05): a new designer, or you?

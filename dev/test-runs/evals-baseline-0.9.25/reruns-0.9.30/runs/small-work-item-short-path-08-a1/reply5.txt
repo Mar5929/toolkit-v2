@@ -1,0 +1,27 @@
+I have not made the corrected file yet, because uploading all four rows again may not be what you want.
+
+**The goal as I understand it:** Dana Whitfield gets her TestFlight invitation at dana.whitfield@example.com, and nothing changes for the three testers who are already in.
+
+**What I recommend:** a new file with one row, Dana with the corrected address. The first file stays as the record of the first load.
+- **One row (recommended):** TestFlight only sees the tester who is missing. You upload a file named `testflight-external-testers-2026-10-09-correction.csv`.
+- **All four rows, corrected:** one complete file, as you asked. A second import of the three testers who are already in may send them a second invitation or stop on a duplicate. I have not checked how TestFlight treats a tester it already has.
+
+Either way, the entry with the wrong address (dana.w@example.com) may still be listed in your tester group. If it is, remove it there before or after the new upload.
+
+This is small, so I will skip the interview and ask you one question at the end.
+
+What I saved:
+- WI-034: your report of the load in your words, Dana's corrected address in the requirement (Q-03), a fix task (P1-T04), and the question below (Q-04). It is back in Building.
+- WI-034, lessons: a wrong address that looks right passes the file checks, because they compare the file with Bea's email.
+- `delivery/migrations/testflight-testers/testflight-testers.md`: the first load added three of four testers on 2026-10-09.
+- PT-03 (Apple Developer Program): marked Done, because you loaded testers into TestFlight. You have not said so in words, so tell me if that is wrong.
+- Current State: removed the PT-03 line under "Now".
+
+Bea's email (SRC-002) is still filed and still holds the wrong address. A filed source is never edited, so the correction is recorded in WI-034. You may want to tell Bea, so that her tester sheet gets the right address.
+
+Sources:
+- WI-034, R-01 and Q-03: the form of the file and the corrected address.
+- `managing-work-items`, "A small work item": a changed requirement is played back in this form.
+- `sources/AGENTS.md`: a filed source is never edited.
+
+Is that right?

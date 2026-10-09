@@ -1,0 +1,27 @@
+I'm filing the call notes as a source, then recording the cents decision, the system rule, and the two action items.
+
+Out of this call you owe one thing: a test account on the staging server for Tomas, this week, which ends Sunday 2026-10-11 (PT-05).
+
+Your records say you have no sign-in to the staging server yet. Tomas still owes you the sign-in steps (PT-01), asked on 2026-09-30. I recorded PT-05 as depending on PT-01, and marked that as not confirmed.
+
+Nadia owes you the second version of the settings screen sketch next week (PT-06). You owe her nothing from this call.
+
+What I saved:
+
+- Recorded in `sources/`: SRC-002, the call notes, unchanged.
+- Recorded in `DECISIONS.md`: DEC-003, Decided: every amount is stored as a whole number of cents. The notes give no reason, so the Why line says so. Tomas's statement that the server already does this is marked as not checked.
+- Recorded in `system/constraints.md`: CON-01, Approved, the same rule for the app, sync, and anything that shows a total.
+- Recorded in WI-031 and WI-032: DEC-003 and CON-01 on the Related items line. No requirement changed.
+- Recorded in the project tasks: PT-05 (yours) and PT-06 (Nadia's).
+- Updated the project's Current State: added PT-05 under "Coming up" and PT-06 under "Waiting on"; removed the line for PT-02, which was done on 2026-10-01.
+
+The settings screen has no work item, and `PROJECT.md` does not list it in scope. I made none, because the call decided nothing.
+
+Sources:
+
+- SRC-002: the three points of the call.
+- `PROJECT.md`, "Systems and environments": you have no sign-in to the staging server yet.
+- PT-01 in the project tasks: Tomas owes the sign-in steps, asked 2026-09-30.
+- PT-02 in the project tasks: done on 2026-10-01.
+
+Can you create the test account without the sign-in steps from Tomas, or does PT-05 wait on PT-01?

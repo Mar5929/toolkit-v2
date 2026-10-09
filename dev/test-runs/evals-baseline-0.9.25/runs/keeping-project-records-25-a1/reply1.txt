@@ -1,0 +1,13 @@
+The next step on offline sync (WI-032) is mine: check that its four requirements are complete, then ask you to approve them. All four questions are answered (Q-01 to Q-04), and you have not approved the requirements yet. Nothing blocks it.
+
+The runbook's location is saved. If the sync server is down and you ask what to do, I will open `ops/RUNBOOK.md` in `pocket-ledger-server` first. I have not opened the file, and nothing recorded says whether I can read Tomas's repository, so the record is marked as not checked.
+
+- Saved to memory: Sync server runbook (`memory/reference_sync_server_runbook.md`).
+- Updated the project's Current State: removed the "Waiting on Bea Hollis: PT-02" line, because PT-02 was done on 2026-10-01.
+
+Sources:
+- WI-032: its Current state, requirements R-01 to R-04, and questions Q-01 to Q-04.
+- `work-items/PROJECT-TASKS.md`: PT-02 is Done.
+- `PROJECT.md`, "Systems and environments": `pocket-ledger-server` is Tomas's repository.
+
+Say 'keep going' and I'll check the WI-032 requirements and bring them to you for approval.

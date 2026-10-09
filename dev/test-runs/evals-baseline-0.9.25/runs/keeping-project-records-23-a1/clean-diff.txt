@@ -1,0 +1,76 @@
+--- PROJECT.md	2026-10-09 10:05:01
++++ PROJECT.md	2026-10-09 10:27:58
+@@ -18,7 +18,7 @@
+ | Pocket Ledger iPhone app | Where a user logs and views transactions | Built with Xcode on Mike's Mac | `app/` in this repository, made when the first work item reaches Building | Mike builds every version himself |
+ | Sync server (production) | Stores each user's transactions and computes the monthly totals | Hosted on Render | Tomas's repository `pocket-ledger-server` | Tomas deploys; Mike can read the logs |
+ | Sync server (staging) | A copy of the sync server for testing sync | Hosted on Render | Tomas's repository `pocket-ledger-server` | Mike has no sign-in yet (PT-01) |
+-| TestFlight | Sends beta builds to the testers | Apple, production | App Store Connect | Mike's Apple developer account, once Apple approves it (PT-03) |
++| TestFlight | Sends beta builds to the testers, and holds the testers' feedback in its feedback inbox | Apple, production | App Store Connect | Mike's Apple developer account, once Apple approves it (PT-03) |
+ | Sentry | Collects crash reports from beta builds | Sentry cloud | The Sentry project `pocket-ledger-ios` | Mike's Sentry account |
+ 
+ ## People and ownership
+@@ -48,6 +48,7 @@
+ ## Operating conventions
+ 
+ - Bea sends Mike a round-up of the testers' feedback every Monday. (Mike, in chat, 2026-09-28)
++- The testers' feedback goes in the TestFlight feedback inbox. The "Feedback" tab of Bea's beta tester sheet is frozen: nobody adds to it. (Mike, in chat, 2026-10-09)
+ - Mike builds and uploads every beta build himself. Nobody else holds the signing keys. (Mike, in chat, 2026-09-28)
+ 
+ ## Toolkit settings
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:27:55
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- memory/reference_beta_tester_sheet.md	2026-10-09 10:05:01
++++ memory/reference_beta_tester_sheet.md	2026-10-09 10:27:55
+@@ -1,14 +1,14 @@
+ ---
+ name: reference_beta_tester_sheet
+-description: The beta tester list and the testers' feedback are in Bea's Google Sheet "Pocket Ledger beta testers", in her own Drive, as of 2026-09-29
++description: The beta tester list is in Bea's Google Sheet "Pocket Ledger beta testers"; its "Feedback" tab is frozen since 2026-10-09 and holds only older feedback
+ created: 2026-09-29
+-updated: 2026-10-01
++updated: 2026-10-09
+ check_by: none
+ metadata:
+   type: reference
+ status: current
+-source: Bea Hollis's email of 2026-09-29 (SRC-001)
+-last_verified: 2026-10-01
++source: Bea Hollis's email of 2026-09-29 (SRC-001); Mike, in chat, 2026-10-09
++last_verified: 2026-10-09
+ authorization: Approved by Mike on 2026-09-29
+ work_items: []
+ supersedes: none
+@@ -32,13 +32,13 @@
+ 
+ ## What each tab holds
+ 
+-**Remember:** The first tab, "Testers", has one row for each tester: the name, the city, and the phone model. The second tab, "Feedback", has one row for each thing a tester said. New feedback from a tester goes in the "Feedback" tab.
++**Remember:** The first tab, "Testers", has one row for each tester: the name, the city, and the phone model. The second tab, "Feedback", has one row for each thing a tester said up to 2026-10-09. The "Feedback" tab is frozen: nobody adds to it. Since 2026-10-09, new feedback from a tester goes in the TestFlight feedback inbox (`PROJECT.md`, "Operating conventions").
+ 
+-**Why:** A later session that looks for what the testers said needs to know which tab to open.
++**Why:** A later session that looks for what the testers said needs to know which place to open for which period.
+ 
+-**How to apply:** Send Mike to the "Feedback" tab when he asks what the testers said.
++**How to apply:** For what the testers said before the freeze, send Mike to the "Feedback" tab. For newer feedback, send Mike to the TestFlight feedback inbox in App Store Connect. Never add a row to the "Feedback" tab, and never ask Bea to.
+ 
+-**Evidence and limits:** SRC-001 for the two tabs. Bea filled the phone models on 2026-10-01 (PT-02).
++**Evidence and limits:** SRC-001 for the two tabs. Bea filled the phone models on 2026-10-01 (PT-02). Mike said in chat on 2026-10-09 that the tab is frozen and that feedback goes in the TestFlight feedback inbox. Mike did not say whether the old rows stay only in the tab or are copied somewhere else; until he does, treat the tab as the only place that holds them.
+ 
+ **Related memories:** None.
+ 

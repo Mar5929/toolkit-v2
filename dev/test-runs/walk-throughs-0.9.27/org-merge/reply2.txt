@@ -1,0 +1,38 @@
+Nine things are open after the workshop. The notes are filed and each item below has a record.
+
+**Open decisions**
+- **DEC-001:** does the merged org set an Account's owner by territory, as Priya proposed? Not agreed: Dan wants to see first what it does to his reps' Accounts.
+- **DEC-002:** which customer ID does the merged org use, Northwind's ERP customer number or Baltic's legacy account ID? The Account migration, the ERP integration, and the reports depend on it.
+
+**Open tasks**
+- **PT-02, Dan Okoye:** send the export of Baltic's Account owners. I set the due date to Friday 2026-10-16, because the workshop was itself on a Friday. Correct me if "by Friday" meant today.
+- **PT-01, you:** find out who decides what. Both decisions above need this, because nobody is recorded as able to decide them.
+
+**Not checked or not known**
+- **Dan's 30% figure:** it is saved in memory as an unchecked claim. The export in PT-02 would check it.
+- **Northwind's flow:** its name and its territory rules are not known. Neither org is connected, so nothing has been checked in an org.
+- **Phase details:** the outcome, exit condition, and target end date of each phase, P01 to P05, are still open in the roadmap.
+- **ERP system:** its name, and which org it is connected to today, are still not recorded. I asked this last turn.
+
+**Still waiting on you from setup**
+- Connect the orgs, install Salesforce's skills, trust the hooks in Codex, and confirm the setup commit.
+
+One gap in the notes: Dan wants to see what territory ownership does to his reps' Accounts, but nobody was named to produce that view. DEC-001 cannot be settled without it.
+
+What I saved:
+- Recorded in `sources/`: SRC-001, the workshop notes, unchanged.
+- Recorded in `sources/README.md`: SRC-002, the recording, as a row only. It stays in the client's SharePoint.
+- Recorded in `DECISIONS.md`: DEC-001 and DEC-002, both Open.
+- Recorded in the project tasks: PT-02.
+- Saved to memory: Baltic Freight Accounts, holding Dan's 30% claim, to check by 2026-11-08.
+- Updated the project's Current State: PT-02's due date under "Coming up", the two decisions under "Waiting on", and two setup lines joined into one.
+- Written, not committed yet: `reference/current-system/account-ownership.md`, how each org sets the Account owner today. It needs your yes to commit.
+
+Sources:
+- SRC-001: everything from the workshop.
+- `DECISIONS.md`: DEC-001 and DEC-002.
+- `work-items/PROJECT-TASKS.md`: PT-01 and PT-02.
+- `PROJECT-ROADMAP.md`: the open phase questions.
+- The project's Current State: the setup steps.
+
+Should I make a work item in P01 Discovery for the Account ownership analysis? It would check the 30% from Dan's export and show which Baltic Accounts would change owner under territory rules. I recommend yes, because DEC-001 waits on that view and nobody owns it.

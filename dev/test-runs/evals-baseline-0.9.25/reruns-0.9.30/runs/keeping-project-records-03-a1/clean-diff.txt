@@ -1,0 +1,112 @@
+--- PROJECT.md	2026-10-09 10:05:01
++++ PROJECT.md	2026-10-09 10:46:34
+@@ -27,7 +27,7 @@
+ | --- | --- | --- | --- | --- |
+ | Owner | Mike Rihm | Makes the project's decisions | Every decision: requirements, designs, results, merges, and Done | Setup, 2026-09-28 |
+ | Backend developer (contractor) | Tomas Lindqvist | Builds the sync server and looks after its hosting | How the server is built and hosted | Mike, in chat, 2026-09-28 |
+-| Designer | Nadia Okafor | Designs the screens of the app | The layout and the colors of a screen | Mike, in chat, 2026-09-28 |
++| Designer | Nobody since 2026-10-02. Nadia Okafor held the role until then. | Designs the screens of the app | The layout and the colors of a screen | SRC-002, 2026-10-09 |
+ | Beta coordinator | Bea Hollis | Runs the beta tester group and collects the testers' feedback | Who is in the beta tester group | SRC-001, 2026-09-29 |
+ 
+ Keep this table short. Write no biography and no contact details.
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:46:51
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -11,14 +11,13 @@
+ 
+ ## Coming up
+ 
+-- 2026-10-23: design review of the entry screen, a call with Mike and Nadia Okafor; it prepares WI-031.
+ - 2026-11-20: the first beta build goes to the testers; Mike sends it and Bea Hollis tells the testers (PT-04).
+ 
+ ## Waiting on
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
++- Mike: PT-05 (a designer for the remaining screens), raised 2026-10-09 from SRC-002.
+ 
+ ## Standing jobs and shared files
+ 
+--- sources/README.md	2026-10-09 10:05:01
++++ sources/README.md	2026-10-09 10:46:34
+@@ -5,3 +5,4 @@
+ | ID | Date received | From | What it is | Where kept | Used by |
+ | --- | --- | --- | --- | --- | --- |
+ | SRC-001 | 2026-09-29 | Bea Hollis | Email: how she will run the beta tester group, and her question about testers outside the United States | [SRC-001-beta-group-email.md](SRC-001-beta-group-email.md) | DEC-002 |
++| SRC-002 | 2026-10-09 | Nadia Okafor | Email: she has left Pocket Ledger, the entry screen design is final in the Figma file, and the review call on 2026-10-23 is not needed | [SRC-002-nadia-wrapping-up-email.md](SRC-002-nadia-wrapping-up-email.md) | WI-031 |
+--- sources/SRC-002-nadia-wrapping-up-email.md	1969-12-31 19:00:00
++++ sources/SRC-002-nadia-wrapping-up-email.md	2026-10-09 10:46:34
+@@ -0,0 +1,7 @@
++From: Nadia Okafor
++To: Mike Rihm
++Subject: Wrapping up
++
++Hi Mike, as we discussed, last Friday was my last day on Pocket Ledger. The entry screen design is final and it's in the Figma file, so we don't need the review call on the 23rd. I won't be doing any more screens, so you'll want someone else for those. It's been fun.
++
++Nadia
+--- work-items/PROJECT-TASKS.md	2026-10-09 10:05:01
++++ work-items/PROJECT-TASKS.md	2026-10-09 10:46:51
+@@ -26,3 +26,9 @@
+   **Done when:** Every tester on the beta tester sheet can install the build.  
+   **Who does it:** owner  
+   **Depends on:** PT-03, and WI-031 Done.
++- [ ] **PT-05 — Find a designer for the screens that are not designed yet** · Not Started  
++  **Work:** Mike decides who designs the screens after the entry screen. Nadia Okafor left the project on 2026-10-02 and designs no more screens (SRC-002). Mike has not yet said how he wants to cover this.  
++  **Deliverable:** A named person in the Designer row of `PROJECT.md`, or Mike's decision that the project needs no designer.  
++  **Done when:** The Designer row of `PROJECT.md` names who designs the remaining screens, or says that nobody is needed.  
++  **Who does it:** owner  
++  **Depends on:** None.
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:46:51
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -22,7 +22,7 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** The goal, the entry speed, and the required fields are settled (Q-01, Q-03, Q-04). Editing and currencies are still open.
++**Where it stands:** The goal, the entry speed, and the required fields are settled (Q-01, Q-03, Q-04). Editing and currencies are still open. Nadia Okafor says the entry screen design is final and in the Figma file (SRC-002); Mike has not confirmed it here. The design review call on 2026-10-23 is cancelled.
+ 
+ **Next action:** Waiting on the owner: Q-05 (editing or deleting a saved transaction). After his answer: finish R-03.
+ 
+@@ -30,7 +30,7 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002.
+ 
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Nadia Okafor's email filed as SRC-002: she left the project on 2026-10-02, the entry screen design is final in the Figma file, and the review call on 2026-10-23 is cancelled | P1 has its screen design. The project has no designer for other screens (PT-05). |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+@@ -139,7 +140,7 @@
+ 
+ ### Sources
+ 
+-- None.
++- SRC-002: email from Nadia Okafor, received 2026-10-09. The entry screen design is final and is in the Figma file; it is the design for P1 (R-01, R-02). The email does not give the link to the Figma file.
+ 
+ ### Lessons not proven yet
+ 

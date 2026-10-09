@@ -1,0 +1,33 @@
+The cutover is recorded as your report, but I could not date it, and WI-001 still says Backlog.
+
+**The date problem.** This computer's clock says today is Friday 2026-10-09. That is the date on every record so far, including the kickoff and Priya's UAT test, where production had not been touched. A Saturday cutover does not fit that clock, so I recorded "a Saturday, date not confirmed".
+
+**What I did not change, and why:**
+
+- **WI-001 stays in Backlog.** It has no approved requirements and no approved result, and I close a work item only when you say so.
+- **DAT-01 and DAT-02 stay Approved.** A rule is marked Built when its work item closes with an approved result.
+- **The five project phases stay Not Started.** A phase changes only with your yes.
+- **DEC-001, the ownership model, stays Open.** The org is live, so each loaded Account has an owner, but nothing recorded says how the owners were set or what Helen decided.
+
+**Not recorded anywhere for the production load:** the load file, the backup taken before it, the field mapping, and how Priya checked the counts. `delivery/migrations/` holds no record of this load. I saw none of it, so the status is: loaded by you, counts checked by Priya, both as reported.
+
+Two more things do not fit the records:
+
+- **"Uses the ERP customer number everywhere":** that covers the ERP integration and the reports, which have no work items. Contacts and Opportunities are in scope and have none either.
+- **DAT-02's two years:** they started at cutover, so the legacy ID field has a drop date. I cannot set it without the cutover date.
+
+What I saved:
+- Recorded in WI-001: your report in your words, a new Current state, question Q-02 on the cutover date, and a Context line listing what is missing. WI-001 now waits on you.
+- Recorded in `PROJECT.md`: the merged org is live, and 48,212 Baltic Accounts were loaded, both as reported and with the date not confirmed.
+- Updated the project's Current State: removed the 2027-06-30 go-live deadline from "Coming up", and "Next session starts with" now names WI-001.
+
+Still waiting: your yes to commit `reference/current-system/account-ownership.md`.
+
+Sources:
+- WI-001: its State, its approvals, Q-01, and the UAT test row.
+- `DECISIONS.md`, DEC-001 and DEC-002: what is open and what is decided.
+- `system/data-model.md`, DAT-01 and DAT-02: the rule marks and the two-year period.
+- `PROJECT-ROADMAP.md`: the phase statuses.
+- `PROJECT.md`, "Scope and boundaries": what else is in scope.
+
+Which date was the Saturday of the cutover?

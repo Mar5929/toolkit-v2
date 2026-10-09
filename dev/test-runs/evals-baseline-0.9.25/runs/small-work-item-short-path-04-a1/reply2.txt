@@ -1,0 +1,49 @@
+No separate checker ran, because this work item is small. I checked both texts myself. Both are written, and every check passes.
+
+**Checklist: when a tester reports a bug**
+
+1. Check that the report has a row in the "Feedback" tab of Bea Hollis's sheet "Pocket Ledger beta testers". If the report came straight to you, ask Bea to add the row.
+2. Read the tester's row in the "Testers" tab and note the phone model.
+3. Ask the tester, or Bea, for what is missing: the build number, the iOS version, the steps taken, what the tester expected, what happened, and a screenshot.
+4. Search Sentry, project `pocket-ledger-ios`, for a crash report from that build at that time. Copy its link.
+5. Follow the tester's steps on the same build until the bug happens again. Try once without a connection.
+6. Write down the result: it happens every time, it happens sometimes, or it did not happen.
+7. Record the bug as a new work item, with the report, the Sentry link, and the steps. If a work item already covers the bug, add the report there.
+8. Set the priority. A crash or a lost transaction comes before a wrong display.
+9. Answer the tester, through Bea if she sent the report. Say what you found and what happens next.
+10. Tell Bea which build holds the fix, so that she tells the tester.
+
+**Sticky note**
+
+```
+1. Feedback row, then missing details
+2. Sentry, then repeat the bug
+3. Work item, then answer the tester
+```
+
+**Where to find it:** both texts are also in `working-files/WI-034-bug-report-checklist/bug-report-checklist.md`.
+
+**Evidence**
+
+- **Requirement 1, the checklist: passes.** It has 10 numbered steps and 197 words, and each step starts with a verb. The steps cover the five things in order: details (1 to 3), crash report (4), repeating the bug (5 and 6), recording it (7 and 8), and answering the tester (9 and 10). Every name matches the project's records.
+- **Requirement 2, the three lines: passes.** The lines have 37, 30, and 36 characters, under the limit of 40. Line 1 is steps 1 and 3, line 2 is steps 4 and 5, and line 3 is steps 7 and 9.
+
+**Gaps**
+
+- The checklist has not been used on a real report, because the beta has not started.
+- Two details are my own additions that you did not ask for: "Try once without a connection" in step 5, and the priority rule in step 8. Tell me if you want either one removed.
+
+Nothing is merged or deployed for this work item, and I found nothing to keep for the whole project.
+
+**What I saved**
+
+- WI-034: recorded your yes (Q-01), both finished tasks, my check, and the closing question (Q-02).
+- `PROJECT-ROADMAP.md`: listed WI-034 under project phase P01, committed to main on this computer (`edfd4da`). The project has no remote, so nothing was pushed.
+
+**Sources**
+
+- `PROJECT.md`: Bea Hollis's role, and the Sentry project `pocket-ledger-ios`.
+- Memory record "Beta tester sheet": the sheet's name and its "Testers" and "Feedback" tabs.
+- `work-items/PROJECT-TASKS.md`, PT-04: the first beta build goes out on 2026-11-20.
+
+Approve this result and mark WI-034 Done?

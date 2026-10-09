@@ -1,0 +1,9 @@
+Tomas just sent me this. Read it and tell me if it changes anything for offline sync.
+
+From: Tomas Lindqvist
+To: Mike Rihm
+Subject: Hosting help
+
+Mike, quick one. I've brought in Ilse Varga to look after the hosting side of the sync server from now on. She's a freelance ops person I've worked with before. Anything about where the server runs, uptime, or the hosting bill goes to her. I still own the server code and the sync logic, so nothing changes there.
+
+Tomas

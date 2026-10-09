@@ -1,0 +1,33 @@
+Apple's help page did not give the CSV details on the first read; I'm checking it once more, then building the file.
+
+The CSV file is written, and a separate checker found one of its five checks cannot be done as I wrote it. I need one answer from you before I can close WI-034.
+
+**The file:** `delivery/migrations/testflight-testers/first-build-testers.csv`, in the project's main folder. It has five rows, first name, last name, email, with no header row. Git does not track it.
+
+**What the checker found (requirement R-01, partly met):**
+- Five lines, none a header or empty: true (`wc -l` prints 5).
+- Three values per line, in order: true (`awk -F,` prints NF=3 for all five lines).
+- Every name and address matches Bea's email character for character: true (`diff` exits 0).
+- `git status` does not list the file: true ("nothing to commit, working tree clean").
+- The form matches Apple's help page: **could not be checked.** Apple's page "Invite external testers" says only that testers can be imported from a CSV file. It gives no columns, order, or header rule. Web search was not permitted in this session, so neither the checker nor I could look for another Apple page.
+
+So the format rests on what you named and on what I recall of the import dialog. No Apple page I could read today confirms it.
+
+**Q-03: the change I propose to that fifth check**
+- **New wording:** the file has the form you named: first name, last name, email, one row each, no header row. That is true of the file now.
+- **Proof that TestFlight accepts it:** your import. You cannot import until Apple approves your developer account (PT-03), so I would add a line to PT-04 that names this file and says the import is the first proof.
+- **What it gains:** WI-034 can close now and does not stay open for weeks.
+- **What it costs:** if TestFlight rejects the file at import, fixing it is new work.
+- **The other choice:** keep WI-034 open until you have read the import dialog or done the import. I recommend the change.
+
+What I saved:
+- Recorded in WI-034: the approval of the requirements (Q-02), the three finished tasks, the checker's report, and Q-03.
+- Recorded in `PROJECT-ROADMAP.md`: WI-034 is listed under P01 — First beta.
+- Recorded in `delivery/migrations/testflight-testers/testflight-testers.md`: where the file's data came from and what each column holds. It holds no email address.
+
+Sources:
+- WI-034, R-01: the five checks.
+- `work-items/PROJECT-TASKS.md`: PT-03 and PT-04.
+- Apple's help page "Invite external testers", read on 2026-10-09: it gives no CSV format.
+
+Is that right?

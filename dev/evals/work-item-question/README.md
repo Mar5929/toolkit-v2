@@ -9,14 +9,14 @@ Mike decided on 2026-10-08 that the agent does not decide by itself whether a jo
 The starter's root guide, `plugins/toolkit/skills/project-setup/assets/every-project/AGENTS.md`, section "Every session", states both as one general rule:
 
 - When the owner asks for work and no work item covers it, the agent asks whether to make a work item, before it starts the work. It asks in one short line that names the work and says whether it recommends a work item.
-- The agent does not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in the agent's reply, or when "Where information goes" or "Which skill" sends the request somewhere other than a work item.
+- The agent does not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in the agent's reply, when the request is only to save or correct a fact or a project task in the project's records, or when one skill in "Which skill" other than `managing-work-items` does the whole request.
 - After a no, the agent does the work without a work item, and the rule `.claude/rules/shared-repository-work.md` still applies. That rule says that code, rules, skills, hooks, and settings are changed in a worktree and on a branch of the agent's own, and that a merge into the default branch needs the owner's yes.
 
-Every expectation in `evals.json` states what that rule said on 2026-10-09. When the rule changes, change the expectations that it made wrong.
+Every expectation in `evals.json` states what that rule said on 2026-10-09, in version 0.9.30. When the rule changes, change the expectations that it made wrong.
 
 `../small-work-item-short-path/` tests what happens after the owner says yes: four of its nine evals start with the same question.
 
-Mike has not yet confirmed one of the four cases in which the agent does not ask: the result that is only text in the reply. The Main Orchestrator session put it to him on 2026-10-09. When he chooses that the agent asks there too, eval 2 changes: its first reply is the question, and its second message is "No.".
+Mike has not yet confirmed one of the five cases in which the agent does not ask: the result that is only text in the reply. The Main Orchestrator session put it to him on 2026-10-09. When he chooses that the agent asks there too, eval 2 changes: its first reply is the question, and its second message is "No.".
 
 **These situations are for testing only. Never copy a case, a prompt, or an expectation into the agent's instructions.** That covers the root guide, a rule, a skill, a hook, and a helper agent's brief. When an eval fails, change the general rule, and never add a sentence for that one situation.
 

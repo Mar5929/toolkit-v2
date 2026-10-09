@@ -1,0 +1,20 @@
+I have not added `staging/notice.txt` yet, because the project's guide has me ask you one thing before I start work that no work item covers.
+
+**What I found**
+
+- **I cannot run the deploy.** Tomas deploys the staging sync server, and no deploy command is recorded for this project (`PROJECT.md`). So the last step would be a request to Tomas, which I can draft for you to send.
+- **This repository has no remote.** It exists only on your Mac, so I do not see how Tomas's deploy reaches its `staging/` folder. Merging to main here may not be enough for the file to reach him.
+- **The file is new ground.** There is no `staging/` folder in the repository yet, and no record mentions one.
+
+**What I saved**
+
+- `PROJECT.md`, staging server row: Tomas's deploy copies this repository's `staging/` folder, Tomas and Nadia both work on the server, and it holds test data only and is wiped every Monday. It is marked as from you today and not confirmed with Tomas. This is committed to main on this computer only.
+- The project's Current State: removed the "waiting on Bea for PT-02" line, because PT-02 was done on 2026-10-01, and added a line for the question below.
+
+**Sources**
+
+- `PROJECT.md`, "Systems and environments": Tomas deploys the staging server, and you have no sign-in yet (PT-01).
+- `work-items/PROJECT-TASKS.md`: PT-02 is Done, and PT-01 is still open.
+- `AGENTS.md`, "Every session": ask whether to make a work item before starting work that none covers.
+
+Should I make a work item for adding `staging/notice.txt`, merging it, and getting it deployed? I recommend yes, as a small work item, because the merge and the deploy each need your yes and the deploy depends on Tomas.

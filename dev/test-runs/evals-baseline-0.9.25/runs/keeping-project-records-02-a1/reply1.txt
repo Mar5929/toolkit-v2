@@ -1,0 +1,31 @@
+Five things are open on the beta side, and three of them wait on you.
+
+- **DEC-002, testers outside the United States: Open, waiting on you.** Bea asked on 2026-09-29 whether her cousin in Toronto can join the first beta (SRC-001). The check-again date was today. The answer now goes to Nadia.
+- **WI-031 Q-06, which currencies the first version supports: Open, waiting on you.** This is tied to DEC-002: the recommendation in WI-031 is US dollars only, which would mean no testers outside the United States in the first beta.
+- **PT-03, enrolling in the Apple Developer Program: In Progress, yours.** Apple has not approved the account yet, and TestFlight needs it.
+- **PT-04, sending the first beta build on 2026-11-20: Not Started.** It depends on PT-03 and on WI-031 being Done. WI-031 is still in Refining Requirements and also waits on you for Q-05 (editing or deleting a saved transaction).
+- **Three points the handover leaves unconfirmed.**
+  - The tester sheet is in Bea's own Google Drive, and nothing says Nadia can edit it.
+  - Bea sent you the Monday feedback round-up, and you did not say whether Nadia sends it now.
+  - Nothing says whether Bea is one of the 12 testers or a 13th, which changes the number of TestFlight invitations.
+
+PT-02 (the testers' phone models) is not open: it was done on 2026-10-01.
+
+What I saved:
+
+- Recorded in `PROJECT.md`, "People and ownership": Nadia Okafor is designer and beta coordinator from 2026-10-09 and decides who is in the group; Bea Hollis is a beta tester.
+- Recorded in `PROJECT.md`, "Operating conventions": the Monday round-up no longer names Bea as the sender, and Nadia as the sender is marked not confirmed.
+- Recorded in PT-04: Nadia tells the testers that the build is ready. It said "Bea tells the testers".
+- Updated the project's Current State: Nadia in the 2026-11-20 line and the tester sheet line, the finished PT-02 line removed, DEC-002 to be checked again on 2026-10-16, and the unconfirmed handover points added under "Waiting on".
+- Saved to memory: "Points nobody has checked since the change of coordinator on 2026-10-09" (in Beta group, `memory/project_beta_group.md`).
+
+Sources:
+
+- `DECISIONS.md`, DEC-002: the open question about testers outside the United States.
+- SRC-001: Bea's email, with the Toronto question and the location of the tester sheet.
+- WI-031: Q-05 and Q-06 are open, and its State is Refining Requirements.
+- `work-items/PROJECT-TASKS.md`: the status of PT-02, PT-03, and PT-04.
+- The project's Current State: the check-again date for DEC-002.
+- `PROJECT.md`, "Operating conventions": the Monday round-up.
+
+Does Nadia also take over the tester sheet and the Monday feedback round-up? I recommend yes to both, with the sheet moved or shared so that Nadia can edit it. That keeps the list with the person who decides who is in, and it costs Bea one step to share or hand over the sheet. The other choice is that Bea keeps both jobs, which costs nothing now but leaves the list with someone who no longer runs the group.

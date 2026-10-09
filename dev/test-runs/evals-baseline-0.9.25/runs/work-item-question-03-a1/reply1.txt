@@ -1,0 +1,12 @@
+`app/Config/Signing.xcconfig` is written and committed on the branch `claude/signing-xcconfig` (commit `c4ba7bb`), with the one line `CODE_SIGN_STYLE = Automatic`. It is not merged into `main` yet, and no work item was made.
+
+Two things I found:
+
+- **This creates `app/` early.** `PROJECT.md` says `app/` does not exist yet and is made when the first work item reaches Building. After the merge I will correct that line to say `app/` exists and holds only this file.
+- **Nothing reads the file yet.** There is no Xcode project in the repository, so the setting takes effect only once a project or target is pointed at this file.
+
+Sources:
+- `PROJECT.md`, "Resources and project paths": `app/` does not exist yet.
+- `.claude/rules/shared-repository-work.md`: code goes on its own branch, and a merge into `main` needs your yes.
+
+Do you want me to merge `claude/signing-xcconfig` into `main` now? I recommend yes: the merge adds one new file, `main` has no uncommitted changes, and I would remove the branch and its worktree afterwards.

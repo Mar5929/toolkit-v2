@@ -1,0 +1,44 @@
+--- PROJECT.md	2026-10-09 10:05:01
++++ PROJECT.md	2026-10-09 10:22:57
+@@ -20,6 +20,7 @@
+ | Sync server (staging) | A copy of the sync server for testing sync | Hosted on Render | Tomas's repository `pocket-ledger-server` | Mike has no sign-in yet (PT-01) |
+ | TestFlight | Sends beta builds to the testers | Apple, production | App Store Connect | Mike's Apple developer account, once Apple approves it (PT-03) |
+ | Sentry | Collects crash reports from beta builds | Sentry cloud | The Sentry project `pocket-ledger-ios` | Mike's Sentry account |
++| Kestrel QA device lab | Tests each build on older iPhone models | Kestrel QA's own collection of old iPhones | Imogen Rask's test report for the build | Mike signed up with Kestrel QA; how a build reaches Kestrel QA is not confirmed |
+ 
+ ## People and ownership
+ 
+@@ -29,6 +30,7 @@
+ | Backend developer (contractor) | Tomas Lindqvist | Builds the sync server and looks after its hosting | How the server is built and hosted | Mike, in chat, 2026-09-28 |
+ | Designer | Nadia Okafor | Designs the screens of the app | The layout and the colors of a screen | Mike, in chat, 2026-09-28 |
+ | Beta coordinator | Bea Hollis | Runs the beta tester group and collects the testers' feedback | Who is in the beta tester group | SRC-001, 2026-09-29 |
++| Device tester (Kestrel QA, outside vendor) | Imogen Rask | Runs the device tests at Kestrel QA and is Mike's contact there | Not stated | Mike, in chat, 2026-10-09 |
+ 
+ Keep this table short. Write no biography and no contact details.
+ 
+@@ -49,6 +51,7 @@
+ 
+ - Bea sends Mike a round-up of the testers' feedback every Monday. (Mike, in chat, 2026-09-28)
+ - Mike builds and uploads every beta build himself. Nobody else holds the signing keys. (Mike, in chat, 2026-09-28)
++- Imogen Rask sends Mike a device test report after every build. (Mike, in chat, 2026-10-09)
+ 
+ ## Toolkit settings
+ 
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:23:01
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 

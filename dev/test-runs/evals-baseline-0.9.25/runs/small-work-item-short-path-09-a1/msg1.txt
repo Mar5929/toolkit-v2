@@ -1,0 +1,1 @@
+Set the app's minimum iOS version in the repo now, so nobody builds for an older phone. Add `app/Config/Deployment.xcconfig` with the one line `IPHONEOS_DEPLOYMENT_TARGET = 17.0`.

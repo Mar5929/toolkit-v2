@@ -1,0 +1,19 @@
+$ git log --all --oneline --decorate 6ccb1644a54d454998be0236a38cdf3c81f8bb0b..
+ea978a4 (HEAD -> main) Name DEC-003 in the sponsor row of PROJECT.md
+089846b Replace DEC-002 with DEC-003: the Finance team can edit the legacy ID field in the first year
+d0f707e Record the reported cutover and the production load of 48,212 Baltic Freight Accounts
+4572318 Record that a UAT sandbox exists for the Northwind Supply org
+633ca09 Name WI-001 on DEC-001, DEC-002, SRC-001, and SRC-003
+48ebef3 Record the customer ID decision (DEC-002) with its source and two data model rules
+15c72fe Record who decides what at the client, and name the decider on DEC-001 and DEC-002
+9397524 File the Accounts workshop notes and recording, and record two open decisions
+2ec8b0f Record the kickoff: purpose, scope, people, systems, and the five project phases
+
+$ git branch --all -vv
+* main ea978a4 Name DEC-003 in the sponsor row of PROJECT.md
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/walkthroughs/out-org-merge/runs/org-merge-01-a1 ea978a4 [main]
+
+$ git status --short
+?? reference/current-system/account-ownership.md

@@ -1,0 +1,21 @@
+WI-034, "CSV of the first four testers for TestFlight", is created. Bea's email is not filed; the work item and memory say it stays in your mailbox.
+
+The goal is that you have one CSV file that TestFlight accepts for adding external testers, with the four testers Bea named, so you can add them in one upload. I hand over the file that I already wrote today, with four rows, no header row, and the order first name, last name, email. I will check it line by line against Bea's email, and confirm that Git does not track it.
+
+- **Not part of it:** the upload itself, which you do, and which needs Apple to approve your developer account first (PT-03).
+- **Unsure:** Bea's email does not say whether the four are among her 12 testers, or where each one lives (DEC-002 is still open). I recorded both as not checked and left them out of this work item.
+- **Project phase:** P01, First beta.
+
+This is small, so I will skip the interview and ask you one question at the end.
+
+What I saved:
+
+- Updated the project's Current State: added WI-034 under "Now" and "Next session starts with", and removed the question about committing Bea's email.
+- Updated in memory: Beta group. It said: "It is not filed as a source yet: it holds email addresses, so the agent asked Mike on 2026-10-09 whether to commit it." Say 'undo that' to put it back.
+
+Sources:
+- `PROJECT-ROADMAP.md`: P01, First beta, is the only project phase.
+- `work-items/PROJECT-TASKS.md`, PT-03: the Apple developer enrollment is In Progress.
+- `DECISIONS.md`, DEC-002: testers outside the United States is Open.
+
+Is that right?

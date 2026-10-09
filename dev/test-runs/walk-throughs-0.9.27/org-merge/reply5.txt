@@ -1,0 +1,29 @@
+WI-001, "Move Baltic's Accounts into Northwind's org", exists in Backlog. No interview has started and nothing in it is approved.
+
+What it holds:
+
+- **Requirement 1:** your words, unchanged. It has two lines so far: the migrated Accounts follow the customer ID rules DAT-01 and DAT-02, and the ERP integration and the reports are outside this work item.
+- **Linked records:** DEC-002 (the customer ID, Decided), DEC-001 (the ownership model, still Open with Helen), and the two sources SRC-001 and SRC-003.
+- **Context:** how each org sets the Account owner today, Dan's unchecked 30% claim, and his export in PT-02. None of it has been checked in an org.
+- **One open question, Q-01:** how does each Baltic Account get a Northwind ERP customer number? I raised this last turn. It now sits in the work item for the interview, so I did not add it to `DECISIONS.md`.
+
+Three things I left alone:
+
+- **Goal and acceptance criteria:** empty until you start the work item.
+- **Project phase:** WI-001 is under none yet. I will ask which one when you start it.
+- **ERP integration and reports:** no work items made, as you said. Nothing tracks them yet except the line in WI-001.
+
+What I saved:
+- Recorded in the work items: WI-001, new, in Backlog.
+- Recorded in `DECISIONS.md`: DEC-001 and DEC-002 now name WI-001 under Affects.
+- Recorded in `sources/README.md`: SRC-001 and SRC-003 now name WI-001 under "Used by".
+- Updated in memory: Baltic Freight Accounts now links to WI-001.
+
+Sources:
+- `DECISIONS.md`, DEC-001 and DEC-002: what is decided and what is open.
+- `system/data-model.md`, DAT-01 and DAT-02: the customer ID rules.
+- SRC-001 and SRC-003: the workshop notes and Helen's email.
+- Memory, "Baltic Freight Accounts": the unchecked claim.
+- `work-items/PROJECT-TASKS.md`, PT-02: Dan's export.
+
+`reference/current-system/account-ownership.md` is still written and not committed, and WI-001 points to it. May I commit it?

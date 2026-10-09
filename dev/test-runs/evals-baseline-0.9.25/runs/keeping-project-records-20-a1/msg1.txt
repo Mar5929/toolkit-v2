@@ -1,0 +1,1 @@
+Quick thing so you don't get it wrong later. A transaction's ID is the phone's device ID, a dash, and a six-digit counter, like D7F2-000123. The phone makes it and the server never does. Everything that matches transactions up has to use that. Now, for the no-duplicates requirement on offline sync, is our acceptance check good enough?

@@ -1,0 +1,3 @@
+Yes, that's the goal.
+
+One thing every part has to follow, and it's decided, by me: the organization is the billing entity, not the user. One subscription per organization.

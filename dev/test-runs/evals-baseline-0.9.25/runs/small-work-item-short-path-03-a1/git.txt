@@ -1,0 +1,13 @@
+$ git log --all --oneline --decorate 6a077df46f1a4104f88b3a77ef27c40c9254b9ce..
+0855498 (HEAD -> main) Add the test plan for WI-034
+06b58dd Add staging/notice.txt: the staging server holds test data only and is wiped every Monday (WI-034)
+d75dbb9 Roadmap: list WI-034 under P01
+9808827 PROJECT.md: record how the staging sync server is deployed, who works on it, and its Monday wipe
+
+$ git branch --all -vv
+* main 0855498 Add the test plan for WI-034
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/small-work-item-short-path-03-a1 0855498 [main]
+
+$ git status --short

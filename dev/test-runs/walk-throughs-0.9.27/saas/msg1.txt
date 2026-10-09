@@ -1,0 +1,1 @@
+We're adding organization accounts to Tidepool: one company signs up, and many of its people use the same account. It touches three areas, authentication, billing, and support. It's big, so make a work item for it and run the full process. Sub-items for authentication, billing, and support.

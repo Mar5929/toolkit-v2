@@ -1,0 +1,1 @@
+Add one line to the README that says the app needs iOS 17 or newer. I know it's tiny, but run the full process on this one, interview and all.

@@ -1,0 +1,250 @@
+--- PROJECT-ROADMAP.md	2026-10-09 10:05:01
++++ PROJECT-ROADMAP.md	2026-10-09 10:14:10
+@@ -27,6 +27,7 @@
+ 
+ - [[WI-031]] Transaction entry
+ - [[WI-033]] Pick a charting library
++- [[WI-034]] "What to test" text for the first beta build
+ 
+ ## Open project-level planning questions
+ 
+@@ -35,3 +36,4 @@
+ ## Planning changes
+ 
+ - 2026-09-28, Mike at the kickoff: the project starts with one phase, the first beta.
++- 2026-10-09, Mike, "Yes, that's right." (WI-034, Q-01): WI-034 goes under P01.
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:13:29
+@@ -1,12 +1,13 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+ - WI-031: logging a transaction.
+ - WI-032: offline sync.
+ - WI-033: picking a charting library.
++- WI-034: the "What to test" text for the first beta build.
+ - Enrolling in the Apple Developer Program (PT-03).
+ 
+ ## Coming up
+@@ -18,7 +19,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+@@ -26,4 +26,4 @@
+ 
+ ## Next session starts with
+ 
+-- WI-031: read its Current state.
++- WI-034: read its Current state.
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:15:44
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -136,6 +136,7 @@
+ - The starting request, in Mike's words on 2026-09-28: "I want people to be able to log a transaction fast on their phone. Amount, what it was for, done."
+ - Categories for the first version: Groceries, Rent, Transport, Eating out, Other (P1-T01).
+ - Crash reports from beta builds go to Sentry (`PROJECT.md`, "Systems and environments").
++- On 2026-10-09 Mike named "edit a purchase" as one of the three flows that the testers of the first beta build try ([[WI-034]], Q-02). This is not an answer to Q-05: Mike did not say whether a user can also delete.
+ 
+ ### Sources
+ 
+--- work-items/WI-034-what-to-test-text/WI-034.md	1969-12-31 19:00:00
++++ work-items/WI-034-what-to-test-text/WI-034.md	2026-10-09 10:15:44
+@@ -0,0 +1,182 @@
++---
++id: WI-034
++title: '"What to test" text for the first beta build'
++type: task
++state: Building
++status: In Progress
++parent: none
++waiting_on: "owner"
++priority: medium
++delivery: not-offered
++requirements_approved: 2026-10-09 by Mike
++design: none
++result_approved: no
++updated: 2026-10-09
++---
++
++# WI-034: "What to test" text for the first beta build
++
++## Overview
++
++<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step; Moved up stays empty until the item is closed. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
++
++**Goal:** The beta testers read one short text that tells them which three flows to try in the first beta build.
++
++### Current state
++
++<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a state or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to one or two sentences. -->
++
++**Where it stands:** On 2026-10-09 Mike gave the three flows and added two requirements: the text is also shown inside the app, and it can be changed without a new build (Q-02). The work item left the short path. R-01 stays approved. R-02 and R-03 are written as far as Mike's words go, and they are not approved. Nothing is built.
++
++**Next action:** Waiting on the owner: Q-03 (the new goal). After the answer: continue the interview on R-02 and R-03, then ask Q-04 and Q-05, and recommend Designing.
++
++**Waiting on:** The owner: Q-03, then Q-04 and Q-05.
++
++**Blockers:** None.
++
++**Last updated:** 2026-10-09, the agent.
++
++**Related items:** Project phase P01. [[WI-031]] (the flow "edit a purchase" depends on its R-03, which its Q-05 leaves open). PT-04 (Mike sends the first beta build to the testers).
++
++**Moved up:**
++
++## Roadmap
++
++<!-- Only a top-level item (`parent: none`) has a Roadmap, with at least one phase. A sub-item has no phases: delete this whole Roadmap section, and use the sub-item form at the end of Tasks. -->
++
++A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
++
++<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
++
++| Phase | Outcome | Status | Exit result | Sub-items |
++|---|---|---|---|---|
++| P1 — Write the text | The "What to test" text, ready for Mike to send with the first beta build | In Progress | The text meets every Acceptance Criteria line of R-01 | None. |
++
++## Tasks
++
++<!-- A top-level item: under each phase heading, add that phase's tasks only, and delete the sub-item form at the end of this section. A sub-item: delete the phase headings and their tasks, and keep only the sub-item form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
++
++### P1 — Write the text
++
++- [x] **P1-T01 — Get the three flows** · Done  
++  **Work:** Mike sends the agent the three flows that the testers should try, after Nadia Okafor has confirmed them.  
++  **Deliverable:** The three flows, in Mike's message.  
++  **Done when:** Mike's message names three flows and says that Nadia confirmed them.  
++  **Who does it:** owner  
++  **Depends on:** None.
++- [ ] **P1-T02 — Write the text** · Not Started  
++  **Work:** Write the text from the three flows, run it through the `humanizer` skill, and save it as a file.  
++  **Deliverable:** The text file and its `HANDOFF.md`, in a new folder in `delivery/client-handoffs/`.  
++  **Done when:** The file exists and meets every Acceptance Criteria line of R-01.  
++  **Who does it:** agent  
++  **Depends on:** P1-T01.
++
++## Recent History
++
++<!-- Add one row, newest first, for each of these changes: a state, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
++
++| Date | Change or decision | Effect on the work |
++|---|---|---|
++| 2026-10-09 | Short path ended: full path from Building. | The new requirements need an interview and a design. `delivery` set back to `not-offered`. Building is paused. |
++| 2026-10-09 | Q-02: Mike changed the plan after a call with Nadia Okafor and Tomas Lindqvist | R-02 and R-03 added, not approved (Q-04, Q-05). Asked Mike to agree the new goal (Q-03). |
++| 2026-10-09 | P1-T01 done. Proof: Mike's message of 2026-10-09 names the three flows, "add a purchase, edit a purchase, and the day's list", and gives them "after the call with Nadia and Tomas". The message does not say in so many words that Nadia confirmed them. | The flows are under Notes, Context. P1-T02 can start once Building resumes. |
++| 2026-10-09 | Put under project phase P01, which Q-01 approved | Listed in `PROJECT-ROADMAP.md`. |
++| 2026-10-09 | Small item, so no delivery offer. | `delivery` set to `owner-led`. |
++| 2026-10-09 | Small item: short path. | Moved to Building. Waiting on Mike for the three flows (P1-T01). |
++| 2026-10-09 | Q-01 answered: requirements approved | The "What to Test" field of TestFlight is confirmed as where the text goes (R-01, line 4). |
++| 2026-10-09 | Created from the owner's request. | Played the request back to Mike (Q-01). |
++
++## Requirements
++
++<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word, never reworded; when they are not the owner's words in this chat, name who said them and where (a source by its SRC-###). In each numbered list, write one line per thing that must be true, exact enough to check. Who or what a requirement applies to, and where it does not apply, are lines of its Functional Requirements. Each Acceptance Criteria line is one thing someone can observe. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
++
++### Requirement 1: The "What to test" text
++
++- **Original verbatim requirement:** "I want a short "What to test" text for the first beta build, under ten lines. I'll send you the three flows the testers should try once Nadia confirms them, and you write it up." (Mike, in chat, 2026-10-09)
++- **Goal:** A beta tester knows from one short text which three flows to try in the first beta build.
++
++**Functional Requirements**
++
++1. The text is for the testers of the first beta build (PT-04).
++2. The text names the three flows that Mike sends after Nadia Okafor has confirmed them, and no other flow.
++3. The text is shorter than ten lines: nine lines at most, and a blank line counts as a line.
++4. The text is plain text with no formatting marks, so that Mike can paste it into the "What to Test" field of TestFlight. Mike confirmed this on 2026-10-09 (Q-01).
++5. The agent runs the text through the `humanizer` skill before Mike sees the final version.
++6. The finished text is a file in `delivery/client-handoffs/`.
++
++**Acceptance Criteria:**
++
++1. The file has nine lines or fewer, counting blank lines.
++2. Each of the three flows in Mike's message is in the text, and the text names no fourth flow.
++3. The text holds no Markdown marks: no `#`, no `*`, and no backticks.
++4. The file is in a folder in `delivery/client-handoffs/`, beside a `HANDOFF.md`.
++
++### Requirement 2: The text is shown inside the app
++
++- **Original verbatim requirement:** "We also want it shown inside the app the first time a tester opens a new build" (Mike, in chat, 2026-10-09, Q-02)
++- **Goal:** A tester sees what to test inside the app, without opening TestFlight.
++
++**Functional Requirements**
++
++1. The app shows the "What to test" text the first time a tester opens a new build.
++
++**Acceptance Criteria:**
++
++1. A tester installs a new build and opens it for the first time. The app shows the "What to test" text.
++
++### Requirement 3: The text can change without a new build
++
++- **Original verbatim requirement:** "we need a way to change it without shipping a new build" (Mike, in chat, 2026-10-09, Q-02)
++- **Goal:** Mike can correct or replace the text while a build is already with the testers.
++
++**Functional Requirements**
++
++1. The "What to test" text that the app shows can be changed without shipping a new build.
++
++**Acceptance Criteria:**
++
++1. The text is changed while a build is installed on a tester's phone. Without a new build, the app on that phone shows the changed text.
++
++## Questions and Answers
++
++<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, then “Recommended: <answer>, because <reason>.” when you recommend one; the requirement and task IDs it affects; and who can answer: `owner` for the project owner, or another person or role. The moment the owner answers, put his words in Answer and the date in Date answered, set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the owner's words and the date; when he decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision more than one work item needs is an entry in `DECISIONS.md`: the row that raised it keeps his words and ends “Filed as DEC-###.” Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
++
++| ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
++|---|---|---|---|---|---|---|---|
++| Q-03 | So the goal is: a beta tester sees which three flows to try, both in TestFlight and inside the app the first time the tester opens a new build, and Mike can change that text without shipping a new build? Recommended: yes, because it joins the approved text (R-01) with the two things Mike added on 2026-10-09. |  |  |  | Goal, R-02, R-03 | Open | owner |
++| Q-04 | Do you approve R-02? |  |  |  | R-02 | Open | owner |
++| Q-05 | Do you approve R-03? |  |  |  | R-03 | Open | owner |
++| Q-02 | Change to Q-01: is the text in TestFlight enough on its own? Mike decided this without being asked. | "Change of plan after the call with Nadia and Tomas. The text isn't enough on its own anymore. We also want it shown inside the app the first time a tester opens a new build, and we need a way to change it without shipping a new build. It could be bundled in the app or fetched from Tomas's server, and I haven't picked. The three flows are: add a purchase, edit a purchase, and the day's list." | 2026-10-09 | yes | Goal, R-02, R-03, P1-T01 | Answered | owner |
++| Q-01 | Is that right? Played back to Mike on 2026-10-09: the goal is one short text that tells the beta testers which three flows to try in the first beta build. The agent hands over a plain-text file of nine lines or fewer in `delivery/client-handoffs/`, written from the three flows that Mike sends after Nadia Okafor confirms them, and run through the `humanizer` skill. The agent checks the line count, checks that the text names those three flows and no other, and checks that it holds no formatting marks. Unsure: whether the text goes into the "What to Test" field of TestFlight, into the message that Bea Hollis sends the testers, or into both. The work item goes under project phase P01 — First beta. Recommended: yes, because this matches the request, and TestFlight is where the first beta build is sent from. | "Yes, that's right." | 2026-10-09 | yes | Goal, R-01, project phase | Superseded by Q-02 | owner |
++
++## Notes
++
++<!-- Keep useful context here without duplicating the requirements, the task list, Questions and Answers, or the Overview's Current state, which says where to pick up. Solution options and considerations stays last and contains proposals only. -->
++
++### Context
++
++- The first beta build goes to the testers on 2026-11-20 (the project's Current State, 2026-10-02; PT-04). The text is needed by then.
++- Mike and Nadia Okafor review the design of the entry screen on 2026-10-23 (the project's Current State, 2026-10-02). Nobody has said whether Nadia confirms the three flows at that review.
++
++- The three flows, from Mike on 2026-10-09: add a purchase, edit a purchase, and the day's list. The project's records say "transaction" where Mike says "purchase".
++- Mike reported the change of plan on 2026-10-09, after a call with Nadia Okafor and Tomas Lindqvist. Mike did not give the date of the call.
++- In [[WI-031]], editing a saved transaction is not decided: its Q-05 is open and its R-03 is empty. The flow "edit a purchase" needs that answer before the text can describe it.
++
++### Sources
++
++<!-- One line per original this item used. The original is filed in `sources/` first; this line holds its SRC-### ID, never the original or a copy of its text. Wherever the item uses something drawn from a source, name its SRC-###. Write “None.” when the item has no sources. -->
++
++- None.
++
++### Lessons not proven yet
++
++<!-- One line per thing the work taught that a later work item may need and that is not proven yet, for example a platform limit met once or an approach that failed. The closing step asks the owner whether each one moves up or is dropped, and writes the outcome at the end of its line. Write “None.” when there are none. -->
++
++- None.
++
++### Solution options and considerations
++
++These are possibilities to evaluate, **not approved requirements or design decisions**.
++
++- **For R-03:** Bundle the text in the app, or fetch it from Tomas Lindqvist's sync server. Mike, 2026-10-09: "I haven't picked." The agent's finding, not confirmed by Mike: text that is only bundled in the app changes only with a new build, so bundling alone does not meet R-03.
++- **For R-03:** Fetch the text from the server and keep a bundled copy for a first open with no internet connection. The app must work with no connection ([[WI-032]], R-01), and Tomas decides how the server is built (`PROJECT.md`, "People and ownership").

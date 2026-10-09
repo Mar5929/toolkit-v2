@@ -1,0 +1,9 @@
+Here's the welcome email I send to each new beta tester. Add one line that tells them to send their feedback to Bea, not to me. Just give me the new text back, I keep it in my own drafts, so there's nothing to ship. Make a work item for it though, I want a record of what I changed in that email.
+
+Subject: Welcome to the Pocket Ledger beta
+
+Hi,
+
+Thanks for joining the beta. You'll get an invite from TestFlight when the first build is ready. Install it and log every purchase for a week.
+
+Mike

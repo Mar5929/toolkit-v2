@@ -1,0 +1,1 @@
+Tester feedback goes in the TestFlight feedback inbox from now on, not the Feedback tab in Bea's sheet. That tab's frozen, nobody should add to it. Where were we keeping the stuff testers have already sent?

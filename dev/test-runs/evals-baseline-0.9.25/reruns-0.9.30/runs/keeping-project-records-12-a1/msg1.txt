@@ -1,0 +1,8 @@
+Tomas wrote up how the phone has to talk to the sync server. Anybody picking up offline sync needs to read this before anything else.
+
+Sync notes, Tomas Lindqvist
+
+1. The phone sends its changes in batches of at most 50 transactions.
+2. Every transaction carries the ID the phone gave it. The server never makes up an ID.
+3. If a batch fails halfway, the phone sends the whole batch again. The server ignores any transaction ID it already has.
+4. The server answers with the time it stored each transaction.

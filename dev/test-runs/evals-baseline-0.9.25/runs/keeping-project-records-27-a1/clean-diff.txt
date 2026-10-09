@@ -1,0 +1,141 @@
+--- DECISIONS.md	2026-10-09 10:05:01
++++ DECISIONS.md	2026-10-09 10:30:03
+@@ -35,13 +35,13 @@
+ 
+ ## DEC-001: Oldest iOS version the app supports
+ 
+-- Status: Decided
++- Status: Superseded
+ - Raised: 2026-09-28, the agent, in WI-033 (Q-02)
+ - Decided: 2026-09-28, Mike
+ - Decision: The app supports iOS 17 and newer.
+ - Why: Every beta tester has a recent phone, and one oldest version for the whole app keeps the screens and the chart on the same tools.
+ - Affects: WI-031, WI-033
+-- Replaces or replaced by: none
++- Replaces or replaced by: replaced by DEC-003
+ - Sources: none
+ 
+ ## DEC-002: Testers outside the United States
+@@ -54,3 +54,14 @@
+ - Affects: WI-031
+ - Replaces or replaced by: none
+ - Sources: SRC-001
++
++## DEC-003: Oldest iOS version the app supports is iOS 18
++
++- Status: Decided
++- Raised: 2026-10-09, Mike
++- Decided: 2026-10-09, Mike
++- Decision: The app supports iOS 18 and newer. The app no longer supports iOS 17.
++- Why: Mike, in chat, 2026-10-09: "Two of the things Nadia designed need it, and I'd rather cut 17 than build them twice."
++- Affects: WI-031, WI-033
++- Replaces or replaced by: replaces DEC-001
++- Sources: none
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:31:17
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:30:16
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -30,9 +30,9 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+-**Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002.
++**Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-003, DEC-002.
+ 
+ **Moved up:**
+ 
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike raised the oldest supported iOS version to iOS 18 (DEC-003 replaces DEC-001), because two of the things Nadia Okafor designed need iOS 18 | The screens are built for iOS 18 and newer. No requirement changed. |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+--- work-items/WI-033-charting-library/WI-033.md	2026-10-09 10:05:01
++++ work-items/WI-033-charting-library/WI-033.md	2026-10-09 10:31:17
+@@ -11,7 +11,7 @@
+ requirements_approved: 2026-09-29 by Mike
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-033: Pick a charting library
+@@ -22,7 +22,7 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** The comparison is written, under Notes, "Solution options and considerations". A separate checker tested it against R-01 and R-02, and both pass.
++**Where it stands:** The comparison is written, under Notes, "Solution options and considerations". On 2026-10-09 the recommendation's reason changed to name iOS 18 (DEC-003); the recommended option, Swift Charts, did not change. A separate checker tested the changed text against R-01 and R-02 on 2026-10-09, and both pass.
+ 
+ **Next action:** Waiting on the owner: Q-04 (approve the finished result). After his answer: Agent: run the closing steps.
+ 
+@@ -30,9 +30,9 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+-**Related items:** Project phase P01. DEC-001.
++**Related items:** Project phase P01. DEC-003.
+ 
+ **Moved up:**
+ 
+@@ -59,6 +59,8 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Independent check of `work-items/WI-033-charting-library/WI-033.md`, SHA-256 `205f2296…182833`: R-01 Met, R-02 Met. Evidence: no test plan; the checker counted 3 option rows, 3 comparison columns with no empty cell, and 2 sentences after the table, and found the recommendation consistent with DEC-003. Gaps: the "iOS versions" cells of the open-source library and of drawing the chart ourselves give no version number, and the library is not named. | Q-04 still waits on Mike, now for the changed text. |
++| 2026-10-09 | Mike raised the oldest supported iOS version to iOS 18 (DEC-003 replaces DEC-001) | The recommendation stays Swift Charts, which needs iOS 16 or newer. Its reason now names iOS 18 and DEC-003. No requirement changed. The changed text needs a new check before Q-04. |
+ | 2026-09-30 | A separate checker tested the comparison: R-01 and R-02 pass | Asked Mike to approve the result (Q-04). |
+ | 2026-09-30 | Comparison written, using DEC-001 (iOS 17 and newer) | Sent to the checker. |
+ | 2026-09-29 | Q-03 answered: requirements approved | Moved to Building. |
+@@ -97,9 +99,9 @@
+ 
+ | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
+ |---|---|---|---|---|---|---|---|
+-| Q-04 | Do you approve the finished result? The comparison covers three options and recommends Swift Charts, and a separate checker passed both requirements. Recommended: yes, because every requirement passed. |  |  |  | R-01, R-02 | Open | owner |
++| Q-04 | Do you approve the finished result? The comparison covers three options and recommends Swift Charts. Its reason names iOS 18 and newer (DEC-003) since 2026-10-09, and a separate checker passed both requirements on the changed text that day. Recommended: yes, because every requirement passed. |  |  |  | R-01, R-02 | Open | owner |
+ | Q-03 | Do you approve these requirements? | "Yes." | 2026-09-29 | yes | R-01, R-02 | Answered | owner |
+-| Q-02 | Which iOS versions must the app support? Recommended: iOS 17 and newer, because the beta testers all have recent phones. | "iOS 17 and newer." Filed as DEC-001. | 2026-09-28 | yes | R-01 | Answered | owner |
++| Q-02 | Which iOS versions must the app support? Recommended: iOS 17 and newer, because the beta testers all have recent phones. | "iOS 17 and newer." Filed as DEC-001. Mike replaced this answer on 2026-10-09 with iOS 18 and newer (DEC-003). | 2026-09-28 | yes | R-01 | Answered | owner |
+ | Q-01 | So the goal is: choose the tool for the spending-by-category chart, and say why? Recommended: yes, because it matches your starting request. | "Yes." | 2026-09-28 | yes | Goal | Answered | owner |
+ 
+ ## Notes
+@@ -126,4 +128,4 @@
+ | An open-source charting library | Older iOS versions too | Medium: add the library and learn its settings | Many styles, and some look dated |
+ | Drawing the chart ourselves | Any iOS version | High: every bar, label, and tap is ours to build | Exactly what we design |
+ 
+-Recommended: Swift Charts. The app supports iOS 17 and newer (DEC-001), Swift Charts is built in so nothing extra is installed, and it takes the least work.
++Recommended: Swift Charts. The app supports iOS 18 and newer (DEC-003), Swift Charts is built in so nothing extra is installed, and it takes the least work.

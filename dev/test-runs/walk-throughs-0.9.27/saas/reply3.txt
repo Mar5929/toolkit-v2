@@ -1,0 +1,29 @@
+The billing rule is written as approved, and the support question is recorded as open. Both are committed to `main` on this computer.
+
+**Billing: approved**
+
+- **`DECISIONS.md`:** DEC-002, Decided: an organization admin can change the organization's plan, and a member cannot.
+- **`system/security-model.md`:** SEC-01, Approved, with the same rule. I filed it there because authentication (WI-002) also depends on it: it has to provide the two roles.
+- **WI-003 (billing):** your words are saved as Q-01, and its requirement now points to SEC-01, with a check that a tester can run.
+- **WI-001 and WI-002:** both now name DEC-002 and SEC-01.
+
+This approves the rule only. The billing requirements as a whole are not approved yet, because the interview has not started.
+
+**Support: not decided**
+
+- **`DECISIONS.md`:** DEC-003, Open: does a ticket belong to the user who opened it, or to the organization? No rule is written for it.
+- **WI-004 (support):** it now waits on you for DEC-003. I added the task T01 for you: talk to the support lead, then decide.
+- **`PROJECT.md`:** I added the support lead to the people table, with no name, as someone you consult. The table records that you make the decision.
+
+Two things the billing rule leaves open, which I will ask in the interviews: who becomes the first organization admin, and whether SEC-01 also covers cancelling the subscription and changing the payment method.
+
+Sources:
+- DEC-002 and SEC-01 (`system/security-model.md`): the billing rule, as filed in this turn.
+- DEC-003 (`DECISIONS.md`): the open support question.
+- WI-001, Q-05: the project phase question, still open.
+
+Q-05 is still open, and WI-001 cannot be placed in the project's roadmap without it:
+
+Q-05: Which project phase does WI-001 go under?
+Recommended: add one project phase, "P01 — Organization accounts", and put WI-001 under it, because organization accounts is the only planned work that the project's records name.
+Watch out: if you plan other work before or after organization accounts, the phases should show that order, so tell me that work now.

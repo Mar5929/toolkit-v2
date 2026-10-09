@@ -1,0 +1,10 @@
+Notes from today's Accounts workshop are below. What's open after this?
+
+Accounts workshop. Mike, Priya Nair, Dan Okoye.
+
+- Northwind org: an Account's owner is set by territory. A flow assigns it when the billing state changes. Priya showed the flow.
+- Baltic org: the owner is whoever created the Account. Dan says nobody reassigns them. Dan thinks about 30% of their Accounts have an owner who has left the company. Nobody has checked that number.
+- Priya proposed territory-based ownership for the merged org. Not agreed, Dan wants to see what it does to his reps' books first.
+- Open: which customer ID does the merged org use, Northwind's ERP customer number or Baltic's legacy account ID? Three things depend on it: the Account migration, the ERP integration, and the reports.
+- Dan sends an export of Baltic's Account owners by Friday.
+- Recording is in the client's SharePoint, Projects/Org Merge/Workshops/2026-10-09-accounts.mp4. It can't leave SharePoint.

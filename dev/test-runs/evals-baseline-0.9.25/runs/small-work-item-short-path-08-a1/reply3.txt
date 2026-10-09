@@ -1,0 +1,30 @@
+The CSV is ready for you to upload, and a separate checker tested it and found the requirement met.
+
+**How to see it:** open `delivery/migrations/testflight-external-testers/testflight-external-testers-2026-10-09.csv` in the project's main folder. Git does not track it.
+
+**Evidence** (the file has no commit; its SHA-256 hash starts `9a48e12e`):
+
+- R-01, the CSV that TestFlight takes: Met.
+- The file has 4 lines and none is a header (`wc -l` gives 4).
+- Every line has 3 fields in the order first name, last name, email, and each address equals the one in the lines you pasted.
+- `git check-ignore` prints the file's path, and `git status --porcelain` prints nothing.
+
+**Gaps:**
+
+- Not run: whether TestFlight accepts the file. Only your upload can show that.
+- The addresses were compared with the four lines you pasted in chat. The checker could not compare them with the email in your mailbox.
+
+**Still to come:** the upload to TestFlight. You run it, once Apple approves your developer account (PT-03). Your yes below does not cover the upload.
+
+Nothing from this work item needs keeping for the whole project: it made no shared decision, no system rule, and no lesson.
+
+What I saved:
+
+- WI-034: recorded your yes to the requirements, both checks, and the closing question (Q-02). It is in the Testing Loop.
+- `PROJECT-ROADMAP.md`: WI-034 is under project phase P01, First beta, committed to local `main`.
+
+Sources:
+- WI-034, R-01 and Recent History: the acceptance criteria and the checker's verdict.
+- `work-items/PROJECT-TASKS.md`, PT-03: the Apple developer enrollment is In Progress.
+
+Approve this result and mark WI-034 Done?

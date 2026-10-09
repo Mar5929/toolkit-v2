@@ -1,0 +1,9 @@
+Tomas sent this over. Is there anything in there I need to do?
+
+From: Tomas Lindqvist
+To: Mike Rihm
+Subject: Charts
+
+Mike, I read the chart comparison you forwarded. Swift Charts is the right call, I use it for the server dashboard too. As far as I'm concerned that one is finished, go ahead and close it out.
+
+Tomas

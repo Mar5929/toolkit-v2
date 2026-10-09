@@ -1,0 +1,83 @@
+--- work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:06:10
+@@ -5,13 +5,13 @@
+ state: Refining Requirements
+ status: Preparing
+ parent: WI-031
+-waiting_on: "agent"
++waiting_on: "owner"
+ priority: medium
+ delivery: not-offered
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-032: Offline sync
+@@ -22,15 +22,15 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** Every question is answered (Q-01 to Q-04), and four requirements are written. Mike has not approved them yet.
++**Where it stands:** Five requirements are written. Mike added R-05 (the "not synced" badge in the day's list) on 2026-10-09, and it has one open question (Q-05). Mike has not approved the requirements yet.
+ 
+-**Next action:** Agent: check that the requirements are complete, then ask Mike to approve them.
++**Next action:** Waiting on the owner: Q-05 (whether a transaction with an unsent edit also shows the badge). After his answer: finish R-05, check that the requirements are complete, then ask Mike to approve them.
+ 
+-**Waiting on:** Nothing.
++**Waiting on:** The owner: Q-05.
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** [[WI-031]] (parent).
+ 
+@@ -46,6 +46,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike added a requirement: the "not synced" badge in the day's list. Q-05 asked | R-05 written except the case of an unsent edit (Q-05). Waiting on Mike. |
+ | 2026-09-30 | Q-03 and Q-04 answered | R-04 written. Every question is answered. Next: check that the requirements are complete. |
+ | 2026-09-29 | Q-01 and Q-02 answered | Goal agreed. R-01 to R-03 written. |
+ | 2026-09-28 | Created as a sub-item of [[WI-031]] at Mike's request | Interview started. |
+@@ -106,10 +107,27 @@
+ 
+ 1. The tester edits one transaction on two phones while both are offline, then syncs both. The server holds the later edit.
+ 
++### Requirement 5: A "not synced" badge in the day's list
++
++- **Original verbatim requirement:** "A transaction that the server doesn't have yet should show a small 'not synced' badge in the day's list, so people know it hasn't gone up." (Mike, 2026-10-09, in chat)
++- **Goal:** A user can see which transactions have not reached the server yet.
++
++**Functional Requirements**
++
++1. In the day's list, a transaction that the server does not have yet shows a small "not synced" badge.
++2. The badge goes away when the server has the transaction.
++3. Whether a transaction that the server has, with an edit that the server does not have yet, shows the badge is not decided yet (Q-05).
++
++**Acceptance Criteria:**
++
++1. With the phone in airplane mode, a tester logs a transaction. The day's list shows the "not synced" badge on it.
++2. The tester turns airplane mode off. When the server shows the transaction, the badge is gone from the day's list.
++
+ ## Questions and Answers
+ 
+ | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
+ |---|---|---|---|---|---|---|---|
++| Q-05 | Does a transaction that the server already has, with an edit made offline that the server does not have yet, also show the "not synced" badge? Recommended: yes, because the amount on the phone then differs from the amount on the server, and R-04 can discard that edit. |  |  |  | R-05 | Open | owner |
+ | Q-04 | What have we not talked about yet that could change this? Recommended: nothing, if the four requirements are right. | "Nothing else comes to mind." | 2026-09-30 | no | R-01 to R-04 | Answered | owner |
+ | Q-03 | When the same transaction is edited on two phones before they sync, which edit wins? Recommended: the most recent edit, because asking the user to choose is slow and rare. | "Most recent wins. Don't bother the user." | 2026-09-30 | yes | R-04 | Answered | owner |
+ | Q-02 | How soon after the connection returns must sync finish? Recommended: within 1 minute, because users check the list right after leaving a dead zone. | "1 minute is fine." | 2026-09-29 | yes | R-02 | Answered | owner |
+@@ -120,6 +138,8 @@
+ ### Context
+ 
+ - Mike loses signal on the subway every day, for about 20 minutes each way (Q-01).
++- The day's list is part of [[WI-031]] (its phase P2). R-05 adds a badge to that list.
++- Nadia Okafor decides the layout and the colors of a screen (`PROJECT.md`, "People and ownership"), so the look and the place of the badge are hers to decide. Nobody has asked her yet.
+ 
+ ### Sources
+ 

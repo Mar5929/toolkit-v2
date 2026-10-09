@@ -1,0 +1,21 @@
+I wrote the badge into WI-032 (offline sync) as a new requirement, R-05. The goal as I understand it: a user can see which transactions have not reached the server yet.
+
+R-05 now says that a transaction the server does not have yet shows a small "not synced" badge in the day's list, and that the badge goes away once the server has it. A tester checks it by logging a transaction in airplane mode, seeing the badge, then turning airplane mode off and seeing the badge go.
+
+Your wording leaves one case open, so I need one answer before R-05 is finished:
+
+Q-05: Does a transaction that the server already has, with an edit made offline that the server does not have yet, also show the "not synced" badge?
+Recommended: yes, because the amount on the phone then differs from the amount on the server, and that edit can still be discarded if another phone edited the same transaction later (WI-032, R-04).
+Watch out: the badge then means "something here has not gone up", which covers both a new transaction and a changed one.
+Not yet covered: Nadia decides the layout and colors of a screen, so the look and place of the badge are hers to decide, and nobody has asked her yet. The day's list itself belongs to WI-031 (transaction entry).
+
+Saved:
+- WI-032: added R-05 with your words, added Q-05 as an open question, and changed its Current state to waiting on you for Q-05.
+- WI-032, Notes: recorded that the badge's look is Nadia's to decide and that the day's list is part of WI-031.
+
+Sources:
+- WI-032: the four existing requirements, including R-04 (the latest edit wins).
+- WI-031: the day's list is in its phase P2.
+- `PROJECT.md`, "People and ownership": Nadia Okafor decides the layout and colors of a screen.
+
+Does a transaction with an unsent edit also show the badge?

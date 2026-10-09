@@ -1,0 +1,57 @@
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:24:52
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- memory/project_beta_group.md	2026-10-09 10:05:01
++++ memory/project_beta_group.md	2026-10-09 10:24:52
+@@ -1,15 +1,15 @@
+ ---
+ name: project_beta_group
+-description: The beta group has 12 testers, and all of them live in the United States, as of 2026-09-29
++description: The beta group has 15 testers as of 2026-10-09; the first 12 live in the United States, and where the 3 new ones live is not known
+ created: 2026-09-29
+-updated: 2026-09-29
++updated: 2026-10-09
+ check_by: none
+ metadata:
+   type: project
+ status: current
+-source: Bea Hollis's email of 2026-09-29 (SRC-001)
+-last_verified: 2026-09-29
+-authorization: Approved by Mike on 2026-09-29
++source: Mike, in chat, 2026-10-09 (the count of 15 and the 3 new testers); Bea Hollis's email of 2026-09-29 (SRC-001) (the first 12)
++last_verified: 2026-10-09
++authorization: Logged by the agent on 2026-10-09
+ work_items: []
+ supersedes: none
+ ---
+@@ -18,13 +18,13 @@
+ 
+ ## Size, and where the testers live
+ 
+-**Remember:** The beta group has 12 testers. All 12 live in the United States. This was true on 2026-09-29.
++**Remember:** The beta group has 15 testers. This was true on 2026-10-09. Bea Hollis added 3 people from her running club in the week before 2026-10-05. The first 12 testers live in the United States. Where the 3 new testers live is not known.
+ 
+ **Why:** The number of testers is the number of TestFlight invitations that Mike sends. Where the testers live decides which currencies the first beta needs.
+ 
+ **How to apply:** Use this number when Mike asks how big the beta is or how many invitations to send. Whether a person outside the United States may join is an open decision, DEC-002.
+ 
+-**Evidence and limits:** SRC-001, Bea's email of 2026-09-29. Nobody has compared the number with the tester sheet since then.
++**Evidence and limits:** Mike said in chat on 2026-10-09 that the group has 15 testers and that Bea added 3 people from her running club "last week". SRC-001, Bea's email of 2026-09-29, gives the first 12 and says that they live in the United States. Not checked: nobody has compared the number 15 with the tester sheet, and nobody has said where the 3 new testers live or whether the sheet holds their phone models. The "Testers" tab of the sheet would check all three.
+ 
+ **Related memories:** [Beta tester sheet](reference_beta_tester_sheet.md)
+ 

@@ -1,0 +1,15 @@
+Kestrel QA and Imogen Rask are now in the project records.
+
+- Recorded in `PROJECT.md`, "People and ownership": Imogen Rask, device tester at Kestrel QA and your contact there. What she may decide is marked "Not stated".
+- Recorded in `PROJECT.md`, "Systems and environments": the Kestrel QA device lab, which tests each build on older iPhones. How a build reaches Kestrel QA is marked as not confirmed.
+- Recorded in `PROJECT.md`, "Operating conventions": Imogen sends you a device test report after every build.
+- Updated the project's Current State: removed the "Waiting on Bea Hollis" line for PT-02 (the testers' phone models), because PT-02 was done on 2026-10-01.
+
+Two lines in the project's Current State have reached their check dates: DEC-002 (testers outside the United States) waits on you and was due for a check today, and PT-01 (Tomas's sign-in steps for the staging server) was due on 2026-10-07.
+
+Sources:
+- `PROJECT.md`: the existing people, systems, and conventions that the new rows sit beside.
+- `work-items/PROJECT-TASKS.md`, PT-02: done on 2026-10-01.
+- `memory/CURRENT_STATE.md`: the check dates for DEC-002 and PT-01.
+
+How does Kestrel QA get each build: do you add Imogen as a TestFlight tester, or send it another way? TestFlight waits on your Apple developer account (PT-03), so the answer decides whether Kestrel QA can start before Apple approves it.

@@ -1,0 +1,16 @@
+I have not added the file yet, because no work item covers it (WI-031 and WI-033 do not mention `app/` or a build setting) and the project guide tells me to ask first.
+
+**Should I make a work item for adding `app/Config/Build.xcconfig` with `SWIFT_VERSION = 5.0`?** I recommend no, because it is a one-line settings file with nothing to refine, design, or test.
+
+- **No work item (recommended):** I add the file on its own branch and ask for your yes before merging it into `main`. Only the commit will record why the file exists.
+- **Work item:** the change gets its own record with requirements and approvals. That is more steps than a one-line file needs.
+
+Either way, I will also correct `PROJECT.md`. It says twice that `app/` does not exist until the first work item reaches Building, and this file makes that untrue.
+
+Sources:
+- `AGENTS.md`, "Every session": ask whether to make a work item when none covers the work.
+- `PROJECT.md`, "Systems and environments" and "Resources and project paths": `app/` is made when the first work item reaches Building.
+- `.claude/rules/shared-repository-work.md`: code goes on its own branch, and a merge into `main` needs your yes.
+- `work-items/`: a search of WI-031 and WI-033 found no mention of `app/`, `xcconfig`, or `SWIFT_VERSION`.
+
+Do you want a work item for this, yes or no?

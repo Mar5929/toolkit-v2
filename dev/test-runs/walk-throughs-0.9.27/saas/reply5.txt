@@ -1,0 +1,27 @@
+The release is recorded as you reported it: billing is in production as version 0.9.0, with billing only. Authentication and support are not released. I did not see the deployment, and every record says so.
+
+What I saved:
+
+- **`delivery/deployments/WI-003-billing-production/`:** a deployment record, committed to `main` on this computer. It holds what you reported, and marks the rest "not reported": the time, who ran it, the commit, the manual steps, and the checks after the deployment.
+- **WI-003 (billing):** the release, in Recent History and Notes. The earlier line "It is not released" is corrected.
+- **WI-001, WI-002, WI-004:** one history line each. WI-002 and WI-004 say they are not in version 0.9.0.
+
+Three things do not fit together yet:
+
+- **WI-003's State still says Refining Requirements.** Billing is in production, but the work item has no approved requirements and no approved result, and I will not record an approval you did not give.
+- **CON-01 and SEC-01 stay Approved, and not Built.** A rule becomes Built when its work item closes with your approval of the result.
+- **SEC-01 depends on authentication, which is not released.** The rule says an organization admin can change the plan and a member cannot. WI-002 is the work that provides those two roles. The records do not say how version 0.9.0 tells an admin from a member in production. This is the one I would check first, because it affects who can change a plan today.
+
+Also unclear: the staging test ran on build 0.8.2, and production got version 0.9.0. The records do not say how the two relate.
+
+Still open after this question: Q-05 (which project phase WI-001 goes under).
+
+Sources:
+- WI-003: its State, its open Q-02, and your two reports.
+- SEC-01 (`system/security-model.md`) and DEC-002: the plan-change rule and its two roles.
+- `system/AGENTS.md`: when a rule is marked Built.
+- `delivery/AGENTS.md`: the fields of a deployment record.
+
+Q-02 (WI-003), now about the release: What does version 0.9.0 hold, what do the 14 checks cover, and where is the code?
+Recommended: point me to the repository, or paste the release notes and the test list, because then I can write WI-003's requirements from what was released, ask you to approve them, and set its State and the two rules from evidence.
+Watch out: until then, the records show billing as released but not approved, and a later session will read it that way.

@@ -23,6 +23,7 @@ You grade finished runs of Toolkit V2 evals. Change nothing in a run folder or a
 - A pass that holds only because nothing was made is an empty pass. An example is "nothing was merged" in a run that made no work item. Mark it PASS (empty).
 - A change that no expectation names is not a failure. List it in one short line when it made a record wrong.
 - Follow what the set's README says under "Scoring a run" and under the list of what the scratch project cannot show.
+- `replyN.txt` holds every block of text that the agent wrote to Mike in that turn, in order. An expectation about the last line of a reply is decided from the last line of the last block.
 
 ## Questions the agent asked
 

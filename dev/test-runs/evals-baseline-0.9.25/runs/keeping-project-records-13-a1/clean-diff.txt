@@ -1,0 +1,55 @@
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:24:18
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -18,7 +18,6 @@
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- memory/reference_beta_tester_sheet.md	2026-10-09 10:05:01
++++ memory/reference_beta_tester_sheet.md	2026-10-09 10:24:18
+@@ -1,14 +1,14 @@
+ ---
+ name: reference_beta_tester_sheet
+-description: The beta tester list and the testers' feedback are in Bea's Google Sheet "Pocket Ledger beta testers", in her own Drive, as of 2026-09-29
++description: The beta tester list and the testers' feedback are in Bea's Google Sheet "Pocket Ledger beta testers", in the shared Pocket Ledger Drive folder, as of 2026-10-09
+ created: 2026-09-29
+-updated: 2026-10-01
++updated: 2026-10-09
+ check_by: none
+ metadata:
+   type: reference
+ status: current
+-source: Bea Hollis's email of 2026-09-29 (SRC-001)
+-last_verified: 2026-10-01
++source: Bea Hollis's email of 2026-09-29 (SRC-001); Mike, in chat, 2026-10-09, for where the sheet is
++last_verified: 2026-10-09
+ authorization: Approved by Mike on 2026-09-29
+ work_items: []
+ supersedes: none
+@@ -18,13 +18,13 @@
+ 
+ ## Where the sheet is
+ 
+-**Remember:** The list of the beta testers is a Google Sheet named "Pocket Ledger beta testers". It is in Bea Hollis's own Google Drive: https://example.com/sheets/bea/pocket-ledger-testers
++**Remember:** The list of the beta testers is a Google Sheet named "Pocket Ledger beta testers". Bea Hollis moved it out of her own Google Drive and into the shared Pocket Ledger folder: https://example.com/drive/pocket-ledger/beta-testers
+ 
+ **Why:** No file in the repository holds the tester list, and the sheet is hard to find without the link.
+ 
+ **How to apply:** Give this link when Mike or a helper agent needs the tester list.
+ 
+-**Evidence and limits:** SRC-001 gives the name of the sheet and the link. Mike opened the link on 2026-10-01.
++**Evidence and limits:** SRC-001 gives the name of the sheet. Mike gave the new place and the new link in chat on 2026-10-09, and said that the link in SRC-001 no longer works. The agent has not opened the new link.
+ 
+ **Related memories:** [Beta group](project_beta_group.md)
+ 

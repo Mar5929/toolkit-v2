@@ -1,0 +1,112 @@
+--- PROJECT.md	2026-10-09 10:05:01
++++ PROJECT.md	2026-10-09 10:20:07
+@@ -27,7 +27,7 @@
+ | --- | --- | --- | --- | --- |
+ | Owner | Mike Rihm | Makes the project's decisions | Every decision: requirements, designs, results, merges, and Done | Setup, 2026-09-28 |
+ | Backend developer (contractor) | Tomas Lindqvist | Builds the sync server and looks after its hosting | How the server is built and hosted | Mike, in chat, 2026-09-28 |
+-| Designer | Nadia Okafor | Designs the screens of the app | The layout and the colors of a screen | Mike, in chat, 2026-09-28 |
++| Designer | Nobody since 2026-10-02, when Nadia Okafor left the project | Designs the screens of the app | The layout and the colors of a screen | SRC-002, 2026-10-09 |
+ | Beta coordinator | Bea Hollis | Runs the beta tester group and collects the testers' feedback | Who is in the beta tester group | SRC-001, 2026-09-29 |
+ 
+ Keep this table short. Write no biography and no contact details.
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:20:21
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, SRC-002 and a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -11,14 +11,12 @@
+ 
+ ## Coming up
+ 
+-- 2026-10-23: design review of the entry screen, a call with Mike and Nadia Okafor; it prepares WI-031.
+ - 2026-11-20: the first beta build goes to the testers; Mike sends it and Bea Hollis tells the testers (PT-04).
+ 
+ ## Waiting on
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+ - Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
+ 
+ ## Standing jobs and shared files
+ 
+--- sources/README.md	2026-10-09 10:05:01
++++ sources/README.md	2026-10-09 10:20:07
+@@ -5,3 +5,4 @@
+ | ID | Date received | From | What it is | Where kept | Used by |
+ | --- | --- | --- | --- | --- | --- |
+ | SRC-001 | 2026-09-29 | Bea Hollis | Email: how she will run the beta tester group, and her question about testers outside the United States | [SRC-001-beta-group-email.md](SRC-001-beta-group-email.md) | DEC-002 |
++| SRC-002 | 2026-10-09 | Nadia Okafor | Email: she has left the project, the entry screen design is final, and the review call on 2026-10-23 is not needed | [SRC-002-nadia-wrapping-up-email.md](SRC-002-nadia-wrapping-up-email.md) | WI-031 |
+--- sources/SRC-002-nadia-wrapping-up-email.md	1969-12-31 19:00:00
++++ sources/SRC-002-nadia-wrapping-up-email.md	2026-10-09 10:20:07
+@@ -0,0 +1,7 @@
++From: Nadia Okafor
++To: Mike Rihm
++Subject: Wrapping up
++
++Hi Mike, as we discussed, last Friday was my last day on Pocket Ledger. The entry screen design is final and it's in the Figma file, so we don't need the review call on the 23rd. I won't be doing any more screens, so you'll want someone else for those. It's been fun.
++
++Nadia
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:20:21
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -22,15 +22,15 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** The goal, the entry speed, and the required fields are settled (Q-01, Q-03, Q-04). Editing and currencies are still open.
++**Where it stands:** The goal, the entry speed, and the required fields are settled (Q-01, Q-03, Q-04). Editing and currencies are still open. Nadia Okafor, who designed the screens, left the project on 2026-10-02 (SRC-002); who designs the screens that are left is open (Q-07).
+ 
+ **Next action:** Waiting on the owner: Q-05 (editing or deleting a saved transaction). After his answer: finish R-03.
+ 
+-**Waiting on:** The owner: Q-05, Q-06.
++**Waiting on:** The owner: Q-05, Q-06, Q-07.
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002.
+ 
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Nadia Okafor's email filed as SRC-002: she left the project on 2026-10-02, she says the entry screen design is final, and the design review call on 2026-10-23 is not needed. Q-07 asked | No design review is planned for the entry screen. Nobody is assigned to design the screens of P2. Waiting on Mike. |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+@@ -124,6 +125,7 @@
+ |---|---|---|---|---|---|---|---|
+ | Q-05 | Can a user change or delete a transaction after saving it? Recommended: yes to both, because people mistype amounts. |  |  |  | R-03 | Open | owner |
+ | Q-06 | Which currencies must the first version support? Recommended: US dollars only, because the beta testers are in the United States and other currencies need exchange rates. |  |  |  | R-01 | Open | owner |
++| Q-07 | Who designs the screens that are left, such as the day's list, now that Nadia Okafor has left the project (SRC-002)? Recommended: build them from the standard iPhone list and form layouts, with Mike deciding the layout, and look for a designer after the first beta, because the first beta build is due on 2026-11-20 and finding a designer takes time. |  |  |  | P2 | Open | owner |
+ | Q-04 | Which fields must every transaction have? Recommended: amount, date, category, because reports group by all three. | "Amount, date, category. Notes are optional." | 2026-09-30 | yes | R-01 | Answered | owner |
+ | Q-03 | How fast should logging a transaction feel? Recommended: under 10 seconds from opening the app, because slow entry means people stop logging. | "Under 10 seconds. That is the whole point." | 2026-09-29 | yes | R-02 | Answered | owner |
+ | Q-02 | Does the first version need an Android app? Recommended: no, iPhone only, because it halves the work of the first release. | "iPhone only for now." | 2026-09-28 | yes | R-01, R-02 | Answered | owner |
+@@ -136,10 +138,11 @@
+ - The starting request, in Mike's words on 2026-09-28: "I want people to be able to log a transaction fast on their phone. Amount, what it was for, done."
+ - Categories for the first version: Groceries, Rent, Transport, Eating out, Other (P1-T01).
+ - Crash reports from beta builds go to Sentry (`PROJECT.md`, "Systems and environments").
++- Nadia Okafor wrote on 2026-10-09 that the entry screen design is final and is in the Figma file (SRC-002). Not checked: no record shows that Mike has opened the final design, and no record says where the Figma file is or who can open it.
+ 
+ ### Sources
+ 
+-- None.
++- SRC-002: email from Nadia Okafor, received 2026-10-09. Taken from it: Q-07.
+ 
+ ### Lessons not proven yet
+ 

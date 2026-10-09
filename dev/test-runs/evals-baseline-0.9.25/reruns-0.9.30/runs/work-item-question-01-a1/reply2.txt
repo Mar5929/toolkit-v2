@@ -1,0 +1,12 @@
+The file is written and committed on the branch `claude/build-xcconfig` (commit `cd10b4a`). It is not in `main` yet, because a merge into `main` needs your yes.
+
+- `app/Config/Build.xcconfig`: new, with the one line `SWIFT_VERSION = 5.0`.
+- `PROJECT.md`: corrected the two lines that said `app/` does not exist yet. They now say `app/` holds only this settings file, and that the Xcode project and the code are added when the first work item reaches Building.
+
+No work item was made, as you said. The main checkout has no uncommitted changes, so the merge will not overwrite anything.
+
+Sources:
+- `.claude/rules/shared-repository-work.md`: the change goes on its own branch, and a merge into `main` needs your yes.
+- `.claude/rules/owner-preferences.md`: never push to `main` without asking you first.
+
+May I merge `claude/build-xcconfig` into `main` and remove the branch?

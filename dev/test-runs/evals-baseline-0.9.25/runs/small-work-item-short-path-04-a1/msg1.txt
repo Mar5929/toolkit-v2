@@ -1,0 +1,1 @@
+Write me two things for my own notes. One is a checklist, about half a page, that I follow when a tester reports a bug. The other is a three line version of it for the sticky note on my monitor. Just the two texts, nothing to ship. Track it as a work item.

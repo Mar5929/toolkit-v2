@@ -1,0 +1,14 @@
+Transaction entry (WI-031) has two open questions, and both wait on you.
+
+- **Q-05:** Can a user change or delete a transaction after saving it? My recommendation is yes to both, because people mistype amounts. Your answer lets me write Requirement 3 (editing and deleting after saving), which is empty until then.
+- **Q-06:** Which currencies must the first version support? My recommendation is US dollars only, because the beta testers are in the United States and other currencies need exchange rates. Your answer completes Requirement 1 (required fields).
+
+One project-level question also waits on you and affects this work item: DEC-002, whether people who live outside the United States join the first beta. Bea Hollis raised it on 2026-09-29, and its check-again date is today, 2026-10-09. It is tied to Q-06, because a tester in another country needs another currency.
+
+The sub-item for offline sync (WI-032) has no open questions; all four are answered.
+
+**Sources**
+- WI-031, Questions and Answers and Current state: Q-05 and Q-06 are Open, and both need a decision from the owner.
+- WI-032, Questions and Answers: Q-01 to Q-04 are Answered.
+- `DECISIONS.md`, DEC-002: Open, affects WI-031.
+- The project's Current State, "Waiting on": the check-again date for DEC-002.

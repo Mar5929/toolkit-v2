@@ -1,0 +1,1 @@
+Cutover happened on Saturday. I ran the production load myself, 48,212 Baltic Accounts. Priya checked the counts on Sunday morning and they match. The merged org is live and uses the ERP customer number everywhere.

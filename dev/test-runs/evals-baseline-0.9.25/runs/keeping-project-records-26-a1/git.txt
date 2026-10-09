@@ -1,0 +1,10 @@
+$ git log --all --oneline --decorate 6a077df46f1a4104f88b3a77ef27c40c9254b9ce..
+e642572 (HEAD -> main) File the 2026-10-09 call notes as SRC-002, record DEC-003 and add CON-01: amounts are stored as whole cents
+
+$ git branch --all -vv
+* main e642572 File the 2026-10-09 call notes as SRC-002, record DEC-003 and add CON-01: amounts are stored as whole cents
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/keeping-project-records-26-a1 e642572 [main]
+
+$ git status --short

@@ -1,0 +1,174 @@
+--- DECISIONS.md	2026-10-09 10:05:01
++++ DECISIONS.md	2026-10-09 10:27:23
+@@ -54,3 +54,14 @@
+ - Affects: WI-031
+ - Replaces or replaced by: none
+ - Sources: SRC-001
++
++## DEC-003: The server holds the true category list
++
++- Status: Decided
++- Raised: 2026-10-09, Mike
++- Decided: 2026-10-09, Mike
++- Decision: The server holds the true category list, and the phone keeps only a copy of it. When the two lists differ, the server's list wins. For now, the app gives a user no way to add, rename, or delete a category on the phone.
++- Why: Mike, in chat, 2026-10-09: "If the phone and the server ever disagree about the category list, the server wins, full stop. The phone only keeps a copy, and I don't want categories edited on the phone at all for now." Mike gave no further reason.
++- Affects: WI-031, WI-032, CON-01, CON-02
++- Replaces or replaced by: none
++- Sources: none
+--- system/constraints.md	2026-10-09 10:04:26
++++ system/constraints.md	2026-10-09 10:27:23
+@@ -2,18 +2,30 @@
+ 
+ <!-- Keep this guide. This document holds the rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect. Rule IDs: CON-01, CON-02, and so on. The Status values, the form of a rule, and the marks are in `system/AGENTS.md`. Change this document with `filing-project-records`, step "update a system document". -->
+ 
+-- Status: Not started
+-- Last changed via: none
+-- Governs: not set
++- Status: Approved
++- Last changed via: DEC-003
++- Governs: The category list, on the sync server and in the iPhone app.
+ 
+ ## Overview
+ 
+-Not written yet.
++A transaction's category comes from one category list. Both the sync server and the iPhone app hold that list, so the rules below say which of the two holds the true list and where the list may be changed. The rules cover the data, the app's screens, and sync, which is why they are here and not in the document of one area.
+ 
+ ## Content
+ 
+-No rules yet.
++### CON-01: The server holds the true category list
+ 
++- Mark: Approved (DEC-003)
++- Rule: The sync server holds the true category list. The iPhone app keeps only a copy of that list. When the app's copy and the server's list differ, the server's list wins, and the app replaces its copy with the server's list.
++- Conditions and exceptions: None
++- Source: DEC-003
++
++### CON-02: No editing of categories on the phone
++
++- Mark: Approved (DEC-003)
++- Rule: The iPhone app gives a user no way to add, rename, or delete a category. A user only picks a category from the app's copy of the list.
++- Conditions and exceptions: Mike set this rule "for now" (DEC-003). It holds until a later decision replaces it.
++- Source: DEC-003
++
+ ## Open questions
+ 
+ None.
+@@ -22,3 +34,4 @@
+ 
+ | Date | Change | DEC | Work item |
+ | --- | --- | --- | --- |
++| 2026-10-09 | Added CON-01 (the server holds the true category list) and CON-02 (no editing of categories on the phone). | DEC-003 | none |
+--- work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-031.md	2026-10-09 10:27:23
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-031: Transaction entry
+@@ -22,7 +22,7 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** The goal, the entry speed, and the required fields are settled (Q-01, Q-03, Q-04). Editing and currencies are still open.
++**Where it stands:** The goal, the entry speed, and the required fields are settled (Q-01, Q-03, Q-04). The category picker follows CON-01 and CON-02 (DEC-003). Editing and currencies are still open.
+ 
+ **Next action:** Waiting on the owner: Q-05 (editing or deleting a saved transaction). After his answer: finish R-03.
+ 
+@@ -30,9 +30,9 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+-**Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002.
++**Related items:** Project phase P01. [[WI-032]] (sub-item, offline sync). DEC-001, DEC-002, DEC-003. CON-01, CON-02.
+ 
+ **Moved up:**
+ 
+@@ -69,6 +69,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike decided that the server holds the true category list and that the phone has no editing of categories (DEC-003, CON-01, CON-02) | Line 4 added to R-01. Nothing in R-01 to R-03 went against the decision. |
+ | 2026-09-30 | Q-04 answered. Q-05 and Q-06 asked | R-01 written except the currencies (Q-06). Waiting on Mike. |
+ | 2026-09-29 | Q-03 answered | R-02 written. |
+ | 2026-09-28 | Q-01 and Q-02 answered. Offline sync split out as [[WI-032]] at Mike's request | Goal agreed. iPhone only. |
+@@ -85,6 +86,7 @@
+ 1. The app saves a transaction only when it has an amount, a date, and a category.
+ 2. Notes are optional.
+ 3. Which currencies a user may enter is not decided yet (Q-06).
++4. The user picks the category from the app's copy of the category list (CON-01). The entry screen has no way to add, rename, or delete a category (CON-02).
+ 
+ **Acceptance Criteria:**
+ 
+@@ -134,7 +136,7 @@
+ ### Context
+ 
+ - The starting request, in Mike's words on 2026-09-28: "I want people to be able to log a transaction fast on their phone. Amount, what it was for, done."
+-- Categories for the first version: Groceries, Rent, Transport, Eating out, Other (P1-T01).
++- Categories for the first version: Groceries, Rent, Transport, Eating out, Other (P1-T01). The server holds this list, and the phone keeps a copy (CON-01).
+ - Crash reports from beta builds go to Sentry (`PROJECT.md`, "Systems and environments").
+ 
+ ### Sources
+--- work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:27:23
+@@ -5,13 +5,13 @@
+ state: Refining Requirements
+ status: Preparing
+ parent: WI-031
+-waiting_on: "agent"
++waiting_on: "owner"
+ priority: medium
+ delivery: not-offered
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-032: Offline sync
+@@ -22,17 +22,17 @@
+ 
+ ### Current state
+ 
+-**Where it stands:** Every question is answered (Q-01 to Q-04), and four requirements are written. Mike has not approved them yet.
++**Where it stands:** Q-01 to Q-04 are answered, and four requirements are written. Mike has not approved them yet. DEC-003 (the server holds the true category list) opened one new question, Q-05.
+ 
+-**Next action:** Agent: check that the requirements are complete, then ask Mike to approve them.
++**Next action:** Waiting on the owner: Q-05 (a transaction logged offline with a category the server's list no longer has). After his answer: write the requirement for it, check that the requirements are complete, then ask Mike to approve them.
+ 
+-**Waiting on:** Nothing.
++**Waiting on:** The owner: Q-05.
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+-**Related items:** [[WI-031]] (parent).
++**Related items:** [[WI-031]] (parent). DEC-003. CON-01, CON-02.
+ 
+ **Moved up:**
+ 
+@@ -46,6 +46,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike decided that the server holds the true category list (DEC-003, CON-01, CON-02). Q-05 asked | No requirement changed yet. Waiting on Mike for Q-05. |
+ | 2026-09-30 | Q-03 and Q-04 answered | R-04 written. Every question is answered. Next: check that the requirements are complete. |
+ | 2026-09-29 | Q-01 and Q-02 answered | Goal agreed. R-01 to R-03 written. |
+ | 2026-09-28 | Created as a sub-item of [[WI-031]] at Mike's request | Interview started. |
+@@ -110,6 +111,7 @@
+ 
+ | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
+ |---|---|---|---|---|---|---|---|
++| Q-05 | A user logs a transaction offline with a category from the phone's copy, and the server's list no longer has that category when the phone syncs. What does the server do with the transaction? Recommended: keep the transaction and put it under "Other", because the app must never lose a logged purchase. |  |  |  | New requirement | Open | owner |
+ | Q-04 | What have we not talked about yet that could change this? Recommended: nothing, if the four requirements are right. | "Nothing else comes to mind." | 2026-09-30 | no | R-01 to R-04 | Answered | owner |
+ | Q-03 | When the same transaction is edited on two phones before they sync, which edit wins? Recommended: the most recent edit, because asking the user to choose is slow and rare. | "Most recent wins. Don't bother the user." | 2026-09-30 | yes | R-04 | Answered | owner |
+ | Q-02 | How soon after the connection returns must sync finish? Recommended: within 1 minute, because users check the list right after leaving a dead zone. | "1 minute is fine." | 2026-09-29 | yes | R-02 | Answered | owner |

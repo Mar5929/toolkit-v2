@@ -1,0 +1,98 @@
+--- memory/CURRENT_STATE.md	2026-10-09 10:05:01
++++ memory/CURRENT_STATE.md	2026-10-09 10:21:53
+@@ -1,6 +1,6 @@
+ # Current state
+ 
+-Last updated: 2026-10-02, a session with Mike, the agent
++Last updated: 2026-10-09, a session with Mike, the agent
+ 
+ ## Now
+ 
+@@ -17,8 +17,8 @@
+ ## Waiting on
+ 
+ - Mike: DEC-002 (testers outside the United States), asked 2026-09-29; check again 2026-10-09.
+-- Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-07.
+-- Bea Hollis: PT-02 (the testers' phone models), asked 2026-09-29; check again 2026-10-06.
++- Tomas Lindqvist (contractor): PT-01 (the sign-in steps for the staging server), asked 2026-09-30; check again 2026-10-23, after the server move.
++- Tomas Lindqvist (contractor): word that the sync server move is done; no deploy or change on production or staging until then (`project_sync_server_move.md`), told 2026-10-09; check again 2026-10-23.
+ 
+ ## Standing jobs and shared files
+ 
+--- memory/project_sync_server_move.md	1969-12-31 19:00:00
++++ memory/project_sync_server_move.md	2026-10-09 10:21:43
+@@ -0,0 +1,38 @@
++---
++name: project_sync_server_move
++description: No deploy or change on the sync server, production or staging, from 2026-10-09 for about two weeks, until Tomas says the move to a new host is done
++created: 2026-10-09
++updated: 2026-10-09
++check_by: 2026-10-23
++metadata:
++  type: project
++status: current
++source: Mike, in chat, 2026-10-09, passing on what Tomas Lindqvist asked for
++last_verified: 2026-10-09
++authorization: Logged by the agent on 2026-10-09
++work_items:
++  - "[[WI-032]]"
++supersedes: none
++---
++
++# Sync server move to a new host
++
++## No deploys or changes until Tomas says the move is done
++
++**Remember:** Tomas Lindqvist is moving the sync server to a new host. From 2026-10-09, nobody deploys anything to the sync server or changes anything on it. This covers the production server and the staging server. Mike said the freeze lasts "the next two weeks", which is to about 2026-10-23. The freeze ends when Tomas says the move is done, and not on a fixed date.
++
++**Why:** A deploy or a change during the move could be lost or could break the move. Offline sync ([[WI-032]]) is the work that needs the server, and PT-01 is about signing in to the staging server.
++
++**How to apply:** Before any step that deploys to the sync server, changes it, or tests against it, check whether Tomas has said the move is done. If he has not, do not take the step, and tell Mike. On or after 2026-10-23, ask Mike whether Tomas has finished. When the move is done, retire this record, correct the "Environment" cells of the two sync server rows in `PROJECT.md`, which say "Hosted on Render", and continue PT-01.
++
++**Evidence and limits:** Mike, in chat, 2026-10-09: "Nobody touches the sync server for the next two weeks. Tomas is moving it to a new host and he doesn't want anything deployed or changed on it, staging included, until he says it's done." Nobody has said which host the server moves to, whether the server's address changes, or whether signing in to the staging server (PT-01) counts as touching it. The end date is Mike's estimate.
++
++**Related memories:** None.
++
++**Authoritative records:** [[WI-032]]; PT-01 in `work-items/PROJECT-TASKS.md`; `PROJECT.md`, "Systems and environments".
++
++**Check or remove by:** 2026-10-23
++
++## Gotchas and lessons
++
++None yet.
+--- work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:05:01
++++ work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md	2026-10-09 10:21:53
+@@ -11,7 +11,7 @@
+ requirements_approved: no
+ design: none
+ result_approved: no
+-updated: 2026-09-30
++updated: 2026-10-09
+ ---
+ 
+ # WI-032: Offline sync
+@@ -30,7 +30,7 @@
+ 
+ **Blockers:** None.
+ 
+-**Last updated:** 2026-09-30, the agent.
++**Last updated:** 2026-10-09, the agent.
+ 
+ **Related items:** [[WI-031]] (parent).
+ 
+@@ -46,6 +46,7 @@
+ 
+ | Date | Change or decision | Effect on the work |
+ |---|---|---|
++| 2026-10-09 | Mike reported a freeze on the sync server, production and staging, until Tomas says its move to a new host is done, about 2026-10-23 | Nothing stops now. A server change or a test against the server waits for Tomas's word. Noted under Notes, Context. |
+ | 2026-09-30 | Q-03 and Q-04 answered | R-04 written. Every question is answered. Next: check that the requirements are complete. |
+ | 2026-09-29 | Q-01 and Q-02 answered | Goal agreed. R-01 to R-03 written. |
+ | 2026-09-28 | Created as a sub-item of [[WI-031]] at Mike's request | Interview started. |
+@@ -120,6 +121,7 @@
+ ### Context
+ 
+ - Mike loses signal on the subway every day, for about 20 minutes each way (Q-01).
++- From 2026-10-09, nobody deploys to the sync server or changes it, production or staging, until Tomas says its move to a new host is done, about 2026-10-23 (Mike, in chat, 2026-10-09). Requirements and design can go on. A server change, or a test against the server, waits for Tomas's word. The memory record `project_sync_server_move.md` holds the detail.
+ 
+ ### Sources
+ 

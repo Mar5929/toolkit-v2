@@ -1,0 +1,1 @@
+I shut the staging server down last night. It was seven bucks a month for nothing. We'll test sync against a server running on my Mac from here on.

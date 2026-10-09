@@ -1,0 +1,13 @@
+$ git log --all --oneline --decorate 0a976ed6212cd245507f12e3d4be48cb0d191640..
+50d11c7 (claude/wi-034-minimum-ios-version) WI-034: set the minimum iOS version to 17.0 as a build setting
+cb5278d (HEAD -> main) Add WI-034 to project phase P01 and to DEC-001
+
+$ git branch --all -vv
++ claude/wi-034-minimum-ios-version 50d11c7 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/small-work-item-short-path-09-a1/.claude/worktrees/wi-034-minimum-ios-version) WI-034: set the minimum iOS version to 17.0 as a build setting
+* main                              cb5278d Add WI-034 to project phase P01 and to DEC-001
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/small-work-item-short-path-09-a1                                              cb5278d [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/baseline-0.9.25/runs/small-work-item-short-path-09-a1/.claude/worktrees/wi-034-minimum-ios-version 50d11c7 [claude/wi-034-minimum-ios-version]
+
+$ git status --short

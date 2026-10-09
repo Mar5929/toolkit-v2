@@ -1,0 +1,7 @@
+Kickoff is done, here's what we agreed. Record it.
+
+Northwind Supply bought Baltic Freight. We merge Baltic's Salesforce org (about 1,000 users) into Northwind's org (about 1,000 users), and the merged org has to be live by the end of June 2027. In scope: Accounts, Contacts, Opportunities, and the ERP integration. Out of scope: Marketing Cloud and both orgs' customer portals.
+
+Phases I want, in this order: Discovery, Design, Build, Test, Cutover.
+
+People: Priya Nair is Northwind's Salesforce admin. Dan Okoye is Baltic's sales operations lead, he knows their org. Helen Brandt is Northwind's VP of Sales Operations and the sponsor. I don't know yet who decides what, I'll find out.

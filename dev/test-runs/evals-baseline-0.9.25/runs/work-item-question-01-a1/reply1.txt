@@ -1,0 +1,12 @@
+Should I make a work item for adding `app/Config/Build.xcconfig` with `SWIFT_VERSION = 5.0`? I recommend no: it is a one-line settings file with no requirements to track, and neither open work item (WI-031, WI-033) covers build settings.
+
+I have not written the file yet. Whichever you choose, I will write it on its own branch and ask for your yes before it merges into `main`.
+
+I found nothing else to raise about the request. Adding the file creates `app/` earlier than `PROJECT.md` says ("made when the first work item reaches Building"), so I will correct those two lines in the same change.
+
+Sources:
+- `AGENTS.md`, "Every session": ask whether to make a work item before starting work that no work item covers.
+- WI-031 and WI-033: their goals are transaction entry and picking a charting library.
+- `PROJECT.md`, "Systems and environments" and "Resources and project paths": the two lines that say when `app/` is made.
+
+Work item or no work item?

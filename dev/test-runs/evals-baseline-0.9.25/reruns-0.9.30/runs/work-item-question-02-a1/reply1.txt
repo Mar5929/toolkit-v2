@@ -1,0 +1,6 @@
+```
+The entry screen is faster now. Log a few purchases and tell me if anything still feels slow.
+The day's list now shows a total at the bottom. Check that it matches what you logged that day.
+```
+
+I ran the text through the `humanizer` skill, and it is written in your voice because it goes out under your name.
