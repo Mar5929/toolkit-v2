@@ -2,6 +2,33 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Setup no longer rebuilds the Notion template, version 0.9.34 (2026-10-09)
+
+The last of the five cuts that Mike approved on 2026-10-09. His words when he
+was told that the toolkit carried about 3,700 lines that can rebuild his
+Notion "Project" template through the API: "Yeah, delete that."
+
+- A new Notion project was already a copy of the owner's "Project" template.
+  That part stays: `notion.md`, and `notion-build/work-setup.md` and
+  `setup.md`, now 314 lines together.
+- Gone: the steps that built the template, brought a template or a project
+  "up to the current template", and moved a project from Stage to State and
+  from the Done checkbox to Status; the 41 request files in the two
+  `assets/schema/` folders; `work-layout.md`, `work-item-page.md`,
+  `project-page.md`, `memory-page.md`, and `views-and-layout.md`.
+- The template is the owner's. Setup copies it and never changes it, and an
+  update changes nothing in Notion. When a skill file names a property or a
+  section that the project's Notion pages lack, the agent tells the owner.
+- Known and not changed: Mike's template differs from the skill files in a
+  few places. Its work item template has no "Moved up" line and no Sub-items
+  view, and its Current state page has the earlier headings. The skill files
+  still name them. He was told, and he chose to leave his Notion as it is.
+- `check-skills.mjs` no longer compares the Next action prompt with the
+  deleted `work-item-page.md`.
+- Not tested live: a setup of a Notion project with the shorter text.
+- Everything under `plugins/toolkit/` is 13,635 lines now. It was 37,025
+  lines before the cuts of this day.
+
 ## A Salesforce project runs no code of the toolkit's, version 0.9.33 (2026-10-09)
 
 Two more of the cuts that Mike approved on 2026-10-09.

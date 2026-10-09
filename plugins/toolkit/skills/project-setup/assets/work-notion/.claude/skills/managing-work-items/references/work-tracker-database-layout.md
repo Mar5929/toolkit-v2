@@ -2,7 +2,7 @@
 
 This file shows how a project looks in Notion, lists every property of its three databases with its options, says where each work item field goes, and gives the calls that save to the databases. Open it when you check what a property holds, or when you create or change a work item's properties, phases, tasks, links, or tags.
 
-The bodies that create the databases are in `assets/schema/`. Never rename or remove a property that this file lists.
+The databases come from the owner's "Project" template in Notion. Never rename or remove a property that this file lists.
 
 ## Contents
 
@@ -145,7 +145,7 @@ The body below creates a work item. Replace each `{{…}}` with the id in `PROJE
 - For a level-2 sub-item, "Phase" is one of its parent's phases, which is a row whose "Work item" is that parent.
 - For a level-3 sub-item, leave out "Phase".
 - Send the body with `ntn api v1/pages -d @new.json < /dev/null`. The answer holds the page `id`, its `url`, and the new ID (`.properties.ID.unique_id`: prefix and number).
-- When Notion refuses because the database has no default template, tell the owner. `project-setup` rebuilds the templates.
+- When Notion refuses because the database has no default template, tell the owner. The owner sets the default template in the Notion app.
 
 ## Setting State and Status
 

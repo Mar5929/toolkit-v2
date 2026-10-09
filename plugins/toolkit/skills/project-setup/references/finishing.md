@@ -149,7 +149,6 @@ The table lists the steps that the owner does. Say each one plainly, with the re
 | --- | --- | --- |
 | Run `ntn login` in a terminal. | It signs the Notion command-line tool into the owner's account. It opens a browser. | Notion, when `ntn whoami` fails |
 | Share the owner's Notion root page with "Notion CLI". | The agent can reach only shared pages. | Notion, when a call returns 404 |
-| Set the page layout of each database in the new "Project" template in the Projects database. The clicks are in the Notion setup files. | Only the Notion app can set the page layout. Every project copied from the template keeps it. | Notion, when setup built the template |
 | Run `gh auth login` in a terminal. | It signs the GitHub command-line tool in. | GitHub Issues, when `gh auth status` fails |
 | Trust the project folder in Codex. | Until the folder is trusted, Codex ignores the project's `.codex/config.toml` and `.codex/hooks.json`. Trust is tied to the folder path, so it is needed again after a move. | Always, the first time the owner opens the project in Codex |
 | Trust the hooks in Codex: type `/hooks` and trust them. | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file that the hook runs is not reviewed again. | Always. Again after "update the toolkit" changes an entry in `.codex/hooks.json`. With Hindsight, also the hooks of Hindsight's coding-agent add-on, after the add-on is installed |

@@ -62,10 +62,7 @@
 //     matched by its Choice cell to the row of the setup-copy.md table, and names exactly the
 //     skills that row's folders hold), a skills row for every choice whose folders hold skills,
 //     and the skill counts; every-project holds no sf-* skill and the salesforce folder holds
-//     no other;
-//   - the Next action prompt kept by hand in project-setup's references/notion-build/
-//     work-item-page.md (the Notion work item template's text) says the same as the work item
-//     template's WORK-ITEM.md.
+//     no other.
 // Findings on the model's own skills (the sf-* skills) are warnings: changing them is a model change that needs
 // Mike's yes (AGENTS.md). The run fails (exit 1) on any error.
 
@@ -436,17 +433,6 @@ for (const f of walk(ASSETS)) {
     const [first, second, ...rest] = read(a).split('\n');
     if (!first.startsWith('<!--') || !first.includes(rule)) report('error', a, `its first line must be a comment that names the rule it copies, ${rule}`);
     if (second !== '' || rest.join('\n') !== read(b)) report('error', a, `differs from the rule ${rule}: edit the rule, then copy it over this file below its first line and one blank line`);
-  }
-  // The Next action prompt is written by hand in two places; they must match.
-  const pageFile = path.join(SETUP, 'references/notion-build/work-item-page.md');
-  const templateFile = path.join(ASSETS, 'work-local/work-items/work-item-template/WORK-ITEM.md');
-  const prompt = (text) => text.replace(/\\/g, '').match(/\*\*Next action:\*\* (.*?)(?:<br>|\n|$)/)?.[1];
-  if (!fs.existsSync(pageFile) || !fs.existsSync(templateFile)) report('error', pageFile, `this file or ${shown(templateFile)} is missing, so the Next action prompts were not compared`);
-  else {
-    const page = prompt(read(pageFile));
-    const template = prompt(read(templateFile));
-    if (!page || !template) report('error', page ? templateFile : pageFile, 'has no "**Next action:**" prompt');
-    else if (page !== template) report('error', pageFile, `its Next action prompt (backslashes removed) differs from the work item template's WORK-ITEM.md: "${page}" against "${template}"`);
   }
 }
 

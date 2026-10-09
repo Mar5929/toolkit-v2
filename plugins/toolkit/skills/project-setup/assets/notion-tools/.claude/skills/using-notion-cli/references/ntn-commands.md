@@ -7,7 +7,6 @@ This file says how to reach the owner's Notion with `ntn`, gives the form of eve
 - Access and sign-in
 - One call
 - Sending a body
-- Filling a body from an asset
 - Reading properties
 - Finding rows
 - Reading and changing page text
@@ -57,33 +56,6 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Priority":{"select":{"na
 - Property names in the body of a page call or a query may be the names that Notion shows, such as "Waiting on" and "Parent item".
 - A view's group-by setting and its column settings need property ids.
 - In JSON text, `"` is written `\"`, and a backslash is written `\\`.
-
-## Filling a body from an asset
-
-The bodies in the `assets/schema/` folder of a skill that stores in Notion, which is `managing-work-items` or `managing-project-memory`, hold `{{PLACEHOLDERS}}`:
-
-| Placeholder | Value | Where it is |
-| --- | --- | --- |
-| `{{WORK_ITEMS_DS}}`, `{{PHASES_DS}}`, `{{TASKS_DS}}` | The Work Items, Phases, Tasks data sources | `PROJECT.md`, "Toolkit settings" |
-| `{{WORK_ITEMS_DB}}`, `{{PHASES_DB}}`, `{{TASKS_DB}}` | The same databases | `PROJECT.md` |
-| `{{MEMORIES_DS}}`, `{{ENTITIES_DS}}`, `{{LORE_PROJECTS_DS}}`, `{{LORE_TOPICS_DS}}`, `{{MEMORIES_DB}}` | Lore's databases | `PROJECT.md` (memory lines) |
-| `{{CURRENT_STATE_PAGE_ID}}`, `{{GLOSSARY_PAGE_ID}}` | Those pages | `PROJECT.md` |
-| `{{PROJECT_PAGE_ID}}`, `{{MEMORY_PAGE_ID}}` | The template or project page, and its Memory page, being built | The page you just made (setup) |
-| `{{ITEM_PAGE_ID}}`, `{{AFTER_BLOCK_ID}}` | The work item template, and the block a view goes after | The template build (setup) |
-| `{{P_<NAME>}}`, `{{PH_<NAME>}}`, `{{T_<NAME>}}`, `{{M_<NAME>}}` | The id of a property of Work Items (P), Phases (PH), Tasks (T), or Memories (M). `<NAME>` is the property's name in capitals with spaces and hyphens turned into underscores: "Waiting on" is `{{P_WAITING_ON}}`, and "Sub-items" of Phases is `{{PH_SUB_ITEMS}}`. | The command below |
-
-This command lists a database's property ids:
-
-```bash
-ntn api v1/data_sources/<data-source-id> < /dev/null | jq -r '.properties | to_entries[] | "\(.key)\t\(.value.id)"'
-```
-
-To fill a body from an asset, do these four things:
-
-1. Copy the asset to the temporary folder, and replace every placeholder with its value. A property id may hold characters such as `%3B`: copy it exactly.
-2. Remove a top-level `"note"` field when the asset has one. The field explains the file, and it is not part of the request.
-3. Check that no `{{` is left: `grep -c '{{' body.json` prints 0.
-4. Send the body.
 
 ## Reading properties
 
