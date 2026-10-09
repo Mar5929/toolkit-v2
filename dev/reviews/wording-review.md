@@ -45,7 +45,8 @@ Each finding names one check.
   explained once (W2), and that explanation is never a finding.
 - **W2 No jargon.** No insider shorthand, coined labels, or abbreviations
   that the same file does not define. An ID the file defines (Q-07, R-01) is
-  fine. An ordinary word that the project gave a meaning of its own (a
+  fine. So is an abbreviation that is more common than its full form, such
+  as "ID" or "URL". An ordinary word that the project gave a meaning of its own (a
   made-up word) counts, for example home, pointer, concept. A made-up word
   is a finding when plain words, or a name the reader can already see such
   as a folder name or a field name, would do. A made-up word that neither
@@ -67,8 +68,8 @@ Each finding names one check.
     `VAGUE_RE` in `dev/tools/rule-lint.mjs`;
   - size and time words with no measure: large, small, big, recent, soon,
     a few, several, often, long. Either define them in the same file, point
-    to where they are defined, or say that the agent judges and what it
-    judges by (W5);
+    to where they are defined, or say that the agent judges and state the
+    goal that the judgment serves (W5);
   - a pronoun (it, this, that, they, them) that could point to two things;
   - "or" that could mean one of them or both;
   - a condition with no rule for the other case, where the other case can
@@ -79,8 +80,11 @@ Each finding names one check.
   - two lines, in this file or elsewhere in the skill, that say different
     things.
 - **W5 Judgment on purpose.** Where the agent should decide, the text says
-  so and says what to weigh: "Use your judgment: weigh X against Y." Text
-  that leaves a decision open without saying so is a W4 finding.
+  so and states the goal that the decision serves. It does not tell the
+  agent how to weigh. For example: "The owner's yes covers the work as it
+  was when the owner answered. Use your judgment to decide whether the work
+  has grown a lot since then." Text that leaves a decision open without
+  saying so is a W4 finding.
 - **W6 Concise.** No sentence the reader does not need. Report a sentence
   that repeats a rule in the same file, or that tells a story about what
   happens in place of saying what to do (B5).
