@@ -2,6 +2,21 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The skill sf-component-tracker rewritten to the writing rule, version 0.9.31 (2026-10-09, TKV-50)
+
+Mike read the rewrite and said "merge" on 2026-10-09. Every rule is kept.
+
+- The opening says what the skill is for, each record is explained once
+  (the component tracker, a manifest, the master manifest), and each
+  heading says what its section holds.
+- Two places where the old text said two things are settled: the agent asks
+  the owner before it adds or renames an org column, and the master
+  manifest never names a removal while a component that is gone everywhere
+  still leaves it.
+- Left as it was, for Mike to settle: the skill gives a manual step three
+  phases (Pre-deploy, Deploy, Post-deploy), and the two templates have only
+  Pre-deploy and Post-deploy.
+
 ## The baseline of the live tests, and one corrected case of the work item question, version 0.9.30 (2026-10-09, TKV-51, TKV-40)
 
 All three eval sets ran in full on version 0.9.25, in the fixed test home.

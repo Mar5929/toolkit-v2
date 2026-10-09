@@ -5,11 +5,18 @@ description: 'Keeps the Salesforce component tracker CSV, master and per-work-it
 
 # Salesforce component tracker
 
-Keep the deployment records current in the same response as the change.
+This skill keeps a Salesforce project's deployment records true. The records say which components the project created or changed, which org each one is deployed to, which components a deploy includes, and which steps a person must do by hand. The skill's job is done when the records say what is true now, in the same response as the metadata change or the deploy result that changed it.
 
 A project that already uses `engagement/` uses `engagement/deployment/` wherever this skill says `delivery/deployments/` or `delivery/releases/`. Do not create a parallel `delivery/` tree. A project that keeps deployment records in another folder keeps these records in that folder.
 
-## Deployment folder
+## The records and where they are kept
+
+- **The component tracker** is `delivery/deployments/component-tracker.csv`. It is one CSV file for the whole project, with one row for each component that the project created or changed. Each row has a flag for each org, which says whether the component is deployed there. Never split the tracker by work item.
+- **A manifest** is a `package.xml` file. It names the components that a Salesforce command-line deploy includes.
+- **The master manifest** is `delivery/deployments/full-project-deployment-template/package.xml`. It names every component in the tracker that the command line can deploy. It is used for a full cutover, which is a deploy of the whole project to one org. Fill in the verified API version before its first use.
+- **A work item's manifest** is the `package.xml` in that work item's deployment folder. It names only the components that the work item adds or changes.
+- **`destructiveChanges.xml`**, in a work item's deployment folder, names the components that the work item removes.
+- **`manual-steps.md`** holds the steps that a person does by hand for a deploy. It sits beside the manifest that it belongs to.
 
 ```
 delivery/deployments/
@@ -28,79 +35,68 @@ delivery/releases/
   <YYYY-MM-DD>-<release-name>/ one folder per release that ships several work items together: CUTOVER-PLAN.md and RELEASE-NOTES.md
 ```
 
-- One master tracker for the whole project. Never split it per work item.
-- `delivery/deployments/full-project-deployment-template/` holds the project-wide manifest and any full-cutover manual steps. Fill the verified API version before first use.
-- Name each work-item folder with the work item's id and a short slug from the project's work tracker, for example `WI-031-account-merge`. This deployment folder is not the work item; find the item by its ID in the project's work tracker.
-- Keep work-item folders flat under `delivery/deployments/`: no folders by status. The work tracker holds each item's status; the component tracker's org flags record what is deployed where.
-- A manifest (`package.xml`) names the components a Salesforce CLI deploy includes.
+- Name each work item's deployment folder with the work item's ID and a short name from the project's work tracker, for example `WI-031-account-merge`. This folder is not the work item. Find the work item by its ID in the project's work tracker.
+- Keep the work items' deployment folders directly under `delivery/deployments/`. Do not sort them into folders by status. The work tracker holds each work item's status, and the tracker's org flags record what is deployed where.
 
-## Step 1: update the tracker, master manifest, and work-item manifest
+## What to update when a component changes or a deploy result arrives
 
-Do all three in the same response when any of these happens:
+Update the tracker, the master manifest, and the work item's manifest in the same response when one of these four things happens.
 
-1. You author, modify, or rename metadata under `force-app/`.
-   - Add the row if none exists, with the correct flags and Change Type. Otherwise edit the existing row.
-   - A change to an existing component edits its one row. Never create a second row.
-   - Add the member under the correct `<types>` block in `delivery/deployments/full-project-deployment-template/package.xml`. Refresh any member counts in its header when that header uses counts.
-   - Add the member to the work item's `package.xml`.
-2. The owner reports a successful deploy: set that org's flag to `Yes` for every component in the deploy.
-3. You stage a component for deletion:
-   - Set Change Type to `Destructive`.
-   - Add it to the work item's `destructiveChanges.xml`.
-   - Leave the flags showing where it is still present.
-4. The owner reports a successful destructive deploy:
-   - Set the affected org's flag to `No`.
-   - If the component is gone from every org and from `force-app/`, delete the row and its master-manifest member.
+1. **You create, change, or rename metadata under `force-app/`.**
+   - Add a tracker row when the component has none, with the correct flags and Change Type. Otherwise edit the existing row. A change to an existing component edits its one row, and never creates a second row.
+   - Add the component as a member under the correct `<types>` block of the master manifest. When the header of the master manifest holds member counts, update them.
+   - Add the component as a member of the work item's manifest.
+2. **The owner reports a successful deploy.** Set that org's flag to `Yes` for every component in the deploy.
+3. **You stage a component for deletion.** Set its Change Type to `Destructive`, and add it to the work item's `destructiveChanges.xml`. Leave the flags as they are: they show where the component is still present.
+4. **The owner reports a successful destructive deploy.** Set the affected org's flag to `No`. When the component is gone from every org and from `force-app/`, delete its row and its member in the master manifest.
 
-Rules for the master manifest:
-- Every CLI-deployable tracker row is a member of `delivery/deployments/full-project-deployment-template/package.xml`. Every member has a tracker row.
-- A tracker row missing from the master manifest is dropped from the full-org cutover without warning.
-- The master manifest is add-only. It never names a removed component.
-- These rules apply to every agent and every session.
+## What each manifest holds
 
-## Step 2: per-work-item manifests
+The master manifest and the tracker hold the same components. These rules apply to every agent and every session.
 
-- `package.xml` names only the work item's new and changed components. Its members also appear in the master manifest.
-- Deploy this narrow set, not the master manifest, unless the goal is a full cutover.
-- Removals go in `destructiveChanges.xml`, never in a `package.xml`.
+- Every tracker row that the command line can deploy is a member of the master manifest, and every member has a tracker row.
+- A full cutover leaves out a component whose row is missing from the master manifest, and it gives no warning.
+- The master manifest never names a component for removal. A removal goes in a work item's `destructiveChanges.xml`.
 
-## Step 3: types kept out of the manifest
+A work item's manifest holds only that work item's part.
 
-These types cannot be deployed safely by a manifest today: profiles, duplicate rules, matching rules, and compact-layout assignments. They move by change set or by hand.
+- It names only the work item's new and changed components. Each of its members is also in the master manifest.
+- Deploy the work item's manifest, and not the master manifest, unless the goal is a full cutover.
+- A removal goes in `destructiveChanges.xml`, never in a `package.xml`.
 
-- Add a tracker row for them. The tracker is the full inventory.
-- Keep them out of the master manifest.
-- Add their deploy as a step in the relevant `manual-steps.md`: which change set to build, which assignment to make, in what order.
-- Name the exclusions in the master manifest's header comment.
+## Component types that stay out of the master manifest
 
-Permission sets are not on this list. They get a normal tracker row and a normal manifest member. They deploy to a sandbox only after a clean `permsets.py preflight` (`permissions-source-control.md`). Set their org flags like any other component's (see "Org flags").
+A manifest cannot deploy these types safely today: profiles, duplicate rules, matching rules, and compact-layout assignments. They move by change set or by hand.
 
-## Step 4: manual steps (`manual-steps.md`)
+- Add a tracker row for each one. The tracker is the full list of what the project created or changed.
+- Keep them out of the master manifest, and name them in the header comment of the master manifest as left out.
+- Add their deploy as a step in the `manual-steps.md` that it belongs to. The step says which change set to build, which assignment to make, and in what order.
 
-Manual deploy steps live in `manual-steps.md` beside the manifest they belong to: the work item's deployment folder, or `delivery/deployments/full-project-deployment-template/` for the full cutover. A folder whose deploy needs no manual steps has no `manual-steps.md`.
+Permission sets are not one of these types. A permission set gets a normal tracker row and a normal manifest member. It deploys to a sandbox only after a clean `permsets.py preflight`, as the rule `permissions-source-control.md` says. Set its org flags like any other component's, as "Org flags" below says.
 
-Add a step in the same response in which you author the triggering metadata. Triggers:
+## Manual steps in `manual-steps.md`
 
-- New permission set or permission set group: assign it to users.
-- New field fed by an external connector: configure the connector mapping.
-- New record type that needs retroactive assignment: the data update or Apex script.
-- New or changed rollup: capture a pre-deploy baseline and validate the post-deploy delta.
-- New scheduled Apex or scheduled flow: schedule it after the deploy.
-- Migration that must clear a field before re-stamping: ordered Pre-deploy steps.
-- Deploy that depends on a managed-package version, remote site setting, custom setting, or org-wide setting: a Pre-deploy verification step.
-- One-time post-deploy backfill (Batch Apex, anonymous Apex, data load): a step with the full kickoff script inline.
-- Any other deploy, by your judgment: a pre-deploy snapshot step for rollback. Weigh whether a rollback would need old values that Git does not hold, such as org data or org settings.
+A manual step is something that a person must do by hand so that a deploy works or is complete. `manual-steps.md` sits beside the manifest that it belongs to: in the work item's deployment folder, or in `delivery/deployments/full-project-deployment-template/` for a full cutover. A folder whose deploy needs no manual step has no `manual-steps.md`.
 
-Skip the step when the deploy is self-contained:
+### When a deploy needs a manual step
 
-- Pure UI or LWC changes with no permission, data, or config follow-up.
-- Apex refactors that change only internal behavior.
-- Formula-field changes that affect only existing in-scope data.
-- Label or text-only changes.
+Add a step in the same response in which you create the metadata that needs it. A deploy needs a manual step when something outside the metadata must be set up, checked, or run for the change to work. For example:
+
+- A new permission set or permission set group needs a step that assigns it to users.
+- A new field that an external connector fills needs a step that configures the connector's mapping.
+- A new record type that existing records must get needs a step with the data update or the Apex script.
+- A new or changed rollup needs a step that captures a baseline before the deploy and checks the change after it.
+- A new scheduled Apex job or scheduled flow needs a step that schedules it after the deploy.
+- A migration that must clear a field before it writes the field again needs ordered Pre-deploy steps.
+- A deploy that depends on a managed-package version, a remote site setting, a custom setting, or an org-wide setting needs a Pre-deploy step that verifies it.
+- A one-time backfill after the deploy (Batch Apex, anonymous Apex, or a data load) needs a step that holds the full script that starts it.
+- Any other deploy needs a Pre-deploy step that takes a snapshot when a rollback would need old values that Git does not hold, such as org data or org settings.
+
+A deploy that is complete with nothing else done needs no step. Examples are a change to the user interface or to a Lightning web component that needs no permission, data, or configuration afterwards; an Apex change that alters only how the code works inside; a formula-field change that affects only data already in scope; and a change to a label or to other text.
 
 When unsure, add the step. A step closed as "skipped" costs less than a missed action.
 
-Step shape:
+### The form of a manual step
 
 | Field | Content |
 | --- | --- |
@@ -111,19 +107,20 @@ Step shape:
 | Status | Not started, in progress, done, or skipped. |
 | Body | Purpose (one or two sentences), numbered operator instructions, a verification section (SOQL, screenshot, or UI check), and inline scripts in fenced code blocks. |
 
-- Put scripts (anonymous Apex, SOQL, CLI commands) inline in the body. Do not link to a repo file for a script that fits inline.
-- Name the originating implementation task and its work item by ID, for example `WI-031`, plus the item's link when the work tracker has one.
-- The person or team in each step's Owner field runs that step and updates its status.
+- Put a script (anonymous Apex, SOQL, or command-line commands) in the body itself. Do not link to a file in the repository for a script that fits in the body.
+- Name the task that the step comes from and its work item by ID, for example `WI-031`. Add the work item's link when the work tracker has one.
+- The person or team in a step's Owner field runs the step and updates its status.
 
-Not in `manual-steps.md`:
-- Routine steps that need no ordering.
-- Work-item documentation. It lives with the work item.
-- Implementation tasks. They live in the work item's Tasks.
-- Generic deploy commands for every Salesforce deploy.
+### What does not go in `manual-steps.md`
 
-## Tracker schema
+- A routine step that needs no place in the order.
+- Documentation of the work item. It is kept with the work item.
+- A task of the build. It is kept in the work item's Tasks.
+- A deploy command that every Salesforce deploy uses.
 
-Columns, in this fixed order:
+## The tracker's columns
+
+The tracker has these columns, in this fixed order.
 
 | Column | Content |
 | --- | --- |
@@ -133,54 +130,56 @@ Columns, in this fixed order:
 | Label | Label shown in Setup, or the bundle masterLabel for LWC or Aura. |
 | Work Item | The primary work item's ID, for example `WI-031`, plus its link when the work tracker has one (a Notion page, GitHub issue, or Jira ticket). Never a folder path. |
 | Change Type | `New`, `Modified`, or `Destructive`. |
-| Sandbox | `Yes` if deployed in the working sandbox, else `No`. Rename or add columns to match the project's orgs. |
+| Sandbox | `Yes` if deployed in the working sandbox, else `No`. A project with other orgs has one such column for each of them. |
 | Production | `Yes` if deployed in production, else `No`. |
 | Notes | One short line on the component as it is now: type details (`Text(255)`, `Number(18,0)`), what the component does, and any caveat (renamed-from, superseded-by, manual-step, gated-off). Use `;` instead of `,`, or quote the cell. |
 
+Ask the owner before you add or rename a column.
+
 ## Org flags
 
-- Flags are independent. A component can be in one org, another, or both.
-- A new component not yet deployed: all flags `No`.
+An org flag is the `Yes` or `No` in a row's column for one org.
+
+- Each org's flag is independent of the others. A component can be in one org, in another, or in both.
+- A new component that is not deployed yet has `No` in every flag.
 - When a deploy to an org succeeds, set that org's flag to `Yes`.
-- The owner runs production deploys. When the owner reports a successful production deploy, set `Production=Yes` for its components.
-- Order does not matter. `Sandbox=No, Production=Yes` is valid if that is what happened.
-- Never change a flag for a failed deploy.
+- The owner runs production deploys. When the owner reports a successful production deploy, set `Production` to `Yes` for its components.
+- The order of the deploys does not matter. `Sandbox=No, Production=Yes` is valid when that is what happened.
+- Never change a flag for a deploy that failed.
 
 ## Change Type
 
-- `New`: this project created the component. Default. A created component that was later renamed is still `New`.
-- `Modified`: the component existed and this project changed it. Start Notes with `Modified: ...`.
-- `Destructive`: the component is being removed. Keep the row while the deletion is pending in any org. The flags mean "still present there". Delete the row once it is gone from every org and from `force-app/`.
+- `New` means that this project created the component. It is the default. A component that the project created and later renamed is still `New`.
+- `Modified` means that the component existed before and this project changed it. Start its Notes with `Modified: ...`.
+- `Destructive` means that the component is being removed. Keep the row while the deletion is pending in any org. The flags then mean "still present there". Delete the row when the component is gone from every org and from `force-app/`.
 
-## One row per component
+## One row for each component
 
-- Key: Component Type + Object/Parent + API Name. One row per key.
-- Renamed: keep one row under the new API name, drop the old row, note the rename in Notes.
-- Replaced: keep the replacement's row and drop the replaced row, with a note. If the replaced component is still being removed, set its Change Type to `Destructive` until the deletion lands.
-- Do not keep rows for components that are gone from `force-app/` and deployed nowhere. The tracker shows only what exists now. Git and the work item's Recent History hold history.
+- A row's key is Component Type, Object/Parent, and API Name together. The tracker has one row for each key.
+- When a component is renamed, keep one row under the new API name, delete the old row, and write the rename in Notes.
+- When a component is replaced, keep the replacement's row, with a note. Delete the replaced component's row, unless that component is still being removed from an org: then set its Change Type to `Destructive` until the deletion is done.
+- Do not keep a row for a component that is gone from `force-app/` and deployed nowhere. The tracker shows only what exists now. Git and the work item's Recent History hold the history.
 
-## Project-authored only
+## Which components get a row
 
-- Track only components this project created or modified.
-- Do not add components pulled into `force-app/` by a backfill or reverse-engineering snapshot. A manifest may list them; the tracker does not.
-- A pre-existing component this project modified gets a row with a `Modified: ...` Notes line.
+Track only the components that this project created or changed.
 
-## CSV editing
+- A component that existed before and that this project changed gets a row whose Notes start with `Modified: ...`.
+- A component that a backfill or a reverse-engineering snapshot pulled into `force-app/` gets no row. A manifest may list it.
+- A configuration change made in the org's user interface, with no file under `force-app/`, gets no row.
+- Managed-package metadata that this project did not write gets no row.
+- A file in the repository that is not a Salesforce component gets no row. Examples are a document, a script, a work item's folder, and a manifest.
+- The tracker holds no dates of deploys. The work item's Recent History holds them.
 
-- Use RFC 4180 quoting. Quote any cell with a comma, newline, or double quote. Escape `"` as `""`.
-- Prefer `;` or `/` over `,` inside Notes.
-- The header and column order are fixed. Ask the owner before adding a column.
-- Group rows by Component Type.
+## Editing the CSV file
 
-## Not in the tracker
-
-- Config changes made in the org UI with no `force-app/` file.
-- Managed-package metadata this project did not author.
-- Local-only files: documents, scripts, work-item folders, manifests.
-- Dated deploy history. Dates live in the work item's Recent History.
+- Use the quoting of RFC 4180. Put quotes around a cell that holds a comma, a line break, or a double quote, and write a double quote inside a cell as `""`.
+- Inside Notes, prefer `;` or `/` to `,`.
+- The header and the order of the columns are fixed.
+- Group the rows by Component Type.
 
 ## Related rules
 
-- `check-deployment-contents.md`: reads this tracker as a hint before any deploy.
-- `salesforce-agent-permissions.md` and `salesforce-org-safety.md`: what an agent may do against an org.
-- `permissions-source-control.md`: how permission sets are fetched, verified, and deployed.
+- `check-deployment-contents.md` reads this tracker as a hint before any deploy.
+- `salesforce-agent-permissions.md` and `salesforce-org-safety.md` say what an agent may do in an org.
+- `permissions-source-control.md` says how permission sets are fetched, verified, and deployed.
