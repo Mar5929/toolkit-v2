@@ -30,7 +30,10 @@ def change_run_folder(set_dir, eval_id, run):
     path = os.path.join(set_dir, 'run-folder-changes.json')
     if not os.path.exists(path):
         return
-    for change in json.load(open(path)).get(str(eval_id), []):
+    changes = json.load(open(path)).get(str(eval_id), [])
+    if not changes:
+        return
+    for change in changes:
         target = os.path.join(run, change['file'])
         text = open(target).read()
         if 'replace' in change:

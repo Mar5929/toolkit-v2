@@ -29,6 +29,6 @@ git log --oneline -10
 - Read the full staged diff.
 - Before you take a sequential number (a work item ID, a DEC-###, an SRC-###, a rule ID in `system/`), check every folder where work items are kept, every worktree, and the remote. When you find later that the same number was used twice, renumber only your own.
 - Merge implementation work through a pull request, and only with the owner's yes. A standing merge instruction in `.claude/rules/owner-preferences.md` counts as that yes only under the conditions that `managing-work-items` gives in `references/deploying.md`, section "What a merge into the default branch needs".
-- A repository with no remote has no pull request. Merge on this computer, as `managing-work-items` says in `references/deploying.md`, section "A project with no remote".
+- A repository with no remote has no pull request. Merge on this computer, as `managing-work-items` says in `references/deploying.md`, section "A project with no remote". For a branch with no work item, leave out what that section writes to a work item.
 - Before a merge, do the merge-safety check: compare `git diff --name-only <default-branch>...<branch>` with `git status` in the main checkout. When a file is in both, stop, name the file, and ask the owner.
 - After the merge, remove your worktree and branch.

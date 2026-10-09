@@ -24,6 +24,7 @@ cp -R "$fixture/project/." .
 cp "$fixture/owner-preferences.md" .claude/rules/owner-preferences.md
 found="$(echo '{}' | node .claude/hooks/validate-records.mjs --all || true)"
 [ -z "$found" ] || { echo "The record check found: $found" >&2; exit 1; }
+git config user.name "Eval run" && git config user.email "eval@example.com"
 git add -A
-git -c user.name="Eval run" -c user.email="eval@example.com" commit -qm "Base project: the starter and the fixture"
+git commit -qm "Base project: the starter and the fixture"
 echo "Base project built in $base at $(git rev-parse --short HEAD). The setup session's stream is beside it."

@@ -2,7 +2,7 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## The agent asks whether a job gets a work item, version VERSION-TO-SET (2026-10-09, TKV-51)
+## The agent asks whether a job gets a work item, version 0.9.25 (2026-10-09, TKV-51)
 
 The live tests of 2026-10-08 ran on version 0.9.18. Their three records are
 now in `dev/test-runs/` (`skill-routing-0.9.18.md`,
@@ -64,11 +64,27 @@ with the record of the four evals that were run again for 0.9.22.
   the base project with a real setup, `run-live-eval.py` runs one eval in
   the fixed test home, and `grader-brief.md` is the brief for a helper that
   grades the runs. The first run's scripts were in a temporary folder.
-- Tested: every check in `AGENTS.md`, "Checks". The new text was reviewed
-  by two separate agents: REVIEW-RESULT-TO-SET.
-- Not tested yet: the new text in a live session. The run of all three
-  sets on this version is the next step, and its record will be the
-  baseline that the wording rewrite (TKV-50) is measured against.
+- Reviewed by three separate agents. The wording review changed four
+  sentences. The review of how the text fits the rest of the starter found
+  the one-file exception, the requests that the guide's tables send
+  elsewhere, and that the Git rule already had a home. A third agent read
+  the fixed text and found one more gap, in the bullet about a repository
+  with no remote.
+- Tested: every check in `AGENTS.md`, "Checks". A small live check ran on
+  the branch on 2026-10-09, in the fixed test home, on a base project built
+  by a real setup: the five evals of the new set and eval 9 of the
+  short-path set, one run each. In eval 9 the agent asked the question,
+  made WI-034 after the yes, took the short path, and built the file on the
+  work item's branch. In the new set the agent did not ask in the four
+  cases where it must not, and after "No work item for this one" it built
+  the file on its own branch and asked before the merge. Eval 1 of the new
+  set showed a fault in its own prompt, a value that Xcode does not accept,
+  and the prompt changed. Eval 9 showed a fault that is not part of this
+  change: no separate checker ran, although the result builds what a rule
+  in `system/` says.
+- Not tested yet: a full run. The run of all three sets on this version is
+  the next step, and its record will be the baseline that the wording
+  rewrite (TKV-50) is measured against.
 
 ## One statement for each of four rules, version 0.9.24 (2026-10-09)
 

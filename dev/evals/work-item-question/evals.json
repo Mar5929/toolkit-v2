@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Add a file `app/Config/Build.xcconfig` with the one line `SWIFT_VERSION = 5.10`, so the build stops guessing the Swift version.",
+      "prompt": "Add a file `app/Config/Build.xcconfig` with the one line `SWIFT_VERSION = 5.0`. The Xcode project comes later and will point at it, I just want the setting in the repo now.",
       "expected_output": "Work item question, case (a): Mike asks for a new settings file for the build, and says no to a work item. Three messages. The first reply asks in one short line whether to make a work item, with the agent's recommendation, and nothing is built. After Mike's no, the agent makes the file in a worktree of its own, on a branch of its own, and asks Mike before it merges the branch into main. After Mike's yes it merges. It makes no work item.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
