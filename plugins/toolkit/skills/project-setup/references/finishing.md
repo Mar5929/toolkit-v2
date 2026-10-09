@@ -106,57 +106,21 @@ Then delete the file's fill-in guide comment, as the comment says.
 
 ## Final checks
 
-Run each check alone, from the project folder. Each check only reads.
+Run each check alone, from the project folder. Each check only reads. The checks show that setup worked. They do not test whether the project matches the toolkit: a project that holds more than setup gave it, such as a skill or a rule of its own, is as it should be.
 
 ### The checks
 
-1. **Nothing from a choice that the owner did not make.** Run `ls -a`. It must show each of these only in the project named beside it:
-   - `work-items/` and `PROJECT-ROADMAP.md` only with local work items;
-   - `memory/` only with local memory or Hindsight memory. With local memory, `memory/` holds `AGENTS.md`, `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md`, and `project_topic_template.md`. With Hindsight memory, `memory/` holds only `CURRENT_STATE.md`;
-   - `tools/` and `sfdx-project.json` only in a Salesforce project;
-   - `SOUL.md` only when the owner keeps one;
-   - `.claude/rules/hindsight-memory.md` only with Hindsight memory;
-   - `.claude/rules/notion-records.md` only with work items or memory in Notion.
-2. **Skills.** `ls .claude/skills` must show exactly the list of skills for the owner's choices, and each skill folder must hold a `SKILL.md`. `skills-hooks-settings.md`, "Skills", gives the list for each choice.
-3. **Project records.** The project must hold all of these, whatever the owner chose for work items and for memory:
-   - `DECISIONS.md`;
-   - `system/` with its six documents, `integrations/README.md`, and `integrations/INTEGRATION-TEMPLATE.md`;
-   - `sources/README.md`;
-   - `delivery/` with `releases/`, `deployments/`, `migrations/`, and `client-handoffs/`;
-   - `reference/` with `outside-docs/INDEX.md` and `current-system/`.
-4. **The `AGENTS.md` of each folder.** `find . -name AGENTS.md -not -path './.claude/*' -not -path './.git/*'` must list the root file and one `AGENTS.md` in each of `system/`, `sources/`, `delivery/`, and `reference/`. With local work items it must also list one in `work-items/`, and with local memory one in `memory/`. Each `AGENTS.md` must have a `CLAUDE.md` beside it that holds only the line `@AGENTS.md`.
-5. **The link.** `ls -la .agents` must show `skills -> ../.claude/skills`. Through this link, Codex reads the same skills as Claude Code.
-6. **Hook commands.** A hook command is a small command that Claude Code or Codex runs by itself at set moments, such as the start of a session. `ls .claude/hooks` must show `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, and `validate-records.mjs`. In a Salesforce project it must also show the two guards.
-7. **Settings are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
-8. **The settings name hook commands that exist, and hold no placeholder.** Every hook command that the settings name must exist in `.claude/hooks/`. No `{{` placeholder may be left: `grep -n '{{' .claude/settings.json .codex/hooks.json` must print nothing.
-9. **The session-start check.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. With local memory it must also print the memory index, which reads "No memory files yet." in a new project. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`.
+1. **The settings files are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
+2. **The session-start command runs.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`.
    - With Notion memory, add `--page <Current state page id>` to the command.
    - In Codex with Notion memory, run the command escalated. `SKILL.md`, "Mistakes to avoid", says how Codex runs a command that way. Inside the sandbox the command prints "could not be read here". That text comes from the sandbox, and it is not a setup failure.
-10. **The prompt reminder.** Run `echo '{"prompt":"remember this: we use Postgres"}' | node .claude/hooks/prompt-reminder.mjs`. It must print a line that tells the agent to check the project's skills, which it prints for any message. It must also print the memory reminder, which it adds for a "remember this" message. Last, it must print the line "The owner's rule for every request, from .claude/rules/evaluate-the-owners-request.md. Where owner-preferences.md says otherwise, that file wins:" and then the whole text of that rule file, which it prints for any message.
-    - With Hindsight memory, add `--skill hindsight` to the command.
-    - When the output lacks the rule, find the cause and report it. One cause is that `.claude/hooks/prompt-reminder.mjs` differs from the setup copy's file, which means the project's command is older than this version of the toolkit. The other cause is that `.claude/rules/evaluate-the-owners-request.md` is missing or empty. For both causes, the fix is "update the toolkit".
-    - The whole output must be 10,000 characters or less. To count the characters, add `| wc -m` to the end of the command. When the output is longer, report that the rule file is too long for the agent to be shown all of it. Claude Code then gives the agent the path of a file that holds the output and a preview of at most its first 2,000 characters. Codex does the same for an output over roughly 2,500 tokens, with a preview of the start and the end of the output.
-11. **The after-commit reminder.** Run `printf '{"tool_input":{"command":"git %s -m x"}}' commit | node .claude/hooks/codex-after-commit.mjs`. The input stands for a commit, and the command must answer it with its reminder.
-12. **`validate-records.mjs` finds nothing.** The command that checks the records, `.claude/hooks/validate-records.mjs`, checks the form of the project's records. `node .claude/hooks/validate-records.mjs --all < /dev/null` must print nothing. Each line that it prints is one finding. Report each finding.
-13. **The pre-commit check.** The pre-commit check is the file `.githooks/pre-commit`. Git runs it before each commit, and it runs `validate-records.mjs`.
-    - `test -x .githooks/pre-commit && echo executable` must print "executable".
-    - `git config --get core.hooksPath` must print `.githooks`. When it prints something else or nothing, report what it prints, and the reason that `placing-files.md`, "5. The pre-commit check", gives for that result. Step 2 of that section holds the two commands that show which row of its table fits.
-14. **`AGENTS.md` is within its limits.** `wc -lc AGENTS.md` must print 200 lines or less and 24,576 bytes or less.
-    - Claude Code recommends under 200 lines. Codex stops reading instruction files at 32,768 bytes in all, `~/.codex/AGENTS.md` included.
-    - Count `AGENTS.md` only. `PROJECT.md` is not counted. Claude Code loads `PROJECT.md` through the `@PROJECT.md` line in `AGENTS.md`, and Codex does not load it that way.
-    - When either number is over its limit, say so in the report. Never cut lines from `AGENTS.md`.
-15. **The text that loads in every session.** `command grep -L '^paths:' .claude/rules/*.md` lists the rules with no `paths` line in their front matter. Count the bytes of `AGENTS.md` and of each of those files with `wc -c`, and give the total in bytes in the report. No limit is set for the total.
-16. **"Toolkit settings" holds no prompt.** The "Toolkit settings" section of `PROJECT.md` must hold no prompt, except a prompt that waits on the owner.
-17. **The owner is named.** "People and ownership" in `PROJECT.md` must name the owner. Check it with `grep -n '^| Owner |' PROJECT.md`.
-18. **The older plugins are off in this project.** Check it with `jq '.enabledPlugins' .claude/settings.json`. `skills-hooks-settings.md`, "The older plugins, off in this project", says which plugins must be off.
-19. **Salesforce's skills, in a Salesforce project only.** Salesforce's skills must be installed. `salesforce.md`, "Salesforce's skills", says where they come from in each host. When they are not installed, report it.
-20. **Services: Notion work items or memory.** Do the check that starts "For a new project" under "Checks after any of these" in `notion-build/work-setup.md`.
-21. **Services: Notion memory.**
-    - The "Notion memory" line in `PROJECT.md` must hold every bullet that `notion-build/setup.md` lists under "Recording the links in PROJECT.md".
-    - The "Current state" page must show its first lines. Read the page with `ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown`.
-22. **Services: GitHub Issues.** Do the checks under "Checks after either" in `github.md`.
-23. **Services: Hindsight.** Do the check under "Check a Hindsight project, or connect a new computer" in `hindsight-on-vps.md`.
-24. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
+3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.
+4. **"Toolkit settings" is filled.** The "Toolkit settings" section of `PROJECT.md` must hold no prompt, except a prompt that waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
+5. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
+6. **The services.** For each service that the project uses, do the check that the service's own file gives:
+   - Notion: the check that starts "For a new project" under "Checks after any of these" in `notion-build/work-setup.md`;
+   - GitHub Issues: the checks under "Checks after either" in `github.md`;
+   - Hindsight: the check under "Check a Hindsight project, or connect a new computer" in `hindsight-on-vps.md`.
 
 ### After the checks
 
@@ -168,10 +132,7 @@ Run each check alone, from the project folder. Each check only reads.
 
 "Check the setup" is one of the jobs in `SKILL.md`, "Which setup job to do". In that job, fix nothing. Report each failed check with the fix that you recommend.
 
-Two checks run differently in "check the setup", so that checking changes no file:
-
-- The session-start check runs the project's own hook command. With local memory, the hook command may rebuild the generated index `memory/MEMORY.md`. That index is the one file a check may change. When `.claude/hooks/session-start.mjs` differs from the setup copy's file, also report the hook command as out of date.
-- When the project has no `.claude/hooks/validate-records.mjs`, run the setup copy's `validate-records.mjs` from the project folder: `node <copy>/.claude/hooks/validate-records.mjs --all < /dev/null`.
+With local memory, the session-start hook command may rebuild the generated index `memory/MEMORY.md`. That index is the one file a check may change.
 
 "Check the setup" puts one kind of file back: a toolkit file that is missing from `work-items/` or `memory/`. Git does not track `work-items/` and `memory/`, so a toolkit file that was deleted there cannot be brought back from Git.
 
@@ -179,8 +140,6 @@ When one of the files listed below is missing in the main checkout, copy it from
 
 - With local work items, the files are `work-items/AGENTS.md`, `work-items/CLAUDE.md`, `work-items/work-item-template/WORK-ITEM.md`, and `work-items/work-item-template/DESIGN.md`.
 - With local memory, the files are `memory/AGENTS.md`, `memory/CLAUDE.md`, and `memory/project_topic_template.md`.
-
-Put none of these files back in a project that was set up before the current folder layout. "Update the toolkit" gives such a project these files. The current folder layout is the layout in which information the whole project needs is kept in five places, as files in the repository: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`. `one-home-layout.md`, "Find the old layout", says how to tell that a project was set up before that layout.
 
 ## The owner's steps
 
@@ -206,7 +165,7 @@ The table lists the steps that the owner does. Say each one plainly, with the re
 
 Give the owner a short, plain report. It has these parts, in this order:
 
-1. **What was set up.** Say where work items and memory are kept, whether the project is a Salesforce project, how many skills it has, the four hook commands, whether the pre-commit check is on or why it is not, and each line that was added to `owner-preferences.md`, in the owner's words.
+1. **What was set up.** Say where work items and memory are kept, whether the project is a Salesforce project, how many skills it has, the three hook commands, and each line that was added to `owner-preferences.md`, in the owner's words.
 2. **What was made outside the project folder.** Name the Notion pages, the GitHub repository and labels, the Hindsight bank, and the add-on's changes in `~/.claude`, `~/.codex`, and `~/.hindsight`.
 3. **What was skipped**, and why.
 4. **What the owner must do**, each step with the reason for it.

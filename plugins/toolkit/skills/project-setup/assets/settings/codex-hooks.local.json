@@ -1,5 +1,5 @@
 {
-  "description": "Toolkit V2 hooks for this project in Codex: Current State at session start; on every message, a line that says to check the project's skills, the text of the owner's rule for every request, and, when the owner uses a keep or decision phrase, a hint on where a fact is filed; a work item reminder after each commit; a work item reminder when a helper agent starts or reports back; and a check of the project's records after each file edit.",
+  "description": "Toolkit V2 hooks for this project in Codex: Current State at session start; on every message, a line that says to check the project's skills, the text of the owner's rule for every request, and, when the owner uses a keep or decision phrase, a hint on where a fact is filed; a work item reminder after each commit; and a work item reminder when a helper agent starts or reports back.",
   "hooks": {
     "SessionStart": [
       {
@@ -43,16 +43,6 @@
           {
             "type": "command",
             "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"A helper agent ran or was started. If it works on a work item or sub-item, update the status, Recent History, and Current state of that item with managing-work-items once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.\"}}'",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "^apply_patch$",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/validate-records.mjs\"",
             "timeout": 10
           }
         ]

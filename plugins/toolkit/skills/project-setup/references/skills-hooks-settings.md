@@ -42,11 +42,9 @@ A work choice adds tracker references, and a local or Notion memory choice adds 
 
 ## Hook commands
 
-The four hook commands are in `every-project/.claude/hooks/`, so the setup copy has them in `<copy>/.claude/hooks/`: `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, and `validate-records.mjs`. A hook command is a command that Claude Code or Codex runs by itself at a fixed moment, for example at session start. Both Claude Code and Codex run the four commands from `.claude/hooks/`.
+The three hook commands are in `every-project/.claude/hooks/`, so the setup copy has them in `<copy>/.claude/hooks/`: `session-start.mjs`, `prompt-reminder.mjs`, and `codex-after-commit.mjs`. A hook command is a command that Claude Code or Codex runs by itself at a fixed moment, for example at session start. Both Claude Code and Codex run the three commands from `.claude/hooks/`.
 
 - `prompt-reminder.mjs` runs on every message. It prints one line that tells the agent to check the project's skills, then a memory reminder when the message has a phrase such as "remember this", and then the whole text of the rule `.claude/rules/evaluate-the-owners-request.md`. It reads that rule file each time it runs, so the project's rule file is the only place where the rule's text is kept.
-- `validate-records.mjs` checks the form of the project's records (`DECISIONS.md`, `system/`, `sources/`, and local work items) and only reads.
-- The setup copy also has `.githooks/pre-commit`, which runs `validate-records.mjs` before each commit once the steps of `placing-files.md`, "5. The pre-commit check", are done.
 - A Salesforce project also gets the two guards in `.claude/hooks/` from the `salesforce` folder, and the scripts in `tools/`. The graph Stop hook runs those scripts.
 
 ## Settings snippets
@@ -55,8 +53,8 @@ The four hook commands are in `every-project/.claude/hooks/`, so the setup copy 
 
 | Snippet | Merged into | For |
 | --- | --- | --- |
-| `claude-settings-hooks.<memory>.json` | `<copy>/.claude/settings.json` | The memory choice. It holds the Claude Code hooks: session start, prompt reminder, after a commit, a helper agent returned, and `validate-records.mjs` after a file edit and when the agent stops. |
-| `codex-hooks.<memory>.json` | `<copy>/.codex/hooks.json` | The memory choice. It holds the Codex hooks: session start, prompt reminder, after a commit, a helper agent started or returned, and `validate-records.mjs` after a file edit. |
+| `claude-settings-hooks.<memory>.json` | `<copy>/.claude/settings.json` | The memory choice. It holds the Claude Code hooks: session start, prompt reminder, after a commit, and a helper agent returned. |
+| `codex-hooks.<memory>.json` | `<copy>/.codex/hooks.json` | The memory choice. It holds the Codex hooks: session start, prompt reminder, after a commit, and a helper agent started or returned. |
 | `enabled-plugins-off.json` | `<copy>/.claude/settings.json` | Every project. |
 | `codex-plugins-off.toml` | `<copy>/.codex/config.toml` | Every project. |
 
@@ -68,29 +66,27 @@ Never try to turn off, in the project, a plugin from the owner's ChatGPT account
 
 The Notion snippets hold `{{CURRENT_STATE_PAGE_ID}}`. Leave it in the setup copy. The Notion memory setup fills it with the id of the Notion page named "Current state". `notion.md`, "The links in PROJECT.md", says when and where to put that id.
 
-Never change a snippet's hook commands or texts, because they are written to match the four hook commands.
+Never change a snippet's hook commands or texts, because they are written to match the three hook commands.
 
 ## Merge rules
 
 - Start from the file that `<copy>` already holds, after the Salesforce removals. `setup-copy.md`, "Salesforce entries in the settings file", lists the entries to take out in a project that is not a Salesforce project.
   - When `<copy>` has no such file, the first snippet is the start. This is so for `.codex/hooks.json` in a project that is not a Salesforce project, and for `.codex/config.toml`.
 - Replace the toolkit's own hook handlers. Never join the old ones and the new ones. A hook handler is one entry in a settings file that says what a hook runs. The toolkit's own hook handlers are:
-  - a handler whose `args` or `command` names `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, or `validate-records.mjs`;
+  - a handler whose `args` or `command` names `session-start.mjs`, `prompt-reminder.mjs`, or `codex-after-commit.mjs`;
   - the `echo` handler in the `PostToolUse` group whose matcher is `Agent`;
   - the `echo` handler in the `.codex/hooks.json` `PostToolUse` group whose matcher is `^(collaboration)?(spawn_agent|wait_agent)$`.
 - When the file already has the toolkit's own hook handlers (an update, or a changed memory choice), show the owner the old and new handlers. Then remove the old ones and any group or event they leave empty, and merge the snippet. Never keep both.
   - When you cannot tell whether a handler is the toolkit's, ask the owner.
   - A new project's setup copy has none of them.
-- When the file holds an old end-of-reply check, an older Codex matcher, or one of the seven `permissions.ask` entries for `sf` commands, handle it as `update.md`, "4. What the toolkit no longer ships", says. That section lists what an earlier version of the toolkit put into a project and how to remove it. Never add an end-of-reply check.
+- When the file holds an entry that an earlier version of the toolkit put there and the snippets no longer have, handle it as `update.md`, "4. What the toolkit no longer ships", says. Never add a `Stop` hook of type `prompt`.
 - Add a plain value (text, a number, true or false) that the file does not have.
   - When the file already has that plain value with a different value, and the file is in the setup copy, take the snippet's value.
   - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `placing-files.md` and `update.md` send you to these rules for such a file.
 - Never delete any other entry. The copied permission rules, the Git deny and ask rules, the Salesforce guards (and the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`), and the hooks that the owner added all stay.
-  - In a Salesforce project, the `Stop` event then holds two groups: the graph hook's group and the group that runs `validate-records.mjs`.
-- In an update or a move-over of a project whose settings hold no entry that runs `validate-records.mjs`, add those entries last. `update.md`, "Turning on validate-records.mjs and the pre-commit file", gives the steps that come before them.
 - `.codex/hooks.json` holds only `description` and `hooks` at the top level.
   - In a Salesforce project, the `description` is the text of the `salesforce` folder's file, one space, then the snippet's text. In any other project, the `description` is the snippet's text.
-  - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. List that change in the numbered table that the owner sees. `placing-files.md`, "3. Files the project already has", and `update.md` say how to show that table.
+  - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. One sentence is the exception: a sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the snippet's text. List that change in the numbered table that the owner sees. `placing-files.md`, "3. Files the project already has", and `update.md` say how to show that table.
 - When the snippet sets a key that the file writes another way, leave the file as it is and ask the owner. Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table.
 
 ## The older plugins, off in this project
@@ -128,5 +124,4 @@ Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the fi
 - `.codex/config.toml` has each table once, and `[skills]` holds `max_context_tokens = 10000`.
 - The `description` in `.codex/hooks.json` contains the snippet's description text (`jq -e` with `contains` shows it). When it does not, add it as "Merge rules" says.
 - Each of the toolkit's hook handlers is in each settings file once. Count the `hooks/*.mjs` names with `grep -o`, and the `echo` helper reminders with `jq`.
-  - `validate-records.mjs` is named twice in `.claude/settings.json` (after an edit, and at stop with `--all`) and once in `.codex/hooks.json`.
   - The Codex helper reminder has only the matcher `^(collaboration)?(spawn_agent|wait_agent)$`, and `.claude/settings.json` has no `Stop` hook of type `prompt`. A Codex helper reminder with another matcher, or a `Stop` hook of type `prompt`, is an old handler to take out, as "Merge rules" above and `update.md`, "4. What the toolkit no longer ships", say.

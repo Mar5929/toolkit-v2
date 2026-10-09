@@ -1,6 +1,0 @@
-#!/bin/sh
-# Checks the project's records before each commit. Git runs it once core.hooksPath is .githooks.
-# Only a finding (exit code 2) stops the commit. A missing Node or script, or a crash, does not.
-check="$(git rev-parse --show-toplevel)/.claude/hooks/validate-records.mjs"
-command -v node >/dev/null 2>&1 && [ -f "$check" ] || exit 0
-node "$check" --staged || [ $? -ne 2 ]

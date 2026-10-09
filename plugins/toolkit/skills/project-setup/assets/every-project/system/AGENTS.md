@@ -93,7 +93,6 @@ What each mark means:
 - A rule that one work item proposes stays in that work item's design. It comes here only when more than one work item depends on it, as a Draft rule.
 - This folder describes the system the owner approved. The record of how the system works today (what was observed, in which environment, and on which date) goes in `reference/current-system/`.
 - Name work items, decisions, and sources by ID. Never copy their text into a document.
-- `.claude/hooks/validate-records.mjs` checks these documents after each edit and before each commit. Fix what it reports.
 
 ## Which skill to use
 

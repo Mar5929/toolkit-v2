@@ -1,6 +1,6 @@
 # Changes from earlier toolkit versions
 
-This file holds three parts of "update the toolkit". Each part is for a project that was set up before one version of the toolkit: the move from Stage to State (toolkit 0.6.0), the levels structure (toolkit 0.8.0), and the Requirements layout (toolkit 0.8.1). Open it when `update.md`, section 5, says that the project needs one of the parts. A part is done when the project is as that part describes and the owner has been told what changed.
+This file holds three parts of "update the toolkit". Each part is for a project that was set up before one version of the toolkit: the move from Stage to State (toolkit 0.6.0), the levels structure (toolkit 0.8.0), and the Requirements layout (toolkit 0.8.1). Open it when a project was set up before one of those versions. The move-over and the files for Notion and GitHub point to its parts. A part is done when the project is as that part describes and the owner has been told what changed.
 
 Make every change to a local work item or to `memory/` in the main checkout, at the time that `update.md`, "Before you start", gives. The main checkout is the project's main folder, the first path that `git worktree list` prints.
 
@@ -29,7 +29,7 @@ Before toolkit 0.6.0, each work item had a stage (`01-discovery` to `14-spec-upd
 - With local work items, change every work item in `work-items/`, sub-items and `archive/` included. A sub-item is a work item inside another work item. Replace the `stage:` line with a `state:` line, and set `status:` and `updated:` in the same edit.
 - With work items in Notion, change every row of Work Items, archived rows included. Do this after "From Stage to State" in `notion-build/work-setup.md` has added the State property and the Status options.
 - With work items in GitHub, change open issues only, after the `state:` labels exist. `github.md`, "Bringing a project up to date", step 3, says which label to add to each issue and which to remove. A closed issue's labels are ignored.
-- When a Next action ends ", with <skill>.", and the skill is one that `update.md`, section 4, lists as retired, remove that ending, so that the Next action matches a form that the work item template gives. In Notion, change the Current state on the work item's page and the Next action property together.
+- When a Next action ends ", with <skill>.", and the skill is one that the project no longer has, remove that ending, so that the Next action matches a form that the work item template gives. In Notion, change the Current state on the work item's page and the Next action property together.
 - Add a Recent History row to each changed work item: "Toolkit update: stage <old> is now State <new>." Change nothing else in the work item.
 - Tell the owner in one short list how many work items moved to each State.
 

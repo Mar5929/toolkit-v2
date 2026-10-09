@@ -4,7 +4,7 @@ Toolkit V2 sets up a project folder so the agent can run the project for you
 in Claude Code or Codex. You make the decisions and steer. The agent does the
 work, tracks it, and remembers what matters.
 
-It is written instructions plus four small hooks. There is no program to
+It is written instructions plus three small hooks. There is no program to
 install, run, or keep working (your decision of 2026-09-29).
 
 ## The parts
@@ -99,10 +99,8 @@ deletes a file there only when you ask.
 
 It shows you the plan and waits for your yes. Then it copies the starter
 project's files, the skills for your answers, the hooks, and the settings
-into the project. It turns on a check of the project's records that runs
-before each commit (a Git setting in that copy of the project; when the
-project already has a Git hook of its own, or its own hooks folder, setup
-changes nothing there and tells you). It asks you to sign in where needed (`ntn login` for Notion,
+into the project.
+It asks you to sign in where needed (`ntn login` for Notion,
 `gh auth login` for GitHub), then sets up the Notion pages, the GitHub labels,
 or the Hindsight memory bank. It finishes by running its checks and offering
 to commit.
@@ -137,10 +135,7 @@ Later, say **"check the setup"** to see what differs (it changes nothing,
 except that it puts back a toolkit guide or template that is missing from
 `work-items/` or `memory/`), or
 **"update the toolkit"** to bring a project up to date. It shows every change
-first and never overwrites a file you changed without asking. The check
-before each commit is a setting of one copy of the project: in a new copy,
-or on another computer, "check the setup" says it is off and "update the
-toolkit" turns it on.
+first and never overwrites a file you changed without asking.
 
 A project set up before the five places above existed keeps the same facts
 elsewhere: shared questions, requirements, a system guide, decision records
@@ -241,13 +236,6 @@ description.
 | You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved and where. The agent saves it without asking you first, and tells you in one line what it saved. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
-| The agent edits a file | The record check runs: 15 checks on the form of `DECISIONS.md`, `system/`, `sources/`, and local work items, such as an ID used twice or a rule marked approved with no decision behind it. The agent is told what is wrong and fixes it. |
-| The agent finishes a turn (Claude Code only) | The record check runs on every record. A problem nobody fixed is reported again. |
-| Before each commit | The record check runs again, and a commit that breaks a record or changes a filed source is stopped. |
-
-The record check is the fourth hook command (your yes of 2026-10-05). It
-only reads. It checks the form of a record, never whether what it says is
-right.
 
 There is no hook for marking work Done. The agent asks you first, and
 records your words and the date.

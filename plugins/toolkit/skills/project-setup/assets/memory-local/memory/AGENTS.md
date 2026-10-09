@@ -25,7 +25,6 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 ## What must stay true
 
 - `.claude/rules/memory-review-and-save.md` says when memory is reviewed, what never goes in memory, which skill changes memory, and what the owner's yes covers.
-- `.claude/hooks/validate-records.mjs` checks the work item IDs in the project's Current State after each edit. Correct what it reports.
 
 ## Which skill to use
 

@@ -153,5 +153,4 @@ Run each check below. Each of these commands only reads.
 - `command grep -c -E '^- (Tracker|Memory|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md` prints 10. `command grep` runs the system grep. In Claude Code, plain grep skips the folders that the copied `.gitignore` names.
 - `jq empty <copy>/.claude/settings.json` prints nothing, which means that the JSON is valid.
 - Run `ls -A <skill folder>/assets/every-project`, the same command for each folder you copied, and `ls -A <copy>`. The last list holds every name of the other lists except `.agents`, plus `memory` with Hindsight memory, and no other name.
-- `test -x <copy>/.githooks/pre-commit && echo executable` prints `executable`.
 - `find <copy> -name AGENTS.md -not -path '*/.claude/*'` lists the root file and one file in each of `system/`, `sources/`, `delivery/`, and `reference/`. With local work items it also lists one in `work-items/`, and with local memory it also lists one in `memory/`. Each of these files has a `CLAUDE.md` beside it that holds only the line `@AGENTS.md`.

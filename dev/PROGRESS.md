@@ -2,6 +2,35 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The record check, the long list of final checks, and the old-version update steps are cut, version 0.9.32 (2026-10-09)
+
+Mike wrote six guiding principles into `AGENTS.md` on 2026-10-09. An audit of
+everything the toolkit ships against them found five large cuts, and he said
+yes to all five ("3 all yes"). This version makes three of them.
+
+- **`validate-records.mjs` is gone**, with `.githooks/pre-commit`, their
+  entries in the six settings snippets, their two test files, and the setup
+  and update steps that turned them on. The command stopped a commit when a
+  project's records differed from the toolkit's form, which principle 5 says
+  the toolkit must not do. The form of each record is still stated in its
+  home: the top of `DECISIONS.md` and each folder's `AGENTS.md`. A project
+  runs three hook commands now.
+- **The final checks of setup went from 24 to 6** (`finishing.md`). They show
+  that setup worked. They no longer test whether the project matches the
+  toolkit, so a project with a skill or a rule of its own passes.
+- **`update.md` went from 426 lines to 225.** Its section 4 held one part for
+  each thing an earlier version shipped (13 parts). It is now one general
+  rule: list what the project holds and the new setup copy lacks, keep what
+  is the owner's, and remove the rest after the owner's yes. The update no
+  longer routes to `earlier-versions.md` or `one-home-layout.md`.
+- Kept: `move-over.md`, `old-toolkit-pieces.md`, `one-home-layout.md`, and
+  `earlier-versions.md`. Four of Mike's projects on the Mac (Anchor,
+  DragonFly, alyssa-ai-assistant, diligence-ready) are still on the older
+  toolkit, and the move-over uses the tables of all four files.
+- Not tested live: a setup and an update with the shorter text.
+- Still to do from the same five cuts: the Salesforce tools and guards, and
+  the Notion build steps.
+
 ## The skill sf-component-tracker rewritten to the writing rule, version 0.9.31 (2026-10-09, TKV-50)
 
 Mike read the rewrite and said "merge" on 2026-10-09. Every rule is kept.

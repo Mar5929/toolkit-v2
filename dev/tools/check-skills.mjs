@@ -46,8 +46,8 @@
 //     its row's Choice cell, so two folders swapped between rows fail;
 //   - the skillOverrides list in this repository's .claude/settings.json sets every project
 //     skill name to "off" and names nothing else;
-//   - the starter root AGENTS.md is within the line and byte limits that references/finishing.md
-//     makes setup check in every new project, and references/update.md gives the same limits;
+//   - the starter root AGENTS.md is within the line and byte limits that references/update.md
+//     gives under "Updating AGENTS.md";
 //   - the list of the kinds of harness file in writing-harness-files/SKILL.md is, word for word,
 //     in the repository AGENTS.md and README.md; each kind is in that skill's description;
 //     and each kind has a "## " section in its references/checklist.md;
@@ -569,13 +569,13 @@ for (const f of walk(ASSETS)) {
 
 // ------------------------------------------------------------------ the size of the starter root AGENTS.md
 
-// Setup checks these limits in every new project, so the starter file must pass them before setup fills it in.
+// update.md gives these limits for a project's AGENTS.md, so the starter file must be within them.
 {
   const limits = (file) => (read(path.join(SETUP, 'references', file)).match(/200 lines.*?([\d,]+) bytes/) ?? [])[1];
-  const max = Number((limits('finishing.md') ?? '').replace(/,/g, ''));
+  const max = Number((limits('update.md') ?? '').replace(/,/g, ''));
   const guide = path.join(EVERY, 'AGENTS.md');
   const [lines, bytes] = [read(guide).split('\n').length - 1, fs.statSync(guide).size];
-  if (!max || limits('update.md') !== limits('finishing.md')) report('error', path.join(SETUP, 'references/finishing.md'), 'its limit for AGENTS.md (check 14) was not found, or references/update.md gives another limit');
+  if (!max) report('error', path.join(SETUP, 'references/update.md'), 'its limit for AGENTS.md ("Updating AGENTS.md") was not found');
   else if (lines > 200 || bytes > max) report('error', guide, `is ${lines} lines and ${bytes} bytes, over the limits that setup checks (200 lines, ${max} bytes)`);
 }
 

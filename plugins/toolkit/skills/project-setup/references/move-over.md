@@ -206,7 +206,7 @@ Do these seven points in order, so that nothing is removed before what replaces 
    - Copy into the main checkout only `<copy>/memory/` and `<copy>/work-items/`, when the owner's choices have them, with the same `rsync -rlt --ignore-existing`.
    - The main checkout ignores these two folders only after the branch is merged. Until then, stage nothing in them. After the branch is merged, run on these two folders the final checks that `finishing.md`, "Final checks", gives for them, such as the check that Git does not track `work-items/` or `memory/`.
 3. **Update.** Carry out each approved Update line.
-   - Merge the settings files with the rules in `skills-hooks-settings.md`, "Merge rules". Leave out the entries that run the command that checks the records, `.claude/hooks/validate-records.mjs`. Step 4 of `update.md`, "Turning on validate-records.mjs and the pre-commit file", adds those entries after the records pass the check. "7. Finish", step 2, below runs that section.
+   - Merge the settings files with the rules in `skills-hooks-settings.md`, "Merge rules".
    - Put each line of the owner's in its new place, and read it back there.
 4. **Services.** Do step 7 of "New project" in `SKILL.md`, which sets up each service that the owner chose.
 5. **Records.** Do step 6 of this file, "Carry over the old records".
@@ -239,6 +239,6 @@ The old records stay where they are, unchanged, except as points 6 and 8 below s
 ## 7. Finish
 
 1. Follow `finishing.md`, which fills the prompts in the copied files, writes the project's Current State, and gives the final checks, the owner's steps, the report, and the commit offer. A fact that an old file shows (the old project facts file, the owner's `AGENTS.md`) counts as a fact that a file in the repository shows. Use such a fact, and list it in the report so that the owner can correct it.
-2. Run `validate-records.mjs` and the final checks as steps 1 and 2 of `update.md`, "7. Checks and report", say. When a check fails only because of something on a "Kept untouched" line, such as a skill or folder of the owner's own, do not count it as a failure, and say so in the report.
+2. Run the final checks as step 1 of `update.md`, "6. Checks and report", says. When a check fails only because of something on a "Kept untouched" line, such as a skill or folder of the owner's own, do not count it as a failure, and say so in the report.
 3. Write the report. It says what was deleted, added, updated, and kept, with the counts. It says what was carried over and what stayed. It gives the owner's own steps: the steps in `finishing.md`, and one more. On each other computer that has this project, the owner pulls the default branch and says "toolkit v2". The update on that computer lists that copy's old Git hook and removes it after the owner's yes, as `update.md`, "4. What the toolkit no longer ships", says.
-4. Offer the commit, and merge the branch after the owner's yes, as steps 4 to 6 of `update.md`, "7. Checks and report", say. Until the branch is merged, `PROJECT.md` is only in the worktree, so the main checkout still shows the old setup. A later session finds the move with step 1, "An unfinished move".
+4. Offer the commit, and merge the branch after the owner's yes, as steps 3 to 5 of `update.md`, "6. Checks and report", say. Until the branch is merged, `PROJECT.md` is only in the worktree, so the main checkout still shows the old setup. A later session finds the move with step 1, "An unfinished move".

@@ -642,15 +642,14 @@ test('Claude Code settings snippets: the right commands, arguments, and texts fo
     const { hooks: h, ...rest } = JSON.parse(readFileSync(join(settings, `claude-settings-hooks.${memory}.json`), 'utf8'));
     assert.deepEqual(Object.keys(rest), []);
     // Mike dropped the end-of-reply check (a Stop hook of type prompt) on 2026-10-01: only command handlers.
-    // The one Stop hook is the record check (his yes, 2026-10-05); dev/tests/validate-records.test.mjs tests its entries.
-    assert.deepEqual(Object.keys(h).sort(), ['PostToolUse', 'SessionStart', 'Stop', 'UserPromptSubmit']);
+    assert.deepEqual(Object.keys(h).sort(), ['PostToolUse', 'SessionStart', 'UserPromptSubmit']);
     const start = h.SessionStart[0];
     assert.equal(start.matcher, 'startup|resume|clear|compact|fork');
     assert.deepEqual(start.hooks[0].args.slice(0, 3), ['${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.mjs', '--memory', memory]);
     if (memory === 'notion') assert.deepEqual(start.hooks[0].args.slice(3), ['--page', '{{CURRENT_STATE_PAGE_ID}}']);
     assert.deepEqual(h.UserPromptSubmit[0].hooks[0].args, ['${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-reminder.mjs', ...reminderArgs]);
     assert.equal(h.UserPromptSubmit[0].matcher, undefined);
-    assert.equal(h.PostToolUse.length, 3);
+    assert.equal(h.PostToolUse.length, 2);
     const [bash, agent] = h.PostToolUse;
     assert.equal(bash.matcher, 'Bash');
     assert.equal(bash.hooks[0].if, 'Bash(git *)');
@@ -679,8 +678,7 @@ test('Codex hook snippets: shell strings from the Git root, anchored matchers, n
     // The helper reminder: spawn_agent (a helper starts) and wait_agent (its report comes back),
     // an echo of fixed JSON in single quotes, so its text has no apostrophe. Codex 0.157.0 names
     // the tools collaborationspawn_agent and collaborationwait_agent in hook input (cx-hooks).
-    // The third entry is the record check after apply_patch (dev/tests/validate-records.test.mjs).
-    assert.equal(h.PostToolUse.length, 3);
+    assert.equal(h.PostToolUse.length, 2);
     const agent = h.PostToolUse[1];
     assert.equal(agent.matcher, '^(collaboration)?(spawn_agent|wait_agent)$');
     assert.equal(agent.hooks.length, 1);
@@ -761,9 +759,8 @@ test('plugin switches: every old claude-toolkit plugin is off in both hosts; Cod
 // every job kept; the line count was replaced by the Code limit rules (dev/GOAL.md, "Code limit");
 // the limits below are the sizes as built.
 test('size limit: each hook command stays small', () => {
-  // validate-records.mjs: the owner's limit for the record check is 280 lines (CHECKS-SPEC.md).
-  const limits = { 'session-start.mjs': 76, 'prompt-reminder.mjs': 72, 'codex-after-commit.mjs': 20, 'validate-records.mjs': 280 };
-  assert.deepEqual(readdirSync(hooks).sort(), Object.keys(limits).sort(), 'exactly four hook commands');
+  const limits = { 'session-start.mjs': 76, 'prompt-reminder.mjs': 72, 'codex-after-commit.mjs': 20 };
+  assert.deepEqual(readdirSync(hooks).sort(), Object.keys(limits).sort(), 'exactly three hook commands');
   for (const [file, max] of Object.entries(limits)) {
     const lines = readFileSync(join(hooks, file), 'utf8').trimEnd().split('\n');
     assert.ok(lines.length <= max, `${file} has ${lines.length} lines (limit ${max})`);

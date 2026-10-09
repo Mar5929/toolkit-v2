@@ -1,8 +1,8 @@
 # Putting the setup copy into the project
 
-Use this file to copy the finished setup copy into the project. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. Open this file at step 6 of "New project" in `SKILL.md`. An update and a move-over also follow "5. The pre-commit check".
+Use this file to copy the finished setup copy into the project. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. Open this file at step 6 of "New project" in `SKILL.md`.
 
-The job is done when four things are true: the project has every file of the setup copy, except a file that the owner chose to keep as it was; no file that the project already had was overwritten without the owner's answer; `.agents/skills` is a link to `.claude/skills`; and the check that runs before each commit is turned on, or the owner was told why it is not.
+The job is done when three things are true: the project has every file of the setup copy, except a file that the owner chose to keep as it was; no file that the project already had was overwritten without the owner's answer; and `.agents/skills` is a link to `.claude/skills`.
 
 Run every command from the project folder. `<copy>` stands for the temporary folder that holds the setup copy. `setup-copy.md`, "Make the temporary folder", says how that folder is made.
 
@@ -12,8 +12,7 @@ Run every command from the project folder. `<copy>` stands for the temporary fol
 - 2. Copy the files the project does not have
 - 3. Files the project already has
 - 4. The .agents/skills link
-- 5. The pre-commit check
-- 6. Check
+- 5. Check
 
 ## 1. See what would change
 
@@ -80,53 +79,7 @@ diff -r .agents/skills .claude/skills
 
 Git stores the link as a link. Never replace the link with copied folders to get past a problem. Tell the owner about the problem instead.
 
-## 5. The pre-commit check
-
-`.githooks/pre-commit` runs the command that checks the records, `.claude/hooks/validate-records.mjs`, before each commit. It stops a commit that breaks the form of a record or changes a filed source. A source is anything the project was given by someone else, kept unchanged in `sources/`.
-
-Git runs `.githooks/pre-commit` only when `core.hooksPath` is `.githooks` in this copy of the repository. That setting is not in a file that Git tracks, so each clone and each computer needs this section once. Every worktree of one clone uses the same setting. A worktree is a separate folder with its own branch.
-
-A new project, "update the toolkit", and a move-over all do this section.
-
-1. Keep the file executable. Git stores the mode with the file:
-
-   ```text
-   chmod +x .githooks/pre-commit
-   ```
-
-   In an update or a move-over, run this command in your worktree, where the file is.
-2. Look, in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints. Both commands only read:
-
-   ```text
-   git config --get core.hooksPath
-   ls "$(git rev-parse --git-path hooks)"
-   ```
-
-3. Use the first row that fits:
-
-   | The commands show | Do |
-   | --- | --- |
-   | Git says this is not a Git repository | Skip this section, and tell the owner that the check will not run before commits. |
-   | The first command prints `.githooks` | Do nothing. |
-   | The first command prints another folder | Change nothing. Tell the owner what the text below the table says, and name that folder. |
-   | The first command prints nothing, and the second lists any file whose name does not end in `.sample`, such as `pre-commit`, `commit-msg`, `pre-push`, or the hooks Git LFS installs | Change nothing, because with `core.hooksPath` set, Git stops running every hook in that folder. Tell the owner what the text below the table says, and name each of those files. |
-   | The first command prints nothing, and the second lists only files whose names end in `.sample`, lists no file, or says the folder does not exist | Run `git config core.hooksPath .githooks`. |
-
-   When a row says to change nothing, tell the owner three things:
-
-   - the folder or the files that are already there;
-   - that `validate-records.mjs` will not run before commits in this project;
-   - that the owner can run it from the owner's own hooks with the one line below, in the `pre-commit` file of that folder, or in a new file named `pre-commit` when the folder has none.
-
-   ```text
-   "$(git rev-parse --show-toplevel)/.githooks/pre-commit" || exit 1
-   ```
-
-   Never add the line for the owner, and never change the owner's setting.
-
-"Check the setup" changes nothing in this section. In "check the setup", the final checks report the setting, whether the file is executable, and what `validate-records.mjs` prints. `finishing.md`, "Final checks", lists those checks.
-
-## 6. Check
+## 5. Check
 
 Run these commands:
 
@@ -134,12 +87,10 @@ Run these commands:
 rsync -rcni <copy>/ ./
 ls -la .agents
 git status --short
-git config --get core.hooksPath
 ```
 
 - The first command lists only files that the owner chose to keep as the owner's own.
 - `.agents` shows `skills -> ../.claude/skills`, and `ls .agents/skills` shows the skills.
-- `core.hooksPath` prints `.githooks`, or the owner was told why it does not.
 - `git status` lists the new files and nothing under `work-items/` or `memory/`, because Git ignores both.
 
 Keep the temporary folder until the end of the final checks. `finishing.md`, "Final checks", lists those checks and says when to remove the folder.

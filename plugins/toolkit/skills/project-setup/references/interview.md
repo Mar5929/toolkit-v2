@@ -42,7 +42,7 @@ For the check "A linked worktree", do these things when this session runs in a l
 
 For the check "A folder of the project's own with a name setup uses", do these things when one of the four folders lists a file:
 
-- Stop, and copy nothing. Setup would put the folder's `AGENTS.md` into that folder. The command that checks the records, `.claude/hooks/validate-records.mjs`, would then read every file in `system/` and `sources/` as a record, and it would stop the setup commit and every later commit to those files.
+- Stop, and copy nothing. Setup would put the folder's `AGENTS.md` into that folder. That guide would then describe the files that are already there as the project's records.
 - Name the folder and how many files it holds, and ask the owner: "This project already has `<folder>/`. Rename it, or move its files, before setup?"
 - Go on only when none of the four folders lists a file.
 
@@ -121,8 +121,7 @@ The API version comes after the plan, in step 7 of "New project" in `SKILL.md`. 
 After the owner has answered the questions, say in a few lines what will happen, and wait for the owner's yes. The plan holds these parts:
 
 - Start with the owner's answers in one short line: the name and the owner, where work items are kept (with the ID prefix for local folders; with Notion the prefix is asked later), where memory is kept, Salesforce (and the org aliases), and `SOUL.md`.
-- Say that you will copy the project files for the owner's choices into this folder, with the skills and the 4 small hook commands, for both Claude Code and Codex (setup writes `.codex/` in every project, with no question). Give the skill count. The end of this section says how to count the skills.
-- Say that you will turn on the check of the project's records before each commit (the Git setting `core.hooksPath`, in this copy of the repository).
+- Say that you will copy the project files for the owner's choices into this folder, with the skills and the 3 small hook commands, for both Claude Code and Codex (setup writes `.codex/` in every project, with no question). Give the skill count. The end of this section says how to count the skills.
 - Say that you will turn the older claude-toolkit plugins off for this project only.
 - Say that every project gets `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/` as files in this folder, whatever the owner chose.
 - Name every thing that will be created outside the project folder. The table gives the words to say for each choice.
