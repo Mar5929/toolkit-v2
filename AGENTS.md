@@ -884,6 +884,15 @@ node --test 'dev/tests/*.test.mjs'
   - The bank's settings are in `.claude/hindsight-bank-settings.json`. Change
     one only when Mike asks: change that file, then apply it as
     `<setup>references/hindsight-on-vps.md`, "Apply the settings", says.
+  - Mike chose what the bank gets (2026-10-08): the sessions, and nothing
+    from the Git history or a code survey, because an agent can read Git
+    itself. He found the first memories too many and too noisy.
+  - The bank's instruction for sessions ends with a filter that starts
+    "OWNER FILTER FOR THIS PROJECT". It tells Hindsight to keep decisions
+    with their reason, rules that were set, and problems with how they were
+    solved, and to skip live status and what an agent reported. The filter
+    is kept only on the server, in the bank's `retain_strategies`, under
+    `conversation`. Change it only when Mike asks.
   - This repository is not a toolkit project, so it has no `PROJECT.md` and
     no rule `hindsight-memory.md`. This bullet holds what those would hold.
   - Never use this bank for a test. A test uses a bank made for the test.

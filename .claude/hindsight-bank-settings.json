@@ -5,12 +5,16 @@
   },
   "addOn": {
     "retainSessions": true,
-    "retainExtractionMode": "verbose",
+    "retainExtractionMode": "concise",
     "autoInject": "reflect",
-    "gitIngest": "message",
-    "codebaseSurvey": true,
+    "gitIngest": "none",
+    "codebaseSurvey": false,
     "recallOptions": {
-      "types": ["observation", "world", "experience"]
+      "types": [
+        "observation",
+        "world",
+        "experience"
+      ]
     }
   }
 }
