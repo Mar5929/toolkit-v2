@@ -174,11 +174,14 @@ each save goes to OpenAI, and that work uses the same ChatGPT usage
 allowance as your own Codex sessions. Hindsight writes every memory in
 English.
 
-Setup asks you about six settings of the project's memory bank, in one
+Setup asks you about seven settings of the project's memory bank, in one
 message, each with a default: whether Hindsight builds observations
 (statements it puts together from several saved memories; on by default,
 built after every save), whether every
-session is saved, how much detail a save keeps, what the agent is shown on
+session is saved, how much detail a save keeps (short by default), a
+filter that tells Hindsight what to leave out of a saved session (by
+default the live status of work, and anything true only for the moment),
+what the agent is shown on
 the first message of a session, how much of the Git history is saved, and
 whether the code is surveyed. Say "defaults" to keep them all. The answers
 are kept in the project, in `.claude/hindsight-bank-settings.json`, so
