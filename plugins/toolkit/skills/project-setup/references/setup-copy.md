@@ -143,6 +143,8 @@ Then add each instruction the owner gave during the interview. `finishing.md`, "
 
 The starting text is `assets/owner-preferences.md`, which is outside `every-project`. The reason is that the file is the owner's own file from the first instruction on. So setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it afterwards.
 
+A Salesforce project has a second file of this kind, `.claude/rules/salesforce-agent-permissions.md`. It comes with the `salesforce` folder and holds the owner's choices about what an agent may do in each kind of org, with the toolkit's defaults. Copy it whole and change nothing in it. When the owner gives such a choice during the interview, write it into the file, in the place that the first bullets of the file give. "Update the toolkit" copies the file only into a Salesforce project that has none, and never compares or replaces it afterwards.
+
 ## Check the setup copy
 
 Run each check below. Each of these commands only reads.

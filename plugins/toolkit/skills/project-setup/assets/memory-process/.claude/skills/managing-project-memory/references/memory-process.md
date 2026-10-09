@@ -17,6 +17,7 @@ Two neighbouring jobs belong to other skills. A decision or an open question tha
 - How memory is kept
 - When to search memory
 - When to ask the owner
+- When to clean up all of memory
 - A memory record that is out of date or no longer needed
 - Every time you change a memory record
 - Work that another skill or reference does
@@ -58,6 +59,12 @@ Save, correct, and retire without a question. Ask the owner only when one of the
 - You clean up all of memory, or a part of the project's Current State is over its limit with only true lines. `references/tidying.md` and `references/current-state.md` say to show the owner the plan first, because a clean-up changes many records at once, and a cut removes a line that is still true.
 
 The owner's own request to keep, change, or forget something is the owner's yes. Act on it at once.
+
+## When to clean up all of memory
+
+Clean up all of memory when the owner asks for it, and start at once. Start a clean-up yourself when you judge that memory is no longer small and true. For example, the memory records shown at the start of a session cover one subject twice. When you start a clean-up yourself, choose a point where the owner is not waiting on you, such as after a work item closes.
+
+`references/tidying.md` gives the steps. A helper does the reading in the background, and the owner approves the plan before anything on it changes.
 
 ## A memory record that is out of date or no longer needed
 

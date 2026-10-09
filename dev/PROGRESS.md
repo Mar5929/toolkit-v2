@@ -2,6 +2,145 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## One home for what an agent may do in each Salesforce org, version 0.9.20 (2026-10-08, TKV-37)
+
+Mike's words: "Every salesforce project is different so there will always be
+things I need to tweak and rules specific to that project I need to tweak
+and it shouldn't break the entire toolkit", and "maybe the toolkitv2 could
+ship a default preference file and I could always adjust it on the fly if
+need be." Also: "I don't want you to just keep adding more and more files.
+If we need to refactor existing stuff so that everything is clean ... make
+sure that happens." This is the first of two changes. The guard's code is
+the second, and it is not written.
+
+- **One new file, the owner's own.** A Salesforce project gets
+  `.claude/rules/salesforce-agent-permissions.md`. It holds a table with one
+  row for each kind of action and one column each for a sandbox or scratch
+  org and for production, the list of changes the agent confirms with the
+  owner first, and a part "Only in this project" for dated lines in the
+  owner's words. Each cell says Allowed, Ask first, or Never. Setup copies
+  the file once, and "update the toolkit" never compares or replaces it.
+- **The defaults** (his yes, 2026-10-08). On a sandbox or scratch org:
+  reads, a deploy, a deploy validation, and Apex and Flow tests are Allowed;
+  a data change, anonymous Apex, a deploy with a destructive changes file,
+  and a change to DevOps Center records are Ask first; a profile deploy and
+  a promotion through a DevOps Center pipeline are Never. On production,
+  reads are Allowed and everything else is Never. Three defaults are the
+  builder's. They were shown to Mike on 2026-10-08 with the table, and the
+  change was merged on his word "Merge". He did not approve the three one
+  by one, and he changes any of them by telling the agent: DevOps Center
+  records on a sandbox (Ask first), a promotion on a sandbox (Never), and
+  the last row, "Any other change to an org" (Ask first on a sandbox, Never
+  on production). Before this change such an action had no line of its own:
+  the safety rule said "Read-only against every org, except the sandbox
+  actions below", so it was forbidden.
+- **Three homes, each with one job.** `salesforce-org-safety.md` now holds
+  only the limits that are the same in every project, the commands for each
+  kind of action, and what the guard checks. It says in three lines how it,
+  the owner's file, and the guard fit together. Its sections "Allowed",
+  "Never", and "The owner's yes for a sandbox change" are gone: the limits
+  stayed, and the choices moved to the owner's file.
+- **Two rules removed.** `production-data-changes.md` (the `sf-data-change`
+  skill holds its steps) and `confirm-salesforce-changes.md` (its list is in
+  the owner's file, "Confirm with the owner first"). A Salesforce project
+  now gets ten rules, one fewer than before.
+- **Pointers in place of repeated text:** `permissions-source-control.md`,
+  `salesforce-delivery.md`, `salesforce-project.md`, the three `sf-*`
+  skills, `PERMISSIONS-RUNBOOK.md`, the comments in `protected-orgs.json`,
+  and `salesforce-deploying.md` in `managing-work-items`.
+- **The stop before a deploy.** `managing-work-items` asked the owner before
+  each deploy to an environment that other people use. `lifecycle-rules.md`,
+  stop 5, and `deploying.md` now say that a deploy that a rule of the
+  project allows without a question needs no new yes.
+- **Leftovers removed from setup.** `salesforce.md` and `interview.md` still
+  said that in Codex the owner runs every sandbox deploy, which has not
+  been true since 2026-10-07. `salesforce.md`, `finishing.md`, and
+  `move-over.md` now send an instruction about what an agent may do in an
+  org to the owner's file.
+- **The line "Sandbox questions: off"** no longer goes in the project's
+  Current State. `update.md`, "The owner's choices for Salesforce orgs",
+  moves it into the owner's file in an existing project, and moves an edit
+  of the owner's out of the two removed rules. `setup-copy.md` and
+  `old-toolkit-pieces.md` name the new file.
+- This revisits two decisions of 2026-10-07 (TKV-31): where the sandbox
+  choice is kept, and the default, which was to ask before every sandbox
+  change.
+
+Not in this change: the guard reading the type of an org from the Salesforce
+command line's own login files, and asking in Claude Code when it cannot
+identify an org; and telling the owner to turn off the Salesforce plugin's
+install suggestions (question Q-03 of the work item). `builder-brief.md` was
+left as it is: its line "Never deploy" is a limit on helper agents in every
+project.
+
+A separate reviewer read the change and found nine things that had to be
+fixed and two smaller ones. All eleven were fixed. The most important: stop
+5 of `managing-work-items` still told the agent to ask before every deploy
+to a shared sandbox; an owner's "from now on" choice could land in
+`owner-preferences.md` while the table still said Ask first; an action with
+no row had no instruction; and data changes and test runs in production
+had become something a project line could open, which they were not
+before. Both are "Never (fixed)" again, and the safety rule forbids them in
+every project. Two sentences of the safety rule are new in meaning and need
+Mike's eye. The first: it said never to add a production alias to the
+guard's lists, and now also says that the agent changes
+`protected-orgs.json` only when the owner told it that change in this
+session. The second: "The one kind of production data that a project can
+open to the agent is DevOps Center records, in the owner's file." Opening
+that cell changes nothing in practice yet, because the guard denies every
+data write to production.
+
+The reviewer read the fixes and found two more things, which were fixed: two
+setup files sent every choice of the owner's to "Only in this project", and
+a promotion into production was not marked fixed, although it is a deploy
+to production.
+## Memory is tidied in the background, version 0.9.19 (2026-10-08, TKV-39)
+
+Mike first asked for a background helper that saves memory, like the one in
+his Davis project, without its slowness. The agent objected to a helper for
+every save, and he agreed with the main reason ("this is a fantastic point,
+actually"): since the one-home layout most facts go to work items,
+decisions, and sources, which the main agent must write itself, so such a
+helper would cover little. He chose a helper that tidies memory, for local
+and Notion memory, and wanted it simple: "Just a couple short instructions
+about what files, the scope of what it's looking to tidy up, and when it
+should run that stuff".
+
+- The clean-up of all of memory already existed in the memory skill,
+  `managing-project-memory`, `references/tidying.md`, as one process for
+  local and Notion memory. Nothing started it except the owner asking, and
+  the main agent did all the reading in the conversation.
+- No skill and no agent file was added. The skill got two short sections.
+  - `memory-process.md`, "When to clean up all of memory": when the owner
+    asks, at once, and when the agent judges that memory is no longer
+    small and true. For a clean-up it starts itself, the agent chooses a
+    point where the owner is not waiting, such as after a work item closes.
+    There is no schedule and no count.
+  - `tidying.md`, "A helper reads memory in the background": the main agent
+    starts one helper and hands it `tidying.md` and `memory-store.md`. The
+    helper changes nothing. It returns the changes that do not go on the
+    plan, and the plan. The main agent makes the first kind itself and
+    shows the owner the plan, as the file already required.
+- A Hindsight project has no toolkit memory skill and gets nothing.
+- Agreed with the session that owns the cohesion audit (TKV-43): this
+  change stays out of the parts of the memory skill that the audit's phase
+  P3 will move.
+
+A separate reviewer read the change and found four things that had to be
+fixed, which were fixed. The helper's message pointed it at a file whose
+first section told it to start a helper. The owner's own "tidy memory"
+could be read as something to put off. The file said "Two changes do not go
+on the plan" and then named a third. And one example was dropped that Mike
+had been shown: starting a clean-up when a handoff is written. The owner
+clears the session after a handoff, so the helper's plan would be lost.
+
+Not tested live: a helper in Codex. The text has Codex call `wait_agent`
+before the turn ends, because no captured Codex page says that the main
+agent is told when a helper finishes.
+
+The design for a helper that saves memory on every save, with the
+measurements from Davis, is kept on the work item's page and is not built.
+
 ## A small work item is judged by the agent, version 0.9.18 (2026-10-08)
 
 The agent asked Mike whether a task that fixes the result counts toward the

@@ -28,9 +28,9 @@ A permission set retrieve is complete since API 40.0. A permission set deploy re
 - Before every deploy, run `permsets.py preflight <file> --org <sandbox>`. `sf project deploy validate` and `sf project deploy preview` cannot detect removed grants.
 - A preflight receipt expires after 30 minutes. Re-run it before the deploy.
 - To remove grants on purpose, re-run the preflight with `--accept-removals`.
-- Deploy to a sandbox only, with the owner's yes, as `salesforce-org-safety.md`, section "The owner's yes for a sandbox change", says. The owner runs production.
+- `salesforce-agent-permissions.md` says in which orgs you may deploy, and when you ask the owner first. The owner runs production.
 - Never skip the conflict check (`--ignore-conflicts`, or the same option in any deploy tool) on a permission file.
-- Profiles are excluded. Never deploy a profile from source. The one exception is in `salesforce-org-safety.md`, section "The owner's yes for a sandbox change".
+- Profiles are excluded from these steps. `salesforce-agent-permissions.md` says whether you may deploy a profile.
 - Never edit or disable `.claude/hooks/guard-permission-set-deploy.cjs`. If the hook matches quoted text in another command, put the text in a file.
 
 ## After a deploy

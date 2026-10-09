@@ -182,5 +182,5 @@ Columns, in this fixed order:
 ## Related rules
 
 - `check-deployment-contents.md`: reads this tracker as a hint before any deploy.
-- `salesforce-org-safety.md`: what an agent may do against an org.
+- `salesforce-agent-permissions.md` and `salesforce-org-safety.md`: what an agent may do against an org.
 - `permissions-source-control.md`: how permission sets are fetched, verified, and deployed.
