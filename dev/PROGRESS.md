@@ -2,6 +2,64 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The baseline of the live tests, and one corrected case of the work item question, version 0.9.30 (2026-10-09, TKV-51, TKV-40)
+
+All three eval sets ran in full on version 0.9.25, in the fixed test home.
+`dev/test-runs/evals-baseline-0.9.25.md` is the record, and a later change
+to the instruction text is measured against it.
+
+- The numbers: 19 of 36 record-keeping evals pass, 5 of 9 short-path evals,
+  and 5 of 5 evals for the work item question. The first run, on 0.9.18,
+  had 5 of 36 and 1 of 9, with other expectations in places.
+- One sentence of the starter root guide changed. Version 0.9.25 told the
+  agent not to ask whether to make a work item "when 'Where information
+  goes' or 'Which skill' sends the request somewhere other than a work
+  item". In two runs of two the agent then made a file of records for the
+  owner with no question, and one reply gave the reason: "a load file like
+  this belongs in `delivery/migrations/`". That table names a place for the
+  result of almost every job. The two cases now read: the request is only
+  to save or correct a fact or a project task in the project's records, or
+  one skill in "Which skill" other than `managing-work-items` does the
+  whole request. A separate agent reviewed the sentence and found two gaps
+  in a first version (a to-do, and the Salesforce row of the skill table),
+  and both are closed. Eleven evals ran again on the new sentence: the
+  agent asked in the three runs where it must, and in none of the eight
+  where it must not. The guide is 24,395 bytes.
+- What the baseline shows that is not fixed here:
+  - 14 record-keeping evals fail only on the report of a save. Six name the
+    commit, which `publish-docs`, step 8, was changed in 0.9.22 to stop;
+    the scratch project has no remote. Eight add a sentence or a paragraph
+    beside the lines.
+  - Eval 26 saves a decision as Decided from pasted notes, in three runs of
+    three. `file-source.md` says to record it as Open until a person who
+    may decide confirms it. `record-decision.md`, which the agent follows
+    to write the entry, does not say it.
+  - Short-path eval 9 starts no separate checker for a result that builds a
+    rule in `system/`, in two runs of two.
+  - The edit of `.claude/rules/owner-preferences.md` was refused in two of
+    three sessions without a person, so evals 17 and 19 did not run.
+- The reminder hook was seen working in a live Codex session
+  (`dev/test-runs/codex-reminder-hook-live-0.9.25.md`): the session got the
+  project's Current State at its start, and the two reminder lines and the
+  whole rule with the message. A session without a person runs a project's
+  hooks only when the folder is trusted in the Codex home's `config.toml`
+  and the command has `--dangerously-bypass-hook-trust`.
+- The two walk-throughs that TKV-24 waits on ran in projects set up from
+  main at 0.9.27 (`dev/test-runs/walk-throughs-0.9.27.md`): a Salesforce
+  org merge in eight events and a SaaS feature in five. In both, a new
+  session found the current answer, its source, and the affected work from
+  the records alone. Both also showed three weaknesses of the layout: a
+  reported cutover or release has no clear record, a rule is stated once as
+  the decision and once in `system/`, and a person who looks for a rule by
+  its subject has to guess which document in `system/` holds it.
+- The test tools changed: `run-live-eval.py` saves every block of text of a
+  reply, and the README of the record-keeping set holds the one rule for
+  grading the report of a save.
+- Tested: every check in `AGENTS.md`, "Checks".
+- Cost of the day's live runs: about 190 dollars of usage (the baseline 97,
+  the eleven reruns 32, the two walk-throughs 37, a first check of seven
+  evals on the branch and the base projects about 25).
+
 ## The writing rule names a reader who is new to the project, version 0.9.29 (2026-10-09, TKV-50)
 
 Mike approved five additions to the writing rule, `document-clarity-standard.md`,

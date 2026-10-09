@@ -27,7 +27,7 @@ The folder `evals-baseline-0.9.25/` holds every message, every reply, the list o
 
 The command for each message is the one in `run-live-eval.py`: `claude -p` with `--permission-mode acceptEdits` and the tools `Bash Read Write Edit Glob Grep Skill Agent ToolSearch`. No option that skips permission checks was used. Every session finished, so no run was repeated for a service error.
 
-Main was at version 0.9.27 when the run ended. Versions 0.9.26 and 0.9.27 changed no instruction text that this base project gets: the only difference in its files is three lines of `.claude/settings.json`.
+Main was at version 0.9.27 when the run ended. Versions 0.9.26 and 0.9.27 changed no instruction text that this base project gets: the only difference in its files is three lines of `.claude/settings.json`. Version 0.9.29, later the same day, changed the writing rule `document-clarity-standard.md`, which every project gets. The baseline was not run with that change.
 
 ## How the runs were graded
 
