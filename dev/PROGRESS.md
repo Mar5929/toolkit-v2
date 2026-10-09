@@ -2,6 +2,67 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The agent asks whether a job gets a work item, version VERSION-TO-SET (2026-10-09, TKV-51)
+
+The live tests of 2026-10-08 ran on version 0.9.18. Their three records are
+now in `dev/test-runs/` (`skill-routing-0.9.18.md`,
+`evals-small-work-item-0.9.18.md`, `evals-keeping-project-records-0.9.18.md`),
+with the record of the four evals that were run again for 0.9.22.
+
+- In six of the nine short-path runs the agent made no work item for a
+  small direct job, and in one run it committed a new file to the default
+  branch with no check. Mike decided that the agent asks him: "The agent
+  should just ask me if something g needs a work item. Keep it simple".
+- The starter root guide, section "Every session", has one new bullet. When
+  the owner asks for work and no work item covers it, the agent asks in one
+  short line whether to make a work item, says which it recommends, and
+  waits. It does not ask when the owner has already said, when the turn
+  only answers a question, or when the whole result of the work is text in
+  the agent's reply. Mike has not yet confirmed that third case: it was put
+  to him on 2026-10-09, and it is built until he answers, because without
+  it the agent asks before every quick draft. After a no, every change to a file that Git
+  tracks goes in a worktree and on a branch of its own, and reaches the
+  default branch only after the owner's yes. A project document is the
+  exception, because `publish-docs` commits it.
+- Two lines of the guide changed so that they fit the new bullet: the row
+  "A new request, idea, or bug" of "Where information goes" points to
+  "Every session", and "How to write a question to the owner" now also
+  yields to a form that the guide itself gives. The guide is 24,292 bytes,
+  under its limit of 24,576.
+- The tests follow the decision. Four of the nine short-path evals make or
+  change a file, and they start with the question and Mike's yes. The
+  prompts of four others, whose result is a text in the reply, now say to
+  make a work item. The messages that follow say what they answer ("Yes,
+  that's right."), so that a reply that asks nothing is not answered with a
+  bare "Yes.". A new set, `dev/evals/work-item-question/` (5 evals), tests
+  a no, a job whose result is only text in the reply, a request that
+  already says "no work item", a turn that only asks a question, and work
+  that a work item covers.
+- The report expectation of 31 record-keeping evals now says what Mike
+  approved for 0.9.22: one short line for each record that changed, and
+  nothing else about the save. It is decided from the lines that report
+  the save.
+- The six record faults of the first run were read again. Four were
+  expectations stricter than the shipped rules (evals 5, 7, 24, and 30),
+  and those expectations changed. One was a question that offers further
+  work, which the README now says is not a question about saving
+  (eval 12). One is a real miss: in eval 26 the agent saved a decision as
+  Decided, and a rule as Approved, from pasted call notes. The eval is
+  unchanged, and the next run shows whether the miss repeats.
+- Two things that the first run's scoring exposed in the tests changed:
+  eval 3 of the short-path set now says how the staging server gets the
+  file, evals 2 and 8 have Mike answer the question about personal data in
+  his second message.
+- `dev/evals/tools/` is new and not shipped: `build-base-project.sh` builds
+  the base project with a real setup, `run-live-eval.py` runs one eval in
+  the fixed test home, and `grader-brief.md` is the brief for a helper that
+  grades the runs. The first run's scripts were in a temporary folder.
+- Tested: every check in `AGENTS.md`, "Checks". The new text was reviewed
+  by two separate agents: REVIEW-RESULT-TO-SET.
+- Not tested yet: the new text in a live session. The run of all three
+  sets on this version is the next step, and its record will be the
+  baseline that the wording rewrite (TKV-50) is measured against.
+
 ## The rule to evaluate the owner's request fits with the reply instructions, version 0.9.22 (2026-10-08)
 
 Phase P1 of TKV-43, the audit of how the shipped skills, rules, and hooks

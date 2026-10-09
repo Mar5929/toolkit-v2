@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "Tomas just sent me this. Read it and tell me if it changes anything for offline sync.\n\nFrom: Tomas Lindqvist\nTo: Mike Rihm\nSubject: Hosting help\n\nMike, quick one. I've brought in Ilse Varga to look after the hosting side of the sync server from now on. She's a freelance ops person I've worked with before. Anything about where the server runs, uptime, or the hosting bill goes to her. I still own the server code and the sync logic, so nothing changes there.\n\nTomas",
-      "expected_output": "Situation 1: a new person with a role. The fact arrives in a pasted email, inside a question about offline sync. The agent adds Ilse Varga to the people in PROJECT.md, takes the hosting out of Tomas's row, files the email as SRC-002, and tells Mike in one line. It asks nothing about saving. It also answers the question: offline sync does not change, because Tomas keeps the server code and the sync logic.",
+      "expected_output": "Situation 1: a new person with a role. The fact arrives in a pasted email, inside a question about offline sync. The agent adds Ilse Varga to the people in PROJECT.md, takes the hosting out of Tomas's row, files the email as SRC-002, and tells Mike in one short line for each record that changed. It asks nothing about saving. It also answers the question: offline sync does not change, because Tomas keeps the server code and the sync logic.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -28,7 +28,7 @@
         "The pasted email is filed unchanged in `sources/` under the next free ID, SRC-002, and `sources/README.md` has a row for it whose From cell names Tomas Lindqvist.",
         "Ilse Varga's row names where the fact came from: SRC-002, or Tomas's email with the run date.",
         "No memory record under `memory/` holds Ilse Varga's role.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers the question Mike asked: nothing changes for offline sync, because Tomas still owns the server code and the sync logic."
       ]
@@ -36,7 +36,7 @@
     {
       "id": 2,
       "prompt": "Heads up, Nadia's taking over the beta group from Bea starting today. Bea's staying on as a tester but she doesn't have the time to run it anymore, so who's in, who's out, and telling the testers stuff all goes through Nadia now. With that in mind, what's still open on the beta side?",
-      "expected_output": "Situation 2: a role change. The fact is in Mike's own words, inside a question about the beta. The agent moves the beta tester group from Bea to Nadia in PROJECT.md, corrects the other records that name Bea for that job (the project's Current State and PT-04), and leaves history alone: DEC-002 still says Bea raised it. It tells Mike in one line, asks nothing about saving, and lists what is open for the beta.",
+      "expected_output": "Situation 2: a role change. The fact is in Mike's own words, inside a question about the beta. The agent moves the beta tester group from Bea to Nadia in PROJECT.md, corrects the other records that name Bea for that job (the project's Current State and PT-04), and leaves history alone: DEC-002 still says Bea raised it. It tells Mike in one short line for each record that changed, asks nothing about saving, and lists what is open for the beta.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -61,7 +61,7 @@
         "PT-04 in `work-items/PROJECT-TASKS.md` no longer says that Bea tells the testers. It names Nadia.",
         "The changed row in `PROJECT.md` names Mike and the run date as where the change came from.",
         "DEC-002 in `DECISIONS.md` still says that Bea Hollis raised it: a record of what happened earlier is not rewritten.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply lists what is open for the beta, and the list names DEC-002 and PT-04."
       ]
@@ -69,7 +69,7 @@
     {
       "id": 3,
       "prompt": "Got this from Nadia this morning. Can you draft me a short thank-you to send back?\n\nFrom: Nadia Okafor\nTo: Mike Rihm\nSubject: Wrapping up\n\nHi Mike, as we discussed, last Friday was my last day on Pocket Ledger. The entry screen design is final and it's in the Figma file, so we don't need the review call on the 23rd. I won't be doing any more screens, so you'll want someone else for those. It's been fun.\n\nNadia",
-      "expected_output": "Situation 3: someone leaves. The fact arrives in a pasted email, inside a request for a draft. The agent takes Nadia's current role out of PROJECT.md, removes the design review call from the project's Current State, files the email as SRC-002, and tells Mike in one line. It asks nothing about saving, and it writes the thank-you draft.",
+      "expected_output": "Situation 3: someone leaves. The fact arrives in a pasted email, inside a request for a draft. The agent takes Nadia's current role out of PROJECT.md, removes the design review call from the project's Current State, files the email as SRC-002, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it writes the thank-you draft.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -92,15 +92,15 @@
         "`memory/CURRENT_STATE.md` no longer lists the design review call with Nadia on 2026-10-23 under \"Coming up\".",
         "The pasted email is filed unchanged in `sources/` as SRC-002, with a row in `sources/README.md` whose From cell names Nadia Okafor.",
         "The change in `PROJECT.md` names where it came from: SRC-002, or Nadia's email with its date.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
-        "The reply holds the draft of a short thank-you to Nadia."
+        "The reply holds the draft of a short thank-you to Nadia, and it does not ask whether to make a work item."
       ]
     },
     {
       "id": 4,
       "prompt": "When I say the tape, I just mean the day's list. That's what I've always called it in my head, so you'll hear it a lot. Anyway, what has to be filled in before something shows up on the tape?",
-      "expected_output": "Situation 4: a new nickname for a field. The fact is in Mike's own words, inside a question. The agent adds \"the tape\" to the glossary as another name for \"day's list\", with Mike and the run date as the source, and tells Mike in one line. It asks nothing about saving, and it answers from WI-031: an amount, a date, and a category.",
+      "expected_output": "Situation 4: a new nickname for a field. The fact is in Mike's own words, inside a question. The agent adds \"the tape\" to the glossary as another name for \"day's list\", with Mike and the run date as the source, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it answers from WI-031: an amount, a date, and a category.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -122,7 +122,7 @@
         "`system/glossary.md` holds \"the tape\" as another name for \"day's list\": in the \"Distinction or alias\" cell of that row, or in a row of its own that points to it.",
         "The glossary gives Mike and the run date as the source of the alias.",
         "No memory record under `memory/` holds the nickname.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers from WI-031, Requirement 1: an amount, a date, and a category must be filled in, and notes are optional."
       ]
@@ -130,7 +130,7 @@
     {
       "id": 5,
       "prompt": "Let's park the chart library thing. I'm not going to look at charts until the first beta's out the door, so stop waiting on me for it. What does that leave on my plate right now?",
-      "expected_output": "Situation 5: the active work changes. The fact is in Mike's own words, inside a question. The agent writes the pause into WI-033's Current state and Recent History, changes the \"Now\" part of the project's Current State, and tells Mike in one line. It asks nothing about saving. Its answer leaves Q-04 of WI-033 out of what waits on Mike.",
+      "expected_output": "Situation 5: the active work changes. The fact is in Mike's own words, inside a question. The agent writes the pause into WI-033's Current state and Recent History, copies nothing about it into the project's Current State, and tells Mike in one short line for each record that changed. It asks nothing about saving. Its answer leaves Q-04 of WI-033 out of what waits on Mike.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -151,9 +151,8 @@
       "expectations": [
         "WI-033's Current state, the five lines at its top, says that the work item is parked until the first beta build is out, and that Mike said so.",
         "WI-033 has a new Recent History row with the run date for the pause.",
-        "In `memory/CURRENT_STATE.md`, \"Now\" no longer lists WI-033 as active work, or its line says that WI-033 is parked.",
-        "The \"Last updated\" line of `memory/CURRENT_STATE.md` holds the run date.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "In `memory/CURRENT_STATE.md`, no line copies where WI-033 stands. A line for WI-033 under \"Now\" holds only its ID and a few words on what it is for: the hold is recorded in WI-033.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply's list of what waits on Mike leaves out Q-04 of WI-033."
       ]
@@ -161,7 +160,7 @@
     {
       "id": 6,
       "prompt": "Nobody touches the sync server for the next two weeks. Tomas is moving it to a new host and he doesn't want anything deployed or changed on it, staging included, until he says it's done. Does that get in the way of anything we've got going?",
-      "expected_output": "Situation 6: a constraint across work is added. The fact is in Mike's own words, inside a question. The freeze is true only for a while and fits no row outside memory, so the agent saves it in memory with the day it ends, names Mike as the source, and tells Mike in one line. It asks nothing about saving, and it answers the question.",
+      "expected_output": "Situation 6: a constraint across work is added. The fact is in Mike's own words, inside a question. The freeze is true only for a while and fits no row outside memory, so the agent saves it in memory with the day it ends, names Mike as the source, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it answers the question.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -184,7 +183,7 @@
         "That record gives the day the freeze ends or must be checked again, two weeks after the run date. In a memory record this is the `check_by` date.",
         "That record names where the fact came from: Mike, on the run date, passing on what Tomas asked for.",
         "The freeze is not written as a rule in `system/`.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers the question: no work in progress needs the server now, because WI-032 is still in its requirements."
       ]
@@ -192,7 +191,7 @@
     {
       "id": 7,
       "prompt": "The first beta build is slipping two weeks. It's going out December 4th now, not November 20th. Apple still hasn't approved the developer account and I'm not going to rush it.",
-      "expected_output": "Situation 7: the schedule shifts. The fact is Mike's whole message. The agent changes the date in both records that hold it, the \"Coming up\" line of the project's Current State and PT-04, and tells Mike in one line. It asks nothing about saving.",
+      "expected_output": "Situation 7: the schedule shifts. The fact is Mike's whole message. The agent changes the date in both records that hold it, the \"Coming up\" line of the project's Current State and PT-04, and tells Mike in one short line for each record that changed. It asks nothing about saving.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -213,16 +212,16 @@
       "expectations": [
         "In `memory/CURRENT_STATE.md`, the \"Coming up\" line for the first beta build starts with 2026-12-04.",
         "No line in `memory/CURRENT_STATE.md` still gives 2026-11-20 as the date of the first beta build.",
-        "PT-04 in `work-items/PROJECT-TASKS.md` says 2026-12-04, and it no longer says 2026-11-20.",
+        "PT-04 in `work-items/PROJECT-TASKS.md` gives 2026-12-04 as the date of the upload. A sentence that names 2026-11-20 only as the earlier date is not a failure.",
         "The \"Last updated\" line of `memory/CURRENT_STATE.md` holds the run date and names Mike as the source.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it."
       ]
     },
     {
       "id": 8,
       "prompt": "I ripped Sentry out over the weekend. Crash reports go to Firebase Crashlytics now, it's on the same Google account as everything else. Can you check whether any of our open work still mentions Sentry?",
-      "expected_output": "Situation 8: a tool is replaced. The fact is in Mike's own words, inside a request to check the open work. The agent replaces Sentry with Firebase Crashlytics in the systems table of PROJECT.md, corrects the note in WI-031 that names Sentry, and tells Mike in one line. It asks nothing about saving, and it reports that WI-031 mentioned Sentry.",
+      "expected_output": "Situation 8: a tool is replaced. The fact is in Mike's own words, inside a request to check the open work. The agent replaces Sentry with Firebase Crashlytics in the systems table of PROJECT.md, corrects the note in WI-031 that names Sentry, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it reports that WI-031 mentioned Sentry.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -245,7 +244,7 @@
         "No row in `PROJECT.md` still says that Sentry is in use: the Sentry row is removed, or it says that Sentry was replaced and when.",
         "WI-031's Notes, \"Context\", no longer says that crash reports go to Sentry.",
         "`PROJECT.md` says where the change came from: Mike and the run date are in the Crashlytics row or beside the table.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers the question: WI-031 was the open work item that mentioned Sentry."
       ]
@@ -253,7 +252,7 @@
     {
       "id": 9,
       "prompt": "I signed up with a little shop called Kestrel QA to do device testing for us. They've got a wall of old iPhones. Imogen Rask is my contact there, she runs the tests and sends me a report after every build.",
-      "expected_output": "Situation 9: a new vendor. The fact is Mike's whole message. A vendor and its contact are a stable fact about the project's people, so the agent adds a row to \"People and ownership\" in PROJECT.md, with Mike and the run date as the source, and tells Mike in one line. It asks nothing about saving.",
+      "expected_output": "Situation 9: a new vendor. The fact is Mike's whole message. A vendor and its contact are a stable fact about the project's people, so the agent adds a row to \"People and ownership\" in PROJECT.md, with Mike and the run date as the source, and tells Mike in one short line for each record that changed. It asks nothing about saving.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -275,14 +274,14 @@
         "`PROJECT.md`, \"People and ownership\", has a new row for Kestrel QA that names Imogen Rask as the contact and device testing as the responsibility.",
         "The new row names Mike and the run date as where the fact came from.",
         "The vendor is not kept only in a memory record: `PROJECT.md` holds it.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it."
       ]
     },
     {
       "id": 10,
       "prompt": "I shut the staging server down last night. It was seven bucks a month for nothing. We'll test sync against a server running on my Mac from here on.",
-      "expected_output": "Situation 10: a system is removed. The fact is Mike's whole message. The agent corrects the three records the change made wrong: the staging row in PROJECT.md, the \"Waiting on\" line for PT-01 in the project's Current State, and PT-01 itself, which nobody needs now. It records where sync is tested from now on, tells Mike in one line, and asks nothing about saving.",
+      "expected_output": "Situation 10: a system is removed. The fact is Mike's whole message. The agent corrects the three records the change made wrong: the staging row in PROJECT.md, the \"Waiting on\" line for PT-01 in the project's Current State, and PT-01 itself, which nobody needs now. It records where sync is tested from now on, tells Mike in one short line for each record that changed, and asks nothing about saving.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -306,14 +305,14 @@
         "PT-01 in `work-items/PROJECT-TASKS.md` is no longer an open task that waits on Tomas: it says that the staging server was shut down.",
         "A record says that sync is now tested against a server on Mike's Mac: `PROJECT.md`, or WI-032.",
         "`PROJECT.md` says where the change came from: Mike and the run date.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it."
       ]
     },
     {
       "id": 11,
       "prompt": "Nadia put every screen design into one Figma file, it's at https://example.com/figma/pocket-ledger-screens. That's the place to look for any screen from now on. Can you pull up what we've agreed for the entry screen so far?",
-      "expected_output": "Situation 11: a new link for a spec. The fact is in Mike's own words, inside a request. Where to find something is kept in memory, so the agent saves the link in one memory record, with Mike and the run date as the source, and tells Mike in one line. It asks nothing about saving, and it shows what WI-031 holds for the entry screen.",
+      "expected_output": "Situation 11: a new link for a spec. The fact is in Mike's own words, inside a request. Where to find something is kept in memory, so the agent saves the link in one memory record, with Mike and the run date as the source, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it shows what WI-031 holds for the entry screen.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -335,7 +334,7 @@
         "A memory record under `memory/` holds the link https://example.com/figma/pocket-ledger-screens and says what is there: every screen design, made by Nadia.",
         "That record names Mike and the run date as where the link came from.",
         "The link is written in one record only. It is not copied into `memory/CURRENT_STATE.md` or into a work item.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply shows what is agreed for the entry screen, from WI-031: the required fields (R-01) and entry in under 10 seconds (R-02)."
       ]
@@ -343,7 +342,7 @@
     {
       "id": 12,
       "prompt": "Tomas wrote up how the phone has to talk to the sync server. Anybody picking up offline sync needs to read this before anything else.\n\nSync notes, Tomas Lindqvist\n\n1. The phone sends its changes in batches of at most 50 transactions.\n2. Every transaction carries the ID the phone gave it. The server never makes up an ID.\n3. If a batch fails halfway, the phone sends the whole batch again. The server ignores any transaction ID it already has.\n4. The server answers with the time it stored each transaction.",
-      "expected_output": "Situation 12: a new starting file for complex work. The fact arrives as pasted notes. In Toolkit V2 the work item is where a session starts, and a document someone gave the project is a source. So the agent files the notes as SRC-002, names SRC-002 in WI-032 as the thing to read first, and tells Mike in one line. It asks nothing about saving, and it copies the notes into no other record.",
+      "expected_output": "Situation 12: a new starting file for complex work. The fact arrives as pasted notes. In Toolkit V2 the work item is where a session starts, and a document someone gave the project is a source. So the agent files the notes as SRC-002, names SRC-002 in WI-032 as the thing to read first, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it copies the notes into no other record.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -367,14 +366,14 @@
         "WI-032 says that SRC-002 is read first: in its Current state, or in its Notes.",
         "The \"Used by\" cell of the SRC-002 row names WI-032.",
         "No memory record under `memory/` repeats the text of the notes.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it."
       ]
     },
     {
       "id": 13,
       "prompt": "Bea moved the tester list out of her own Drive and into the shared Pocket Ledger folder. New link is https://example.com/drive/pocket-ledger/beta-testers, the old one's dead. How many testers have we got on there, do you know?",
-      "expected_output": "Situation 13: a reference is moved. The fact is in Mike's own words, inside a question. The agent changes the existing memory record in place: the new link replaces the old one, and the description no longer says the sheet is in Bea's own Drive. It tells Mike in one line and asks nothing about saving. It answers 12, and says the number comes from Bea's email and not from the sheet.",
+      "expected_output": "Situation 13: a reference is moved. The fact is in Mike's own words, inside a question. The agent changes the existing memory record in place: the new link replaces the old one, and the description no longer says the sheet is in Bea's own Drive. It tells Mike in one short line for each record that changed and asks nothing about saving. It answers 12, and says the number comes from Bea's email and not from the sheet.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -398,7 +397,7 @@
         "The `description` of that record no longer says that the sheet is in Bea's own Drive.",
         "The `updated` field of that record holds the run date, and the record names Mike and the run date as the source of the new location.",
         "`memory/` holds one record about the tester sheet, not two: the existing record was changed in place.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply says 12 testers, and it says that the number comes from Bea's email of 2026-09-29 (SRC-001) and not from the sheet."
       ]
@@ -406,7 +405,7 @@
     {
       "id": 14,
       "prompt": "Actually, Bea sends the feedback round-up on Wednesdays, not Mondays. I told you Monday at the kickoff and that was just wrong. So when's the next one due?",
-      "expected_output": "Situation 14: the owner says \"actually\" about something recorded. The fact is in Mike's own words, inside a question. The agent corrects the line under \"Operating conventions\" in PROJECT.md in place, with Mike and the run date as the source, and tells Mike in one line. It asks nothing about saving, and it gives the next Wednesday.",
+      "expected_output": "Situation 14: the owner says \"actually\" about something recorded. The fact is in Mike's own words, inside a question. The agent corrects the line under \"Operating conventions\" in PROJECT.md in place, with Mike and the run date as the source, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it gives the next Wednesday.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -429,7 +428,7 @@
         "No line in `PROJECT.md` still says that the round-up comes on Mondays.",
         "The corrected line names Mike and the run date as its source.",
         "The convention is one line, changed in place: `PROJECT.md` has no second line about the day of the round-up.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply gives the next Wednesday after the run date as the day the next round-up is due."
       ]
@@ -437,7 +436,7 @@
     {
       "id": 15,
       "prompt": "Draft me a two-line note for the beta testers saying the first build lands on November 20th. There are 15 of them now, by the way. Bea added three people from her running club last week.",
-      "expected_output": "Situation 15: the owner contradicts a memory record. Mike does not say that he is correcting anything: the new number is an aside inside a request for a draft. The agent changes the number in the memory record about the beta group, says where the new number came from, and does not claim that the three new testers live in the United States, because nobody said so. It tells Mike in one line, asks nothing about saving, and writes the note.",
+      "expected_output": "Situation 15: the owner contradicts a memory record. Mike does not say that he is correcting anything: the new number is an aside inside a request for a draft. The agent changes the number in the memory record about the beta group, says where the new number came from, and does not claim that the three new testers live in the United States, because nobody said so. It tells Mike in one short line for each record that changed, asks nothing about saving, and writes the note.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -461,15 +460,15 @@
         "The record names where the new number came from: Mike, on the run date, who said that Bea added three people.",
         "The record does not state as a confirmed fact that all 15 testers live in the United States.",
         "The `updated` field of the record holds the run date.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
-        "The reply holds the two-line note for the testers."
+        "The reply holds the two-line note for the testers, and it does not ask whether to make a work item."
       ]
     },
     {
       "id": 16,
       "prompt": "I've got Bea on the phone in ten minutes. What is she still supposed to get me?",
-      "expected_output": "Situation 16: a record is found out of date. Mike's message holds no new fact. The project's Current State says that Bea owes PT-02, and PT-02 has been Done since 2026-10-01. The agent finds this when it checks what Bea owes, removes the out-of-date line in the same turn without asking, and tells Mike in one line. Its answer is that Bea owes nothing for PT-02.",
+      "expected_output": "Situation 16: a record is found out of date. Mike's message holds no new fact. The project's Current State says that Bea owes PT-02, and PT-02 has been Done since 2026-10-01. The agent finds this when it checks what Bea owes, removes the out-of-date line in the same turn without asking, and tells Mike in one short line for each record that changed. Its answer is that Bea owes nothing for PT-02.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -499,7 +498,7 @@
     {
       "id": 17,
       "prompt": "From now on, write dates out for me, like November 20th. Never 11/20, I mix up the month and the day every single time. So with that in mind, when's the first beta build going out?",
-      "expected_output": "Situation 17: \"never do X\" or \"always use Y\". The instruction is in Mike's own words, inside a question. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`, so the agent adds one line there in the file's layout and tells Mike in one line. It asks nothing about saving, and it answers with the date written out.",
+      "expected_output": "Situation 17: \"never do X\" or \"always use Y\". The instruction is in Mike's own words, inside a question. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`, so the agent adds one line there in the file's layout and tells Mike in one short line for each record that changed. It asks nothing about saving, and it answers with the date written out.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -522,7 +521,7 @@
         "The new line ends with the run date, Mike's name, and \"in chat\", as the layout note in that file says.",
         "The lines that were already in `.claude/rules/owner-preferences.md` are unchanged.",
         "The instruction is not saved as a memory record under `memory/`.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply gives the date of the first beta build written out, as November 20th, and not as 11/20."
       ]
@@ -530,7 +529,7 @@
     {
       "id": 18,
       "prompt": "That short status you gave me yesterday, three lines and then the one thing you need from me. That's how I want them. The long ones lose me. Give me one like that now.",
-      "expected_output": "Situation 18: a preference confirmed in the session. Mike confirms a way of working inside a request for a status. `.claude/rules/owner-preferences.md` holds an older line that asks for the opposite, so the agent replaces that line with the new one and tells Mike in one line. It asks nothing about saving, and the status it gives is short.",
+      "expected_output": "Situation 18: a preference confirmed in the session. Mike confirms a way of working inside a request for a status. `.claude/rules/owner-preferences.md` holds an older line that asks for the opposite, so the agent replaces that line with the new one and tells Mike in one short line for each record that changed. It asks nothing about saving, and the status it gives is short.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -553,7 +552,7 @@
         "The older line that asked for the full detail in a status update is gone: the new line replaced it.",
         "The new line ends with the run date, Mike's name, and \"in chat\".",
         "The line under \"Git\" in `.claude/rules/owner-preferences.md` is unchanged.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The status update in the reply is short: about three lines, then what the agent needs from Mike. It does not list every work item and every open question."
       ]
@@ -561,7 +560,7 @@
     {
       "id": 19,
       "prompt": "One thing. Before you ever message a tester or touch anything in TestFlight, check with me first. Bea got a weird automated email from some other app last month and I don't want that happening here. Okay, so what do the testers need to hear from us before the first build?",
-      "expected_output": "Situation 19: a new \"ask me first\" pattern. The instruction is in Mike's own words, inside a question. The agent adds one line to `.claude/rules/owner-preferences.md` and leaves the root AGENTS.md alone, because that file changes only with the owner's yes on a branch. It tells Mike in one line, asks nothing about saving, and proposes what to tell the testers without sending anything.",
+      "expected_output": "Situation 19: a new \"ask me first\" pattern. The instruction is in Mike's own words, inside a question. The agent adds one line to `.claude/rules/owner-preferences.md` and leaves the root AGENTS.md alone, because that file changes only with the owner's yes on a branch. It tells Mike in one short line for each record that changed, asks nothing about saving, and proposes what to tell the testers without sending anything.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -584,7 +583,7 @@
         "The new line ends with the run date, Mike's name, and \"in chat\".",
         "The root `AGENTS.md` is unchanged: the instruction is not added to its \"Ask the owner first\" list.",
         "The instruction is not saved as a memory record under `memory/`.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply proposes what to tell the testers, and the agent sends nothing."
       ]
@@ -592,7 +591,7 @@
     {
       "id": 20,
       "prompt": "Quick thing so you don't get it wrong later. A transaction's ID is the phone's device ID, a dash, and a six-digit counter, like D7F2-000123. The phone makes it and the server never does. Everything that matches transactions up has to use that. Now, for the no-duplicates requirement on offline sync, is our acceptance check good enough?",
-      "expected_output": "Situation 20: keys the agent will use again. The fact is in Mike's own words, inside a question. It is a rule of the system that more than one work item relies on, so it goes in `system/data-model.md`, with the decision behind it in DECISIONS.md, and not in memory. The agent tells Mike in one line, asks nothing about saving, and answers the question about WI-032.",
+      "expected_output": "Situation 20: keys the agent will use again. The fact is in Mike's own words, inside a question. It is a rule of the system that more than one work item relies on, so it goes in `system/data-model.md`, with the decision behind it in DECISIONS.md, and not in memory. The agent tells Mike in one short line for each record that changed, asks nothing about saving, and answers the question about WI-032.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -614,7 +613,7 @@
         "`system/data-model.md` holds a rule that gives the form of a transaction's ID: the phone's device ID, a dash, and a six-digit counter, made by the phone.",
         "The rule names an entry in `DECISIONS.md`, and the Decided line of that entry holds the run date and Mike.",
         "No memory record under `memory/` holds the form of the ID.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers the question about the acceptance check of WI-032, Requirement 3."
       ]
@@ -622,7 +621,7 @@
     {
       "id": 21,
       "prompt": "If the phone and the server ever disagree about the category list, the server wins, full stop. The phone only keeps a copy, and I don't want categories edited on the phone at all for now. Does anything in transaction entry go against that?",
-      "expected_output": "Situation 21: which data source wins. The decision is in Mike's own words, inside a question. More than one work item needs it, so the agent records it in DECISIONS.md as DEC-003, names DEC-003 in WI-031, and tells Mike in one line. It asks nothing about saving, and it answers the question.",
+      "expected_output": "Situation 21: which data source wins. The decision is in Mike's own words, inside a question. More than one work item needs it, so the agent records it in DECISIONS.md as DEC-003, names DEC-003 in WI-031, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it answers the question.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -645,7 +644,7 @@
         "The Decided line of DEC-003 holds the run date and Mike.",
         "WI-031's \"Related items\" line names DEC-003.",
         "No memory record under `memory/` repeats the decision.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers the question: WI-031 lists the categories in its Notes, and nothing in it goes against the decision."
       ]
@@ -653,7 +652,7 @@
     {
       "id": 22,
       "prompt": "Tomas sent this about the server. Does it change anything in the offline sync requirements?\n\nFrom: Tomas Lindqvist\nTo: Mike Rihm\nSubject: Rate limit on the sync server\n\nMike, one thing to know before you build sync. The server takes at most 60 requests a minute from one phone. Past that it answers with a 429 and drops the request, it does not queue it. There is no retry-after header, so the phone has to wait a full minute by itself. I set it up this way on day one and it is live on production now.\n\nTomas",
-      "expected_output": "Situation 22: how an integration behaves. The fact arrives in a pasted email, inside a question. The agent files the email as SRC-002 and writes how the server behaves today in a file under `reference/current-system/`, with SRC-002 as the evidence. It points WI-032 to that record, and it does not turn the email into a decision or an approved rule. It tells Mike in one line, asks nothing about saving, and says how the limit bears on sync within 1 minute.",
+      "expected_output": "Situation 22: how an integration behaves. The fact arrives in a pasted email, inside a question. The agent files the email as SRC-002 and writes how the server behaves today in a file under `reference/current-system/`, with SRC-002 as the evidence. It points WI-032 to that record, and it does not turn the email into a decision or an approved rule. It tells Mike in one short line for each record that changed, asks nothing about saving, and says how the limit bears on sync within 1 minute.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -677,7 +676,7 @@
         "That file names SRC-002 as the evidence for the limit.",
         "WI-032 names SRC-002, or the path of that file, in its Notes.",
         "The limit is not written as an approved rule in `system/` or as a Decided entry in `DECISIONS.md`: an email by itself decides nothing.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply says how the limit bears on WI-032, Requirement 2, which asks for sync within 1 minute."
       ]
@@ -685,7 +684,7 @@
     {
       "id": 23,
       "prompt": "Tester feedback goes in the TestFlight feedback inbox from now on, not the Feedback tab in Bea's sheet. That tab's frozen, nobody should add to it. Where were we keeping the stuff testers have already sent?",
-      "expected_output": "Situation 23: a new home for a kind of information. The fact is in Mike's own words, inside a question. The memory record about the tester sheet says that new feedback goes in the \"Feedback\" tab, which is now wrong. The agent corrects that record, records the new place, and tells Mike in one line. It asks nothing about saving, and it answers that the earlier feedback is in the \"Feedback\" tab.",
+      "expected_output": "Situation 23: a new home for a kind of information. The fact is in Mike's own words, inside a question. The memory record about the tester sheet says that new feedback goes in the \"Feedback\" tab, which is now wrong. The agent corrects that record, records the new place, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it answers that the earlier feedback is in the \"Feedback\" tab.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -707,7 +706,7 @@
         "`memory/reference_beta_tester_sheet.md` no longer says that new feedback goes in the \"Feedback\" tab. It says that the tab is frozen.",
         "A record says that tester feedback now goes in the TestFlight feedback inbox: that memory record, another memory record, or the TestFlight row of `PROJECT.md`.",
         "The changed record names Mike and the run date as where the change came from.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers the question: the feedback that testers already sent is in the \"Feedback\" tab of the beta tester sheet."
       ]
@@ -715,7 +714,7 @@
     {
       "id": 24,
       "prompt": "Change of plan on the monthly totals. The phone works them out itself now. The server just stores transactions and doesn't compute anything, Tomas already took that code out.",
-      "expected_output": "Situation 24: an ownership line moves. The fact is Mike's whole message. The systems table in PROJECT.md says that the server computes the monthly totals, which is now wrong. The agent corrects the table so that the app works out the totals and the server only stores transactions, names Mike and the run date as the source, and tells Mike in one line. It asks nothing about saving.",
+      "expected_output": "Situation 24: an ownership line moves. The fact is Mike's whole message. The systems table in PROJECT.md says that the server computes the monthly totals, which is now wrong. The agent corrects the table so that the app works out the totals and the server only stores transactions, names Mike and the run date as the source, and tells Mike in one short line for each record that changed. It asks nothing about saving.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -736,15 +735,15 @@
       "expectations": [
         "In `PROJECT.md`, \"Systems and environments\", the row for the production sync server no longer says that the server computes the monthly totals.",
         "`PROJECT.md` says that the iPhone app works out the monthly totals.",
-        "`PROJECT.md` says where the change came from: Mike and the run date.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "`PROJECT.md` says where the change came from: it names Mike and the run date, or it names the ID of a record that does, such as an entry in `DECISIONS.md`.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it."
       ]
     },
     {
       "id": 25,
       "prompt": "Tomas wrote a runbook for the sync server, what to do when it falls over. It's in his repo, pocket-ledger-server, at ops/RUNBOOK.md. If the server's ever down and I'm asking you what to do, start there. Unrelated, what's the next step on offline sync?",
-      "expected_output": "Situation 25: a new top-level document. The fact is in Mike's own words, before an unrelated question. Where to find something, and when to open it, is kept in memory, so the agent saves one memory record that names the repository, the path, and the case it is for. It tells Mike in one line, asks nothing about saving, and gives WI-032's next action.",
+      "expected_output": "Situation 25: a new top-level document. The fact is in Mike's own words, before an unrelated question. Where to find something, and when to open it, is kept in memory, so the agent saves one memory record that names the repository, the path, and the case it is for. It tells Mike in one short line for each record that changed, asks nothing about saving, and gives WI-032's next action.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -767,7 +766,7 @@
         "That record says when to open the runbook: when the sync server is down.",
         "That record names Mike and the run date as where the fact came from.",
         "The runbook's location is not written as an entry in `DECISIONS.md` or as a rule in `system/`.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply gives WI-032's next action: the agent checks that the requirements are complete, then asks Mike to approve them."
       ]
@@ -775,7 +774,7 @@
     {
       "id": 26,
       "prompt": "Notes from this morning's call with Tomas and Nadia are below. What do I owe people out of this?\n\nCall notes, Pocket Ledger. Mike, Tomas, Nadia.\n\n- Amounts. Mike decided that we store every amount as a whole number of cents, never as a decimal. Tomas agrees, the server already does this. It applies to the app, to sync, and to anything that shows a total.\n- Nadia showed a sketch of the settings screen. No decision. She sends a second version next week.\n- Tomas asked for a test account on the staging server. Mike creates it this week.",
-      "expected_output": "Situation 26: a lasting decision lands. The facts arrive as pasted call notes, inside a question. The agent files the notes as SRC-002, records the decision about amounts as DEC-003, with the Status Open and SRC-002 as its source, because only the notes say that Mike decided it, names DEC-003 in WI-031 and WI-032, and saves what Mike and Nadia each owe. It records no decision about the settings screen. It tells Mike in one line, asks him in one line to confirm DEC-003, asks nothing about saving, and tells Mike that he owes Tomas the test account.",
+      "expected_output": "Situation 26: a lasting decision lands. The facts arrive as pasted call notes, inside a question. The agent files the notes as SRC-002, records the decision about amounts as DEC-003, with the Status Open and SRC-002 as its source, because only the notes say that Mike decided it, names DEC-003 in WI-031 and WI-032, and saves what Mike and Nadia each owe. It records no decision about the settings screen. It tells Mike in one short line for each record that changed, asks him in one line to confirm DEC-003, asks nothing about saving, and tells Mike that he owes Tomas the test account.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -801,7 +800,7 @@
         "`work-items/PROJECT-TASKS.md` has a new task for the test account on the staging server, and its \"Who does it\" line says owner.",
         "A record holds what Nadia owes, the second version of the settings screen sketch: a project task, or a line under \"Waiting on\" in `memory/CURRENT_STATE.md`.",
         "The settings screen sketch is not recorded as a decision.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply tells Mike what he owes: the test account on the staging server, for Tomas."
       ]
@@ -809,7 +808,7 @@
     {
       "id": 27,
       "prompt": "We're dropping iOS 17. The minimum is iOS 18 now. Two of the things Nadia designed need it, and I'd rather cut 17 than build them twice. Does that change the chart library pick?",
-      "expected_output": "Situation 27: a decision is replaced. The decision is in Mike's own words, inside a question. The agent adds DEC-003 for iOS 18 and newer, sets DEC-001 to Superseded without changing its Decision text, links the two entries, names DEC-003 in the work items that named DEC-001, and tells Mike in one line. It asks nothing about saving, and it answers that the pick stands.",
+      "expected_output": "Situation 27: a decision is replaced. The decision is in Mike's own words, inside a question. The agent adds DEC-003 for iOS 18 and newer, sets DEC-001 to Superseded without changing its Decision text, links the two entries, names DEC-003 in the work items that named DEC-001, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it answers that the pick stands.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -833,7 +832,7 @@
         "The Status of DEC-001 is Superseded.",
         "The Decision text of DEC-001 is unchanged: it still says iOS 17 and newer.",
         "The \"Related items\" lines of WI-031 and WI-033 name DEC-003.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply answers the question: the pick stands, because Swift Charts works on iOS 16 and newer."
       ]
@@ -841,7 +840,7 @@
     {
       "id": 28,
       "prompt": "Let's switch over to offline sync today. Transaction entry can sit until I've answered those two questions.",
-      "expected_output": "Situation 28: the focus shifts. Mike asks to work on another work item, and says nothing about the project's Current State. The agent changes \"Next session starts with\" so that it names WI-032, leaves WI-031 as it is, and starts on WI-032's next action. It tells Mike in one line and asks nothing about saving.",
+      "expected_output": "Situation 28: the focus shifts. Mike asks to work on another work item, and says nothing about the project's Current State. The agent changes \"Next session starts with\" so that it names WI-032, leaves WI-031 as it is, and starts on WI-032's next action. It tells Mike in one short line for each record that changed and asks nothing about saving.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -863,7 +862,7 @@
         "In `memory/CURRENT_STATE.md`, \"Next session starts with\" names WI-032.",
         "The \"Last updated\" line of `memory/CURRENT_STATE.md` holds the run date.",
         "WI-031 keeps its State, Refining Requirements, and it still waits on Mike for Q-05 and Q-06.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply starts the work on WI-032 from its next action: the check that its requirements are complete."
       ]
@@ -871,7 +870,7 @@
     {
       "id": 29,
       "prompt": "On Bea's question about her cousin, the answer's no. Nobody outside the US in the first beta, I don't want to deal with other currencies yet. So what does that unblock?",
-      "expected_output": "Situation 29: a new lasting decision that the next session must see. Mike answers an open question inside another question, and does not name it by its ID. The agent finds DEC-002, sets it to Decided in place, and removes the \"Waiting on\" line for it from the project's Current State, so the next session no longer starts with it as open. It tells Mike in one line, asks nothing about saving, and says what the answer bears on.",
+      "expected_output": "Situation 29: a new lasting decision that the next session must see. Mike answers an open question inside another question, and does not name it by its ID. The agent finds DEC-002, sets it to Decided in place, and removes the \"Waiting on\" line for it from the project's Current State, so the next session no longer starts with it as open. It tells Mike in one short line for each record that changed, asks nothing about saving, and says what the answer bears on.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -894,7 +893,7 @@
         "The Decision line of DEC-002 gives the answer: nobody outside the United States joins the first beta.",
         "`DECISIONS.md` has no second entry for the same decision: DEC-002 was changed in place.",
         "`memory/CURRENT_STATE.md`, \"Waiting on\", no longer has the line that says Mike owes DEC-002.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply says what the decision bears on: Q-06 of WI-031, the currencies of the first version."
       ]
@@ -902,7 +901,7 @@
     {
       "id": 30,
       "prompt": "This just came in from Tomas. What can we still get done on sync in the meantime?\n\nFrom: Tomas Lindqvist\nTo: Mike Rihm\nSubject: Production server\n\nMike, bad news on the production server. The hosting company put the account under review after I changed the card, and I can't create the production database until they clear it. They say up to five business days. Until then there is no production address for the app to point at. Staging still works.\n\nTomas",
-      "expected_output": "Situation 30: a new blocker. The fact arrives in a pasted email, inside a question. The agent files the email as SRC-002, adds a \"Waiting on\" line to the project's Current State for the hosting company's review, names the source, and tells Mike in one line. It asks nothing about saving, and it lists the work that can go on.",
+      "expected_output": "Situation 30: a new blocker. The fact arrives in a pasted email, inside a question. The agent files the email as SRC-002, adds a \"Waiting on\" line to the project's Current State for the hosting company's review, names the source, and tells Mike in one short line for each record that changed. It asks nothing about saving, and it lists the work that can go on.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -922,10 +921,10 @@
       ],
       "expectations": [
         "The pasted email is filed unchanged in `sources/` as SRC-002, with a row in `sources/README.md` whose From cell names Tomas Lindqvist.",
-        "`memory/CURRENT_STATE.md`, \"Waiting on\", has a new line for the hosting company's review of the account, which holds up the production server.",
+        "`memory/CURRENT_STATE.md`, \"Waiting on\", has a new line for what holds up the production server: the hosting company's review of the account, or the project task that waits for that review.",
         "The new line starts with who owes the next step, the hosting company or Tomas Lindqvist, and it gives the run date.",
         "A record of the blocker names SRC-002 as where it came from: the new line, the \"Last updated\" line, a project task, or WI-032.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply lists work that can go on in the meantime, such as the requirements of WI-032 or a test on the staging server."
       ]
@@ -933,7 +932,7 @@
     {
       "id": 31,
       "prompt": "Tomas walked me through the staging sign-in on a call just now and I'm in, so that one's done. What's next on offline sync?",
-      "expected_output": "Situation 31: a blocker is cleared. The fact is in Mike's own words, inside a question, and Mike does not name the task. The agent finds PT-01, marks it Done, removes its \"Waiting on\" line from the project's Current State, and corrects the staging row in PROJECT.md, which still says Mike has no sign-in. It tells Mike in one line, asks nothing about saving, and gives WI-032's next action.",
+      "expected_output": "Situation 31: a blocker is cleared. The fact is in Mike's own words, inside a question, and Mike does not name the task. The agent finds PT-01, marks it Done, removes its \"Waiting on\" line from the project's Current State, and corrects the staging row in PROJECT.md, which still says Mike has no sign-in. It tells Mike in one short line for each record that changed, asks nothing about saving, and gives WI-032's next action.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -956,7 +955,7 @@
         "`memory/CURRENT_STATE.md`, \"Waiting on\", no longer has the line that says Tomas Lindqvist owes PT-01.",
         "`PROJECT.md`, \"Systems and environments\", no longer says that Mike has no sign-in to the staging server.",
         "The \"Last updated\" line of `memory/CURRENT_STATE.md` holds the run date.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply gives WI-032's next action."
       ]
@@ -964,7 +963,7 @@
     {
       "id": 32,
       "prompt": "Apple approved the developer account this morning, we're officially enrolled. What should I be looking at next?",
-      "expected_output": "Situation 32: a major item is finished. The fact is in Mike's own words, inside a question. The agent marks PT-03 Done, takes the enrollment out of the \"Now\" part of the project's Current State, and corrects the TestFlight row in PROJECT.md, which still says the account waits for Apple. It tells Mike in one line, asks nothing about saving, and says what comes next.",
+      "expected_output": "Situation 32: a major item is finished. The fact is in Mike's own words, inside a question. The agent marks PT-03 Done, takes the enrollment out of the \"Now\" part of the project's Current State, and corrects the TestFlight row in PROJECT.md, which still says the account waits for Apple. It tells Mike in one short line for each record that changed, asks nothing about saving, and says what comes next.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
@@ -987,7 +986,7 @@
         "`memory/CURRENT_STATE.md`, \"Now\", no longer lists the enrollment in the Apple Developer Program.",
         "`PROJECT.md` no longer says that the Apple developer account waits for Apple's approval.",
         "The \"Last updated\" line of `memory/CURRENT_STATE.md` holds the run date.",
-        "The reply tells Mike what was saved in one line, or in one line for each record that changed, and not in a longer report.",
+        "The reply says what was saved in one short line for each record that changed, and adds nothing else about the save.",
         "The agent makes the change in the same turn and asks Mike no question about whether or where to save it.",
         "The reply says what comes next, and it names at least one thing that waits on Mike: Q-05 or Q-06 of WI-031, Q-04 of WI-033, or DEC-002."
       ]
@@ -1023,7 +1022,7 @@
     {
       "id": 34,
       "prompt": "I think Tomas said the hosting bill roughly doubles in January, when the free tier runs out. Not sure I heard that right, it was at the end of a call. Anyway, is there anything on the server side that's still owed to us?",
-      "expected_output": "Edge of the goal: a fact nobody confirmed. Mike is not sure of what he heard. One uncertain fact is not a contradiction, so the agent does not ask: it saves the claim in memory, marks it as not confirmed, says who it came from, and tells Mike in one line. It answers the question: Tomas owes PT-01.",
+      "expected_output": "Edge of the goal: a fact nobody confirmed. Mike is not sure of what he heard. One uncertain fact is not a contradiction, so the agent does not ask: it saves the claim in memory, marks it as not confirmed, says who it came from, and tells Mike in one short line for each record that changed. It answers the question: Tomas owes PT-01.",
       "files": [
         "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
         "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",

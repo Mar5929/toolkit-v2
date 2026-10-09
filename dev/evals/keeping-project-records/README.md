@@ -69,17 +69,18 @@ Each fixture file is a filled copy of a starter form. When a starter form change
 | `project/sources/README.md` | `every-project/sources/README.md` | SRC-001, so that the next free ID is SRC-002. |
 | `project/sources/SRC-001-beta-group-email.md` | None. A filed source has no form. | The source of both memory records and of DEC-002. |
 | `project/system/glossary.md` | `every-project/system/glossary.md` | The row for "day's list", which eval 4 adds another name to. |
-| `project/memory/CURRENT_STATE.md` | `memory-local/memory/CURRENT_STATE.md` | A line for each of evals 2, 3, 5, 7, 10, 16, 28, 29, 31, and 32 to correct. |
+| `project/memory/CURRENT_STATE.md` | `memory-local/memory/CURRENT_STATE.md` | A line for each of evals 2, 3, 7, 10, 16, 28, 29, 31, and 32 to correct. The line for WI-033 under "Now", which eval 5 must leave as it is. |
 | `project/memory/project_beta_group.md`, `project/memory/reference_beta_tester_sheet.md` | `memory-local/memory/project_topic_template.md` | The number 12, which eval 15 corrects. The link and the "Feedback" tab, which evals 13 and 23 correct. |
 | `project/work-items/PROJECT-TASKS.md` | `work-local/work-items/PROJECT-TASKS.md` | PT-01 (evals 10 and 31), PT-02 (eval 16), PT-03 (eval 32), and PT-04 (evals 2 and 7). |
 | The three work items | `work-local/work-items/work-item-template/WORK-ITEM.md` | The "Related items" lines, the note about Sentry in WI-031, and the requirements and next actions that the prompts ask about. |
 
 Every other file of the scratch project comes from the starter when the base project is built: the root `AGENTS.md` and `CLAUDE.md`, the rules, the skills, the hook commands, the settings, the other system documents, the `AGENTS.md` of each folder, and the templates for a work item and a memory record. Those files are not stored here, so they cannot differ from the starter.
 
-Know these three things about the fixture and the expectations before you read a result:
+Know these four things about the fixture and the expectations before you read a result:
 
 - **One line is out of date.** The project's Current State says that Bea owes PT-02, and PT-02 has been Done since 2026-10-01. Eval 16 tests whether the agent finds and corrects this line. A run of another eval that also corrects the line has not failed.
 - **The evals expect no question before a change to `PROJECT.md`.** The Project map tells the agent to keep the facts of `PROJECT.md` current. The agent asks only before it changes what the project is for or its scope. An agent that asks before it adds a person or a system fails the "asks Mike no question" expectation of evals 1, 2, 3, 8, 9, 10, 14, 24, 31, and 32.
+- **No prompt calls for the question whether to make a work item.** The root guide, section "Every session", tells the agent to ask that question before it starts work that no work item covers. Every prompt here asks a question, states a fact, concerns a work item that exists, or asks for a draft whose whole result is text in the reply (evals 3 and 15). The agent must not ask it in any of them.
 - **The dates are fixed.** The fixture was written on 2026-10-07. It holds a call on 2026-10-23, a beta build on 2026-11-20, and three "check again" dates from 2026-10-06 to 2026-10-09. After one of these dates has passed, an agent may also report that it has passed. That report is not a failure. To avoid it, move the dates forward in the fixture and in evals 3, 7, 15, and 17, which name them.
 
 ## Building the base project
@@ -147,7 +148,9 @@ How to read a result:
 - A failed eval from 1 to 32 means that the goal did not catch that situation, or that it put the fact in the wrong place. The repair is a change to the goal or to the general process.
 - Three expectations repeat in most evals, and each one is a sentence of the goal: the reply says what was saved in one short line for each record that changed, the agent asks nothing about saving, and the record names where the fact came from. When one of these three fails in many evals, that sentence of the goal is not working, and no single situation is the cause.
 - The root guide may give a few examples under the goal. An eval whose situation is one of those examples tests the example, and not the goal alone. Name those evals when you report a result.
-- A question about the work is not a question about saving. An agent that asks Mike which design to pick has not failed "asks Mike no question about whether or where to save it".
+- A question about the work is not a question about saving. An agent that asks Mike which design to pick has not failed "asks Mike no question about whether or where to save it". The same holds for an offer of further work with a fact that is already saved, such as writing rules from a filed source, and for the question whether to make a work item.
+- Decide the expectation about the report of a save from the lines of the reply that report the save. The answer to Mike's request, a Sources list, and a question about the work are not part of the report. A sentence about the commit or the remote is part of it. That sentence fails the expectation, unless the main checkout does not hold the save: `publish-docs`, step 8, says when the reply names the commit.
+- A work item's line under "Now" in the project's Current State holds the work item's ID and a few words on what it is for, from the time the work item leaves Backlog until it is Done or Cancelled. Where the work item stands is in the work item. So a work item that is put on hold keeps its line.
 - A change that no expectation names is not a failure. Report it when it made a record wrong.
 
 ## Which situation each eval tests
@@ -160,7 +163,7 @@ How to read a result:
 | 2 | 2 | A role change | Mike's words | Yes | `PROJECT.md`, "People and ownership" | Bea's row; the "Coming up" line for the beta build; PT-04 |
 | 3 | 3 | Someone leaves | A pasted email | Yes | `PROJECT.md`, "People and ownership"; the email in `sources/` | Nadia's row; the "Coming up" line for 2026-10-23 |
 | 4 | 4 | A new nickname for a field | Mike's words | Yes | `system/glossary.md` | The row for "day's list" |
-| 5 | 5 | The active work changes | Mike's words | Yes | WI-033's Current state; "Now" in the project's Current State | Both |
+| 5 | 5 | The active work changes | Mike's words | Yes | WI-033's Current state | WI-033's Current state |
 | 6 | 6 | A constraint across work is added | Mike's words | Yes | Memory, with the day the constraint ends | None |
 | 7 | 7 | The schedule shifts | Mike's words | No | "Coming up" in the project's Current State; PT-04 | Both |
 | 8 | 8 | A tool is replaced | Mike's words | Yes | `PROJECT.md`, "Systems and environments" | The Sentry row; a note in WI-031 |

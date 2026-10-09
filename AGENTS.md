@@ -1033,6 +1033,36 @@ node --test 'dev/tests/*.test.mjs'
     notes or a transcript "decide nothing" (his yes, 2026-10-08). It now
     says that only the owner's own words are the owner's yes, and that the
     agent records what a source says and files it.
+- **The owner decides whether a job gets a work item** (Mike, 2026-10-08,
+  work item TKV-51). In the live tests of 2026-10-08 the agent made no work
+  item for a small direct job in six of nine runs, and in one run it
+  committed a new file to the default branch with no check. His words: "The
+  agent should just ask me if something g needs a work item. Keep it simple".
+  - The starter root `AGENTS.md`, section "Every session", holds the rule,
+    and no other file states it again. When the owner asks for work and no
+    work item covers it, the agent asks in one short line whether to make a
+    work item, says which it recommends, and waits. It does not ask when the
+    owner has already said, when the turn only answers a question, or when
+    the whole result of the work is text in the agent's reply.
+  - Mike has not yet confirmed the third of those cases, the result that is
+    only text in the reply, such as a short draft. It was put to him on
+    2026-10-09 through the Main Orchestrator session, which said to build it
+    until he answers. Without it, the agent asks the question before every
+    quick draft. When he chooses that the agent asks there too, remove that
+    clause from the starter guide and change the tests that the README of
+    `dev/evals/work-item-question/` names.
+  - He chose a separate one-line question over a question at the end of a
+    play-back of the job, and he said yes to this: a change with no work
+    item still goes on a branch and reaches the default branch only after
+    his yes (both on 2026-10-08, to a numbered list of decisions: "Go with
+    your recommendations for all"). A project document is the exception,
+    because `publish-docs` commits it.
+  - The situations are tests: `dev/evals/work-item-question/` (5 evals)
+    tests when the agent asks and what follows a no, and four of the nine
+    evals in `dev/evals/small-work-item-short-path/` start with the question
+    and a yes. Never copy a situation from there into an instruction.
+  - `dev/evals/tools/run-live-eval.py` runs one eval of a set in a headless
+    Claude Code session, in the fixed test home. It is not shipped.
 - **Jira is deferred** by Mike: no Jira skills now.
 - **Read-only sources.** Never change
   `/Users/michaelrihm/Documents/Projects/claude-toolkit`,

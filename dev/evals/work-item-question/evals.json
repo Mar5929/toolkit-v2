@@ -1,0 +1,147 @@
+{
+  "skill_name": "work-item-question",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a file `app/Config/Build.xcconfig` with the one line `SWIFT_VERSION = 5.10`, so the build stops guessing the Swift version.",
+      "expected_output": "Work item question, case (a): Mike asks for a change to a file that Git tracks, and says no to a work item. Three messages. The first reply asks in one short line whether to make a work item, with the agent's recommendation, and nothing is built. After Mike's no, the agent makes the file in a worktree of its own, on a branch of its own, and asks Mike before it merges the branch into main. After Mike's yes it merges. It makes no work item.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT-ROADMAP.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/CURRENT_STATE.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/project_beta_group.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/reference_beta_tester_sheet.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/SRC-001-beta-group-email.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/system/glossary.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/PROJECT-TASKS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
+      ],
+      "expectations": [
+        "Reply 1 asks Mike in one short line whether to make a work item. The line names the work and says whether the agent recommends a work item. Reply 1 asks Mike nothing else, and the file `app/Config/Build.xcconfig` exists on no branch after message 1.",
+        "After message 2, the file `app/Config/Build.xcconfig` holds exactly the one line Mike gave. It is committed on a branch that is not main, in a worktree that is not the main checkout.",
+        "After message 2, main does not hold `app/Config/Build.xcconfig`, and the main checkout has no uncommitted copy of it.",
+        "Reply 2 asks Mike whether to merge the branch into main. It asks that one question.",
+        "After message 3, main holds `app/Config/Build.xcconfig` with exactly the one line Mike gave.",
+        "No work item WI-034 exists at the end of the run. No reply plays the request back with \"Is that right?\", and no reply asks \"Approve this result and mark WI-034 Done?\"."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write me a two-line text for the TestFlight \"What to test\" box of the second build. The entry screen is faster, and the day's list now shows a total at the bottom.",
+      "expected_output": "Work item question, case (b): Mike asks for a short text, and the whole result is text in the agent's reply. One message. The agent does not ask whether to make a work item. Its reply holds the text. Nothing in Git changes, so the agent makes no branch and asks nothing about a merge.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT-ROADMAP.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/CURRENT_STATE.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/project_beta_group.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/reference_beta_tester_sheet.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/SRC-001-beta-group-email.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/system/glossary.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/PROJECT-TASKS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
+      ],
+      "expectations": [
+        "Reply 1 does not ask Mike whether to make a work item.",
+        "Reply 1 holds a text of two lines that names both changes: the faster entry screen, and the total at the bottom of the day's list.",
+        "No work item WI-034 exists at the end of the run.",
+        "The run makes no commit and no branch for the text, and reply 1 does not ask Mike about a merge."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "No work item for this one, it's a two minute job. Add a file `app/Config/Signing.xcconfig` with the one line `CODE_SIGN_STYLE = Automatic`.",
+      "expected_output": "Work item question, case (c): Mike has already said that the job gets no work item. One message. The agent does not ask whether to make one. It makes the file in a worktree of its own, on a branch of its own, and asks Mike before it merges the branch into main.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT-ROADMAP.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/CURRENT_STATE.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/project_beta_group.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/reference_beta_tester_sheet.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/SRC-001-beta-group-email.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/system/glossary.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/PROJECT-TASKS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
+      ],
+      "expectations": [
+        "Reply 1 does not ask Mike whether to make a work item.",
+        "The file `app/Config/Signing.xcconfig` holds exactly the one line Mike gave. It is committed on a branch that is not main, in a worktree that is not the main checkout.",
+        "Main does not hold `app/Config/Signing.xcconfig` at the end of the run, and the main checkout has no uncommitted copy of it.",
+        "Reply 1 asks Mike whether to merge the branch into main. It asks that one question.",
+        "No work item WI-034 exists at the end of the run."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "How many open questions does transaction entry still have, and which of them wait on me?",
+      "expected_output": "Work item question, case (d): the turn only answers a question. One message. The agent answers from WI-031 and does not ask whether to make a work item.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT-ROADMAP.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/CURRENT_STATE.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/project_beta_group.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/reference_beta_tester_sheet.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/SRC-001-beta-group-email.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/system/glossary.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/PROJECT-TASKS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
+      ],
+      "expectations": [
+        "Reply 1 answers from WI-031: two questions are open, Q-05 and Q-06, and both wait on Mike.",
+        "Reply 1 does not ask Mike whether to make a work item.",
+        "No work item WI-034 exists at the end of the run. The run changes no requirement and no question row of WI-031."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "One more thing for offline sync. A transaction that the server doesn't have yet should show a small \"not synced\" badge in the day's list, so people know it hasn't gone up.",
+      "expected_output": "Work item question, case (e): a work item covers the work. One message. Offline sync is WI-032, so the agent does not ask whether to make a work item. It records the new requirement in WI-032, in Mike's words, with `managing-work-items`. WI-032 is still in Refining Requirements, so nothing is built.",
+      "files": [
+        "dev/evals/fixtures/pocket-ledger-records/owner-preferences.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/DECISIONS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT-ROADMAP.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/PROJECT.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/CURRENT_STATE.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/project_beta_group.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/memory/reference_beta_tester_sheet.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/README.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/sources/SRC-001-beta-group-email.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/system/glossary.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/PROJECT-TASKS.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-031.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-031-transaction-entry/WI-032-offline-sync/WI-032.md",
+        "dev/evals/fixtures/pocket-ledger-records/project/work-items/WI-033-charting-library/WI-033.md"
+      ],
+      "expectations": [
+        "Reply 1 does not ask Mike whether to make a work item.",
+        "WI-032 holds a new requirement, or a change to one of its requirements, whose Original verbatim requirement holds Mike's words about the \"not synced\" badge.",
+        "No work item WI-034 exists at the end of the run: the requirement is in WI-032.",
+        "Nothing is built: the run adds no code, and WI-032 still has `requirements_approved: no`."
+      ]
+    }
+  ]
+}
