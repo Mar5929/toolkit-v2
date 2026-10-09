@@ -5,19 +5,14 @@
     "email": "michael@rihm.com"
   },
   "metadata": {
-    "description": "Toolkit V2: the toolkit plugin, whose project-setup skill sets up and updates one solo developer's projects in Claude Code and Codex, and the workstreams plugin, a side panel for Claude Code that lists the work a project's chats are doing. The agent runs the project; the owner decides and steers.",
-    "version": "0.9.25"
+    "description": "Toolkit V2: the toolkit plugin, whose project-setup skill sets up and updates one solo developer's projects in Claude Code and Codex. The agent runs the project; the owner decides and steers.",
+    "version": "0.9.26"
   },
   "plugins": [
     {
       "name": "toolkit",
       "source": "./plugins/toolkit",
       "description": "Sets up Toolkit V2 in a project, or moves a project from the older toolkit onto it: copies the project files, work and memory skills with the selected storage references, and the hooks."
-    },
-    {
-      "name": "workstreams",
-      "source": "./plugins/workstreams",
-      "description": "Shows the pieces of work this project's Claude chats report, the chat handling each one, and each chat's state, in a side panel. Open it with /streams. Claude Code only."
     }
   ]
 }

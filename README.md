@@ -5,9 +5,7 @@ in Claude Code or Codex. You make the decisions and steer. The agent does the
 work, tracks it, and remembers what matters.
 
 It is written instructions plus four small hooks. There is no program to
-install, run, or keep working (your decision of 2026-09-29). The one
-exception is the workstream panel for Claude Code (your decision of
-2026-10-03), described below.
+install, run, or keep working (your decision of 2026-09-29).
 
 ## The parts
 
@@ -67,57 +65,6 @@ choices for it. The toolkit does not ship those tools. The file is not a
 skill, so the agent reads it only in a chat opened in this repository, and
 setup never copies it into a project. To add a tool, say "add this to my tool
 list" in a chat opened in this repository.
-
-## The workstream panel
-
-A second plugin, `workstreams`, adds a side panel to Claude Code. Type
-`/streams` in any project folder. It shows the Claude chats you have going in
-that project and what each one is working on. It needs no Notion.
-
-- **One card per chat.** A small "Chat" label sits above the chat's name.
-  The card shows whether the chat is working, asking you a question, or
-  stopped, your last message to it, and how many helper agents it runs. A
-  chat named "Main Orchestrator" is listed first, then the chats that need
-  you.
-- **Its workstreams are inside the card**, under a "Workstreams" label and
-  indented. Each one has a name and three labelled lines, always in this
-  order: About, Status, Next.
-  - The name is a short subject line in your own plain words.
-  - About is one or two plain sentences on what you asked for and why. It is
-    there to remind you what the work is, and it stays as first written.
-  - Status is a colored label: Needs you, Blocked, or In progress.
-  - Next is the next step and who does it.
-- **Collapse.** Press Collapse on a card to fold away its workstreams. The
-  folded card still says how many there are and how many need you. Press
-  Expand to open it again.
-- **Mark done.** Press it on a workstream when it is finished. It moves to
-  the "Done today" list. A chat's agent can also report a workstream as done.
-- **Hide.** Press it on a workstream to hide it without calling it done.
-  Press "Dismiss chat" after you archive a chat, because the panel is not
-  told about that. What you press applies in every chat's panel.
-- A workstream comes back if a chat reports it again. A chat comes back if
-  you write to it again.
-- **Done today.** The work finished in the last day.
-- Each chat's agent reports its own work with a small tool the plugin gives
-  it. That costs a few tokens per report, plus one short instruction at the
-  start of each chat. Opening and refreshing the panel costs none.
-- The agent reports only a significant piece of work: a work item, or a
-  large task you asked for and are following. It does not report the steps
-  inside one, a quick question, or a small chore. A chat with nothing to
-  report still shows as a chat. One chat can show several pieces of work.
-- A chat renamed in the sidebar shows its new name in the panel.
-- A chat appears after its next message once the plugin is installed. A chat
-  in a worktree under the project's `.claude/worktrees/` folder counts as
-  the same project.
-- It is built for the Claude Code terminal and the desktop app, on Mac and
-  Windows. So far it has run in the desktop app and the terminal on Mac,
-  never on Windows. It does not work in Codex.
-
-Install it once per computer:
-
-```bash
-claude plugin install workstreams@toolkit-v2
-```
 
 ## Set up a project
 
@@ -460,11 +407,10 @@ The agent never does these for you. It tells you when each one is needed.
 ## Where things are
 
 - `OUTSIDE-TOOLS.md`: your tool list ("Your tool list" above).
-- `plugins/toolkit/`: the main plugin, with its two skills in `skills/`.
+- `plugins/toolkit/`: the plugin, with its two skills in `skills/`.
   The `skills/project-setup/assets/` folder holds the starter project:
   `every-project/` (the files, skills, and hooks every project gets), one
   or more folders for each choice, and `settings/`.
-- `plugins/workstreams/`: the workstream panel.
 - `reference/how-the-owner-works-with-agents.md`: what you ask agents to do
   in your real projects, in your own words, one section per project. It is
   not installed anywhere.
