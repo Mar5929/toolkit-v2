@@ -1,1 +1,0 @@
-Set up this project with the toolkit. My answers: the project name is greet, track work in local folders, use the built-in memory, and it is not a Salesforce project. I'm Mike. For anything else, use your recommendations.

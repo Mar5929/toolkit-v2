@@ -1,1 +1,0 @@
-Yes, merge it locally into main; there is no remote. I approve the merge and the git commands you need, and you can close both items out when they are done.

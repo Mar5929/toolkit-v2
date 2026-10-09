@@ -1,7 +1,0 @@
-0.226s :: 'const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item'
-0.27s :: 'const r=await tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:4000}); text(r.output)\n'
-0.27s :: 'const r=await tools.exec_command({cmd:"toolkit work next",max_output_tokens:4000}); text(r.output)\n'
-0.263s :: 'const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:5000}); text(r.output)\n'
-0.254s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:4000}); text(r.output)\n'
-0.243s :: 'const r=await tools.exec_command({cmd:"toolkit work lifecycle",max_output_tokens:5000}); text(r.output)\n'
-MAX toolkit call seconds: 0.27

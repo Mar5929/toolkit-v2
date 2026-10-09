@@ -1,7 +1,0 @@
-0.295s :: 'const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.3.0/skills/project-setup/SKILL.md","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude'
-0.239s :: 'const x = await Promise.allSettled([\n  tools.exec_command({cmd:"pwd; rg --files -g \'AGENTS.md\' -g \'.toolkit.json\' -g \'sfdx-project.json\' -g \'package.json\' -g \'README*\' -g \'.git\' -g \'.codex/**\' -g \'.agents/**\' | head -80;'
-0.254s :: 'const x = await Promise.allSettled([\n tools.exec_command({cmd:"git rev-parse --show-toplevel","max_output_tokens":1000}),\n tools.exec_command({cmd:"git status --short --branch","max_output_tokens":1000}),\n tools.exec_com'
-0.268s :: 'const r=await tools.exec_command({cmd:"toolkit doctor","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex","max_output'
-0.283s :: 'const r=await tools.exec_command({cmd:"toolkit hindsight health","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex","'
-4.309s :: 'const r=await tools.exec_command({cmd:"toolkit hindsight health","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex","'
-MAX toolkit call seconds: 4.309

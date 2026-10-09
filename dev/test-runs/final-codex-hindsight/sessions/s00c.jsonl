@@ -1,6 +1,0 @@
-{"type":"thread.started","thread_id":"01a0ea0e-4db6-7a32-8217-2d5ae93f1c9b"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Work items will live in local folders.\n\nWhere should project memory live? I recommend the built-in `.memory/` folder because it is private and needs no server. **Hindsight** is another option, but the Codex sandbox prevented me from checking whether its local server is running."}}
-{"type":"turn.completed","usage":{"input_tokens":157052,"cached_input_tokens":139520,"cache_write_input_tokens":0,"output_tokens":1132,"reasoning_output_tokens":319}}

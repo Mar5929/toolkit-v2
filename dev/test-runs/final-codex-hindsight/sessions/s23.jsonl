@@ -1,9 +1,0 @@
-{"type":"thread.started","thread_id":"01a0ea3b-8d74-7113-afaa-f3880eed6c82"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I’ll run the two commands in the order you gave and report each result."}}
-{"type":"item.started","item":{"id":"item_3","type":"command_execution","command":"/bin/zsh -lc 'toolkit work list && git status --short'","aggregated_output":"","exit_code":null,"status":"in_progress"}}
-{"type":"item.completed","item":{"id":"item_3","type":"command_execution","command":"/bin/zsh -lc 'toolkit work list && git status --short'","aggregated_output":"No open work items. Add --all to include finished, cancelled, and archived ones.\n","exit_code":0,"status":"completed"}}
-{"type":"item.completed","item":{"id":"item_4","type":"agent_message","text":"- `git add -A` was blocked before execution by the PreToolUse hook. It said to stage changed files by name.\n- `toolkit work list && git status --short` completed with exit code 0. It reported no open work items; `git status --short` produced no output. The command guard also warned against joining a toolkit command with another command."}}
-{"type":"turn.completed","usage":{"input_tokens":69347,"cached_input_tokens":57984,"cache_write_input_tokens":0,"output_tokens":729,"reasoning_output_tokens":432}}

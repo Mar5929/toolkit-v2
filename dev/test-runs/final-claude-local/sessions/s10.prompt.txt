@@ -1,1 +1,0 @@
-Let's get WI-002's requirements going. For what it's worth, our CI runs greet on Node 22, and nobody uses Node 18 anymore.

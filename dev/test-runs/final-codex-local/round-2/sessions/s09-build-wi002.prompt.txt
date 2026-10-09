@@ -1,1 +1,0 @@
-Keep going with WI-002. Same Git approval as before: worktree add, add, and commit are fine, but no merge yet.

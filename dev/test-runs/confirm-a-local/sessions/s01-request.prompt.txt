@@ -1,1 +1,0 @@
-Build the tally CLI: `node bin/tally.js notes.txt` should print how many words are in notes.txt. Also add a --lines flag, so `node bin/tally.js --lines notes.txt` prints how many lines it has instead.

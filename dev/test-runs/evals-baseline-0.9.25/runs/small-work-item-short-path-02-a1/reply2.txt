@@ -1,3 +1,0 @@
-The record check found one problem in WI-034, and it is fixed: the row for Q-01 named SRC-002, which does not exist in the list of sources yet. The row now says "a new source". The check passes.
-
-Nothing else changed. WI-034 still waits on your answer to the played-back request in my last message: is that right?

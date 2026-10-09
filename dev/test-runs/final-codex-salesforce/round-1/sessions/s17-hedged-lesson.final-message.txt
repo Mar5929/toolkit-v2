@@ -1,5 +1,0 @@
-I think a lighter check would be right for the next small field change in this practice org. For WI-002, the first inventory established that four profiles used Accounts and that active users had no permission set assignments. Once we knew that, checking the four profile grants and testing representative users was enough to keep the review focused.
-
-I wouldn’t make “four profiles only” a standing rule. Salesforce can also grant field access through permission sets and permission set groups, so a quick check should confirm whether those are in use before relying on profile results. [Salesforce: Control Who Sees What](https://help.salesforce.com/s/articleView?id=security_data_access.htm&language=en_US&type=5)
-
-The full inventory took longer than this picklist warranted. I’ll treat the shorter check as a proposal for similar changes, since you haven’t decided on a project rule.

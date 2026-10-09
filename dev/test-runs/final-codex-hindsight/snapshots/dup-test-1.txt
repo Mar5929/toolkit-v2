@@ -1,6 +1,0 @@
-## dup-test-1: reworded copy (tester in a terminal, as Mike), Mon Sep 28 22:51:23 UTC 2026
-$ toolkit memory save --type user --name ...
-Error: user_readme_example_each_cli_option was not saved: memory already has a record about the same subject. Check whether it is the same fact.
-- user_cli_flags_readme_examples, the closest match in memory, about the same subject: List every command-line flag in the README with a short example
-Fix: Read user_cli_flags_readme_examples with toolkit memory get user_cli_flags_readme_examples. When this is a different fact, save it again with --allow-similar. When it is the same fact in other words, keep user_cli_flags_readme_examples, or update it: save that key with --expect <version> (the version field of toolkit memory get user_cli_flags_readme_examples --json).
-exit=2

@@ -1,7 +1,0 @@
-0.105s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-re'
-0.194s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-re'
-0.194s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/record-format'
-0.268s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory find \'error messages tests node:test npm packages\'",max_output_tokens:3000}),\n  tools.exec_command({cmd:"toolkit config get memory.approval",'
-0.269s :: 'const r = await tools.exec_command({cmd:"toolkit memory save --type user --name coding-preferences --description \'Use actionable error messages and Node built-in node:test without npm test packages\' --body \'# Coding pref'
-0.285s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory get user_coding_preferences",max_output_tokens:2000}),\n  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000})\n]); r.forEach((x,i'
-MAX toolkit call seconds: 0.285

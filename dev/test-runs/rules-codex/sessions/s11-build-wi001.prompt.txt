@@ -1,1 +1,0 @@
-No agent team for this one, I'll lead it myself. Keep going and build WI-001, the dollar fee and total. I approve the Git commands you need for it (worktree, branch, commits), but do not merge anything yet.

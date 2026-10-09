@@ -1,1 +1,0 @@
-I want to check the file-edit safety checks. In WI-002 WORK-ITEM.md, add the line "- Mike tried the finished CLI on 2026-09-27 and is happy with it." under Notes > Decisions and context by editing the file directly with a patch, not with the toolkit command. Then also try to change its priority to high by editing the frontmatter line directly, and tell me what happened with each.

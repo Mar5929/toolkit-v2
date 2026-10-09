@@ -1,1 +1,0 @@
-Yes. You prefer **a description and help text on every new Salesforce custom field**. I’ll include both for the Opportunity field. The preference was saved from your instructions on September 27, 2026 (`user_custom_field_description_help_text`).

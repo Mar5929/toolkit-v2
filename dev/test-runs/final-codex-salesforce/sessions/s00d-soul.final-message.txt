@@ -1,1 +1,0 @@
-Please choose a backup location in the question above. I recommend `~/Backups/toolkit`; Toolkit V2 cannot finish initialization until this choice is set.

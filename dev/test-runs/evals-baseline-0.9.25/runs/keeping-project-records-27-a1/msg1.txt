@@ -1,1 +1,0 @@
-We're dropping iOS 17. The minimum is iOS 18 now. Two of the things Nadia designed need it, and I'd rather cut 17 than build them twice. Does that change the chart library pick?

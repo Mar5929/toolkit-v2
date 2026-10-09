@@ -1,1 +1,0 @@
-Thanks, that helps. Quick question while I've got you. How does sync decide which edit wins if I change the same transaction on two phones?

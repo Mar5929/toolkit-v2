@@ -1,3 +1,0 @@
-WI-001 and WI-002 are **Done**. I recorded your reported production deploys, Tier grants, and passing checks; updated the component tracker, deployment records, requirements, and system guide; and committed the closeout to local `main` at `6aa2c47`.
-
-Both work items validate cleanly, and the Git worktree is clean. No remote is configured, so the commit is local only. The remaining owner to-do is to trust this project and its Toolkit hooks in Codex.

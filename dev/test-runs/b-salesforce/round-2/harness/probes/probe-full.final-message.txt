@@ -1,5 +1,0 @@
-`git add probe.txt` did not run. The exact error was:
-
-```text
-exec_command failed: CreateProcess { message: "Rejected(\"approval required by policy, but AskForApproval is set to Never\")" }
-```

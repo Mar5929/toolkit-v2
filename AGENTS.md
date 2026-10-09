@@ -123,11 +123,7 @@ node --test 'dev/tests/*.test.mjs'
 - **Texts that Mike approved word for word.** Change a word of these only with his yes: the rules `evaluate-the-owners-request.md`, `document-clarity-standard.md`, and `salesforce-org-safety.md`; the section "Your job as the agent" in the starter root `AGENTS.md`; the default tables in `salesforce-agent-permissions.md`; the `sf-*` skills; and the default filter for saved sessions in `<setup>references/hindsight-on-vps.md`.
 
 - **Plain English.** Every skill, rule, guide, and project document follows the writing rule, `<setup>assets/every-project/.claude/rules/document-clarity-standard.md`. All the writing rules are in that one file. A file that needs one points to it and does not state it again.
-  - Clear beats short. Never squeeze a sentence to save words.
-  - For a made-up word, choose in this order: plain words; a name the reader can already see, such as a folder name or an ID prefix; and only then the word itself, explained once. A word decision that reaches past one file goes on `dev/reviews/word-list.md`.
-  - Do not rename a file, a skill, or a folder to make its name plainer.
-  - Write "session", never "chat". Write "the project's Current State" or "the work item's Current state", never the bare name.
-  - A helper agent and Codex never see the output style, so a helper's brief gives it the path of the writing rule.
+
 - **Harness files follow the current official documentation.** A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. This list is the same, word for word, in the `writing-harness-files` skill's `SKILL.md` and in `README.md`: change all three together.
   - Open the `writing-harness-files` skill before you write or change one, in this repository and in any project.
   - In this repository, read the official page for that kind of file in `ai-external-knowledge/`. Each folder's `SOURCE-RECORD.md` gives the capture date. When a capture is more than 14 days old, capture the page again with Firecrawl first. Never edit a captured page by hand.

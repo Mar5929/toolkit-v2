@@ -1,1 +1,0 @@
-About the README brief: it's for people new to Node who clone the repo to try it, and for me later. Your draft is close. Also, remember that I prefer README sections written as short bullet lists, not long paragraphs. If nothing else is open after that, show me the requirements so I can approve them.

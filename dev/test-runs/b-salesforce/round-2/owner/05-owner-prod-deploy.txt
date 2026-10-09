@@ -1,5 +1,0 @@
-# Mike runs the production deploys himself (fake sf), 14:41:01
-$ sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-prod
-{"status":0,"result":{"id":"0AfFAKE000DEPLOY2","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}
-$ sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-prod
-{"status":0,"result":{"id":"0AfFAKE000DEPLOY2","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}

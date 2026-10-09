@@ -1,3 +1,0 @@
-I opened **WI-001: Add a Tier picklist field to Account** and recorded your request. It’s in requirements review; no Salesforce metadata has changed.
-
-Is the goal for the sales team to assign each Account a Tier and use it to rank accounts? I recommend yes, so the field has a clear purpose before we define its values.

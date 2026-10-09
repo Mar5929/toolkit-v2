@@ -1,1 +1,0 @@
-Keep going. I approve the git commands you need for the build (worktree, add, commit).

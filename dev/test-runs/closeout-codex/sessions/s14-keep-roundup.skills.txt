@@ -1,1 +1,0 @@
-work-decide, work-requirements, memory-save,   ref:work/skills/work-decide/references/toolkit-commands.md,   ref:work/skills/work-decide/references/work-item-format.md,   ref:work/skills/work-requirements/references/interview.md

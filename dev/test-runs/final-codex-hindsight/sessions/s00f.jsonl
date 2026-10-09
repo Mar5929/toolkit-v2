@@ -1,6 +1,0 @@
-{"type":"thread.started","thread_id":"01a0ea0e-4db6-7a32-8217-2d5ae93f1c9b"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I’ll skip `SOUL.md`.\n\nWhere should automatic backups of local work items and Hindsight memory go? I recommend `~/Backups/toolkit`, outside the project folder. You can also choose another folder or say “no backups.”"}}
-{"type":"turn.completed","usage":{"input_tokens":245382,"cached_input_tokens":226944,"cache_write_input_tokens":0,"output_tokens":1315,"reasoning_output_tokens":347}}

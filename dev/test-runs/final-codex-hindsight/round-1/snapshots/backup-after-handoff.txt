@@ -1,9 +1,0 @@
-drwxr-xr-x  3 michaelrihm  wheel  96 Sep 28 15:50:11 2026 .
-drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28
--rw-r--r--  1 michaelrihm  wheel  871 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28/toolkit-export.json
-drwxr-xr-x  6 michaelrihm  wheel  192 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28/memory-export
-drwxr-xr-x  6 michaelrihm  wheel  192 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28/work-items
--rw-r--r--  1 michaelrihm  wheel  615 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28/memory-export/CURRENT_FOCUS.md
--rw-r--r--  1 michaelrihm  wheel  904 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28/memory-export/feedback_small_changes_mike_prefers_working_directly_agent.md
--rw-r--r--  1 michaelrihm  wheel  345 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28/memory-export/toolkit-memory-export.json
--rw-r--r--  1 michaelrihm  wheel  748 Sep 28 16:31:28 2026 ./greet-cli-final-h-2026-09-28/memory-export/user_document_cli_flags_in_readme.md

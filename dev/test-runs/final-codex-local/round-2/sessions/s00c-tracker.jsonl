@@ -1,9 +1,0 @@
-{"type":"thread.started","thread_id":"01a0ea0e-249e-7261-a096-0b07d7d93f00"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Local folders are selected. I’m checking whether the optional Hindsight memory service is available before recommending a memory choice."}}
-{"type":"item.started","item":{"id":"item_3","type":"command_execution","command":"/bin/zsh -lc 'toolkit hindsight health'","aggregated_output":"","exit_code":null,"status":"in_progress"}}
-{"type":"item.completed","item":{"id":"item_3","type":"command_execution","command":"/bin/zsh -lc 'toolkit hindsight health'","aggregated_output":"Hindsight at http://127.0.0.1:8888: healthy, version 0.10.1.\n","exit_code":0,"status":"completed"}}
-{"type":"item.completed","item":{"id":"item_4","type":"agent_message","text":"Where should tipcalc’s memory live? I recommend the built-in `.memory/` folder because it is simple and private. Hindsight is also running on this Mac if you want search by meaning across memories."}}
-{"type":"turn.completed","usage":{"input_tokens":182730,"cached_input_tokens":158336,"cache_write_input_tokens":0,"output_tokens":999,"reasoning_output_tokens":208}}

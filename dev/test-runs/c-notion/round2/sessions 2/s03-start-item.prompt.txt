@@ -1,1 +1,0 @@
-Please put README.md back the way it was before your last edit. I want this tracked as a work item and done properly: write a short project brief in README.md. Start a work item for it and ask me what it should say before you write anything.

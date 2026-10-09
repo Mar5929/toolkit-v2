@@ -1,3 +1,0 @@
-Your checks are recorded. The independent review found R-01 through R-04 met using your reported sandbox observations and the committed source. The reviewer did not repeat the checks in Salesforce. WI-001 and WI-002 are ready for **separate result approvals**.
-
-First, WI-002: you confirmed the intended Tier access for all four profiles and saw Tier directly below Rating. Do you approve the WI-002 result?

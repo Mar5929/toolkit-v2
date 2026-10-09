@@ -1,1 +1,0 @@
-Keep going: build both items. I approve the git commands you need for it (worktree, add, commit).

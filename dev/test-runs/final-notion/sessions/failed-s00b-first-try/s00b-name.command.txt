@@ -1,1 +1,0 @@
-cd <project> && codex exec resume --json --approve-for-me --dangerously-bypass-hook-trust -c notify=\[\] -c projects=\{\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1\"=\{trust_level=\"trusted\"\}\} 01a0e991-9c36-7030-a7b6-3b20c1faa0bf \<prompt\> < /dev/null

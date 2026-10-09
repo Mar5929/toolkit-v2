@@ -1,3 +1,0 @@
-WI-001 now records the confirmed goal and Tier values in order: **Gold, Silver, Bronze**. I also saved your standing preference that every new custom field has a description and help text. The requirements are still being refined.
-
-Must every Account have a Tier before it can be saved? I recommend **no**, so existing Accounts remain valid while the sales team assigns Tiers.

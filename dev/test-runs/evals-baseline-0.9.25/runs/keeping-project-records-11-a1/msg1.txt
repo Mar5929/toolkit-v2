@@ -1,1 +1,0 @@
-Nadia put every screen design into one Figma file, it's at https://example.com/figma/pocket-ledger-screens. That's the place to look for any screen from now on. Can you pull up what we've agreed for the entry screen so far?

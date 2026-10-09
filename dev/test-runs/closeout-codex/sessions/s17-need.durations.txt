@@ -1,8 +1,0 @@
-0.063s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
-0.206s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
-0.265s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:5000}),\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-de'
-0.274s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:10000}),\n  tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:10000}),\n  tools.exec_command({cmd'
-0.229s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/agent-acceptance-checker.md",max_output_tokens:10000}),\n  tool'
-0.276s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit work design WI-001",max_output_tokens:12000}),\ntools.exec_command({cmd:"cat tests/WI-001-TEST-PLAN.md",workdir:".claude/worktrees/wi-001-build-the-plain'
-0.309s :: 'const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \'Checked: R-01 against commit 8f746be; acceptance-checker: R-01 met on exact commit with no defects; evidence: tests/WI-001-TEST-PLAN.md, 2 passin'
-MAX toolkit call seconds: 0.309

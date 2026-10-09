@@ -1,3 +1,0 @@
-Mike’s approval of WI-001’s Account Tier requirements is recorded. The item passed validation and is ready for solution design.
-
-Would you like agents to take responsibility for delivering this, with you acting as product owner?

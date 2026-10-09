@@ -1,3 +1,0 @@
-$ toolkit memory delete project_runtime_environment --owner-approved
-Deleted project_runtime_environment. This cannot be undone.
-exit=0

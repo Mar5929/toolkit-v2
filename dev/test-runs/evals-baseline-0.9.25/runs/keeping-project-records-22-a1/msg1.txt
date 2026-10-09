@@ -1,9 +1,0 @@
-Tomas sent this about the server. Does it change anything in the offline sync requirements?
-
-From: Tomas Lindqvist
-To: Mike Rihm
-Subject: Rate limit on the sync server
-
-Mike, one thing to know before you build sync. The server takes at most 60 requests a minute from one phone. Past that it answers with a 429 and drops the request, it does not queue it. There is no retry-after header, so the phone has to wait a full minute by itself. I set it up this way on day one and it is live on production now.
-
-Tomas

@@ -1,1 +1,0 @@
-Ship it: WI-002 and WI-003. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches.

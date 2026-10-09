@@ -1,1 +1,0 @@
-Use that: a command that splits a restaurant bill between friends, tip included.

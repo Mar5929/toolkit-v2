@@ -1,1 +1,0 @@
-I ran the WI-002 layout deploy. Result: {"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"numberComponentsDeployed":1,"numberComponentErrors":0}}. Keep going.

@@ -1,3 +1,0 @@
-Billing's rule is approved: an organization admin can change the plan, and a member can't. Write that into billing as approved.
-
-Support is not decided. I don't know yet whether a ticket belongs to the user who opened it or to the organization. Don't treat it as decided, I need to talk to the support lead first.

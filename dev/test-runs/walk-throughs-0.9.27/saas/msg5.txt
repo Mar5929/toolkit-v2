@@ -1,1 +1,0 @@
-Billing went out to production this morning as version 0.9.0. Billing only. Authentication and support are not in this release.

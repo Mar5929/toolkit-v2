@@ -1,3 +1,0 @@
-WI-001 now records the confirmed goal and the Tier values **Gold, Silver, Bronze**, in that order. I also saved your preference that every new custom field have a description and help text. Say “forget that” if you want me to remove the preference.
-
-Should Tier be optional with no default? I recommend that so an Account is not ranked until someone chooses its Tier.

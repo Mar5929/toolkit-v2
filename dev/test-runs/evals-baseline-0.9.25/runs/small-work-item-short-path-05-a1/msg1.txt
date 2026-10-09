@@ -1,1 +1,0 @@
-I want a short "What to test" text for the first beta build, under ten lines. I'll send you the three flows the testers should try once Nadia confirms them, and you write it up. Make a work item for it.

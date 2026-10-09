@@ -1,1 +1,0 @@
-In tkv2-sbx there are no custom Lightning record pages for Account; all four profiles use the standard page with Account Layout. No permission sets or permission set groups grant anything on Account fields. Tier has no read or edit grants yet, since setting them is WI-002's job under option A. Keep going.

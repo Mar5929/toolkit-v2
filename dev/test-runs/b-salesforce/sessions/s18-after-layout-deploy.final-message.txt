@@ -1,5 +1,0 @@
-WI-002’s Account Layout deploy is recorded as **Succeeded**: one component, zero errors. I updated the component tracker and deployment record, committed them on the WI-002 branch, and brought both work items and the session focus up to date. The work-item checks are clean.
-
-**WI-002 still needs the approved profile changes.** There is no Salesforce Setup session available here, and the project requires these grants to be set in Setup. In `tkv2-sbx`, give `Account.Tier__c` read/edit access to Sales Manager and System Administrator, and read-only access to Sales User and Read Only. Then run the placement, record-interface, and API checks in [WI-002 manual steps](</private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md>).
-
-Can you report the saved grants and check results? Effective access and rendered placement remain unverified until then.

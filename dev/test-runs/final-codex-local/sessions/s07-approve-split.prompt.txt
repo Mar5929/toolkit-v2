@@ -1,1 +1,0 @@
-I approve Option A. Before you build, split the --max option out into its own sub-item under WI-001, so the basic slug and the --max limit are tracked separately.

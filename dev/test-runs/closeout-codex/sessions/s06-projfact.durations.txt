@@ -1,6 +1,0 @@
-0.238s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
-0.295s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md",max_output_tokens:14000}),\n  tools.exec_command({cmd:"'
-0.274s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:10000}),\ntools.exec_command({cmd:"cat .work-items/WI-001-build-the-tip-command/WORK-ITEM.md",max_output_tokens:10000'
-0.305s :: 'const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \'Owner said: \\"Remember that the split part of tipcalc is for my Friday dinners with friends: every week we split one restaurant bill between 3 to'
-0.273s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:3000}),\ntools.exec_command({cmd:"toolkit work show WI-001 --section \'Decisions and context\'",max_output_tokens:2'
-MAX toolkit call seconds: 0.305

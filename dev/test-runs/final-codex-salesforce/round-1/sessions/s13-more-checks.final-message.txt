@@ -1,8 +1,0 @@
-Your checks support most of what you asked for. **R-02 (description and help text) and R-04 (Tier below Rating) are met.** All three Tier values and blank saved, the API rejected Platinum, and the four tested user profiles behaved as intended.
-
-The independent check left two acceptance checks open:
-
-- **WI-001, R-01:** On a *new* Account, does Tier start blank, and does the picklist display **Gold, Silver, Bronze** in that order? The field metadata specifies both, but the page behavior has not been reported.
-- **WI-002, R-03:** Can you confirm through Setup effective access, or an equivalent check, that no other active Account viewer has elevated permission to edit Tier? Your four user checks are recorded; the earlier sandbox query could not verify elevated permissions.
-
-I updated and committed both test plans. I recorded the roughly $1 million Gold guideline as **rep discretion**, with no automatic rule. Once you confirm the two open checks, I can present the two results for separate approval.

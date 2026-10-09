@@ -1,3 +1,0 @@
-Option A is approved and recorded. I created **WI-002** under WI-001 for Tier access and page layout. WI-001’s plan now puts the field first; WI-002 follows after the field exists. Both items link to the approved requirement and design, and the tracker validates cleanly.
-
-No Salesforce metadata has been changed. The next step is a read-only sandbox check of the Tier field.

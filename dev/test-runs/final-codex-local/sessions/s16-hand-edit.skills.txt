@@ -1,1 +1,0 @@
-work-on,   ref:work/skills/work-on/references/work-item-format.md

@@ -1,3 +1,0 @@
-I need one check before you deploy WI-001: **please open production Setup using the corrected `tkv2-prod` org and tell me whether `Account.Tier__c` exists.** I recommend holding the field deploy until you confirm. Today’s read-only checks conflict: Account describe lists the field, while two metadata queries do not.
-
-After that is resolved, I’ll give you the WI-001 step first. WI-002’s layout deployment and profile access steps follow only after the field is confirmed in production.

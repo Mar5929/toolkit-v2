@@ -1,2 +1,0 @@
-3070ef8 Initial commit
-./README.md

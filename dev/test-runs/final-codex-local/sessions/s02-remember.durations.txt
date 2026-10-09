@@ -1,5 +1,0 @@
-0.224s :: 'const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifact'
-0.354s :: 'const cmds=["cat .memory/AGENTS.md .memory/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/references/record-format.md","git worktree list","git status --short --bran'
-0.302s :: 'const r=await tools.exec_command({cmd:"toolkit memory save --type user --name node-project-preference --description \'Prefer plain Node.js without npm packages and tests using the built-in node:test runner\' --body \'# Node'
-0.311s :: 'const cmds=["toolkit memory get user_node_project_preference","toolkit doctor"]; const rs=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:3000}))); rs.forEach((r,i)=>text(JSON.stringify({'
-MAX toolkit call seconds: 0.354

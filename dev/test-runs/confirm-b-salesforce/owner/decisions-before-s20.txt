@@ -1,7 +1,0 @@
-2 decisions wait on the owner:
-
-WI-001 add a Tier picklist field to Account so the sales team can rank their accounts
-  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
-
-WI-002 Set Account Tier access and place it below Rating on Account Layout
-  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)

@@ -1,7 +1,0 @@
-error: unexpected argument '--approve-for-me' found
-
-  tip: to pass '--approve-for-me' as a value, use '-- --approve-for-me'
-
-Usage: codex exec resume --json [SESSION_ID] [PROMPT]
-
-For more information, try '--help'.

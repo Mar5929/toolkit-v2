@@ -1,1 +1,0 @@
-From now on, write tests with Node's built-in node:test runner, no npm packages.

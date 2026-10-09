@@ -1,3 +1,0 @@
-0.232s :: 'const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifact'
-0.362s :: 'const cmds=["toolkit work list --tree","toolkit work next","toolkit work decisions","toolkit memory focus","toolkit work lifecycle"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_toke'
-MAX toolkit call seconds: 0.362

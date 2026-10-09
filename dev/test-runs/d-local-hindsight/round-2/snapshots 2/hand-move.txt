@@ -1,4 +1,0 @@
-Hand move by the owner, 2026-09-27T17:14:45Z, between s07 and s08:
-$ mkdir .work-items/cli-flags
-$ mv .work-items/WI-001-add-shout-flag-to-greet-cli .work-items/cli-flags/
-$ mv .work-items/cli-flags/WI-001-add-shout-flag-to-greet-cli/WI-002-document-shout-in-readme .work-items/cli-flags/WI-001-add-shout-flag-to-greet-cli/WI-002-readme-docs

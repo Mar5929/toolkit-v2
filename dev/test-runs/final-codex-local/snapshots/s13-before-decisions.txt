@@ -1,4 +1,0 @@
-1 decision waits on the owner:
-
-Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
-  - project_publish_blog_ghost_keeps_only_first_190_characters: You publish your blog on Ghost, and Ghost keeps only the first 190 characters of a slug. Saved 2026-09-28. Yes: toolkit memory approve project_publish_blog_ghost_keeps_only_first_190_characters --by <name>. No: toolkit memory reject project_publish_blog_ghost_keeps_only_first_190_characters. (work-decide)

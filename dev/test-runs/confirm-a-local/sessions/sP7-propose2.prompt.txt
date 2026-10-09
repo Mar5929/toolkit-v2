@@ -1,1 +1,0 @@
-I think the fact that I only run tally on my Mac mini with Node 22 might be worth keeping. Ask me before you save it.

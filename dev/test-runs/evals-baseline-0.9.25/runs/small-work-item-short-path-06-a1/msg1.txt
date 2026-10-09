@@ -1,1 +1,0 @@
-A tester asked me when the Android version is coming. Write me a two line reply I can send her. Android is out of scope, so say that kindly. Make a work item for it, I want these tester replies tracked.

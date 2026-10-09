@@ -1,1 +1,0 @@
-I uploaded it. Three went through, but TestFlight could not send Dana's invite. Bea had her address wrong, it's dana.whitfield@example.com. Fix the file and I'll upload it again.

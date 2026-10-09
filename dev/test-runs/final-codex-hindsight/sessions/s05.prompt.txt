@@ -1,1 +1,0 @@
-Yes, go with your recommendation: no greeting and a failure exit status.

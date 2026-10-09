@@ -1,3 +1,0 @@
-Option A is approved and recorded. **WI-001** now owns the Tier field; **WI-002** is its sub-item for access and page layout. WI-002 inherits the approved requirements and design, and will need its own result approval.
-
-Both items are ready for implementation planning. The tracker validates cleanly, and no work decision is waiting on you.

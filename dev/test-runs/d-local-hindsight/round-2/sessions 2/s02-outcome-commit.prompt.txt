@@ -1,1 +1,0 @@
-The outcome I want: a small, friendly greeting command that I can grow with a few simple flags. Keep the roadmap to that for now. And please commit the setup files.

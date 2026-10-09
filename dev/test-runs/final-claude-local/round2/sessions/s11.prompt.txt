@@ -1,1 +1,0 @@
-Yes, that's the goal. Also, by the way: slug's docs site is at https://docs.example.com/slug, and its usage page is where people read about the options.

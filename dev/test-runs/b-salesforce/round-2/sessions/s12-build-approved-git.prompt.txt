@@ -1,1 +1,0 @@
-Keep going. I approve the git commands you need for WI-001 and WI-002: creating the worktree and branch, and committing to it. Facts for you: "Account Layout" is the only Account page layout and every profile uses it, and no permission set gives anyone access to Account fields.

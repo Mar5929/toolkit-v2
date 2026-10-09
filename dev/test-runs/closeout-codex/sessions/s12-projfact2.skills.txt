@@ -1,1 +1,0 @@
-memory-save, work-requirements, work-decide,   ref:memory/skills/memory-save/references/record-format.md, publish-docs,   ref:work/skills/work-decide/references/decisions-log.md

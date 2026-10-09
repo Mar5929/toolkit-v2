@@ -1,1 +1,0 @@
-WI-001 approved. For WI-002's question: yes, treat a name made only of spaces like an empty name. With that, WI-002's requirements are approved too.

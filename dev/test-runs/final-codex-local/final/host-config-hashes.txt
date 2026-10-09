@@ -1,3 +1,0 @@
-$ shasum -a 256 ~/.codex/config.toml ~/.claude/settings.json (after the run)
-f8570208fafd350862d97242bd1b174c7ab2ebe3f3a1ff5317bcf4e50e9b6294  /Users/michaelrihm/.codex/config.toml
-d80a8b38a889647b43291d53c5a2a44dcebbbeeb313a2e82f4c8a0cca954e65b  /Users/michaelrihm/.claude/settings.json

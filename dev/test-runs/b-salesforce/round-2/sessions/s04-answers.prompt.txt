@@ -1,1 +1,0 @@
-Optional, with no default value. Only the Sales Manager profile and system administrators can edit it; everyone else who can see an Account can read it. Put it on the main Account page layout.

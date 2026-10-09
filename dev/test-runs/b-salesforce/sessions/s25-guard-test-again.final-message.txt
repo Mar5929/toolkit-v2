@@ -1,1 +1,0 @@
-The PreToolUse guard blocked the command before it ran. It identified `tkv2-prod` as a production org and instructed me to ask you to run it. The dry run did not execute, and I changed no files.

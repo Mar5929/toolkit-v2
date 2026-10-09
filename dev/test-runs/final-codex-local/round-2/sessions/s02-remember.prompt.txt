@@ -1,1 +1,0 @@
-Remember that I prefer error messages that tell me how to fix the problem, and tests written with Node's built-in node:test runner, no npm packages.

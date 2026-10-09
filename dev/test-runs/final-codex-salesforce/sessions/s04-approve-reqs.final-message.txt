@@ -1,1 +1,0 @@
-WI-001’s R-01 through R-04 and acceptance checks are recorded as approved by Mike Rihm. The work item passed validation, and no decision is waiting on you. The next step is to prepare the design options for the Account Tier field.

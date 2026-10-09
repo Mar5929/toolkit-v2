@@ -1,1 +1,0 @@
-I ripped Sentry out over the weekend. Crash reports go to Firebase Crashlytics now, it's on the same Google account as everything else. Can you check whether any of our open work still mentions Sentry?

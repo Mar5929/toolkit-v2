@@ -1,4 +1,0 @@
-0.247s :: 'const r = await tools.exec_command({cmd:"pwd && rg --files -g \'SOUL.md\' -g \'PROJECT.md\' -g \'AGENTS.md\' -g \'.claude/rules/*.md\' && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKI'
-0.303s :: 'const r=await tools.exec_command({cmd:"toolkit rule add --section \'Git\' --text \'Keep commit messages under 50 characters.\' --source \'Mike Rihm, in chat\'","max_output_tokens":2500}); text(r.output);\n'
-0.353s :: 'const results = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit rule list","max_output_tokens":1500}),\n  tools.exec_command({cmd:"git diff -- AGENTS.md .claude/rules/owner-preferences.md","max_output_tokens'
-MAX toolkit call seconds: 0.353

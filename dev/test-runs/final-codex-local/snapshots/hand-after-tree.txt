@@ -1,8 +1,0 @@
-.work-items/.toolkit-state.json
-.work-items/DASHBOARD.md
-.work-items/slug-cli/WI-001-slug/DESIGN.md
-.work-items/slug-cli/WI-001-slug/WI-002-build-basic-slug-command/WORK-ITEM.md
-.work-items/slug-cli/WI-001-slug/WORK-ITEM.md
-.work-items/slug-cli/WI-001-slug/max-option/WORK-ITEM.md
-.work-items/work-item-template/DESIGN.md
-.work-items/work-item-template/WORK-ITEM.md

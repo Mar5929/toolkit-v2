@@ -1,3 +1,0 @@
-0.295s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
-0.293s :: 'const r=await tools.exec_command({cmd:"toolkit rule add --section \'Replies\' --text \'Always show status as a table.\' --source \'Mike Rihm, in chat\'",max_output_tokens:2000});text(r);\n'
-MAX toolkit call seconds: 0.295

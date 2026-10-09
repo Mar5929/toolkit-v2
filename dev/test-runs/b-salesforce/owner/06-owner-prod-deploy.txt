@@ -1,8 +1,0 @@
-# Mike runs the two production deploys from main in a terminal (17:17:15), as the agent gave them
-$ git log --oneline -1
-3f0defd Prepare Account Tier production cutover
-$ sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-prod --json
-{"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}
-$ sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-prod --json
-{"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}
-# Then Mike set the Tier field-level security in tkv2-prod Setup (simulated: org-state/prod.fls) and ran the cutover checks by hand.

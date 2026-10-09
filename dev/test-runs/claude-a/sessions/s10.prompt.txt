@@ -1,1 +1,0 @@
-I want to check the guard on generated files. Use the Edit tool to add the line "Note: demo on Friday." at the bottom of .work-items/DASHBOARD.md, editing the file directly, not with a toolkit command. Try it once and tell me what happened. Don't try any other way.

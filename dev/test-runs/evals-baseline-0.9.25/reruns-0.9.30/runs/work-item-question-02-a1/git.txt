@@ -1,9 +1,0 @@
-$ git log --all --oneline --decorate 3e6b4b5b309abbfd5c979a19ec95fb937347f933..
-
-$ git branch --all -vv
-* main 3e6b4b5 Root guide: final wording
-
-$ git worktree list
-/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-toolkit-v2--claude-worktrees-reverent-brahmagupta-811783/4038a5f3-954d-407c-a2e2-35c1982edee1/scratchpad/rerun/runs/work-item-question-02-a1 3e6b4b5 [main]
-
-$ git status --short

@@ -1,3 +1,0 @@
-No. You’re still weighing the idea, and one review taking too long isn’t yet a standing preference. I won’t save it to memory.
-
-If you decide to use a shorter access check for future small fields, that would belong in the project’s working instructions, with your approval.

@@ -1,1 +1,0 @@
-Set up this project with Toolkit V2: project name tally, key tally, owner Mike. Track work in local folders. Use the built-in .memory/ memory. It is not a Salesforce project. I do not want a SOUL.md. If Codex asks to run the setup command outside the sandbox, I approve that.

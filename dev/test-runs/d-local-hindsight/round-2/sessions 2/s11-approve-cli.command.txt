@@ -1,1 +1,0 @@
-codex exec --json workspace-write --dangerously-bypass-hook-trust -c model_reasoning_effort=medium -c notify=[] -c projects={<project>={trust_level=trusted}}  -C <project> <prompt>

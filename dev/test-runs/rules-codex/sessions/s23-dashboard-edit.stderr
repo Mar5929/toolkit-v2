@@ -1,7 +1,0 @@
-Reading additional input from stdin...
-2026-09-29T16:24:44.937205Z ERROR codex_core::tools::router: error=Command blocked by PreToolUse hook: .work-items/DASHBOARD.md is a generated file, so it is not edited by hand. It is rebuilt after every toolkit work command. Change work items with toolkit work commands (toolkit work sync rebuilds it on its own). Command: *** Begin Patch
-*** Update File: .work-items/DASHBOARD.md
-@@
-+Shipped WI-001 and WI-002 on 2026-09-29.
- # Work items dashboard
-*** End Patch

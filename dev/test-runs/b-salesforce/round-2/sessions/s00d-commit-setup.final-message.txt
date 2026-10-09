@@ -1,3 +1,0 @@
-The setup is committed locally as `1d49cdb` (`Set up Acme CRM project toolkit`). The working tree is clean, and I updated the current focus so the commit is no longer listed as pending. No remote is configured, so it has not been pushed.
-
-Codex still needs you to trust this project folder and, in `/hooks`, trust the Toolkit V2 hooks and two Salesforce org guards.

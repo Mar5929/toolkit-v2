@@ -1,3 +1,0 @@
-account-tier/ (group)
-  WI-001  Add a Tier picklist field to Account  (06 Implementation plan, In Progress, waiting on owner)
-    WI-002  Configure Account Tier access and page layout  (06 Implementation plan, In Progress, waiting on agent)

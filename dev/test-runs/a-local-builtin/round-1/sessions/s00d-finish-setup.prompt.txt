@@ -1,1 +1,0 @@
-Finish the Toolkit V2 setup for Codex. I approve running the toolkit command outside the sandbox for this. Keep my earlier answers: both Codex and Claude Code, and no SOUL.md.

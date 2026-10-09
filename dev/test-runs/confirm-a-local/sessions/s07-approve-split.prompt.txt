@@ -1,1 +1,0 @@
-I approve option A. Before you build, split this up: WI-001 is doing two things. Keep the word count in WI-001 and make the --lines flag its own sub-item under it.

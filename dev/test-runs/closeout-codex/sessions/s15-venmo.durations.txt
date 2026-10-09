@@ -1,3 +1,0 @@
-0.239s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:6000}),\n  tools.exec_command({cmd:"cat .claude/rules/humanize-outboun'
-0.299s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit memory list --type project",max_output_tokens:3000}),\ntools.exec_command({cmd:"toolkit memory find \'whole-cent split Venmo\'",max_output_tokens:3000}),\nt'
-MAX toolkit call seconds: 0.299

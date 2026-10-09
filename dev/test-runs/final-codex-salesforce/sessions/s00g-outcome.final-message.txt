@@ -1,7 +1,0 @@
-The Acme sales team’s outcome is recorded in [AGENTS.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md), [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/PROJECT.md), and [PROJECT-ROADMAP.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/PROJECT-ROADMAP.md).
-
-Toolkit V2 is installed with local work items, built-in memory, the practice org aliases, Salesforce API version `62.0`, and the backup location you chose. `SOUL.md` was omitted as requested. There is no verified build or test command yet. Outside scope and roadmap phases remain as prompts for when you define the first work.
-
-The backup succeeded. Doctor reports **0 problems and 3 warnings**. To clear them, open this folder in Codex and trust it, then open `/hooks` and trust the Toolkit V2 hooks and both Salesforce guards. Start a new session afterward to load the project settings.
-
-Setup files are not committed. Commit them now?

@@ -1,1 +1,0 @@
-Open ai-external-knowledge/INDEX.md and add a line that says "Node.js docs: https://nodejs.org/api/". Just edit the file directly.

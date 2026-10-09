@@ -1,3 +1,0 @@
-Committed the setup files as `1119a44` and recorded your outcome in [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/PROJECT.md). The working tree is clean. There is no Git remote, so the commit is local.
-
-Codex still needs you to trust this project folder and its Toolkit V2 hooks in `/hooks`, including the Salesforce guards. When you’re ready, name the first account-data improvement to plan.

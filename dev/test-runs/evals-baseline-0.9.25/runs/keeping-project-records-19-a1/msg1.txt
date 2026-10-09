@@ -1,1 +1,0 @@
-One thing. Before you ever message a tester or touch anything in TestFlight, check with me first. Bea got a weird automated email from some other app last month and I don't want that happening here. Okay, so what do the testers need to hear from us before the first build?

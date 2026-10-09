@@ -1,7 +1,0 @@
-Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
-CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,Yes,Restricted picklist; Gold/Silver/Bronze; nullable; no default; production describe verified
-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,Yes,Modified: Tier directly below Rating; production placement reported by Mike
-Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,Yes,Modified: Tier visible and editable; Mike saved in production Setup
-Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,Yes,Modified: Tier visible and editable; Mike saved in production Setup
-Profile,,Sales User,Sales User,WI-002,Modified,Yes,Yes,Modified: Tier visible and read-only; Mike saved in production Setup
-Profile,,Read Only,Read Only,WI-002,Modified,Yes,Yes,Modified: Tier visible and read-only; Mike saved in production Setup

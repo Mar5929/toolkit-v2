@@ -1,1 +1,0 @@
-Please do the commit for me. I approve the git add and git commit commands.

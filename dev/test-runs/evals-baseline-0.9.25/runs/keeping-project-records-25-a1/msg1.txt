@@ -1,1 +1,0 @@
-Tomas wrote a runbook for the sync server, what to do when it falls over. It's in his repo, pocket-ledger-server, at ops/RUNBOOK.md. If the server's ever down and I'm asking you what to do, start there. Unrelated, what's the next step on offline sync?

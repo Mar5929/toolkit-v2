@@ -1,4 +1,0 @@
-codex exec --json --sandbox workspace-write --dangerously-bypass-hook-trust \
-  -c model_reasoning_effort="medium" -c 'notify=[]' \
-  -c 'projects={"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2"={trust_level="trusted"}}' \
-  -C "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2" "$(cat s10-approve-wi002.prompt.txt)" < /dev/null

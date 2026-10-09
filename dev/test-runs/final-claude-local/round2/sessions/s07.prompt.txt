@@ -1,1 +1,0 @@
-Remember that I prefer commit messages without the work item number in them. Just say what changed.

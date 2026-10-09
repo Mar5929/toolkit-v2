@@ -1,8 +1,0 @@
-**Two work items are in build. No owner decision is currently waiting.**
-
-- **WI-001 — Account Tier picklist:** The field source is committed, and sandbox validation succeeded. The field has not been deployed, so its behavior has not been checked in the sandbox.
-- **WI-002 — access and page layout:** Tier has been added to the retrieved Account Layout source. The layout package and manual profile access steps are prepared. The effective access audit and live page checks remain.
-
-The next work is to finish WI-002’s access audit and package review. A **separate approval for the sandbox deployment** will then be needed before the field, access, and layout acceptance checks. The local commits cannot be pushed from this copy because it has no `origin` remote.
-
-Say **“keep going”** to continue the build.

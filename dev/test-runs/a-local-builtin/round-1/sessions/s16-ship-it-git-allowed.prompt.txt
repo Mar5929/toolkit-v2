@@ -1,1 +1,0 @@
-Ship WI-001 and WI-002 now. I approve running git outside the sandbox for the commits and the local merge into main (no remote, no GitHub repo). Then mark both done.

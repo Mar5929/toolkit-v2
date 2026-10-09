@@ -1,1 +1,0 @@
-work-finish,   ref:work/skills/work-finish/references/git-rules.md,   ref:work/skills/work-finish/references/approvals.md,   ref:work/skills/work-finish/references/work-item-format.md,   ref:work/skills/work-finish/references/current-focus.md, publish-docs, memory-save

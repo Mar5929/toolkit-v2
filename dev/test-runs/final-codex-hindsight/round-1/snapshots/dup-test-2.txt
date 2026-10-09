@@ -1,6 +1,0 @@
-$ toolkit memory save --type user --name readme-describes-all-cli-options --description 'The README should describe all of the command-line options' --body '<Remember: Mike wants the README to describe all of the command-line options the tool accepts.>' --source 'Mike, terminal, 2026-09-28' --approved-by Mike
-Error: user_readme_describes_all_cli_options was not saved: memory already has a record about the same subject. Check whether it is the same fact.
-- user_document_cli_flags_in_readme, the closest match in memory, about the same subject: Explain every command-line flag in the README
-Fix: Read user_document_cli_flags_in_readme with toolkit memory get user_document_cli_flags_in_readme. When this is a different fact, save it again with --allow-similar. When it is the same fact in other words, keep user_document_cli_flags_in_readme, or update it: save that key with --expect <version> (the version field of toolkit memory get user_document_cli_flags_in_readme --json).
-exit=2
-

@@ -1,3 +1,0 @@
-cc81386 Initial commit
-/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2 cc81386 [main]
-./README.md

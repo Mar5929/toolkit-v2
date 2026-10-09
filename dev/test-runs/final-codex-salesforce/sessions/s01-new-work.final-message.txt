@@ -1,3 +1,0 @@
-I started **WI-001, “Add a Tier picklist field to Account,”** and recorded your request. It is in requirements refinement; the field has not been built.
-
-Is the goal for the sales team to assign one Tier to each Account and use it to rank accounts? I recommend yes, since that gives the field a clear purpose.

@@ -1,1 +1,0 @@
-Yes, I approve Option A, those two field texts, and that scope. Then split it: make the access and page layout part its own sub-item under WI-001, so the field itself can go first.

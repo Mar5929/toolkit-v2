@@ -1,1 +1,0 @@
-Add a file `staging/notice.txt` with one line: "Staging server: test data only. It is wiped every Monday." Tomas's deploy of the staging sync server copies this repo's `staging/` folder onto it. So the file needs to be merged to main and then deployed to that server, because Tomas and Nadia both work on it.

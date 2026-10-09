@@ -1,1 +1,0 @@
-I signed up with a little shop called Kestrel QA to do device testing for us. They've got a wall of old iPhones. Imogen Rask is my contact there, she runs the tests and sends me a report after every build.

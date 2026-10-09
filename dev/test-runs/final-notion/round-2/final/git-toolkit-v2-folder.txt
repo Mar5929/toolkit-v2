@@ -1,5 +1,0 @@
-total 8
-drwxr-xr-x   4 michaelrihm  wheel   128 Sep 28 19:31 .
-drwxr-xr-x  14 michaelrihm  wheel   448 Sep 28 19:32 ..
--rw-r--r--   1 michaelrihm  wheel  1617 Sep 28 19:31 memory-cache.json
-drwxr-xr-x   6 michaelrihm  wheel   192 Sep 28 19:33 notion

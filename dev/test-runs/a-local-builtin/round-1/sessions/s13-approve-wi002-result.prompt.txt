@@ -1,1 +1,0 @@
-I ran node bin/greet.js --version in the worktree and it printed 0.1.0. I approve the WI-002 result.

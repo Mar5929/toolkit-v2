@@ -1,7 +1,0 @@
-Merged. `main` is now at commit `cd10b4a`, and it contains `app/Config/Build.xcconfig` with the one line `SWIFT_VERSION = 5.0`, plus the two corrected lines in `PROJECT.md`.
-
-The repository has no remote, so I merged on this computer as a fast-forward and nothing was pushed. I removed the branch `claude/build-xcconfig` and its worktree.
-
-Sources:
-- `managing-work-items`, `references/deploying.md`, "A project with no remote": the steps for a merge on this computer.
-- `.claude/rules/shared-repository-work.md`: the merge-safety check, and removing the worktree and branch after the merge.

@@ -1,3 +1,0 @@
-The Tier grants are confirmed in tkv2-sbx: Sales Manager and System Administrator have read/edit access; Sales User and Read Only have read access. I recorded your Sales Manager, Sales User, page placement, and new Account checks in WI-001 and WI-002. The deployment notes are committed on the WI-002 branch.
-
-Four acceptance checks remain: can a System Administrator save Tier, can a Read Only user see it without editing it, is a non-manager API edit denied, and does an existing Account with blank Tier stay blank? Which of those passed or failed?

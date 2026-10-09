@@ -1,1 +1,0 @@
-work-decide,   ref:work/skills/work-decide/references/approvals.md,   ref:work/skills/work-decide/references/current-focus.md, memory-save, work-finish,   ref:work/skills/work-decide/references/work-item-format.md

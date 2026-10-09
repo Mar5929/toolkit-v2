@@ -1,1 +1,0 @@
-Nobody touches the sync server for the next two weeks. Tomas is moving it to a new host and he doesn't want anything deployed or changed on it, staging included, until he says it's done. Does that get in the way of anything we've got going?

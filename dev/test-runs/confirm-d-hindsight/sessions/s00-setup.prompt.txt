@@ -1,1 +1,0 @@
-Set up this project with the toolkit: the project name is Greet CLI Confirm D, key greet-cli-confirm-d, id prefix WI, owner Mike. Track work items in local folders. Use local Hindsight for memory. It is not a Salesforce project. I use both Claude Code and Codex. I don't want a SOUL.md.

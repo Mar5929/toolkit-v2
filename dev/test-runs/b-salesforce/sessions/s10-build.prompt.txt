@@ -1,1 +1,0 @@
-I approve that worktree command and the other git commands the build needs, so go ahead and run them yourself. Keep going.

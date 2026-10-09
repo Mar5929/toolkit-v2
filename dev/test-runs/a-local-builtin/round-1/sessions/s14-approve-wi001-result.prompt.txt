@@ -1,1 +1,0 @@
-I tried node bin/greet.js Mike and node bin/greet.js in the worktree: Hello, Mike! and Hello, world!. I approve the WI-001 greeting result.

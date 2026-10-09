@@ -1,5 +1,0 @@
-16e745a Turn remaining Latin stroke letters into plain letters (WI-001)
-e204afb Record the run and test commands in AGENTS.md (WI-001)
-af288b5 Add slug command and tests (WI-001)
-f8811ea Set up Toolkit V2
-6903e40 Initial commit

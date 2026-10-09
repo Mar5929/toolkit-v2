@@ -1,1 +1,0 @@
-Commit setup. I approve running the git commands for it.

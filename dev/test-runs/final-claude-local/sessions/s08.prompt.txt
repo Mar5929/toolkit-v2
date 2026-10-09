@@ -1,1 +1,0 @@
-Before I approve WI-001: split the gap the checker found (`node greet.js "" Sam` prints two spaces) into its own sub-item under WI-001.

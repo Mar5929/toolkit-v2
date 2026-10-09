@@ -1,1 +1,0 @@
-Remember that I prefer plain Node.js with no npm packages in my projects, and tests written with the built-in node:test runner.

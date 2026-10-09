@@ -1,1 +1,0 @@
-Hmm, looking back, the full permission inventory took a long time for one small picklist. Maybe for tiny fields like this a quick check of the four profiles would have been enough, I'm not sure.

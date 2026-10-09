@@ -1,5 +1,0 @@
-  "exportedAt": "2026-09-28T20:29:03.244Z",
-total 0
-drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 15:51 .
-drwxr-xr-x  7 michaelrihm  wheel  224 Sep 28 15:59 ..
-drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 16:29 slug-2026-09-28

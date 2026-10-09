@@ -1,4 +1,0 @@
-d9f5709 Drop empty words and trim word ends
-10140e6 Add greet command with acceptance tests (WI-001)
-8e37755 Set up Toolkit V2
-9976daf Initial commit

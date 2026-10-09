@@ -1,1 +1,0 @@
-I ran it in the WI-002 worktree: "Hello World!" printed hello-world, "Café au lait" printed cafe-au-lait, and "!!!" gave an error. I approve the WI-002 result.

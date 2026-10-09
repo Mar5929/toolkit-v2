@@ -1,8 +1,0 @@
-0.476s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md",max_output_tokens:5000}),\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-s'
-0.645s :: 'const r = await tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:3000}); text(r.output)\n'
-0.362s :: 'const r = await tools.exec_command({cmd:"toolkit work next",max_output_tokens:3000}); text(r.output)\n'
-0.375s :: 'const r = await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000}); text(r.output)\n'
-0.379s :: 'const r = await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:4000}); text(r.output)\n'
-0.314s :: 'const r = await tools.exec_command({cmd:"toolkit work lifecycle",max_output_tokens:5000}); text(r.output)\n'
-0.386s :: 'const r = await tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:7000}); text(r.output)\n'
-MAX toolkit call seconds: 0.645

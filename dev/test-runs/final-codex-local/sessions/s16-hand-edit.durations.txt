@@ -1,4 +1,0 @@
-0.067s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat PROJECT.md SOUL.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
-0.222s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat PROJECT.md SOUL.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
-0.236s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit work show WI-003 --path",max_output_tokens:1000}),\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skil'
-MAX toolkit call seconds: 0.236

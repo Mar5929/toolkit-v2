@@ -1,1 +1,0 @@
-Your approval is recorded for WI-001’s requirements and acceptance checks. The item passed validation and has moved to solution design. I checked the sandbox’s Account fields and profiles; the design still needs to be completed and brought to you for approval before building.

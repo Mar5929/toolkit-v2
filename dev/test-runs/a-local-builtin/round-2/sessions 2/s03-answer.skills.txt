@@ -1,2 +1,0 @@
-Skill files and helper agents opened (from the Codex session log, in order):
-work-requirements, work-on, spawn_agent:requirements_check(fork_turns=none)

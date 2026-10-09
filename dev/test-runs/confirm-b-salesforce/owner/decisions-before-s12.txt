@@ -1,7 +1,0 @@
-2 decisions wait on the owner:
-
-WI-002 Set Account Tier access and place it below Rating on Account Layout
-  - Q-02: Does Mike approve setting Account.Tier__c Visible for Sales Manager, System Administrator, Sales User, and Read Only in tkv2-sbx, with edit access only for Sales Manager and System Administrator, using the exact WI-002 manual step? Affects P2-T02; R-03. (work-decide)
-
-Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
-  - user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon. Saved 2026-09-28. Yes: toolkit memory approve user_salesforce_setup_afternoon --by <name>. No: toolkit memory reject user_salesforce_setup_afternoon. (work-decide)

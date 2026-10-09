@@ -1,1 +1,0 @@
-Let's make the Account migration real work. Make a work item for moving Baltic's Accounts into Northwind's org under the customer ID rule. Don't start the interview yet, I just want it to exist with what we know, and the ERP integration and the reports each get their own item later.

@@ -1,1 +1,0 @@
-Not yet on the merge. First WI-003: in its worktree, node bin/greet.js --version printed 0.1.0, and node bin/greet.js Mike --version printed 0.1.0 too. I approve the WI-003 result.

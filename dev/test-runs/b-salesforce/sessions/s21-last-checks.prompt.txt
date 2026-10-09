@@ -1,1 +1,0 @@
-Both passed. As System Administrator I saved each of Gold, Silver, and Bronze, then cleared it to blank and saved. And an API update of Tier as the Read Only user was denied with an insufficient access error.

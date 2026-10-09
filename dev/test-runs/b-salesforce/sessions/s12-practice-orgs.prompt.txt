@@ -1,1 +1,0 @@
-To be clear: Acme CRM is a practice project. tkv2-sbx and tkv2-prod are practice orgs, and the sf script on the PATH simulates them on purpose; there is no real Salesforce org behind them. I'm testing the whole workflow. For this project, treat what that sf prints as the result from the org, including validations. I approve the git commands the build needs. Keep going.

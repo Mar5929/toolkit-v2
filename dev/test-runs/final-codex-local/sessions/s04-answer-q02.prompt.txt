@@ -1,1 +1,0 @@
-Yes, an invalid --max value should print an error and exit with code 1.

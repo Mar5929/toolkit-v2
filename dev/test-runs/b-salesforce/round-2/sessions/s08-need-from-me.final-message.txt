@@ -1,3 +1,0 @@
-Nothing is waiting on your decision right now. WI-001’s requirements are approved, and I can continue the design research.
-
-Would you like agents to take responsibility for delivering WI-001, with you acting as product owner?

@@ -1,7 +1,0 @@
-.work-items/.toolkit-state.json
-.work-items/DASHBOARD.md
-.work-items/WI-001-build-tally-word-count-cli/DESIGN.md
-.work-items/WI-001-build-tally-word-count-cli/WI-002-add-lines-line-count/WORK-ITEM.md
-.work-items/WI-001-build-tally-word-count-cli/WORK-ITEM.md
-.work-items/work-item-template/DESIGN.md
-.work-items/work-item-template/WORK-ITEM.md

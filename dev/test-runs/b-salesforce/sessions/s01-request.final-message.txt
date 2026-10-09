@@ -1,1 +1,0 @@
-WI-001 is recorded. Before I change Account, I need the picklist values and their order. What should they be? I recommend **Tier 1, Tier 2, Tier 3**, with Tier 1 highest.

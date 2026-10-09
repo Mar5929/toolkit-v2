@@ -1,6 +1,0 @@
-0.223s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md",max_output_tokens:5000}),\n  tools.exec_command({cmd:"cat SO'
-0.237s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"cat .memory/memory-criteria.md",max_output_tokens:3000}),\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skill'
-0.229s :: 'const r=await tools.exec_command({cmd:"toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes --json",max_output_tokens:3000});text(r.output);\n'
-0.284s :: 'const r=await tools.exec_command({cmd:"toolkit memory approve project_mike_rihm_friends_settle_split_bills_venmo_takes --by \'Mike Rihm\'",max_output_tokens:2000});text(r.output);\n'
-0.32s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes",max_output_tokens:1800}),\n  tools.exec_command({cmd:"toolkit doctor",max_output_t'
-MAX toolkit call seconds: 0.32

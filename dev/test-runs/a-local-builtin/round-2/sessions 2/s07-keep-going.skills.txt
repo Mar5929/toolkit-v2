@@ -1,2 +1,0 @@
-Skill files and helper agents opened (from the Codex session log, in order):
-work-on, work-delegate, work-check, spawn_agent:acceptance_check(fork_turns=none), memory-save

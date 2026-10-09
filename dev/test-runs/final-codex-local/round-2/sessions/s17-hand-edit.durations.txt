@@ -1,5 +1,0 @@
-0.318s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-re'
-0.32s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"rg -n -C 4 \'WI-002|^priority:|^## Notes|Checked with a real Venmo\' .work-items",max_output_tokens:4000}),\n  tools.exec_command({cmd:"cat .work-items/cli/WI-00'
-0.343s :: 'const r=await tools.exec_command({cmd:"toolkit work set WI-002 --priority high",max_output_tokens:3000});text(r);\n'
-0.3s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"rg -n -C 2 \'^priority:|^## Notes$|^Checked with a real Venmo request on 2026-09-28\\\\.$\' .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md",max_outp'
-MAX toolkit call seconds: 0.343

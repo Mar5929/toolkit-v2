@@ -1,3 +1,0 @@
-The production guard blocked the dry-run command before `sf` ran. It identified `tkv2-prod` as a production org and told me to ask the owner to run it.
-
-I then ran `sf project deploy start --help` once. It exited successfully and printed `fake sf help for: project deploy start --help`.

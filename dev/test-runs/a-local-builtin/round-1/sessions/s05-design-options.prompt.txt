@@ -1,1 +1,0 @@
-Not yet, I do not approve the result. You skipped the design step. Before I approve anything, I want to see design options for WI-001, especially how --version gets its version number. How should we build this? Keep the code you already wrote in the worktree for now.

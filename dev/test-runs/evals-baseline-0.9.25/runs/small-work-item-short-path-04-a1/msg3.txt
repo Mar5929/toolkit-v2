@@ -1,1 +1,0 @@
-No. The long checklist is missing the step where I ask the tester for their phone model and iOS version.

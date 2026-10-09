@@ -1,7 +1,0 @@
-2 decisions wait on the owner:
-
-WI-002 Set Account Tier access and place it below Rating on Account Layout
-  - Q-04: Does Mike approve deploying the validated layout-only WI-002 package containing Account-Account Layout to tkv2-sbx? This adds Tier directly below Rating on Account Layout and affects its assigned users; no profile or permission set is in the package. Affects P2-T03; R-04. (work-decide)
-
-Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
-  - user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon. Saved 2026-09-28. Yes: toolkit memory approve user_salesforce_setup_afternoon --by <name>. No: toolkit memory reject user_salesforce_setup_afternoon. (work-decide)

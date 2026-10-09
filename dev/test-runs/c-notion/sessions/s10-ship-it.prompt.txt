@@ -1,1 +1,0 @@
-Approved, TV2-002 looks good too. Ship it: there is no remote, so merge the README brief into main locally. I approve that merge. Then close both items out and clean up the worktrees.

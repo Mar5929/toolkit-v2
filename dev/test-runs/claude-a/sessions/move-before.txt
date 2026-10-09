@@ -1,7 +1,0 @@
-.
-./.toolkit-state.json
-./DASHBOARD.md
-./WI-001-add-a-version-flag-to-the-greet-cli
-./WI-001-add-a-version-flag-to-the-greet-cli/WI-002-handle-an-empty-name-and-version-in-any
-./WI-001-add-a-version-flag-to-the-greet-cli/WI-002-handle-an-empty-name-and-version-in-any/WORK-ITEM.md
-./WI-001-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md

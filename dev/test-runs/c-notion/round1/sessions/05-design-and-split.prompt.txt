@@ -1,1 +1,0 @@
-Go with option A. Then split the work: make the new "Add a quote" section its own sub-item under the README brief item, and keep the Purpose and Start here bullets in the main item.

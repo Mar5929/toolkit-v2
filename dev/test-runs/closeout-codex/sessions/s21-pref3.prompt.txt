@@ -1,1 +1,0 @@
-Always keep commit messages to one short line in plain English.

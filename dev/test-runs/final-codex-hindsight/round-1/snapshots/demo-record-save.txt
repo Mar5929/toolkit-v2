@@ -1,6 +1,0 @@
-$ toolkit memory save --type project --name demo-on-friday --description 'The greet CLI demo is on Friday' --body '<Remember: The greet CLI demo for the team is on Friday.>' --source 'Mike, terminal, 2026-09-28' --approved-by Mike
-Saved to memory: project_demo_on_friday (new record).
-Where: Hindsight bank greet-cli-final-h at http://127.0.0.1:8888
-Version: 43f90d8942bf
-Approved by: Mike
-exit=0

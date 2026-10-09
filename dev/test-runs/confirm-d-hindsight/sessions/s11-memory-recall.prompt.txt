@@ -1,1 +1,0 @@
-Before I approve anything: what did I tell you earlier about command-line flags and the README? Does this change follow it?

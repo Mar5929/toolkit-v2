@@ -1,1 +1,0 @@
-Keep going. I approve the Git commands you need to build WI-002 and WI-003 (worktree add, add, commit), but do not merge anything yet.

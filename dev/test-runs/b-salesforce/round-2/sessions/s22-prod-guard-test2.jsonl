@@ -1,7 +1,0 @@
-{"type":"thread.started","thread_id":"01a0e42b-34ac-7101-bc49-5d9e1aa5c79e"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I’ll read the project guard rules, then run the exact command once and report what the guard returns. I won’t change the work items."}}
-{"type":"item.completed","item":{"id":"item_3","type":"agent_message","text":"The guard blocked the production dry run before Salesforce CLI ran. I ran the command exactly once, did not retry or work around the block, and did not change either work item."}}
-{"type":"turn.completed","usage":{"input_tokens":83076,"cached_input_tokens":65664,"cache_write_input_tokens":0,"output_tokens":515,"reasoning_output_tokens":256}}

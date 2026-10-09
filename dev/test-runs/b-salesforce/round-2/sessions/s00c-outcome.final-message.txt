@@ -1,5 +1,0 @@
-The Acme CRM outcome is written in [AGENTS.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md), [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/PROJECT.md), [README.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/README.md), and the roadmap. The session focus is also updated. Phases and data model details remain open because they have not been defined.
-
-`toolkit doctor` found no setup problems. To clear its three trust warnings, open this project in Codex, trust the folder when prompted, then use `/hooks` to trust the Toolkit V2 hooks and Salesforce guards. Start a new session afterward so the settings load.
-
-The setup files are **not committed**. The project-setup skill requires your approval for the initial commit; say **“commit setup”** if you want me to make it. Next, tell me the first specific Salesforce change you want built.

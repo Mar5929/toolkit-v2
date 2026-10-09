@@ -1,1 +1,0 @@
-Go with option A. And split this: put the README documentation part into its own sub-item, so it can be built and checked on its own.

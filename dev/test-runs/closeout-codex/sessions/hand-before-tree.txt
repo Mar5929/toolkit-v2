@@ -1,7 +1,0 @@
-.work-items/.toolkit-state.json
-.work-items/DASHBOARD.md
-.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md
-.work-items/WI-001-build-the-plain-tip-and-total-command/WI-002-add-the-split-option/WORK-ITEM.md
-.work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md
-.work-items/work-item-template/DESIGN.md
-.work-items/work-item-template/WORK-ITEM.md

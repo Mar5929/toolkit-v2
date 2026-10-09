@@ -1,5 +1,0 @@
-0.464s :: 'const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.7/skills/project-setup/SKILL.md","max_output_tokens":12000}); text(r.output);\n'
-1.467s :: 'const names=ALL_TOOLS.filter(x=>/update_plan/.test(x.name)); text(names); const r=await Promise.allSettled([tools.exec_command({cmd:"pwd && rg --files -g \'AGENTS.md\' -g \'.toolkit.json\' -g \'README*\' -g \'sfdx-project.json\''
-0.738s :: 'const r=await Promise.allSettled([tools.exec_command({cmd:"git rev-parse --show-toplevel","max_output_tokens":1000}),tools.exec_command({cmd:"git config user.name","max_output_tokens":1000}),tools.exec_command({cmd:"ls -'
-3.933s :: 'const r=await tools.exec_command({cmd:"toolkit hindsight health",sandbox_permissions:"require_escalated",justification:"May I check whether the local Hindsight memory service is running so I can present the correct memor'
-MAX toolkit call seconds: 3.933

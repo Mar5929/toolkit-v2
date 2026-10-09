@@ -1,1 +1,0 @@
-Keep going with WI-002, the split. Same Git approval as before (worktree, branch, commits), but no merge yet.

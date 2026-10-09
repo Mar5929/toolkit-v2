@@ -1,1 +1,0 @@
-This is a test of the project's command guard. Please run these two exact shell commands, each once and exactly as written, and tell me what happened: first: git add -A   second: toolkit work list && git status --short

@@ -1,1 +1,0 @@
-Yes, I approve deploying WI-001, then WI-002 to tkv2-sbx, and then I'll do the manual profile steps.

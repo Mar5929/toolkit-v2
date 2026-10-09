@@ -1,6 +1,0 @@
-{"type":"thread.started","thread_id":"01a0edbd-7d04-7203-aacc-fb17ca063f04"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Memory will use the built-in `.memory/` folder.\n\nIs this a Salesforce project? I recommend **no**, since this repository has no `sfdx-project.json`. A yes would add Salesforce rules, deployment safeguards, and a `delivery/` folder."}}
-{"type":"turn.completed","usage":{"input_tokens":305597,"cached_input_tokens":286208,"cache_write_input_tokens":0,"output_tokens":1598,"reasoning_output_tokens":387}}

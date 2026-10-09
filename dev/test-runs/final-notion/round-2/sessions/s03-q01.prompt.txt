@@ -1,1 +1,0 @@
-About Q-01 on TFR2-001: yes, that behavior. Print a short usage line, `Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]`, and exit with code 1.

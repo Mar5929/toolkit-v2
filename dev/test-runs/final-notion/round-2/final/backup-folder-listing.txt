@@ -1,9 +1,0 @@
-$ find <scratchpad>/backups/notion -type f (modification time in UTC, size, path)
-2026-09-28T20:01:02Z 592 <scratchpad>/backups/notion/tv2-final-run-2026-09-28/memory-export/CURRENT_FOCUS.md
-2026-09-28T20:01:03Z 1109 <scratchpad>/backups/notion/tv2-final-run-2026-09-28/memory-export/terminology-glossary.md
-2026-09-28T20:01:03Z 334 <scratchpad>/backups/notion/tv2-final-run-2026-09-28/memory-export/toolkit-memory-export.json
-2026-09-28T22:17:47Z 1109 <scratchpad>/backups/notion/tv2-final-run-2-2026-09-28/memory-export/terminology-glossary.md
-2026-09-28T22:17:47Z 334 <scratchpad>/backups/notion/tv2-final-run-2-2026-09-28/memory-export/toolkit-memory-export.json
-2026-09-28T22:17:47Z 545 <scratchpad>/backups/notion/tv2-final-run-2-2026-09-28/memory-export/CURRENT_FOCUS.md
-
-Work finish of TFR2-002 and TFR2-001 ran in s13 (see sessions/index.txt); the handoff-backup ran in c4.

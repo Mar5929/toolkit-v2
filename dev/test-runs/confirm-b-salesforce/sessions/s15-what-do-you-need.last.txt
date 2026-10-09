@@ -1,5 +1,0 @@
-I need your decision on **WI-002’s sandbox layout deployment**. I recommend approving it: the package was validated and contains only `Account-Account Layout`. It adds Tier directly below Rating for users assigned that layout; it contains no profile or permission set changes.
-
-**Do you approve deploying that package to `tkv2-sbx`?** If yes, I’ll run the final scope check, deploy it, and verify the result. If no, I’ll record your decision and leave it undeployed.
-
-There is also a separate proposed memory preference to review after this decision.

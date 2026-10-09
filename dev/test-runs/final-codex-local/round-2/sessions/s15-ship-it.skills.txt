@@ -1,1 +1,0 @@
-work-finish, merge-and-clean-up,   ref:work/skills/work-finish/references/git-rules.md,   ref:work/skills/work-finish/references/approvals.md, publish-docs, memory-save

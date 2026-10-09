@@ -1,3 +1,0 @@
-789c45b Add a short project brief to README.md (TVSRC-001, TVSRC-002)
-65ccb48 Set up Toolkit V2 (Notion tracker, Notion memory)
-ae840d0 Initial commit: quote script

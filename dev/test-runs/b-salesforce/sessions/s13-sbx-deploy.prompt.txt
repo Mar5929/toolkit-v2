@@ -1,1 +1,0 @@
-Yes, I approve deploying only Account.Tier__c from the WI-001 package to tkv2-sbx. Keep going after that.

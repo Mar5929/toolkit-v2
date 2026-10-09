@@ -1,1 +1,0 @@
-About the waiting memory note: yes, keep it. I run days-until only on my MacBook Air with Node 24.

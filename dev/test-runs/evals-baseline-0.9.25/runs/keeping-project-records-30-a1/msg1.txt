@@ -1,9 +1,0 @@
-This just came in from Tomas. What can we still get done on sync in the meantime?
-
-From: Tomas Lindqvist
-To: Mike Rihm
-Subject: Production server
-
-Mike, bad news on the production server. The hosting company put the account under review after I changed the card, and I can't create the production database until they clear it. They say up to five business days. Until then there is no production address for the app to point at. Staging still works.
-
-Tomas

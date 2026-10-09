@@ -1,1 +1,0 @@
-Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Also, remember that I prefer every command-line flag to be listed in the README with a short example.

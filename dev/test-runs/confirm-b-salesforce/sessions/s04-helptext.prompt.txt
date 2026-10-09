@@ -1,1 +1,0 @@
-Yes, the help text should say that. Something like: Set by hand. Gold is the highest tier, then Silver, then Bronze.

@@ -1,1 +1,0 @@
-memory-save, publish-docs,   ref:git-workflows/skills/publish-docs/references/git-rules.md,   ref:memory/skills/memory-save/references/record-format.md,   ref:memory/skills/memory-save/references/proposals.md

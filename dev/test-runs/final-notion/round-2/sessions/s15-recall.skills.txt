@@ -1,1 +1,0 @@
-memory-find,   ref:memory/skills/memory-find/references/record-format.md,   ref:memory/skills/memory-find/references/proposals.md

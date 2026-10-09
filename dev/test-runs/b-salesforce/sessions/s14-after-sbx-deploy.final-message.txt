@@ -1,5 +1,0 @@
-WI-001’s sandbox deployment is recorded and verified. `Account.Tier__c` is present with Gold, Silver, Bronze in order, no default, and help text. I updated the deployment records and component tracker on the WI-001 and WI-002 branches. WI-001 remains open while WI-002 completes the access and page checks.
-
-For WI-002, the sandbox reports Account Layout assigned to Sales Manager, System Administrator, Sales User, and Read Only. It has not provided enough information to verify effective Tier access or active Lightning page assignments, so the layout has not been deployed.
-
-Can you share the `tkv2-sbx` Setup assignments for active Account Lightning record pages and the Tier read/edit grants for those four profiles, including any permission sets or groups? Screenshots or a written list are fine.

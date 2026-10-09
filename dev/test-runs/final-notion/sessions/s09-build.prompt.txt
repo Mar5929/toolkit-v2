@@ -1,1 +1,0 @@
-No agent team for this one. Keep it owner-led: you build it and bring me the results. Go ahead and build. I approve the git commands you need for the build (worktree add, add, commit), but no merge yet.

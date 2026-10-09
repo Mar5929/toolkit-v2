@@ -1,3 +1,0 @@
-set up this project
-
-Answers to your interview questions: the project is named Northwind Org Merge, the owner is Mike Rihm, work items are local with the prefix WI, memory is local, and it keeps no SOUL.md. It is a Salesforce project. For anything else, use these facts: the project merges the Salesforce org of Baltic Freight into the Salesforce org of Northwind Supply, for the client Northwind Supply; Mike Rihm is the consultant who runs it; no Salesforce org is connected on this computer yet, no org alias exists yet, and the production orgs and sandboxes will be named later, so leave those as not known yet and connect nothing. Ask me nothing more: where a fact is not given here, write that it is not known yet.

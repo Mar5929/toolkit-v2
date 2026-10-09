@@ -1,8 +1,0 @@
-== Project row
-Key: tv2-final-run | Local path: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 | Memory system: notion | Project: Toolkit V2 final run (safe to delete) | Salesforce: False | Set up on: 2026-09-28 | Status: Active | Tracker: notion | trash False
-== Work items
-ID: TFR-2 | Work item: Add the --weeks flag to days-until | Stage: 14-spec-update | Status: Done | Type: build | Waiting on: none | Delivery: owner-led | Requirements approved: 2026-09-28 by Mike Rihm | Design: none | Design approved: no | Result approved: 2026-09-28 by Mike Rihm | Parent item: 3e9b381d-a176-81b7-b7cc-ea07b01d5850 | Sub-items:  | Archived: False | Next action: None. Finished.
-ID: TFR-1 | Work item: Build the days-until command | Stage: 14-spec-update | Status: Done | Type: build | Waiting on: none | Delivery: owner-led | Requirements approved: 2026-09-28 by Mike Rihm | Design: approved | Design approved: 2026-09-28 by Mike Rihm | Result approved: 2026-09-28 by Mike Rihm | Parent item:  | Sub-items: 3e9b381d-a176-815b-b55c-cfff40995905 | Archived: False | Next action: None. Finished.
-== Memories
-Record Key: project_run_days_until_only_macbook_air_node_24 | Title: you run days-until only on your MacBook Air with Node 24 | Kind: note | Status: accepted | Authorization: Approved by Mike Rihm on 2026-09-28 | Source: manual | Saved: 2026-09-28 | trash False
-Record Key: user_plain_nodejs_tests | Title: Node.js and test preferences | Kind: note | Status: accepted | Authorization: Approved by Mike on 2026-09-28 | Source: manual | Saved: 2026-09-28 | trash False

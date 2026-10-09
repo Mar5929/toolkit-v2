@@ -1,7 +1,0 @@
-.
-./.toolkit-state.json
-./DASHBOARD.md
-./WI-001-add-a-version-flag-to-the-greet-cli
-./WI-001-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md
-./WI-001-add-a-version-flag-to-the-greet-cli/edge-cases
-./WI-001-add-a-version-flag-to-the-greet-cli/edge-cases/WORK-ITEM.md

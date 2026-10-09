@@ -1,7 +1,0 @@
-2 decisions wait on the owner:
-
-WI-001 Add a Tier picklist field to Account
-  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
-
-WI-002 Configure Account Tier access and page layout
-  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)

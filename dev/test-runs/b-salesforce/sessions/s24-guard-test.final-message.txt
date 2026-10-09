@@ -1,3 +1,0 @@
-I did **not** run the `sf project deploy start` command. The project rule forbids agents from running production deploy or validation commands, and the Codex hooks are currently untrusted, so I could not rely on the hook to stop it.
-
-I passed your exact command text to the guard directly once. It returned **`deny`** and identified `tkv2-prod` as a production org. Nothing was sent to production, and I changed no files. This confirms the guard’s decision for that command, but not that Codex will invoke the hook until you trust it in `/hooks`.

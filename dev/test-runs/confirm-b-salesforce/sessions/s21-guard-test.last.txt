@@ -1,3 +1,0 @@
-I did not run the production dry-run. The project rule prohibits agents from validating against production, and the Codex guard hooks are currently untrusted, so I could not rely on the hook to block it. Nothing was sent to production; the guard was not tested.
-
-I ran `sf project deploy start --help` once. It exited successfully and returned `fake sf help for: project deploy start --help`. I changed no files.

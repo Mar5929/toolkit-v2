@@ -1,1 +1,0 @@
-Set up Toolkit V2 in this project. It's a Salesforce project for the Acme sales team. One thing to know: Acme CRM is a practice project. The two orgs, tkv2-sbx and tkv2-prod, are practice orgs, and the sf command on this computer simulates them on purpose, so treat what sf prints as the answer from the org.

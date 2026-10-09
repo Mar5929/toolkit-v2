@@ -1,1 +1,0 @@
-Yes, it can be blank, with no default value. For who sees it: everyone who can see an Account can read Tier, but only the Sales Manager profile and system administrators can edit it. Put it on the Account Layout page layout, right below Rating.

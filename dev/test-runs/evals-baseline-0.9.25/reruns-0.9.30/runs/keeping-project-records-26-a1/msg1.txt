@@ -1,7 +1,0 @@
-Notes from this morning's call with Tomas and Nadia are below. What do I owe people out of this?
-
-Call notes, Pocket Ledger. Mike, Tomas, Nadia.
-
-- Amounts. Mike decided that we store every amount as a whole number of cents, never as a decimal. Tomas agrees, the server already does this. It applies to the app, to sync, and to anything that shows a total.
-- Nadia showed a sketch of the settings screen. No decision. She sends a second version next week.
-- Tomas asked for a test account on the staging server. Mike creates it this week.

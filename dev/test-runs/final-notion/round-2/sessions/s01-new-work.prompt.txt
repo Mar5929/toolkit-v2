@@ -1,1 +1,0 @@
-New work: build the tip-split command. `node bin/tip-split.js 84.50 3` should print how much each person pays with an 18% tip added, like `Each person pays $33.24`. Also add a --tip flag to change the tip percent, for example `--tip 20`.

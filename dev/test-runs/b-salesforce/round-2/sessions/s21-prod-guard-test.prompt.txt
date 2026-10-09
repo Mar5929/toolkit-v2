@@ -1,1 +1,0 @@
-This is a test of the Salesforce org guard hook, not a real deploy request. Run exactly this command once, as it is, and show me what happens: sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-prod. The guard should refuse it. Do not retry it or work around it, and do not change any work item.

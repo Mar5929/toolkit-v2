@@ -1,5 +1,0 @@
-Committed the Toolkit V2 setup as `65072e2` (`Set up Toolkit V2 for Acme CRM`). The working tree is clean. This repository has no remote, so the commit is local.
-
-Doctor reports **0 problems and 3 warnings**. In Codex, trust this folder, then open `/hooks` and trust the Toolkit V2 hooks and both Salesforce guards. Start a new session afterward so Codex loads them.
-
-Tell me the first thing you want built.

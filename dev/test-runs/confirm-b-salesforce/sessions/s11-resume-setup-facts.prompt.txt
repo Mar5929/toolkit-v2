@@ -1,1 +1,0 @@
-It's after lunch now. In tkv2-sbx Setup, Account.Tier__c shows Description: Manually assigned account importance tier. Help Text: Set by hand. Gold is the highest tier, then Silver, then Bronze. For access: none of the four profiles has any access to Tier yet, and no permission sets or permission set groups grant Tier. Keep going.

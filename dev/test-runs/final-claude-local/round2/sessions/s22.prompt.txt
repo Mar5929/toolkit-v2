@@ -1,1 +1,0 @@
-Go ahead and save the Friday release. Then end your reply with exactly this question on its own line, and take no other action on it: "Save to memory: you publish slug releases to npm yourself?"

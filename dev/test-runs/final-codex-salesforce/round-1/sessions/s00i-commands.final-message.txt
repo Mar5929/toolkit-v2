@@ -1,7 +1,0 @@
-Toolkit V2 is set up for Acme CRM with local work items, built-in memory, and the practice Salesforce orgs `tkv2-sbx` and `tkv2-prod`. The project files record your account-ranking outcome and sandbox API version `62.0`. The local backup succeeded. No build, test, or deploy command is recorded as verified yet.
-
-`toolkit doctor` reports **0 problems and 3 warnings**. To clear them, open Codex in this folder and trust it when asked, then use `/hooks` to trust the Toolkit V2 hooks and both Salesforce guards. Start a new session afterward so Codex loads the project settings.
-
-The project guide still has prompts for scope details, and the roadmap and data model need confirmed plans and requirements. They can be filled as that work is defined. The existing README was kept.
-
-Setup files are not committed. Commit them now?

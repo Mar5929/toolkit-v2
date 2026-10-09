@@ -1,9 +1,0 @@
-Change from Helen, forwarded below. I'm fine with it.
-
-From: Helen Brandt
-To: Mike Rihm
-Subject: Legacy ID
-
-Mike, Finance needs to correct some of the Baltic legacy IDs during the first year. So the legacy ID field has to be editable by the Finance team for the first year after cutover, not read-only. The two years stay.
-
-Helen

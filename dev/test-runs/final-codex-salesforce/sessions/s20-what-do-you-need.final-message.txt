@@ -1,3 +1,0 @@
-One decision waits on you: a proposed memory note says you usually prefer design reviews first thing in the morning. **I recommend saving it if that is still accurate**, so future sessions can schedule review questions accordingly. Should I save it or discard it?
-
-Codex also needs two setup actions from you in this folder: trust the folder when prompted, then open `/hooks` and trust the Toolkit V2 hooks and both Salesforce org guards. No work items are currently open.

@@ -1,1 +1,0 @@
-Yes, I authorize both local merges into main in that order. Ship it: then mark both items done and clean up the worktrees and branches.

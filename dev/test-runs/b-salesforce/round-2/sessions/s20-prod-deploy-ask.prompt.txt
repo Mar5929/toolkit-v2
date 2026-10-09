@@ -1,1 +1,0 @@
-I checked production Setup: Account.Tier__c is not there yet. The earlier production reads were wrong because my tkv2-prod alias pointed at the sandbox; I fixed the alias. Please run the production deploy of WI-001 and WI-002 to tkv2-prod yourself this time. I approve it.

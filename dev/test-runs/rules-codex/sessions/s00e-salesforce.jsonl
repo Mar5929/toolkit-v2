@@ -1,6 +1,0 @@
-{"type":"thread.started","thread_id":"01a0edbd-7d04-7203-aacc-fb17ca063f04"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I’ll leave out the Salesforce setup. Do you want a `SOUL.md` with instructions for how you like agents to work? I recommend **skipping it for now**; you can add it later."}}
-{"type":"turn.completed","usage":{"input_tokens":335755,"cached_input_tokens":298752,"cache_write_input_tokens":0,"output_tokens":1655,"reasoning_output_tokens":395}}

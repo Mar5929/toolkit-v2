@@ -1,1 +1,0 @@
-project-setup,   ref:toolkit/skills/project-setup/references/interview.md,   ref:toolkit/skills/project-setup/references/toolkit-commands.md,   ref:toolkit/skills/project-setup/references/running-init.md,   ref:toolkit/skills/project-setup/references/finishing-setup.md,   ref:toolkit/skills/project-setup/references/current-focus.md

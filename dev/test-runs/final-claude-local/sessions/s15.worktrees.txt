@@ -1,2 +1,0 @@
-/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r1                                                  8e37755 [main]
-/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r1/.claude/worktrees/wi-001-build-the-greet-command 10140e6 [claude/wi-001-build-the-greet-command]

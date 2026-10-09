@@ -1,8 +1,0 @@
-{
-  "pluginId": "memory@toolkit-v2",
-  "name": "memory",
-  "marketplaceName": "toolkit-v2",
-  "version": "0.2.4",
-  "installedPath": "/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4",
-  "authPolicy": "ON_INSTALL"
-}

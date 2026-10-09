@@ -1,5 +1,0 @@
-0.256s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-re'
-0.232s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"git worktree list",max_output_tokens:2000}),\ntools.exec_command({cmd:"git status",max_output_tokens:2000}),\ntools.exec_command({cmd:"git remote",max_output_toke'
-0.226s :: 'const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000});text(r)\n'
-0.236s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"rg -n \\"input rule|bill amounts|malformed|percent.*100|split count\\" . --hidden -g \'!node_modules\' -g \'!.git\' -g \'!.work-items/DASHBOARD.md\'",max_output_tokens:'
-MAX toolkit call seconds: 0.256

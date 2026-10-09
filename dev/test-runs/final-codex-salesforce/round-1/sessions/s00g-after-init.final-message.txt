@@ -1,3 +1,0 @@
-The Salesforce settings are written, the first local backup succeeded, and `toolkit doctor` reports **0 problems**. Its three warnings are for Codex folder and hook trust, which only you can grant in Codex. The setup guides still need your project outcome; the build, test, and deploy commands are also unverified.
-
-What should Acme CRM do for the sales team, in one sentence? Based on the README, I suggest: “Support the Acme sales team’s Salesforce work.”

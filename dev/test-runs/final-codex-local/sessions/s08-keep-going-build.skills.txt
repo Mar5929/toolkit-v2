@@ -1,1 +1,0 @@
-work-on, work-decide,   ref:work/skills/work-on/references/work-item-format.md, work-check,   ref:work/skills/work-check/references/agent-acceptance-checker.md, spawn_agent:acceptance_check(fork_turns=none),   ref:work/skills/work-check/references/approvals.md, memory-save,   ref:work/skills/work-on/references/current-focus.md

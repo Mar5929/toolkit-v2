@@ -1,4 +1,0 @@
-1 decision waits on the owner:
-
-WI-001 add a Tier picklist field to Account so the sales team can rank their accounts
-  - Q-04: Would you like agents to take responsibility for delivering this, with you acting as product owner? Affects delivery. (work-decide)

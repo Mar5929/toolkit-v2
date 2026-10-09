@@ -1,1 +1,0 @@
-Good. I approve both results, the CLI and the README. Also add this line to WI-002's Decisions and context: 'Mike checked the README examples himself.' Just edit the file directly.

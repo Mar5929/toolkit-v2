@@ -1,9 +1,0 @@
-Helen sent her decision on the customer ID, it's below. I agree with it.
-
-From: Helen Brandt
-To: Mike Rihm
-Subject: Customer ID
-
-Mike, decided. The merged org uses Northwind's ERP customer number as the customer ID. Baltic's legacy account ID is kept in a read-only field for two years after cutover, then we drop it.
-
-Helen

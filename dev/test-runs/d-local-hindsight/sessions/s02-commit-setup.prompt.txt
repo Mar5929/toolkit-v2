@@ -1,1 +1,0 @@
-Yes, commit the setup files. Also, the outcome I want for this project: a small, friendly greeting command that I can grow with a few simple flags.

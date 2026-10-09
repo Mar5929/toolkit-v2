@@ -1,3 +1,0 @@
-$ node bin/feecalc.js 200 --days 10
-Late fee: $5.00  Total due: $205.00
-exit=0

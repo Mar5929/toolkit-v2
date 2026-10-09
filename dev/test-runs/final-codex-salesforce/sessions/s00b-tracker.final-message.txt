@@ -1,1 +1,0 @@
-Confirmed: **Acme CRM**, owner **Mike Rihm**, local work item folders, and the two practice org aliases. Please choose the memory backend in the question above so I can continue setup.

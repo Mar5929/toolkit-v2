@@ -1,2 +1,0 @@
-- user_document_cli_flags_in_readme: Document every command-line flag in the README
-- user_explain_each_cli_flag_in_readme [archived]: Explain each command-line flag in the README file

@@ -1,1 +1,0 @@
-Yes: words are anything separated by spaces or line breaks, and a last line without a newline still counts. An empty file prints 0 for both. By the way, I read most of your replies on my phone. Show me the requirements again after that.

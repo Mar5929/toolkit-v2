@@ -1,1 +1,0 @@
-Add a Tier picklist field to Account so the sales team can rank their accounts.

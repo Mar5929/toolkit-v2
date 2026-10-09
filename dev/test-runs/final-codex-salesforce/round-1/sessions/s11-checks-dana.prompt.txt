@@ -1,1 +1,0 @@
-All three checks passed this afternoon: Tier shows right below Rating, a Sales Manager could pick Gold and save, a Sales User can see Tier but can't edit it, and the field has its description in Setup. I approve the git commands to commit the records. By the way, Dana Lee is the sales manager who asked for this field, and she'll be the one who checks the tiers every Monday.

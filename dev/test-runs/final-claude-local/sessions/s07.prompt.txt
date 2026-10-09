@@ -1,1 +1,0 @@
-Remember that I prefer short commit messages: one line, under 50 characters.

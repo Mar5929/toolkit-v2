@@ -1,4 +1,0 @@
-0.231s :: 'const p="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md";const cmds=["cat PROJECT.md PROJECT-ROADMAP.md DECISIONS.md","cat .claude/rules/humanize-outbound-text.md .claude'
-0.287s :: 'const cmds=["toolkit work show WI-002 --path","git worktree list","git status --short --branch","cat .work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md","rg -n \'split|Run|node|tipcalc\' README.md tests '
-0.24s :: 'const r=await tools.exec_command({cmd:"node bin/tipcalc.js 50 --percent 20 --split 7","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpa'
-MAX toolkit call seconds: 0.287

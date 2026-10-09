@@ -1,3 +1,0 @@
-I need your approval or rejection of two finished results, one at a time. **First is WI-001, the Account Tier field.** I recommend approving it: the field metadata and practice sandbox checks met the approved requirements. The record and API behavior checks were reported by you; the test Account IDs were not recorded.
-
-If you approve WI-001, I’ll record that decision and bring you WI-002, which covers Tier access and page layout. **Do you approve the finished WI-001 result?**

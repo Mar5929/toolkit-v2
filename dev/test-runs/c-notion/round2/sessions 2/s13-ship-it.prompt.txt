@@ -1,1 +1,0 @@
-Approved, the combined README brief looks good. Ship it: there is no remote, so merge it into main locally. I approve that merge. Then close both items out and clean up the worktrees.

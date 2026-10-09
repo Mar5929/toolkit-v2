@@ -1,7 +1,0 @@
-Project row: Key tv2-final-run-2 | Memory system notion | Project Toolkit V2 final run (safe to delete) | Salesforce False | Set up on 2026-09-28 | Status Active | Tracker notion | in_trash False
-Delivery owner-led | Design none | Design approved no | ID TFR2-2 | Parent item ['0e24'] | Requirements approved 2026-09-28 by Mike Rihm | Result approved 2026-09-28 by Mike Rihm | Stage 14-spec-update | Status Done | Sub-items [] | Type build | Waiting on none | Work item Add the --tip option
-Delivery owner-led | Design approved | Design approved 2026-09-28 by Mike Rihm | ID TFR2-1 | Parent item [] | Requirements approved 2026-09-28 by Mike Rihm | Result approved 2026-09-28 by Mike Rihm | Stage 14-spec-update | Status Done | Sub-items ['26cf'] | Type build | Waiting on none | Work item Build the tip-split bill command
-Memory project_mike_rihm_usually_splits_restaurant_bills_among | accepted | Approved by Mike Rihm on 2026-09-28 | Mike Rihm usually splits restaurant bills among four people
-Memory user_nodejs_testing_preference | accepted | Approved by Mike Rihm on 2026-09-28 | Node.js and test preference
-All Projects view unchanged by the run: True | last edited 2026-09-28T19:54:32.845+00:00
-Root page in trash: False

@@ -1,6 +1,0 @@
-{"type":"thread.started","thread_id":"01a0e990-0b27-7f51-8412-8d0b55e5c48f"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Got it: name `slug`, key `slug`, work item IDs starting at `WI-001`, owner Mike Rihm.\n\nWhere should work items live? I recommend **local folders** because this is a new solo project and they work offline. You can also choose Notion, GitHub Issues, or Jira."}}
-{"type":"turn.completed","usage":{"input_tokens":175084,"cached_input_tokens":157952,"cache_write_input_tokens":0,"output_tokens":1043,"reasoning_output_tokens":177}}

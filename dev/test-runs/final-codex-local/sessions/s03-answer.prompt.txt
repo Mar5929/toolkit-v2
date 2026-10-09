@@ -1,1 +1,0 @@
-Yes, that is the --max behavior I want. Two more things: accented letters like é should become a plain e, and if the title has no letters or numbers at all, the command should print an error and exit with code 1.

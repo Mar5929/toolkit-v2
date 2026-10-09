@@ -1,3 +1,0 @@
-WI-001  Add a --shout flag to the greet CLI  (Done)
-  docs/ (group)
-    WI-002  Document the --shout flag in README  (Done)

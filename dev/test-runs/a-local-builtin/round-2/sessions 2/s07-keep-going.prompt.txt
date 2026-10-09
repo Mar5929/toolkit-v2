@@ -1,1 +1,0 @@
-Keep going. I approve the git commands for the work branches and worktrees when Codex asks (worktree add, add, commit), but no merge yet.

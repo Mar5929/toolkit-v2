@@ -1,1 +1,0 @@
-Keep WI-001 open until WI-002 is done. Skip the design for WI-002 and build it.

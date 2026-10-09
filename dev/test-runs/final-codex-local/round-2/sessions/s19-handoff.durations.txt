@@ -1,9 +1,0 @@
-0.068s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/session-skills/0.2.7/skills/handoff/SKILL.md",max_output_tokens:8000}),\n  tools.exec_command({cmd:"ca'
-0.212s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/session-skills/0.2.7/skills/handoff/SKILL.md",max_output_tokens:8000}),\n  tools.exec_command({cmd:"ca'
-0.233s :: 'const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/session-skills/0.2.7/skills/handoff/references/";\nconst r=await Promise.allSettled([\ntools.exec_command({cmd:"cat "+base+"{save-memory-and-focus,prompt-forma'
-0.379s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:4000}),\ntools.exec_command({cmd:"git status --short --branch",max_output_tokens:2000}),\ntools.exec_command({cmd:"'
-0.383s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000}),\ntools.exec_command({cmd:"toolkit work list",max_output_tokens:2500}),\ntools.exec_command({cmd:"cat PROJECT-ROADMAP.md"'
-0.295s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus --text \'# Current focus\\n\\nLast updated: 2026-09-28, handoff, agent\\n\\n## Now\\n\\nNone.\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex he'
-0.282s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000});text(r);\n'
-0.407s :: 'const r=await tools.exec_command({cmd:"toolkit handoff-backup",max_output_tokens:2500});text(r);\n'
-MAX toolkit call seconds: 0.407

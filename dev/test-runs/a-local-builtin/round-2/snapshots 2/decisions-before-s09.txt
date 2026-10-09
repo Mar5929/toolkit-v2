@@ -1,7 +1,0 @@
-2 decisions wait on the owner:
-
-WI-002 Build basic greet CLI
-  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
-
-WI-003 Add --version flag to greet CLI
-  - WI-003 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-003 --result --by <name>. (work-decide)

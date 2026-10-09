@@ -1,1 +1,0 @@
-Approved, TSRC-002 looks good. Also, I dragged TSRC-002 out from under TSRC-001 in Notion by mistake. Put it back under TSRC-001, then keep going.

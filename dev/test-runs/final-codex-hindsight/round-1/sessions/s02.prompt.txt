@@ -1,1 +1,0 @@
-New work: add a --shout flag to the greet CLI. It should print the greeting in capital letters. Track it as a work item and ask me what you need to pin down the requirements.

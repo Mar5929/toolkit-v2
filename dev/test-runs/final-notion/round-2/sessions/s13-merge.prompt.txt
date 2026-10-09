@@ -1,1 +1,0 @@
-Yes, I authorize merging both approved branches into main, TFR2-001 first. Then finish both items.

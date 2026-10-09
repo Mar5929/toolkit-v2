@@ -1,1 +1,0 @@
-Q-03: yes, round an exact half cent up. With that change I approve the requirements again.

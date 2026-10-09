@@ -1,1 +1,0 @@
-Yes to Q-01. Also, by the way: greet's CI dashboard is at https://ci.example.com/greet, and that's where failing builds show up.

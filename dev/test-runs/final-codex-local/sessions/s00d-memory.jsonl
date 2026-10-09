@@ -1,6 +1,0 @@
-{"type":"thread.started","thread_id":"01a0e990-0b27-7f51-8412-8d0b55e5c48f"}
-{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Memory will use `.memory/`.\n\nIs this a Salesforce project? I recommend **no** because the repo has no `sfdx-project.json`. A yes would add Salesforce rules, deployment skills, and protected-org guards."}}
-{"type":"turn.completed","usage":{"input_tokens":261833,"cached_input_tokens":243712,"cache_write_input_tokens":0,"output_tokens":1236,"reasoning_output_tokens":239}}

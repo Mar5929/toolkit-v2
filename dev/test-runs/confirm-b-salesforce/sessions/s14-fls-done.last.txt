@@ -1,3 +1,0 @@
-Mike’s field-level security change is recorded and verified in `tkv2-sbx`: all four profiles can read Tier, and only Sales Manager and System Administrator can edit it. I saved the evidence on the WI-002 branch.
-
-The next step needs separate approval under the project’s Salesforce org safety rule. **Do you approve deploying the WI-002 layout-only package to `tkv2-sbx`?** It contains only `Account-Account Layout` and places Tier directly below Rating for users assigned that layout. The package passed check-only validation; the layout has not been deployed.

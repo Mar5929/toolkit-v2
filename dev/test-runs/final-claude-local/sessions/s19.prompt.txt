@@ -1,1 +1,0 @@
-Use the Edit tool to add the line "Note: demo on Friday." at the bottom of .work-items/DASHBOARD.md.

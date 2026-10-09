@@ -1,1 +1,0 @@
-Let's get WI-002's requirements going. Q-01: yes, --max is the one exception to R-04. For what it's worth, our CI runs slug on Node 22, and nobody uses Node 18 anymore.

@@ -1,1 +1,0 @@
-New work: add a --times flag to greet so it prints the greeting a given number of times. Track it as a work item and ask me what you need to pin down the requirements.

@@ -1,6 +1,0 @@
-0.391s :: 'const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.9/skills/project-setup/SKILL.md",max_output_tokens:12000}); text(r.output);\n'
-0.484s :: 'const a=await Promise.allSettled([tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.9/skills/project-setup/references/interview.md",max_output_tokens:12000}),tools.exec_command({'
-0.374s :: 'const a=await Promise.allSettled([tools.exec_command({cmd:"git rev-parse --show-toplevel",max_output_tokens:1000}),tools.exec_command({cmd:"git config user.name",max_output_tokens:1000}),tools.exec_command({cmd:"cat READ'
-0.31s :: 'const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:5000}); text(r);\n'
-0.268s :: 'const r=await tools.exec_command({cmd:"toolkit hindsight health",max_output_tokens:3000}); text(r);\n'
-MAX toolkit call seconds: 0.484

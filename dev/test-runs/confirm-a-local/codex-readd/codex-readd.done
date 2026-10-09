@@ -1,4 +1,0 @@
-Codex plugins re-added by confirm-a-local at 2026-09-28T16:21:33Z
-versions: toolkit 0.2.4, work 0.2.6, memory 0.2.4, session-skills 0.2.4, git-workflows 0.2.4, sf-architect-solutioning 0.2.1
-all six set back to enabled = false; ~/.codex/config.toml equals the backup /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/confirm-a-local-tools/codex-config-before-readd.toml (diff exit 0)
-cache copies match the source folders file for file

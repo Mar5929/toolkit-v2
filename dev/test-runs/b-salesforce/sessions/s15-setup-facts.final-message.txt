@@ -1,3 +1,0 @@
-WI-002 is ready for its separate sandbox layout release. I recorded your Setup findings: all four profiles use the standard Account page with Account Layout, and Tier has no grants yet. The package contains only Account Layout; a fresh comparison found only Tier added below Rating. Sandbox validation passed with one component and no errors.
-
-**Do you approve deploying the WI-002 Account Layout package to `tkv2-sbx`?** The Option A profile grants and access checks follow that release.

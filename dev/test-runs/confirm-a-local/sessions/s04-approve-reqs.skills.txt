@@ -1,1 +1,0 @@
-work-decide,   ref:work/references/conventions.md, work-requirements, solution-design,   ref:work/skills/solution-design/references/design-process.md,   ref:work/references/team-roles.md,   ref:work/agents/requirements-analyst.md, spawn_agent:requirements_analyst(fork_turns=none), memory-save

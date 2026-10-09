@@ -1,3 +1,0 @@
-WI-001 now records **Gold, Silver, Bronze**, in that order, for Account Tier. I also saved your preference that every new custom field have a description and help text, and applied it to this item.
-
-The remaining field behavior still needs to be settled before the requirements can be approved and built.

@@ -1,3 +1,0 @@
-Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
-CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,Yes,Optional restricted picklist; Gold / Silver / Bronze; no default
-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,Yes,Modified: place Tier directly below Rating in Account Information

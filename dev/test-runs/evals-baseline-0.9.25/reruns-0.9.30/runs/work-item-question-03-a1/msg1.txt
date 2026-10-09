@@ -1,1 +1,0 @@
-No work item for this one, it's a two minute job. Add a file `app/Config/Signing.xcconfig` with the one line `CODE_SIGN_STYLE = Automatic`.

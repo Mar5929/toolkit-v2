@@ -1,1 +1,0 @@
-Yes, go with your recommendation: both positions work, and the whole greeting including the name is in capitals, like HELLO, MIKE! Also, remember that I prefer every command-line flag to be documented in the README.

@@ -1,5 +1,0 @@
-Mike’s Setup check confirms the approved WI-001 description and help text. The remaining WI-001 record and page checks depend on WI-002.
-
-WI-002’s [Setup steps](</private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md>) are written. They would make Tier visible to **Sales Manager, System Administrator, Sales User, and Read Only**, with editing limited to **Sales Manager and System Administrator**. This exposes Tier to users who can read Accounts; it does not change Account record access. The separate layout package passed check-only validation, and a fresh retrieve showed only the intended Tier placement.
-
-The project’s `confirm-salesforce-changes` rule requires your approval before changing field access. **I recommend approving the four-profile Setup change. Do you approve it in `tkv2-sbx`?**

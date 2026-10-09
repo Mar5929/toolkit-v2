@@ -1,1 +1,0 @@
-Yes, you may create that one test Account in the sandbox, save each value, clear Tier, and delete it. I also checked the users: Sales Manager and System Administrator users can edit and clear Tier, a Read Only user sees Tier but cannot edit it, and a user without access to an Account still cannot open it.

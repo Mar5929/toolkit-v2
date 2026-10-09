@@ -1,1 +1,0 @@
-Before you build anything: how should we build this? I want to see design options for WI-002 first, especially where --version gets its version number from.

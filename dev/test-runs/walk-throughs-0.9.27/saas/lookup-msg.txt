@@ -1,1 +1,0 @@
-Where are we on organization accounts? What is approved, what is still open, and what is live in production today? Tell me the files so I can open them myself.

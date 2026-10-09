@@ -1,1 +1,0 @@
-Both positions. For the wording: use "1 week" and "1 day" for one, leave out a part that is 0 (so "3 days" or "2 weeks"), and for today print "0 days". That should cover it, so please show me the requirements to approve.

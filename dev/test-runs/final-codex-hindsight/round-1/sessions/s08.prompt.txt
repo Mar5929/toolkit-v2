@@ -1,1 +1,0 @@
-No, work with me directly. It's a small change, so no helper agents. Keep going with the build of both items. I approve the git commands you need for it (worktree, add, commit).

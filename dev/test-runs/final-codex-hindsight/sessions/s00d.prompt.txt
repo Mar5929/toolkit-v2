@@ -1,1 +1,0 @@
-Use local Hindsight for memory. The Hindsight server is already running on this Mac.

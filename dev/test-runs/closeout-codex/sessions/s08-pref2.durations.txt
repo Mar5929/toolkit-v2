@@ -1,6 +1,0 @@
-0.209s :: 'const r = await tools.exec_command({cmd:"pwd && cat PROJECT.md && cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-ar'
-0.297s :: 'const cmds=["cat .memory/AGENTS.md .memory/memory-criteria.md","cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/references/record-format.md","toolkit memory list --type feedback","t'
-0.266s :: 'const cmds=["toolkit memory list --type user","toolkit memory get user_working_preferences --json"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:4000}))); r.forEach((x,i)=>tex'
-0.308s :: 'const r=await tools.exec_command({cmd:"toolkit memory save --concept user_working_preferences --section \'Test runner\' --body \'\\n**Remember:** From now on, write tests with Node’s built-in node:test runner and use no npm '
-0.344s :: 'const r=await Promise.allSettled([tools.exec_command({cmd:"toolkit memory get user_working_preferences",max_output_tokens:2000}),tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000})]); r.forEach((x,i)=>text('
-MAX toolkit call seconds: 0.344

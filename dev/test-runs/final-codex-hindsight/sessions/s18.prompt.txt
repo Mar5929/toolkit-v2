@@ -1,1 +1,0 @@
-Remember that I want each command-line option documented in the README, with an example of how to use it.

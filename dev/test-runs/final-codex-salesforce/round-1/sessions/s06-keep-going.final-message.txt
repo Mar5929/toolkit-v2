@@ -1,3 +1,0 @@
-WI-001’s requirements are approved. I recorded the delivery choice as Q-04; the Tier field design is still in progress. Your answer will determine how I organize the remaining design and build work.
-
-Would you like agents to take responsibility for delivering this, with you acting as product owner?

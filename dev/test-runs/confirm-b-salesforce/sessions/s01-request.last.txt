@@ -1,5 +1,0 @@
-I opened WI-001 for the Account Tier field. No Salesforce metadata has changed.
-
-I recommend a single picklist that salespeople set manually, so they can rank accounts without adding ranking automation. The proposed change touches the Account field; its values, access, and any page layout changes still need to be defined. Existing account entry and integrations could be affected if those choices change.
-
-**Is manual ranking with one Account Tier picklist the goal?**

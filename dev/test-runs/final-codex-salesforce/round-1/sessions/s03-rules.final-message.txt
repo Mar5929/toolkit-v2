@@ -1,3 +1,0 @@
-WI-001 now records that Tier may be blank, has no default, is editable only by the Sales Manager profile and system administrators, and appears directly below Rating on the Account page layout. The requirements check found one point to settle before approval.
-
-I recommend that **assigning Gold, Silver, or Bronze is enough for this item**, since the request named a field. Should the team also see Accounts ordered by Tier in a list or report?

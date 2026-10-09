@@ -1,1 +1,0 @@
-Two quick edits, and please edit the WI-002 WORK-ITEM.md file directly with apply_patch instead of the toolkit command: add a line under its Notes that says 'Checked with a real Venmo request on 2026-09-28.', then change its priority in the header to high.

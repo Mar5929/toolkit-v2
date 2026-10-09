@@ -1,1 +1,0 @@
-Add a file `app/Config/Build.xcconfig` with the one line `SWIFT_VERSION = 5.0`. The Xcode project comes later and will point at it, I just want the setting in the repo now.

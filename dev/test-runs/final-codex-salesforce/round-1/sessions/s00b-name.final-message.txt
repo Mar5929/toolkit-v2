@@ -1,1 +1,0 @@
-Where should work items live? I recommend **local folders**: they work offline and need no extra service. You can also choose Notion, GitHub Issues, or Jira.
