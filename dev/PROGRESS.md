@@ -281,12 +281,17 @@ and yes to a throwaway test bank.
 - The filter paragraph names neither secrets nor personal data. Mike was
   asked whether to add a clause for them, and said no (2026-10-08).
 
+- The bank `toolkit-v2` no longer holds the two missions of the old setup
+  (Mike, 2026-10-09: "yes, clear them"). The agent cleared both and started
+  the add-on's own job. The bank now holds the add-on's three missions, and
+  its observation settings, its detail, and its filter are as they were.
+  The step was rehearsed first on a bank made for the test.
+
 Open for Mike:
 
-- The bank `toolkit-v2` still holds the two missions of the old setup. It
-  was not changed.
 - Not tested: a save of a real session through the filter, Codex, and the
   installer in a real project.
+
 ## One home for what an agent may do in each Salesforce org, version 0.9.20 (2026-10-08, TKV-37)
 
 Mike's words: "Every salesforce project is different so there will always be
