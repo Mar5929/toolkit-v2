@@ -305,12 +305,11 @@ gets them:
   the plugins' checks. It never changes your own settings without your yes.
   Another Salesforce project on that computer then has the plugins only
   after "update the toolkit" has run in it.
-- The first time you open the project on a computer, you accept what Claude
-  Code asks about the folder and about Salesforce's marketplace. The agent
-  then checks that the computer has the marketplace and the seven plugins,
-  and gives you the commands for whatever is missing. In a test on
-  2026-10-08, the project's settings alone did not put a plugin onto a
-  computer that lacked it.
+- The first time you open the project on a computer, you trust the folder
+  when Claude Code asks. The agent then checks that the computer has the
+  marketplace and the seven plugins, and gives you the commands for whatever
+  is missing. In a test in sessions with no screen, the project's settings
+  alone did not make a plugin load.
 - Setup tells you the command that turns down the plugin's suggestions to
   install more plugins.
 - Earlier setups told you to run `npx skills add forcedotcom/sf-skills`, so

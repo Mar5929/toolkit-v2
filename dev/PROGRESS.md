@@ -143,8 +143,11 @@ What was not tested:
 - Whether the two `env` values reach the plugins' hook commands in the
   Claude desktop app, where a variable of the app's own launch environment
   wins. Final check 19 reads both values.
-- The text of the second commit, which follows the review of the first, has
-  not had a separate review of its own.
+Known from the test:
+
+- `claude plugin install <name>@salesforce --scope project` changed the
+  order of the keys in the project's `.claude/settings.json` and nothing
+  else. So the file shows as changed in Git after an install.
 
 ## The order of the Hindsight setup steps, version 0.9.21 (2026-10-08)
 

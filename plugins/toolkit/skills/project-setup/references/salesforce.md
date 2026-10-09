@@ -31,7 +31,7 @@ Everything else a Salesforce project needs comes with the `salesforce` setup fol
 
 ## Salesforce's skills
 
-Salesforce publishes its own skills in the GitHub repository `forcedotcom/sf-skills`. A Salesforce project relies on them for platform questions and Salesforce work. Claude Code and Codex get them in different ways, and setup installs them in neither.
+Salesforce publishes its own skills in the GitHub repository `forcedotcom/sf-skills`. A Salesforce project relies on them for platform questions and Salesforce work. Claude Code and Codex get them in different ways. For both, setup gives the owner the commands, and runs one only when the owner says so in that session.
 
 ### Claude Code: the plugins that the project turns on
 
@@ -51,7 +51,7 @@ This project's rules, its three `sf-*` skills, and its two guards still decide w
 
 ### The first time the project is opened on a computer
 
-The project's settings turn the plugins on, but a computer must also have the marketplace `salesforce` and the plugins themselves. Tell the owner what the owner does the first time this project is opened in Claude Code on a computer: the owner opens the project, and accepts what Claude Code asks about the folder and about the marketplace `salesforce`. Claude Code reads the marketplace and the two environment variables from the project's settings only after the owner has trusted the folder.
+The project's settings turn the plugins on, but a computer must also have the marketplace `salesforce` and the plugins themselves. Tell the owner what the owner does the first time this project is opened in Claude Code on a computer: the owner opens the project, and trusts the folder when Claude Code asks. Claude Code reads the marketplace and the two environment variables from the project's settings only after the owner has trusted the folder.
 
 Then check what this computer has, with two commands that change nothing:
 
@@ -60,7 +60,7 @@ Then check what this computer has, with two commands that change nothing:
 
 In an update, run the two commands after the branch was merged, because the project's main folder holds the new settings only then.
 
-When the marketplace or a plugin is missing, give the owner the commands for what is missing. The owner runs them in a terminal, in the project folder, or tells you to run them:
+When the marketplace or a plugin is missing, give the owner the commands for what is missing. The owner runs them in a terminal, in the project folder:
 
 ```text
 claude plugin marketplace add forcedotcom/sf-skills
@@ -71,7 +71,7 @@ The first command is for a missing marketplace. The second command is run once f
 
 Do the check, and assume neither result. Claude Code's documentation says that a plugin which is a folder inside the marketplace's repository, as these are, loads from the marketplace with no install. A test of the toolkit, in sessions with no screen, showed something else. The project's settings alone did not add the marketplace. Once the marketplace was added, Claude Code downloaded the plugins, and a plugin still loaded only after the install command above.
 
-Setup installs nothing unless the owner says so. When the marketplace or a plugin is still missing at the end of setup, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
+Setup gives the owner the commands, and runs one only when the owner says so in that session. When the marketplace or a plugin is still missing at the end of setup, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
 
 ### Once on each computer: the plugins are turned off for every other project
 
@@ -119,13 +119,13 @@ Look for Salesforce's skills in `~/.agents/skills` and in the project's `.claude
 npx skills add forcedotcom/sf-skills
 ```
 
-Setup never installs them itself. When the owner has not installed them yet, add a line to the report, and add a "Waiting on" line to the project's Current State, as for a plugin that is missing.
+Setup gives the owner the command, and runs it only when the owner says so in that session. When the owner has not installed them yet, add a line to the report, and add a "Waiting on" line to the project's Current State, as for a plugin that is missing.
 
 ### Copies of Salesforce's skills from an earlier setup
 
 Earlier versions of setup told the owner to run `npx skills add forcedotcom/sf-skills` for Claude Code too. That command may have put copies of Salesforce's skills into `~/.claude/skills` or into the project's `.claude/skills`. Claude Code loads such a copy beside the plugin that holds the same skill, and then lists that skill twice.
 
-Look in both folders for skills that come from `forcedotcom/sf-skills`. The project's three `sf-*` skills are the toolkit's own, and they are not such copies. Tell the owner what you found, and let the owner decide what happens to the copies. Change nothing in either folder without the owner's yes.
+Look in both folders for skills that come from `forcedotcom/sf-skills`. The project's three `sf-*` skills are the toolkit's own, and they are not such copies. Tell the owner what you found, and let the owner decide what happens to the copies. A copy in the project's `.claude/skills` is also the one Codex reads, so tell the owner that. Change nothing in either folder without the owner's yes.
 
 ## The org aliases
 
