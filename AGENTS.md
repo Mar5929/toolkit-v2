@@ -4,6 +4,8 @@ The user dictates most messages with voice-to-text, so words may be misheard, mi
 
 After you change, add, or delete files, end your reply with the list of those files, each as a link, with one plain sentence on what changed and why.
 
+Every agent must keep their according cooresponding Notion ticket up to date (properties, ticket body, comments, history, etc.)
+
 ## Mike's principles for building the toolkit
 
 Guiding Design Principles - follow these on every request in this project:
@@ -118,9 +120,7 @@ node --test 'dev/tests/*.test.mjs'
 
 - **No AI credit anywhere.** No "Generated with" line, no `Co-Authored-By` naming an AI, and no AI named in a comment, file header, manifest, README, commit, or pull request.
 - **Texts that Mike approved word for word.** Change a word of these only with his yes: the rules `evaluate-the-owners-request.md`, `document-clarity-standard.md`, and `salesforce-org-safety.md`; the section "Your job as the agent" in the starter root `AGENTS.md`; the default tables in `salesforce-agent-permissions.md`; the `sf-*` skills; and the default filter for saved sessions in `<setup>references/hindsight-on-vps.md`.
-- **Code limit.** The only code a project runs is the four hook commands (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), the file `.githooks/pre-commit` that runs the fourth, and the Salesforce project's own code (its two guards, its graph Stop hook, and `tools/`).
-  - A hook command can never break a session, needs nothing installed beyond Node 20 or newer, and is covered by the tests. A test fails when one grows past its size limit.
-  - No other script goes into a skill or a project. A new command, a new job for one, or a higher size limit needs Mike's yes first, with the size in plain numbers. Do not write it first.
+
 - **Plain English.** Every skill, rule, guide, and project document follows the writing rule, `<setup>assets/every-project/.claude/rules/document-clarity-standard.md`. All the writing rules are in that one file. A file that needs one points to it and does not state it again.
   - Clear beats short. Never squeeze a sentence to save words.
   - For a made-up word, choose in this order: plain words; a name the reader can already see, such as a folder name or an ID prefix; and only then the word itself, explained once. A word decision that reaches past one file goes on `dev/reviews/word-list.md`.
@@ -147,7 +147,7 @@ node --test 'dev/tests/*.test.mjs'
   - Claude Code runs the plugin in place from the main checkout, so a saved edit under `plugins/` there reaches Mike's Claude Code at its next session start.
   - Codex runs its own copy. A change reaches it after the version is raised and `codex plugin add toolkit@toolkit-v2` runs.
   - Each install command changes Mike's own setup, so ask him first.
-- **Challenge the current design.** Recommend the clearest process, filing location, and record form, also when it differs from what is built. Say which earlier decision of Mike's a recommendation would revisit, before you change the starter project.
+
 - **Records and work items in a project.** The starter root `AGENTS.md` holds two rules that no other file states again. "Your job as the agent": the agent keeps the project's records in the same turn, without being asked. "Every session": the agent asks the owner whether a job gets a work item, and a change with no work item still goes on a branch.
 - **Memory.** Memory holds only what no other project file holds.
   - Local and Notion memory use one skill, `managing-project-memory`. Notion memory uses Lore's layout: never rename or remove a Lore database or property.
