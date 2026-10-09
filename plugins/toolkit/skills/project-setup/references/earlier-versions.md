@@ -27,7 +27,7 @@ Before toolkit 0.6.0, each work item had a stage (`01-discovery` to `14-spec-upd
 
 - In the same change, set the Status that goes with the new State. The Status and State table in `managing-work-items/references/lifecycle-rules.md` gives the Status for each State.
 - With local work items, change every work item in `work-items/`, sub-items and `archive/` included. A sub-item is a work item inside another work item. Replace the `stage:` line with a `state:` line, and set `status:` and `updated:` in the same edit.
-- With work items in Notion, change every row of Work Items, archived rows included. Do this after "From Stage to State" in `notion-build/work-setup.md` has added the State property and the Status options.
+- With work items in Notion, change every row of Work Items, archived rows included. The Work Items database needs the State property and the Status options first. `work-tracker-database-layout.md` lists them. Add them only as the owner says.
 - With work items in GitHub, change open issues only, after the `state:` labels exist. `github.md`, "Bringing a project up to date", step 3, says which label to add to each issue and which to remove. A closed issue's labels are ignored.
 - When a Next action ends ", with <skill>.", and the skill is one that the project no longer has, remove that ending, so that the Next action matches a form that the work item template gives. In Notion, change the Current state on the work item's page and the Next action property together.
 - Add a Recent History row to each changed work item: "Toolkit update: stage <old> is now State <new>." Change nothing else in the work item.
@@ -51,14 +51,14 @@ The steps name storage references, such as `work-tracker-field-mapping.md` for l
    - A project with no phases yet gets none now. `managing-work-items` proposes phases when the next work item leaves Backlog.
 4. **Project tasks.** A project task is a task that belongs to no work item.
    - With local work items, `work-items/PROJECT-TASKS.md` comes in with the missing files, in the main checkout.
-   - With work items in Notion, the "Project tasks" view comes with the views, as `notion-build/work-setup.md` says. Also add Phase type and Task type, and make "By project phase", "Project phases", and "Project tasks" the first tabs, in the project and in the shared "Project" template. Steps 2, 3, and 5 of `notion-build/work-setup.md`, "Bringing a project up to the current template", say how. Then give the owner the page-layout clicks that pin Phase type and Task type, from `notion-build/work-layout.md`, "Property order and page layout".
+   - With work items in Notion, tell the owner which of these the project's databases lack: the properties Phase type and Task type, and the views "By project phase", "Project phases", and "Project tasks". Add them only as the owner says.
    - With work items in GitHub, do nothing now. The "Project tasks" issue is made with the first project task.
-5. **Task status in Notion.** A task has one status field, Status, and no "Done" checkbox. Make that change with the steps in `notion-build/work-setup.md`, "From the Done checkbox to Status", in the project and in the shared "Project" template.
+5. **Task status in Notion.** A task has one status field, Status, and no "Done" checkbox. In a project whose Tasks database still has the checkbox, tell the owner, and make the change in Notion only as the owner says.
 6. **Untracked to-dos.** The project's Current State no longer has an "Untracked to-dos" section.
    - For each line under that heading, propose where the line goes: the work item it concerns, a project task for administrative work, or a new Backlog work item for other project work. `managing-work-items` is the skill for a project task and for a new work item.
    - Move each line to the place that the owner approves, then remove the heading.
    - With local or Hindsight memory, the heading is in `memory/CURRENT_STATE.md` in the main checkout.
-   - With Notion memory, the heading is on the "Current state" page, and on the same page of the shared "Project" template. Step 5 of `notion-build/setup.md`, "Bringing memory up to the current layout", covers this heading on both pages.
+   - With Notion memory, the heading is on the project's "Current state" page.
    - When the section says "None.", it needs no question: remove the heading.
 7. Add a Recent History row to each changed work item. The row holds "Toolkit update: the levels structure of toolkit 0.8.0." and what changed. Then tell the owner in one short list what changed.
 
@@ -68,7 +68,7 @@ Since toolkit 0.8.1, the Requirements section of a work item holds one block for
 
 - **New work items get the new layout** through the work item template.
   - With local work items, the template files in `work-items/work-item-template/` are "Other toolkit files" in the table in `update.md`, section 3. Take the toolkit's version of them after the owner's yes.
-  - With work items in Notion, do step 4 of `notion-build/work-setup.md`, "Bringing a project up to the current template", which brings the work item template up to date.
+  - With work items in Notion, the project's work item template is the owner's. Tell the owner what differs, and change it only as the owner says.
   - With work items in GitHub, there is nothing to do, because the template comes with the skills.
 - **Existing work items stay as they are.** Never rewrite the Requirements section of an existing work item in an update, wherever the project keeps its work items. The skills read the older layout as it is.
   - A work item moves to the new layout only when the owner asks for that work item.

@@ -99,9 +99,9 @@ copies exactly one of these folders:
 | GitHub Issues | `assets/work-github/.claude/skills/managing-work-items/` | Work items as GitHub issues. |
 
 Moved on 2026-10-01 from `notion-work-track`, which the Notion session built
-and tested (commit `82aaaa6`). Its setup steps and the Notion page texts are
-in project-setup's `references/notion-build/` (`work-setup.md`,
-`work-layout.md`, `work-item-page.md`, `project-page.md`).
+and tested (commit `82aaaa6`). Its setup steps are in project-setup's
+`references/notion-build/work-setup.md`. A Notion project is a copy of the
+owner's "Project" template, which the toolkit does not build (0.9.34).
 
 No version stores a source the project received: it goes to `sources/`, and
 the work item holds its SRC ID. Mike deferred Jira on 2026-09-29 ("It could
@@ -131,10 +131,9 @@ record true only for a while also has a "check or remove by" date.
 | Local files and Obsidian | `assets/memory-local/.claude/skills/managing-project-memory/` | Memory records and the project's Current State in `memory/`. |
 | Notion in Lore's layout | `assets/memory-notion/.claude/skills/managing-project-memory/` | Memory pages and the Current state page in Notion. |
 
-Lore's database definitions are in the Notion choice's `assets/schema/`.
-The columns, views, and page layout are in its `references/database-layout.md`
-and `references/views-and-layout.md`. Project-setup's
-`references/notion-build/setup.md` sends them. The databases stay as Lore
+Lore's databases come from the owner's "Project" template in Notion. Their
+columns are described in the Notion choice's `references/database-layout.md`.
+The databases stay as Lore
 has them; the Topics database, the `decision` tag, and the glossary page
 are not written.
 

@@ -5,7 +5,6 @@ Use this file when the owner says "update the toolkit" in a project that is alre
 - The project has the newer skills and hook commands.
 - The project's settings files are merged with the newer settings.
 - The project's files hold the toolkit's newer text, wherever the owner said yes to it.
-- In a project that uses Notion, Notion is brought up to the current template.
 
 A project that differs from the toolkit on purpose is not a fault. An update shows the owner what differs and changes only what the owner says yes to.
 
@@ -181,7 +180,7 @@ A project may hold something that an earlier setup put there and that the new se
 
 Do each line that fits the project. Each line names the section that holds the steps.
 
-- For a Notion project, follow `notion.md`, "Updating a Notion project". That section says which Notion steps bring the project up to the current template.
+- For a Notion project, follow `notion.md`, "Updating a Notion project". An update changes nothing in Notion.
 - For a Hindsight project, do the check under "Check a Hindsight project, or connect a new computer" in `hindsight-on-vps.md`. Fix each failure only after the owner's yes. Name the server the project uses in the report.
 - For a GitHub Issues project, follow `github.md`, "Bringing a project up to date". Add missing labels only after the owner's yes.
 - For a Salesforce project, write the entries for each production org as `salesforce.md`, "The refuse list for production", says, before section 4 removes a guard that an earlier setup put there. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.

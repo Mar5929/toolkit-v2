@@ -163,7 +163,7 @@ The table says where each old file or record goes. The rules for each row are in
 - When a term has no source, write "Old glossary, not confirmed" as its Source, and list those terms for the owner.
 - Remove the old glossary in step 8 of "After the owner's yes", after you have read its rows back in `system/glossary.md`.
   - Remove the local file with `rm`.
-  - Remove the Notion page as `notion-build/setup.md`, "Bringing memory up to the current layout", step 6, says. That step asks the owner before the page goes to Notion's trash.
+  - Ask the owner before the Notion page goes to Notion's trash (`PATCH v1/pages/<id>` with `{"in_trash":true}`). The page stays until the owner says yes. Then remove the "Terminology glossary page" line from "Toolkit settings" in `PROJECT.md`.
 - A glossary that holds only the example row that the toolkit's glossary file came with is a toolkit file ("Toolkit files" below).
 
 **An agreed requirement**
@@ -282,8 +282,8 @@ Make these changes with the selected `references/work-tracker.md` inside `managi
 
 **The Notion work item template**
 
-- Follow `notion-build/work-setup.md`, "Bringing a project up to the current template", step 4. That step brings the project's work item template up to the current one, section by section.
-- Follow every rule of "Where the templates are kept" in that file, for example the rule never to restore a template through the API.
+- The project's work item template in Notion is the owner's. Tell the owner which sections differ from the sections that `references/work-tracker-page-layout.md` of `managing-work-items` lists, and change the template only as the owner says.
+- Follow every rule of "Where the templates are kept" in `notion-build/work-setup.md`, for example the rule never to restore a template through the API.
 - Never move the project's own work item template to the trash.
 
 ### The project's Current State in the earlier form

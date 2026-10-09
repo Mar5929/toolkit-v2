@@ -40,4 +40,4 @@ Use `filing-project-records` for a source, a decision or open question that seve
 | [references/builder-brief.md](references/builder-brief.md) | You start a builder. |
 | [references/acceptance-checker-brief.md](references/acceptance-checker-brief.md) | You start the separate checker in the Testing Loop. |
 
-The installed [work tracker instructions](references/work-tracker.md) list their own supporting reference files and, for Notion, the schema files. Open only the files needed for the current action.
+The installed [work tracker instructions](references/work-tracker.md) list their own supporting reference files. Open only the files needed for the current action.

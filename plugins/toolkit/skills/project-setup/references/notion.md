@@ -33,7 +33,7 @@ Ask the owner for the sign-in right after the plan is approved, so that the owne
 ## The owner's yes before anything is made
 
 - Make nothing in the owner's real Notion workspace without the owner's yes. The plan that the owner approved covers this project's pages when the plan named them. `interview.md`, "The plan to confirm", says what that plan holds.
-- The "Project" template in the owner's Projects database is built once per workspace, the first time any project needs it. Building the template is a question of its own. When the template does not exist yet, ask: "Your Projects database has no Project template yet. I need you to make it in the Notion app: two empty templates (one in your Projects database, one in the Work Items database inside it), two choices of 'Set as default', and the page layout of the databases inside it. I give you the clicks in small groups and fill in everything else. Then every Notion project, and every card you make with New, starts from it. Go ahead?"
+- Every Notion project is a copy of the "Project" template in the owner's Projects database. The template is the owner's. When it does not exist, stop and tell the owner: the owner makes it in the Notion app, and the toolkit does not build it.
 - When the owner says this project is a test, make its Notion pages only under the test page the owner names. Never make them under the owner's real pages unless the owner says so.
 
 ## Where the project page goes
@@ -88,24 +88,6 @@ grep -n '{{' .claude/settings.json .codex/hooks.json
 
 ## Updating a Notion project
 
-Copying newer skill files changes nothing in Notion. So for an update in a Notion project, run these two sections, each for the parts the project keeps in Notion:
+An update changes nothing in Notion. The project's databases, views, and work item template are the owner's.
 
-- `notion-build/work-setup.md`, "Bringing a project up to the current template";
-- `notion-build/setup.md`, "Bringing memory up to the current layout".
-
-Both sections only add what is missing and bring the toolkit's own guide paragraphs up to date. They never remove, rename, or retype anything, except what those sections name:
-
-- one Memories view;
-- one Current state heading;
-- the Terminology glossary page, after the owner's yes;
-- the Tasks "Done" checkbox and Status type;
-- the Requirements section of a work item template that still has the layout from before toolkit 0.8.1.
-
-The parts of the work item template that the owner wrote, and every existing work item, stay as they are.
-
-Some projects also need one more section of `notion-build/work-setup.md`:
-
-- A project with a Stage property also needs "From Stage to State".
-- A project with a Tasks "Done" checkbox also needs "From the Done checkbox to Status".
-
-Tell the owner in one short list what was added.
+When a newer skill file names a property or a section that the project's Notion pages do not have, tell the owner in one short list. Change Notion only as the owner says.

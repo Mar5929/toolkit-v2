@@ -2,7 +2,7 @@
 
 This file shows how a project's memory looks in Notion. It lists every column of the five databases with its options, and it says which part of a memory record goes in which column. Open it when you need to know where a part of a memory record is stored, or how a page body is laid out.
 
-Two other places hold the rest of the layout. The bodies that create the databases are in `assets/schema/`. The views and the page layout are in `views-and-layout.md`.
+The databases, their views, and their page layout come from the owner's "Project" template in Notion.
 
 ## Contents
 
