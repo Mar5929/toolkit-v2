@@ -644,6 +644,22 @@ node --test 'dev/tests/*.test.mjs'
     project file holds (Mike, 2026-10-05). The Notion tracker and memory
     references use `ntn` through `using-notion-cli` and do not repeat its
     sign-in, Codex, or error text. Each instruction lives in one file.
+  - Tidying memory in the background (Mike, 2026-10-08, work item TKV-39).
+    He first asked for a background helper that saves memory, as in his
+    Davis project. He dropped it when he saw that most facts now go to work
+    items, decisions, and sources, which the main agent must write itself
+    ("this is a fantastic point, actually"). He chose a helper that tidies
+    memory, and wanted it simple: "Just a couple short instructions about
+    what files, the scope of what it's looking to tidy up, and when it
+    should run". The clean-up process already existed in
+    `managing-project-memory`, `references/tidying.md`, for local and Notion
+    memory. So no skill and no agent file was added. `memory-process.md`
+    says when the agent starts a clean-up (at once when the owner asks;
+    otherwise its judgment, at a point where the owner is not waiting), and
+    `tidying.md` says that a helper reads all
+    of memory and writes the plan, which the owner approves before anything
+    on it changes. A Hindsight project has no toolkit memory skill and gets
+    nothing.
 - **Wording and overlap review** (Mike, 2026-09-30). New or changed text in
   a skill, reference, template, example, helper brief, or
   `dev/build-shared/` source is reviewed by a separate agent against
@@ -871,6 +887,31 @@ node --test 'dev/tests/*.test.mjs'
   `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`
   in `~/.zshenv`), never in a repository. Tests use only banks made for the
   test, with his yes, never his own.
+- **This repository's own Hindsight bank** (Mike, 2026-10-08, as a trial of
+  Hindsight). This repository has a bank on his server, `toolkit-v2`. Its
+  dashboard page is `https://memory.mrihm-memory.com/banks/toolkit-v2`.
+  - Hindsight's add-on saves each session here to that bank at the end of
+    every turn, also a session in a worktree of this repository. The add-on
+    shows the agent a guide to its tools at session start, and its skill
+    `hindsight-coding-agent` says how to use them.
+  - The bank is for searching past sessions. It replaces no record: Mike's
+    decisions stay in `dev/GOAL.md`, progress in `dev/PROGRESS.md`, and the
+    rules in this file.
+  - The bank's settings are in `.claude/hindsight-bank-settings.json`. Change
+    one only when Mike asks: change that file, then apply it as
+    `<setup>references/hindsight-on-vps.md`, "Apply the settings", says.
+  - Mike chose what the bank gets (2026-10-08): the sessions, and nothing
+    from the Git history or a code survey, because an agent can read Git
+    itself. He found the first memories too many and too noisy.
+  - The bank's instruction for sessions ends with a filter that starts
+    "OWNER FILTER FOR THIS PROJECT". It tells Hindsight to keep decisions
+    with their reason, rules that were set, and problems with how they were
+    solved, and to skip live status and what an agent reported. The filter
+    is kept only on the server, in the bank's `retain_strategies`, under
+    `conversation`. Change it only when Mike asks.
+  - This repository is not a toolkit project, so it has no `PROJECT.md` and
+    no rule `hindsight-memory.md`. This bullet holds what those would hold.
+  - Never use this bank for a test. A test uses a bank made for the test.
 - **Salesforce org permissions** (Mike, 2026-10-08, work item TKV-37). In a
   Salesforce project, what an agent may do in an org is stated in three
   places, each with one job. No other file states a permission again: a file

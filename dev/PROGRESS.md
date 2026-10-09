@@ -2,7 +2,7 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## One home for what an agent may do in each Salesforce org, version not set yet (2026-10-08, TKV-37)
+## One home for what an agent may do in each Salesforce org, version 0.9.20 (2026-10-08, TKV-37)
 
 Mike's words: "Every salesforce project is different so there will always be
 things I need to tweak and rules specific to that project I need to tweak
@@ -26,7 +26,9 @@ the second, and it is not written.
   and a change to DevOps Center records are Ask first; a profile deploy and
   a promotion through a DevOps Center pipeline are Never. On production,
   reads are Allowed and everything else is Never. Three defaults are the
-  builder's, and Mike sees them in the file before the merge: DevOps Center
+  builder's. They were shown to Mike on 2026-10-08 with the table, and the
+  change was merged on his word "Merge". He did not approve the three one
+  by one, and he changes any of them by telling the agent: DevOps Center
   records on a sandbox (Ask first), a promotion on a sandbox (Never), and
   the last row, "Any other change to an org" (Ask first on a sandbox, Never
   on production). Before this change such an action had no line of its own:
@@ -92,6 +94,52 @@ The reviewer read the fixes and found two more things, which were fixed: two
 setup files sent every choice of the owner's to "Only in this project", and
 a promotion into production was not marked fixed, although it is a deploy
 to production.
+## Memory is tidied in the background, version 0.9.19 (2026-10-08, TKV-39)
+
+Mike first asked for a background helper that saves memory, like the one in
+his Davis project, without its slowness. The agent objected to a helper for
+every save, and he agreed with the main reason ("this is a fantastic point,
+actually"): since the one-home layout most facts go to work items,
+decisions, and sources, which the main agent must write itself, so such a
+helper would cover little. He chose a helper that tidies memory, for local
+and Notion memory, and wanted it simple: "Just a couple short instructions
+about what files, the scope of what it's looking to tidy up, and when it
+should run that stuff".
+
+- The clean-up of all of memory already existed in the memory skill,
+  `managing-project-memory`, `references/tidying.md`, as one process for
+  local and Notion memory. Nothing started it except the owner asking, and
+  the main agent did all the reading in the conversation.
+- No skill and no agent file was added. The skill got two short sections.
+  - `memory-process.md`, "When to clean up all of memory": when the owner
+    asks, at once, and when the agent judges that memory is no longer
+    small and true. For a clean-up it starts itself, the agent chooses a
+    point where the owner is not waiting, such as after a work item closes.
+    There is no schedule and no count.
+  - `tidying.md`, "A helper reads memory in the background": the main agent
+    starts one helper and hands it `tidying.md` and `memory-store.md`. The
+    helper changes nothing. It returns the changes that do not go on the
+    plan, and the plan. The main agent makes the first kind itself and
+    shows the owner the plan, as the file already required.
+- A Hindsight project has no toolkit memory skill and gets nothing.
+- Agreed with the session that owns the cohesion audit (TKV-43): this
+  change stays out of the parts of the memory skill that the audit's phase
+  P3 will move.
+
+A separate reviewer read the change and found four things that had to be
+fixed, which were fixed. The helper's message pointed it at a file whose
+first section told it to start a helper. The owner's own "tidy memory"
+could be read as something to put off. The file said "Two changes do not go
+on the plan" and then named a third. And one example was dropped that Mike
+had been shown: starting a clean-up when a handoff is written. The owner
+clears the session after a handoff, so the helper's plan would be lost.
+
+Not tested live: a helper in Codex. The text has Codex call `wait_agent`
+before the turn ends, because no captured Codex page says that the main
+agent is told when a helper finishes.
+
+The design for a helper that saves memory on every save, with the
+measurements from Davis, is kept on the work item's page and is not built.
 
 ## A small work item is judged by the agent, version 0.9.18 (2026-10-08)
 
