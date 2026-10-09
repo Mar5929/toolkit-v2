@@ -2,6 +2,90 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The agent asks whether a job gets a work item, version 0.9.25 (2026-10-09, TKV-51)
+
+The live tests of 2026-10-08 ran on version 0.9.18. Their three records are
+now in `dev/test-runs/` (`skill-routing-0.9.18.md`,
+`evals-small-work-item-0.9.18.md`, `evals-keeping-project-records-0.9.18.md`),
+with the record of the four evals that were run again for 0.9.22.
+
+- In six of the nine short-path runs the agent made no work item for a
+  small direct job, and in one run it committed a new file to the default
+  branch with no check. Mike decided that the agent asks him: "The agent
+  should just ask me if something g needs a work item. Keep it simple".
+- The starter root guide, section "Every session", has one new bullet. When
+  the owner asks for work and no work item covers it, the agent asks in one
+  short line whether to make a work item, says which it recommends, and
+  waits. It does not ask in four cases: the owner has already said, the
+  turn only answers a question, the whole result of the work is text in
+  the agent's reply, or the guide's own tables send the request somewhere
+  other than a work item. Mike has not yet confirmed the third case: it was
+  put to him on 2026-10-09, and it is built until he answers, because
+  without it the agent asks before every quick draft. After a no, the agent
+  does the work without a work item, and the guide points to the rule
+  `shared-repository-work.md`.
+- That rule lost one sentence: "The one exception to using your own
+  worktree and branch is a one-file edit asked for directly." In the test
+  run the agent gave those words as its reason for the commit to the
+  default branch. Mike's yes of 2026-10-08, that a change with no work item
+  still goes on a branch and reaches the default branch only after his yes,
+  replaces the exception. The rule also says now that a repository with no
+  remote merges on the computer, as `deploying.md` says.
+- Two lines of the guide changed so that they fit the new bullet: the row
+  "A new request, idea, or bug" of "Where information goes" points to
+  "Every session", and "How to write a question to the owner" now also
+  yields to a form that the guide itself gives. The guide is 24,310 bytes,
+  under its limit of 24,576.
+- The tests follow the decision. Four of the nine short-path evals make or
+  change a file, and they start with the question and Mike's yes. The
+  prompts of four others, whose result is a text in the reply, now say to
+  make a work item. The messages that follow say what they answer ("Yes,
+  that's right."), so that a reply that asks nothing is not answered with a
+  bare "Yes.". A new set, `dev/evals/work-item-question/` (5 evals), tests
+  a no, a job whose result is only text in the reply, a request that
+  already says "no work item", a turn that only asks a question, and work
+  that a work item covers.
+- The report expectation of 31 record-keeping evals now says what Mike
+  approved for 0.9.22: one short line for each record that changed, and
+  nothing else about the save. It is decided from the lines that report
+  the save.
+- The six record faults of the first run were read again. Four were
+  expectations stricter than the shipped rules (evals 5, 7, 24, and 30),
+  and those expectations changed. One was a question that offers further
+  work, which the README now says is not a question about saving
+  (eval 12). One is a real miss: in eval 26 the agent saved a decision as
+  Decided, and a rule as Approved, from pasted call notes. The eval is
+  unchanged, and the next run shows whether the miss repeats.
+- Two things that the first run's scoring exposed in the tests changed:
+  eval 3 of the short-path set now says how the staging server gets the
+  file, evals 2 and 8 have Mike answer the question about personal data in
+  his second message.
+- `dev/evals/tools/` is new and not shipped: `build-base-project.sh` builds
+  the base project with a real setup, `run-live-eval.py` runs one eval in
+  the fixed test home, and `grader-brief.md` is the brief for a helper that
+  grades the runs. The first run's scripts were in a temporary folder.
+- Reviewed by three separate agents. The wording review changed four
+  sentences. The review of how the text fits the rest of the starter found
+  the one-file exception, the requests that the guide's tables send
+  elsewhere, and that the Git rule already had a home. A third agent read
+  the fixed text and found one more gap, in the bullet about a repository
+  with no remote.
+- Tested: every check in `AGENTS.md`, "Checks". A small live check ran on
+  the branch on 2026-10-09, in the fixed test home, on a base project built
+  by a real setup: the five evals of the new set and eval 9 of the
+  short-path set, one run each. In eval 9 the agent asked the question,
+  made WI-034 after the yes, took the short path, and built the file on the
+  work item's branch. In the new set the agent did not ask in the four
+  cases where it must not, and after "No work item for this one" it built
+  the file on its own branch and asked before the merge. Eval 1 of the new
+  set showed a fault in its own prompt, a value that Xcode does not accept,
+  and the prompt changed. Eval 9 showed a fault that is not part of this
+  change: no separate checker ran, although the result builds what a rule
+  in `system/` says.
+- Not tested yet: a full run. The run of all three sets on this version is
+  the next step, and its record will be the baseline that the wording
+  rewrite (TKV-50) is measured against.
+
 ## One statement for each of four rules, version 0.9.24 (2026-10-09)
 
 Phase P2 of TKV-43 (`dev/research/toolkit-cohesion-audit.md`, findings 7 and

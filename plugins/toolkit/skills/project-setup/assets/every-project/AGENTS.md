@@ -33,6 +33,9 @@ For example, each of these changes what is true: a new person or a changed role,
 - When a turn concerns a work item, find the work item, read its Current state (the five lines at its top), and use `managing-work-items` for the requested work.
   - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's Current State names.
   - Stop at the first check that finds one. Ask the owner only when it finds two.
+- When the owner asks for work and no work item covers it, ask the owner whether to make a work item, before you start the work. Ask in one short line that names the work and says whether you recommend a work item. Do not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in your reply, or when "Where information goes" or "Which skill" sends the request somewhere other than a work item.
+  - After a yes, use `managing-work-items`.
+  - After a no, do the work without a work item. `.claude/rules/shared-repository-work.md` still applies: it says where to make the change, and that a merge into the default branch needs the owner's yes.
 
 ## Project map
 
@@ -95,7 +98,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | --- | --- |
 | A stable fact about the project: its purpose, scope, people, or systems | `PROJECT.md` |
 | A stable fact about how the client's business or the project team works that is not a rule of the system, such as the month the fiscal year starts | `PROJECT.md`, "Operating conventions" |
-| A new request, idea, or bug | A new work item |
+| A new request, idea, or bug | A new work item. "Every session" says when to ask the owner whether to make one. |
 | A to-do, an action item, or an administrative task that belongs to no work item | The project tasks |
 | The requirements, questions, tasks, design, and history of one change | That work item and its design |
 | Where one work item stands and its next action | The Current state at the top of that work item |
@@ -132,7 +135,7 @@ When the owner's own words state the change, those words are the yes.
 
 ## How to write a question to the owner
 
-Write a question so that the owner can answer it without reading earlier messages. When the question asks the owner to choose, say what the owner is choosing, give each option with what it gains and what it costs, and recommend one. When a step of a skill says how to ask, follow that step. An example is "The question format" in `managing-work-items`, `references/refining-requirements.md`.
+Write a question so that the owner can answer it without reading earlier messages. When the question asks the owner to choose, say what the owner is choosing, give each option with what it gains and what it costs, and recommend one. When another part of this guide or a step of a skill says how to ask, follow that part or that step. An example is "The question format" in `managing-work-items`, `references/refining-requirements.md`.
 
 ## Which skill
 
