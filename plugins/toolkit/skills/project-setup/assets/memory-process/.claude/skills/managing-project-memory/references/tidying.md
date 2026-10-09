@@ -41,7 +41,7 @@ A clean-up reads every memory record whole, which takes time. So a helper does t
 
 ## The project's Current State
 
-Do this part first, before the plan. Remove the lines that are no longer true, as `references/current-state.md`, section "Steps for removing lines that are no longer true", says. Tell the owner what you removed.
+Do this part first, before the plan. Remove the lines that are no longer true, as `references/current-state.md`, section "Steps for removing lines that are no longer true", says.
 
 ## Duplicates and merges
 

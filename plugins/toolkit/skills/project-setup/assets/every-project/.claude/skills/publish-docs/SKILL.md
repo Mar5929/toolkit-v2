@@ -95,7 +95,7 @@ Run each Git command on its own, with `git -C <folder>`, which names the folder 
      - the commit id;
      - where the commit is, in one of these two sentences: "Saved to main and pushed to the remote." or "No remote: saved to main on this computer only.";
      - whether the main checkout holds the save.
-   - Put these three things in the reply to the owner only when the owner asked for this save, or when the main checkout does not hold the save. In every other case, say nothing about the commit or the remote in the reply.
+   - Put these three things in the reply to the owner only when the owner asked to publish or commit the documents, or when the main checkout does not hold the save. In every other case the save is finished and the main checkout holds it, so say nothing about the commit or the remote in the reply.
    - When another skill started this save, go back to that skill and continue from the step that started this save. Otherwise, end with the one question for the owner, or with the exact words that continue.
 
 ## Refused files
@@ -138,7 +138,7 @@ When to remove the copy depends on the remote:
 
 ## The main checkout
 
-The report of step 8 says whether the main checkout holds the save. The reason is that local work items and the command that checks the records, `.claude/hooks/validate-records.mjs`, look up a record's ID in the main checkout.
+The third thing that step 8 notes is whether the main checkout holds the save. The reason is that local work items and the command that checks the records, `.claude/hooks/validate-records.mjs`, look up a record's ID in the main checkout.
 
 ### With no remote
 
@@ -157,7 +157,7 @@ A pushed save is not in the main checkout yet. After step 8 verifies the save, m
 
 ### When the main checkout does not hold the save
 
-The save is still finished. Say so in the report in one line: "The main checkout does not hold this save yet", and then what blocks the update. What blocks the update is the branch that the main checkout is on, the files that block the update, or Git's message. Tell the skill that started the save.
+The save is still finished. Say so in the reply in one line: "The main checkout does not hold this save yet", and then what blocks the update. What blocks the update is the branch that the main checkout is on, the files that block the update, or Git's message. Tell the skill that started the save.
 
 ## Mistakes to avoid
 

@@ -164,7 +164,7 @@ Write a line that the owner dictates with the steps below alone. For every other
 
 ## Reply lines
 
-Give the owner one short line for each record you changed, in the form below, and add nothing else about the save. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link. The line for a correction gives the old text and the words that undo it, and the line for a retire gives the words that restore the record, because each of these changes takes something away. No other line gives undo words.
+Give the owner one short line for each record you changed, in the form below, and add nothing else about the save. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link. The line for a change that removes or replaces text in a memory record or in the project rules also gives what the section for that change asks for: the old text, and the words that undo or restore it. A correction, a removed section, and a retire are such changes. No other line gives undo words.
 
 After the lines, give the next step. The next step is the question that still waits for the owner. When no question waits, it is the exact words that continue the work: "Say 'keep going' and I'll <next action>."
 
