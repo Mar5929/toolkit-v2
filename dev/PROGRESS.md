@@ -2,6 +2,24 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The writing rule names a reader who is new to the project, version 0.9.29 (2026-10-09, TKV-50)
+
+Mike approved five additions to the writing rule, `document-clarity-standard.md`,
+on 2026-10-08, and said yes to the merge on 2026-10-09.
+
+- The opening names the reader: someone who is new to the project and was
+  not in the session.
+- "Use common words" has an example, and an abbreviation is written in full
+  the first time unless it is more common than its full form.
+- A heading must say enough for a reader who sees only the heading.
+- A document is organized so that a reader can find a thing from the
+  headings alone.
+- The copy in `writing-harness-files/references/writing-rule.md` is the same
+  text. Check W5 of `dev/reviews/wording-review.md` now asks for the goal
+  that a judgment serves, and no longer for what to weigh.
+- No other shipped file changed. The findings of the wording scan are on the
+  branch `wording-scan`, not on main.
+
 ## Hindsight: agents save on purpose, and setup is one short file, version 0.9.28 (2026-10-09)
 
 Mike looked at this repository's bank after a day of use and found it full
