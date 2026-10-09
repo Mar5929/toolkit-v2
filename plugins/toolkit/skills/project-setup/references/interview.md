@@ -80,7 +80,7 @@ Recommend local memory with Obsidian, because it is private, fast, and needs no 
 - When the owner picks Hindsight, do three things in this order:
   1. Explain that setup in plain words. Take the facts from `hindsight-on-vps.md`, "What runs where", which lists what runs on the server and what runs on this computer. Say that the text of each saved session goes to OpenAI, through the owner's ChatGPT subscription, to be turned into memories.
   2. Ask whether to create a separate memory bank for this project (or to use the one this project already has), and recommend yes. A memory bank is one project's store of memory on the Hindsight server. When the owner says no, ask question 3 again.
-  3. Ask about the six settings of this project's bank, as `hindsight-on-vps.md`, "The bank's settings", "Ask the owner", says. Setup applies the answers after it creates the bank.
+  3. Ask about the seven settings of this project's bank, as `hindsight-on-vps.md`, "The bank's settings", "Ask the owner", says. Setup writes the answers into the add-on's settings in the same command that switches the add-on on for the project's folder, and sends the rest to the server before the first session is saved.
 
 Memory holds two things. The first is where the project stands now. That part is called the project's Current State: the project's one short page of what is true now. The second is what no other project file holds: facts about people and the client, where to find things, and what happened. Decisions, terms, sources, and the description of the system are never memory. With every choice, they are files in the repository.
 

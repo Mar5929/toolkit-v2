@@ -174,11 +174,14 @@ each save goes to OpenAI, and that work uses the same ChatGPT usage
 allowance as your own Codex sessions. Hindsight writes every memory in
 English.
 
-Setup asks you about six settings of the project's memory bank, in one
+Setup asks you about seven settings of the project's memory bank, in one
 message, each with a default: whether Hindsight builds observations
 (statements it puts together from several saved memories; on by default,
 built after every save), whether every
-session is saved, how much detail a save keeps, what the agent is shown on
+session is saved, how much detail a save keeps (short by default), a
+filter that tells Hindsight what to leave out of a saved session (by
+default the live status of work, and anything true only for the moment),
+what the agent is shown on
 the first message of a session, how much of the Git history is saved, and
 whether the code is surveyed. Say "defaults" to keep them all. The answers
 are kept in the project, in `.claude/hindsight-bank-settings.json`, so
@@ -444,3 +447,39 @@ The agent never does these for you. It tells you when each one is needed.
   and Agent Skills documentation, used to build the skills and hooks. It is
   not installed anywhere.
 - `AGENTS.md`: instructions for agents working on Toolkit V2 itself.
+
+### Inside a skill folder: `SKILL.md`, `references/`, and `assets/`
+
+Every skill is one folder. The names inside it are the ones the skill format
+recommends for Claude Code and for Codex, so they mean the same in every
+skill. They are a convention, and neither host requires them.
+
+| Name | What it holds | Who reads it |
+| --- | --- | --- |
+| `SKILL.md` | The skill itself: what it is for and its steps. | The agent, first |
+| `references/` | More instructions, one file per step or subject. The agent opens one only when a step needs it. | The agent |
+| `assets/` | Files the skill copies or fills in. They are not instructions. | Whoever gets the copy |
+
+In `plugins/toolkit/skills/project-setup/` that means:
+
+- `references/` holds the instructions for the agent that sets up a project,
+  such as `setup-copy.md` (which folders each choice copies) and `update.md`
+  ("update the toolkit").
+- `assets/` is the starter project, also called the blueprint: the files a
+  project gets.
+
+What is under `assets/`:
+
+| Folder or file | Which projects get it |
+| --- | --- |
+| `every-project/` | Every project. |
+| `work-local/`, `work-notion/`, `work-github/` | One of the three, by where work items are kept. |
+| `memory-local/`, `memory-notion/`, `memory-hindsight/` | One of the three, by where memory is kept. A Hindsight project also takes one file from `memory-local/`: `memory/CURRENT_STATE.md`. |
+| `memory-process/` | A project with local or Notion memory. The two choices share it. |
+| `notion-tools/` | A project with work items or memory in Notion. |
+| `salesforce/`, `soul/` | Only a project that chose it. |
+| `settings/` | No project gets this folder. Setup merges its lines into a project's settings files. |
+| `owner-preferences.md` | Every project, once: the starting text of one rule file. Setup never replaces it. |
+
+Six of these folders hold only a `.claude` folder. A file browser that hides
+names starting with a dot shows them as empty.
