@@ -1,8 +1,8 @@
 # AGENTS.md: working on Toolkit V2
 
-The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
+The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things. This is similar in philosophy to @.claude/rules/evaluate-the-owners-request.md
 
-After you change, add, or delete files, end your reply with the list of those files, each as a link, with one plain sentence on what changed and why (Mike, 2026-10-09: "I need to see the list of files that you changed or added ... a simple sentence on why").
+After you change, add, or delete files, end your reply with the list of those files, each as a link, with one plain sentence on what changed and why.
 
 ## Mike's principles for building the toolkit
 
@@ -159,7 +159,6 @@ node --test 'dev/tests/*.test.mjs'
   - `salesforce-agent-permissions.md` holds the owner's choices for one project.
   - The guard and `.claude/protected-orgs.json` block production and an org the guard cannot classify, whatever the owner's file says. No code asks before a change to a sandbox.
   - For Salesforce's own plugins, setup checks that they are installed and asks the owner what to have on or off. The toolkit ships no settings for them.
-- **Jira is deferred.** No Jira skills now.
 - **Tests stay in scratch folders.** Point `HOME`, `CLAUDE_CONFIG_DIR`, and `CODEX_HOME` at a temporary folder. Never write to Mike's real `~/.claude`, `~/.codex`, Notion pages, or Hindsight banks.
   - Live test sessions sign in through two fixed test homes: `CLAUDE_CONFIG_DIR=~/.toolkit-v2-test-homes/claude` and `CODEX_HOME=~/.toolkit-v2-test-homes/codex`. Reuse them, and never delete either folder. Signing in is Mike's step; never copy his own sign-in files.
   - A Notion test runs only in a throwaway project made from Mike's "Project" template and named "<what it tests> (safe to delete)". Make it only after his yes.
