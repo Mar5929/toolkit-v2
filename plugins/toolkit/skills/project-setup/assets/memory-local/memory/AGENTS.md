@@ -24,16 +24,13 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 
 ## What must stay true
 
-- `.claude/rules/memory-review-and-save.md` says when memory is reviewed, and what a yes or a no from the owner means for a save.
+- `.claude/rules/memory-review-and-save.md` says when memory is reviewed, what never goes in memory, and which skill changes memory.
 - `.claude/hooks/validate-records.mjs` checks the work item IDs in the project's Current State after each edit. Correct what it reports.
 
 ## Which skill to use
 
 | Change | Use |
 | --- | --- |
-| Keep, correct, forget, or find something | `managing-project-memory` |
-| What each part of the project's Current State holds, and its limits | `managing-project-memory` |
-| Clean up memory | `managing-project-memory` |
+| Every read and every write of a file in this folder: keep, correct, forget, find, or clean up something; the form of a memory record, its header fields, and the searches; what each part of the project's Current State holds, and its limits | `managing-project-memory` |
 | A standing instruction from the owner | `managing-project-memory` |
-| Every read and every write of a file in this folder: the form of a memory record, its header fields, and the searches | `managing-project-memory` |
 | A work item's line under "Now" in `CURRENT_STATE.md` | `managing-work-items` decides the line |

@@ -1,5 +1,5 @@
 {
-  "description": "Toolkit V2 hooks for this project in Codex: Current State at session start, a memory reminder when the owner uses a keep or decision phrase, a work item reminder after each commit, a work item reminder when a helper agent starts or reports back, and a check of the project's records after each file edit.",
+  "description": "Toolkit V2 hooks for this project in Codex: Current State at session start; on every message, a reminder to check the project's skills, the owner's rule for every request, and a hint on where a fact is filed when the owner uses a keep or decision phrase; a work item reminder after each commit; a work item reminder when a helper agent starts or reports back; and a check of the project's records after each file edit.",
   "hooks": {
     "SessionStart": [
       {
