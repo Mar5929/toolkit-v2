@@ -39,6 +39,7 @@ This file uses five names:
   - The renamed rule
   - Old hook entries
   - The questions before a sandbox change
+  - The owner's choices for Salesforce orgs
   - The Memory approval line and saves that waited for the owner's yes
   - Old Hindsight entries
   - Files from the retired toolkit program
@@ -120,7 +121,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 | Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/README.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
 | Rules in `.claude/rules/` | | Show the owner what differs. |
 | Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, the output style, `.githooks/pre-commit`, the Salesforce guards and `tools/` | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
-| The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; `.claude/hindsight-bank-settings.json`; the owner's own skills and rules | Never compare or change one of these. |
+| The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; `.claude/rules/salesforce-agent-permissions.md`; `.claude/hindsight-bank-settings.json`; the owner's own skills and rules | Never compare or change one of these. |
 
 ### Special cases for the rows of the table
 
@@ -146,11 +147,12 @@ Most rows have special cases. They are listed under the table, in "Special cases
 - **Rules in `.claude/rules/`.** "Whether a difference is the owner's edit" below says whether a rule holds an edit of the owner's.
   - When a rule holds no edit of the owner's, recommend the toolkit's version.
   - When a rule holds an edit of the owner's, the edit stays unless the owner says to take the toolkit's version.
-  - A project with no `owner-preferences.md` gets the setup copy's file through the "Missing files" row. A project that has `owner-preferences.md` follows the row "The owner's own records".
+  - A project with no `owner-preferences.md` gets the setup copy's file through the "Missing files" row. A project that has `owner-preferences.md` follows the row "The owner's own records". The same holds for `salesforce-agent-permissions.md` in a Salesforce project.
 - **Other toolkit files.** "Whether a difference is the owner's edit" below says whether a file holds an edit of the owner's. When a file holds no edit of the owner's, recommend the toolkit's version.
 - **The owner's own records.**
   - A memory record is each file in `memory/` whose name starts `user_`, `project_`, `reference_`, or `event_`. The one exception is `project_topic_template.md`: it is a template, and the "Other toolkit files" row covers it.
   - `memory/MEMORY.md` is the generated index. The session-start hook rebuilds it, so do not compare it either.
+  - `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices about what an agent may do in each kind of Salesforce org. A Salesforce project that has no such file gets the setup copy's file through the "Missing files" row. Section 4, "The owner's choices for Salesforce orgs", then moves the project's earlier choices into it.
   - `.claude/hindsight-bank-settings.json` holds the owner's choices for the project's Hindsight bank. A Hindsight project that has no such file gets the setup copy's file through the "Missing files" row. Section 5 then asks the owner about the bank's settings.
 
 ### Whether a difference is the owner's edit
@@ -276,6 +278,7 @@ A removed rule is a rule in `.claude/rules/` that the new setup copy lacks and t
 
 - The current folder layout removed two rules: `work-item-folders.md` (`work-items/AGENTS.md` holds what it said) and `ai-external-knowledge.md` (`reference/AGENTS.md` holds what it said).
 - `hindsight-memory.md` is such a rule in a project whose memory is not Hindsight.
+- A Salesforce project may hold two rules that the toolkit no longer ships: `production-data-changes.md` (the `sf-data-change` skill holds its steps) and `confirm-salesforce-changes.md` (its list is in `salesforce-agent-permissions.md`, "Confirm with the owner first"). "The owner's choices for Salesforce orgs" below says what to do before you remove them.
 - When the owner wrote a line in the rule, put that line in its new place before you remove the file. `move-over.md`, "3. Sort everything the project holds", has a table under the label "Where the owner's lines from an old toolkit file go" that gives the new place for each kind of line.
 
 ### The renamed rule
@@ -301,7 +304,7 @@ Leave the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`. It comes fro
 
 ### The questions before a sandbox change
 
-A Salesforce project may still ask the owner before each change to a sandbox in two places that the toolkit no longer uses: seven `permissions.ask` entries in `.claude/settings.json`, and `"sandboxAction": "ask"` in `.claude/protected-orgs.json`. The rule `.claude/rules/salesforce-org-safety.md`, section "The owner's yes for a sandbox change", now says when the agent asks, and the owner turns those questions off and on by telling the agent.
+A Salesforce project may still ask the owner before each change to a sandbox in two places that the toolkit no longer uses: seven `permissions.ask` entries in `.claude/settings.json`, and `"sandboxAction": "ask"` in `.claude/protected-orgs.json`. The rule `.claude/rules/salesforce-agent-permissions.md` now says when the agent asks.
 
 Tell the owner that in one line. After the owner's yes, make these two changes:
 
@@ -309,6 +312,14 @@ Tell the owner that in one line. After the owner's yes, make these two changes:
 - In `.claude/protected-orgs.json`, set `"sandboxAction"` to `"allow"`. Change no other value of that file: the lists `alwaysProtect` and `neverProtect` are the owner's.
 
 The guard still blocks production and an org that it cannot classify.
+
+### The owner's choices for Salesforce orgs
+
+A Salesforce project that has no `.claude/rules/salesforce-agent-permissions.md` keeps the owner's choices about what an agent may do in an org in three places. They now go in that one file, which the "Missing files" row in section 3 adds with the toolkit's defaults. Tell the owner in one line that a deploy and a deploy validation on a sandbox or scratch org now run with no question by default. Then move the project's own choices into the new file, after the owner's yes to the numbered table:
+
+- **The line "Sandbox questions: off" in the project's Current State.** When the line is there, the owner turned off the questions before a sandbox data change and before anonymous Apex on a sandbox. In the new file, set "Change data" and "Run anonymous Apex" to Allowed in the column for a sandbox or scratch org, and add the date and the name from the old line in each cell. Ask the owner whether a deploy with a destructive changes file and a profile deploy on a sandbox also stay allowed, because the old line allowed both and the new defaults do not. Then remove the line from the project's Current State.
+- **An edit of the owner's in `confirm-salesforce-changes.md` or in `production-data-changes.md`.** Section 3, "Whether a difference is the owner's edit", says how to find one. Put each line that the owner changed or added under "Only in this project" in the new file, or in the list "Confirm with the owner first" when it belongs there. Then remove the two rules, as "Removed rules" above says.
+- **An edit of the owner's in `salesforce-org-safety.md`.** The rule now holds only the limits that are the same in every project. Show the owner the edit, and put a line that only this project needs under "Only in this project" in the new file. Then take the toolkit's version of the rule, after the owner's yes.
 
 ### The Memory approval line and saves that waited for the owner's yes
 

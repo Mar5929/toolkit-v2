@@ -1,6 +1,6 @@
 # The order of the Hindsight setup steps, tested on a bank made for the test
 
-Date: 2026-10-08. Toolkit version: 0.9.19. Add-on: `@vectorize-io/hindsight-coding-agents` 0.8.0.
+Date: 2026-10-08. Toolkit version: 0.9.21. Add-on: `@vectorize-io/hindsight-coding-agents` 0.8.0.
 
 The finding came from the first live Hindsight setup, of the bank `toolkit-v2`, on 2026-10-08. The owner chose `verbose` for the detail of a save, and the bank on the server showed `concise` in every kind of save, and no mission of the add-on.
 

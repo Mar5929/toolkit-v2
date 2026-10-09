@@ -131,7 +131,7 @@ Where the owner's lines from an old toolkit file go:
 | --- | --- |
 | An instruction for how the agent works with the owner | `.claude/rules/owner-preferences.md`, as one list line in the owner's words, with the old file as its source. `finishing.md`, "Instructions the owner gives during setup", says how the line is written. |
 | A fact about the project: a system, an org, a person, or a path | The matching section of `PROJECT.md` |
-| A rule only this project has, such as a safety line about its own orgs or data | One new rule file of the project's own in `.claude/rules/`, named for the project, so the Toolkit V2 rule files stay as the toolkit ships them |
+| A rule only this project has, such as a safety line about its own orgs or data | One new rule file of the project's own in `.claude/rules/`, named for the project, so the Toolkit V2 rule files stay as the toolkit ships them. In a Salesforce project, a line about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, under "Only in this project". |
 
 ## 4. Show the list
 
