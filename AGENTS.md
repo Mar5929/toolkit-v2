@@ -2,9 +2,14 @@
 
 The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things. This is similar in philosophy to @.claude/rules/evaluate-the-owners-request.md
 
-After you change, add, or delete files, end your reply with the list of those files, each as a link, with one plain sentence on what changed and why.
+You (the agent) must keep their according cooresponding Notion ticket up to date (properties, ticket body, comments, history, etc.)
 
-Every agent must keep their according cooresponding Notion ticket up to date (properties, ticket body, comments, history, etc.)
+You (the agent) use hindsight for memory recall, storage, and insights in this project. You (the agent) are responsible for saving this type of information to the toolkitv2 hindsight memory bank:
+    - Persistent project memory criteria:
+    (1 AND 2 AND 3)
+      1. Lasting project-specific facts, decisions, lessons, events, and constraints that not already owned by another memory file (we don't want duplicates).
+      2. It has lasting significance: losing it would cost a later agent real time or understanding.
+      3. It comes from the owner, or from work done together with the owner.
 
 ## Mike's principles for building the toolkit
 
