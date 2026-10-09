@@ -1002,6 +1002,15 @@ node --test 'dev/tests/*.test.mjs'
   word for word: the agent keeps the project's records, in the same turn,
   without being asked and without asking. Change a word of it only with his
   yes. The goal is stated in that one file, and the skills point to it.
+  - One sentence of the goal changed on 2026-10-08, with his yes: "Tell the
+    owner what you saved, in one short line for each record you changed."
+    It was "Tell the owner in one line what you saved." The live tests
+    showed long reports after a save, and he chose one short line for each
+    record. The reply lines of the memory skill (`saving.md`, "Reply lines")
+    and step 8 of `publish-docs` follow it: the old text and the words that
+    undo a change show only for a change that removes or replaces text, and
+    the commit shows only when he asked for the save or the main checkout
+    does not hold it (TKV-43, phase P1).
   - The toolkit states the process and the goal in general rules. It does
     not list what to do in each small situation. His words: "We're really
     just trying to define what our process is and make sure the agent

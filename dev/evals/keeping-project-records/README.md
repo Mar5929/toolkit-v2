@@ -4,7 +4,7 @@ This folder holds 36 prompts that test one thing: whether an agent in a Toolkit 
 
 ## The goal that is tested
 
-Mike approved this goal for the agent on 2026-10-07:
+Mike approved this goal for the agent on 2026-10-07, and its sentence about the report of a save on 2026-10-08:
 
 > You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner what you saved, in one short line for each record you changed. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
 
