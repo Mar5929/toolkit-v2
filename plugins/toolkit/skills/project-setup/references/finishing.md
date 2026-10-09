@@ -67,7 +67,7 @@ Fill the prompts in this order:
 
 ## Instructions the owner gives during setup
 
-When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Two examples of such an instruction are "don't touch my real Notion pages" and "don't use those orgs".
+When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Two examples of such an instruction are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as `salesforce.md`, "The org aliases", says.
 
 - Write the instruction as one list line in the owner's words.
 - Put the line under an area that the file's layout comment names. Use General when no area fits.

@@ -12,10 +12,10 @@ No agent writes data to production. The owner runs the change. This skill produc
 | Operation | Production | Sandbox |
 |---|---|---|
 | Read (SOQL, export, describe) | Allowed | Allowed |
-| Create, update, upsert, delete data | Never | After the owner's yes, as `.claude/rules/salesforce-org-safety.md` says |
-| Anonymous Apex | Never | After the owner's yes, as `.claude/rules/salesforce-org-safety.md` says |
+| Create, update, upsert, delete data | Never | As `.claude/rules/salesforce-agent-permissions.md` says |
+| Anonymous Apex | Never | As `.claude/rules/salesforce-agent-permissions.md` says |
 
-- A yes covers one change, in the chat where it was given. It does not carry to the next change, session, or org. Ask again. The one exception is while the owner has turned these questions off: then follow `.claude/rules/salesforce-org-safety.md`, section "The owner's yes for a sandbox change".
+- `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for this project, and says how long a yes holds. A line there may differ from this table, and then that line wins.
 - No agent writes production data by CLI, API, anonymous Apex, or any tool that wraps them.
 
 ## Step 1: build the handoff
@@ -68,6 +68,6 @@ Give the owner the handoff in the reply: both file paths, which file is which, t
 
 ## Related rules
 
-- `production-data-changes.md`: the always-loaded safety rule and folder layout for data changes.
-- `salesforce-org-safety.md`: which commands are allowed against an org.
+- `salesforce-agent-permissions.md`: what an agent may do in each kind of org in this project.
+- `salesforce-org-safety.md`: the limits that are the same in every project, and the commands.
 - `record-deployment-steps.md`: record a manual step when a deploy needs an action the deploy cannot perform.

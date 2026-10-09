@@ -110,9 +110,8 @@ the intended change.
 
 ## Procedure 3: deploy to a sandbox
 
-Sandbox only, with the owner's yes as `.claude/rules/salesforce-org-safety.md`,
-section "The owner's yes for a sandbox change", says. The owner runs every
-production deploy.
+`.claude/rules/salesforce-agent-permissions.md` says whether you ask the owner
+before a sandbox deploy. The owner runs every production deploy.
 
 1. **Preflight. Not optional, and the hook enforces it.**
    ```
@@ -188,7 +187,8 @@ side whole, then re-apply the other side's change as a fresh edit.
 ## Related
 
 - `.claude/rules/permissions-source-control.md`, the binding rule.
-- `.claude/rules/salesforce-org-safety.md`, what any agent may do against
+- `.claude/rules/salesforce-agent-permissions.md` and
+  `.claude/rules/salesforce-org-safety.md`, what any agent may do against
   an org.
 - `.claude/hooks/guard-permission-set-deploy.cjs`, which blocks an unpreflighted
   deploy.

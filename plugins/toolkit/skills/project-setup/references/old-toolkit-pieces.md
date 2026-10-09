@@ -71,9 +71,9 @@ This table is for files in `.claude/rules/`. "Same name" means that Toolkit V2 h
 | `humanize-outbound-text.md` | Compare | Same name |
 | `dependency-graph.md` | Compare | Same name in a Salesforce project; nothing otherwise |
 | `component-tracker.md`, `permissions-source-control.md` | Compare | Same name (Salesforce) |
-| `salesforce-safety-guardrails.md` | Compare | `salesforce-org-safety.md` |
-| `salesforce-change-clarify.md` | Compare | `confirm-salesforce-changes.md` |
-| `production-data.md`, `data-change-handoff.md` | Compare | `production-data-changes.md` and the `sf-data-change` skill |
+| `salesforce-safety-guardrails.md` | Compare | `salesforce-org-safety.md` for the limits that are the same in every project, and `salesforce-agent-permissions.md` for a line that only this project needs |
+| `salesforce-change-clarify.md` | Compare | `salesforce-agent-permissions.md`, "Confirm with the owner first" |
+| `production-data.md`, `data-change-handoff.md` | Compare | The `sf-data-change` skill, and `salesforce-agent-permissions.md` for who may change data in which org |
 | `deploy-hitchhiker-check.md` | Compare | `check-deployment-contents.md` |
 | `deployment-runbook.md` | Compare | `record-deployment-steps.md` |
 | `delivery-and-knowledge-boundary.md` | Compare | `project-file-locations.md` (Salesforce), and "Where information goes" in `AGENTS.md` |

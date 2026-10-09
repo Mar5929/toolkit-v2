@@ -174,7 +174,7 @@ writes such text.
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each adds the selected tracker references inside the shared `managing-work-items` skill. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
 | `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds the `managing-project-memory` skill and its common process references for local or Notion memory. `memory-local/` and `memory-notion/` add their selected storage references inside that skill; `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, `MEMORY.md` (the index the session-start hook rebuilds), and `project_topic_template.md`, the blank form for a memory record. `memory-hindsight/` holds one rule, `hindsight-memory.md`, the file `.claude/hindsight-bank-settings.json` (the owner's choices for the project's bank), and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
 | `<setup>assets/notion-tools/` | `using-notion-cli` and the rule `notion-records.md`, for every project with work items or memory in Notion. |
-| `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and eleven rules. One of them, `salesforce-delivery.md`, holds the Salesforce lines for `delivery/` and loads only for files there (`paths: delivery/**`). |
+| `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and ten rules. One of them, `salesforce-agent-permissions.md`, is the owner's own file ("Salesforce org permissions" under Rules). Another, `salesforce-delivery.md`, holds the Salesforce lines for `delivery/` and loads only for files there (`paths: delivery/**`). |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
 | `<setup>assets/owner-preferences.md` | The starting text of `.claude/rules/owner-preferences.md`, which every project gets. It is the one file every project gets that sits outside `every-project/`: from the first instruction on it is the owner's own file, so setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it (`<setup>references/setup-copy.md`, "The owner-preferences rule"). `check-rules.mjs` counts its size with the rules. |
 | Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 15 possible project skill names stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
@@ -871,38 +871,68 @@ node --test 'dev/tests/*.test.mjs'
   `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`
   in `~/.zshenv`), never in a repository. Tests use only banks made for the
   test, with his yes, never his own.
-- **Sandbox questions** (Mike, 2026-10-07). In a Salesforce project the agent
-  asks before each deploy, data write, or `sf apex run` on a sandbox, unless
-  the owner turned those questions off. He turns them off and on by telling
-  the agent ("I just need the agent to execute stuff and just get stuff done
-  in the sandbox"; then "All right, turn it on"). The agent keeps his choice
-  as one line in the project's Current State, which every session reads at
-  its start. The rule is in one place, `salesforce-org-safety.md`, section
-  "The owner's yes for a sandbox change". While the questions are off, the
-  agent may also deploy a profile to a sandbox and delete metadata from one
-  through a deploy (his yes, 2026-10-07).
-  - No code asks before a sandbox change: the starter's `protected-orgs.json`
-    has `"sandboxAction": "allow"`, and the starter settings hold no `ask`
-    entry for an `sf` command. The guard still blocks production and an org
-    it cannot classify. This revisits the earlier design, in which a hook
-    asked before every sandbox change.
-  - `sf project delete source` stays forbidden on every org. The starter
-    settings refuse it in the Bash tool and in the PowerShell tool. The
-    `PowerShell(...)` entries have not had a live test.
-  - The rule is the same in Claude Code and Codex (Mike, 2026-10-07: "the
-    rule should just be standard across any model"). The earlier line that
-    said the owner runs every sandbox change in Codex is gone. In Codex the
-    guard no longer blocks `sf project delete source` on a sandbox; only the
-    rule forbids it there.
-  - One cost Mike was told: the seven `ask` entries also made Claude Code
-    ask before those commands on production when the guard did not run (no
-    Node, hooks turned off, or the hook cancelled). That second check is
-    gone.
+- **Salesforce org permissions** (Mike, 2026-10-08, work item TKV-37). In a
+  Salesforce project, what an agent may do in an org is stated in three
+  places, each with one job. No other file states a permission again: a file
+  that needs one points to its home.
+  - `salesforce-org-safety.md` holds the limits that are the same in every
+    project, the commands for each kind of action, and what the guard
+    checks. Its wording is Mike's: change its meaning only with his yes.
+  - `salesforce-agent-permissions.md` holds the owner's choices for one
+    project: a table with one row for each kind of action and one column
+    each for a sandbox or scratch org and for production, the list of
+    changes the agent confirms with the owner first, and "Only in this
+    project". Mike asked for it: "maybe the toolkitv2 could ship a default
+    preference file and I could always adjust it on the fly if need be."
+    Setup copies it once, and "update the toolkit" never compares or
+    replaces it, the same as `owner-preferences.md`. A change to its
+    defaults reaches only projects set up after the change.
+  - The guard and `.claude/protected-orgs.json` block production and an org
+    the guard cannot classify, in code, whatever the owner's file says.
+  - The defaults (his yes, 2026-10-08). On a sandbox or scratch org: reads,
+    a deploy, a deploy validation, and Apex and Flow tests are Allowed; a
+    data change, anonymous Apex, and a deploy with a destructive changes
+    file are Ask first; a profile deploy is Never. On production, reads are
+    Allowed and everything else is Never. Most production cells say "Never
+    (fixed)", because the safety rule forbids them in every project. A
+    project can open two production rows with a line of its own: DevOps
+    Center records, and "Any other change to an org". His words in Dragonfly on
+    2026-10-06: "You need to be able to deploy to sandboxes without me
+    having to approve every deploy."
+  - This replaces the design of 2026-10-07 (TKV-31), in which the agent
+    asked before every sandbox change until the owner turned the questions
+    off, and kept that choice as the line "Sandbox questions: off" in the
+    project's Current State. A standing choice of the owner is not a fact
+    about where the project stands, so it moved. `update.md`, "The owner's
+    choices for Salesforce orgs", moves that line into the owner's file in
+    an existing project.
+  - The owner's choice is kept only in that file, never in
+    `owner-preferences.md` or in memory. A choice for every sandbox or for
+    production is a cell of the table, with the date and the owner's name
+    in the cell. A narrower choice is a line under "Only in this project".
+  - `managing-work-items` asks the owner before each deploy to an
+    environment that other people use, unless a rule of the project allows
+    that deploy without a question (`lifecycle-rules.md`, stop 5). The
+    owner's file is such a rule.
+  - The rules `production-data-changes.md` and `confirm-salesforce-changes.md`
+    are gone. The `sf-data-change` skill holds the steps of the first, and
+    the owner's file holds the list of the second.
+  - Still true from 2026-10-07: no code asks before a sandbox change. The
+    starter's `protected-orgs.json` has `"sandboxAction": "allow"`, and the
+    starter settings hold no `ask` entry for an `sf` command. `sf project
+    delete source` stays forbidden on every org; the starter settings
+    refuse it in the Bash tool and in the PowerShell tool, and the
+    `PowerShell(...)` entries have not had a live test. The rule is the
+    same in Claude Code and Codex ("the rule should just be standard across
+    any model"). In Codex the guard does not block `sf project delete
+    source` on a sandbox; only the rule forbids it there.
   - A switch built into the guard, for one session and 12 hours, was built
-    first and never merged. Mike chose the instruction over it. Its branch
-    was removed on 2026-10-07. Its changes are kept as one patch file,
-    `dev/archive/research/sandbox-checks-switch.patch`. The guard tests
-    have run on Windows without it since version 0.9.14.
+    in 2026-10 and never merged. Its changes are kept as one patch file,
+    `dev/archive/research/sandbox-checks-switch.patch`.
+  - Not built yet: the guard reads the type of an org from the Salesforce
+    command line's own login files, and asks in Claude Code when it cannot
+    identify an org. That is a second change, and its size goes to Mike
+    before it is written.
 - **One goal for keeping the records** (Mike, 2026-10-07). The starter root
   `AGENTS.md`, section "Your job as the agent", holds the goal he approved
   word for word: the agent keeps the project's records, in the same turn,

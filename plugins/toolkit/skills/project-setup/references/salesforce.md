@@ -27,16 +27,16 @@ The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce o
 ```text
 - Salesforce org aliases:
   - `acme-uat`: the UAT sandbox; agents deploy here for testing.
-  - `acme-prod`: production. Agents never deploy or change data here.
+  - `acme-prod`: production.
 ```
 
 Use only the aliases the owner names for this project.
 
 - When none of this project's orgs is on this computer yet (the org does not exist or is not connected), never invent an alias, and never write an alias that the owner says belongs to another project into this project's files. Write ``- Salesforce org aliases: `none yet` ``.
 - The owner's step "Connect the project's Salesforce org" then gets a "Waiting on" line in the project's Current State, and the report lists the line as a prompt left. `finishing.md`, "The project's Current State", says how to write the "Waiting on" line.
-- When the owner gives an instruction about the other orgs (for example "don't use those"), put it in `owner-preferences.md`, as `finishing.md`, "Instructions the owner gives during setup", says.
+- When the owner gives an instruction about what an agent may do in an org (for example "don't use those" about the other orgs), write it into `.claude/rules/salesforce-agent-permissions.md`, in the place that the first bullets of that file give.
 
-Leave `.claude/protected-orgs.json` as copied, because the guard finds production orgs itself and blocks them. Agents never deploy to production or change its data. The guards give the owner the command instead. In Codex, the owner also runs every sandbox deploy and every sandbox data change, and the agent gives the owner the exact command with its `-o <sandbox alias>`.
+Leave `.claude/protected-orgs.json` as copied, because the guard finds production orgs itself and blocks them. `.claude/rules/salesforce-agent-permissions.md` says what an agent may do in each kind of org, in Claude Code and in Codex.
 
 ## The API version
 
