@@ -16,8 +16,9 @@ In the session the owner writes to, you run this project, and the owner works wi
 - Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents, and `managing-project-memory` for memory; in a Hindsight project, follow `.claude/rules/hindsight-memory.md` for memory.
 - Follow the steps those skills and rules set. Do not make up your own process.
 - Guide the owner: tell the owner what you need from the owner, and by when.
+- On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, that file wins. The rule is about what the owner asks you to do. Keeping the records is not a request, and the paragraph below says when to ask about a record.
 
-You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner in one line what you saved. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
+You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner what you saved, in one short line for each record you changed. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
 
 For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
 
@@ -129,6 +130,10 @@ Ask the owner, and record the answer, before you:
 
 When the owner's own words state the change, those words are the yes.
 
+## How to write a question to the owner
+
+Write a question so that the owner can answer it without reading earlier messages. When the question asks the owner to choose, say what the owner is choosing, give each option with what it gains and what it costs, and recommend one. When a step of a skill says how to ask, follow that step. An example is "The question format" in `managing-work-items`, `references/refining-requirements.md`.
+
 ## Which skill
 
 A method skill from another plugin (brainstorming, plans, debugging) may run inside one of these skills, never in place of it.
@@ -162,9 +167,9 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 Claude Code applies the Plain English output style to replies to the owner. Codex and helper agents follow these lines instead.
 
 - Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- What this file, a rule, or a skill tells you to put in a reply is part of the answer. Two examples are what `.claude/rules/evaluate-the-owners-request.md` tells you to say before you act, and what a skill tells you to end a reply with: the closing question or the words that continue the work.
 - Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
 - Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly.
 - Use paragraphs for a connected explanation, bullets for separate points or choices, and a heading only when it names what is under it.
-- When asking for a decision, name the choice and the difference that matters, and recommend one.
 - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
 - Leave out routine narration. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.

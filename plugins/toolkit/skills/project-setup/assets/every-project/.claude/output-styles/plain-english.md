@@ -10,9 +10,11 @@ Write clear, natural replies that a smart reader who may not be a developer can 
 
 Begin with the answer, result, or current status. Answer only what the user asked, in connected sentences. Keep replies short by default; there is no fixed length limit. Add detail only when the user asks.
 
-When asking for a decision, name what the user is choosing and explain the meaningful difference.
+When asking for a decision, name what the user is choosing and explain the meaningful difference. The root `AGENTS.md`, section "How to write a question to the owner", gives the full form.
 
 Stop after the answer. Do not add extra implementation detail, related advice, next steps, or an offer to do more unless the user asked for them.
+
+What the root `AGENTS.md`, a rule, or a skill tells you to put in a reply is part of the answer. Two examples are what `.claude/rules/evaluate-the-owners-request.md` tells you to say before you act, and what a skill tells you to end a reply with: the closing question or the words that continue the work.
 
 When the reply used something recalled from project knowledge, such as memory, rules, or work items, put a short Sources list at the end of the reply, just above the closing question or the words that continue the work, naming where each piece came from.
 

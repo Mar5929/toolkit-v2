@@ -2,7 +2,7 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## A Salesforce project turns on the Salesforce plugins itself, version not set yet (2026-10-08, TKV-44)
+## A Salesforce project turns on the Salesforce plugins itself, version 0.9.23 (2026-10-08, TKV-44)
 
 Mike decided on 2026-10-08 to "turn the Salesforce plugins on only in
 Salesforce projects". On his Windows computer Salesforce's plugins were on
@@ -148,6 +148,52 @@ Known from the test:
 - `claude plugin install <name>@salesforce --scope project` changed the
   order of the keys in the project's `.claude/settings.json` and nothing
   else. So the file shows as changed in Git after an install.
+## The rule to evaluate the owner's request fits with the reply instructions, version 0.9.22 (2026-10-08)
+
+Phase P1 of TKV-43, the audit of how the shipped skills, rules, and hooks
+fit together (`dev/research/toolkit-cohesion-audit.md`, findings 1 to 3).
+Mike approved the wording, both headings, and the changed sentence of the
+goal on 2026-10-08.
+
+- The output style and the starter root guide told the agent to answer only
+  what was asked, while the rule `evaluate-the-owners-request.md` tells it
+  to state the goal and show options. Both now say that what the root
+  guide, a rule, or a skill tells the agent to put in a reply is part of
+  the answer.
+- The starter root guide names the rule under "Your job as the agent", and
+  says that `owner-preferences.md` wins where it says otherwise. Before,
+  only the reminder hook named the rule.
+- The starter root guide has a new section, "How to write a question to the
+  owner". The output style points to it. The question box and "one question
+  in each reply" stay where they were (the work item interview and setup):
+  Mike chose that, because he often answers through the question box.
+- `lifecycle-rules.md` has a new part, "How the rule to evaluate the owner's
+  request applies in a work item": the rule's checks are done once, through
+  the steps of the skill.
+- The report after a save is one short line for each record changed. The
+  goal's sentence changed (root `AGENTS.md` of this repository, "One goal
+  for keeping the records"). In `saving.md`, five reply lines lost "Say
+  'forget that' to undo." or "Memory holds no copy.", and a change to the
+  project's Current State has its own line. In `publish-docs`, step 8, the
+  commit goes in the reply only when the owner asked to publish or commit,
+  or when the main checkout does not hold the save.
+- The starter root guide's byte limit is 24,576, up from 22,528
+  (`finishing.md`, check 14, and `update.md`). The guide is 23,477 bytes.
+  `check-skills.mjs` now fails when the starter guide is over the limit, or
+  when the two references give different limits. Phase P4 of TKV-43 is to
+  shorten the guide again.
+- Tested: every check in `AGENTS.md`, "Checks". Four of the record-keeping
+  evals that failed on the report were run again on the branch at commit
+  ee7281d2, one run each (`dev/test-runs/evals-keeping-project-records-audit-p1.md`
+  on the branch `live-tests-0.9.18`): the report of the save was one short
+  line for each record in all four.
+- Not tested: the last rewording of `publish-docs`, step 8, and of the
+  reply lines, which came after those runs; a live session in Codex; and
+  "update the toolkit" in an existing project, where the new heading makes
+  the update rebuild the project's root `AGENTS.md`.
+- Still open from the audit: phases P2 to P5 of TKV-43. The live tests also
+  showed that replies stay long for other reasons (the Sources list, a
+  closing question), and that is not part of this change.
 
 ## The order of the Hindsight setup steps, version 0.9.21 (2026-10-08)
 
