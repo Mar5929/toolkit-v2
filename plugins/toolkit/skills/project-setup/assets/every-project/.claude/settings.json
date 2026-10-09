@@ -5,9 +5,6 @@
     "sessionUrl": false
   },
   "autoMemoryEnabled": false,
-  "enabledPlugins": {
-    "second-brain@claude-toolkit": false
-  },
   "hooks": {
     "Stop": [
       {

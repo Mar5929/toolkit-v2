@@ -136,6 +136,12 @@ Most rows have special cases. They are listed under the table, in "Special cases
   - Delete no other entry.
   - Leave out the entries that run `validate-records.mjs` until "Turning on validate-records.mjs and the pre-commit file" below says to add them.
   - A changed Codex hook must be trusted again in `/hooks`. Tell the owner.
+  - In a Salesforce project whose `.claude/settings.json` lacks entries of the snippet `claude-settings-salesforce.json`, the merge adds them: Salesforce's plugin marketplace, the Salesforce plugins that the owner uses, and two environment variables. Put that change in the numbered table, and tell the owner these three things with it:
+    - The project now turns Salesforce's plugins on itself in Claude Code, so they no longer have to be on for the whole computer.
+    - The settings keep the automatic deploy of the plugin `salesforce-development` off and turn its telemetry off in this project.
+    - Nothing changes on the rest of this computer without a question of its own.
+
+    `salesforce.md`, "Salesforce's skills", says what each entry is for, and holds the steps that follow the merge. Check that this computer has the plugins, and tell the owner the command for the plugin's install suggestions. The question about turning Salesforce's plugins off for the rest of the computer waits until the branch was merged (section 7, step 5).
 - **Missing files.** Copy the missing files in two parts.
   - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Do not use `-a`, because `-a` would give the project folder the temporary folder's private permissions.
   - Copy into the main checkout after the branch was merged (section 7, step 5), and only when the setup copy has the folder. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
@@ -389,6 +395,8 @@ Do these in order.
    - step 8 of `one-home-layout.md`, when that file ran.
 
    Then run the final checks on these two folders, and run `validate-records.mjs` again (`node .claude/hooks/validate-records.mjs --all < /dev/null`). The expected result is that it prints nothing.
+
+   In a Salesforce project, this is also the point for the question in `salesforce.md`, "Once on each computer: the plugins are turned off for every other project". The project's default branch now turns its plugins on, so turning them off for the rest of the computer no longer takes them from this project.
 6. Remove the worktree and the branch, then the temporary folder.
 
 ## Changing a setup choice

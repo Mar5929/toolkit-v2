@@ -263,7 +263,7 @@ Each project gets one work skill. Setup copies into it only the reference files 
 | Memory in local files | `managing-project-memory` with local storage references, plus `memory/` |
 | Memory in Notion | `managing-project-memory` with Notion storage references, plus `using-notion-cli` |
 | Memory in Hindsight | No Toolkit memory skill (your decision of 2026-10-05). Hindsight's coding-agent add-on saves each session to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
-| Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
+| Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`. Salesforce's own skills (`forcedotcom/sf-skills`) come from Salesforce: in Claude Code the project's settings turn on the seven Salesforce plugins you use, and for Codex you install the skills. Setup checks for both. |
 
 `using-notion-cli` is installed once when either choice uses Notion. Each selected reference has the same file name in every project, such as `references/work-tracker.md` or `references/memory-store.md`. A project receives only one version of each file. The skills do not contain local-versus-Notion setup conditions.
 
@@ -282,12 +282,34 @@ items and memory both in Notion.
 
 A project with local or Notion memory has 11 skills, or 12 when work items
 or memory are in Notion. With Hindsight memory it has 10, or 11 when work
-items are in Notion. A Salesforce project adds three Toolkit Salesforce skills;
-the owner also installs Salesforce's own skills.
+items are in Notion. A Salesforce project adds three Toolkit Salesforce skills.
 When you ask where the work stands, the project's `AGENTS.md` routes the
 agent to the work and memory skills for the records it reads.
 `dev/SKILL-INDEX.md` lists every skill with its exact
 description.
+
+A Salesforce project also uses Salesforce's own skills, which come from
+Salesforce and not from the toolkit. You decided on 2026-10-08 how a project
+gets them:
+
+- In Claude Code, the project's own settings turn on the seven Salesforce
+  plugins you use: `salesforce-development`, `dx-devops`, `experience-lwc`,
+  `integration`, `salesforce-code-quality`, `platform-lightning-widgets`, and
+  `platform-trust-security`. They are on in that project only.
+- The same settings keep the automatic deploy of `salesforce-development`
+  off, because that deploy would not pass the project's org guard or its
+  permission set check. They also turn that plugin's telemetry off, which you
+  chose.
+- Once on each computer, the agent asks you before it turns Salesforce's
+  plugins off for every other project, so that only Salesforce projects run
+  the plugins' checks. It never changes your own settings without your yes.
+  Another Salesforce project on that computer then has the plugins only
+  after "update the toolkit" has run in it.
+- You install a plugin that a computer does not have yet, with the command
+  that setup gives you. Setup also tells you the command that turns down the
+  plugin's suggestions to install more plugins.
+- For Codex, you install Salesforce's skills with
+  `npx skills add forcedotcom/sf-skills`, as before.
 
 ## The hooks
 

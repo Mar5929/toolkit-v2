@@ -31,12 +31,12 @@ Each choice adds the skills in the table below. `setup-copy.md`, "Folders the ch
 | Memory local | `managing-project-memory` |
 | Memory in Notion | `managing-project-memory`, `using-notion-cli` |
 | Memory in Hindsight | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
-| Salesforce | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
+| Salesforce | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills come from Salesforce and not from setup: in Claude Code the project's settings turn Salesforce's plugins on, and for Codex the owner installs the skills (`salesforce.md` in this folder) |
 
 Two rows name another file of this skill:
 
 - In the row "Memory in Hindsight", `hindsight-on-vps.md`, "What runs where", describes the add-on and the tools it gives the agent.
-- In the row "Salesforce", `salesforce.md`, "Salesforce's skills", says how to check that Salesforce's own skills are installed, and what to tell the owner when they are not.
+- In the row "Salesforce", `salesforce.md`, "Salesforce's skills", names the Salesforce plugins that the project turns on in Claude Code. It also says how to check that they are installed on this computer, what to ask the owner once on each computer, and what the owner installs for Codex.
 
 A work choice adds tracker references, and a local or Notion memory choice adds store references. The finished `managing-work-items` folder contains one `SKILL.md` and one selected `references/work-tracker.md`. With local or Notion memory, the finished `managing-project-memory` folder contains one `SKILL.md` and one selected `references/memory-store.md`. Hindsight adds no Toolkit memory skill.
 
@@ -59,8 +59,11 @@ The four hook commands are in `every-project/.claude/hooks/`, so the setup copy 
 | `codex-hooks.<memory>.json` | `<copy>/.codex/hooks.json` | The memory choice. It holds the Codex hooks: session start, prompt reminder, after a commit, a helper agent started or returned, and `validate-records.mjs` after a file edit. |
 | `enabled-plugins-off.json` | `<copy>/.claude/settings.json` | Every project. |
 | `codex-plugins-off.toml` | `<copy>/.codex/config.toml` | Every project. |
+| `claude-settings-salesforce.json` | `<copy>/.claude/settings.json` | A Salesforce project only. It names Salesforce's plugin marketplace, turns on the Salesforce plugins that the owner uses, and sets two environment variables that those plugins read. |
 
 A helper agent is a separate agent that a session starts for one job.
+
+The snippet `claude-settings-salesforce.json` is the one place where the toolkit keeps a Salesforce project's own settings for Claude Code. `salesforce.md`, "Salesforce's skills", says what each of its entries is for and what setup does after the merge. Codex has no snippet of this kind, because Codex does not read these settings.
 
 The Codex plugins-off snippet also sets `max_context_tokens = 10000` under `[skills]`. That value is the largest value Codex accepts here, and it is more than the 2% default for a model with a context window under 500,000 tokens. When the list of skills passes Codex's limit (2% of the model's context window by default), Codex cuts every skill description short, and the Toolkit skills lose their "Use when" and "Not for" parts.
 
@@ -85,6 +88,9 @@ Never change a snippet's hook commands or texts, because they are written to mat
 - Add a plain value (text, a number, true or false) that the file does not have.
   - When the file already has that plain value with a different value, and the file is in the setup copy, take the snippet's value.
   - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `placing-files.md` and `update.md` send you to these rules for such a file.
+- Merge `claude-settings-salesforce.json` only in a Salesforce project. Each of its plugin entries and each of its `env` values is a plain value, so the rule above applies to it.
+  - When a file that the project already had sets one of those plugins to `false`, or sets `SFDX_AUTO_DEPLOY` or `SF_DISABLE_TELEMETRY` to another value, that value is the owner's. Tell the owner what the snippet's value is for, which `salesforce.md`, "Salesforce's skills", gives, and ask which value to keep.
+  - When the file already names a marketplace `salesforce` under `extraKnownMarketplaces` with another source, leave that entry as it is and ask the owner. A marketplace entry is not a plain value, and a marketplace has one source.
 - Never delete any other entry. The copied permission rules, the Git deny and ask rules, the Salesforce guards (and the `Stop` hook that runs `tools/kb/graph_freshness_hook.py`), and the hooks that the owner added all stay.
   - In a Salesforce project, the `Stop` event then holds two groups: the graph hook's group and the group that runs `validate-records.mjs`.
 - In an update or a move-over of a project whose settings hold no entry that runs `validate-records.mjs`, add those entries last. `update.md`, "Turning on validate-records.mjs and the pre-commit file", gives the steps that come before them.
@@ -118,12 +124,21 @@ To turn off one such plugin, do both of these:
   enabled = false
   ```
 
-Never turn off `toolkit@toolkit-v2`, which holds this skill, or `workstreams@toolkit-v2`, the side panel of the owner's sessions. Never change the files in `~/.claude` or `~/.codex`.
+Never turn off `toolkit@toolkit-v2`, which holds this skill, or `workstreams@toolkit-v2`, the side panel of the owner's sessions. Never change the files in `~/.claude` or `~/.codex` to turn an older plugin off.
+
+Salesforce's own plugins are not older plugins, and this section does not cover them. `salesforce.md`, "Salesforce's skills", says which of them a Salesforce project turns on, and how they are turned off for the rest of the computer after the owner's yes.
 
 ## Check
 
 - `ls <copy>/.claude/skills` shows exactly the 10 shared skills and the skills that the table under "Skills" gives for the owner's choices, each with a `SKILL.md`.
 - Both JSON files are valid.
+- In a Salesforce project, `<copy>/.claude/settings.json` holds every entry of `claude-settings-salesforce.json` with the snippet's value. This command compares the two files and prints `true`:
+
+  ```text
+  jq -s '.[0] as $snippet | .[1] as $file | ($snippet.env | to_entries | all($file.env[.key] == .value)) and ($snippet.enabledPlugins | to_entries | all($file.enabledPlugins[.key] == .value)) and ($file.extraKnownMarketplaces.salesforce == $snippet.extraKnownMarketplaces.salesforce)' <skill folder>/assets/settings/claude-settings-salesforce.json <copy>/.claude/settings.json
+  ```
+
+  In any other project, the file names no Salesforce plugin: `jq '[.enabledPlugins // {} | keys[] | select(endswith("@salesforce"))] | length' <copy>/.claude/settings.json` prints `0`.
 - Every hook command that the settings name is in `<copy>/.claude/hooks/`.
 - `.codex/config.toml` has each table once, and `[skills]` holds `max_context_tokens = 10000`.
 - The `description` in `.codex/hooks.json` contains the snippet's description text (`jq -e` with `contains` shows it). When it does not, add it as "Merge rules" says.

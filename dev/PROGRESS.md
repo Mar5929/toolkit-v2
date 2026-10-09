@@ -2,6 +2,101 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## A Salesforce project turns on the Salesforce plugins itself, version not set yet (2026-10-08, TKV-44)
+
+Mike decided on 2026-10-08 to "turn the Salesforce plugins on only in
+Salesforce projects". On his Windows computer Salesforce's plugins were on
+for every project, and their checks slowed every command and every edit in
+every project. `AGENTS.md`, "Salesforce plugins" under Rules, records his
+decisions with his words. The version is set when the branch
+`salesforce-plugins-per-project` is merged; the four version files were not
+changed.
+
+What was built:
+
+- One new settings snippet,
+  `<setup>assets/settings/claude-settings-salesforce.json`. It names
+  Salesforce's marketplace (`salesforce`, the GitHub repository
+  `forcedotcom/sf-skills`), turns on the seven plugins Mike uses, and sets
+  `SFDX_AUTO_DEPLOY` to `0` and `SF_DISABLE_TELEMETRY` to `true`. Setup
+  merges it only into a Salesforce project. It is the one place for a
+  Salesforce project's own Claude Code settings. The Salesforce hooks and the
+  `sf` permission rules stay in `every-project/.claude/settings.json` for
+  now; the cohesion audit (TKV-43, finding 9) moves them later.
+- `skills-hooks-settings.md` has the snippet's row, its merge rules (a value
+  that a project's own file sets differently is the owner's, so the agent
+  asks), and its check, a `jq` command that compares the project's file with
+  the snippet.
+- `salesforce.md`, "Salesforce's skills", is rewritten. It names the seven
+  plugins, says why automatic deploy is off (a deploy by that hook would not
+  go through the org guard or the permission set check) and that telemetry
+  is off by Mike's choice, and says what the owner sees the first time the
+  project is opened on a computer. It holds the step for once on each
+  computer: the agent lists Salesforce's plugins that are on for the whole
+  computer, asks the owner, and runs `claude plugin disable <ID> --scope
+  user` only after the owner's yes. It gives the command for the plugin's
+  install suggestions. For Codex the line with
+  `npx skills add forcedotcom/sf-skills` stays.
+- `finishing.md` (final check 19, the owner's steps, the report),
+  `interview.md` (question 4 and the plan), `SKILL.md` (step 7 and the
+  References row), the rule `salesforce-project.md`, `README.md`, and
+  `dev/SKILL-INDEX.md` say the same.
+- `update.md`: an existing Salesforce project gets the snippet through the
+  "Settings" row, with what the owner is told. The question about the rest
+  of the computer waits until the update's branch was merged, because before
+  that the project's main folder does not turn the plugins on yet.
+- The question to the owner says one thing the decision did not name:
+  another Salesforce project on the same computer loses the plugins until
+  "update the toolkit" has run in it.
+- The duplicate line is gone. `every-project/.claude/settings.json` turned
+  off `second-brain@claude-toolkit`, and so does `enabled-plugins-off.json`,
+  which setup merges into every project. The line came in with Mike's model
+  folder on 2026-09-26 (commit cd734894), before the plugins-off snippet
+  existed (0.5.0, 2026-10-01). `dev/model-changes.md`, item 23, kept it then
+  only because the model was copied whole. A finished project's settings are
+  the same with and without it. `setup-copy.md` no longer names
+  `enabledPlugins` among the entries to keep. An existing project keeps its
+  line: an update deletes no entry.
+- One new test in `dev/tests/hooks.test.mjs` (13 lines): the snippet parses,
+  names exactly the seven plugins with `@salesforce`, holds the marketplace
+  and the two values, and the every-project settings file holds none of the
+  snippet's three keys.
+
+What was checked:
+
+- The marketplace file of `forcedotcom/sf-skills`, read with `gh api` on
+  2026-10-08: the marketplace name is `salesforce`, it lists 17 plugins, all
+  seven names are in it, and each plugin's source is a folder inside the
+  repository.
+- The plugin's source, read and not run: `scripts/sf-deploy-gate` leaves the
+  automatic deploy unless `SFDX_AUTO_DEPLOY` is exactly `1`;
+  `scripts/sf_telemetry.py` and `scripts/telemetry-flush.js` both treat any
+  value of `SF_DISABLE_TELEMETRY` that is not empty as off.
+- `claude plugin disable --help` on Claude Code 2.1.289 shows the option
+  `--scope user`. `claude plugin list` prints a Scope and a Status line for
+  each plugin.
+- The two `jq` commands of the new check, on a scratch file that joins the
+  every-project settings and the two Claude Code snippets.
+- All seven checks of `AGENTS.md`, "Checks", pass: the three
+  `claude plugin validate` runs, `claude plugin test` (14 pass),
+  `check-skills.mjs` (0 errors, 0 warnings), `check-rules.mjs` (the same 3
+  warnings as before, none on a changed file), and the tests (116 pass).
+
+What was not tested:
+
+- Nothing here has been installed or run in a live session, on a Mac or on
+  Windows. No project was set up or updated with the snippet. No plugin was
+  turned off or on, and no session was started with these settings.
+- Whether Claude Code installs by itself a plugin that a project's settings
+  turn on, when the plugin is a folder inside the marketplace's repository.
+  The captured pages state the rule only for a plugin from an external
+  source. The text has the agent check with `claude plugin list`.
+- Whether the two `env` values reach the plugins' hook commands in the
+  Claude desktop app, where a variable of the app's own launch environment
+  wins. Final check 19 reads both values in a session.
+- The separate wording review and best-practices review of the changed text
+  ("Wording and overlap review" in `AGENTS.md`) have not been done.
+
 ## The order of the Hindsight setup steps, version 0.9.21 (2026-10-08)
 
 The first live Hindsight setup, of the bank `toolkit-v2`, left the bank

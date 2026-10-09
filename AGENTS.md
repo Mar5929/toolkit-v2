@@ -178,7 +178,7 @@ writes such text.
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
 | `<setup>assets/owner-preferences.md` | The starting text of `.claude/rules/owner-preferences.md`, which every project gets. It is the one file every project gets that sits outside `every-project/`: from the first instruction on it is the owner's own file, so setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it (`<setup>references/setup-copy.md`, "The owner-preferences rule"). `check-rules.mjs` counts its size with the rules. |
 | Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 15 possible project skill names stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
-| `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
+| `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. One of them, `claude-settings-salesforce.json`, is merged only into a Salesforce project: it is the one place for a Salesforce project's own Claude Code settings ("Salesforce plugins" under Rules). |
 | `ai-external-knowledge/` | Official pages, captured with Firecrawl, one folder per source: `claude-code/`, `codex/`, `openai-plugins/`, `anthropic-agent-skills/`, `anthropic-engineering/`, and `hindsight/`. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address and capture date. Not shipped. |
 | `reference/` (root of this repository) | `how-the-owner-works-with-agents.md`: the record of what Mike asks agents to do in his real projects, with his own words. It names people by role only. Add a section for each project that is studied. `davis-memory-system.md`: how the memory system of his Davis project works, as its files were on 2026-10-07. `memory-in-toolkit-v2-and-in-davis.md`: a comparison of memory in Toolkit V2 at version 0.9.9 with memory in Davis. Not shipped (Mike, 2026-10-07: "I don't want it to be buried under 'dev'"). |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
@@ -991,6 +991,78 @@ node --test 'dev/tests/*.test.mjs'
     command line's own login files, and asks in Claude Code when it cannot
     identify an org. That is a second change, and its size goes to Mike
     before it is written.
+- **Salesforce plugins** (Mike, 2026-10-08, work item TKV-44). In Claude
+  Code, a Salesforce project turns on Salesforce's own plugins in its own
+  settings, and the plugins are turned off for the rest of the computer. His
+  words: "turn the Salesforce plugins on only in Salesforce projects". On
+  his Windows computer the plugins were on for every project, and their
+  checks slowed every command and every edit in every project.
+  - The plugins come from Salesforce's own marketplace: the GitHub
+    repository `forcedotcom/sf-skills`, whose marketplace is named
+    `salesforce` and holds 17 plugins. A plugin's ID is `<name>@salesforce`.
+    `salesforce-development@claude-plugins-official` is the same plugin from
+    Anthropic's marketplace under a different ID. The toolkit turns on only
+    `@salesforce` IDs.
+  - The plugins he uses, in his words: "I mainly just use the Salesforce
+    development plugins and the DevOps plugins, and the Experience LWC
+    plugin, the integration plugin, the Salesforce Code Quality plugin, the
+    Platform Lightning Widgets plugin, and the Platform Trust Security
+    plugin." They are these seven: `salesforce-development`, `dx-devops`,
+    `experience-lwc`, `integration`, `salesforce-code-quality`,
+    `platform-lightning-widgets`, and `platform-trust-security`.
+    `dx-org-lifecycle` is off for now (his answer: "Idk"), and the other
+    nine are off. Add or remove a plugin only with his yes.
+  - One snippet, `<setup>assets/settings/claude-settings-salesforce.json`,
+    holds the marketplace, the seven plugins, and two environment variables.
+    Setup merges it only into a Salesforce project. It is the one place for
+    a Salesforce project's own Claude Code settings. A later change of the
+    cohesion audit (TKV-43, finding 9) moves the Salesforce hooks and the
+    `sf` permission rules there from `every-project/.claude/settings.json`.
+    Until then, put no new Salesforce line into the every-project file.
+  - The two variables. `SFDX_AUTO_DEPLOY` is `0`: the hook command
+    `sf-deploy-gate auto-deploy` of `salesforce-development` deploys each
+    saved file under `force-app/` to the default org when the variable is
+    exactly `1`. It does that outside the agent's shell, so the org guard
+    and the permission set check never see the deploy.
+    `SF_DISABLE_TELEMETRY` is `true`, which turns the plugin's telemetry
+    off, as he chose. Both of the plugin's telemetry scripts
+    (`scripts/sf_telemetry.py` and `scripts/telemetry-flush.js`) treat any
+    value that is not empty as off, and the plugin's own message names
+    `true`.
+  - Once on each computer, the plugins are turned off for the computer, so
+    that other projects do not run their checks. That changes his own
+    setup, so the agent asks him first, each time, on each computer, and
+    never does it without his yes. `<setup>references/salesforce.md`, "Once
+    on each computer: the plugins are turned off for every other project",
+    holds the steps. Another Salesforce project on that computer has the
+    plugins again only after "update the toolkit" has run in it, and the
+    question to him says so.
+  - Setup tells him the command that turns down the plugin's suggestions to
+    install more plugins, `/salesforce-development:plugin-recommendations`.
+  - Codex is unchanged in this work item: for Codex the owner installs
+    Salesforce's skills with `npx skills add forcedotcom/sf-skills`.
+  - What Claude Code's pages say, as captured on 2026-10-05 in
+    `ai-external-knowledge/claude-code/`. A project's `enabledPlugins`
+    entry wins over the same entry in the user's settings
+    (`settings-reference.md`, "`enabledPlugins`"). Claude Code reads
+    `extraKnownMarketplaces` and most `env` values from a project's file
+    only after the folder is trusted (`settings-reference.md`;
+    `settings.md`, "A committed key doesn't reach teammates"). An `env`
+    value reaches every subprocess Claude Code starts, and a hook process
+    inherits that environment (`settings-reference.md`, "`env`";
+    `hooks.md`). A project's settings turn a plugin on but do not install
+    it, and `/plugin` then shows the install command
+    (`plugins-troubleshooting.md`).
+  - What those pages do not say. They state the last rule for a plugin
+    "from an external source such as a GitHub repository or an npm package".
+    The seven plugins are folders inside the marketplace's own repository,
+    and no captured page says whether Claude Code installs such a plugin by
+    itself, or what the trust dialog shows about plugins. The pages that
+    hold those rules (`/docs/en/plugins/org`, `/docs/en/plugins/loading`,
+    `/docs/en/plugins/install`) are not captured. So the toolkit's text has
+    the agent check which plugins a computer has.
+  - Nothing of this has been installed or run in a live session, on a Mac
+    or on Windows.
 - **One goal for keeping the records** (Mike, 2026-10-07). The starter root
   `AGENTS.md`, section "Your job as the agent", holds the goal he approved
   word for word: the agent keeps the project's records, in the same turn,
