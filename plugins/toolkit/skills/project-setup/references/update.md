@@ -191,7 +191,7 @@ Then compare the two lists. One of two cases applies.
      - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line of a rules list between two `toolkit:rules` marker lines, a line about a setup choice).
      - Carry over a line that holds a fact, a command, or an instruction of the owner's own, into the section where it fits. A whole section that the owner added goes in right after "Commands".
      - When you cannot tell whether to drop a line or carry it over, carry the line over and mark it in the list in step 5.
-  4. Run `wc -lc <copy>/AGENTS.md`. The limits are at most 200 lines and at most 22,528 bytes. When the owner's added lines put the file over either limit, say so in the list in step 5, and recommend which of those lines to move, and where. Cut no line of the owner's without the owner's yes.
+  4. Run `wc -lc <copy>/AGENTS.md`. The limits are at most 200 lines and at most 24,576 bytes. When the owner's added lines put the file over either limit, say so in the list in step 5, and recommend which of those lines to move, and where. Cut no line of the owner's without the owner's yes.
   5. Show the owner the whole new file, and under it one short list: each line you carried over, and each of the owner's lines you dropped, with the reason. Write nothing until the owner says yes. After the owner's yes, write the new file as `AGENTS.md` in your worktree.
 
 ### Turning on validate-records.mjs and the pre-commit file

@@ -322,6 +322,12 @@ node --test 'dev/tests/*.test.mjs'
   - It fails when the `skillOverrides` list in this repository's
     `.claude/settings.json` does not set every project skill name to
     `"off"`, or names anything that is no project skill.
+  - It fails when the starter root `AGENTS.md` is over the limits that setup
+    checks in every new project (200 lines and 24,576 bytes,
+    `<setup>references/finishing.md`, check 14), or when
+    `<setup>references/update.md` gives another limit. Phase P1 of TKV-43
+    raised the byte limit from 22,528 on 2026-10-08 (Mike's yes), and the
+    file is to be shortened again in phase P4.
   - It fails when the Salesforce entries listed in
     `<setup>references/setup-copy.md`, "Salesforce entries in the settings
     file", differ from the `sf` and `sfdx` permission rules and the
