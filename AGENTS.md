@@ -644,6 +644,22 @@ node --test 'dev/tests/*.test.mjs'
     project file holds (Mike, 2026-10-05). The Notion tracker and memory
     references use `ntn` through `using-notion-cli` and do not repeat its
     sign-in, Codex, or error text. Each instruction lives in one file.
+  - Tidying memory in the background (Mike, 2026-10-08, work item TKV-39).
+    He first asked for a background helper that saves memory, as in his
+    Davis project. He dropped it when he saw that most facts now go to work
+    items, decisions, and sources, which the main agent must write itself
+    ("this is a fantastic point, actually"). He chose a helper that tidies
+    memory, and wanted it simple: "Just a couple short instructions about
+    what files, the scope of what it's looking to tidy up, and when it
+    should run". The clean-up process already existed in
+    `managing-project-memory`, `references/tidying.md`, for local and Notion
+    memory. So no skill and no agent file was added. `memory-process.md`
+    says when the agent starts a clean-up (at once when the owner asks;
+    otherwise its judgment, at a point where the owner is not waiting), and
+    `tidying.md` says that a helper reads all
+    of memory and writes the plan, which the owner approves before anything
+    on it changes. A Hindsight project has no toolkit memory skill and gets
+    nothing.
 - **Wording and overlap review** (Mike, 2026-09-30). New or changed text in
   a skill, reference, template, example, helper brief, or
   `dev/build-shared/` source is reviewed by a separate agent against
