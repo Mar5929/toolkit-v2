@@ -112,7 +112,7 @@ grep -o 'plugins\."[^"]*"' ~/.codex/config.toml
 Turn off each plugin in the list that the snippets do not already name and whose name is one of these:
 
 - a name that ends in `@claude-toolkit`;
-- a `@toolkit-v2` name other than `toolkit@toolkit-v2` and `workstreams@toolkit-v2`. These are the retired `work`, `memory`, `session-skills`, `git-workflows`, and Salesforce architect plugins.
+- a `@toolkit-v2` name other than `toolkit@toolkit-v2`. These are the retired `work`, `memory`, `session-skills`, `git-workflows`, and Salesforce architect plugins.
 
 To turn off one such plugin, do both of these:
 
@@ -124,7 +124,7 @@ To turn off one such plugin, do both of these:
   enabled = false
   ```
 
-Never turn off `toolkit@toolkit-v2`, which holds this skill, or `workstreams@toolkit-v2`, the side panel of the owner's sessions. Never change the files in `~/.claude` or `~/.codex` to turn an older plugin off.
+Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the files in `~/.claude` or `~/.codex` to turn an older plugin off.
 
 Salesforce's own plugins are not older plugins, and this section does not cover them. `salesforce.md`, "Salesforce's skills", says which of them a Salesforce project turns on, and how they are turned off for the rest of the computer after the owner's yes.
 

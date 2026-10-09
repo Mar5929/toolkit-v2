@@ -41,12 +41,6 @@ are not written there: they are in one rule ("Plain English" under Rules).
 The skill holds an exact copy of it, `references/writing-rule.md`, which
 `check-skills.mjs` compares with the rule. A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. It is text only.
 
-One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
-Code only. It is a mod: code that runs inside Claude Code and draws a side
-panel. `/streams` lists the pieces of work the project's chats report, the
-chat handling each one, and each chat's state. It uses no Notion. See
-"Workstreams plugin" under Rules.
-
 ## The rule every agent follows here
 
 Mike asked for one rule that every agent and every helper agent follows on
@@ -162,9 +156,8 @@ writes such text.
 
 | Path | What is there |
 | --- | --- |
-| `.claude-plugin/marketplace.json` | The `toolkit-v2` marketplace for Claude Code. It lists two plugins, `toolkit` and `workstreams`. |
-| `.agents/plugins/marketplace.json` | The marketplace for Codex, with `policy` and `category`. It lists only `toolkit`: Codex cannot run a mod. |
-| `plugins/workstreams/` | The `workstreams` plugin: its manifest, the mod in `hooks/register.tsx`, its tests in `hooks/register.test.tsx`, and the types of its stored values in `types/index.d.ts`. Claude Code writes `tsconfig.json` and `.claude-plugin/types/` there when it loads the plugin from this folder; `tsconfig.json` is kept in Git so it does not show as a new file, and the `types/` folder ignores itself. |
+| `.claude-plugin/marketplace.json` | The `toolkit-v2` marketplace for Claude Code. It lists one plugin, `toolkit`. |
+| `.agents/plugins/marketplace.json` | The marketplace for Codex, with `policy` and `category`. It lists `toolkit`. |
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/placing-files.md`, "5. The pre-commit check", is the one place that says how `core.hooksPath` is set. `references/update.md` is "update the toolkit"; two parts of it are in their own files: `references/one-home-layout.md` brings a project set up before the one-home layout to it, and `references/earlier-versions.md` holds the changes from toolkit 0.6.0, 0.8.0, and 0.8.1. |
@@ -280,8 +273,6 @@ Run them from the repository root before you hand work back.
 ```bash
 claude plugin validate .
 claude plugin validate ./plugins/toolkit
-claude plugin validate ./plugins/workstreams
-claude plugin test ./plugins/workstreams
 node dev/tools/check-skills.mjs
 node dev/tools/check-rules.mjs
 node --test 'dev/tests/*.test.mjs'
@@ -289,10 +280,6 @@ node --test 'dev/tests/*.test.mjs'
 
 - `claude plugin validate .` checks the marketplace; `./plugins/toolkit`
   checks the plugin, its manifest, and its skill.
-- `claude plugin validate ./plugins/workstreams` reads the mod the way
-  Claude Code will and lists what it hooks and calls. `claude plugin test`
-  runs `hooks/register.test.tsx` without a session, on the terminal and the
-  desktop app.
 - `check-skills.mjs` checks project-setup, every skill under it, and the
   plugin's other skill (`writing-harness-files`): only
   `name` and `description` in the frontmatter, `name` equal to the folder
@@ -514,80 +501,6 @@ node --test 'dev/tests/*.test.mjs'
     for a test of this repository's own settings entry. A test fails
     when the command is over 72 lines. Tell him the size again before it
     grows.
-- **Workstreams plugin** (Mike, 2026-10-03, work items TKV-12 and TKV-14).
-  The one other piece of code the toolkit ships. The first version (TKV-12)
-  listed Notion work items. Mike had it rebuilt the same day (TKV-14) so it
-  works in every project with no Notion: he was told about 450 lines, and it
-  was about 540 lines (`register.tsx`, `types/index.d.ts`) plus about 290
-  lines of tests. With the Dismiss buttons (his yes, 2026-10-03, told about
-  45 more lines) it was about 620 lines plus about 370 lines of tests. With
-  the Done button and one card per chat (his yes and his idea, 2026-10-03,
-  told about 30 more lines) it was about 650 lines plus about 415 lines of
-  tests. With plain names, the About line, the labelled layout, and
-  collapsible cards (his yes, 2026-10-04, told about 70 more lines) it is
-  about 715 lines plus about 475 lines of tests. Tell him the size again
-  before it grows.
-  - It is installed once per computer in Claude Code. Nothing of it is copied
-    into a project, so the code limit for projects stands.
-  - Each chat reports its own work. The plugin gives the agent one tool,
-    `mcp__workstreams__report`, and one short instruction at the start of
-    each chat. The agent sends a name, an "about" text, a status, and the
-    next step. Mike switches between many chats and needs reminding what each
-    piece of work is (2026-10-04), so the name is a subject line of 8 words
-    or fewer in his own plain words, and "about" is one or two plain
-    sentences, 30 words or fewer, on what he asked for and why. Neither holds
-    a ticket number, a file name, or a technical term. The first "about" is
-    kept; later reports change only the status and the next step. This
-    costs a few tokens per report, plus the instruction and the tool's
-    listing in every chat. A piece of work is Mike's "workstream" (his words,
-    2026-10-03: "a significant piece of work ... a work item or some large
-    task that I'm tracking"). The instruction tells the agent to report only
-    those, never the steps inside one, a question, or a small chore. One chat
-    may report several, and a helper agent's report is not saved.
-  - The plugin also notes, at no token cost, whether each chat is working,
-    asking Mike a question, or stopped, his last message to it, and how many
-    helper agents it runs.
-  - Each chat saves its record in its own file,
-    `~/.claude/workstreams/<project>/<chat id>.json`, so no chat writes over
-    another. `/streams` reads every file of the project. A chat in a worktree
-    under the project's `.claude/worktrees/` folder counts as the same
-    project. A mod cannot delete a file, so these small files stay on disk;
-    the panel leaves out a chat that has not changed for 7 days. A chat that
-    is opened again takes up its saved record first.
-  - A chat's name is read from Claude Code's own
-    `~/.claude/projects/<folder>/<chat id>/custom-title.json` each time, so a
-    chat renamed in the sidebar shows its new name. A chat named "Main
-    Orchestrator" is listed first.
-  - The panel shows one card per chat, with that chat's pieces of work inside
-    it (Mike's layout, 2026-10-03 and 2026-10-04). A "Chat" label sits above
-    the chat's name and a "Workstreams" label above its work, so the two are
-    never confused. Each piece of work shows its name, then the lines About,
-    Status, and Next, always in that order; color is used only for status.
-    A card folds with Collapse and opens with Expand; a folded card still
-    says how many pieces of work it has and how many need him. The work
-    finished in the last day is listed below the cards.
-  - Mike's own presses are kept in one file for the project,
-    `_dismissed.json`, beside the chats' files, so every chat's panel shows
-    the same. "Mark done" moves a piece of work to the finished list. "Hide"
-    hides a piece of work. Collapse folds a card. "Dismiss chat" hides a chat
-    and its work: the panel is
-    not told when Mike archives a chat. A press on a piece of work holds
-    until the work is reported again. A dismissed chat shows again when Mike
-    writes to it or it reports work.
-  - It writes only its own files under `~/.claude/workstreams/`. It never
-    writes to a project, to Notion, or to a chat file, and it runs no other
-    program.
-  - A new job for it needs Mike's yes first, with its size.
-  - A mod can never break a session: Claude Code skips a hook that fails.
-    Keep every failure to one short line in the panel.
-  - Read `ai-external-knowledge/claude-code/mods/` and
-    `dev/research/claude-code-mods.md` before changing it. The mods API is
-    early access and may change between Claude Code releases.
-  - Live tests run in the test sign-in with
-    `--plugin-dir ./plugins/workstreams`; remove
-    `~/.toolkit-v2-test-homes/claude/workstreams` afterwards. Nothing here
-    has run on Windows; the plugin uses only Claude Code's own file calls
-    there.
 - **Shared texts.** Text several skills need is copied into each skill,
   because a skill reads only files inside its own folder. Edit the source in
   `dev/build-shared/`, then copy it over every copy (the first line of each
@@ -599,8 +512,7 @@ node --test 'dev/tests/*.test.mjs'
   This repository's `.claude/rules/evaluate-the-owners-request.md` copies
   the starter rule of the same name ("The rule every agent follows here").
 - **`dev/` and the root `reference/` folder are not shipped.** Claude Code
-  installs only `plugins/toolkit/` and `plugins/workstreams/`, and Codex only
-  `plugins/toolkit/`. Nothing shipped reads a file under `dev/` or under this
+  and Codex install only `plugins/toolkit/`. Nothing shipped reads a file under `dev/` or under this
   repository's root `reference/`. The `reference/` folder that every project
   gets is a different folder, in the starter project.
 - **Skills.** A skill is a folder: `SKILL.md`, plus `references/`,
@@ -764,8 +676,7 @@ node --test 'dev/tests/*.test.mjs'
   snippets pass none: renaming a memory skill changes only those files and
   needs no new trust.
 - **Versions.** Both `toolkit` manifests carry the same `name` and `version`.
-  Every shipped change raises `version` in both, in
-  `plugins/workstreams/.claude-plugin/plugin.json`, and `metadata.version` in
+  Every shipped change raises `version` in both, and `metadata.version` in
   `.claude-plugin/marketplace.json`, so the toolkit has one version number.
   - Codex runs its own copy, filed under the version
     (`~/.codex/plugins/cache/toolkit-v2/toolkit/<version>`). A change reaches
@@ -791,8 +702,6 @@ node --test 'dev/tests/*.test.mjs'
   of this plugin on 2026-10-06 ("The tool list" above). A third skill in
   this plugin needs Mike's yes
   first: every chat in both hosts reads each one's description.
-  `workstreams` is on for every folder in Claude Code only,
-  and its hooks run there ("Workstreams plugin" above says what they do).
 - **Rule files** live in the model and follow
   `dev/research/rules-best-practices.md` Part 1: one topic per file, a `# `
   heading, one specific instruction per bullet, `paths` frontmatter only

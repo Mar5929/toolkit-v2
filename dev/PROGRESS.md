@@ -2,6 +2,24 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The workstreams plugin is removed, version 0.9.26 (2026-10-09)
+
+Mike decided on 2026-10-09 to remove the `workstreams` plugin, the side panel
+for Claude Code. He was shown the line "Workstreams panel: 651 lines. You
+asked for this one." in a list of the custom code the toolkit ships, and
+answered: "have another session delete this". His reason: "We can't have all
+this custom code and stuff in this toolkit."
+
+- The folder `plugins/workstreams/` is deleted, and the marketplace for
+  Claude Code lists only `toolkit`.
+- `AGENTS.md`, `README.md`, and two references of `project-setup`
+  (`skills-hooks-settings.md` and `old-toolkit-pieces.md`) no longer name
+  the plugin. The two `claude plugin` commands for it are out of "Checks".
+- Three files carry the version now: the two `toolkit` manifests and the
+  marketplace for Claude Code.
+- Nothing replaces the panel. Earlier entries of this file and the files
+  under `dev/research/` and `dev/test-runs/` still describe it, as history.
+
 ## The agent asks whether a job gets a work item, version 0.9.25 (2026-10-09, TKV-51)
 
 The live tests of 2026-10-08 ran on version 0.9.18. Their three records are
