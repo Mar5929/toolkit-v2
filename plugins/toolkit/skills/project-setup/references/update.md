@@ -184,6 +184,7 @@ Do each line that fits the project. Each line names the section that holds the s
 - For a Notion project, follow `notion.md`, "Updating a Notion project". That section says which Notion steps bring the project up to the current template.
 - For a Hindsight project, do the check under "Check a Hindsight project, or connect a new computer" in `hindsight-on-vps.md`. Fix each failure only after the owner's yes. Name the server the project uses in the report.
 - For a GitHub Issues project, follow `github.md`, "Bringing a project up to date". Add missing labels only after the owner's yes.
+- For a Salesforce project, write the entries for each production org as `salesforce.md`, "The refuse list for production", says, before section 4 removes a guard that an earlier setup put there. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
 
 ## 6. Checks and report
 

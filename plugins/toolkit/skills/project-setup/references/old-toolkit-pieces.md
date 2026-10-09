@@ -69,7 +69,7 @@ This table is for files in `.claude/rules/`. "Same name" means that Toolkit V2 h
 | `ai-external-knowledge.md` | Compare | `reference/AGENTS.md` |
 | `plain-english-artifacts.md` | Compare | `document-clarity-standard.md` |
 | `humanize-outbound-text.md` | Compare | Same name |
-| `dependency-graph.md` | Kept | Nothing: the rule belongs to the project's own `tools/kb/` |
+| `dependency-graph.md` | Kept when the project has `tools/kb/` | Nothing: the rule belongs to the project's own `tools/kb/` |
 | `component-tracker.md` | Compare | Same name (Salesforce) |
 | `permissions-source-control.md` | Kept | Nothing: the rule belongs to the project's own `tools/permissions/` |
 | `salesforce-safety-guardrails.md` | Compare | `salesforce-org-safety.md` for the limits that are the same in every project, and `salesforce-agent-permissions.md` for a line that only this project needs |

@@ -105,7 +105,7 @@ For a Salesforce project, ask for the org aliases, one question per message. Bef
 1. Ask for the sandbox that the agents may deploy to for testing.
    - Recommend an alias only when its name matches this project or the owner said it is this project's.
    - When none of the listed orgs is for this project, recommend "none yet". `salesforce.md`, "The org aliases", says what to write in that case and how the aliases are written in `PROJECT.md`.
-2. Ask for production. Agents never deploy to production or change its data. The rule `salesforce-org-safety.md` forbids both, and Claude Code refuses a command that names the production org (`salesforce.md`, "The refuse list for production").
+2. Ask for production. Agents never deploy to production or change its data. The rule `salesforce-org-safety.md` forbids both, and Claude Code refuses a command that changes the production org and names it (`salesforce.md`, "The refuse list for production").
 
 The API version comes after the plan, in step 7 of "New project" in `SKILL.md`. It is a question of its own when the version cannot be read. `salesforce.md`, "The API version", says how to read the version and what to ask when it cannot be read.
 

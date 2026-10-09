@@ -1,6 +1,6 @@
 # Salesforce projects
 
-This file says which Salesforce facts setup records in a Salesforce project: the org aliases, written while you build the setup copy, and the API version, written after the files are in place. It also says how to check that Salesforce's own skills are installed, and what to ask the owner about them. Open it at step 7 of "New project" in `SKILL.md`, and at step 4 when you write the org aliases. Its job is done when `PROJECT.md` holds the org aliases, the API version is written in the two files that hold it, the owner knows when Salesforce's skills are not installed, and the owner has said what to have on or off. Where the owner cannot give a value yet, the sections below say what to write in its place.
+This file says which Salesforce facts setup records in a Salesforce project: the org aliases and the refuse list for production, both written while you build the setup copy, and the API version, written after the files are in place. It also says how to check that Salesforce's own skills are installed, and what to ask the owner about them. Open it at step 7 of "New project" in `SKILL.md`, and at step 4 when you write the org aliases. Its job is done when `PROJECT.md` holds the org aliases, `.claude/settings.json` holds the refuse list entries for each production org that the owner named, the API version is written in the two files that hold it, the owner knows when Salesforce's skills are not installed, and the owner has said what to have on or off. Where the owner cannot give a value yet, the sections below say what to write in its place.
 
 The setup copy is the project's finished files, built in a temporary folder before anything is put into the project.
 
@@ -33,23 +33,23 @@ The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce o
 Use only the aliases the owner names for this project.
 
 - When none of this project's orgs is on this computer yet (the org does not exist or is not connected), never invent an alias, and never write an alias that the owner says belongs to another project into this project's files. Write ``- Salesforce org aliases: `none yet` ``.
-- The owner's step "Connect the project's Salesforce org" then gets a "Waiting on" line in the project's Current State, and the report lists the line as a prompt left. `finishing.md`, "The project's Current State", says how to write the "Waiting on" line.
+- The owner's step "Connect the project's Salesforce org" then gets a "Waiting on" line in the project's Current State, and the report lists the line as a prompt left. The line also says that the refuse list entries for production are still to be written. `finishing.md`, "The project's Current State", says how to write the "Waiting on" line.
 - When the owner gives an instruction about what an agent may do in an org (for example "don't use those" about the other orgs), write it into `.claude/rules/salesforce-agent-permissions.md`, in the place that the first bullets of that file give.
 
 `.claude/rules/salesforce-agent-permissions.md` says what an agent may do in each kind of org, in Claude Code and in Codex.
 
 ## The refuse list for production
 
-For each production org that the owner names, add entries to `permissions.deny` in the project's `.claude/settings.json`, so that Claude Code refuses a command that changes that org. Claude Code matches an entry against the text of a command, and `*` stands for any text.
+The refuse list is `permissions.deny` in `.claude/settings.json`: Claude Code refuses a command that matches one of its entries. For each production org that the owner names, add entries to it, so that Claude Code refuses a command that changes that org. In a new project, write them into the setup copy's file with the org aliases. In an update or a move-over, write them into the project's own file. Claude Code matches an entry against the text of a command, and `*` stands for any text.
 
 - Write two entries for each kind of command that changes an org: one for the org's name at the end of the command, and one for the name in the middle. For a deploy to the org `acme-prod`, the two entries are `Bash(sf project deploy * acme-prod)` and `Bash(sf project deploy * acme-prod *)`.
-- The kinds of command are a deploy or a deploy validation (`sf project deploy`), each data change (`sf data create`, `sf data update`, `sf data upsert`, `sf data delete`, and `sf data import`), anonymous Apex and an Apex test run (`sf apex run`), and a Flow test run (`sf flow run`).
+- The kinds of command are a deploy or a deploy validation (`sf project deploy`), each data change (`sf data create`, `sf data update`, `sf data upsert`, `sf data delete`, and `sf data import`), anonymous Apex and an Apex test run (`sf apex run`), and a Flow test run (`sf flow run` and `sf logic run`).
 - Write no entry for a command that only reads, such as `sf data query` or `sf project retrieve`.
 - When the owner gives the production username as well as the alias, write the same entries for the username.
-- On Windows, write each entry a second time with `PowerShell(` in place of `Bash(`.
-- When no production org is known yet, write no entry. Add the entries when the owner names the org.
+- Write each entry a second time with `PowerShell(` in place of `Bash(`, for a session that runs on Windows.
+- When no production org is known yet, write no entry. "The org aliases" above says how the project's Current State records that the entries are still to be written.
 
-Tell the owner in one line which org Claude Code now refuses. The list stops a command that names production plainly, and it is not a full check. Codex has no such list. `.claude/rules/salesforce-org-safety.md` forbids every change to production in both.
+Tell the owner in one line for which org Claude Code now refuses changes. The list stops a command that names the org as a word of its own, as in `-o acme-prod` or `--target-org acme-prod`. It is not a full check: a command that writes the name another way, such as `--target-org=acme-prod`, is not refused. Codex has no such list. `.claude/rules/salesforce-org-safety.md` forbids every change to production in both.
 
 ## The API version
 

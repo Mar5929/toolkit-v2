@@ -70,7 +70,7 @@ Never change a snippet's hook commands or texts, because they are written to mat
 ## Merge rules
 
 - Start from the file that `<copy>` already holds, after the Salesforce removals. `setup-copy.md`, "Salesforce entries in the settings file", lists the entries to take out in a project that is not a Salesforce project.
-  - When `<copy>` has no such file, the first snippet is the start. This is so for `.codex/hooks.json` in a project that is not a Salesforce project, and for `.codex/config.toml`.
+  - When `<copy>` has no such file, the first snippet is the start. This is so for `.codex/hooks.json` and for `.codex/config.toml`.
 - Replace the toolkit's own hook handlers. Never join the old ones and the new ones. A hook handler is one entry in a settings file that says what a hook runs. The toolkit's own hook handlers are:
   - a handler whose `args` or `command` names `session-start.mjs`, `prompt-reminder.mjs`, or `codex-after-commit.mjs`;
   - the `echo` handler in the `PostToolUse` group whose matcher is `Agent`;
@@ -84,7 +84,7 @@ Never change a snippet's hook commands or texts, because they are written to mat
   - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `placing-files.md` and `update.md` send you to these rules for such a file.
 - Never delete any other entry. The copied permission rules, the Git deny and ask rules, the entries of `permissions.deny` for a production Salesforce org, and the hooks that the owner added all stay.
 - `.codex/hooks.json` holds only `description` and `hooks` at the top level.
-  - In a Salesforce project, the `description` is the text of the `salesforce` folder's file, one space, then the snippet's text. In any other project, the `description` is the snippet's text.
+  - The `description` is the snippet's text.
   - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. One sentence is the exception: a sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the snippet's text. List that change in the numbered table that the owner sees. `placing-files.md`, "3. Files the project already has", and `update.md` say how to show that table.
 - When the snippet sets a key that the file writes another way, leave the file as it is and ask the owner. Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table.
 

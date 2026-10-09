@@ -113,7 +113,7 @@ the intended change.
 `.claude/rules/salesforce-agent-permissions.md` says whether you ask the owner
 before a sandbox deploy. The owner runs every production deploy.
 
-1. **Preflight. Not optional, and the hook enforces it.**
+1. **Preflight. Not optional, and the rule requires it.**
    ```
    python tools/permissions/permsets.py preflight <file> --org <SANDBOX>
    ```

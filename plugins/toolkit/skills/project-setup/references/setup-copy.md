@@ -121,7 +121,8 @@ Keep the fill-in guide comment of the "Toolkit settings" section itself, because
 
 In a project that is not a Salesforce project, take the Salesforce entries out of `<copy>/.claude/settings.json`. A Salesforce project keeps them. `.claude/settings.json` is the settings file of Claude Code. Every project gets it, and it holds Salesforce entries.
 
-- Delete these entries from `permissions.deny`: `Bash(sf project delete source *)`, `Bash(sfdx force:source:delete *)`, `Bash(sf org delete *)`, `PowerShell(sf project delete source *)`, `PowerShell(sfdx force:source:delete *)`.
+- Delete these entries from `permissions.deny`: `Bash(sf project delete source *)`, `Bash(sfdx force:source:delete *)`, `Bash(sf org delete *)`, `PowerShell(sf project delete source *)`, `PowerShell(sfdx force:source:delete *)`, `PowerShell(sf org delete *)`.
+- In a Salesforce project, also add the entries for each production org that the owner named, as `salesforce.md`, "The refuse list for production", says.
 - Keep every other entry: the Git deny and ask rules, `attribution`, `autoMemoryEnabled`, `enabledPlugins`, `outputStyle`, and `skillListingBudgetFraction`.
 
 `.gitignore` is copied whole in every project. Its lines for Salesforce tools ignore nothing in a project that has none of those files.

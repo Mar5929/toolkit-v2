@@ -38,7 +38,8 @@
       "Bash(sfdx force:source:delete *)",
       "Bash(sf org delete *)",
       "PowerShell(sf project delete source *)",
-      "PowerShell(sfdx force:source:delete *)"
+      "PowerShell(sfdx force:source:delete *)",
+      "PowerShell(sf org delete *)"
     ],
     "ask": [
       "Bash(git reset --hard *)",
