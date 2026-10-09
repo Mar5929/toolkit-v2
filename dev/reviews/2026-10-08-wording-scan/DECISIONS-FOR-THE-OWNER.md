@@ -9,7 +9,7 @@ Two facts apply to every decision:
 
 ## Decision 1. Two sentences in the writing rule that are not the owner's words yet
 
-**Closed on 2026-10-09.** The Main Orchestrator session checked its transcript: Mike approved both sentences on 2026-10-08, as they read below, with the answer "Go with your recommendations for all". All five additions shipped in version 0.9.24.
+**Closed on 2026-10-09.** The Main Orchestrator session checked its transcript: Mike approved both sentences on 2026-10-08, as they read below, with the answer "Go with your recommendations for all". All five additions are in version 0.9.25.
 
 **Background.** The writing rule, `document-clarity-standard.md`, is the owner's approved text. Three additions on the branch are the owner's approved words. Two more were written by the Main Orchestrator session after the owner said that the heading "How to ask the owner" does not give enough context.
 
@@ -109,7 +109,7 @@ The reminder hook passes: its phrases only add a hint, and the starter root `AGE
 
 ## Decision 6. A change to the checklist that reviewers use
 
-**Decided on 2026-10-09 by the Main Orchestrator session, as proposed below.** Its reason: the checklist is not shipped, and the change is easy to undo. Mike can still say that he disagrees. The new wording is in `dev/reviews/wording-review.md` since version 0.9.24.
+**Decided on 2026-10-09 by the Main Orchestrator session, as proposed below.** Its reason: the checklist is not shipped, and the change is easy to undo. Mike can still say that he disagrees. The new wording is in `dev/reviews/wording-review.md` since version 0.9.25.
 
 **Background.** `dev/reviews/wording-review.md` is the checklist for every review of skill text. It is not shipped. Its check W5 says: "Where the agent should decide, the text says so and says what to weigh: "Use your judgment: weigh X against Y."" That asks writers to tell the agent how to weigh, which the owner asked on 2026-10-08 not to do. One checker already rejected two rewrites because they added a "weigh X against Y" sentence.
 

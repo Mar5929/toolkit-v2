@@ -163,12 +163,12 @@ The owner asked on 2026-10-08: "make sure that nothing i asked for would get us 
 
 The full text of each decision, with its options and a recommendation, is in `DECISIONS-FOR-THE-OWNER.md`. By subject:
 
-1. Two sentences in the writing rule that are the orchestrator's wording: the fuller heading rule, and the line on organizing a document. Closed on 2026-10-09: Mike had approved both on 2026-10-08, and all five additions shipped in version 0.9.24.
+1. Two sentences in the writing rule that are the orchestrator's wording: the fuller heading rule, and the line on organizing a document. Closed on 2026-10-09: Mike had approved both on 2026-10-08, and all five additions are in version 0.9.25.
 2. What to do with the 34 lists of situations.
 3. Which of the 30 numbers stay, and which become the agent's judgment.
 4. What to do with the 22 places that name one of the owner's phrases.
 5. What to do with the 31 lines that say how to weigh, or that tell the agent what it would do anyway.
-6. A change to check W5 of the wording checklist. Decided on 2026-10-09 by the Main Orchestrator session, as proposed, and made in version 0.9.24.
+6. A change to check W5 of the wording checklist. Decided on 2026-10-09 by the Main Orchestrator session, as proposed, and made in version 0.9.25.
 7. A new order and fuller headings for the starter root `AGENTS.md`.
 8. Whether the owner's own Salesforce texts may be rewritten, and the Salesforce rules that disagree.
 9. Whether the Hindsight rule may get longer.
@@ -179,7 +179,7 @@ The full text of each decision, with its options and a recommendation, is in `DE
 
 ## The order of the fixes
 
-No fix has started. Each area is fixed with the steps of the skill `writing-harness-files`, `references/rewrite-steps.md`. A separate agent reviews each change against `dev/reviews/wording-review.md` and `dev/reviews/best-practices-review.md`. Every check in the repository's `AGENTS.md`, "Checks", runs before the work is handed back.
+No fix has started. No shipped file changes without the owner's yes for that change or that area, given in the session of TKV-50, and the owner sees a before-and-after before a rewrite merges. His words on 2026-10-09: "I want to make sure that the agents aren't just running wild and making a bunch of content updates, which would break a lot of the toolkit." Each area is fixed with the steps of the skill `writing-harness-files`, `references/rewrite-steps.md`. A separate agent reviews each change against `dev/reviews/wording-review.md` and `dev/reviews/best-practices-review.md`. Every check in the repository's `AGENTS.md`, "Checks", runs before the work is handed back.
 
 **Before any area:**
 
@@ -193,7 +193,7 @@ No fix has started. Each area is fixed with the steps of the skill `writing-harn
 | Order | Area | Waits for | What shows that the agent did not get worse |
 | --- | --- | --- | --- |
 | 1 | The writing rule and check W5 | The owner's yes to the exact words | `check-skills.mjs` compares the rule with its copy |
-| 2 | Setup: the skill `project-setup` and its reference files | The orchestrator's go-ahead. The live tests do not cover setup. | The checks, and one setup in a scratch folder |
+| 2 | Setup: the skill `project-setup` and its reference files | The owner's yes for the area. The live tests do not cover setup. | The checks, and one setup in a scratch folder |
 | 3 | The small skills, rules, and folder guides that every project gets | The test baseline | The checks, and the questions to two fresh agents that the rewrite steps give |
 | 4 | The memory folders, the Notion tools, and the Hindsight rule | The test baseline, phase P3 of the cohesion audit, and decisions 9 and 10 | The 36 tests of keeping the records |
 | 5 | The three work tracker folders and the work item template | The test baseline | Both sets of live tests |

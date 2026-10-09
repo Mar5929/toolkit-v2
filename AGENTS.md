@@ -451,7 +451,7 @@ node --test 'dev/tests/*.test.mjs'
     because a ban could be read as "remove the statement of what the skill
     is and its goal".
   - Five additions to the writing rule (Mike, 2026-10-08, work item TKV-50,
-    version 0.9.24). He asked that every shipped file be "easily understood
+    version 0.9.25). He asked that every shipped file be "easily understood
     by a stranger or someone that hasn't been a part of the chat sessions
     that designed the toolkit", and that "Document layouts need to be
     organized and be clear and use ordinary language and just say what the
