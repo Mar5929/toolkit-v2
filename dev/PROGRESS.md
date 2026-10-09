@@ -2,6 +2,88 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The writing rule names a reader who is new to the project, version 0.9.29 (2026-10-09, TKV-50)
+
+Mike approved five additions to the writing rule, `document-clarity-standard.md`,
+on 2026-10-08, and said yes to the merge on 2026-10-09.
+
+- The opening names the reader: someone who is new to the project and was
+  not in the session.
+- "Use common words" has an example, and an abbreviation is written in full
+  the first time unless it is more common than its full form.
+- A heading must say enough for a reader who sees only the heading.
+- A document is organized so that a reader can find a thing from the
+  headings alone.
+- The copy in `writing-harness-files/references/writing-rule.md` is the same
+  text. Check W5 of `dev/reviews/wording-review.md` now asks for the goal
+  that a judgment serves, and no longer for what to weigh.
+- No other shipped file changed. The findings of the wording scan are on the
+  branch `wording-scan`, not on main.
+
+## Hindsight: agents save on purpose, and setup is one short file, version 0.9.28 (2026-10-09)
+
+Mike looked at this repository's bank after a day of use and found it full
+of entries nobody needs: "It's just sort of dumping all this random
+conversational chit-chat in there." A scan showed 138 live entries. Most
+were approvals inside one work item, status notes, and copies. The cause:
+the add-on saved after every turn, and the filter kept "decisions", which
+the toolkit's own memory definition says never belong in memory. He chose
+that agents save on purpose ("Yes, do this"). The same day he said that
+the Hindsight setup must not hardcode settings: "It's literally just a
+plain-English instruction file with a few interview questions and setup
+steps." He approved the plan below ("yes do it").
+
+- `hindsight-on-vps.md` went from 445 lines of exact commands to one short
+  file: how his Hindsight is set up, what must be true when setup is done,
+  the defaults with one question to the owner, and the mistakes to avoid.
+  It gives no commands.
+- The defaults for a new bank: nothing is saved by itself, a record is
+  stored as written (`verbatim`), no Git history, no code survey, and
+  observations on. Mike kept observations on: "well I like observations".
+- The file `.claude/hindsight-bank-settings.json` is gone, from the starter
+  project and from this repository. The owner's choices are kept in plain
+  words in the rule `hindsight-memory.md`, section "What this project
+  saves in Hindsight". `update.md` says what an existing project does with
+  the old file.
+- The rule `hindsight-memory.md` now says what to save and what never to
+  save. It follows the definition in `memory-criteria.md`, which a
+  Hindsight project does not get, because it has no memory skill.
+- The filter paragraph for saved sessions stays in `hindsight-on-vps.md`,
+  for a project whose owner turns automatic saving on.
+- This repository's bank `toolkit-v2`: automatic saving is off, the save
+  mode is `verbatim`, and all 117 memories were retired on 2026-10-09 with
+  the reason "Clean start of the bank, Mike 2026-10-09". The 69
+  observations went with them. Retiring can be undone on the server.
+- Tested on a bank made for the test, which was deleted: one record saved
+  with `concise` became three memories, and the same record saved with
+  `verbatim` or with `chunks` stayed one
+  (`dev/test-runs/hindsight-setup-order.md`).
+
+Open for Mike:
+
+- The knowledge pages of a bank fail to build when the server is busy:
+  each build has 300 seconds, and a failed first build is not tried again.
+  The setting is `HINDSIGHT_API_REFLECT_WALL_TIMEOUT` on his server.
+- Not tested: a setup of a real project from the new short file.
+
+## The root AGENTS.md is cleaned up (2026-10-09)
+
+Mike found the root `AGENTS.md` a mess: every change had added lines to it,
+and none had tidied it. His words: "You're just continually adding ... more
+and more lines, and you're not actually cleaning or keeping things tidy. I
+need you to clean up the agent cmd drastically." Nothing shipped changed, so
+the version stays 0.9.27.
+
+- The file went from 1,057 lines (81 KB) to 169 lines (23 KB). His own top
+  section, with his six guiding design principles, is unchanged.
+- Each rule is now a line or two. The dates, his words, the sizes he was
+  told, and what earlier versions did are no longer in it. The whole earlier
+  file is kept as `dev/archive/AGENTS-before-cleanup-2026-10-09.md`.
+- A new section, "Keep this file short", says what belongs in the file and
+  where history goes, so the file does not grow again.
+- `check-skills.mjs` now expects the list of the kinds of harness file once
+  in `AGENTS.md`, where it expected it twice.
+
 ## Salesforce's plugins: setup checks and asks, version 0.9.27 (2026-10-09)
 
 Mike found the Salesforce plugin setup of version 0.9.23 far larger than

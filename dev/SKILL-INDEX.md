@@ -140,8 +140,8 @@ are not written.
 
 ### Hindsight
 
-Hindsight's coding-agent add-on saves each session to the project's bank on
-Mike's VPS; the agent uses the add-on's `hindsight_*` tools and keeps the
+Hindsight's coding-agent add-on connects the agent to the project's bank on
+Mike's VPS; the agent saves a record on purpose, uses the add-on's `hindsight_*` tools and keeps the
 project's Current State in `memory/CURRENT_STATE.md`. The rule
 `.claude/rules/hindsight-memory.md`, which only a Hindsight project gets
 (`assets/memory-hindsight/`), says how. Mike decided on 2026-09-29 that

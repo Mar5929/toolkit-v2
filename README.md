@@ -110,29 +110,25 @@ to commit.
 Hindsight memory lives on your Hindsight server on the Hostinger VPS
 (`https://memory-api.mrihm-memory.com`), one memory bank per project.
 Nothing of Hindsight is installed on your Mac except Hindsight's
-coding-agent add-on, which saves each session to the project's bank in
-Claude Code and Codex. Setup shows you every change the add-on makes to
-your Claude Code and Codex settings before it installs it. Setup then opens
-the bank in the dashboard, `https://memory.mrihm-memory.com`.
+coding-agent add-on, which connects Claude Code and Codex to the project's
+bank. Setup shows you every change the add-on makes to your Claude Code and
+Codex settings before it installs it. Setup then opens the bank in the
+dashboard, `https://memory.mrihm-memory.com`.
 
-Hindsight on the VPS turns each saved session into memories with a model at
-OpenAI (`gpt-5.6-terra`), through your ChatGPT subscription. So the text of
-each save goes to OpenAI, and that work uses the same ChatGPT usage
-allowance as your own Codex sessions. Hindsight writes every memory in
-English.
+Hindsight on the VPS does its model work with a model at OpenAI, through
+your ChatGPT subscription. So the text of each save goes to OpenAI, and
+that work uses the same ChatGPT usage allowance as your own Codex sessions.
+Hindsight writes every memory in English.
 
-Setup asks you about seven settings of the project's memory bank, in one
-message, each with a default: whether Hindsight builds observations
-(statements it puts together from several saved memories; on by default,
-built after every save), whether every
-session is saved, how much detail a save keeps (short by default), a
-filter that tells Hindsight what to leave out of a saved session (by
-default the live status of work, and anything true only for the moment),
-what the agent is shown on
-the first message of a session, how much of the Git history is saved, and
-whether the code is surveyed. Say "defaults" to keep them all. The answers
-are kept in the project, in `.claude/hindsight-bank-settings.json`, so
-every computer uses the same ones. To change one later, tell the agent.
+Setup shows you the defaults for the project's memory bank and asks one
+question: "Do you want these defaults?" By default nothing is saved by
+itself: the agent saves a record on purpose, only for what no other
+project file holds, and Hindsight stores the record as it was written. The
+Git history is not imported, the code is not surveyed, and observations
+(statements that Hindsight forms from several saved records) are on. Your
+choices are kept in plain words in the project's rule
+`.claude/rules/hindsight-memory.md`, which you can edit. To change one
+later, tell the agent.
 
 Start a new session afterwards, so the new files load. In Codex, also trust
 the project folder and its hooks (`/hooks`).
@@ -209,7 +205,7 @@ Each project gets one work skill. Setup copies into it only the reference files 
 | Work items in GitHub Issues | GitHub tracking references inside `managing-work-items` |
 | Memory in local files | `managing-project-memory` with local storage references, plus `memory/` |
 | Memory in Notion | `managing-project-memory` with Notion storage references, plus `using-notion-cli` |
-| Memory in Hindsight | No Toolkit memory skill (your decision of 2026-10-05). Hindsight's coding-agent add-on saves each session to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
+| Memory in Hindsight | No Toolkit memory skill (your decision of 2026-10-05). Hindsight's coding-agent add-on connects the agent to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
 | Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
 
 `using-notion-cli` is installed once when either choice uses Notion. Each selected reference has the same file name in every project, such as `references/work-tracker.md` or `references/memory-store.md`. A project receives only one version of each file. The skills do not contain local-versus-Notion setup conditions.
@@ -361,7 +357,7 @@ The agent never does these for you. It tells you when each one is needed.
   terminal.
 - **Trust the project in Codex**: trust the folder the first time you open
   it, then trust its hooks with `/hooks`. Do it again after the hooks change.
-- **Enter the Hindsight API key** in Terminal, with the two lines the agent
+- **Enter the Hindsight API key** in Terminal, with the command the agent
   gives you. Never paste it into the chat.
 - **Sign in to the Hindsight dashboard** with its own access key, which is
   not the API key.
