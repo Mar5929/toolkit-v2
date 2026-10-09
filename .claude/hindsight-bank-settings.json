@@ -7,7 +7,7 @@
     "retainSessions": true,
     "retainExtractionMode": "verbose",
     "autoInject": "reflect",
-    "gitIngest": "full",
+    "gitIngest": "message",
     "codebaseSurvey": true,
     "recallOptions": {
       "types": ["observation", "world", "experience"]
