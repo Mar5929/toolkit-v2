@@ -1,4 +1,5 @@
 {
+  "autoMemoryEnabled": false,
   "claudeMdExcludes": [
     "**/plugins/toolkit/skills/project-setup/assets/**",
     "**/plugins/toolkit/skills/project-setup/assets/*/.claude/rules/**",

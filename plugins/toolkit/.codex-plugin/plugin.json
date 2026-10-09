@@ -1,6 +1,6 @@
 {
   "name": "toolkit",
-  "version": "0.9.34",
+  "version": "0.9.35",
   "description": "Sets up Toolkit V2 in a project, or moves a project from the older toolkit onto it: copies the model files, the chosen work tracking and memory skills, and their hooks.",
   "author": {
     "name": "Mike Rihm",
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Toolkit V2",
     "shortDescription": "Set up a project with Toolkit V2, move one onto it, or check or update its setup.",
-    "longDescription": "Holds two skills. project-setup asks where to track work, which memory to use, and whether it is a Salesforce project, then copies the model project, the skills for those choices, three small hook commands, and their settings into the project. It also checks and updates an existing setup, and moves a project that was set up with the older toolkit onto Toolkit V2 from one list the owner approves first. writing-harness-files gives the steps, the official page addresses, and the checklist for writing or changing a harness file, such as a skill, a rule, or a hook. The plugin itself has no hooks and no command, so it runs nothing in other projects.",
+    "longDescription": "Holds one skill. project-setup asks where to track work, which memory to use, and whether it is a Salesforce project, then copies the model project, the skills for those choices, three small hook commands, and their settings into the project. It also checks and updates an existing setup, and moves a project that was set up with the older toolkit onto Toolkit V2 from one list the owner approves first. The plugin itself has no hooks and no command, so it runs nothing in other projects.",
     "developerName": "Mike Rihm",
     "category": "Productivity",
     "capabilities": [

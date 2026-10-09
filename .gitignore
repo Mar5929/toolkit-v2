@@ -37,3 +37,6 @@ node_modules/
 /plugins/toolkit/skills/project-setup/assets/salesforce/tools/kb/_prev-*.json
 __pycache__/
 *.pyc
+
+# Obsidian settings. The owner opens this repository as an Obsidian vault to read the Markdown files.
+.obsidian/
