@@ -1,3 +1,0 @@
-set up this project
-
-Answers to your interview questions: the project is named Pocket Ledger, the owner is Mike Rihm, work items are local with the prefix WI, memory is local, the project is not a Salesforce project, and it keeps no SOUL.md. For anything else, use these facts: Pocket Ledger is a small iPhone app for logging purchases; the owner and only developer is Mike Rihm; the app is in a first beta with 12 testers in the United States.
