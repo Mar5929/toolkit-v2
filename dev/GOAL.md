@@ -3,32 +3,6 @@
 Mike's goal, set 2026-09-26. This file is the single place the goal and his
 answers live. Update it when he changes a decision.
 
-## What Hindsight saves (2026-10-09)
-
-Mike set what an agent saves in a Hindsight bank, in the words of the
-original toolkit's knowledge manual:
-
-- "Qualifying lasting project facts, decisions, lessons, events, and
-  constraints not already owned by another record".
-- A memory must pass all three tests: it concerns this project; it has
-  lasting significance, so that losing it would cost a later agent real time
-  or understanding; it comes from the owner, or from work done together with
-  the owner.
-- A significant failure the agent found and fixed itself may be saved without
-  passing all three tests, with its cause and its fix.
-
-The toolkit's records do not change (Mike: "Nothing changes as far as the
-structure", "Hindsight just saves extra stuff"). So a decision is still filed
-in `DECISIONS.md` or its work item, and is also saved in Hindsight. This
-replaces the line "Never save a decision" of version 0.9.28.
-
-The agent saves on purpose; sessions are not saved by themselves. The code
-survey is on ("The agent should be able to read the code and save a
-description of its structure. That should be on"). The Git history stays out
-("I don't want git commit messages stored in memory"). The settings are
-defaults in plain English that setup offers, and the owner may change any of
-them for a project.
-
 ## Work and memory skill structure (2026-10-06, TKV-29)
 
 Mike approved one project skill for work items, `managing-work-items`, and

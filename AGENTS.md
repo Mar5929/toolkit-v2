@@ -154,11 +154,11 @@ node --test 'dev/tests/*.test.mjs'
   - Local and Notion memory use one skill, `managing-project-memory`. Notion memory uses Lore's layout: never rename or remove a Lore database or property.
   - A Hindsight project gets no toolkit memory skill. It gets the rule `hindsight-memory.md`, which says what the agent saves and holds the owner's choices for the bank in plain words. Hindsight is an extra store there: a fact is still filed in its project record, and a lasting fact, decision, lesson, event, or constraint is also saved in Hindsight. The project uses the skill of Hindsight's own add-on. `<setup>references/hindsight-on-vps.md` is a short plain-English file: how Mike's Hindsight is set up, what must be true when setup is done, and the defaults that setup offers the owner. It gives no commands, and the toolkit ships no settings file for a bank.
   - The Hindsight server is Mike's. An agent never changes it, and never reads or prints its API key.
-- **This repository's own Hindsight bank** is `toolkit-v2`. It is an extra store and replaces no record: `dev/GOAL.md`, `dev/PROGRESS.md`, Git, and the work items in Notion are kept exactly as before.
+- **This repository's own Hindsight bank** is `toolkit-v2`. It is an extra store and replaces no record: Git and the work items in Notion are kept exactly as before.
   - No session is saved to the bank by itself. Save a record on purpose, with the add-on's tools: one record for one subject, with its date.
   - Save lasting project facts, decisions, lessons, events, and constraints. A memory must pass all three tests: it concerns this project; it has lasting significance, so that losing it would cost a later agent real time or understanding; and it comes from Mike, or from work done together with Mike. A significant failure that you found and fixed yourself may be saved without passing all three tests, with its cause and its fix.
   - Never save a to-do, the live status of work, a routine edit, a secret, or a transcript.
-  - When you update `dev/PROGRESS.md` before you stop, also decide whether anything from the session belongs in the bank.
+  - Before you stop work in a session, decide whether anything from the session belongs in the bank.
   - The bank stores a record as written and imports no Git history. The add-on surveys the code and saves a description of how it is built, and the bank builds observations after every save. Change a setting only when Mike asks. Never use this bank for a test.
 - **Salesforce.** What an agent may do in an org is stated in three places, and no other file states a permission again.
   - `salesforce-org-safety.md` holds the limits that are the same in every project.
