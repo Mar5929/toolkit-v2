@@ -42,7 +42,6 @@ The prefix of a file name is the type of the memory record. There are four types
 - The name is `<prefix>_<name>.md`. Write the name as lower-case words joined by underscores. The name says the subject of the file, not one fact.
 - An event that happened once ends its name with its date, as in `event_client_meeting_2026-10-05.md`. The file of a recurring job has no date in its name.
 - A file with none of these four prefixes is left out of the index.
-- `feedback_` and `decision_` are prefixes that are no longer used. Once the content of an old file with one of them has moved, mark the file the way `record-format.md`, section "Marks for what is not current", says.
 - `CURRENT_STATE.md` and `MEMORY.md` have fixed names and none of the four prefixes. The template has the fixed name `project_topic_template.md` and is not a memory record.
 
 ## Size limits

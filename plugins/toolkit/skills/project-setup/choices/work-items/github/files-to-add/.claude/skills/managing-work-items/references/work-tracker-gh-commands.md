@@ -37,7 +37,7 @@ This command prints the signed-in account and the scopes. A private repository n
 `<repo>` is the "GitHub repository" line in `PROJECT.md`, section "Toolkit settings". It is written `owner/name`, for example `example-owner/money-log`.
 
 - Pass `-R <repo>` to every `gh issue` and `gh label` command, and write `repos/<repo>/...` in every `gh api` path.
-- When the line is empty, missing, or `not used`, ask the owner which repository it is, and record it with `project-setup`. Never guess the repository from the Git remote.
+- When the line is empty or missing, ask the owner which repository it is, and record it with `project-setup`. Never guess the repository from the Git remote.
 
 ## In Codex
 

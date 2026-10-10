@@ -239,19 +239,13 @@ A change to the plan is a change to rows:
 
 After a change to the plan, list the work item's phases and check the order. `work-tracker-searching.md`, section "A parent's full tree", gives the query.
 
-### A task with an empty Status, and a Tasks database from before toolkit 0.8.0
+### A task with an empty Status
 
 A task that was made by hand can have an empty Status. Set its Status to Not Started.
 
-A Tasks database that still has a "Done" checkbox, or a Status of type select, was set up before toolkit 0.8.0.
-
-- Tell the owner that "update the toolkit" converts the database.
-- Until the database is converted, send and read the Tasks Status with the type that the database has. Write `"select"` in place of `"status"`, in the calls in this file and in `work-tracker-searching.md`.
-- Until the database is converted, tick Done, where it exists, exactly when Status is Done or Cancelled.
-
 ## A work item that changes level
 
-Use this section in two cases: a move puts a work item at another level, or a work item that was made before toolkit 0.8.0 is a sub-item that still has phases.
+Use this section when a move puts a work item at another level.
 
 - **Phases to a plain list** (the work item is now a sub-item). Do these six things:
   1. Read the work item's phases and tasks. `work-tracker-searching.md`, section "A parent's full tree", gives the queries.

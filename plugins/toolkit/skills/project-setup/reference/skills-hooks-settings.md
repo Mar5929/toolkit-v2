@@ -1,10 +1,10 @@
 # Skills, hook commands, and settings
 
-This file says which skills, hook commands, and settings every project has, and how a settings file that already exists is merged. Open it whenever a settings file changes, and whenever another file sends you to "Merge rules". The lines that one choice changes in the settings are in the setup file of that choice.
+This file says which skills, hook commands, and settings every project has, and how a settings file that already exists is merged. Open it whenever a settings file changes, and whenever another file sends you to "Merge rules". The setup file of a choice gives, in a step or in the file that a step names, the lines that the choice changes in the settings.
 
 The job is done when the settings files hold what the owner's choices need, every entry that the owner had is still there, and everything under "What must be true when the settings are done" holds.
 
-In a setup, change the project's own settings files. In an update or a check of the setup, the files are built in a temporary folder first, and `reference/setup-copy.md` says how that folder is made.
+In a setup, change the project's own settings files. In an update or a check of the setup, the files are built in a temporary folder first, and [reference/setup-copy.md](setup-copy.md) says how that folder is made.
 
 ## Contents
 
@@ -13,7 +13,6 @@ In a setup, change the project's own settings files. In an update or a check of 
 - The settings every project gets
 - What a choice changes in the settings
 - Merge rules
-- The older plugins, off in this project
 - What must be true when the settings are done
 - Known problems
 
@@ -37,9 +36,9 @@ A hook command is a command that Claude Code or Codex runs by itself at a fixed 
 
 | File | Who reads it | What it holds |
 | --- | --- | --- |
-| `.claude/settings.json` | Claude Code | No AI credit on a commit or a pull request. Claude Code's own memory off. The older claude-toolkit plugins off. The Plain English output style. The Git commands that are refused or asked about. The hooks: session start, every message, after a commit, and after a helper agent returned. More room for the list of skills. |
+| `.claude/settings.json` | Claude Code | No AI credit on a commit or a pull request. Claude Code's own memory off. The Plain English output style. The Git commands that are refused or asked about. The hooks: session start, every message, after a commit, and after a helper agent returned. More room for the list of skills. |
 | `.codex/hooks.json` | Codex | The same hooks, written the way Codex reads them: session start, every message, after a commit, and when a helper agent started or returned. |
-| `.codex/config.toml` | Codex | The older claude-toolkit plugins off, and `max_context_tokens = 10000` under `[skills]`. |
+| `.codex/config.toml` | Codex | `max_context_tokens = 10000` under `[skills]`. |
 
 A helper agent is a separate agent that a session starts for one job.
 
@@ -49,7 +48,7 @@ Never change the command or the text of one of the toolkit's hooks, because they
 
 ## What a choice changes in the settings
 
-The setup file of each choice gives the lines that the choice changes in `.claude/settings.json` and `.codex/hooks.json`. Work items in local files, Notion, or GitHub Issues, and memory in local files, change nothing.
+The setup file of each choice gives, in a step or in the file that a step names, the lines that the choice changes in `.claude/settings.json` and `.codex/hooks.json`. Work items in local files, Notion, or GitHub Issues, and memory in local files, change nothing.
 
 The owner's answer about Claude Code's own memory is one line in `.claude/settings.json`: `"autoMemoryEnabled"` is `false` when the owner wants it off, which is the default, and `true` when the owner wants it on.
 
@@ -68,42 +67,13 @@ These rules apply every time the toolkit's settings meet a settings file that al
 - **Leave a handler that is already right.** When the file's handler and the toolkit's handler are the same, apart from a page id that was written in place of `{{CURRENT_STATE_PAGE_ID}}`, change nothing and ask nothing. The handler keeps its page id.
 - **When you cannot tell whether an entry is the toolkit's, ask the owner.**
 
-## The older plugins, off in this project
-
-The toolkit's settings turn the older claude-toolkit plugins off for this project only. The skills of those plugins have the same names as Toolkit V2 skills (`handoff`, `pull-latest`, and others), so both would load.
-
-This computer may have more of those plugins than the settings name. These three commands list every plugin that this computer has, and change nothing:
-
-```text
-jq -r '.enabledPlugins // {} | keys[]' ~/.claude/settings.json
-jq -r '.plugins // {} | keys[]' ~/.claude/plugins/installed_plugins.json
-grep -o 'plugins\."[^"]*"' ~/.codex/config.toml
-```
-
-Turn off each plugin in the list that the settings do not already name and whose name is one of these:
-
-- a name that ends in `@claude-toolkit`;
-- a `@toolkit-v2` name other than `toolkit@toolkit-v2`. These are the retired `work`, `memory`, `session-skills`, `git-workflows`, and Salesforce architect plugins.
-
-To turn off one such plugin, do both of these in the project:
-
-- add `"<name>": false` under `enabledPlugins` in `.claude/settings.json`;
-- add this table to `.codex/config.toml`:
-
-  ```toml
-  [plugins."<name>"]
-  enabled = false
-  ```
-
-Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the files in `~/.claude` or `~/.codex`.
-
 ## What must be true when the settings are done
 
 - `.claude/skills` holds the 10 shared skills and the skills that the setup files of the owner's choices name, each with a `SKILL.md`. It holds no skill of a choice the owner did not make. A skill of the owner's own may be there too.
 - `.claude/settings.json` and `.codex/hooks.json` are valid JSON.
 - Every hook command that the settings name is in `.claude/hooks/`.
-- Each of the toolkit's own hook handlers is in each settings file once.
-- The session-start line names the owner's memory choice in both files.
+- Each of the toolkit's own hook handlers is in each settings file once, apart from a handler that the setup file of one of the owner's choices takes out.
+- The session-start line, where the project has one, names the owner's memory choice in both files.
 - `.claude/settings.json` has no `Stop` hook of type `prompt`, and the Codex helper reminder has only the matcher `^(collaboration)?(spawn_agent|wait_agent)$`.
 - `.codex/config.toml` has each table once, and `[skills]` holds `max_context_tokens = 10000`.
 - The `description` in `.codex/hooks.json` contains the description text of the toolkit's file.
@@ -112,10 +82,9 @@ Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the fi
 
 - **`.codex/hooks.json` accepts only `description` and `hooks` at the top level.** Put nothing else there.
   - In a file that the project already had, a `description` that does not contain the toolkit's text keeps the text it has. Add the toolkit's text after it, with one space between them.
-  - One sentence is the exception. A sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the toolkit's text. Put that change in the numbered table that the owner sees. `reference/placing-files.md`, "Files the project already has", and `reference/update.md` say how to show that table.
+  - One sentence is the exception. A sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the toolkit's text. Put that change in the numbered table that the owner sees. [reference/placing-files.md](placing-files.md), "Files the project already has", and [reference/update.md](update.md), "3. What to do with each kind of file", say how to show that table.
 - **A settings file writes a key another way than the toolkit does.** Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table. Leave the file as it is and ask the owner.
-- **A settings file holds an entry that an earlier version of the toolkit put there and the toolkit no longer has.** `reference/update.md`, "4. What the toolkit no longer ships", says what to do with it. Two such entries are a `Stop` hook of type `prompt`, and a Codex helper reminder with a matcher other than `^(collaboration)?(spawn_agent|wait_agent)$`. Take each one out as that section says, and never add either one.
+- **A settings file holds an entry of the toolkit's that the toolkit no longer ships.** [reference/update.md](update.md), "4. What the toolkit no longer ships", says what to do with it.
 - **Codex cuts every skill description short.** Codex does this when the list of skills passes its limit, which is 2% of the model's context window by default. The Toolkit skills then lose their "Use when" and "Not for" parts. `max_context_tokens = 10000` under `[skills]` prevents this. That value is the largest that Codex accepts there, and it is more than the 2% default for a model with a context window under 500,000 tokens.
-- **A plugin from the owner's ChatGPT account cannot be turned off in the project.** The name of such a plugin ends in `@openai-curated-remote`. The account's own setting replaces a table for it in the project's file, so never add one.
 - **A changed Codex hook entry does not run.** Codex skips a hook until the owner trusts it in `/hooks`, and again after any change to its entry in `.codex/hooks.json`. Tell the owner.
-- **Codex refuses to create `.codex/`.** `SKILL.md`, "Known problems", says under "In Codex" how to run such a command.
+- **Codex refuses to create `.codex/`.** [SKILL.md](../SKILL.md), "Known problems", says under "In Codex" how to run such a command.

@@ -38,7 +38,7 @@ These steps make the folder and the file of a new work item. Afterwards, fill th
    sed -nE 's/^- Work item ID prefix: `([^`]*)`.*/\1/p' "$MAIN/PROJECT.md"
    ```
 
-   When the command prints nothing, `not used`, or still `<WI>`, stop and tell the owner that the setup is incomplete.
+   When the command prints nothing, stop and tell the owner that the setup is incomplete.
 3. **The next ID.** In this command, replace `WI` with the prefix:
 
    ```bash

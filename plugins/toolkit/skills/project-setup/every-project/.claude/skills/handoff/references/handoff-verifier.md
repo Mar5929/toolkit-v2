@@ -1,4 +1,4 @@
-<!-- Shared text from the Toolkit V2 repository (dev/build-shared/helper-briefs/handoff-verifier.md), where it is edited. In a project, never edit this copy: "update the toolkit" replaces it. -->
+<!-- Shared text from the Toolkit V2 repository, where it is edited. In a project, never edit this copy: "update the toolkit" replaces it. -->
 
 # Handoff verifier: helper brief
 

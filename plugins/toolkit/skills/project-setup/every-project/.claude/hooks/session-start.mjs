@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // SessionStart hook for Claude Code and Codex: prints Current State; with local memory it also
-// rebuilds memory/MEMORY.md and prints one line per memory file. An error prints one line; exit 0.
+// rebuilds memory/MEMORY.md and prints one line per memory file. With Hindsight memory the project
+// has no Current State, so only the line after a compaction is printed. An error prints one line;
+// exit 0.
 // Usage: node session-start.mjs --memory local|notion|hindsight [--page <Current state page id>]
 import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -21,7 +23,7 @@ const opts = { cwd: input.cwd || process.cwd(), encoding: 'utf8', stdio: 'pipe',
 const out = input.source === 'compact' ? [COMPACTED] : [];
 const where = memory === 'notion' ? 'the Current state page, with managing-project-memory'
   : 'memory/CURRENT_STATE.md in the main checkout';
-try {
+if (memory !== 'hindsight') try {
   // memory/ is kept out of Git, so it is only in the main checkout. No Git: the session's folder.
   const git = attempt(() => execFileSync('git', ['rev-parse', '--git-common-dir'], opts).trim());
   const dir = join(git ? dirname(resolve(opts.cwd, git)) : opts.cwd, 'memory');
@@ -33,8 +35,7 @@ try {
   const lines = state.split('\n').length;
   const updated = state.match(/Last updated:\W*(\d{4}-\d{2}-\d{2})/i)?.[1];
   const days = Math.floor((Date.now() - Date.parse(updated)) / 864e5) || 0;
-  const prune = `Remove the lines that are no longer true with ${memory === 'hindsight' ? 'a direct'
-    + ' edit, as .claude/rules/hindsight-memory.md says' : 'the managing-project-memory skill'}`;
+  const prune = 'Remove the lines that are no longer true with the managing-project-memory skill';
   const size = lines >= 40 ? `${lines} lines (limit: under 40)` : days > 7 && `${days} days old`;
   if (size) out.push(`The project's Current State is ${size}. ${prune}.`);
   if (state) out.push("The project's Current State:", state);
@@ -73,4 +74,4 @@ try {
 const [text, rest] = [out.join('\n'), memory === 'local' ? `memory/MEMORY.md and ${where}` : where];
 const cut = text.length > 9500 && `${text.slice(0, text.lastIndexOf('\n', 9400))}\n[Cut short to`
   + ` fit the hook limit. Read the rest yourself: ${rest}.]`;
-process.stdout.write(`${cut || text}\n`);
+if (text) process.stdout.write(`${cut || text}\n`);

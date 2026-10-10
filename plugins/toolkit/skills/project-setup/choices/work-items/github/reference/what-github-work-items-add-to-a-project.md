@@ -1,0 +1,35 @@
+# What the GitHub Issues work items choice adds to a project
+
+This file lists what setup adds to a project that keeps its work items in GitHub Issues: the files inside a skill, and the lines in `PROJECT.md`. Steps 4, 5, and 7 of [github-work-items-setup.md](../github-work-items-setup.md) use it.
+
+## Everything the choice adds, by kind
+
+| Kind | What it adds |
+| --- | --- |
+| Files inside a skill | Copy `choices/work-items/github/files-to-add/` into the project. It adds six files on how a work item is kept as an issue inside `managing-work-items`, which every project has. `references/work-tracker.md` is the one that the skill opens first. |
+| Settings | Nothing. |
+| `PROJECT.md`, "Toolkit settings" | Write `github` on the Tracker line. Add the line `- GitHub repository:` below the Memory line, with the repository's name, as the example below shows. |
+
+Step 4 of the setup file copies the files of the first row. Step 5 writes the Tracker line. Step 7 adds the repository line, after step 6 has checked the repository.
+
+What the choice makes outside the project folder is in [github-repository-for-work-items.md](github-repository-for-work-items.md).
+
+## The lines in PROJECT.md
+
+The repository name here is an example:
+
+```markdown
+- Tracker: `github`
+- GitHub repository: `Mar5929/ios-money-log`
+```
+
+Nothing else is recorded. The labels are the same in every project.
+
+## The project files that the setup instructions link to
+
+The setup file and the files of this folder link to four of the six files that this choice adds inside the project's `managing-work-items` skill. Their source is `choices/work-items/github/files-to-add/.claude/skills/managing-work-items/references/` in this skill, and each link opens the file there:
+
+- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md)
+- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md)
+- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-searching.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-searching.md)
+- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-project-roadmap-and-tasks.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-project-roadmap-and-tasks.md)

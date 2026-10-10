@@ -1,6 +1,6 @@
 # Putting the toolkit's files into the project
 
-Use this file to copy a folder of this skill into the project. Open it at Step 3 of `SKILL.md` for the full layout, `every-project/`, and at Step 5 for each `files-to-add/` folder of a choice.
+Use this file to copy a folder of this skill into the project. Open it at Step 3 of [SKILL.md](../SKILL.md) for the full layout, `every-project/`, and at Step 5 for each `files-to-add/` folder of a choice.
 
 The job is done when three things are true: the project has every file of the folder, except a file that the owner chose to keep as it was; no file that the project already had was replaced without the owner's answer; and `.agents/skills` is a link to `.claude/skills`.
 
@@ -36,7 +36,7 @@ diff -u <file> <source>/<file>
 | File | What to do |
 | --- | --- |
 | `.gitignore`, `.ignore` | Add each line of the toolkit's file that the project's file lacks, at the end after one blank line. This change only adds lines, so no question is needed. |
-| `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge the toolkit's entries into the project's file. `reference/skills-hooks-settings.md`, "Merge rules", gives the rules for the merge. Ask the owner before you change any value that the project already has. |
+| `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge the toolkit's entries into the project's file. [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules", gives the rules for the merge. Ask the owner before you change any value that the project already has. |
 | `CLAUDE.md` with more than the line `@AGENTS.md` | Keep the project's file. Ask the owner whether to add the line `@AGENTS.md` at its top, because while a `CLAUDE.md` exists, Claude Code reads `AGENTS.md` only through that line. |
 | `AGENTS.md` (a project that had its own) | Keep the project's file. Show the owner what the toolkit's version adds. After the owner's yes, add the sections of the toolkit's version, and keep the owner's text. |
 | Every other file, such as `README.md`, a rule, or a template | Say in one line what differs, and recommend one of three choices: keep the owner's file, take the toolkit's file, or merge the two. The owner's file stays until the owner chooses. |

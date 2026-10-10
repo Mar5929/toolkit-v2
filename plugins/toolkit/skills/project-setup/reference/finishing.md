@@ -1,9 +1,9 @@
 # Finishing setup
 
-This file is the last step of a setup: Step 6 in `SKILL.md`. Open it when the owner has answered the questions and each answer has added its part. Its job is done when all of these are true:
+This file is the last step of a setup: Step 6 in [SKILL.md](../SKILL.md). Open it when the owner has answered the questions and each answer has added its part. Its job is done when all of these are true:
 
 - every answer of the interview is written in its place, and the prompts in the project's files hold facts that the owner confirmed;
-- the roadmap and the project's Current State are written;
+- the roadmap is written, and with local or Notion memory the first lines of the project's Current State are written too;
 - the final checks have run;
 - the owner has been told the steps that only the owner does;
 - the reply ends with the report and the commit offer.
@@ -43,10 +43,10 @@ Go through these parts:
    - the outcome line of `AGENTS.md`, which is the line under the title that starts with the prompt `<One sentence describing this project and its outcome.>`;
    - the one-sentence line under the title of `README.md`;
    - "Intended outcome" in `PROJECT.md`;
-   - each further place that the setup file of a choice names under "At the finish".
+   - each further place that a step of a choice's setup file names for the finish of setup.
 
    When the owner gave no sentence, leave the outcome prompts, and list them in the report.
-2. **The other answers.** Check each answer against the table in `SKILL.md`, Step 4, which gives the place for each one.
+2. **The other answers.** Check each answer against the table in [SKILL.md](../SKILL.md), Step 4, which gives the place for each one.
 3. **The "Build, test, or deploy" row** under "Commands" in `AGENTS.md`. Fill it when the owner gave the commands during the interview. Otherwise leave the prompt, and list it in the report with what the repository shows as a suggestion, for example `npm test`.
 4. **The other prompts of `PROJECT.md` and `README.md`.** Follow the fill-in guide of each file.
    - Fill a prompt only with a fact that the owner gave or confirmed in this session. A fact that a file in the repository shows is a suggestion: offer it to the owner, and write it after the owner's yes.
@@ -57,7 +57,7 @@ Go through these parts:
 
 ## Instructions the owner gives during setup
 
-When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. The owner's answers to question 9 are such instructions. Two more examples are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as `choices/salesforce/salesforce-setup.md`, "The org aliases", says.
+When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. The owner's answers to question 9 are such instructions. Two more examples are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as the step on the org aliases in the Salesforce setup file, [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md), says.
 
 - Write the instruction as one list line in the owner's words.
 - Put the line under an area that the file's layout comment names. Use General when no area fits.
@@ -81,13 +81,15 @@ A setup answer is not an instruction. These answers never go in `owner-preferenc
 
 The roadmap is the project's phases: what each phase is for, which phases are done, which phase the project is in now, and what comes next. Write it from the owner's answers to question 12, in the place where the project keeps its work items.
 
-The setup file of the work items choice says where the roadmap is kept, under "At the finish". Write it straight into that place, as `SKILL.md`, Step 4, says for every record of a setup.
+The setup file of the work items choice says where the roadmap is kept, in its step for the finish of setup. Write it straight into that place, as [SKILL.md](../SKILL.md), Step 4, says for every record of a setup.
 
 Write only what the owner confirmed. Show the owner the roadmap after you wrote it.
 
 ## The project's Current State
 
-The project's Current State is the project's one short page of what is true now. Setup writes its first lines. The setup file of the memory choice says where it is kept.
+The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one, and setup writes its first lines. The setup file of the memory choice says where it is kept.
+
+A Hindsight project has no Current State and no `memory/` folder. Where the work stands is in the place where work items are kept, so the rest of this section does not apply to a Hindsight project. For a Hindsight project, the report names each of the owner's steps that is still open.
 
 Keep the five headings and their line limits. The list below says what to write on the "Last updated" line and under each of the five headings:
 
@@ -107,7 +109,7 @@ Run each check alone, from the project folder. Each check only reads. The checks
 ### The checks
 
 1. **The settings files are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
-2. **The session-start command runs.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`. The setup file of the memory choice gives the full command when the choice adds to it.
+2. **The session-start command runs.** With local or Notion memory, `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local` or `notion`. The setup file of the memory choice gives the full command when the choice adds to it. A Hindsight project has no Current State, so this check does not apply to it. The Hindsight setup file, [choices/memory/hindsight/hindsight-setup.md](../choices/memory/hindsight/hindsight-setup.md), gives the checks of that choice.
 3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.
 4. **"Toolkit settings" is complete.** The Tracker and the Memory line of `PROJECT.md`, "Toolkit settings", each name a choice, and the section holds the lines that the setup file of each of the owner's choices adds. A line may still lack its value only when the value waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
 5. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
@@ -117,11 +119,11 @@ Run each check alone, from the project folder. Each check only reads. The checks
 
 - When a check fails, fix what the check found, then run the check again.
 - Report each check that you cannot make pass, with what it printed.
-- In an update or a check, remove the temporary folder that holds the setup copy after the checks: `rm -rf <copy>`. The setup copy is the files the project would get today, built in a temporary folder, as `reference/setup-copy.md` says.
+- In an update or a check, remove the temporary folder that holds the setup copy after the checks: `rm -rf <copy>`. The setup copy is the files the project would get today, built in a temporary folder, as [reference/setup-copy.md](setup-copy.md) says.
 
 ### The final checks in "check the setup"
 
-"Check the setup" is one of the jobs in `SKILL.md`, "A project that already has the toolkit". In that job, fix nothing. Report each failed check with the fix that you recommend.
+"Check the setup" is one of the jobs in [SKILL.md](../SKILL.md), "A project that already has the toolkit". In that job, fix nothing. Report each failed check with the fix that you recommend.
 
 With local memory, the session-start hook command may rebuild the generated index `memory/MEMORY.md`. That index is the one file a check may change.
 

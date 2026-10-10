@@ -1,43 +1,23 @@
 # Work items in Notion
 
-Open this file when the owner answers "Notion" to question 5 of `SKILL.md`. It gives the default to tell the owner, the questions to ask, what the choice adds to the project, and what it needs at the finish. The Notion steps themselves are in `choices/notion-shared/notion-setup.md`, because Notion memory uses the same steps.
+Follow these steps when the owner answers "Notion" to question 5 of the guide, [SKILL.md](../../../SKILL.md). The job is done when the project's page and its databases exist in the owner's Notion, the Notion files are in the project, and `PROJECT.md` records the choice, the ID prefix, and the links.
 
-The job is done when the project's page and its databases exist in the owner's Notion, the Notion files are in the project, and `PROJECT.md` records the choice, the ID prefix, and the links.
+## Steps
 
-## What the toolkit sets up by default
+Do steps 1 to 4 right after the answer, before the next question of the guide. Do step 5 when the owner's sign-in is done and the owner has answered questions 5, 6, and 7 of the guide. Do steps 6 to 10 when setup finishes, in Step 6 of the guide. Steps 4 and 5 send you to [choices/notion-shared/notion-setup.md](../../notion-shared/notion-setup.md), which holds the sign-in and the Notion steps once, because Notion memory uses the same ones.
 
-Tell the owner this in a few plain lines, and ask whether it is what the owner wants.
+1. **Tell the owner how the toolkit sets up work items in Notion by default, and ask whether that is what the owner wants.** [reference/notion-work-items-default.md](reference/notion-work-items-default.md) holds the default. [SKILL.md](../../../SKILL.md), "Each choice has questions of its own", gives the words of the question and what to ask after a no.
+2. **Copy the choice's files into the project.** Two folders hold them at the paths a project has them: `choices/work-items/notion/files-to-add/` and `choices/notion-shared/files-to-add/`. [reference/what-notion-work-items-add-to-a-project.md](reference/what-notion-work-items-add-to-a-project.md) lists them, and [reference/placing-files.md](../../../reference/placing-files.md) gives the copy command and what to do with a file that the project already has.
+3. **Write `notion` on the Tracker line of "Toolkit settings" in `PROJECT.md`.** The choice's two other lines hold the ID prefix and the Notion links, so step 5 writes them when those values are known. [reference/what-notion-work-items-add-to-a-project.md](reference/what-notion-work-items-add-to-a-project.md) gives each line and the place where it goes.
+4. **Ask the owner to sign in to Notion.** Do step 1 of [choices/notion-shared/notion-setup.md](../../notion-shared/notion-setup.md). The owner can sign in while the interview goes on.
+5. **Make the project's page in Notion, after the owner's yes.** Do steps 2 to 5 of [choices/notion-shared/notion-setup.md](../../notion-shared/notion-setup.md), in order.
+   - Those steps ask this choice's two questions. The first question is where the project's page goes: which Projects database gets the project's row. The second question is the ID prefix: propose two to four capital letters from the project's name. Notion allows each prefix in only one database of a workspace.
+   - Those steps remove the part of the page that this project keeps elsewhere and fill the fields of the project's row, so they need the owner's answers to question 6, where memory is kept, and question 7, Salesforce.
+   - Those steps also write the ID prefix, the link to the project's page, and the ids of its databases in `PROJECT.md`.
+6. **Write the project's outcome in the project's row in Notion.** Write the owner's sentence from question 2 in the "Desired Outcome" field of the project's row, and read the row back. [reference/finishing.md](../../../reference/finishing.md), "Fill the prompts", gives the rules for the sentence and the other places where it goes.
+7. **Write the roadmap as rows of the Phases database.** Write the project's phases from question 12. The project's `managing-work-items` skill says how, in `references/work-tracker.md`. [reference/finishing.md](../../../reference/finishing.md), "The roadmap", gives the rules for the roadmap.
+8. **Check the project's page in Notion.** Do the check that starts "For a new project" in [choices/notion-shared/reference/notion-project-pages.md](../../notion-shared/reference/notion-project-pages.md), "Checks after any of these". [reference/finishing.md](../../../reference/finishing.md), "Final checks", says how to run a check and what to do when one fails.
+9. **Tell the owner the owner's own steps for Notion.** [choices/notion-shared/reference/notion-sign-in.md](../../notion-shared/reference/notion-sign-in.md) gives them. [reference/finishing.md](../../../reference/finishing.md), "The owner's steps", says how to tell the owner a step.
+10. **List the "Project brief" prompts of the project's page in the report.** The prompts are Overview/Context, Goals, and Success criteria. They stay until the owner gives them, so list them with the prompts that are left. [reference/finishing.md](../../../reference/finishing.md), "The report", says where those prompts go in the report.
 
-- The project gets one page in the owner's Notion. The page is a row of the owner's Projects database, made as a copy of the owner's "Project" template.
-- That page holds three databases: Work Items, Phases, and Tasks. Each work item is a page in the Work Items database, and the project's phases are rows of the Phases database.
-- The owner can read and change the board in the Notion app, on a phone or on the web.
-- The agent reaches Notion with the Notion command-line tool, `ntn`, which the owner signs in.
-
-## Questions for the owner
-
-Ask them at the points that `choices/notion-shared/notion-setup.md` gives.
-
-- **Where the project's page goes:** which Projects database gets the project's row. "Where the project page goes" in that file gives the question.
-- **The ID prefix.** Propose two to four capital letters from the project's name. Notion allows each prefix in only one database of a workspace.
-
-## What this choice adds to the project
-
-| Kind | What it adds |
-| --- | --- |
-| Files inside a skill | Copy `choices/work-items/notion/files-to-add/` into the project. It adds the files on how a work item is kept as a Notion page inside `managing-work-items`, which every project has. `references/work-tracker.md` is the one that the skill opens first. |
-| Skill and rule | Copy `choices/notion-shared/files-to-add/` into the project. It holds the skill `using-notion-cli` and the rule `notion-records.md`. Notion memory brings the same folder, and a project gets it once. |
-| Settings | Nothing. |
-| `PROJECT.md`, "Toolkit settings" | Write `notion` on the Tracker line. Add two lines below the Memory line: `- Work item ID prefix:` with the prefix, and `- Notion work items:` with the link to the project's page and the ids of its databases as nested bullets. `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says how they are written. |
-
-## Outside the project folder
-
-After the owner's yes, make the project's page in Notion. Follow `choices/notion-shared/notion-setup.md`: the sign-in, the owner's yes, where the project page goes, and which steps to follow.
-
-Those steps remove the part of the page that this project keeps elsewhere and fill the fields of the project's row, so they need the owner's answers to question 6, where memory is kept, and question 7, Salesforce.
-
-## At the finish
-
-- **The project's outcome.** Also write the owner's sentence from question 2 in the "Desired Outcome" field of the project's row in Notion, and read the row back. The page's "Project brief" prompts (Overview/Context, Goals, Success criteria) stay until the owner gives them. List them in the report with the prompts that are left.
-- **The roadmap.** Write the project's phases from question 12 as rows of the Phases database. The project's `managing-work-items` skill says how, in `references/work-tracker.md`.
-- **Check.** Do the check that starts "For a new project" under "Checks after any of these" in `choices/notion-shared/reference/notion-work-item-pages.md`.
-- **The owner's own steps.** `choices/notion-shared/notion-setup.md`, "Sign-in: the owner's step", gives them.
+"Check the setup", "update the toolkit", and a change of where work items are kept use the same steps: steps 2 and 3 give the folders and the lines that this choice adds, and step 8 gives its check. An update changes nothing in Notion, as the closing lines of [choices/notion-shared/notion-setup.md](../../notion-shared/notion-setup.md) say. [reference/update.md](../../../reference/update.md) says how each of those jobs works.

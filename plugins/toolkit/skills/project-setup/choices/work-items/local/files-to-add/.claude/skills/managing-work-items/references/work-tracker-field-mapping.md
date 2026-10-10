@@ -97,7 +97,7 @@ A top-level item (`parent: none`) has a Roadmap, and its tasks are under phase h
 
 ### A work item that changes level
 
-Use this part in two cases: a move puts a work item at another level, or a work item that was made before toolkit 0.8.0 has sub-items that still have phases.
+Use this part when a move puts a work item at another level.
 
 - **Phases to a plain list** (the work item is now a sub-item). Do these four things:
   1. Under `## Tasks`, write the `**Sub-items:**` line with every ID from the work item's Sub-items cells, or "None.".

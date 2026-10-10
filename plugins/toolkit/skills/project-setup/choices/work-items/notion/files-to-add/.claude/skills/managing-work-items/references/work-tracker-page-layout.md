@@ -34,7 +34,7 @@ A work item's page has these sections, in this order. Each one is marked as text
 
 Three more things are true of every page:
 
-- **Heading levels.** In the current template, a section heading is level 1 (`# Overview`), and a heading inside a section is level 2 (`## Current state`). A project whose template was made before toolkit 0.8.1 can have both one level lower. Match a heading by its words, at the level you read. Write a new heading at the level that the page uses for that kind of heading.
+- **Heading levels.** In the template, a section heading is level 1 (`# Overview`), and a heading inside a section is level 2 (`## Current state`). Match a heading by its words, at the level you read. Write a new heading at the level that the page uses for that kind of heading.
 - **The note at the top.** The template's first block is a note for the agent, in a callout. The note says what `references/lifecycle-rules.md`, section "Rules that apply in every State", says about text in angle brackets. A page that you create or change never keeps the note. "Filling a new work item" below says how to delete it.
 - **Lines that are not text.** The Solution Design is a child page, and the page text shows it as a `<page url="…">` line. The page text shows each view as one `<database url="…">` line. Change the rows in the view's database, never the line.
 
@@ -70,8 +70,6 @@ After the template's content is on the page, send one `update_content` call that
 - Related items;
 - the first Recent History row, in place of the example row;
 - one block for each requirement, in place of the template's example requirement block. "Requirements" below shows the block.
-
-When the project's template still has the older layout, the page holds `**Overall status:**`. Then replace everything between the Requirements heading and the Questions and Answers heading with the requirement blocks.
 
 **Delete** the rest:
 
@@ -130,7 +128,7 @@ Each requirement is one block under the Requirements heading, in the order of it
 
 The lines inside a toggle start with one tab.
 
-- **A new requirement.** Insert its block before the Questions and Answers heading line, with the next unused number. `old_str` is that heading line as you read it, which is `# Questions and Answers {toggle="true"}` in the current template. `new_str` is the block followed by that line. Take the form from the block above, never from a prompt that was left on a page.
+- **A new requirement.** Insert its block before the Questions and Answers heading line, with the next unused number. `old_str` is that heading line as you read it, which is `# Questions and Answers {toggle="true"}` in the template. `new_str` is the block followed by that line. Take the form from the block above, never from a prompt that was left on a page.
 - **A new line.** Add the line after the last line of its list. `old_str` is that last line, and `new_str` is that last line followed by the new line, which starts with one tab.
   - For a list with no line yet, `old_str` is the toggle's `<summary>` line instead.
   - When `old_str` does not match exactly once, add the lines around it to `old_str`, and keep those lines in `new_str`.
@@ -138,7 +136,7 @@ The lines inside a toggle start with one tab.
 
 ## Saving a question and its answer
 
-The table is under the toggle heading "Questions and Answers", which is `# Questions and Answers {toggle="true"}` in the current template. Its columns, in order, are ID, Question, Answer, Date answered, Decision?, Affects, Status, and Decision needed from.
+The table is under the toggle heading "Questions and Answers", which is `# Questions and Answers {toggle="true"}` in the template. Its columns, in order, are ID, Question, Answer, Date answered, Decision?, Affects, Status, and Decision needed from.
 
 - **A new row.** Its ID is the highest Q-ID in the table plus one. Insert the row after the last open row. When no row is open, insert it right after the header row. Open rows then stay on top, oldest first.
   - `old_str` is the last open row as you read it, and `new_str` is that row followed by the new row.

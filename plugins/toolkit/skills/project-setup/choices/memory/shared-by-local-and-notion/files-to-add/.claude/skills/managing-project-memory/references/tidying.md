@@ -14,7 +14,6 @@ Work in this order: the project's Current State first, then duplicates, links, s
 - Links between memory records
 - Stale records
 - The wrong place, the wrong type, or a memory record changed by hand
-- Old feedback records
 - Too many memory records
 - Lessons that should become rules or skills
 - Writing a project skill
@@ -95,15 +94,6 @@ A stale record is a memory record, or a section of one, that may no longer be tr
 - Retire a guess, or a fact that the owner rejected.
 - When a memory record is of the wrong type, move it to the right type, and correct every link to it. `references/memory-store.md` says how to move it.
 - A memory record may no longer follow the layout because the owner made it or changed it by hand. Keep the owner's edit. List these memory records for the owner, and correct one only with the owner's yes.
-
-## Old feedback records
-
-"Feedback" is a type of memory record that is no longer used. For each section of a feedback record, do one of these:
-
-- Move an instruction to `.claude/rules/owner-preferences.md`, as a bullet that ends with `(<date the record was saved>, <owner name>, from the old feedback record <name>)`.
-- Move a fact to a memory record of the type user or project.
-
-Then mark the feedback record as replaced, and say in it that it moved to the rules and to those memory records on <date>.
 
 ## Too many memory records
 

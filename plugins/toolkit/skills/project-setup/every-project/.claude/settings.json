@@ -5,17 +5,6 @@
     "sessionUrl": false
   },
   "autoMemoryEnabled": false,
-  "enabledPlugins": {
-    "git-workflows@claude-toolkit": false,
-    "hooks-library@claude-toolkit": false,
-    "project-init@claude-toolkit": false,
-    "protocol-guard@claude-toolkit": false,
-    "second-brain@claude-toolkit": false,
-    "session-skills@claude-toolkit": false,
-    "sf-architect-solutioning@claude-toolkit": false,
-    "system-guide@claude-toolkit": false,
-    "work-tracker@claude-toolkit": false
-  },
   "hooks": {
     "SessionStart": [
       {

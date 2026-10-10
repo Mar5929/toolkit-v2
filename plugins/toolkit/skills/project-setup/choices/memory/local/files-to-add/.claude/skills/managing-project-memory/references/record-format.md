@@ -40,7 +40,6 @@ The header is the block of fields between the two `---` lines at the top of the 
   - `Approved by <owner> on <date>`, for a save that the owner asked for or said yes to.
   - `Logged by the agent on <date>`, for every other save.
 - Keep any other field that Claude Code, Codex, or an import wrote.
-- A file that was made before the fields `created` and `check_by` existed gets both at its next change. Set `created` to the oldest date that the file shows, and set `check_by: none`.
 
 ## Status
 
@@ -63,7 +62,6 @@ Find the case in the first column. The other three columns give what to write in
 | --- | --- | --- | --- |
 | Another file replaced this file | `superseded` | `Superseded by <file>:` | First line under the title: `**Superseded by:** [<title>](<file>.md) on <date>.` |
 | The file is no longer used for answers, and nothing replaces it | `retired` | `Retired <date>:` | First line under the title: `**Retired:** <date>. <reason, in the owner's words when the owner gave one>` |
-| A `feedback_` file whose content moved to the rules and to the memory records of its subjects, or a `decision_` file whose decision moved to `DECISIONS.md` | `superseded` | `Moved on <date>:` | First line under the title: `**Superseded by:** <where it moved, with the DEC ID for a decision>, on <date>.` |
 
 - A file with the status `superseded` or `retired` keeps its body as history.
 - In a file that replaces another file, set `supersedes:` to the name of the file it replaces.

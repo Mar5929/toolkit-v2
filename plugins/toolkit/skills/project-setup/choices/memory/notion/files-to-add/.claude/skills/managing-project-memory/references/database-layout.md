@@ -31,7 +31,7 @@ The databases, their views, and their page layout come from the owner's "Project
 │   ├── Entities                 only when the owner wants a named thing found on its own
 │   └── Facts                    only when the owner wants one dated statement found on its own
 ├── Current state                page (current-state-page.md)
-└── Terminology glossary         page from the earlier layout: not written
+└── Terminology glossary         page: not written
 ```
 
 The owner's Projects database and Lore's Projects database are different databases. Every memory page links to the project's row in Lore's Projects database.
@@ -78,7 +78,7 @@ The first column is the word that `managing-project-memory` uses for the status 
 | retired | deprecated |
 
 - A Status that the owner changed by hand counts. Read "deprecated" as retired.
-- Lore's other options, informational and rejected, are not used. A page with the Status "proposed" was saved by an earlier version of the toolkit: do not rely on it, and "update the toolkit" asks the owner about it.
+- Lore's other options, informational and rejected, are not used.
 
 ## The page body
 
@@ -244,5 +244,3 @@ These parts of the layout stay as they are and get no new content:
 - the Topics database;
 - the Terminology glossary page, because a project term is a row of `system/glossary.md`;
 - on Memories, the `decision` tag, Kind `decision`, and the columns Decided At, Alternatives, and Consequences, because a decision that more than one work item needs is an entry in `DECISIONS.md`.
-
-A page with the `decision` tag, or a row on the glossary page, is from the layout that was used before the current folder layout. Leave it as it is, and tell the skill that asked that it exists. `project-setup` ("update the toolkit") moves it.

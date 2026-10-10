@@ -33,7 +33,7 @@ This file uses four names:
 ## Before you start
 
 - Read the project's choices in `PROJECT.md`, section "Toolkit settings": Tracker, Memory, the ID prefix, the links, and the Hindsight bank. Never change a choice unless the owner asks. "Changing a setup choice", at the end of this file, gives the steps for that.
-  - The project is a Salesforce project when "Toolkit settings" has a "Salesforce org aliases" line with a value other than `not used`. A project set up with an earlier version of the toolkit has a line for every choice, and `not used` on the lines of the choices it did not make.
+  - The project is a Salesforce project when "Toolkit settings" has a "Salesforce org aliases" line.
   - The choice "SOUL.md kept" applies when the file is present.
 - Take the new files from this skill's setup folders, in the toolkit plugin that is installed on this computer.
   - When the owner says that the toolkit itself changed, but this skill's setup folders do not have the change the owner names, ask the owner before you update the plugin, because updating the plugin changes the owner's computer.
@@ -52,8 +52,8 @@ This file uses four names:
 
 Build the setup copy for the choices that `PROJECT.md` records, in a new temporary folder. Follow two files, in this order:
 
-1. `reference/setup-copy.md` gives the steps for making the temporary folder and copying the setup folders into it.
-2. `reference/skills-hooks-settings.md` gives what must be true of the skills, the hook commands, and the settings. The setup file of each choice gives the settings lines that the choice changes.
+1. [reference/setup-copy.md](setup-copy.md) gives the steps for making the temporary folder and copying the setup folders into it.
+2. [reference/skills-hooks-settings.md](skills-hooks-settings.md) gives what must be true of the skills, the hook commands, and the settings. The setup file of each choice gives, in a step or in the file that a step names, the settings lines that the choice changes.
 
 While you build the setup copy, do the following:
 
@@ -87,11 +87,11 @@ Most rows have special cases. They are listed under the table, in "Special cases
 | --- | --- | --- |
 | Toolkit skills | each folder in `<copy>/.claude/skills/` | Replace the project's folder with the new folder, one skill at a time: `rsync -a --delete <copy>/.claude/skills/<name>/ .claude/skills/<name>/` |
 | Hook commands | `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs` | Replace each file after the owner's yes: `cp <copy>/.claude/hooks/<file> .claude/hooks/<file>` |
-| Settings | `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge each file with the rules in `reference/skills-hooks-settings.md`. |
+| Settings | `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge each file with the rules in [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules". |
 | Missing files | every `>f+++++++` line | List the missing files, then copy them into the project. |
 | Ignore files | `.gitignore`, `.ignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. Ask no question. The change only adds lines, and the owner's request to update the toolkit is the owner's yes to it. |
 | `AGENTS.md` | the root file | Follow "Updating AGENTS.md" below. |
-| `PROJECT.md`, "Toolkit settings" | | Make the section hold the lines of the setup copy's section, with the same labels. A line that says `not used` belongs to no choice of this project: show it to the owner as a line to remove. |
+| `PROJECT.md`, "Toolkit settings" | | Make the section hold the lines of the setup copy's section, with the same labels. |
 | Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/INDEX.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
 | Rules in `.claude/rules/` | | Show the owner what differs. |
 | Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, and the output style | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
@@ -102,7 +102,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 - **Toolkit skills.** The command deletes every file in the project's folder that the new folder lacks. So before you run the command for a skill, list each file inside the project's folder that the new folder lacks, and ask the owner about those files.
 - **Hook commands.**
   - Codex trusts the hook entry in `.codex/hooks.json`, not the file that the entry runs, so a replaced command file is not reviewed again. For that reason, put each replaced `.mjs` file in the numbered table, with one plain line that says what its diff changes, and copy the file only after the owner's yes.
-- **Settings.** `reference/skills-hooks-settings.md`, "Merge rules", gives the merge rules in full. All of the following apply:
+- **Settings.** [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules", gives the merge rules in full. All of the following apply:
   - Add what is missing.
   - Ask before you change a value.
   - Replace the toolkit's own hook handlers. Do not add a second copy of one.
@@ -118,7 +118,6 @@ Most rows have special cases. They are listed under the table, in "Special cases
 - **Rules in `.claude/rules/`.** "Whether a difference is the owner's edit" below says whether a rule holds an edit of the owner's.
   - When a rule holds no edit of the owner's, recommend the toolkit's version.
   - When a rule holds an edit of the owner's, the edit stays unless the owner says to take the toolkit's version.
-  - In `hindsight-memory.md`, the lines under "What this project saves in Hindsight" are the owner's choices. Keep the project's lines in every update.
   - A project with no `owner-preferences.md` gets the setup copy's file through the "Missing files" row. A project that has `owner-preferences.md` follows the row "The owner's own records". The same holds for `salesforce-agent-permissions.md` in a Salesforce project.
 - **Other toolkit files.** "Whether a difference is the owner's edit" below says whether a file holds an edit of the owner's. When a file holds no edit of the owner's, recommend the toolkit's version.
 - **The owner's own records.**
@@ -137,7 +136,7 @@ git status --short -- <file>
 ```
 
 - The first command lists the commits that changed the file.
-- A commit is the toolkit's when both of these are true: the second command also lists a file under `.claude/skills/` for that commit, and the commit's message names the setup, a move-over, or a toolkit update. Each of those three jobs commits skills together with the other toolkit files.
+- A commit is the toolkit's when both of these are true: the second command also lists a file under `.claude/skills/` for that commit, and the commit's message names the setup or a toolkit update. Each of those two jobs commits skills together with the other toolkit files.
   - The owner may also change a rule and a skill in one commit of the owner's own. When the message does not show which of the two the commit is, ask the owner.
 - When all of a file's commits are the toolkit's, and the third command does not list the file, the file holds no edit of the owner's. Say so on the file's line of the numbered table, and recommend the toolkit's version.
 - When a file has any other commit, or the third command lists the file, the file holds an edit of the owner's. Show the difference. The owner's edit stays unless the owner says to take the toolkit's version.
@@ -159,7 +158,7 @@ Then compare the two lists. One of two cases applies.
   1. Start from `<copy>/AGENTS.md`, which already has the project's name.
   2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones, and delete its fill-in guide comment.
   3. Find the lines that the owner added or changed with `diff -u AGENTS.md <copy>/AGENTS.md`. Then decide for each of those lines:
-     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line of a rules list between two `toolkit:rules` marker lines, a line about a setup choice).
+     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice).
      - Carry over a line that holds a fact, a command, or an instruction of the owner's own, into the section where it fits. A whole section that the owner added goes in right after "Commands".
      - When you cannot tell whether to drop a line or carry it over, carry the line over and mark it in the list in step 5.
   4. Run `wc -lc <copy>/AGENTS.md`. The limits are at most 200 lines and at most 24,576 bytes. When the owner's added lines put the file over either limit, say so in the list in step 5, and recommend which of those lines to move, and where. Cut no line of the owner's without the owner's yes.
@@ -174,26 +173,26 @@ A project may hold something that an earlier setup put there and that the new se
 - When the thing holds a choice or a line of the owner's, show it to the owner, and put it in the place that holds such a choice now before you remove the old one. For example, a choice about what an agent may do in a Salesforce org goes in `.claude/rules/salesforce-agent-permissions.md`, and an instruction for how the agent works goes in `.claude/rules/owner-preferences.md`.
 - Remove a hook command and its entry in the settings files in the same change, with any group or event that the entry leaves empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
-- This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records, such as `.work-items/` or `.memory/`, is the owner's, and it stays.
+- This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
 
 ## 5. Services
 
 Do each line that fits the project. Each line names the section that holds the steps.
 
-- For a Notion project, follow `choices/notion-shared/notion-setup.md`, "Updating a Notion project". An update changes nothing in Notion.
-- For a Hindsight project, go through the steps of `choices/memory/hindsight/hindsight-setup.md` as a check. Fix each failure only after the owner's yes. Name the server the project uses in the report.
-- For a GitHub Issues project, follow `choices/work-items/github/github-work-items-setup.md`, "Bringing a project up to date". Add missing labels only after the owner's yes.
-- For a Salesforce project, write the entries for each production org as `choices/salesforce/salesforce-setup.md`, "The refuse list for production", says, before section 4 removes a guard that an earlier setup put there. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
+- For a Notion project, follow what the shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says for "update the toolkit". An update changes nothing in Notion.
+- For a Hindsight project, go through the steps of [choices/memory/hindsight/hindsight-setup.md](../choices/memory/hindsight/hindsight-setup.md) as a check. Fix each failure only after the owner's yes. Name the server the project uses in the report.
+- For a GitHub Issues project, follow what [choices/work-items/github/github-work-items-setup.md](../choices/work-items/github/github-work-items-setup.md) says for "update the toolkit". Add missing labels only after the owner's yes.
+- For a Salesforce project, write the entries for each production org as the step on the refuse list for production in [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md) says, before section 4 removes a guard that an earlier setup put there. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
 
 ## 6. Checks and report
 
 Do these in order.
 
-1. **The final checks.** Run the final checks in `reference/finishing.md`, "Final checks", from your worktree. The temporary folder stays until step 5.
+1. **The final checks.** Run the final checks in [reference/finishing.md](finishing.md), "Final checks", from your worktree. The temporary folder stays until step 5.
 2. **Report.** Report what was replaced, merged, added, removed, and left as the owner's. Then name the owner's steps:
    - trust the hooks again in Codex `/hooks`, only when an entry or the `description` in `.codex/hooks.json` changed;
    - start a new session.
-3. **Commit and merge.** End with the commit offer in `reference/finishing.md`, "The commit offer", made in your worktree. After the commit, merge the branch only after the owner's yes. Before the merge, whether it is by pull request or by `git merge`, do the merge-safety check in the project's `.claude/rules/shared-repository-work.md`. Merge the branch by pull request, or, when the project has no remote, by `git merge --ff-only <branch>` from the main checkout.
+3. **Commit and merge.** End with the commit offer in [reference/finishing.md](finishing.md), "The commit offer", made in your worktree. After the commit, merge the branch only after the owner's yes. Before the merge, whether it is by pull request or by `git merge`, do the merge-safety check in the project's `.claude/rules/shared-repository-work.md`. Merge the branch by pull request, or, when the project has no remote, by `git merge --ff-only <branch>` from the main checkout.
 4. **In the main checkout, after the branch was merged**, make every change to `memory/` and `work-items/`: the missing files (section 3), and each difference in those two folders that the owner said yes to.
 5. Remove the worktree and the branch, then the temporary folder.
 
@@ -209,17 +208,17 @@ A choice decides which files a project has, never which lines inside a file. So 
 2. Make your own worktree and branch, as "Before you start" says. In the worktree, change `PROJECT.md`, "Toolkit settings":
    - Change the Tracker or Memory line.
    - Remove each line that only the old choice used.
-   - Write the new choice's lines as the setup file of the new choice says, and as `SKILL.md`, "The lines of "Toolkit settings"", says for every line.
+   - Write the new choice's lines as the setup file of the new choice says, and as [SKILL.md](../SKILL.md), "The lines of "Toolkit settings"", says for every line.
 3. Build a new setup copy for the new choices and compare, as sections 1 and 2 say.
-   - Add each file the project lacks, as the "Missing files" row says, except the affected merged skill folder. Keep that skill and its selected store reference in the old form until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
+   - Add each file the project lacks, as the "Missing files" row says, except the affected merged skill folder. Keep that skill and its selected store reference as the old choice has them until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
    - Keep the old choice's installed instructions until the records move in step 5. Read the old `references/work-tracker.md` or `references/memory-store.md` before the change. Read the new choice's selected reference in the setup copy to learn how to create and read back its records. Do not install the new choice's reference over the old one yet.
-   - A new memory choice also replaces the toolkit's hook handlers in `.claude/settings.json` and `.codex/hooks.json` with the handlers of the new choice (`reference/skills-hooks-settings.md`, "What a choice changes in the settings" and "Merge rules"). The owner trusts the changed Codex hooks again in `/hooks`.
-4. Do what the setup file of the new choice gives for outside the project folder. `SKILL.md`, Step 5, names the setup file of each choice.
-   - When the project already has work items or memory in Notion and adds the other one, make no second project page. Follow `choices/notion-shared/reference/notion-work-item-pages.md`, "Adding work items or memory later".
+   - A new memory choice also replaces the toolkit's hook handlers in `.claude/settings.json` and `.codex/hooks.json` with the handlers of the new choice ([reference/skills-hooks-settings.md](skills-hooks-settings.md), "What a choice changes in the settings" and "Merge rules"). The owner trusts the changed Codex hooks again in `/hooks`.
+4. Do what the setup file of the new choice gives for outside the project folder. [SKILL.md](../SKILL.md), Step 5, names the setup file of each choice.
+   - When the project already has work items or memory in Notion and adds the other one, make no second project page. The shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says, in a step or in the file that a step names, how a Notion project adds work items or memory later.
    - When memory moved out of Hindsight, after the owner's yes also remove the project's folder from the settings of Hindsight's coding-agent add-on, so that the add-on is switched off there.
 5. Move the records one at a time, with a preview of each record and the owner's yes, and read each record back in its new place. Delete nothing from the place where the work items were kept before, or from the old memory system.
    - When the records go into Hindsight, the add-on's tools load only in the next session. So save each record through the server's API, with the record's ID as the ID of the saved document, and read the record back with a search after the save has finished.
 6. After the records are moved and the owner says yes to the list, install the new choice's merged skill folder from the setup copy and remove the old choice's files. Check for owner edits before replacing or removing a skill file. The selected `references/work-tracker.md` or `references/memory-store.md` then contains the new choice's instructions.
-   - The list is every file of the old choice's setup folders that no setup folder of the new choices holds. `(cd <skill folder>/<folder> && find . -type f)` prints a folder's files, and the setup file of each choice names its folders. `SKILL.md`, Step 5, names the setup file of each choice. `<skill folder>` is the folder that holds this skill's `SKILL.md`.
-   - Memory that moved to Hindsight keeps `memory/CURRENT_STATE.md`.
+   - The list is every file of the old choice's setup folders that no setup folder of the new choices holds. `(cd <skill folder>/<folder> && find . -type f)` prints a folder's files, and the setup file of each choice names its folders. [SKILL.md](../SKILL.md), Step 5, names the setup file of each choice. `<skill folder>` is the folder that holds this skill's `SKILL.md`.
+   - A Hindsight project has no Current State. When memory moved to Hindsight, `memory/CURRENT_STATE.md` is on the list. Its lines are the owner's record, so show them to the owner, and ask where each line that is still true goes, before the file is removed. Where the work stands is kept in the place where work items are kept.
    - A file in `work-items/` or `memory/` that is not in a setup folder is the owner's record. It stays until the owner says what to do with it.

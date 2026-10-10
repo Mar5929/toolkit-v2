@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: 'Sets up Toolkit V2 in a new project or in an existing one, and checks or updates a project that already has it. It also changes where a project keeps work items or memory, opens the Hindsight dashboard, or connects Hindsight on a new computer. Use for requests such as "set up this project", "add the toolkit to this project", "check the setup", or "update the toolkit". For new commits from Git, use pull-latest. The older claude-toolkit uses project-sync.'
+description: 'Sets up Toolkit V2 in a new project or in an existing one, and checks or updates a project that already has it. It also changes where a project keeps work items or memory, opens the Hindsight dashboard, or connects Hindsight on a new computer. Use for requests such as "set up this project", "add the toolkit to this project", "check the setup", or "update the toolkit". For new commits from Git, use pull-latest.'
 ---
 
 # Project setup
@@ -21,10 +21,11 @@ There is no setup program. You copy and edit the files yourself. This guide give
 This skill's folder is the folder that holds this `SKILL.md`. Claude Code and Codex each show its path when they load the skill. Every path in this skill starts from that folder.
 
 - `every-project/` is the full layout: every folder, file, rule, skill, and setting that every project gets, at the paths a project has them. Nothing in it belongs to one answer.
-- `choices/` has one folder for each answer that adds something to the project. A project gets an answer's part only when the owner gives that answer. A folder holds what its answer needs:
-  - one setup file, which says how the toolkit sets the answer up by default, what to ask the owner, what the answer adds to the project, and what it needs at the finish;
-  - `reference/`, when the answer has more detail than fits in the setup file;
+- `choices/` has one folder for each answer that adds something to the project. A project gets an answer's part only when the owner gives that answer. Every answer folder has the same shape, and it holds only the parts that its answer needs:
+  - one setup file. It opens with one or two sentences that say when you follow the file and what its steps do. After that, it holds only the list of steps you go through, in order. A step holds its whole instruction, or it names the file under `reference/` that holds its detail;
+  - `reference/`, which holds the detail that does not fit in a step: how the toolkit sets the answer up by default, the exact text and lines that the answer adds to a file the project already has, the values and commands, and the known problems. Each file covers one subject;
   - `files-to-add/`, when the answer adds files to the project. The files are at the paths a project has them.
+- A part that two answers share is kept once, in a folder of its own with the same shape. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
 - `reference/` holds the detail for the steps that belong to no single answer.
 
 ## Rules for every step
@@ -52,7 +53,7 @@ Say in one line which of these situations this is.
 | What the folder holds | What it is | Where you go next |
 | --- | --- | --- |
 | Nothing, or only the project's own code and documents. A `.claude/settings.local.json` and a `.claude/worktrees/` folder are Claude Code's own and count as nothing. | A new project | Step 3 |
-| Agent files that the toolkit did not put there, such as an `AGENTS.md`, a `CLAUDE.md`, rules, skills, hooks, or the older claude-toolkit | An existing project that is adopting the toolkit | "An existing project" below |
+| Agent files that the toolkit did not put there, such as an `AGENTS.md`, a `CLAUDE.md`, rules, skills, or hooks | An existing project that is adopting the toolkit | "An existing project" below |
 | A `PROJECT.md` whose "Toolkit settings" section is filled | A project that already has Toolkit V2 | "A project that already has the toolkit" below |
 | A `PROJECT.md` from the full layout whose "Toolkit settings" section is not complete, or another sign under "Known problems" that setup stopped part way | A setup that stopped part way | Say so. Read the answers that are already written, and continue at the first question that has no answer. |
 
@@ -73,8 +74,6 @@ Copy `every-project/` into the project, hidden files included. Add each file tha
 
 [reference/placing-files.md](reference/placing-files.md) gives a copy command that never replaces a file, what to do with each kind of file the project already has, and the link `.agents/skills` that lets Codex read the same skills as Claude Code.
 
-The settings in the full layout turn the older claude-toolkit plugins off for this project. This computer may have more of those plugins than the settings name. [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md), "The older plugins, off in this project", says how to list them and turn them off.
-
 ## Step 4: Ask the questions
 
 Ask one question per message, in the order of the table. Give each question a recommendation and the reason for it. Where the folder already shows an answer, say what you found, and the owner confirms or corrects it.
@@ -94,9 +93,9 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 9 | What may the agent do without asking? | The toolkit's default, which "Question 9" below names | `.claude/rules/owner-preferences.md` |
 | 10 | How should the agent work with the owner on this project? | The `SOUL.md` that the full layout brought | `SOUL.md` |
 | 11 | Is there material to start from? | None | `sources/` |
-| 12 | Where does the project stand? | None | The roadmap, in the place where work items are kept, and the project's Current State |
+| 12 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
 
-The project's Current State is the project's one short page of what is true now.
+The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one. A Hindsight project has none: where the work stands is in the place where work items are kept.
 
 ### What to know for a question
 
@@ -122,7 +121,7 @@ The project's Current State is the project's one short page of what is true now.
 | --- | --- | --- | --- |
 | Local files | `local` | Most projects. | Memory is Markdown files in `memory/`, which Git ignores, so it exists only on this computer. It is private and needs no server. |
 | Notion | `notion` | Work items are in Notion, or the owner reads memory on a phone. | Work and memory then sit together and link to each other. It needs `ntn`, signed in. |
-| Hindsight | `hindsight` | Search by meaning across the saved records matters. | Memory is in a memory bank on the owner's own Hindsight server. A memory bank is one project's store of memory on that server. |
+| Hindsight | `hindsight` | Search by meaning across the saved records matters. | Memory is in a memory bank on the owner's own Hindsight server. A memory bank is one project's store of memory on that server. The project has no `memory/` folder and no Current State. |
 
 Any mix of the work items choice and the memory choice works, for example work items in Notion with local memory. With every choice, the project's decisions, terms, sources, and the description of its system are files in the repository, and they are never memory.
 
@@ -142,17 +141,16 @@ After the owner has said where memory is kept, ask about Claude Code's own memor
 
 The answers to questions 5, 6, and 7 pick a choice. The questions after that are about how the owner wants that choice set up in this project.
 
-1. Open the setup file of the choice. The table in Step 5 names it.
-2. Tell the owner, in a few plain lines, how the toolkit sets the choice up when the owner changes nothing.
-3. Ask: "This is how the toolkit sets up `<choice>` by default. Is this what you want?"
-4. After a no, ask what the owner wants to be different.
-5. Ask the other questions that the setup file gives. Step 5 says when the choice is set up.
+The questions are steps of the choice's setup file. Open that file as soon as the owner gives the answer. The table in Step 5 names it, and Step 5 says how you go through its steps and when the choice is set up. For every choice, the steps have you do these things, in the order that the setup file gives:
 
-When a choice needs a sign-in, ask for it as soon as the owner picks the choice, so that the owner can sign in while the interview goes on. The setup file says how to check the sign-in.
+- Tell the owner, in a few plain lines, how the toolkit sets the choice up when the owner changes nothing.
+- Ask: "This is how the toolkit sets up `<choice>` by default. Is this what you want?"
+- After a no, ask what the owner wants to be different.
+- Ask the choice's other questions.
 
 ## Step 5: Each answer adds its part
 
-Each answer to questions 5, 6, and 7 has a setup file. The setup file holds everything about that answer.
+Each answer to questions 5, 6, and 7 has a folder under `choices/`, and that folder has one setup file. When the owner gives the answer, open its setup file and go through its steps in the order the file lists them. A step holds its whole instruction, or it names the file under that folder's `reference/` that holds its detail.
 
 | Answer | Setup file |
 | --- | --- |
@@ -164,12 +162,15 @@ Each answer to questions 5, 6, and 7 has a setup file. The setup file holds ever
 | Memory: Hindsight | [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) |
 | Salesforce: yes | [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) |
 
-An answer adds its part in two moments:
+The steps of a setup file are done at three moments. A step that names no moment is done right after the answer. A step that waits for a later moment says which one.
 
-1. **Right after the answer, before the next question,** add what the setup file says the choice adds to the project:
+1. **Right after the answer, before the next question,** ask the choice's own questions, and add what the setup file says the choice adds to the project:
    - the files. Copy each `files-to-add/` folder that the setup file names into the project, the way Step 3 copies the full layout;
    - the lines that it adds to a file the project already has: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, and `.gitignore`. A line whose value is not known yet, such as the id of a Notion page, is added when the value is known.
+
+   When a choice needs a sign-in, ask for it at this moment too, so that the owner can sign in while the interview goes on. The step for the sign-in says how to check it.
 2. **When the choice's sign-in is done and the owner has given the answers that the setup file needs,** set up what the choice needs outside the project folder, after the owner's yes. The Notion steps, for example, need the answers to questions 5, 6, and 7.
+3. **When setup finishes, in Step 6,** do what the choice needs at the finish, such as its part of the roadmap, of the project's Current State, of the final checks, and of the owner's steps.
 
 Add the files of one work items choice and of one memory choice only. Each of those choices puts a file with the same name inside a skill, so a project with two of them would have the wrong one.
 
@@ -178,8 +179,8 @@ Add the files of one work items choice and of one memory choice only. Each of th
 "Toolkit settings" is the section of `PROJECT.md` that records the owner's setup choices. The project's skills read its lines.
 
 - The full layout brings two lines, which every project has: Tracker and Memory.
-- Each choice adds its own lines, and its setup file gives them. A project has no line for a choice that the owner did not make.
-- Keep every label as the setup file writes it. Write each value inside backticks, for example ``- Tracker: `local` ``. A setup file says so when one of its lines has another form.
+- Each choice adds its own lines. Its setup file gives them, in a step or in the file that a step names. A project has no line for a choice that the owner did not make.
+- Keep every label as it is written there. Write each value inside backticks, for example ``- Tracker: `local` ``. The same text says so when one of its lines has another form.
 - Keep the section's fill-in guide comment, because later sessions read it.
 
 ## Step 6: Finish
@@ -188,8 +189,8 @@ Add the files of one work items choice and of one memory choice only. Each of th
 
 1. Check that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
 2. Write the roadmap from question 12 in the place where work items are kept.
-3. Write the first lines of the project's Current State. They say where the project stands, from question 12.
-4. Check that the setup works: the settings files are valid, the session-start command prints the project's Current State, and each service that the owner chose answers.
+3. With local or Notion memory, write the first lines of the project's Current State. They say where the project stands, from question 12. A Hindsight project has no Current State: where the work stands is in the place where work items are kept.
+4. Check that the setup works: the settings files are valid, the session-start command prints the project's Current State when the project has one, and each service that the owner chose answers.
 5. Tell the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
 6. Report what was set up, what was made outside the project folder, and what is still open.
 7. Offer to commit the setup files.
@@ -216,9 +217,9 @@ Three rules hold in both cases:
 What you do depends on what the owner asks for.
 
 - **Update the toolkit.** Follow [reference/update.md](reference/update.md). An update is also the job when the owner says only "toolkit v2".
-- **Check the setup.** Compare the project with the toolkit as `reference/update.md`, sections 1 and 2, say. Then run the checks in `reference/finishing.md`, "Final checks". Change nothing, with the two exceptions that section gives, and report each difference and each failed check with the fix that you recommend.
-- **Change where work items or memory are kept.** Follow `reference/update.md`, "Changing a setup choice".
-- **Hindsight: the dashboard, the bank's settings, or a new computer.** Follow the Hindsight setup file, `choices/memory/hindsight/hindsight-setup.md`.
+- **Check the setup.** Compare the project with the toolkit as [reference/update.md](reference/update.md), sections 1 and 2, say. Then run the checks in [reference/finishing.md](reference/finishing.md), "Final checks". Change nothing, with the two exceptions that section gives, and report each difference and each failed check with the fix that you recommend.
+- **Change where work items or memory are kept.** Follow [reference/update.md](reference/update.md), "Changing a setup choice".
+- **Hindsight: the dashboard, the bank's settings, or a new computer.** Follow the Hindsight setup file, [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md).
 
 ## Known problems
 
@@ -227,8 +228,7 @@ What you do depends on what the owner asks for.
 - **The folder is not a Git repository, or it sits inside another repository.** The hook commands and the skills find `.claude/hooks/`, `work-items/`, and `memory/` from the root of the Git repository. With no repository, offer `git init`. Inside another repository, recommend setting up the root of that repository, and recommend `git init` in this folder only when this folder is its own project.
 - **The session runs in a linked worktree.** A linked worktree is a separate folder with its own branch. The main checkout is the project's main folder, the first path that `git worktree list` prints. Git ignores `memory/` and `work-items/`, so they exist only in the main checkout, and the setup commit belongs on the default branch. Set up a new project in the main checkout, even when a rule for the whole computer asks for a worktree.
 - **The project has its own folder named `system/`, `sources/`, `delivery/`, or `reference/`.** The full layout puts a guide, `AGENTS.md`, into each of these folders, and that guide would describe the owner's files there as the project's records. Ask the owner before you copy anything into that folder.
-- **Setup stopped part way.** These are the signs: the Tracker or the Memory line of "Toolkit settings" still holds its prompt, one of those lines names a choice whose own lines are missing from the section, `{{CURRENT_STATE_PAGE_ID}}` is still in `.claude/settings.json` or `.codex/hooks.json`, or the project's Current State still has its fill-in guide.
-- **The folder holds the older claude-toolkit, and the owner says "update the toolkit" or "check the setup" without naming Toolkit V2.** The owner may mean the older toolkit, whose skill is `project-sync`. Ask which one the owner means before any other question. This skill never runs the older claude-toolkit.
+- **Setup stopped part way.** These are the signs: the Tracker or the Memory line of "Toolkit settings" still holds its prompt, one of those lines names a choice whose own lines are missing from the section, `{{CURRENT_STATE_PAGE_ID}}` is still in `.claude/settings.json` or `.codex/hooks.json`, or the project's Current State, in a project that has one, still has its fill-in guide.
 
 **Questions and failures**
 
@@ -257,10 +257,12 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 
 ## Files
 
+The table lists the files of `reference/`, the setup file of each answer, and the folders that are copied into a project. Each setup file names the files under its own `reference/` folder that hold the detail of its steps, so the table does not list them.
+
 | File | Open it when |
 | --- | --- |
 | [reference/placing-files.md](reference/placing-files.md) | Steps 3 and 5: you copy `every-project/` or a `files-to-add/` folder into the project, the project already has one of the files, or you make the `.agents/skills` link. |
-| [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Whenever a settings file changes: you need the skills and the three hook commands every project has, the settings every project gets, the rules for a settings file that already exists, and how the older plugins are turned off. |
+| [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Whenever a settings file changes: you need the skills and the three hook commands every project has, the settings every project gets, and the rules for a settings file that already exists. |
 | [reference/finishing.md](reference/finishing.md) | Step 6: you need the places an answer is written, the form of a line in `owner-preferences.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
 | [reference/existing-project.md](reference/existing-project.md) | The folder already has agent files that the toolkit did not put there: you need what to look for, how the branch works with the folders that Git ignores, and the known problems. |
 | [reference/update.md](reference/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice. |
@@ -270,10 +272,8 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 | [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) | The owner keeps work items in GitHub Issues. |
 | [choices/memory/local/local-memory-setup.md](choices/memory/local/local-memory-setup.md) | The owner keeps memory in local files. |
 | [choices/memory/notion/notion-memory-setup.md](choices/memory/notion/notion-memory-setup.md) | The owner keeps memory in Notion. |
-| [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) | The owner keeps memory in Hindsight. Each of its steps names the file under `choices/memory/hindsight/reference/` that holds its detail. |
+| [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) | The owner keeps memory in Hindsight. |
 | [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) | The project is a Salesforce project. |
-| [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | One of the two Notion setup files sends you here: you need the sign-in, the owner's yes, where the project's page goes, and the links in `PROJECT.md`. |
-| [choices/notion-shared/reference/notion-work-item-pages.md](choices/notion-shared/reference/notion-work-item-pages.md) | The shared Notion file sends you here for the steps that make the project's page. |
-| [choices/notion-shared/reference/notion-memory-pages.md](choices/notion-shared/reference/notion-memory-pages.md) | The shared Notion file sends you here for the steps for memory. |
+| [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | One of the two Notion setup files sends you here for the steps that the two Notion answers share. |
 | `every-project/` | Step 3: the full layout. |
 | The `files-to-add/` folders under `choices/` | Step 5: the files that an answer adds. Each setup file names its folders. |

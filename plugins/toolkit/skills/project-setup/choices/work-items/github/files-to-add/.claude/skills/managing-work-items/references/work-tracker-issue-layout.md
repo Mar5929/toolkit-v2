@@ -108,7 +108,7 @@ How to change them:
 
 ### A work item that changes level
 
-Use this part in two cases: a move puts a work item at another level, or a sub-issue that was made before toolkit 0.8.0 still has a Roadmap.
+Use this part when a move puts a work item at another level.
 
 - **Phases to a plain list** (the work item is now a sub-issue). Do these four things:
   1. Under `## Tasks`, write the `**Sub-items:**` line with every number from the work item's Sub-items cells, or "None.".

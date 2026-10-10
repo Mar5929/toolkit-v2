@@ -1,46 +1,18 @@
 # Memory in local files
 
-Open this file when the owner answers "local files" to question 6 of `SKILL.md`. It gives the default to tell the owner, what the choice adds to the project, and what it needs at the finish. This choice has no question beyond the one about the default.
+Follow these steps when the owner answers "local files" to question 6 of the guide, [SKILL.md](../../../SKILL.md). The job is done when `memory/` and the skill `managing-project-memory` are in the project, `PROJECT.md` records the choice, and the session-start command prints the project's Current State, which is the project's one short page of what is true now.
 
-The job is done when `memory/` and the skill `managing-project-memory` are in the project, `PROJECT.md` records the choice, and the session-start command prints the project's Current State. The project's Current State is the project's one short page of what is true now.
+## Steps
 
-## What the toolkit sets up by default
+Do steps 1 to 4 right after the answer, before the next question of the guide. Do steps 5 and 6 when setup finishes, in Step 6 of the guide. This choice has no question beyond the one about the default, needs no sign-in, and makes nothing outside the project folder.
 
-Tell the owner this in a few plain lines, and ask whether it is what the owner wants.
+1. **Tell the owner how the toolkit sets up memory in local files by default, and ask whether that is what the owner wants.** [reference/local-memory-default.md](reference/local-memory-default.md) holds the default. [SKILL.md](../../../SKILL.md), "Each choice has questions of its own", gives the words of the question and what to ask after a no.
+2. **Copy the skill `managing-project-memory` into the project.** The folder `choices/memory/shared-by-local-and-notion/files-to-add/` holds the skill at the path a project has it. Copy this folder first. [reference/placing-files.md](../../../reference/placing-files.md) gives the copy command and what to do with a file that the project already has.
+3. **After the skill is copied, copy this choice's own files into the project.** The folder `choices/memory/local/files-to-add/` holds them at the paths a project has them: four files inside that skill, and the folder `memory/`. Copy this folder the same way. [reference/what-local-memory-adds-to-a-project.md](reference/what-local-memory-adds-to-a-project.md) lists what the two folders add.
+4. **Write the choice's lines in `PROJECT.md` and `AGENTS.md`.** [reference/what-local-memory-adds-to-a-project.md](reference/what-local-memory-adds-to-a-project.md) gives each line and the place where it goes.
+5. **Write the first lines of the project's Current State in `memory/CURRENT_STATE.md`.** [reference/finishing.md](../../../reference/finishing.md), "The project's Current State", says what to write under each heading.
+6. **Check that the session-start command prints the project's Current State, and that Git does not track memory.** `node .claude/hooks/session-start.mjs --memory local </dev/null` prints the Current State, and `git status --short` lists nothing under `memory/`. [reference/finishing.md](../../../reference/finishing.md), "Final checks", says how to run a check and what to do when one fails.
 
-- Memory is Markdown files in `memory/`, at the root of the project: the project's Current State, and one file for each subject that no other project file holds.
-- At the start of each session, the agent is shown the Current State and one line for each memory file.
-- Git ignores `memory/`, so memory exists only on this computer. It is private and needs no server and no sign-in.
-- The whole project folder opens as an Obsidian vault, where the owner can read the memory files.
+When a step does not work as expected, open [reference/local-memory-known-problems.md](reference/local-memory-known-problems.md).
 
-## What this choice adds to the project
-
-| Kind | What it adds |
-| --- | --- |
-| Skill | Copy `choices/memory/shared-by-local-and-notion/files-to-add/` into the project. It holds the skill `managing-project-memory`: what counts as memory, and how to save, find, and tidy it. |
-| Files inside that skill | Copy `choices/memory/local/files-to-add/` into the project after it. It adds four files on how memory is kept as local files. `references/memory-store.md` is the one that the skill opens first. |
-| Files and folders | The same folder adds `memory/` with its guide, `CURRENT_STATE.md`, the index `MEMORY.md`, and the template for a memory file. |
-| Settings | Nothing. The settings in the full layout already name `local`. |
-| `PROJECT.md`, "Toolkit settings" | Write `local` on the Memory line. |
-| Text in `AGENTS.md` | Three rows in the "Project map" table. "The text in AGENTS.md" below gives them. |
-| Outside the project folder | Nothing. |
-
-## The text in AGENTS.md
-
-In the project's root `AGENTS.md`, in the "Project map" table, add these rows after the row for `.gitignore`, `.ignore`, and after the rows for `work-items/` when the project has them:
-
-```markdown
-| `memory/` | What a later session needs and no other file holds: the project's Current State, and one file per subject. | `managing-project-memory`. |
-| `memory/CURRENT_STATE.md` | The project's Current State, in five parts. | `managing-project-memory` writes it. |
-| `memory/MEMORY.md` | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
-```
-
-## At the finish
-
-- **The project's Current State.** Write its first lines in `memory/CURRENT_STATE.md`.
-- **Check.** `node .claude/hooks/session-start.mjs --memory local </dev/null` prints the Current State, and `git status --short` lists nothing under `memory/`.
-
-## Known problems
-
-- **`memory/MEMORY.md` changes by itself.** It is an index that the session-start command rebuilds. Never edit it by hand.
-- **The project already has a folder named `memory/` with files of its own.** Ask the owner before you add a file there. `reference/existing-project.md` says what to offer.
+"Check the setup", "update the toolkit", and a change of where memory is kept use the same steps: steps 2 to 4 give the folders and the lines that this choice adds, and step 6 gives its checks. [reference/update.md](../../../reference/update.md) says how each of those jobs works.

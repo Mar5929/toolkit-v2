@@ -27,7 +27,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 - A page's key is `<prefix>_<slug>`, such as `project_client_plans`. The prefix is the type of the memory record: `user`, `project`, `reference`, or `event`. The key is in the Record Key column, and pages are found by it.
 - **Projects** holds one row that names this project, and every page links to that row. **Topics** is not used. **Entities** and **Facts** are used only when the owner wants a thing found on its own.
 - The **Current state** page sits beside the Memory page. `references/current-state-page.md` says how to read and change it.
-- Never write the **Terminology glossary** page beside the Memory page, or a page of Memories with the `decision` tag. Never read either of them for a term or a decision. Both are from the layout that was used before the current folder layout. A project term is in `system/glossary.md`, and a decision is in `DECISIONS.md`.
+- Never write the **Terminology glossary** page beside the Memory page, or a page of Memories with the `decision` tag. Never read either of them for a term or a decision. A project term is in `system/glossary.md`, and a decision is in `DECISIONS.md`.
 - Nothing shows the memory pages at the start of a session. Only the Current state page is printed. `managing-project-memory` says when to search.
 - A page names its work items in the Work item IDs column. When the work items are in Notion too, the page also names them in the Work items relation.
 - The ids of the databases and pages are in `PROJECT.md`, section "Toolkit settings": the nested bullets under the fixed line "Notion memory". Never search the workspace for them.
