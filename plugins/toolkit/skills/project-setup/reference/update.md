@@ -34,7 +34,7 @@ This file uses four names:
 
 - Read the project's choices in `PROJECT.md`, section "Toolkit settings": Tracker, Memory, the ID prefix, the links, and the Hindsight bank. Never change a choice unless the owner asks. "Changing a setup choice", at the end of this file, gives the steps for that.
   - The project is a Salesforce project when "Toolkit settings" has a "Salesforce org aliases" line.
-  - The choice "SOUL.md kept" applies when the file is present.
+  - A project whose owner deleted `SOUL.md` does not get it back.
 - Take the new files from this skill's setup folders, in the toolkit plugin that is installed on this computer.
   - When the owner says that the toolkit itself changed, but this skill's setup folders do not have the change the owner names, ask the owner before you update the plugin, because updating the plugin changes the owner's computer.
   - In Claude Code, the commands are `claude plugin marketplace update toolkit-v2`, then `claude plugin update toolkit@toolkit-v2`.
@@ -144,7 +144,7 @@ git status --short -- <file>
 
 ### Updating AGENTS.md
 
-The root `AGENTS.md` reads the same in every project, except for two prompts that the owner filled: the outcome sentence and the "Build, test, or deploy" row. The owner may also have added lines. List the `## ` headings of both files:
+The root `AGENTS.md` reads the same in every project, except for two prompts that the owner filled, which are the outcome sentence and the "Build, test, or deploy" row, and the lines that the setup files of the project's choices add. The owner may also have added lines. List the `## ` headings of both files:
 
 ```text
 grep -n '^## ' AGENTS.md
@@ -180,9 +180,9 @@ A project may hold something that an earlier setup put there and that the new se
 Do each line that fits the project. Each line names the section that holds the steps.
 
 - For a Notion project, follow what the shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says for "update the toolkit". An update changes nothing in Notion.
-- For a Hindsight project, go through the steps of [choices/memory/hindsight/hindsight-setup.md](../choices/memory/hindsight/hindsight-setup.md) as a check. Fix each failure only after the owner's yes. Name the server the project uses in the report.
+- For a Hindsight project, follow what [choices/memory/hindsight/hindsight-setup.md](../choices/memory/hindsight/hindsight-setup.md) says for an update. Name the server the project uses in the report.
 - For a GitHub Issues project, follow what [choices/work-items/github/github-work-items-setup.md](../choices/work-items/github/github-work-items-setup.md) says for "update the toolkit". Add missing labels only after the owner's yes.
-- For a Salesforce project, write the entries for each production org as the step on the refuse list for production in [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md) says, before section 4 removes a guard that an earlier setup put there. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
+- For a Salesforce project, write the entries for each production org as the step on the refuse list for production in [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md) says, before section 4 removes anything that refuses a change to production. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
 
 ## 6. Checks and report
 
@@ -202,13 +202,14 @@ Change a setup choice only when the owner asks, for example "move memory to Noti
 
 ### Where work items or memory are kept
 
-A choice decides which files a project has, never which lines inside a file. So a changed choice does three things: it adds the files of the new choice's setup folders, it removes the files of the old choice's setup folders, and it changes lines of "Toolkit settings". No other line of `AGENTS.md`, `README.md`, `PROJECT.md`, or a rule changes.
+A changed choice does four things: it adds the files of the new choice's setup folders, it removes the files of the old choice's setup folders, it changes lines of "Toolkit settings", and it changes the lines that a choice adds to a file the project already has. No other line of `AGENTS.md`, `README.md`, `PROJECT.md`, or a rule changes.
 
 1. Tell the owner what changes and what cannot move (for example Notion page history and comments), and get the owner's yes.
 2. Make your own worktree and branch, as "Before you start" says. In the worktree, change `PROJECT.md`, "Toolkit settings":
    - Change the Tracker or Memory line.
    - Remove each line that only the old choice used.
    - Write the new choice's lines as the setup file of the new choice says, and as [SKILL.md](../SKILL.md), "The lines of "Toolkit settings"", says for every line.
+   - Take out the lines that the old choice's setup file adds to a file the project already has, such as rows in `AGENTS.md`, entries in the settings files, and lines in `.gitignore`. Put in the lines that the new choice's setup file adds.
 3. Build a new setup copy for the new choices and compare, as sections 1 and 2 say.
    - Add each file the project lacks, as the "Missing files" row says, except the affected merged skill folder. Keep that skill and its selected store reference as the old choice has them until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
    - Keep the old choice's installed instructions until the records move in step 5. Read the old `references/work-tracker.md` or `references/memory-store.md` before the change. Read the new choice's selected reference in the setup copy to learn how to create and read back its records. Do not install the new choice's reference over the old one yet.

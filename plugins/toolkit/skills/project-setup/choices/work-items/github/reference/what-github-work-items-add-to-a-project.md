@@ -20,7 +20,7 @@ The repository name here is an example:
 
 ```markdown
 - Tracker: `github`
-- GitHub repository: `Mar5929/ios-money-log`
+- GitHub repository: `example-owner/money-log`
 ```
 
 Nothing else is recorded. The labels are the same in every project.

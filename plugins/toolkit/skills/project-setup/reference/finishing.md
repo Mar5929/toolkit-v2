@@ -89,7 +89,7 @@ Write only what the owner confirmed. Show the owner the roadmap after you wrote 
 
 The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one, and setup writes its first lines. The setup file of the memory choice says where it is kept.
 
-A Hindsight project has no Current State and no `memory/` folder. Where the work stands is in the place where work items are kept, so the rest of this section does not apply to a Hindsight project. For a Hindsight project, the report names each of the owner's steps that is still open.
+A Hindsight project has no Current State and no `memory/` folder. Where the work stands is in the place where work items are kept, so the rest of this section does not apply to a Hindsight project. For a Hindsight project, write each of the owner's steps that is still open as a project task, with the project's `managing-work-items` skill, so that a later session finds it. Use the words that the "Waiting on" line below gives, and name each step in the report too.
 
 Keep the five headings and their line limits. The list below says what to write on the "Last updated" line and under each of the five headings:
 

@@ -28,7 +28,8 @@ Read what the project holds before you ask the question, so that you can tell th
 
 - **A file of the owner's has the name of a file in the full layout**, such as `AGENTS.md`, `README.md`, `PROJECT.md`, `DECISIONS.md`, or `SOUL.md`. [reference/placing-files.md](placing-files.md), "Files the project already has", says what to do with each kind.
 - **The project has its own folder named `work-items/` or `memory/`.** The toolkit uses the same names for local work items and local memory. Ask the owner before you add a file there. One answer to offer is a new name for the old folder, so that old and new records never mix.
-- **The project's settings files hold hooks that the toolkit did not put there.** [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules", says which entries are the toolkit's and which stay. Take out a hook's entry and its command file in the same step.
+- **The project's settings files hold hooks that the toolkit did not put there.** [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules", says which entries are the toolkit's and which stay. When a hook comes out, take out its entry and its command file in the same step.
+- **A Salesforce project has a guard of its own that refuses a change to a production org**, such as a hook command. Toolkit V2 does that job with entries in `permissions.deny`. Put those entries in before a guard comes out, so that the project is never without something that refuses a change to production. The step on the refuse list in [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md) gives the entries.
 
 **Old records**
 

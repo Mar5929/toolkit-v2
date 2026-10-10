@@ -83,7 +83,7 @@ Every answer folder has the same shape. The Hindsight folder, `choices/memory/hi
 
 A folder holds only the parts that its answer needs.
 
-A part that two answers share is kept once, in a folder of its own with the same shape. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
+A part that two answers share is kept once, in a folder of its own, which holds only the parts it needs. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
 
 When the owner gives an answer, the agent opens that answer's setup file and goes through its steps: it asks the questions, puts the skills and files where the steps say, and sets up whatever the choice needs outside the project folder.
 

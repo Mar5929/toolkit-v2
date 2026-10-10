@@ -18,3 +18,5 @@ Apart from the steps in those two files, setup makes only these Notion calls its
 - the `ntn api v1/search` call in [where-the-notion-project-page-goes.md](where-the-notion-project-page-goes.md);
 - the one write of the project's outcome into the project's row, which the step for the project's outcome gives in [choices/work-items/notion/notion-work-items-setup.md](../../work-items/notion/notion-work-items-setup.md) and in [choices/memory/notion/notion-memory-setup.md](../../memory/notion/notion-memory-setup.md);
 - the one read of the "Current state" page in the check that [choices/memory/notion/notion-memory-setup.md](../../memory/notion/notion-memory-setup.md) gives for the finish of setup.
+
+The two Notion setup files also have a step that writes the roadmap and a step that brings the "Current state" page up to date. Those steps use the project's own skills, as the steps say.

@@ -25,14 +25,14 @@ This skill's folder is the folder that holds this `SKILL.md`. Claude Code and Co
   - one setup file. It opens with one or two sentences that say when you follow the file and what its steps do. After that, it holds only the list of steps you go through, in order. A step holds its whole instruction, or it names the file under `reference/` that holds its detail;
   - `reference/`, which holds the detail that does not fit in a step: how the toolkit sets the answer up by default, the exact text and lines that the answer adds to a file the project already has, the values and commands, and the known problems. Each file covers one subject;
   - `files-to-add/`, when the answer adds files to the project. The files are at the paths a project has them.
-- A part that two answers share is kept once, in a folder of its own with the same shape. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
+- A part that two answers share is kept once, in a folder of its own, which holds only the parts it needs. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
 - `reference/` holds the detail for the steps that belong to no single answer.
 
 ## Rules for every step
 
 - Never answer a question for the owner, even when the owner does not reply.
 - Never write a fact that the owner did not confirm.
-- Make nothing outside the project folder without the owner's yes. Examples are a Notion page, a GitHub repository or label, a Hindsight memory bank, and an install on the owner's computer. A yes covers only what it named.
+- Make or change nothing outside the project folder without the owner's yes. Examples are a Notion page, a GitHub repository or label, a Hindsight memory bank, an install on the owner's computer, and a change to a file in the owner's home folder, such as a file under `~/.claude` or `~/.codex`. A yes covers only what it named.
 - Never replace or delete a file that the project already has without showing the owner the difference and asking.
 - A project may differ from the toolkit. When the owner wants something set up another way in this project, set it up that way.
 - The owner dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the owner means, and ask one short question when a message is unclear or could mean two things.
@@ -162,7 +162,7 @@ Each answer to questions 5, 6, and 7 has a folder under `choices/`, and that fol
 | Memory: Hindsight | [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) |
 | Salesforce: yes | [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) |
 
-The steps of a setup file are done at three moments. A step that names no moment is done right after the answer. A step that waits for a later moment says which one.
+The steps of a setup file are done at three moments. Most steps are done right after the answer. A step that waits for a later moment says which one.
 
 1. **Right after the answer, before the next question,** ask the choice's own questions, and add what the setup file says the choice adds to the project:
    - the files. Copy each `files-to-add/` folder that the setup file names into the project, the way Step 3 copies the full layout;
@@ -172,6 +172,8 @@ The steps of a setup file are done at three moments. A step that names no moment
 2. **When the choice's sign-in is done and the owner has given the answers that the setup file needs,** set up what the choice needs outside the project folder, after the owner's yes. The Notion steps, for example, need the answers to questions 5, 6, and 7.
 3. **When setup finishes, in Step 6,** do what the choice needs at the finish, such as its part of the roadmap, of the project's Current State, of the final checks, and of the owner's steps.
 
+When a sign-in is still not done when setup finishes, the steps that wait for it stay open. Name each one in the report, with the owner's step that it waits for.
+
 Add the files of one work items choice and of one memory choice only. Each of those choices puts a file with the same name inside a skill, so a project with two of them would have the wrong one.
 
 ### The lines of "Toolkit settings"
@@ -180,7 +182,7 @@ Add the files of one work items choice and of one memory choice only. Each of th
 
 - The full layout brings two lines, which every project has: Tracker and Memory.
 - Each choice adds its own lines. Its setup file gives them, in a step or in the file that a step names. A project has no line for a choice that the owner did not make.
-- Keep every label as it is written there. Write each value inside backticks, for example ``- Tracker: `local` ``. The same text says so when one of its lines has another form.
+- Keep every label as it is written there. Write each value inside backticks, for example ``- Tracker: `local` ``. The setup file says so when one of its lines has another form.
 - Keep the section's fill-in guide comment, because later sessions read it.
 
 ## Step 6: Finish

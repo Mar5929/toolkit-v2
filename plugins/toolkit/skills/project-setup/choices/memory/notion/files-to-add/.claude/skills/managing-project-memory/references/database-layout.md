@@ -78,7 +78,7 @@ The first column is the word that `managing-project-memory` uses for the status 
 | retired | deprecated |
 
 - A Status that the owner changed by hand counts. Read "deprecated" as retired.
-- Lore's other options, informational and rejected, are not used.
+- Lore's other options, informational and rejected, are not used. Do not rely on a page with the Status "proposed".
 
 ## The page body
 
