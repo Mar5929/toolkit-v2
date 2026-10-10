@@ -1,6 +1,6 @@
 # Bringing a project to the current folder layout
 
-Use this file when a project was set up before the current folder layout. `SKILL.md`, "Which setup job to do", sends an update or a check of such a project here, and the move-over from the older toolkit uses the tables of this file. This file says how to find the old layout, which plan the owner approves, where each old file or record goes, and the order of the moves.
+Use this file when a project was set up before the current folder layout. `SKILL.md`, "A project that already has the toolkit", sends an update or a check of such a project here. This file says how to find the old layout, which plan the owner approves, where each old file or record goes, and the order of the moves.
 
 The current folder layout is the layout in which information the whole project needs is kept in five places, as files in the repository: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`. A project that was set up before this layout holds the same facts in other places, and this file moves them. Memory keeps its records. Only the decision records and the glossary move out of memory, because each of them is now kept in the repository.
 

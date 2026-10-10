@@ -1,6 +1,6 @@
 # Changes from earlier toolkit versions
 
-This file holds three parts of "update the toolkit". Each part is for a project that was set up before one version of the toolkit: the move from Stage to State (toolkit 0.6.0), the levels structure (toolkit 0.8.0), and the Requirements layout (toolkit 0.8.1). Open it when a project was set up before one of those versions. The move-over and the files for Notion and GitHub point to its parts. A part is done when the project is as that part describes and the owner has been told what changed.
+This file holds three parts of "update the toolkit". Each part is for a project that was set up before one version of the toolkit: the move from Stage to State (toolkit 0.6.0), the levels structure (toolkit 0.8.0), and the Requirements layout (toolkit 0.8.1). Open it when a project was set up before one of those versions. The files for Notion and GitHub point to its parts. A part is done when the project is as that part describes and the owner has been told what changed.
 
 Make every change to a local work item or to `memory/` in the main checkout, at the time that `reference/update.md`, "Before you start", gives. The main checkout is the project's main folder, the first path that `git worktree list` prints.
 

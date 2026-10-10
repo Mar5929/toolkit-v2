@@ -1,6 +1,6 @@
 # GitHub Issues
 
-This file gives the GitHub steps that setup runs when a project keeps its work items in GitHub Issues, for a new project and for bringing a project up to date. Open it at step 3 of "New project" in `SKILL.md` for the sign-in, at step 7 for the repository and the labels, and when a project with GitHub Issues is updated. Its job is done when every check under "Checks after either" passes.
+This file gives the GitHub steps that setup runs when a project keeps its work items in GitHub Issues, for a new project and for bringing a project up to date. Open it when the owner answers "GitHub Issues" to question 5 of `SKILL.md`, and when a project with GitHub Issues is updated. Its job is done when every check under "Checks after either" passes.
 
 `work-tracker-gh-commands.md`, `work-tracker-labels.md`, and `work-tracker-searching.md` are the GitHub references added to `managing-work-items`. Their source is `choices/work-items/github/files-to-add/.claude/skills/managing-work-items/references/` in this skill.
 
@@ -14,9 +14,9 @@ This file gives the GitHub steps that setup runs when a project keeps its work i
 
 ## Before you start
 
-- Ask the owner for the sign-in right after the plan is approved, so that the owner can run `gh auth login` while you copy files. Never ask the owner for a token.
+- Ask the owner for the sign-in as soon as the owner picks GitHub Issues, so that the owner can run `gh auth login` while the interview goes on. Never ask the owner for a token.
 - When `gh` is not installed, ask the owner before you install it, because installing it changes the owner's computer. After the owner's yes, run `brew install gh`.
-- The plan that the owner approved covers the labels, and a new repository, only when the plan named them. Anything else in GitHub needs a yes of its own from the owner.
+- Before you make anything in GitHub, tell the owner what will be made, and wait for the owner's yes: the work item labels that the repository does not have yet, and a private repository when the project has none. The yes covers only what you named. Anything else in GitHub needs a yes of its own from the owner.
 
 ## A new project
 
@@ -40,7 +40,7 @@ This file gives the GitHub steps that setup runs when a project keeps its work i
 
      Never make a public repository unless the owner asks for one in the owner's own words.
 
-     Do not push in this step. Never push until the owner says yes to the push question after the setup commit: "Push <default> to <owner>/<repo>?", where <default> is the branch the setup commit is on. `reference/finishing.md`, "The commit offer", says when to ask that question.
+     Do not push in this step. Never push until the owner says yes to the push question after the setup commit: "Push <default> to <owner>/<repo>?", where <default> is the default branch. `reference/finishing.md`, "The commit offer", says when to ask that question.
    - When `hasIssuesEnabled` is false, ask the owner before you turn issues on (`gh repo edit <repo> --enable-issues`).
 3. **Record it** in `PROJECT.md`, as "Recording the repository in PROJECT.md" below shows.
 4. **Labels.** Create the missing labels after the owner's yes. `work-tracker-labels.md`, "Creating the labels", gives the question to ask the owner and the commands.

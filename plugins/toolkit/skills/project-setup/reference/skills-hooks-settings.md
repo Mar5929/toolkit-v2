@@ -1,10 +1,10 @@
 # Skills, hook commands, and settings
 
-This file says which skills, hook commands, and settings a project has, and what each of the owner's choices changes in the settings. Open it at step 5 of "New project" in `SKILL.md`, and whenever another file sends you to "Merge rules".
+This file says which skills, hook commands, and settings a project has, and what each of the owner's choices changes in the settings. Open it at Step 5 of `SKILL.md`, and whenever another file sends you to "Merge rules".
 
 The job is done when the settings files hold what the owner's choices need, every entry that the owner had is still there, and everything under "What must be true when the settings are done" holds.
 
-In an update, a check of the setup, or a move-over, the files are built in a temporary folder first. `<copy>` stands for that folder, and `reference/setup-copy.md` says how it is made. `<skill folder>` stands for the folder that holds this skill's `SKILL.md`.
+In a setup, change the project's own settings files. In an update or a check of the setup, the files are built in a temporary folder first, and `reference/setup-copy.md` says how that folder is made.
 
 ## Contents
 
@@ -23,7 +23,7 @@ Every skill is in `.claude/skills/`, one folder per skill. Claude Code reads tha
 
 The shared skills are the same in every project (10): `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `session-summary`, `filechanges`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project/` holds them.
 
-Each choice adds the skills in the table below. `reference/setup-copy.md`, "Folders the choices add", says which folders hold them.
+Each choice adds the skills in the table below. The table in `SKILL.md`, Step 5, says which folders hold them.
 
 | Choice | Skills |
 | --- | --- |
@@ -74,7 +74,7 @@ The owner's answer about Claude Code's own memory is one line in `.claude/settin
 
 ## Merge rules
 
-These rules apply every time the toolkit's settings meet a settings file that already exists: in a project that had its own settings file before setup, in an update, in a move-over, and when the memory choice changes.
+These rules apply every time the toolkit's settings meet a settings file that already exists: in a project that had its own settings file before setup, in an update, and when the memory choice changes.
 
 - **Add what is missing.** Add each entry and each plain value (text, a number, true or false) that the file does not have.
 - **Never delete any other entry.** Apart from the toolkit's own hook handlers, which the rule on replacing them lists below, every entry stays: the permission rules, the Git deny and ask rules, the entries of `permissions.deny` for a production Salesforce org, and the hooks that the owner added.
@@ -132,10 +132,10 @@ Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the fi
 - **`{{CURRENT_STATE_PAGE_ID}}` is still in a settings file.** With Notion memory it stays until the Notion memory setup knows the id of the Notion page named "Current state". `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says when and where to put that id.
 - **`.codex/hooks.json` accepts only `description` and `hooks` at the top level.** Put nothing else there.
   - In a file that the project already had, a `description` that does not contain the toolkit's text keeps the text it has. Add the toolkit's text after it, with one space between them.
-  - One sentence is the exception. A sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the toolkit's text. Put that change in the numbered table that the owner sees. `reference/placing-files.md`, "3. Files the project already has", and `reference/update.md` say how to show that table.
+  - One sentence is the exception. A sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the toolkit's text. Put that change in the numbered table that the owner sees. `reference/placing-files.md`, "Files the project already has", and `reference/update.md` say how to show that table.
 - **A settings file writes a key another way than the toolkit does.** Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table. Leave the file as it is and ask the owner.
 - **A settings file holds an entry that an earlier version of the toolkit put there and the toolkit no longer has.** `reference/update.md`, "4. What the toolkit no longer ships", says what to do with it. Two such entries are a `Stop` hook of type `prompt`, and a Codex helper reminder with a matcher other than `^(collaboration)?(spawn_agent|wait_agent)$`. Take each one out as that section says, and never add either one.
 - **Codex cuts every skill description short.** Codex does this when the list of skills passes its limit, which is 2% of the model's context window by default. The Toolkit skills then lose their "Use when" and "Not for" parts. `max_context_tokens = 10000` under `[skills]` prevents this. That value is the largest that Codex accepts there, and it is more than the 2% default for a model with a context window under 500,000 tokens.
 - **A plugin from the owner's ChatGPT account cannot be turned off in the project.** The name of such a plugin ends in `@openai-curated-remote`. The account's own setting replaces a table for it in the project's file, so never add one.
 - **A changed Codex hook entry does not run.** Codex skips a hook until the owner trusts it in `/hooks`, and again after any change to its entry in `.codex/hooks.json`. Tell the owner.
-- **Codex refuses to create `.codex/`.** `SKILL.md`, "In Codex", says how to run such a command.
+- **Codex refuses to create `.codex/`.** `SKILL.md`, "Known problems", says under "In Codex" how to run such a command.

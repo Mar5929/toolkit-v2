@@ -1,6 +1,6 @@
 # Notion
 
-This file says what setup does when a project keeps its work items, its memory, or both in Notion: the sign-in, the owner's yes before anything is made in the owner's workspace, which Notion setup steps to follow, and where the links go. Open it at step 3 of "New project" in `SKILL.md` for the sign-in, at step 7 for the Notion pages, and when a Notion project is updated. Its job is done when the owner is signed in, the project's Notion pages were made only after the owner's yes, and `PROJECT.md` holds the project's Notion links and ids.
+This file says what setup does when a project keeps its work items, its memory, or both in Notion: the sign-in, the owner's yes before anything is made in the owner's workspace, which Notion setup steps to follow, and where the links go. Open it when the owner answers "Notion" to question 5 or question 6 of `SKILL.md`, and when a Notion project is updated. Its job is done when the owner is signed in, the project's Notion pages were made only after the owner's yes, and `PROJECT.md` holds the project's Notion links and ids.
 
 The Notion steps themselves are in two other files, the Notion setup files, and setup follows them. `choices/notion-shared/reference/notion-work-item-pages.md` holds the Notion steps for work items, and `choices/notion-shared/reference/notion-memory-pages.md` holds the Notion steps for memory.
 
@@ -22,7 +22,7 @@ Apart from the steps in those two files, setup makes only these Notion calls its
 
 ## Sign-in: the owner's step
 
-Ask the owner for the sign-in right after the plan is approved, so that the owner can sign in while you copy files.
+Ask the owner for the sign-in as soon as the owner picks Notion, so that the owner can sign in while the interview goes on.
 
 1. Check the sign-in with `ntn whoami`. It prints the "Notion CLI" connection, the owner's email, and the workspace.
 2. When `ntn whoami` says there is no sign-in or token, the owner runs `ntn login` in a terminal. That command opens a browser, where the owner signs in and picks the pages the "Notion CLI" connection may use.
@@ -32,7 +32,7 @@ Ask the owner for the sign-in right after the plan is approved, so that the owne
 
 ## The owner's yes before anything is made
 
-- Make nothing in the owner's real Notion workspace without the owner's yes. The plan that the owner approved covers this project's pages when the plan named them. `reference/interview.md`, "The plan to confirm", says what that plan holds.
+- Make nothing in the owner's real Notion workspace without the owner's yes. Before you make anything, tell the owner what will be made: this project's pages in the owner's Notion, from the "Project" template in the owner's Projects database. The owner's yes covers only what you named.
 - Every Notion project is a copy of the "Project" template in the owner's Projects database. The template is the owner's. When it does not exist, stop and tell the owner: the owner makes it in the Notion app, and the toolkit does not build it.
 - When the owner says this project is a test, make its Notion pages only under the test page the owner names. Never make them under the owner's real pages unless the owner says so.
 
@@ -49,7 +49,7 @@ The Notion setup files make the project page as a row of the owner's Projects da
 2. Leave out every data source whose title column is `Name`. Such a data source is Lore's Projects database under another project's Memory page. Lore is the name of the Notion memory layout. The owner's Projects database has the title column `Project`.
 3. Ask the owner one question, with a recommendation: "I'll add this project as a row of your Projects database (<link>). OK?"
    - Ask the question as a message of its own, before the ID prefix question, and make no project page until the owner answers.
-   - The owner's yes to the plan does not cover which database. A line about the database inside a message that asks something else does not count as asking.
+   - The owner's yes to making the pages does not cover which database. A line about the database inside a message that asks something else does not count as asking.
    - When more than one data source is left, list each with its link and ask which one. Recommend the one that holds the owner's other projects.
    - When the owner has no Projects database, stop. Tell the owner that a Notion project needs a Projects database because the template is kept in one, and ask the owner to make one in Notion.
 4. Use the id the owner confirms as `<projects-data-source-id>`.

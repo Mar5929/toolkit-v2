@@ -1,9 +1,9 @@
 # Finishing setup
 
-This file is the last step of a setup: step 8 of "New project" in `SKILL.md`. Open it when the project's files are in place and the services that the project uses are set up. Its job is done when all of these are true:
+This file is the last step of a setup: Step 6 in `SKILL.md`. Open it when the owner has answered the questions and each answer has added its part. Its job is done when all of these are true:
 
-- the prompts in the copied files hold facts that the owner confirmed;
-- the project's Current State is written;
+- every answer of the interview is written in its place, and the prompts in the project's files hold facts that the owner confirmed;
+- the roadmap and the project's Current State are written;
 - the final checks have run;
 - the owner has been told the steps that only the owner does;
 - the reply ends with the report and the commit offer.
@@ -15,6 +15,7 @@ Other jobs of this skill use single sections of this file. For example, "check t
 - Fill the prompts
 - Instructions the owner gives during setup
 - SOUL.md
+- The roadmap
 - The project's Current State
 - Final checks
   - The checks
@@ -28,46 +29,36 @@ Other jobs of this skill use single sections of this file. For example, "check t
 
 ## Fill the prompts
 
-The copied files are the files that setup copied into the project. They hold prompts. A prompt is text in angle brackets (`<angle bracket>`) that says which fact to write in its place. The copied files start with a fill-in guide comment, which says how to fill the file.
+The files that setup copied into the project hold prompts. A prompt is text in angle brackets (`<angle bracket>`) that says which fact to write in its place. Each of those files starts with a fill-in guide comment, which says how to fill the file.
 
-Fill the prompts only with facts that the owner confirmed. Three rules apply to every step below:
+Fill a prompt only with a fact that the owner confirmed. Three rules apply to every part below:
 
 - Never invent a fact to fill a prompt.
-- Setup is never a work item. Never create a work item for setup steps.
-- Never add made-up questions to finish setup.
+- Setup is never a work item. Never create a work item for a setup step.
+- Never add a made-up question to finish setup.
 
-Fill the prompts in this order:
+Go through these parts:
 
-1. **The project's outcome.** The outcome line of `AGENTS.md` is the line under the title that starts with the prompt `<One sentence describing this project and its outcome.>`. The sentence that goes there is the owner's answer. It is never a sentence worked out from the code, the tests, or the README.
-   - Ask for the outcome as its own question, with a suggestion:
+1. **The project's outcome**, from question 2. The sentence is the owner's answer. It is never a sentence worked out from the code, the tests, or the README. It goes in every one of these places:
+   - the outcome line of `AGENTS.md`, which is the line under the title that starts with the prompt `<One sentence describing this project and its outcome.>`;
+   - the one-sentence line under the title of `README.md`;
+   - "Intended outcome" in `PROJECT.md`;
+   - "Project outcome" in `PROJECT-ROADMAP.md`, when the project has local work items;
+   - the "Desired Outcome" field of the project's row in Notion, when the project has its project page in Notion because its work items or its memory are kept there. Read the row back after you write it. The page's "Project brief" prompts (Overview/Context, Goals, Success criteria) stay until the owner gives them. List them in the report with the prompts that are left.
 
-     > What should this project do for you, in one sentence? From the code I'd suggest: "Export invoices to the bank's CSV format every Friday."
-
-   - Ask the question even when the owner described the project earlier in the session (one chat with the agent). In that case, offer the owner's earlier words as the suggestion. Write nothing until the owner answers.
-   - After the owner answers, put the owner's sentence in place of the outcome prompt in every one of these places at once:
-     - the outcome line of `AGENTS.md`;
-     - the one-sentence line under the title of `README.md`;
-     - "Intended outcome" in `PROJECT.md`;
-     - "Project outcome" in `PROJECT-ROADMAP.md`, when the project has local work items.
-   - When the project has its project page in Notion, because its work items or its memory are kept there, also put the owner's sentence in the "Desired Outcome" field of the project's row in Notion. Then read the row back.
-     - The page's "Project brief" prompts (Overview/Context, Goals, Success criteria) stay until the owner gives them. List them in the report with the prompts that are left.
-   - Until the owner answers, leave the outcome prompts in `AGENTS.md`, `README.md`, `PROJECT.md`, and, with local work items, `PROJECT-ROADMAP.md`. List them in the report.
-2. **The "Build, test, or deploy" row** under "Commands" in `AGENTS.md`. Ask the owner, and give a recommendation from what the repository shows, for example `npm test`. When the project is new and empty, leave the prompt and list it in the report.
-3. **`PROJECT.md` and `README.md`.** Follow the fill-in guide of each file.
-   - Ask the owner only what the repository cannot answer.
-   - Fill a prompt only with a fact that the owner gave in this session, or with a fact that a file in the repository shows.
+   When the owner gave no sentence, leave the outcome prompts, and list them in the report.
+2. **The other answers.** Check each answer against the table in `SKILL.md`, Step 4, which gives the place for each one.
+3. **The "Build, test, or deploy" row** under "Commands" in `AGENTS.md`. Fill it when the owner gave the commands during the interview. Otherwise leave the prompt, and list it in the report with what the repository shows as a suggestion, for example `npm test`.
+4. **The other prompts of `PROJECT.md` and `README.md`.** Follow the fill-in guide of each file.
+   - Fill a prompt only with a fact that the owner gave or confirmed in this session. A fact that a file in the repository shows is a suggestion: offer it to the owner, and write it after the owner's yes.
    - The "In scope" and "Outside scope" lines in `PROJECT.md` describe the product. They never describe setup choices or toolkit files.
-   - In a new project with no code yet, ask nothing more for these two files. Leave their prompts and list them in the report.
-   - In a project with code, list in the report each value that you took from the repository, so that the owner can correct it.
    - A file keeps its fill-in guide comment for as long as the file holds a prompt. Delete the guide when the last prompt is filled.
-4. **`PROJECT-ROADMAP.md`**, which only a project with local work items has. Fill it only when the owner already knows the facts. In a new project it usually stays as it is. List it in the report with the prompts that are left.
-   - A project with its work items in Notion or GitHub has no `PROJECT-ROADMAP.md`. The project's phases go where the work items are kept, later, with `managing-work-items`.
-5. **`DECISIONS.md`, the documents in `system/`, and `sources/README.md`** stay as they were copied. They hold no prompt, and each `system/` document says Status "Not started". Never write a decision, a rule, or a source into them during setup.
+5. **`DECISIONS.md` and the documents in `system/`** hold no prompt. Write into them only a decision or a rule that the owner confirmed, in the form that the guide of each gives.
 6. **The fill-in guide comments.** Delete each fill-in guide comment when its own text says to delete it. Keep the guide comment inside "Toolkit settings", because later sessions read it.
 
 ## Instructions the owner gives during setup
 
-When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Two examples of such an instruction are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as `choices/salesforce/salesforce-setup.md`, "The org aliases", says.
+When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. The owner's answers to question 9 are such instructions. Two more examples are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as `choices/salesforce/salesforce-setup.md`, "The org aliases", says.
 
 - Write the instruction as one list line in the owner's words.
 - Put the line under an area that the file's layout comment names. Use General when no area fits.
@@ -77,30 +68,40 @@ When the owner gives an instruction for how the agent works, add the instruction
 
 A setup answer is not an instruction. These answers never go in `owner-preferences.md`: whether the owner uses Claude Code, Codex, or both; where work items and memory are kept; the project name; and the outcome.
 
-The owner can give an instruction before the setup copy exists. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. In that case, keep the instruction in the plan tool, and write it into `owner-preferences.md` when you build the setup copy. `SKILL.md`, "Which setup job to do", says which tool the plan tool is in Claude Code and in Codex.
+`owner-preferences.md` is the owner's own file from the first instruction on. In a Salesforce project, `salesforce-agent-permissions.md` is too.
 
 ## SOUL.md
 
-`SOUL.md` is the owner's own description of how the agent should work with the owner and the project team. A project has the file only when the owner keeps one.
+`SOUL.md` is the owner's own description of how the agent should work with the owner and the project team. Every project gets the file.
 
-- When the owner said yes to `SOUL.md` in the interview, fill each prompt with the owner's own words, and show the owner the text. Delete the file's fill-in guide after the owner's yes to the text.
-- When the owner turns `SOUL.md` down now, delete `SOUL.md`, as its fill-in guide says.
+- Fill each prompt with the owner's own words, from question 10, and show the owner the text.
+- Delete the file's fill-in guide after the owner's yes to the text.
+- When the owner wants no `SOUL.md` in this project, delete the file.
+
+## The roadmap
+
+The roadmap is the project's phases: what each phase is for, which phases are done, which phase the project is in now, and what comes next. Write it from the owner's answers to question 12, in the place where the project keeps its work items.
+
+- With local work items, the roadmap is `PROJECT-ROADMAP.md`. Its fill-in guide says how to fill it. Write the file straight into the project folder, as `SKILL.md`, Step 4, says for every record of a setup.
+- With work items in Notion or in GitHub Issues, the project's `managing-work-items` skill says how that place keeps a phase, in its `references/work-tracker.md`.
+
+Write only what the owner confirmed. Show the owner the roadmap after you wrote it.
 
 ## The project's Current State
 
 The project's Current State is the project's one short page of what is true now. Setup writes its first lines. Where you write them depends on where the project keeps its memory:
 
-- With local memory or Hindsight memory, write the first lines of `memory/CURRENT_STATE.md` now.
-- With Notion memory, the Notion memory setup already wrote these lines on the "Current state" page, in step 7 of "New project". `choices/notion-shared/notion-setup.md` is the file that step follows for Notion. Now bring the "Waiting on" lines of the page up to date.
+- With local memory or Hindsight memory, write the first lines of `memory/CURRENT_STATE.md`.
+- With Notion memory, the Notion memory setup wrote these lines when it made the "Current state" page. Bring the lines of that page up to date.
 
 Keep the five headings and their line limits. The list below says what to write on the "Last updated" line and under each of the five headings:
 
 - Last updated: the date, "setup", and "agent".
-- Now: "None."
-- Coming up: "None."
+- Now: the work that is going on now, from question 12, or "None."
+- Coming up: each dated event or deadline that the owner named, or "None."
 - Waiting on: one line for each of the owner's steps that is still open. "The owner's steps" below lists the steps. Each line starts with "Owner:" and ends with "Setup step; remove this line when it is done."
 - Standing jobs and shared files: "None."
-- Next session starts with: "Ask the owner for the first thing to build."
+- Next session starts with: the next step on the roadmap, from question 12.
 
 Then delete the file's fill-in guide comment, as the comment says.
 
@@ -113,7 +114,7 @@ Run each check alone, from the project folder. Each check only reads. The checks
 1. **The settings files are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
 2. **The session-start command runs.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`.
    - With Notion memory, add `--page <Current state page id>` to the command.
-   - In Codex with Notion memory, run the command escalated. `SKILL.md`, "Mistakes to avoid", says how Codex runs a command that way. Inside the sandbox the command prints "could not be read here". That text comes from the sandbox, and it is not a setup failure.
+   - In Codex with Notion memory, run the command escalated. `SKILL.md`, "Known problems", says under "In Codex" how Codex runs a command that way. Inside the sandbox the command prints "could not be read here". That text comes from the sandbox, and it is not a setup failure.
 3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.
 4. **"Toolkit settings" is filled.** The "Toolkit settings" section of `PROJECT.md` must hold no prompt, except a prompt that waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
 5. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
@@ -126,11 +127,11 @@ Run each check alone, from the project folder. Each check only reads. The checks
 
 - When a check fails, fix what the check found, then run the check again.
 - Report each check that you cannot make pass, with what it printed.
-- Then remove the temporary folder that holds the setup copy: `rm -rf <copy>`.
+- In an update or a check, remove the temporary folder that holds the setup copy after the checks: `rm -rf <copy>`. The setup copy is the files the project would get today, built in a temporary folder, as `reference/setup-copy.md` says.
 
 ### The final checks in "check the setup"
 
-"Check the setup" is one of the jobs in `SKILL.md`, "Which setup job to do". In that job, fix nothing. Report each failed check with the fix that you recommend.
+"Check the setup" is one of the jobs in `SKILL.md`, "A project that already has the toolkit". In that job, fix nothing. Report each failed check with the fix that you recommend.
 
 With local memory, the session-start hook command may rebuild the generated index `memory/MEMORY.md`. That index is the one file a check may change.
 
@@ -164,7 +165,7 @@ The table lists the steps that the owner does. Say each one plainly, with the re
 
 Give the owner a short, plain report. It has these parts, in this order:
 
-1. **What was set up.** Say where work items and memory are kept, whether the project is a Salesforce project, how many skills it has, the three hook commands, and each line that was added to `owner-preferences.md`, in the owner's words.
+1. **What was set up.** Say where work items and memory are kept, whether the project is a Salesforce project, how many skills it has, the three hook commands, where the roadmap is, and each line that was added to `owner-preferences.md`, in the owner's words.
 2. **What was made outside the project folder.** Name the Notion pages, the GitHub repository and labels, the Hindsight bank, and the add-on's changes in `~/.claude`, `~/.codex`, and `~/.hindsight`.
 3. **What was skipped**, and why.
 4. **What the owner must do**, each step with the reason for it.
@@ -187,7 +188,7 @@ The reply's last line is:
 
 ### After the owner's yes
 
-The setup commit is made on the default branch, with no worktree and no pull request. Do these steps in order:
+In a new project, the setup commit is made on the default branch, with no worktree and no pull request. In an existing project, it is made on the branch that holds the changes, and that branch is merged only after the owner's yes. Do these steps in order:
 
 1. Stage each file that setup wrote or changed, by name, and the `.agents/skills` link.
    - List the candidates with `git status --short --untracked-files=all`. Plain `git status --short` shows a new folder, and not the files in it.
@@ -202,10 +203,10 @@ The setup commit is made on the default branch, with no worktree and no pull req
 
 ### After the commit
 
-Ask about a push next, as its own question, when both of these are true: the project has the remote `origin`, and `git ls-remote --heads origin <default>` prints nothing. An example is a repository that setup just created. `<default>` is the branch that the setup commit is on, usually `main`. The question is:
+In a new project, ask about a push next, as its own question, when both of these are true: the project has the remote `origin`, and `git ls-remote --heads origin <default>` prints nothing. An example is a repository that setup just created. `<default>` is the default branch, usually `main`. The question is:
 
 > Push <default> to <owner>/<repo>? The first pull request needs <default> on GitHub.
 
 After the owner's yes, run `git push -u origin <default>`.
 
-After the commit, and the push when it was asked, the reply's last line is "Tell me the first thing you want built."
+After the commit, and the push when it was asked, end the reply with the next step on the roadmap, and ask the owner whether to start it.

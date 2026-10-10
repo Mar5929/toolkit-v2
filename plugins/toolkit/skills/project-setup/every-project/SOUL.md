@@ -1,6 +1,6 @@
 # <Owner-defined working style>
 
-<!-- Fill-in guide for this optional owner-defined file: ask the owner whether to use it. If selected, replace the title and each angle-bracket prompt directly under its heading with the owner's stated preference; obtain their approval and delete this guide. If unselected, remove the file. Do not infer personal preferences from this seed. -->
+<!-- Fill-in guide for this owner-defined file, which every project gets: replace the title and each angle-bracket prompt directly under its heading with the owner's stated preference; obtain their approval and delete this guide. Do not infer personal preferences from this seed. -->
 
 ## Role
 

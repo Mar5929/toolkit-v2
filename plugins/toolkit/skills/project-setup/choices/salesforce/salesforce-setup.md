@@ -1,10 +1,10 @@
 # Salesforce projects
 
-This file says which Salesforce facts setup records in a Salesforce project: the org aliases and the refuse list for production, both written while you build the setup copy, and the API version, written after the files are in place. It also says how to check that Salesforce's own skills are installed, and what to ask the owner about them. Open it at step 7 of "New project" in `SKILL.md`, and at step 4 when you write the org aliases. Its job is done when `PROJECT.md` holds the org aliases, `.claude/settings.json` holds the refuse list entries for each production org that the owner named, the API version is written in the two files that hold it, the owner knows when Salesforce's skills are not installed, and the owner has said what to have on or off. Where the owner cannot give a value yet, the sections below say what to write in its place.
+This file says what setup does in a Salesforce project. Open it when the owner answers yes to question 7 of `SKILL.md`. It gives the check that Salesforce's own skills are installed and the question to the owner about them, the questions about the org aliases, the refuse list for production, and the API version.
 
-The setup copy is the project's finished files, built in a temporary folder before anything is put into the project.
+Its job is done when all of these are true: `PROJECT.md` holds the org aliases; `.claude/settings.json` holds the refuse list entries, and the entries for each production org that the owner named; the API version is written in the two files that hold it; the owner knows when Salesforce's skills are not installed; and the owner has said what to have on or off. Where the owner cannot give a value yet, the sections below say what to write in its place.
 
-Everything else a Salesforce project needs comes with the setup folder `choices/salesforce/files-to-add/`: the rules, the three `sf-*` skills, and the Salesforce templates in `delivery/`. A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. Salesforce's own skills come from Salesforce, not from setup.
+Everything else a Salesforce project needs comes with the folder `choices/salesforce/files-to-add/`: the rules, the three `sf-*` skills, and the Salesforce templates in `delivery/`. Salesforce's own skills come from Salesforce, not from setup.
 
 ## Salesforce's skills
 
@@ -20,7 +20,10 @@ When Salesforce's skills are still missing at the end of setup, add a line to th
 
 ## The org aliases
 
-Ask the owner for the org aliases in the interview, as `reference/interview.md`, "Question 4: Salesforce", says. Write them while you build the setup copy, at the point that `reference/setup-copy.md`, "The project name and "Toolkit settings"", gives.
+Ask the owner for the org aliases, one question per message. Before the first of these questions, show the aliases on this computer with `sf org list`, which only reads.
+
+1. Ask for the sandbox that the agents may deploy to for testing. Recommend an alias only when its name matches this project or the owner said it is this project's. When none of the listed orgs is for this project, recommend "none yet".
+2. Ask for production. Agents never deploy to production or change its data. The rule `salesforce-org-safety.md` forbids both, and Claude Code refuses a command that changes the production org and names it, as "The refuse list for production" below says.
 
 The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce org aliases" line, as one nested line per org. Each nested line holds the alias, which org it is, and its purpose. Mark production. For example:
 
@@ -55,7 +58,7 @@ Then add the entries for each production org, as the next section says.
 
 ## The refuse list for production
 
-For each production org that the owner names, add entries to the refuse list, so that Claude Code refuses a command that changes that org. In a new project, write them when you write the org aliases. In an update or a move-over, write them into the project's own file. Claude Code matches an entry against the text of a command, and `*` stands for any text.
+For each production org that the owner names, add entries to the refuse list, so that Claude Code refuses a command that changes that org. Write them into the project's `.claude/settings.json` when you write the org aliases. Claude Code matches an entry against the text of a command, and `*` stands for any text.
 
 - Write two entries for each kind of command that changes an org: one for the org's name at the end of the command, and one for the name in the middle. For a deploy to the org `acme-prod`, the two entries are `Bash(sf project deploy * acme-prod)` and `Bash(sf project deploy * acme-prod *)`.
 - The kinds of command are a deploy or a deploy validation (`sf project deploy`), each data change (`sf data create`, `sf data update`, `sf data upsert`, `sf data delete`, and `sf data import`), anonymous Apex and an Apex test run (`sf apex run`), and a Flow test run (`sf flow run` and `sf logic run`).

@@ -1,10 +1,12 @@
 # Building the setup copy
 
-This file builds the setup copy. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. Open this file at step 4 of "New project" in `SKILL.md`, and at section 1 of an update (`reference/update.md`, "1. Build a new setup copy"). The job is done when the temporary folder holds the setup folder every project gets and the setup folders for the owner's choices, with the project's name and "Toolkit settings" filled in.
+This file builds the setup copy. The setup copy is the files that the project would get from the toolkit today, built in a temporary folder, so that they can be compared with the project's own files. Open this file in an update or a check of the setup, at `reference/update.md`, "1. Build a new setup copy". The job is done when the temporary folder holds the setup folder every project gets and the setup folders for the project's choices, with the project's name and "Toolkit settings" filled in.
+
+A setup of a new project or of an existing project builds no setup copy. It copies the folders straight into the project, as `SKILL.md`, Steps 3 and 5, say.
 
 A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. The setup folder `every-project/` goes to every project. Each choice of the owner adds one or more.
 
-Two other files do the next two steps. `reference/skills-hooks-settings.md` adds the settings to the setup copy, and `reference/placing-files.md` puts the setup copy into the project.
+`reference/skills-hooks-settings.md`, "What a choice changes in the settings", gives the settings lines that the project's choices change. Make those changes in the setup copy too.
 
 ## Contents
 
@@ -39,25 +41,13 @@ cp -R <skill folder>/every-project/. <copy>/
 
 ## Folders the choices add
 
-This table is the only list of which setup folders a choice copies. For each choice the owner made, copy each folder in the row of that choice into `<copy>`, hidden files included:
+The table in `SKILL.md`, Step 5, is the only list of which setup folders a choice adds. For each choice that the project's "Toolkit settings" records, copy each folder in the row of that choice into `<copy>`, hidden files included:
 
 ```text
 cp -R <skill folder>/<folder>/. <copy>/
 ```
 
-Copy `every-project` first, then each chosen folder. A work choice adds its `references/work-tracker.md` and supporting files inside the `managing-work-items` skill that `every-project` already supplied. Local or Notion memory adds its `references/memory-store.md` and supporting files inside the `managing-project-memory` skill that `choices/memory/shared-by-local-and-notion/files-to-add` supplied. Copy a chosen folder into the existing paths; it adds files to those skill folders. Only one work choice and one memory choice are copied, so the finished project has one version of each selected reference and no storage skill of its own.
-
-Each path in the table is from this skill's folder.
-
-| Choice | Folders to copy |
-| --- | --- |
-| Work items local | `choices/work-items/local/files-to-add` |
-| Work items in Notion | `assets/work-notion` and `choices/notion-shared/files-to-add` |
-| Work items in GitHub Issues | `choices/work-items/github/files-to-add` |
-| Memory local | `choices/memory/shared-by-local-and-notion/files-to-add` and `choices/memory/local/files-to-add` |
-| Memory in Notion | `choices/memory/shared-by-local-and-notion/files-to-add`, `choices/memory/notion/files-to-add`, and `choices/notion-shared/files-to-add` |
-| Memory in Hindsight | `assets/memory-hindsight`, and the one file below |
-| Salesforce | `choices/salesforce/files-to-add` |
+Copy `every-project` first, then each chosen folder. A chosen folder adds files inside skill folders that an earlier folder supplied, so copy it into the existing paths.
 
 Two rows have a special case:
 
@@ -82,41 +72,23 @@ find <copy> \( -name .DS_Store -o -name '*.log' \) -exec rm -f {} +
 
 The two kinds of file are these:
 
-- `.agents`: the `.agents/skills` in `every-project` is a link to the `.claude/skills` folder of `every-project`. `reference/placing-files.md`, "4. The .agents/skills link", makes the project's own link after the copy.
+- `.agents`: the `.agents/skills` in `every-project` is a link to the `.claude/skills` folder of `every-project`. The project has its own link, and `reference/placing-files.md`, "The .agents/skills link", says how it is made.
 - `.DS_Store` and `*.log`: macOS and a local run leave these files in a folder.
 
 ## The project name and "Toolkit settings"
 
-Make these four changes in the copied files.
+Make these four changes in the copied files. Take each value from the project's own `PROJECT.md`.
 
 - Replace `<Project name>` with the project's name in `AGENTS.md`, `README.md`, and `PROJECT.md`, on heading lines only. A heading line starts with one to six `#` and a space. The fill-in guide comments that name `<Project name>` stay as they are until finishing. `reference/finishing.md`, "Fill the prompts", says when a fill-in guide comment is deleted.
 - In `PROJECT.md`, "People and ownership", replace the example row with the owner's row below. The example row is the line that starts with ``| `<role>` |``. Keep the header row and the separator row.
 
   `| Owner | <name from question 1> | Makes the project's decisions | Every decision: requirements, designs, results, merges, and Done | Setup, <YYYY-MM-DD> |`
 
-  - `<name from question 1>` is the owner's name, from the answer to question 1 of `reference/interview.md`.
+  - `<name from question 1>` is the owner's name, which is the answer to question 1 in `SKILL.md`, Step 4.
   - The work skills read the owner's name from this row.
   - The fourth cell, "May decide", says which decisions a person may make.
 - Leave every example ID in the copied files as it is, whatever prefix the owner chose. The example IDs are `WI-31`, `WI-031`, `[[WI-031]]`, `DEC-001`, `SRC-###`, and `SEC-04`. The skills read the real prefix from "Toolkit settings".
-- Fill every line of `PROJECT.md`, section "Toolkit settings". The table below gives the value for each line.
-  - Write each value inside the backticks, in place of the prompt, for example ``- Tracker: `local` ``.
-  - The section has the same 10 lines in every project. Keep every line and every label exactly as written, because the skills read these lines.
-  - On a line for a choice the owner did not make, write the value `not used`, for example ``- Hindsight bank: `not used` ``.
-
-| Line | Value |
-| --- | --- |
-| Tracker | `local`, `notion`, or `github` |
-| Memory | `local`, `notion`, or `hindsight` |
-| Work item ID prefix | With local work items, write the prefix the owner confirmed, for example `WI`. With work items in Notion, leave the prompt for the Notion step. With GitHub Issues, write `not used`. |
-| Notion work items | With work items in Notion, leave the prompt for the Notion step, which writes nested bullets under the label line. Otherwise write `not used`. |
-| GitHub repository | With work items in GitHub Issues, leave the prompt for the GitHub step. Otherwise write `not used`. |
-| Notion memory | With memory in Notion, leave the prompt for the Notion step, which writes nested bullets under the label line. Otherwise write `not used`. |
-| Hindsight bank, Hindsight server, Hindsight dashboard | With memory in Hindsight, leave the three prompts for the Hindsight step. Otherwise write `not used` on each line. |
-| Salesforce org aliases | In a Salesforce project, write the line in the form that `choices/salesforce/salesforce-setup.md`, "The org aliases", shows: the label line, then one nested bullet per org (alias, which org it is, its purpose; mark production). The rule above about writing the value inside the backticks does not apply to that form. Otherwise write `not used`. |
-
-The steps that set up each service fill the prompts that are left for them: `choices/notion-shared/notion-setup.md` for Notion, `choices/work-items/github/github-work-items-setup.md` for GitHub Issues, and `references/hindsight-on-vps.md` for Hindsight.
-
-Keep the fill-in guide comment of the "Toolkit settings" section itself, because later sessions read it.
+- Fill every line of `PROJECT.md`, section "Toolkit settings", with the value that the project's own line holds. `SKILL.md`, "The lines of "Toolkit settings"", gives the lines, the values a line can hold, and how a value is written.
 
 ## Salesforce entries in the settings file
 
@@ -131,11 +103,11 @@ Keep the fill-in guide comment of the "Toolkit settings" section itself, because
 
 Every project gets `.claude/rules/owner-preferences.md`, whatever its memory choice. The file keeps the owner's "from now on" instructions in one file that both Claude Code and Codex read. It starts with only the title, the lead paragraph, and a layout note.
 
-The file comes with `every-project/`. Add each instruction the owner gave during the interview. `reference/finishing.md`, "Instructions the owner gives during setup", says what counts as an instruction and how to write its line.
+The file comes with `every-project/`. `reference/finishing.md`, "Instructions the owner gives during setup", says what counts as an instruction and how to write its line.
 
 The file is the owner's own file from the first instruction on. So setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it afterwards.
 
-A Salesforce project has a second file of this kind, `.claude/rules/salesforce-agent-permissions.md`. It comes with the folder `choices/salesforce/files-to-add` and holds the owner's choices about what an agent may do in each kind of org, with the toolkit's defaults. Copy it whole and change nothing in it. When the owner gives such a choice during the interview, write it into the file, in the place that the first bullets of the file give. "Update the toolkit" copies the file only into a Salesforce project that has none, and never compares or replaces it afterwards.
+A Salesforce project has a second file of this kind, `.claude/rules/salesforce-agent-permissions.md`. It comes with the folder `choices/salesforce/files-to-add` and holds the owner's choices about what an agent may do in each kind of org, with the toolkit's defaults. "Update the toolkit" copies the file only into a Salesforce project that has none, and never compares or replaces it afterwards.
 
 ## Check the setup copy
 
