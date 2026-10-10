@@ -43,11 +43,10 @@ Go through these parts:
    - the outcome line of `AGENTS.md`, which is the line under the title that starts with the prompt `<One sentence describing this project and its outcome.>`;
    - the one-sentence line under the title of `README.md`;
    - "Intended outcome" in `PROJECT.md`;
-   - "Project outcome" in `PROJECT-ROADMAP.md`, when the project has local work items;
-   - the "Desired Outcome" field of the project's row in Notion, when the project has its project page in Notion because its work items or its memory are kept there. Read the row back after you write it. The page's "Project brief" prompts (Overview/Context, Goals, Success criteria) stay until the owner gives them. List them in the report with the prompts that are left.
+   - each further place that the setup file of a choice names under "At the finish".
 
    When the owner gave no sentence, leave the outcome prompts, and list them in the report.
-2. **The other answers.** Check each answer against the table in `SKILL.md`, Step 4, which gives the place for each one.
+2. **The other answers.** Check each answer against the table in `SKILL.md`, Step 4, which gives the place for each one. Then write `not used` on every line of "Toolkit settings" that no choice of the owner filled.
 3. **The "Build, test, or deploy" row** under "Commands" in `AGENTS.md`. Fill it when the owner gave the commands during the interview. Otherwise leave the prompt, and list it in the report with what the repository shows as a suggestion, for example `npm test`.
 4. **The other prompts of `PROJECT.md` and `README.md`.** Follow the fill-in guide of each file.
    - Fill a prompt only with a fact that the owner gave or confirmed in this session. A fact that a file in the repository shows is a suggestion: offer it to the owner, and write it after the owner's yes.
@@ -82,17 +81,13 @@ A setup answer is not an instruction. These answers never go in `owner-preferenc
 
 The roadmap is the project's phases: what each phase is for, which phases are done, which phase the project is in now, and what comes next. Write it from the owner's answers to question 12, in the place where the project keeps its work items.
 
-- With local work items, the roadmap is `PROJECT-ROADMAP.md`. Its fill-in guide says how to fill it. Write the file straight into the project folder, as `SKILL.md`, Step 4, says for every record of a setup.
-- With work items in Notion or in GitHub Issues, the project's `managing-work-items` skill says how that place keeps a phase, in its `references/work-tracker.md`.
+The setup file of the work items choice says where the roadmap is kept, under "At the finish". Write it straight into that place, as `SKILL.md`, Step 4, says for every record of a setup.
 
 Write only what the owner confirmed. Show the owner the roadmap after you wrote it.
 
 ## The project's Current State
 
-The project's Current State is the project's one short page of what is true now. Setup writes its first lines. Where you write them depends on where the project keeps its memory:
-
-- With local memory or Hindsight memory, write the first lines of `memory/CURRENT_STATE.md`.
-- With Notion memory, the Notion memory setup wrote these lines when it made the "Current state" page. Bring the lines of that page up to date.
+The project's Current State is the project's one short page of what is true now. Setup writes its first lines. The setup file of the memory choice says where it is kept.
 
 Keep the five headings and their line limits. The list below says what to write on the "Last updated" line and under each of the five headings:
 
@@ -112,16 +107,11 @@ Run each check alone, from the project folder. Each check only reads. The checks
 ### The checks
 
 1. **The settings files are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
-2. **The session-start command runs.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`.
-   - With Notion memory, add `--page <Current state page id>` to the command.
-   - In Codex with Notion memory, run the command escalated. `SKILL.md`, "Known problems", says under "In Codex" how Codex runs a command that way. Inside the sandbox the command prints "could not be read here". That text comes from the sandbox, and it is not a setup failure.
+2. **The session-start command runs.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`. The setup file of the memory choice gives the full command when the choice adds to it.
 3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.
 4. **"Toolkit settings" is filled.** The "Toolkit settings" section of `PROJECT.md` must hold no prompt, except a prompt that waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
 5. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
-6. **The services.** For each service that the project uses, do the check that the service's own file gives:
-   - Notion: the check that starts "For a new project" under "Checks after any of these" in `choices/notion-shared/reference/notion-work-item-pages.md`;
-   - GitHub Issues: the checks under "Checks after either" in `choices/work-items/github/github-work-items-setup.md`;
-   - Hindsight: the check under "Check a Hindsight project, or connect a new computer" in `references/hindsight-on-vps.md`.
+6. **Each choice.** For each choice of the owner, do the checks that its setup file gives.
 
 ### After the checks
 
@@ -144,19 +134,12 @@ When one of the files listed below is missing in the main checkout, copy it from
 
 ## The owner's steps
 
-The table lists the steps that the owner does. Say each one plainly, with the reason in the "Why" column, and wait where a later step needs it. Never do one of these steps for the owner. The "Needed when" column says when a step applies.
+The table lists the steps that the owner does in every project. The setup file of each choice names the steps that its choice adds, such as a sign-in. Say each step plainly, with the reason for it, and wait where a later step needs it. Never do one of these steps for the owner.
 
 | Step | Why | Needed when |
 | --- | --- | --- |
-| Run `ntn login` in a terminal. | It signs the Notion command-line tool into the owner's account. It opens a browser. | Notion, when `ntn whoami` fails |
-| Share the owner's Notion root page with "Notion CLI". | The agent can reach only shared pages. | Notion, when a call returns 404 |
-| Run `gh auth login` in a terminal. | It signs the GitHub command-line tool in. | GitHub Issues, when `gh auth status` fails |
 | Trust the project folder in Codex. | Until the folder is trusted, Codex ignores the project's `.codex/config.toml` and `.codex/hooks.json`. Trust is tied to the folder path, so it is needed again after a move. | Always, the first time the owner opens the project in Codex |
-| Trust the hooks in Codex: type `/hooks` and trust them. | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file that the hook runs is not reviewed again. | Always. Again after "update the toolkit" changes an entry in `.codex/hooks.json`. With Hindsight, also the hooks of Hindsight's coding-agent add-on, after the add-on is installed |
-| Install Salesforce's own skills. `choices/salesforce/salesforce-setup.md`, "Salesforce's skills", says where they come from in each host. | Salesforce publishes its own skills for Salesforce work. Setup never installs them. | Salesforce, when they are not installed yet |
-| Connect the project's Salesforce org (`sf org login web --alias <alias>`) and tell the agent the alias. | The agent never picks or signs in to an org itself. | Salesforce, when the project's org does not exist yet or is not connected |
-| Enter the Hindsight API key in the owner's own Terminal window, with the command that the agent gives, never in the session. | The add-on and setup read the key from `~/.hindsight/coding-agent.json`. The agent never sees the key. | Hindsight, when the key is not set yet |
-| Sign in to the Hindsight dashboard with its own access key. | The dashboard asks for that key, not the API key, before it shows the bank. The bank is this project's store of memory on the Hindsight server. | Hindsight, the first time the owner opens the dashboard |
+| Trust the hooks in Codex: type `/hooks` and trust them. | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file that the hook runs is not reviewed again. | Always. Again after "update the toolkit" changes an entry in `.codex/hooks.json`. |
 | Open the project folder as an Obsidian vault. | The owner can then browse the project's records, and local work items and memory, with their links. The project's `README.md` says how. | Optional |
 | Start a new session in each of Claude Code and Codex. | The skills, hooks, and settings load at session start. | Always |
 | Say yes to committing the setup files. | New worktree sessions (the Claude desktop app, the Codex app) see only committed files. A worktree is a separate folder with its own branch. | Always |
@@ -171,9 +154,8 @@ Give the owner a short, plain report. It has these parts, in this order:
 4. **What the owner must do**, each step with the reason for it.
 5. **The final checks.** Say that all passed, or name each check that did not pass, with its fix.
 6. **The prompts that are left**, grouped by file, each with the fact it needs in a few words.
-   - Find them with `grep -n '<[A-Za-z][^>]*>' AGENTS.md README.md PROJECT.md | grep -v '<!--'`. With local work items, run the same `grep` on `PROJECT-ROADMAP.md` too.
+   - Find them with `grep -n '<[A-Za-z][^>]*>' AGENTS.md README.md PROJECT.md | grep -v '<!--'`. Run the same `grep` on each further file that the setup file of a choice names.
    - Then skip the lines where the angle brackets are part of a file name or a path pattern, and not a prompt: `<ID>.md`, `<ID>-<short-slug>/`, `<ID>-test-plan.md`, and `<release>-test-plan.md`.
-   - When the project has its project page in Notion, also list the page's "Success criteria".
 7. **The last line** is the commit offer, which the next section gives.
 
 ## The commit offer

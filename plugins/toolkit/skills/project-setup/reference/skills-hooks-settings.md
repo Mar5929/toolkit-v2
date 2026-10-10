@@ -1,6 +1,6 @@
 # Skills, hook commands, and settings
 
-This file says which skills, hook commands, and settings a project has, and what each of the owner's choices changes in the settings. Open it at Step 5 of `SKILL.md`, and whenever another file sends you to "Merge rules".
+This file says which skills, hook commands, and settings every project has, and how a settings file that already exists is merged. Open it whenever a settings file changes, and whenever another file sends you to "Merge rules". The lines that one choice changes in the settings are in the setup file of that choice.
 
 The job is done when the settings files hold what the owner's choices need, every entry that the owner had is still there, and everything under "What must be true when the settings are done" holds.
 
@@ -23,19 +23,7 @@ Every skill is in `.claude/skills/`, one folder per skill. Claude Code reads tha
 
 The shared skills are the same in every project (10): `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `session-summary`, `filechanges`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project/` holds them.
 
-Each choice adds the skills in the table below. The table in `SKILL.md`, Step 5, says which folders hold them.
-
-| Choice | Skills |
-| --- | --- |
-| Work items local | none |
-| Work items in Notion | `using-notion-cli` |
-| Work items in GitHub Issues | none |
-| Memory local | `managing-project-memory` |
-| Memory in Notion | `managing-project-memory`, `using-notion-cli` |
-| Memory in Hindsight | none: the agent uses the tools of Hindsight's coding-agent add-on. `references/hindsight-on-vps.md`, "How the owner's Hindsight is set up", describes the add-on. |
-| Salesforce | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`. The owner installs Salesforce's own skills. `choices/salesforce/salesforce-setup.md`, "Salesforce's skills", says how to check that they are installed, and what to tell the owner when they are not. |
-
-A work choice adds no skill. It adds the selected `references/work-tracker.md` inside `managing-work-items`. A local or Notion memory choice adds the selected `references/memory-store.md` inside `managing-project-memory`.
+A choice may add a skill, or files inside a skill that the project already has. The setup file of each choice says what it adds.
 
 ## Hook commands
 
@@ -61,14 +49,7 @@ Never change the command or the text of one of the toolkit's hooks, because they
 
 ## What a choice changes in the settings
 
-The work tracking choice changes nothing in the settings. The table gives every change that a choice makes.
-
-| Choice | `.claude/settings.json` | `.codex/hooks.json` |
-| --- | --- | --- |
-| Memory local | Nothing. | Nothing. |
-| Memory in Notion | In the session-start hook, the last entry of `args` is `"local"`. Put these three entries in its place: `"notion"`, `"--page"`, `"{{CURRENT_STATE_PAGE_ID}}"`. | The session-start command ends with `--memory local`. Make it end with `--memory notion --page {{CURRENT_STATE_PAGE_ID}}`. |
-| Memory in Hindsight | In the session-start hook, change the last entry of `args` from `"local"` to `"hindsight"`. In the every-message hook, add two entries at the end of `args`: `"--skill"`, `"hindsight"`. | Make the session-start command end with `--memory hindsight`. Add ` --skill hindsight` at the end of the every-message command. |
-| Salesforce | Add the entries that `choices/salesforce/salesforce-setup.md`, "The refuse list", gives to `permissions.deny`. | Nothing. |
+The setup file of each choice gives the lines that the choice changes in `.claude/settings.json` and `.codex/hooks.json`. Work items in local files, Notion, or GitHub Issues, and memory in local files, change nothing.
 
 The owner's answer about Claude Code's own memory is one line in `.claude/settings.json`: `"autoMemoryEnabled"` is `false` when the owner wants it off, which is the default, and `true` when the owner wants it on.
 
@@ -118,7 +99,7 @@ Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the fi
 
 ## What must be true when the settings are done
 
-- `.claude/skills` holds the 10 shared skills and the skills that the table under "Skills" gives for the owner's choices, each with a `SKILL.md`. It holds no skill of a choice the owner did not make. A skill of the owner's own may be there too.
+- `.claude/skills` holds the 10 shared skills and the skills that the setup files of the owner's choices name, each with a `SKILL.md`. It holds no skill of a choice the owner did not make. A skill of the owner's own may be there too.
 - `.claude/settings.json` and `.codex/hooks.json` are valid JSON.
 - Every hook command that the settings name is in `.claude/hooks/`.
 - Each of the toolkit's own hook handlers is in each settings file once.
@@ -129,7 +110,6 @@ Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the fi
 
 ## Known problems
 
-- **`{{CURRENT_STATE_PAGE_ID}}` is still in a settings file.** With Notion memory it stays until the Notion memory setup knows the id of the Notion page named "Current state". `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says when and where to put that id.
 - **`.codex/hooks.json` accepts only `description` and `hooks` at the top level.** Put nothing else there.
   - In a file that the project already had, a `description` that does not contain the toolkit's text keeps the text it has. Add the toolkit's text after it, with one space between them.
   - One sentence is the exception. A sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the toolkit's text. Put that change in the numbered table that the owner sees. `reference/placing-files.md`, "Files the project already has", and `reference/update.md` say how to show that table.

@@ -1,10 +1,50 @@
-# Salesforce projects
+# A Salesforce project
 
-This file says what setup does in a Salesforce project. Open it when the owner answers yes to question 7 of `SKILL.md`. It gives the check that Salesforce's own skills are installed and the question to the owner about them, the questions about the org aliases, the refuse list for production, and the API version.
+Open this file when the owner answers yes to question 7 of `SKILL.md`. It gives the default to tell the owner, the questions to ask, what the choice adds to the project, and what it needs at the finish.
 
-Its job is done when all of these are true: `PROJECT.md` holds the org aliases; `.claude/settings.json` holds the refuse list entries, and the entries for each production org that the owner named; the API version is written in the two files that hold it; the owner knows when Salesforce's skills are not installed; and the owner has said what to have on or off. Where the owner cannot give a value yet, the sections below say what to write in its place.
+Its job is done when all of these are true: the Salesforce files are in the project; `PROJECT.md` holds the org aliases; `.claude/settings.json` holds the refuse list entries, and the entries for each production org that the owner named; the API version is written in the two files that hold it; the owner knows when Salesforce's skills are not installed; and the owner has said what to have on or off. Where the owner cannot give a value yet, the sections below say what to write in its place.
 
-Everything else a Salesforce project needs comes with the folder `choices/salesforce/files-to-add/`: the rules, the three `sf-*` skills, and the Salesforce templates in `delivery/`. Salesforce's own skills come from Salesforce, not from setup.
+## Contents
+
+- What the toolkit sets up by default
+- Questions for the owner
+- What this choice adds to the project
+- Salesforce's skills
+- The org aliases
+- The refuse list
+- The refuse list for production
+- The API version
+- At the finish
+- Known problems
+
+## What the toolkit sets up by default
+
+Tell the owner this in a few plain lines, and ask whether it is what the owner wants.
+
+- The project gets the toolkit's rules for Salesforce work, three skills, and templates for deployments, data migrations, and releases in `delivery/`.
+- An agent never deploys to production and never changes its data. Claude Code refuses a command that changes a production org and names it.
+- In a sandbox or a scratch org, the agent may read, validate, deploy, and run tests without asking, and asks first before a data change, a destructive deploy, or anonymous Apex. The table "Actions" in the project's `.claude/rules/salesforce-agent-permissions.md` holds every default.
+- Salesforce's own skills do the Salesforce platform work. They come from Salesforce, and setup installs none of them.
+
+## Questions for the owner
+
+Ask one question per message.
+
+- **Which sandbox the agents may deploy to, and which org is production.** "The org aliases" below gives the two questions.
+- **Whether the defaults for what an agent may do in each kind of org are what the owner wants.** Write each change into `.claude/rules/salesforce-agent-permissions.md`, in the place that the first bullets of that file give.
+- **Which of Salesforce's own skills to have on or off.** "Salesforce's skills" below gives the question.
+- **The API version**, when it cannot be read from the sandbox. "The API version" below says how to read it and what to ask.
+
+## What this choice adds to the project
+
+| Kind | What it adds |
+| --- | --- |
+| Rules, skills, files, and templates | Copy `choices/salesforce/files-to-add/` into the project. It holds the Salesforce rules, the skills `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`, `sfdx-project.json` and `.forceignore`, and the templates in `delivery/`. |
+| Settings | Entries in `permissions.deny` of `.claude/settings.json`. "The refuse list" and "The refuse list for production" give them. |
+| `PROJECT.md`, "Toolkit settings" | Salesforce org aliases: one nested line for each org. "The org aliases" gives the form. |
+| Outside the project folder | Nothing is made. |
+
+`.claude/rules/salesforce-agent-permissions.md` is the owner's own file from the first day. "Update the toolkit" never compares or replaces it.
 
 ## Salesforce's skills
 
@@ -89,7 +129,14 @@ The copied files hold the API version as `XX.0`. Fill it in two files.
 
 Leave `XX.0` in the two work item templates, `delivery/deployments/work-item-deployment-template/package.xml` and `destructiveChanges.xml`. Each copy of them fills the version from `sfdx-project.json`, as its fill-in guide says.
 
-## Mistakes to avoid
+## At the finish
+
+- **Check.** `jq '.permissions.deny' .claude/settings.json` lists the six entries of "The refuse list", and the entries for each production org that the owner named.
+- **The owner's own steps:**
+  - Install Salesforce's own skills, when they are not installed yet. "Salesforce's skills" says where they come from in Claude Code and in Codex.
+  - Connect the project's Salesforce org with `sf org login web --alias <alias>`, and tell the agent the alias, when the project's org does not exist yet or is not connected. The agent never picks an org or signs in to one itself.
+
+## Known problems
 
 - Setup only reads orgs (`sf org list`, `sf org display`). Never run a deploy, a data command, or anything that changes an org during setup.
 - A Salesforce platform question is for Salesforce's skills, not for setup.

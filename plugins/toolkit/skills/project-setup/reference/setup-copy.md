@@ -6,7 +6,7 @@ A setup of a new project or of an existing project builds no setup copy. It copi
 
 A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. The setup folder `every-project/` goes to every project. Each choice of the owner adds one or more.
 
-`reference/skills-hooks-settings.md`, "What a choice changes in the settings", gives the settings lines that the project's choices change. Make those changes in the setup copy too.
+The setup file of each choice gives the settings lines that the choice changes. Make those changes in the setup copy too. `SKILL.md`, Step 5, names the setup file of each choice.
 
 ## Contents
 
@@ -41,7 +41,7 @@ cp -R <skill folder>/every-project/. <copy>/
 
 ## Folders the choices add
 
-The table in `SKILL.md`, Step 5, is the only list of which setup folders a choice adds. For each choice that the project's "Toolkit settings" records, copy each folder in the row of that choice into `<copy>`, hidden files included:
+The setup file of each choice names the setup folders that the choice adds, and `SKILL.md`, Step 5, names the setup file of each choice. For each choice that the project's "Toolkit settings" records, copy each of its folders into `<copy>`, hidden files included:
 
 ```text
 cp -R <skill folder>/<folder>/. <copy>/
@@ -49,7 +49,7 @@ cp -R <skill folder>/<folder>/. <copy>/
 
 Copy `every-project` first, then each chosen folder. A chosen folder adds files inside skill folders that an earlier folder supplied, so copy it into the existing paths.
 
-Two rows have a special case:
+Two choices have a special case:
 
 - When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once.
 - When memory is in Hindsight, also copy one file of `choices/memory/local/files-to-add`, and nothing else from that folder:

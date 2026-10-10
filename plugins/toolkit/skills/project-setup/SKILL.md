@@ -22,7 +22,7 @@ This skill's folder is the folder that holds this `SKILL.md`. Claude Code and Co
 
 - `every-project/` is the full layout: every folder, file, rule, skill, and setting that every project gets, at the paths a project has them.
 - `choices/` has one folder for each answer that adds something to the project. A folder holds what its answer needs:
-  - one setup file, when the answer has questions of its own or needs something set up. It says what to ask the owner and what to set up;
+  - one setup file, which says how the toolkit sets the answer up by default, what to ask the owner, what the answer adds to the project, and what it needs at the finish;
   - `reference/`, when the answer has more detail than fits in the setup file;
   - `files-to-add/`, when the answer adds files to the project. The files are at the paths a project has them.
 - `reference/` holds the detail for the steps that belong to no single answer.
@@ -116,8 +116,6 @@ The project's Current State is the project's one short page of what is true now.
 | Notion | `notion` | The owner wants the board on a phone or on the web. | It needs the Notion command-line tool `ntn`, signed in. |
 | GitHub Issues | `github` | The code is already kept on GitHub. | It needs the GitHub command-line tool `gh`, signed in, and a GitHub repository. A work item's ID is its issue number, such as `#12`. |
 
-With local files, there is one more question: say that IDs look like `WI-001`, and ask whether to keep the prefix `WI`.
-
 **Question 6.** The three choices:
 
 | Choice | "Memory" value | Good when | What to know |
@@ -144,47 +142,48 @@ After the owner has said where memory is kept, ask about Claude Code's own memor
 
 The answers to questions 5, 6, and 7 pick a choice. The questions after that are about how the owner wants that choice set up in this project.
 
-1. Open the setup file of the choice. The table in Step 5 names it. A choice with no setup file has no questions beyond the ones under "What to know for a question", and its default is its row in the table of choices there.
+1. Open the setup file of the choice. The table in Step 5 names it.
 2. Tell the owner, in a few plain lines, how the toolkit sets the choice up when the owner changes nothing.
 3. Ask: "This is how the toolkit sets up `<choice>` by default. Is this what you want?"
-4. After a no, ask what the owner wants to be different. Step 5 says when the choice is set up.
+4. After a no, ask what the owner wants to be different.
+5. Ask the other questions that the setup file gives. Step 5 says when the choice is set up.
 
 When a choice needs a sign-in, ask for it as soon as the owner picks the choice, so that the owner can sign in while the interview goes on. The setup file says how to check the sign-in.
 
 ## Step 5: Each answer adds its part
 
-Each answer to questions 5, 6, and 7 adds its part in two moments. Do items 1 to 3 below right after the answer, before you ask the next question. Do item 4 when the choice's sign-in is done and the owner has given the answers that its setup file needs. The Notion setup, for example, needs the answers to questions 6 and 7.
+Each answer to questions 5, 6, and 7 has a setup file. The setup file holds everything about that answer.
 
-| Answer | Setup file to follow | Folders whose files are added |
-| --- | --- | --- |
-| Work items: local files | None | `choices/work-items/local/files-to-add/` |
-| Work items: Notion | [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | `choices/work-items/notion/files-to-add/` and `choices/notion-shared/files-to-add/` |
-| Work items: GitHub Issues | [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) | `choices/work-items/github/files-to-add/` |
-| Memory: local files | None | `choices/memory/shared-by-local-and-notion/files-to-add/` and `choices/memory/local/files-to-add/` |
-| Memory: Notion | [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | `choices/memory/shared-by-local-and-notion/files-to-add/`, `choices/memory/notion/files-to-add/`, and `choices/notion-shared/files-to-add/` |
-| Memory: Hindsight | [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) | None. The setup file says which lines this choice adds to the project's files. |
-| Salesforce: yes | [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) | `choices/salesforce/files-to-add/` |
+| Answer | Setup file |
+| --- | --- |
+| Work items: local files | [choices/work-items/local/local-work-items-setup.md](choices/work-items/local/local-work-items-setup.md) |
+| Work items: Notion | [choices/work-items/notion/notion-work-items-setup.md](choices/work-items/notion/notion-work-items-setup.md) |
+| Work items: GitHub Issues | [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) |
+| Memory: local files | [choices/memory/local/local-memory-setup.md](choices/memory/local/local-memory-setup.md) |
+| Memory: Notion | [choices/memory/notion/notion-memory-setup.md](choices/memory/notion/notion-memory-setup.md) |
+| Memory: Hindsight | [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) |
+| Salesforce: yes | [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) |
 
-For each answer, do these things:
+An answer adds its part in two moments:
 
-1. **Add the files.** Copy each folder in the row into the project the way Step 3 copies the full layout. A `files-to-add/` folder also adds files inside a skill that the project already has. A work items choice adds `references/work-tracker.md` inside `managing-work-items`, and a memory choice adds `references/memory-store.md` inside `managing-project-memory`. Add the folders of one work items choice and of one memory choice only, so that the project has one version of each of those two files.
-2. **Change the settings.** [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md), "What a choice changes in the settings", gives every line that a choice changes in `.claude/settings.json` and `.codex/hooks.json`.
-3. **Record the choice in "Toolkit settings".** The table below gives the value of each line.
-4. **Set the choice up as its setup file says**, when the row names one. It gives what to set up outside the project folder after the owner's yes, and the lines that the choice adds to the project's files.
+1. **Right after the answer, before the next question,** add what the setup file says the choice adds to the project:
+   - the files. Copy each `files-to-add/` folder that the setup file names into the project, the way Step 3 copies the full layout;
+   - the lines in the settings files;
+   - the lines of "Toolkit settings" in `PROJECT.md`;
+   - the text in `AGENTS.md`, when the choice has any.
+2. **When the choice's sign-in is done and the owner has given the answers that the setup file needs,** set up what the choice needs outside the project folder, after the owner's yes. The Notion steps, for example, need the answers to questions 5, 6, and 7.
+
+Add the files of one work items choice and of one memory choice only. Each of those choices puts a file with the same name inside a skill, so a project with two of them would have the wrong one.
 
 ### The lines of "Toolkit settings"
 
-The section has the same lines in every project. The project's skills read them, so keep every line and every label as written. Write each value inside the backticks, in place of the prompt, for example ``- Tracker: `local` ``. On a line for a choice that the owner did not make, write `not used`. Keep the section's fill-in guide comment, because later sessions read it.
+"Toolkit settings" has the same lines in every project, and the project's skills read them.
 
-| Line | Value |
-| --- | --- |
-| Tracker | `local`, `notion`, or `github` |
-| Memory | `local`, `notion`, or `hindsight` |
-| Work item ID prefix | With local work items, the prefix that the owner confirmed. With Notion, the Notion setup file fills it. With GitHub Issues, `not used`. |
-| Notion work items, Notion memory | The Notion setup file fills each one that the project uses. |
-| GitHub repository | The GitHub setup file fills it. |
-| Hindsight bank, Hindsight server, Hindsight dashboard | The Hindsight setup file fills them. |
-| Salesforce org aliases | The Salesforce setup file fills it. |
+- Keep every line and every label as written.
+- Write each value inside the backticks, in place of the prompt, for example ``- Tracker: `local` ``. A setup file says so when one of its lines has another form.
+- Each setup file gives the values of its own lines.
+- At the finish, write `not used` on every line that no choice of the owner filled.
+- Keep the section's fill-in guide comment, because later sessions read it.
 
 ## Step 6: Finish
 
@@ -265,18 +264,22 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 | File | Open it when |
 | --- | --- |
 | [reference/placing-files.md](reference/placing-files.md) | Steps 3 and 5: you copy `every-project/` or a `files-to-add/` folder into the project, the project already has one of the files, or you make the `.agents/skills` link. |
-| [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Step 5, and whenever a settings file changes: you need the skills each choice adds, the three hook commands, the settings every project gets, what each choice changes in the settings, the rules for a settings file that already exists, and how the older plugins are turned off. |
+| [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Whenever a settings file changes: you need the skills and the three hook commands every project has, the settings every project gets, the rules for a settings file that already exists, and how the older plugins are turned off. |
 | [reference/finishing.md](reference/finishing.md) | Step 6: you need the places an answer is written, the form of a line in `owner-preferences.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
 | [reference/existing-project.md](reference/existing-project.md) | The folder already has agent files that the toolkit did not put there: you need what to look for, how the branch works with the folders that Git ignores, and the known problems. |
 | [reference/update.md](reference/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice. |
 | [reference/setup-copy.md](reference/setup-copy.md) | An update or a check: you build the setup copy, which is the files the project would get today, in a temporary folder. |
 | [reference/one-home-layout.md](reference/one-home-layout.md) | An update or a check finds a project that was set up before the current folder layout. |
 | [reference/earlier-versions.md](reference/earlier-versions.md) | An update finds a project that was set up before toolkit 0.6.0, 0.8.0, or 0.8.1. |
-| [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | Work items or memory are in Notion: you need the sign-in, the owner's yes, where the project's page goes, and the links in `PROJECT.md`. |
-| [choices/notion-shared/reference/notion-work-item-pages.md](choices/notion-shared/reference/notion-work-item-pages.md) | The Notion setup file sends you here for the project's pages for work items. |
-| [choices/notion-shared/reference/notion-memory-pages.md](choices/notion-shared/reference/notion-memory-pages.md) | The Notion setup file sends you here for the project's pages for memory. |
-| [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) | Work items are in GitHub Issues: you need the sign-in, the repository, the labels, and the checks. |
-| [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) | Memory is in Hindsight: you need the questions to the owner, the memory bank, the add-on that connects Claude Code and Codex to the bank, and the lines this choice adds to the project. Each of its steps names the file under `choices/memory/hindsight/reference/` that holds its detail. |
-| [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) | The project is a Salesforce project: you need the check of Salesforce's own skills, the org aliases, the refuse list for production, and the API version. |
+| [choices/work-items/local/local-work-items-setup.md](choices/work-items/local/local-work-items-setup.md) | The owner keeps work items in local files. |
+| [choices/work-items/notion/notion-work-items-setup.md](choices/work-items/notion/notion-work-items-setup.md) | The owner keeps work items in Notion. |
+| [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) | The owner keeps work items in GitHub Issues. |
+| [choices/memory/local/local-memory-setup.md](choices/memory/local/local-memory-setup.md) | The owner keeps memory in local files. |
+| [choices/memory/notion/notion-memory-setup.md](choices/memory/notion/notion-memory-setup.md) | The owner keeps memory in Notion. |
+| [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) | The owner keeps memory in Hindsight. Each of its steps names the file under `choices/memory/hindsight/reference/` that holds its detail. |
+| [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) | The project is a Salesforce project. |
+| [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | One of the two Notion setup files sends you here: you need the sign-in, the owner's yes, where the project's page goes, and the links in `PROJECT.md`. |
+| [choices/notion-shared/reference/notion-work-item-pages.md](choices/notion-shared/reference/notion-work-item-pages.md) | The shared Notion file sends you here for the steps that make the project's page. |
+| [choices/notion-shared/reference/notion-memory-pages.md](choices/notion-shared/reference/notion-memory-pages.md) | The shared Notion file sends you here for the steps for memory. |
 | `every-project/` | Step 3: the full layout. |
-| The `files-to-add/` folders under `choices/` | Step 5: the files that an answer adds. The table in Step 5 names the folders for each answer. |
+| The `files-to-add/` folders under `choices/` | Step 5: the files that an answer adds. Each setup file names its folders. |

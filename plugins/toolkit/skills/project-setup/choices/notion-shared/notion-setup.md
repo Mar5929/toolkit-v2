@@ -1,15 +1,15 @@
-# Notion
+# Notion: the steps that work items and memory share
 
-This file says what setup does when a project keeps its work items, its memory, or both in Notion: the sign-in, the owner's yes before anything is made in the owner's workspace, which Notion setup steps to follow, and where the links go. Open it when the owner answers "Notion" to question 5 or question 6 of `SKILL.md`, and when a Notion project is updated. Its job is done when the owner is signed in, the project's Notion pages were made only after the owner's yes, and `PROJECT.md` holds the project's Notion links and ids.
+Open this file when `choices/work-items/notion/notion-work-items-setup.md` or `choices/memory/notion/notion-memory-setup.md` sends you here, and when a Notion project is updated. It gives the sign-in, the owner's yes before anything is made in the owner's workspace, where the project's page goes, which Notion steps to follow, and where the links go. Its job is done when the owner is signed in, the project's Notion pages were made only after the owner's yes, and `PROJECT.md` holds the project's Notion links and ids.
 
-The Notion steps themselves are in two other files, the Notion setup files, and setup follows them. `choices/notion-shared/reference/notion-work-item-pages.md` holds the Notion steps for work items, and `choices/notion-shared/reference/notion-memory-pages.md` holds the Notion steps for memory.
+The Notion steps themselves are in two other files. `choices/notion-shared/reference/notion-work-item-pages.md` makes the project's page and its work items part, and `choices/notion-shared/reference/notion-memory-pages.md` holds the steps for memory.
 
 Apart from the steps in those two files, setup makes only these Notion calls itself:
 
 - `ntn whoami`;
 - the `ntn api v1/search` call in "Where the project page goes";
-- the one write of the project's outcome into the project's row, which `reference/finishing.md`, "Fill the prompts", step 1, describes;
-- the one read of the "Current state" page in the Services check, which is one of the checks in `reference/finishing.md`, "Final checks".
+- the one write of the project's outcome into the project's row, which the two Notion setup files give under "At the finish";
+- the one read of the "Current state" page in the check of `choices/memory/notion/notion-memory-setup.md`, "At the finish".
 
 ## Contents
 
@@ -29,6 +29,7 @@ Ask the owner for the sign-in as soon as the owner picks Notion, so that the own
    - Tell the owner so, wait until the owner says it is done, and then run `ntn whoami` again.
    - Never run `ntn login` for the owner, and never ask the owner for a token, a code, or a password.
 3. When `ntn` is not installed (`command not found`), ask the owner before you install it, because installing it changes the owner's computer. After the owner's yes, run `npm install -g ntn`.
+4. When a call returns 404, the owner shares the owner's Notion root page with "Notion CLI", because the agent can reach only shared pages.
 
 ## The owner's yes before anything is made
 
@@ -38,7 +39,7 @@ Ask the owner for the sign-in as soon as the owner picks Notion, so that the own
 
 ## Where the project page goes
 
-The Notion setup files make the project page as a row of the owner's Projects database (`<projects-data-source-id>`), from a template that is kept in that database. Nothing records that database's id yet, so find the id before you follow the Notion setup files:
+The Notion steps make the project page as a row of the owner's Projects database (`<projects-data-source-id>`), from a template that is kept in that database. Nothing records that database's id yet, so find the id before you follow `choices/notion-shared/reference/notion-work-item-pages.md`:
 
 1. List the data sources named "Projects" that "Notion CLI" can see, with each one's title column and the page that holds its database:
 

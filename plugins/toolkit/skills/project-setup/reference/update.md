@@ -53,7 +53,7 @@ This file uses four names:
 Build the setup copy for the choices that `PROJECT.md` records, in a new temporary folder. Follow two files, in this order:
 
 1. `reference/setup-copy.md` gives the steps for making the temporary folder and copying the setup folders into it.
-2. `reference/skills-hooks-settings.md` gives the settings lines that each choice changes, and what must be true of the skills, the hook commands, and the settings.
+2. `reference/skills-hooks-settings.md` gives what must be true of the skills, the hook commands, and the settings. The setup file of each choice gives the settings lines that the choice changes.
 
 While you build the setup copy, do the following:
 
@@ -209,17 +209,17 @@ A choice decides which files a project has, never which lines inside a file. So 
 2. Make your own worktree and branch, as "Before you start" says. In the worktree, change `PROJECT.md`, "Toolkit settings":
    - Change the Tracker or Memory line.
    - Write `not used` on each line that only the old choice used.
-   - Write the new choice's lines as `SKILL.md`, "The lines of "Toolkit settings"", says. That section gives the value of each line.
+   - Write the new choice's lines as the setup file of the new choice says, and as `SKILL.md`, "The lines of "Toolkit settings"", says for every line.
 3. Build a new setup copy for the new choices and compare, as sections 1 and 2 say.
    - Add each file the project lacks, as the "Missing files" row says, except the affected merged skill folder. Keep that skill and its selected store reference in the old form until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
    - Keep the old choice's installed instructions until the records move in step 5. Read the old `references/work-tracker.md` or `references/memory-store.md` before the change. Read the new choice's selected reference in the setup copy to learn how to create and read back its records. Do not install the new choice's reference over the old one yet.
    - A new memory choice also replaces the toolkit's hook handlers in `.claude/settings.json` and `.codex/hooks.json` with the handlers of the new choice (`reference/skills-hooks-settings.md`, "What a choice changes in the settings" and "Merge rules"). The owner trusts the changed Codex hooks again in `/hooks`.
-4. Run the service step for the new choice (`choices/notion-shared/notion-setup.md`, `choices/work-items/github/github-work-items-setup.md`, or `references/hindsight-on-vps.md`).
+4. Do what the setup file of the new choice gives for outside the project folder. `SKILL.md`, Step 5, names the setup file of each choice.
    - When the project already has work items or memory in Notion and adds the other one, make no second project page. Follow `choices/notion-shared/reference/notion-work-item-pages.md`, "Adding work items or memory later".
    - When memory moved out of Hindsight, after the owner's yes also remove the project's folder from the settings of Hindsight's coding-agent add-on, so that the add-on is switched off there.
 5. Move the records one at a time, with a preview of each record and the owner's yes, and read each record back in its new place. Delete nothing from the place where the work items were kept before, or from the old memory system.
    - When the records go into Hindsight, the add-on's tools load only in the next session. So save each record through the server's API, with the record's ID as the ID of the saved document, and read the record back with a search after the save has finished.
 6. After the records are moved and the owner says yes to the list, install the new choice's merged skill folder from the setup copy and remove the old choice's files. Check for owner edits before replacing or removing a skill file. The selected `references/work-tracker.md` or `references/memory-store.md` then contains the new choice's instructions.
-   - The list is every file of the old choice's setup folders that no setup folder of the new choices holds. `(cd <skill folder>/<folder> && find . -type f)` prints a folder's files, and the table in `SKILL.md`, Step 5, names the folders of each choice. `<skill folder>` is the folder that holds this skill's `SKILL.md`.
+   - The list is every file of the old choice's setup folders that no setup folder of the new choices holds. `(cd <skill folder>/<folder> && find . -type f)` prints a folder's files, and the setup file of each choice names its folders. `SKILL.md`, Step 5, names the setup file of each choice. `<skill folder>` is the folder that holds this skill's `SKILL.md`.
    - Memory that moved to Hindsight keeps `memory/CURRENT_STATE.md`.
    - A file in `work-items/` or `memory/` that is not in a setup folder is the owner's record. It stays until the owner says what to do with it.
