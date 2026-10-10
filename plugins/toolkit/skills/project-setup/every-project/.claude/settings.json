@@ -6,7 +6,78 @@
   },
   "autoMemoryEnabled": false,
   "enabledPlugins": {
-    "second-brain@claude-toolkit": false
+    "git-workflows@claude-toolkit": false,
+    "hooks-library@claude-toolkit": false,
+    "project-init@claude-toolkit": false,
+    "protocol-guard@claude-toolkit": false,
+    "second-brain@claude-toolkit": false,
+    "session-skills@claude-toolkit": false,
+    "sf-architect-solutioning@claude-toolkit": false,
+    "system-guide@claude-toolkit": false,
+    "work-tracker@claude-toolkit": false
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.mjs",
+              "--memory",
+              "local"
+            ],
+            "timeout": 30,
+            "statusMessage": "Loading Current State"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-reminder.mjs"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/codex-after-commit.mjs"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo",
+            "args": [
+              "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"A helper agent ran or was started. If it works on a work item or sub-item, update that item's status, Recent History, and Current state with managing-work-items once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.\"}}"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   },
   "outputStyle": "Plain English",
   "permissions": {
@@ -33,13 +104,7 @@
       "Bash(git push * -f)",
       "Bash(git push * -f *)",
       "Bash(git push --force-with-lease*)",
-      "Bash(git push * --force-with-lease*)",
-      "Bash(sf project delete source *)",
-      "Bash(sfdx force:source:delete *)",
-      "Bash(sf org delete *)",
-      "PowerShell(sf project delete source *)",
-      "PowerShell(sfdx force:source:delete *)",
-      "PowerShell(sf org delete *)"
+      "Bash(git push * --force-with-lease*)"
     ],
     "ask": [
       "Bash(git reset --hard *)",

@@ -1,6 +1,5 @@
 # What a Toolkit V2 project sets in Codex: it turns off the older claude-toolkit plugins and raises
-# the limit for the list of skills. Onboarding adds these lines to the project's .codex/config.toml;
-# Codex reads them once the project is trusted.
+# the limit for the list of skills. Codex reads this file once the project is trusted.
 
 [plugins."git-workflows@claude-toolkit"]
 enabled = false
