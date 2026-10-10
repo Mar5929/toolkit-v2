@@ -148,7 +148,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 | Kind | What it adds |
 | --- | --- |
 | Questions | Where in Notion the project's page goes, and the prefix of a work item's ID. |
-| Files inside `managing-work-items` | Four: how a work item is stored as a Notion page (`work-tracker.md`), the layout of the databases, the layout of a page, and how to search. |
+| Files inside `managing-work-items` | One, `work-tracker.md`: where a work item is kept in Notion, how to create, fill, and change one, the exact names and values, the commands, and the known problems. The layout of a work item's page is the owner's template in Notion, and no file describes it. |
 | Skill and rule | `using-notion-cli`, which says how to run the Notion command-line tool, and the rule `notion-records.md`. The Notion memory module adds the same two, and a project gets them once. |
 | `PROJECT.md` | Tracker: `notion`, the ID prefix, and the links and IDs of the project's Notion page and its Work Items, Phases, and Tasks databases. |
 | Outside the project folder | The project's pages in Notion, made as a copy of the owner's "Project" template. The project's phases are kept in the Phases database. |
