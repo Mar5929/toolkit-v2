@@ -119,7 +119,7 @@ The table says where each old file or record goes. The rules for each row are in
 | A target direction record (`project-wide-records/target-architecture/`) | Put it under "Your call". |
 | An intake receipt (`project-wide-records/intake/`) | Put it under "Your call". |
 | A domain map (`project-wide-records/domains/`) | Put it under "Your call". |
-| A source inside a work item (a file in the `references/` folder of a local work item; a GitHub comment that starts `## Source:`; a file in the Files property of a Notion work item) | It goes to `sources/`, with an SRC number and a row in `sources/README.md`. |
+| A source inside a work item (a file in the `references/` folder of a local work item; a GitHub comment that starts `## Source:`; a file in the Files property of a Notion work item) | It goes to `sources/`, with an SRC number and a row in `sources/INDEX.md`. |
 | A client file in `delivery/meeting-notes/` or `delivery/references/` | It goes to `sources/`, with an SRC number and a row. |
 | `delivery/communications/` and `delivery/deliverables/` | They go to `delivery/client-handoffs/`. |
 | `delivery/deployment/` | It goes to `delivery/deployments/`, and a release folder goes to `delivery/releases/`. |
@@ -337,7 +337,7 @@ Do the nine steps in this order.
    - Before the commit, look for these two things in a project on the old layout, and fix them:
      - A closed work item has no filled Moved up line. The rules for a work item that is Done or Cancelled, above, give the line to write.
      - A `memory/` folder has an `AGENTS.md` and no `CLAUDE.md`. Copy `<copy>/memory/CLAUDE.md` into it.
-   - Before the branch is merged, fetch, and compare `DECISIONS.md` and `sources/README.md` with the default branch. When another session took an ID in the meantime, renumber your own record and every mention of it.
+   - Before the branch is merged, fetch, and compare `DECISIONS.md` and `sources/INDEX.md` with the default branch. When another session took an ID in the meantime, renumber your own record and every mention of it.
 8. **In the main checkout, after the branch was merged:**
    - In a Salesforce project, move each data file that Git ignores, for example with `mv <main>/delivery/data/data-loads/<file> <main>/delivery/migrations/data-loads/`, and do the same for `production-backups/`. Then run `git status --short`, which must list no data file. When it lists a data file, that file is not ignored: stop and tell the owner. Remove the old folders with `rmdir` once they are empty.
    - In the work items, write each Sources line, the Moved up line, the heading "Lessons not proven yet", each Questions and Answers row that the plan carries from a memory decision record, and the ID of each new `DECISIONS.md` entry in each work item that the entry affects. Write each one in the place that `<copy>/work-items/AGENTS.md` and the work item template give.

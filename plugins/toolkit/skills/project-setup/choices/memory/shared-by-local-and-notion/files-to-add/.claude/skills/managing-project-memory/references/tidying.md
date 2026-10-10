@@ -135,7 +135,7 @@ A fact that is really an instruction, such as "always check X before Y", is prop
 ## Writing a project skill
 
 - A project skill goes in `.claude/skills/<name>/SKILL.md`. Codex reads `.agents/skills`, which is a link to `.claude/skills`, so one copy serves both Claude Code and Codex.
-- Write the skill with `writing-harness-files`.
+- Write the skill as the official skill pages of Claude Code and Codex say, and follow `.claude/rules/document-clarity-standard.md` for its words.
 - Add one row for the skill to the "Which skill" table in the root `AGENTS.md`.
 
 ## The owner's rules

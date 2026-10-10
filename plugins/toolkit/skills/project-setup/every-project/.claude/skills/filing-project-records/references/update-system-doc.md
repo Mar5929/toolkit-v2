@@ -26,12 +26,12 @@ Before you write a rule, name the DEC ID behind the change. When `DECISIONS.md` 
    - For a changed rule, change its Rule line and its "Conditions and exceptions" line in place, under the same ID, and set its Source to the new DEC ID. Do not keep the old wording in the document, because the Superseded entry in `DECISIONS.md` holds it.
    - When the wording of a rule marked Built changes, set its mark back to Approved with the new DEC ID, because no work item has built the new wording yet.
    - For a rule that no longer applies, set its mark to Retired, and its Source to the DEC ID that retired it.
-   - When a rule's Source names an SRC ID, add the rule ID to the "Used by" cell of that row in `sources/README.md`.
+   - When a rule's Source names an SRC ID, add the rule ID to the "Used by" cell of that row in `sources/INDEX.md`.
 4. When an Open entry becomes Decided, change each Draft rule that waited for it to Approved, and remove its DEC ID from Open questions.
 5. Set the document's "Last changed via" line to the DEC ID. Set the document's Status again. `system/AGENTS.md`, section "The form of a document", says which Status applies.
 6. Add one Changelog row. It holds the date, the change with the rule ID, the DEC ID, and the work item that caused the change or "none".
 7. Add the rule ID to the Affects line of the entry in `DECISIONS.md`. Step 7 of `record-decision.md` writes the rule ID into each work item.
-8. Make one save with `publish-docs`. The save holds the document, `DECISIONS.md`, and `sources/README.md` when step 3 changed it.
+8. Make one save with `publish-docs`. The save holds the document, `DECISIONS.md`, and `sources/INDEX.md` when step 3 changed it.
    - When `record-decision.md` sent you here, do not save. Go back to it, and its step 6 makes the one save.
 
 ## Mark a rule Built

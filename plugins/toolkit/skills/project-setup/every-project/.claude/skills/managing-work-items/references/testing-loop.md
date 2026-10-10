@@ -74,7 +74,7 @@ Keep the reply short, and give its parts in this order:
 2. How the owner can see the result: a link, a screenshot, or a command. Put `cd <worktree path>` before a command, because the change is only in the work item's worktree until it is merged.
 3. The evidence: each requirement's verdict, the commit that was checked, and the tests that were run, with their result lines.
 4. The gaps: anything partly met, not run, or found outside the requirements. Never hide a gap to get a yes.
-5. The Sources list that `.claude/rules/cite-recalled-knowledge.md` asks for.
+5. The Sources list that the root `AGENTS.md`, "How to write replies", asks for.
 6. Last, "Do you approve this result?"
 
 ## Mistakes to avoid

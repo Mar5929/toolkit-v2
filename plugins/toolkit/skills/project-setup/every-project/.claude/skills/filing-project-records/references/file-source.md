@@ -8,7 +8,7 @@ The steps are the same whether the project keeps its work items in local files, 
 
 ## Steps
 
-1. Search `sources/README.md`, the list of sources, for this source. Search by its date, who it came from, and its subject.
+1. Search `sources/INDEX.md`, the list of sources, for this source. Search by its date, who it came from, and its subject.
    - When the source is filed already, use its ID, add the work item's ID to the row's "Used by" cell, and go to step 6.
 2. Decide where the source is kept: in `sources/`, or outside Git. `sources/AGENTS.md`, section "A source kept outside Git", says how to decide. When that section gives a question for this source, ask the owner that question.
 3. Take the next SRC number.
@@ -16,7 +16,7 @@ The steps are the same whether the project keeps its work items in local files, 
    - Save pasted text as a `.md` file.
    - Save a file as a copy with its own extension. An email with attachments is one folder.
    - For a source kept outside Git, save no file.
-5. Add the source's row to `sources/README.md`. In its "Used by" cell, name each work item that uses the source now.
+5. Add the source's row to `sources/INDEX.md`. In its "Used by" cell, name each work item that uses the source now.
 6. Save with `publish-docs` now, before you use the source. The save is what makes the number yours, and a link from Notion or GitHub works only once the file is on the default branch.
 7. Write the source's line in each work item that uses it, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write it. Wait until then.
    - The line goes under Notes, Sources.

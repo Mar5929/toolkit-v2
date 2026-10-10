@@ -31,13 +31,13 @@ The Status of an entry is one of four words: Open (a question that waits for an 
    - On the Affects line, name each open work item the entry changes.
      - Name only a work item that exists. For work that has no work item yet, write "none yet", or first add the work item to the Backlog with `managing-work-items`.
      - When you cannot tell which work items the entry changes, ask the owner in one question.
-   - On the Sources line, name each SRC ID the entry is based on. Add the DEC ID to the "Used by" cell of each of those rows in `sources/README.md`.
+   - On the Sources line, name each SRC ID the entry is based on. Add the DEC ID to the "Used by" cell of each of those rows in `sources/INDEX.md`.
    - When the entry is a lesson from a work item that is being closed, the owner's yes to keeping the lesson for the whole project is the decision. On the Decision line, state the lesson as what to do or what to avoid. On the Why line, say what happened and where it was seen, with the work item's ID.
 5. Decide whether the entry needs a rule in `system/`.
    - A Decided entry that states how the system must work is also a rule. Write the rule now with `update-system-doc.md`, before the save in step 6.
    - An Open entry gets a rule now only when a work item under its Affects is designed or built to the proposed wording before the answer is given. That rule is marked Draft.
    - Otherwise, write the rule of an Open entry when the entry is answered.
-6. Make one save with `publish-docs`. The save holds `DECISIONS.md`, `sources/README.md` when step 4 changed it, and every system document that step 5 changed.
+6. Make one save with `publish-docs`. The save holds `DECISIONS.md`, `sources/INDEX.md` when step 4 changed it, and every system document that step 5 changed.
 7. Write the IDs in each work item under Affects, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write them. Wait until then. On the work item's Related items line, write the DEC ID and the ID of each rule that step 5 added or changed.
    - When a Questions and Answers row in a work item raised the decision, add "Filed as DEC-###." at the end of that row's Answer cell, after the owner's words. The row keeps the owner's words.
    - When a work item cannot continue without the answer to an Open entry, that work item waits on the owner. Continue with `managing-work-items` for that work item.

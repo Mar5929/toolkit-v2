@@ -70,4 +70,4 @@ Give the owner the handoff in the reply: both file paths, which file is which, t
 
 - `salesforce-agent-permissions.md`: what an agent may do in each kind of org in this project.
 - `salesforce-org-safety.md`: the limits that are the same in every project, and the commands.
-- `record-deployment-steps.md`: record a manual step when a deploy needs an action the deploy cannot perform.
+- `salesforce-deployments.md`: record a manual step when a deploy needs an action the deploy cannot perform.

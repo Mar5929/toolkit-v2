@@ -31,6 +31,8 @@ The root `AGENTS.md`, section "Your job as the agent", states the goal for all o
 - Name the source of every fact that you save, and mark a fact that nobody has confirmed. `references/saving.md`, section "An unchecked claim", gives the mark.
 - Tell the owner what you saved. `references/saving.md`, section "Reply lines", gives the line for each kind of save.
 
+The session that the owner writes to decides what is saved. A reminder that a hook prints is not a decision to save. Do not save on every hook reminder or on every turn. A turn can end with nothing saved.
+
 ## How memory is kept
 
 - Memory holds only what no other project file holds. Before you save a fact, check whether another file is the place for it. `references/memory-criteria.md`, section "First find the place where the fact is kept", lists the kinds of fact that never go in memory and the file each one goes in.
@@ -58,7 +60,9 @@ Save, correct, and retire without a question. Ask the owner only when one of the
 - The step is on the list in the root `AGENTS.md`, section "Ask the owner first". For example, a delete of a memory record cannot be undone in some memory stores, and an instruction that you inferred would add a line to a rule file, which the Project map marks "Only with the owner's yes".
 - You clean up all of memory, or a part of the project's Current State is over its limit with only true lines. `references/tidying.md` and `references/current-state.md` say to show the owner the plan first, because a clean-up changes many records at once, and a cut removes a line that is still true.
 
-The owner's own request to keep, change, or forget something is the owner's yes. Act on it at once.
+The owner's own request to keep, change, or forget something is the owner's yes. Act on it at once. When the owner told you to forget something or not to keep it, keep it nowhere else: not in the project's Current State and not in another memory record.
+
+When a change needs the owner's yes, the yes covers only the change and the meaning that you showed. Silence is never a yes.
 
 ## When to clean up all of memory
 

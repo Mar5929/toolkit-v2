@@ -6,7 +6,7 @@ This folder holds every source the project keeps. A source is anything the proje
 
 | File | What it is |
 | --- | --- |
-| `README.md` | The list: one row per source. |
+| `INDEX.md` | The list: one row per source. |
 | `SRC-###-<short-name>.<extension>` | One filed source. |
 | `SRC-###-<short-name>/` | One source that is several files, such as an email with its attachments. |
 

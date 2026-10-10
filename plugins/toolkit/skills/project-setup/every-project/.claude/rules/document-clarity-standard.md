@@ -6,7 +6,7 @@ An artifact is something made for a person to look at, such as a diagram, chart,
 
 A document is a file that someone follows or relies on later. Skills, rules, agent guides (`AGENTS.md` and `CLAUDE.md`), requirements, designs, system documents, decisions, test plans, and delivery records are all documents.
 
-Replies to the owner in a session follow the output style. Text sent to another person follows `humanize-outbound-text.md`. If that text is an artifact, follow this standard for its words too.
+Replies to the owner in a session follow the output style. Text sent to another person follows the root `AGENTS.md`, "Text that goes to another person". If that text is an artifact, follow this standard for its words too.
 
 A helper agent is an agent started for one job. Helper agents and Codex do not get the output style, so they follow this standard for documents and artifacts.
 
@@ -81,4 +81,3 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 - You may reorder the document, split or join its sections, and rename a heading. When you rename a heading, update every file that names it.
 - Change no rule, no limit, and no exact text that a tool or another file reads.
 - Leave a sentence or a name that is already clear. Change one only when a reader who is new to the project would not understand it.
-- To rewrite a skill, a rule, or an agent guide, follow the rewrite steps in the `writing-harness-files` skill.

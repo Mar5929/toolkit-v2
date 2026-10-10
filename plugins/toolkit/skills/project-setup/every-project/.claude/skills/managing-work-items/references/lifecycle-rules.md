@@ -200,6 +200,16 @@ Save after each step, and not at the end.
 - When a save fails, start the reply with "Not saved".
 - When a save worked but reads back differently, start the reply with "Saved but not verified" and say what differs.
 
+### Keep the whole work item true
+
+While you work on a work item, keep the whole work item true, and not only its Current state. A work item's Current state is the five lines at the top of the work item that say where it stands. Keep these true as well: the status of each task and who does it, the status of each of the work item's phases, and every field you have information for.
+
+- Save the owner's requirements and corrections before you go on. Save them in the work item, or in the work item's design when they change the design.
+- When the work item waits on the owner, write Next action in the form that the work item template, `assets/work-item-template.md`, gives for a work item that waits, with the first open question.
+- When Next action disagrees with the work item's fields, the fields are right. Rewrite Next action to match the work item's status, its State, its `waiting_on`, its approvals, and its ticked tasks.
+- A work item keeps its requirements approval when it moves to a later State.
+- Before you end work that is not finished, rewrite the work item's Current state so that its Next action names the exact next step.
+
 ### A work item that waits for an answer in `DECISIONS.md`
 
 A work item that cannot continue until an Open entry in `DECISIONS.md` is answered waits on the owner.
@@ -263,7 +273,7 @@ This table names where to read or save each kind of record and which skill handl
 | Salesforce: updating the component tracker | `sf-component-tracker` |
 | Salesforce: checking a deploy to a shared org | `sf-deploy-check` |
 | Salesforce: a production data change | `sf-data-change` |
-| Pull request text, and Salesforce release notes that go to a client | `humanizer`, as `.claude/rules/humanize-outbound-text.md` says |
+| Pull request text, and Salesforce release notes that go to a client | `humanizer`, as the root `AGENTS.md`, "Text that goes to another person", says |
 
 ## References
 

@@ -180,5 +180,5 @@ Track only the components that this project created or changed.
 
 ## Related rules
 
-- `check-deployment-contents.md` reads this tracker as a hint before any deploy.
+- `salesforce-deployments.md` reads this tracker as a hint before any deploy.
 - `salesforce-agent-permissions.md` and `salesforce-org-safety.md` say what an agent may do in an org.

@@ -150,7 +150,7 @@ When you find a secret or an email address in memory, remove that text at once, 
 
 An instruction from the owner for how the agent works is a rule, and never memory. So is a preference of the owner, and a correction of how the agent works. The owner's own words are the owner's yes.
 
-Write a line that the owner dictates with the steps below alone. For every other change to a rule file, use `writing-harness-files`.
+Write a line that the owner dictates with the steps below alone. Every other change to a rule file follows `.claude/rules/document-clarity-standard.md` and needs the owner's yes first, as the Project map in the root `AGENTS.md` says.
 
 1. Read `.claude/rules/owner-preferences.md` again, right before you change it. Then do the one of these that fits:
    - When a bullet already says the same, add nothing, and tell the owner so.

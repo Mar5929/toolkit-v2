@@ -9,6 +9,7 @@ Its job is done when all of these are true: the Salesforce files are in the proj
 - What the toolkit sets up by default
 - Questions for the owner
 - What this choice adds to the project
+- The text in AGENTS.md
 - Salesforce's skills
 - The org aliases
 - The refuse list
@@ -39,12 +40,47 @@ Ask one question per message.
 
 | Kind | What it adds |
 | --- | --- |
-| Rules, skills, files, and templates | Copy `choices/salesforce/files-to-add/` into the project. It holds the Salesforce rules, the skills `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`, `sfdx-project.json` and `.forceignore`, and the templates in `delivery/`. |
+| Rules, skills, files, and templates | Copy `choices/salesforce/files-to-add/` into the project. It holds three rules (`salesforce-org-safety.md`, `salesforce-agent-permissions.md`, and `salesforce-deployments.md`), the skills `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`, `sfdx-project.json` and `.forceignore`, and the templates in `delivery/`. |
+| Text in `AGENTS.md` | Two lines near the top, and the Salesforce rows of three tables. "The text in AGENTS.md" below gives them. |
 | Settings | Entries in `permissions.deny` of `.claude/settings.json`. "The refuse list" and "The refuse list for production" give them. |
 | `PROJECT.md`, "Toolkit settings" | Salesforce org aliases: one nested line for each org. "The org aliases" gives the form. |
 | Outside the project folder | Nothing is made. |
 
 `.claude/rules/salesforce-agent-permissions.md` is the owner's own file from the first day. "Update the toolkit" never compares or replaces it.
+
+## The text in AGENTS.md
+
+Add this text to the project's root `AGENTS.md`.
+
+Below the paragraph about voice-to-text, add these two lines:
+
+```markdown
+- Salesforce's official skills (`forcedotcom/sf-skills`) are installed for this project. Use them for Salesforce platform questions and Salesforce work.
+- This project's rules and its three `sf-*` skills decide what may be deployed or changed. They win over an official Salesforce skill. `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for each kind of action in each kind of org.
+```
+
+In the "Project map" table, add this row after the row for `working-files/`:
+
+```markdown
+| `force-app/`, `sfdx-project.json`, `.forceignore` | The Salesforce metadata this project builds and deploys, in `force-app/`, and the two files that tell Salesforce tools how to treat this repository. `force-app/` is made when the first metadata is added. | The Salesforce rules in `.claude/rules/`; `sf-component-tracker` before building. |
+```
+
+In the same table, add one sentence to each of two rows:
+
+- to the row for `delivery/deployments/`, in "What it holds": "Also the component tracker and the package files."
+- to the row for `.claude/hooks/`, `.claude/settings.json`, in "What it holds": "In Claude Code, the settings file also refuses a command that changes a production org and names it."
+
+In the "Which skill" table, add this row:
+
+```markdown
+| Salesforce metadata changes, a production data change, or a deploy to a shared org | `sf-component-tracker`, `sf-data-change`, `sf-deploy-check`. `.claude/rules/salesforce-deployments.md` says when to open each. |
+```
+
+In the "Commands" table, add this row:
+
+```markdown
+| Validate a change against the sandbox | `.claude/rules/salesforce-org-safety.md`, "The commands". The aliases are under "Toolkit settings" in `PROJECT.md`. |
+```
 
 ## Salesforce's skills
 

@@ -39,7 +39,7 @@ For example, each of these changes what is true: a new person or a changed role,
 
 ## Project map
 
-- A row marked "local work items", "local memory", "Hindsight memory", "Salesforce", or "optional" is present only in a project set up that way.
+- A row marked "local work items", "local memory", "Hindsight memory", or "optional" is present only in a project set up that way.
 - Git does not track `work-items/`, `memory/`, and `working-files/`. They exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them.
 - Work items are kept in one place: local files, Notion, or GitHub Issues. Never copy a work item into another of these or a list of your own. Name a work item by its ID, never by a folder path.
 
@@ -70,10 +70,10 @@ For example, each of these changes what is true: a new person or a changed role,
 | `system/integrations/` | One document per connection between this system and another one: what data is sent, in which direction, when, and which system holds the true value (INT-##). | As for `system/`. |
 | `system/diagrams/` | Diagrams that explain the system, such as a data model diagram, a process flow, or a map of the integrations. | As for `system/`. |
 | `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
-| `sources/README.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
+| `sources/INDEX.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
 | `delivery/` | The records of putting the work into use, in the four folders below. It does not hold the work itself, or its requirements and tasks: those are in the work item. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
 | `delivery/releases/` | One folder per release: its release notes and the plan for the release. | As for `delivery/`. |
-| `delivery/deployments/` | One folder per deployment of a work item to an environment. `delivery/AGENTS.md` gives the fields of its record. Salesforce: also the component tracker and the package files. | As for `delivery/`. |
+| `delivery/deployments/` | One folder per deployment of a work item to an environment. `delivery/AGENTS.md` gives the fields of its record. | As for `delivery/`. |
 | `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk. Data files and backups are never committed. | As for `delivery/`. |
 | `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for `delivery/`. |
 | `reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions are in `system/` and `DECISIONS.md`. | Commit with `publish-docs`. |
@@ -81,10 +81,9 @@ For example, each of these changes what is true: a new person or a changed role,
 | `reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
 | `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named with its ID and a short form of its title: `working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
-| `force-app/`, `sfdx-project.json`, `.forceignore` (Salesforce) | The Salesforce metadata this project builds and deploys, in `force-app/`, and the two files that tell Salesforce tools how to treat this repository. `force-app/` is made when the first metadata is added. | The Salesforce rules in `.claude/rules/`; `sf-component-tracker` before building. `.claude/rules/salesforce-project.md` names the official Salesforce skills. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
 | `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
-| `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. Salesforce: in Claude Code, the settings file also refuses a command that changes a production org and names it. | Only with the owner's yes. |
+| `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. | Only with the owner's yes. |
 | `.claude/output-styles/` | The Plain English output style ("How to write replies" below). | Only with the owner's yes. |
 | `.agents/skills`, `.codex/` | What Codex reads: a link to `.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
 
@@ -119,6 +118,8 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
+Project memory is kept only in the place that the "Memory" line of "Toolkit settings" names, never in the memory feature of Claude Code or Codex or of another plugin.
+
 To find what was decided before, read `DECISIONS.md`, then `system/`, then the work item. Before you say nothing is recorded, search `work-items/` and `memory/` too (`managing-work-items`, `managing-project-memory`). Search memory before you ask the owner to repeat something, name who does or decides something, set a date, deploy, load data, or run a recurring job.
 
 ## Ask the owner first
@@ -144,7 +145,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | Anything about one work item, from finding or reading it to closing or cancelling it; the project's phases and project tasks | `managing-work-items` |
 | A decision or open question more than one work item needs; the project receives a source; an approved fact about the system changes | `filing-project-records` |
 | The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
-| The owner ends the session or clears context, or pastes a handoff to check | `handoff` |
+| The owner ends the session or clears context, asks for a handoff, or pastes one to check. Offer one when this session's context was compacted or the owner says the work will continue in another session, never after a small edit or a quick lookup. | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
 | The owner asks which files you changed in your last set of changes, such as "what files did you change?" | `filechanges` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
@@ -152,7 +153,6 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
-| Salesforce metadata changes, a production data change, or a deploy to a shared org (Salesforce) | `sf-component-tracker`, `sf-data-change`, `sf-deploy-check`. The Salesforce rules say when to open each. |
 | The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use `managing-work-items` for open work items and project tasks. Use `managing-project-memory` for the project's Current State, or `.claude/rules/hindsight-memory.md` in a Hindsight project. Read the Open entries in `DECISIONS.md`. Report each dated line of the project's Current State, and say when its date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
 
 ## Commands
@@ -161,7 +161,6 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | --- | --- |
 | Check, update, or repair the toolkit setup | The `project-setup` skill ("check the setup", "update the toolkit"). |
 | Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |
-| Check Salesforce impact or permission sets, or validate against the sandbox (Salesforce) | `.claude/rules/salesforce-project.md` |
 
 ## How to write replies
 
@@ -174,3 +173,11 @@ Claude Code applies the Plain English output style to replies to the owner. Code
 - Use paragraphs for a connected explanation, bullets for separate points or choices, and a heading only when it names what is under it.
 - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
 - Leave out routine narration. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+
+This line applies in Claude Code too:
+
+- When a reply uses something recalled from project knowledge (a project record, a work item, memory, or a rule), name the source where you use it, by its ID when it has one, such as "(DEC-012)", and end the reply with a short Sources list just above the closing question or the words that continue the work. Each line of the list names one source and what you took from it.
+
+## Text that goes to another person
+
+Run text that leaves the project for someone other than the owner, such as an email, a message, a support case, a pull request description, or a client document, through the `humanizer` skill before the owner sees the final version. Keep every fact, name, ID, number, and date, and write in the owner's voice, first person, when the text goes out under the owner's name. Without `humanizer`, rewrite the text by `.claude/rules/document-clarity-standard.md`, and say that the humanizer did not run. This does not cover replies to the owner, work items, project records, code, or commit messages.

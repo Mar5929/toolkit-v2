@@ -5,15 +5,28 @@ description: 'Commits an approved edit to project documents directly to the defa
 
 # Commit project documents to the default branch
 
-Use this skill to commit a change to Git-tracked project documents directly to the default branch, with no pull request. The rule `.claude/rules/publish-project-documents.md` lists the paths of the project documents. The default branch is the repository's main branch, which is often `main`.
+Use this skill to commit a change to Git-tracked project documents directly to the default branch, with no pull request. "The paths of the project documents" below lists which files are project documents. The default branch is the repository's main branch, which is often `main`.
 
 In this skill, a save is one commit of an agreed document edit. The commit is made in a temporary Git worktree of its own, which this skill calls the save worktree. A worktree is a separate folder with its own checked-out commit.
 
 Two things must be true when the save is done: only the agreed document edit reaches the default branch, and no other session's work changes. A save is finished only when step 8 finds its commit on the default branch.
 
-This skill decides nothing about what a document says. The skill that asked for the save decides what the document says.
+This skill decides nothing about what a document says. The skill that asked for the save decides what the document says. Committing a document does not approve its requirements or its build.
 
 Run each Git command on its own, with `git -C <folder>`, which names the folder that the command works in. The command then never depends on the current folder.
+
+## The paths of the project documents
+
+A project document is a file under one of these paths.
+
+- `system/**`
+- `PROJECT*.md`
+- `DECISIONS.md`
+- `sources/**`
+- `reference/**`
+- `delivery/**`
+- `tools/**/*.md`
+- `**/README.md`
 
 ## Names used in the commands
 
@@ -29,7 +42,7 @@ Run each Git command on its own, with `git -C <folder>`, which names the folder 
 ## Steps
 
 1. **Check the files.** Name every file in the save. Each file must be a project document, which means that all four of these are true:
-   - The file is under a path in the `paths` list at the top of the rule `.claude/rules/publish-project-documents.md`.
+   - The file is under a path in "The paths of the project documents" above.
    - The file's type is `.md`, `.txt`, `.csv`, `.xml`, `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, or `.pdf`. A source under `sources/` may be any type, because the owner approved the source when `filing-project-records` filed it.
    - "Refused files" below does not refuse the file.
    - Git does not ignore the file. Run `git -C <main> check-ignore <file>`. When the command prints the path, Git ignores the file.

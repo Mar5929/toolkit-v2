@@ -40,7 +40,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - When the owner answers "None", update only the project tasks in step 2.
 2. **Update each of those work items** with `managing-work-items`. For each work item:
    - Read the work item first.
-   - Make every part of the work item true, as the rule `.claude/rules/keep-work-item-current.md` says.
+   - Make every part of the work item true, as `managing-work-items` says in `references/lifecycle-rules.md`, "Keep the whole work item true".
    - Add a Questions and Answers row for each answer or decision from this session that is not there yet.
    - Rewrite the work item's Current state in place, so that a new session can continue from the Current state alone. The work item's Current state is the five lines at the top of the work item.
    - Change the State and `waiting_on` only when they changed in this session.

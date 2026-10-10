@@ -15,7 +15,7 @@ Put a rule in the one document for its area. A rule that covers more than one ar
 | `security-model.md` | Who can see, create, change, and delete a kind of record, who can use a function, and how that access is given. | SEC-## |
 | `automation.md` | Something that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes. | AUT-## |
 | `integrations/<system-name>.md` | One connection to another system: what is sent, in which direction, when, and which side holds the true value. | INT-## |
-| `integrations/README.md` | One row per integration document. | None |
+| `integrations/INDEX.md` | One row per integration document. | None |
 | `integrations/INTEGRATION-TEMPLATE.md` | The template for a new integration document. Never write an integration into it. | None |
 | `diagrams/` | A diagram that explains the system, such as a data model diagram, a process flow, or a map of the integrations. | None |
 
@@ -70,15 +70,15 @@ What each mark means:
 ## A glossary term
 
 - One row per term: Term, System or context, Meaning here, Distinction or alias, Source, Last checked.
-- Source is the owner's words with the date, or a DEC-###. Add the SRC-### when the meaning came from a source listed in `sources/README.md`.
-- A meaning that only a source listed in `sources/README.md` gives, or that you worked out, is not a term yet. The owner confirms it first. Never infer a definition from a similar word.
+- Source is the owner's words with the date, or a DEC-###. Add the SRC-### when the meaning came from a source listed in `sources/INDEX.md`.
+- A meaning that only a source listed in `sources/INDEX.md` gives, or that you worked out, is not a term yet. The owner confirms it first. Never infer a definition from a similar word.
 - A word that two systems use differently gets two rows.
 - A renamed term gets a row under "Naming changes", with the columns Old term, Preferred term, Reason, Source, and Date.
 
 ## An integration document
 
 - Copy `integrations/INTEGRATION-TEMPLATE.md` to `integrations/<system-name>.md`, with the name in lowercase words joined by hyphens.
-- Add its row to `integrations/README.md` in the same edit, and keep the row's Status and rule IDs equal to the document's.
+- Add its row to `integrations/INDEX.md` in the same edit, and keep the row's Status and rule IDs equal to the document's.
 
 ## A diagram
 

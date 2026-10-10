@@ -82,7 +82,7 @@ The time depends on where the project keeps its work items.
 
 The record can be a rule in `system/`, an entry in `DECISIONS.md`, or a source. Make no new record. Do these three things in this order:
 
-1. Add the work item's ID to the record's Affects line or "Used by" cell, where the record has one. An entry in `DECISIONS.md` has an Affects line, and a row in `sources/README.md` has a "Used by" cell.
+1. Add the work item's ID to the record's Affects line or "Used by" cell, where the record has one. An entry in `DECISIONS.md` has an Affects line, and a row in `sources/INDEX.md` has a "Used by" cell.
 2. Save.
 3. Write the record's ID in the work item.
 

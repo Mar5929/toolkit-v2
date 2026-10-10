@@ -10,7 +10,7 @@ Finding only reads. When you find a fact that is wrong or old, correct it with `
    - For a decision, read `DECISIONS.md`, then `system/`, then the work item.
    - For a term, read `system/glossary.md`.
    - For a person's role, read `PROJECT.md`.
-   - For a source, read `sources/README.md`.
+   - For a source, read `sources/INDEX.md`.
 2. **Memory.** Read the memory records about the subject first. Then read the memory records that are linked to the work item the question is about. `references/memory-store.md` gives the search.
    - Search by the subject's words and their synonyms.
    - Search by the work item's ID as a whole ID: a search for WI-031 must not find WI-0310.
@@ -25,7 +25,7 @@ For a question about what was done or what changed in a period, such as "what di
 
 - The event records, and the Runs table of each recurring job.
 - The Recent History of each work item that changed, with `managing-work-items`, and the project tasks.
-- The sources filed in those days. `sources/README.md` lists them by date.
+- The sources filed in those days. `sources/INDEX.md` lists them by date.
 - The commits: `git log --since=<date> --all --date=short`.
 - The dated lines of the project's Current State.
 
@@ -44,5 +44,5 @@ Some remembered claims are about something that changes, such as a vendor, a pro
 
 ## Answering
 
-- Cite each source you use, as `.claude/rules/cite-recalled-knowledge.md` says.
+- Cite each source you use, as the root `AGENTS.md`, "How to write replies", says.
 - When nothing covers the question, say "I don't know; nothing recorded covers that." Never guess.

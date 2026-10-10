@@ -24,7 +24,7 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 
 ## What must stay true
 
-- `.claude/rules/memory-review-and-save.md` says when memory is reviewed, what never goes in memory, which skill changes memory, and what the owner's yes covers.
+- `managing-project-memory` says when memory is saved, what never goes in memory, and what the owner's yes covers, in its `references/memory-process.md`.
 
 ## Which skill to use
 

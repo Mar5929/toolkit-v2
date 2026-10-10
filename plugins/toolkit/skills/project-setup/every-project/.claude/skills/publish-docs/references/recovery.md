@@ -17,7 +17,7 @@ Use this section in two cases:
 
    The save's commit was never on the default branch, so a rebase in the save worktree rewrites nothing that anyone else has.
 2. When the rebase stops on a conflict, read both sides of each file.
-   - When both sides added a row to a list (`sources/README.md`, `reference/outside-docs/INDEX.md`) or an entry to `DECISIONS.md`, keep every row and every entry.
+   - When both sides added a row to a list (`sources/INDEX.md`, `reference/outside-docs/INDEX.md`) or an entry to `DECISIONS.md`, keep every row and every entry.
    - When both sides took the same DEC, SRC, or rule ID, this save's record gets the next free ID, as `filing-project-records` says.
    - When the right result is not clear, run `git -C <save> rebase --abort` and ask the owner.
    - Otherwise, stage each resolved file by name, and finish the rebase without an editor:
