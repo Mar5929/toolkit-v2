@@ -42,7 +42,7 @@ Put these under `banks`, under the resolved bank ID. Read existing path and harn
 | `gitIngest` | `"none"` | Import no Git history. |
 | `codebaseSurvey` | `true` for software projects | Save structural findings; keep off until verification. |
 | `autoInject` | `"reflect"` | Generate a startup summary. |
-| `reflectTimeoutMs` | `60000` | Allow the server time to produce the summary. |
+| `reflectTimeoutMs` | `90000` | Allow the server time to produce the summary. |
 | `injectTimeoutMs` | `15000` | Allow fallback page search and recall when the summary fails. |
 | `recallOptions` | `{"types": ["observation", "world", "experience"], "budget": "mid", "max_tokens": 2500}` | Retrieve observations and individual facts in fallback recall. |
 | `observationScopes` | `"shared"` | Build a shared observation scope. |
@@ -50,11 +50,11 @@ Put these under `banks`, under the resolved bank ID. Read existing path and harn
 | `pageTriggerCron` | `"H * * * *"` | Refresh hourly, staggered by page. |
 | `toolGuideExtra` | The text below | Explain deliberate saving and how to use memory. |
 
-Keep the add-on's seeded knowledge pages on. Use its current defaults for settings not named here, including survey refresh frequency; report any inherited setting that conflicts with the owner's choice. The first-message hook timeout is 90 seconds in both hosts, allowing the summary and fallback budgets. Recheck it after installation.
+Keep the add-on's seeded knowledge pages on. Use its current defaults for settings not named here, including survey refresh frequency; report any inherited setting that conflicts with the owner's choice. The first-message hook timeout is 120 seconds in both hosts, allowing the summary and fallback budgets. Recheck it after installation.
 
 ## Bank settings
 
-Apply and verify these on the bank as well as in the add-on's `defaultBankConfig`. That add-on field fills missing overrides; it does not replace explicit existing bank values. Owner-approved values take precedence over overlapping template values.
+Apply and verify these on the bank as well as in the add-on's `defaultBankConfig`. Set the bank's `retain_extraction_mode` to `"concise"` in the combined bank configuration too; that field does not belong in `defaultBankConfig`. That add-on field fills missing overrides; it does not replace explicit existing bank values. Owner-approved values take precedence over overlapping template values.
 
 | Setting | Default | Purpose |
 | --- | --- | --- |

@@ -1,53 +1,54 @@
 # What the Hindsight choice adds to a project
 
-This file lists what setup writes into a project whose memory is kept in Hindsight. `hindsight-setup.md`, one folder up, names the step that uses it.
+Use this during Hindsight setup to install its memory rule, connect the shared reminder, and record the owner's bank choices. The project uses one memory store and one reminder mechanism.
 
-## `AGENTS.md`
+## Files and settings added
 
-Add this text at the top, with the bank's name filled in. The text is the owner's, and its three criteria are what the owner counts as memory:
+| Part | What setup adds or changes |
+| --- | --- |
+| `.claude/rules/hindsight-memory.md` | Copy this choice's `files-to-add/` into the project. The rule defines qualifying memory, review triggers, recall, corrections, and filing boundaries. |
+| Root `AGENTS.md` | Add the short Hindsight section below. |
+| `PROJECT.md`, "Toolkit settings" | Record the bank, connection, package, template, changes, and open checks. |
+| Existing `.claude/hooks/prompt-reminder.mjs` | Reuse the file supplied by `every-project`; add no hook file. Set its existing prompt entries to use `--skill hindsight`. |
+| Toolkit `SessionStart` entries | Remove the entries that run the local `session-start.mjs`; they read local Current State. Preserve unrelated entries and the Hindsight add-on's hooks. |
+| Add-on settings and bank | Apply the owner's choices through the onboarding steps. Keep keys outside the project. |
 
-> You (the agent) use hindsight for memory recall, storage, and insights in this project. You (the agent) are responsible for saving this type of information to the `<bank>` hindsight memory bank:
->
-> Persistent project memory criteria (1 AND 2 AND 3):
->
-> 1. Lasting project-specific facts, decisions, lessons, events, and constraints that not already owned by another memory file (we don't want duplicates).
-> 2. It has lasting significance: losing it would cost a later agent real time or understanding.
-> 3. It comes from the owner, or from work done together with the owner.
+Do not copy `shared-by-local-and-notion/files-to-add/` or local memory files for this choice. In a setup copy, this choice's instructions take precedence over older guidance that copies a local Current State file. In an existing project, preserve memory records until the owner approves their migration; do not delete them as part of wiring the hook.
 
-Below the owner's text, add this line: One thing may be saved without passing all three criteria: a significant failure that the agent found and fixed itself. The agent saves its cause and its fix.
+## Root `AGENTS.md`
 
-With the default package, add these two lines below it:
+Add this section and replace obsolete Hindsight memory instructions rather than keeping competing versions. Preserve unrelated owner instructions.
 
 ```markdown
-- No session is saved to Hindsight by itself in this project. When a fact meets the criteria above, save it with the add-on's tool for saving a document, as short as the fact allows.
-- Never save a secret or a transcript.
+## Hindsight memory
+
+This project's memory is the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings". Read `.claude/rules/hindsight-memory.md` at session start and after compaction, and follow it for memory reads, reviews, saves, and corrections. It applies wherever this guide or a toolkit skill names `managing-project-memory`. Current work is in the work tracker. Wherever a toolkit guide or skill names the local Current State file, use the current tracker and project records instead, including handoff context; do not create that file or report its absence as a setup failure. The existing prompt reminder suggests when to review memory, and the agent reviews lasting lessons at handoff even when no reminder fires.
 ```
+
+Keep the root `CLAUDE.md` that loads `AGENTS.md`. In the root guide, replace the local Current State startup instruction with the Hindsight section's instruction. Make references to memory lookup use Hindsight. Replace local Current State instructions in startup, status, handoff, and setup checks with the tracker and project-record instruction above; keep unrelated work-tracker and authoritative-record instructions.
 
 ## `PROJECT.md`, section "Toolkit settings"
 
-Write `hindsight` on the "Memory" line, which every project has. Then add these seven lines to the section, each with its exact label:
+Write `hindsight` on the Memory line, then add or update these lines:
 
 | Line | What it holds |
 | --- | --- |
 | Hindsight bank | The bank's ID. |
 | Hindsight server | The API address. |
-| Hindsight dashboard | The link to the bank's page in the dashboard. |
-| Hindsight package | The default package, with any approved changes recorded below. |
-| Hindsight template | The published template the owner picked, or `own instructions`. |
-| Hindsight changes | Each thing the owner wanted different from the package and the template. |
-| Hindsight setup | `done`, or the steps of `hindsight-setup.md` that are still open. |
+| Hindsight dashboard | The bank's dashboard link. |
+| Hindsight package | `default`, with approved changes recorded below. |
+| Hindsight template | `Toolkit coding-project instructions`, the selected published template, or `own instructions`. |
+| Hindsight changes | The owner's changes to the package and template, including capture behavior. |
+| Hindsight setup | `done`, or the remaining onboarding checks. |
 
-## The project's settings files
+## Hook settings
 
-The project's settings files come with memory set to `local`. Change these four places:
+Merge changes into the project's existing `.claude/settings.json` and `.codex/hooks.json`, preserving unrelated handlers. For each host, remove only the toolkit `SessionStart` handler that runs `.claude/hooks/session-start.mjs`. Keep the shared file because other memory choices use it.
 
-| File | Hook | Change |
-| --- | --- | --- |
-| `.claude/settings.json` | `SessionStart` | In the `args` list, change the last entry from `"local"` to `"hindsight"`. |
-| `.claude/settings.json` | `UserPromptSubmit` | Add two entries at the end of the `args` list: `"--skill"`, `"hindsight"`. |
-| `.codex/hooks.json` | `SessionStart` | Make the command end with `--memory hindsight` in place of `--memory local`. |
-| `.codex/hooks.json` | `UserPromptSubmit` | Add `--skill hindsight` at the end of the command. |
+Set the existing `UserPromptSubmit` handler for `.claude/hooks/prompt-reminder.mjs` to `--skill hindsight`: in Claude Code, set or add the argument pair in `args`; in Codex, set or add it in the command. Do not duplicate handlers or arguments. Have the owner trust changed Codex hooks with `/hooks`.
 
-## No `memory/` folder
+The reminder's phrases flag possible memory; the copied rule supplies the criteria and the review after lasting work. Hindsight's add-on owns its startup memory context. Verify both separately.
 
-A Hindsight project gets no `memory/` folder and no Current State file. Hindsight is the project's memory, and the status of work is in the place where the work items are kept.
+## Verify the project wiring
+
+Confirm the copied rule is present, the root guide points to it, and no local memory files or skills were copied into a new Hindsight project. Check both hosts' hook configuration. Run the existing prompt reminder with a representative owner message and `--skill hindsight` and confirm it names the Hindsight rule. A message without a matching phrase must not request an automatic save. In a new session, confirm the agent reads the rule and the add-on reaches the recorded bank. Report any check that cannot run.

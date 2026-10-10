@@ -10,14 +10,14 @@ Read `reference/how-the-owners-hindsight-works.md`. Check the server, installed 
 
 Read `reference/hindsight-package-default.md`. Explain what the package does and what it costs, then ask: "These are our normal Hindsight settings. Do you want them, or any changes?" Record the answer. The default is deliberate memory saves; automatic session saving is a change the owner may choose.
 
-## Offer a template or the owner's own instructions
+## Offer the memory instructions
 
-Read `reference/hindsight-template-for-the-project.md`. Explain the retain, observations, and reflect missions. Recommend a published template suited to the project, and ask whether the owner wants that template or their own instructions. Show the resulting missions and other template settings before applying them. Keep the approved package wherever it overlaps with the template.
+Read `reference/hindsight-template-for-the-project.md` and `reference/hindsight-missions-recommended.md`. Explain the retain, observations, and reflect missions. Offer the Toolkit coding-project instructions together by default, with the option to change them or choose another template. Discuss suitability for the project, show the resulting missions and any template settings before applying them, and keep the approved package wherever it overlaps with a template.
 
 ## Apply and verify the configuration
 
-1. Record the approved choices and open steps as `reference/what-hindsight-adds-to-a-project.md` says. Show changes outside the project before making them.
-2. Prepare the add-on's connection and opt-in settings whether or not a key is already present. Have the owner enter a missing key privately in their Terminal. Preserve settings for other projects.
+1. Install the memory rule, wire the existing reminder, and record the approved choices and open steps as `reference/what-hindsight-adds-to-a-project.md` says. Show changes outside the project before making them.
+2. Prepare the add-on's connection and opt-in settings whether or not a key is already present. Before newly enabling the project or installing hooks, write its per-bank preparation settings with `retainSessions` and `codebaseSurvey` off; enable its path only after these settings are in place. Have the owner enter a missing key privately in their Terminal. Preserve settings for other projects.
 3. Install the add-on for Claude Code and Codex when missing, with the owner's server named. Check the first-message hook timeout against the package. Have the owner trust changed Codex hooks with `/hooks`.
 4. Validate the approved bank configuration with Hindsight's template dry run, then create or configure the bank. Keep automatic sessions and the code survey off during preparation. For an existing bank, preserve its content and unrelated settings.
 5. Map the main checkout to the intended bank with the approved per-bank settings. Have the add-on prepare its strategies and pages, then apply the approved missions to the effective strategies as the template reference says. Start a new session when its tools still use old connection settings.
