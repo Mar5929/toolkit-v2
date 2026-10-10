@@ -219,7 +219,6 @@ What you do depends on what the owner asks for.
 - **Check the setup.** Compare the project with the toolkit as `reference/update.md`, sections 1 and 2, say. Then run the checks in `reference/finishing.md`, "Final checks". Change nothing, with the two exceptions that section gives, and report each difference and each failed check with the fix that you recommend.
 - **Change where work items or memory are kept.** Follow `reference/update.md`, "Changing a setup choice".
 - **Hindsight: the dashboard, the bank's settings, or a new computer.** Follow the Hindsight setup file, `choices/memory/hindsight/hindsight-setup.md`.
-- **A project that was set up before the current folder layout.** The current layout keeps the information that the whole project needs in five places: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`. Say that the project has the earlier layout, and list what [reference/one-home-layout.md](reference/one-home-layout.md) would move. [reference/earlier-versions.md](reference/earlier-versions.md) holds the changes for a project that was set up before toolkit 0.6.0, 0.8.0, or 0.8.1.
 
 ## Known problems
 
@@ -266,8 +265,6 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 | [reference/existing-project.md](reference/existing-project.md) | The folder already has agent files that the toolkit did not put there: you need what to look for, how the branch works with the folders that Git ignores, and the known problems. |
 | [reference/update.md](reference/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice. |
 | [reference/setup-copy.md](reference/setup-copy.md) | An update or a check: you build the setup copy, which is the files the project would get today, in a temporary folder. |
-| [reference/one-home-layout.md](reference/one-home-layout.md) | An update or a check finds a project that was set up before the current folder layout. |
-| [reference/earlier-versions.md](reference/earlier-versions.md) | An update finds a project that was set up before toolkit 0.6.0, 0.8.0, or 0.8.1. |
 | [choices/work-items/local/local-work-items-setup.md](choices/work-items/local/local-work-items-setup.md) | The owner keeps work items in local files. |
 | [choices/work-items/notion/notion-work-items-setup.md](choices/work-items/notion/notion-work-items-setup.md) | The owner keeps work items in Notion. |
 | [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) | The owner keeps work items in GitHub Issues. |

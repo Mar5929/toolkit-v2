@@ -99,10 +99,7 @@ Do these steps when the owner says "update the toolkit", after the newer skill f
 
 1. Run `gh auth status` and read `<repo>`.
 2. List the labels and compare them with `work-tracker-labels.md`, "The full list". Ask the owner before you create the missing ones. Never change, rename, or delete an existing label.
-3. A project set up before toolkit 0.6.0 has `stage:` labels. Once the `state:` labels exist, move each open issue to its State as `reference/earlier-versions.md`, "Work items from Stage to State", says: add the issue's `state:` label, then remove its `stage:` label from the issue.
-   - The `stage:` labels stay in the repository.
-   - Tell the owner that the owner may delete them on the repository's Labels page.
-4. List the open issues without the layout, with the command in `work-tracker-searching.md`, "Issues without the layout". An issue made from an older template keeps its text. Add a missing section heading only after the owner's yes, and never rewrite the owner's text.
+3. List the open issues without the layout, with the command in `work-tracker-searching.md`, "Issues without the layout". An issue made from an older template keeps its text. Add a missing section heading only after the owner's yes, and never rewrite the owner's text.
 
 ## Checks
 
