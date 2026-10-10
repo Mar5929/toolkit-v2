@@ -41,7 +41,7 @@ The same release gives a Notion task one status field (step 5) and removes "Untr
 
 Show the owner every change below in one numbered list, and make each change only after the owner's yes. Delete nothing except what a step names. Each work item keeps its task IDs.
 
-The steps name storage references, such as `work-tracker-field-mapping.md` for local work. The chosen work folder adds those files inside `managing-work-items`; their sources are this skill's `choices/work-items/local/files-to-add/`, `assets/work-notion/`, and `choices/work-items/github/files-to-add/` (under `.claude/skills/`).
+The steps name storage references, such as `work-tracker-field-mapping.md` for local work. The chosen work folder adds those files inside `managing-work-items`; their sources are this skill's `choices/work-items/local/files-to-add/`, `choices/work-items/notion/files-to-add/`, and `choices/work-items/github/files-to-add/` (under `.claude/skills/`).
 
 1. **Sub-items that have phases.** List every level-2 and level-3 work item that still has a phase that is not Cancelled, or a task under a phase. Convert each one with "A work item that changes level", "Phases to a plain list". With local work items that text is in `work-tracker-field-mapping.md`, with Notion in `work-tracker-database-layout.md`, and with GitHub in `work-tracker-issue-layout.md`. A level-3 work item that sits under a phase of its level-2 parent leaves that phase.
 2. **Top-level items with no phase.** List each top-level item that has left Backlog and has no phase. Give it one phase, as "A plain list to phases" says in the same storage file, with a name that the owner approves.

@@ -2,8 +2,7 @@
   "autoMemoryEnabled": false,
   "claudeMdExcludes": [
     "**/plugins/toolkit/skills/project-setup/every-project/**",
-    "**/plugins/toolkit/skills/project-setup/choices/**",
-    "**/plugins/toolkit/skills/project-setup/assets/**"
+    "**/plugins/toolkit/skills/project-setup/choices/**"
   ],
   "hooks": {
     "UserPromptSubmit": [

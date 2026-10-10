@@ -181,7 +181,7 @@ A project may hold something that an earlier setup put there and that the new se
 Do each line that fits the project. Each line names the section that holds the steps.
 
 - For a Notion project, follow `choices/notion-shared/notion-setup.md`, "Updating a Notion project". An update changes nothing in Notion.
-- For a Hindsight project, do the check under "Check a Hindsight project, or connect a new computer" in `references/hindsight-on-vps.md`. Fix each failure only after the owner's yes. Name the server the project uses in the report.
+- For a Hindsight project, go through the steps of `choices/memory/hindsight/hindsight-setup.md` as a check. Fix each failure only after the owner's yes. Name the server the project uses in the report.
 - For a GitHub Issues project, follow `choices/work-items/github/github-work-items-setup.md`, "Bringing a project up to date". Add missing labels only after the owner's yes.
 - For a Salesforce project, write the entries for each production org as `choices/salesforce/salesforce-setup.md`, "The refuse list for production", says, before section 4 removes a guard that an earlier setup put there. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
 

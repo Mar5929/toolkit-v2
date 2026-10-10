@@ -6,7 +6,7 @@ Every Notion project is a copy of the owner's "Project" template. The template i
 
 This file names files that are kept in three places:
 
-- `work-tracker-database-layout.md` is added to `managing-work-items` by the Notion work choice. Its source is `assets/work-notion/.claude/skills/managing-work-items/` in this skill.
+- `work-tracker-database-layout.md` is added to `managing-work-items` by the Notion work choice. Its source is `choices/work-items/notion/files-to-add/.claude/skills/managing-work-items/` in this skill.
 - `ntn-commands.md` is in the `using-notion-cli` skill, in `choices/notion-shared/files-to-add/.claude/skills/using-notion-cli/references/` in this skill. That skill's `SKILL.md` says how to run `ntn` in Codex.
 - The other reference files named here are in this folder (`choices/notion-shared/reference/notion-memory-pages.md`) or in this skill's `references/` folder (`reference/update.md` and `reference/finishing.md`).
 
