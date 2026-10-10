@@ -22,7 +22,7 @@ Before it asks anything, the agent looks at what the folder already holds. It wo
 | What the folder holds                                                                                      | What it is                                       | Where the agent goes next                      |
 | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------- |
 | Nothing, or only the project's own code and documents                                                      | A new project                                    | Step 3                                         |
-| Agent files that the toolkit did not put there, such as an `AGENTS.md`, rules, skills, or an older toolkit | An existing project that is adopting the toolkit | "An existing project" below                    |
+| Agent files that the toolkit did not put there, such as an `AGENTS.md`, rules, or skills                    | An existing project that is adopting the toolkit | "An existing project" below                    |
 | A project that already has Toolkit V2                                                                      | A project to update or check                     | "A project that already has the toolkit" below |
 
 ### Step 3: The agent copies the full layout
@@ -54,7 +54,7 @@ The agent asks one question at a time, each with a recommendation and the reason
 | 9     | What may the agent do without asking? Examples are a push, a merge, a deploy, and sending a message. | Yes or no to the toolkit's default, then the owner's changes                               | `.claude/rules/owner-preferences.md`                                                                                                     |
 | 10    | How should the agent work with the owner on this project? (`SOUL.md`)                                | The owner's words, starting from the default `SOUL.md`                                     | `SOUL.md`                                                                                                                                |
 | 11    | Is there material to start from? Examples are documents, an existing system, and old notes.          | The owner's files and links                                                                | `sources/`. The agent reads the material before question 12.                                                                             |
-| 12    | Where does the project stand?                                                                        | The project's phases, what is done, which phase the project is in now, and what comes next | The roadmap, in the place where work items are kept, and the project's Current State                                                     |
+| 12    | Where does the project stand?                                                                        | The project's phases, what is done, which phase the project is in now, and what comes next | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State                       |
 
 **Question 12 is about the whole roadmap.** The agent asks where the project stands, and it works with the owner until it understands the full roadmap: the phases of the project, what each phase is for, what is already done, and where the project is now. A project that is just starting has a roadmap too, even when it is only the first phase or two. The work starts from the roadmap.
 
@@ -75,14 +75,17 @@ Two examples:
 
 Each answer has its own folder inside the skill, under `choices/`. The folder for an answer holds everything that answer needs, and nothing else.
 
-The folders follow one general shape. A folder holds only the parts that its choice needs, so two folders may differ.
+Every answer folder has the same shape. The Hindsight folder, `choices/memory/hindsight/`, is the model for it.
 
-- **The interview for this choice.** The questions the agent asks the owner once this choice is picked, how the toolkit sets the choice up by default, and what the agent must be aware of.
-- **The skills this choice brings**, as the full skill files.
-- **Any other files or templates this choice brings**, as the full files.
-- **Where each of those goes in the project.** One setup file in the folder says where each skill, file, and template is put in the project's layout, and which lines the choice adds to a file the project already has, such as `AGENTS.md` or the settings.
+- **One setup file.** It opens with one or two sentences that say when the agent follows the file and what its steps do. After that, it holds only the list of steps the agent goes through, in order: what to look at, what to tell and ask the owner, what to write into the project, what to make outside the project folder after the owner's yes, and what to check. Each step names the file under `reference/` that holds its detail.
+- **`reference/`.** The detail that the steps need: how the toolkit sets the choice up by default, the exact text and lines the choice adds to a file the project already has, the values and commands, and the known problems. Each file covers one subject, and its name says the subject.
+- **`files-to-add/`**, when the answer adds files to the project. It holds the skills, rules, files, and templates as the full files, at the paths a project has them.
 
-When the owner gives an answer, the agent reads that answer's folder, asks its questions, puts its skills and files where the setup file says, and sets up whatever the choice needs outside the project folder.
+A folder holds only the parts that its answer needs. For example, the Hindsight folder has no `files-to-add/`, because the Hindsight answer adds no file to the project.
+
+A part that two answers share is kept once, in a folder of its own with the same shape. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
+
+When the owner gives an answer, the agent opens that answer's setup file and goes through its steps: it asks the questions, puts the skills and files where the steps say, and sets up whatever the choice needs outside the project folder.
 
 Nothing is made outside the project folder without the owner's yes. Examples are a Notion page, GitHub labels, a Hindsight memory bank, and an install on the owner's computer.
 
@@ -90,8 +93,8 @@ Nothing is made outside the project folder without the owner's yes. Examples are
 
 1. It checks that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
 2. It writes the roadmap from question 12 in the place where work items are kept.
-3. It writes the first lines of the project's Current State, which is the project's one short page of what is true now. They say where the project stands, from question 12.
-4. It checks that the setup works: the settings files are valid, the session-start command prints the Current State, and each service the owner chose answers.
+3. With local or Notion memory, it writes the first lines of the project's Current State, which is the project's one short page of what is true now. They say where the project stands, from question 12. A Hindsight project has no Current State: where the work stands is in the place where work items are kept.
+4. It checks that the setup works: the settings files are valid, the session-start command prints the Current State when the project has one, and each service the owner chose answers.
 5. It tells the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
 6. It reports what was set up, what was made outside the folder, and what is still open.
 7. It offers to commit the setup files.
@@ -159,14 +162,16 @@ project-setup/
     ├── memory/
     │   ├── local/
     │   ├── notion/
-    │   └── hindsight/
+    │   ├── hindsight/
+    │   └── shared-by-local-and-notion/   what local and Notion memory share
+    ├── notion-shared/                    what the two Notion answers share
     └── salesforce/
 ```
 
-A folder for an answer holds what that answer needs:
+A folder for an answer has the shape that Step 5 gives:
 
-- one setup file, which is the branch the guide points to for that answer;
-- `reference/`, when the answer has more detail than fits in the setup file;
+- one setup file, which is the branch the guide points to for that answer. It holds one or two sentences of overview and then only the list of steps;
+- `reference/`, which holds the detail that the steps need;
 - `files-to-add/`, when the answer adds files to the project. The agent puts those files into the project's layout.
 
 ## Not decided yet

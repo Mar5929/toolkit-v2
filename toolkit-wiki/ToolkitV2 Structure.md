@@ -92,7 +92,7 @@ A hook command runs by itself at a fixed moment. Claude Code and Codex both run 
 
 | Command | When it runs | What it does |
 | --- | --- | --- |
-| `session-start.mjs` | A session starts | Prints the project's Current State. |
+| `session-start.mjs` | A session starts | Prints the project's Current State, when the project has one. |
 | `prompt-reminder.mjs` | Every message | Reminds the agent to check the project's skills, and prints the rule `evaluate-the-owners-request.md`. |
 | `codex-after-commit.mjs` | After a `git commit` | Reminds the agent to update the work item. |
 
@@ -108,7 +108,6 @@ A fourth hook has no file of its own: after a helper agent runs, a reminder to u
 
 - no AI credit on a commit or a pull request;
 - Claude Code's own memory off, unless the owner turns it on in the interview;
-- the older claude-toolkit plugins off in this project;
 - the Plain English output style;
 - the forbidden Git commands (`git add -A`, `git commit -a`, skipping the commit check, a force push), and a question before `git reset --hard` and `git clean`;
 - the four hooks above;
@@ -167,7 +166,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 
 ## Module: where memory is kept
 
-Memory holds only what no other file of the project holds. Every project has a Current State, the project's one short page of what is true now, whichever place the owner picks. The owner picks one of three.
+Memory holds only what no other file of the project holds. The owner picks one of three. With local files or Notion, the project has a Current State, the project's one short page of what is true now. A Hindsight project has none: where the work stands is in the place where work items are kept.
 
 With each of the three, the agent also asks whether the owner wants Claude Code's own memory on in the project. Claude Code's own memory is a folder of notes on the owner's computer that Claude Code loads into every session. The toolkit's default is off, so that the project's memory is kept in one place. The answer is one line in `.claude/settings.json`.
 
@@ -199,9 +198,9 @@ With each of the three, the agent also asks whether the owner wants Claude Code'
 | --- | --- |
 | Questions | Whether this project gets its own memory bank, and which of the two packages of settings the owner wants: the default, where Hindsight saves every session by itself, or the one where the agent saves on purpose. Then whether anything in that package should be different. |
 | Text in `AGENTS.md` | At the top: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
-| Files and folders | `memory/CURRENT_STATE.md`. The Current State is a local file in a Hindsight project. |
+| Files and folders | None. A Hindsight project has no `memory/` folder and no Current State. |
 | Settings | The word `hindsight` on the session-start line, and one more word on the every-message line. |
-| `PROJECT.md` | Memory: `hindsight`, the bank, the server's address, and the link to the dashboard. |
+| `PROJECT.md` | Memory: `hindsight`, and seven lines: the bank, the server's address, the link to the dashboard, the package, the template, what the owner wanted different, and the setup steps that are still open. |
 | Outside the project folder | The memory bank on the owner's Hindsight server, and Hindsight's own add-on for Claude Code and Codex on this computer. The add-on brings its own skill and tools, so the toolkit adds no memory skill. |
 | What the agent must be aware of | The owner enters the API key in the owner's own terminal, and the agent never sees it. The add-on cannot delete a memory. |
 | The owner's own steps | Enter the API key, sign in to the dashboard, and trust the add-on's hooks in Codex. |
