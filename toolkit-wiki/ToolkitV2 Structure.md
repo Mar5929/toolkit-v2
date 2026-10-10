@@ -197,8 +197,8 @@ With each of the three, the agent also asks whether the owner wants Claude Code'
 
 | Kind | What it adds |
 | --- | --- |
-| Questions | Whether this project gets its own memory bank, and whether the toolkit's default settings for the bank are what the owner wants. |
-| Text in `AGENTS.md` | At the top: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. |
+| Questions | Whether this project gets its own memory bank, and which of the two packages of settings the owner wants: the default, where Hindsight saves every session by itself, or the one where the agent saves on purpose. Then whether anything in that package should be different. |
+| Text in `AGENTS.md` | At the top: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
 | Files and folders | `memory/CURRENT_STATE.md`. The Current State is a local file in a Hindsight project. |
 | Settings | The word `hindsight` on the session-start line, and one more word on the every-message line. |
 | `PROJECT.md` | Memory: `hindsight`, the bank, the server's address, and the link to the dashboard. |

@@ -41,20 +41,20 @@ The agent never replaces a file that the project already has. When the project a
 
 The agent asks one question at a time, each with a recommendation and the reason for it. It uses what it found in the folder in Step 2: where the folder already shows an answer, the agent says what it found, and the owner confirms or corrects it.
 
-| Order | Question                                                                                             | The answers                                                                                | Where the answer goes                                                                                                               |
-| ----- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | What is the project called, and who is the owner?                                                    | The owner's words                                                                          | The headings of `AGENTS.md`, `README.md`, and `PROJECT.md`, and the owner's row in `PROJECT.md`                                     |
-| 2     | What is this project for, in one sentence?                                                           | The owner's words                                                                          | The top of `AGENTS.md` and `README.md`, and "Intended outcome" in `PROJECT.md`                                                      |
-| 3     | Who else is involved, and who may decide what?                                                       | Each person, what the person does, and what the person may decide                          | "People and ownership" in `PROJECT.md`                                                                                              |
-| 4     | Which systems does the project touch, and which of them are production?                              | Each system, what it is for, and whether it is production                                  | "Systems and environments" in `PROJECT.md`. Every project is asked this, and it is the base for the safety rules.                   |
-| 5     | Where are work items kept?                                                                           | Local files, Notion, or GitHub Issues                                                      | "Toolkit settings" in `PROJECT.md`, and that choice's folder under `choices/`                                                       |
-| 6     | Where is memory kept?                                                                                | Local files, Notion, or Hindsight                                                          | "Toolkit settings" in `PROJECT.md`, and that choice's folder under `choices/`                                                       |
-| 7 | Is this a Salesforce project? | Yes or no | With a yes, the project gets what the toolkit offers for Salesforce work: extra rules, skills, and templates, from `choices/salesforce/` |
-| 8     | Which outside tools and services does this project use?                                              | The owner's list                                                                           | `PROJECT.md`. The agent then checks that each one is installed and signed in on this computer, and tells the owner what is missing. |
-| 9     | What may the agent do without asking? Examples are a push, a merge, a deploy, and sending a message. | Yes or no to the toolkit's default, then the owner's changes                               | `.claude/rules/owner-preferences.md`                                                                                                |
-| 10    | How should the agent work with the owner on this project? (`SOUL.md`)                                | The owner's words, starting from the default `SOUL.md`                                     | `SOUL.md`                                                                                                                           |
-| 11    | Is there material to start from? Examples are documents, an existing system, and old notes.          | The owner's files and links                                                                | `sources/`. The agent reads the material before question 12.                                                                        |
-| 12    | Where does the project stand?                                                                        | The project's phases, what is done, which phase the project is in now, and what comes next | The roadmap, in the place where work items are kept, and the project's Current State                                                |
+| Order | Question                                                                                             | The answers                                                                                | Where the answer goes                                                                                                                    |
+| ----- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | What is the project called, and who is the owner?                                                    | The owner's words                                                                          | The headings of `AGENTS.md`, `README.md`, and `PROJECT.md`, and the owner's row in `PROJECT.md`                                          |
+| 2     | What is this project for, in one sentence?                                                           | The owner's words                                                                          | The top of `AGENTS.md` and `README.md`, and "Intended outcome" in `PROJECT.md`                                                           |
+| 3     | Who else is involved, and who may decide what?                                                       | Each person, what the person does, and what the person may decide                          | "People and ownership" in `PROJECT.md`                                                                                                   |
+| 4     | Which systems does the project touch, and which of them are production?                              | Each system, what it is for, and whether it is production                                  | "Systems and environments" in `PROJECT.md`. Every project is asked this, and it is the base for the safety rules.                        |
+| 5     | Where are work items kept?                                                                           | Local files, Notion, or GitHub Issues                                                      | "Toolkit settings" in `PROJECT.md`, and that choice's folder under `choices/`                                                            |
+| 6     | Where is memory kept?                                                                                | Local files, Notion, or Hindsight                                                          | "Toolkit settings" in `PROJECT.md`, and that choice's folder under `choices/`                                                            |
+| 7     | Is this a Salesforce project?                                                                        | Yes or no                                                                                  | With a yes, the project gets what the toolkit offers for Salesforce work: extra rules, skills, and templates, from `choices/salesforce/` |
+| 8     | Which outside tools and services does this project use?                                              | The owner's list                                                                           | `PROJECT.md`. The agent then checks that each one is installed and signed in on this computer, and tells the owner what is missing.      |
+| 9     | What may the agent do without asking? Examples are a push, a merge, a deploy, and sending a message. | Yes or no to the toolkit's default, then the owner's changes                               | `.claude/rules/owner-preferences.md`                                                                                                     |
+| 10    | How should the agent work with the owner on this project? (`SOUL.md`)                                | The owner's words, starting from the default `SOUL.md`                                     | `SOUL.md`                                                                                                                                |
+| 11    | Is there material to start from? Examples are documents, an existing system, and old notes.          | The owner's files and links                                                                | `sources/`. The agent reads the material before question 12.                                                                             |
+| 12    | Where does the project stand?                                                                        | The project's phases, what is done, which phase the project is in now, and what comes next | The roadmap, in the place where work items are kept, and the project's Current State                                                     |
 
 **Question 12 is about the whole roadmap.** The agent asks where the project stands, and it works with the owner until it understands the full roadmap: the phases of the project, what each phase is for, what is already done, and where the project is now. A project that is just starting has a roadmap too, even when it is only the first phase or two. The work starts from the roadmap.
 
@@ -143,9 +143,13 @@ Three rules hold in both cases:
 
 ## Where each step finds its files
 
+`SKILL.md` is the one guide. It holds the sequence the agent goes through and the questions it asks, in order. It branches off to another file only where a step needs more detail.
+
 ```
 project-setup/
-├── SKILL.md              Steps 1 to 6, the existing project, and the update
+├── SKILL.md              the one guide: Steps 1 to 6 and the questions
+├── reference/            branches that belong to no choice: an existing
+│                         project, and a project that already has the toolkit
 ├── every-project/        Step 3: the full layout
 └── choices/              Step 5: one folder for each answer
     ├── work-items/
@@ -158,6 +162,12 @@ project-setup/
     │   └── hindsight/
     └── salesforce/
 ```
+
+A folder for an answer holds what that answer needs:
+
+- one setup file, which is the branch the guide points to for that answer;
+- `reference/`, when the answer has more detail than fits in the setup file;
+- `files-to-add/`, when the answer adds files to the project. The agent puts those files into the project's layout.
 
 ## Not decided yet
 
