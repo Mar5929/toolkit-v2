@@ -4,7 +4,7 @@ Use this file to add the settings snippets to the setup copy, and to check the s
 
 The job is done when each snippet is merged into the settings file that the setup copy already holds, and every check under "Check" passes.
 
-`<copy>` stands for the temporary folder that holds the setup copy, which `setup-copy.md` says how to make. `<skill folder>` stands for the folder that holds this skill's `SKILL.md`.
+`<copy>` stands for the temporary folder that holds the setup copy, which `reference/setup-copy.md` says how to make. `<skill folder>` stands for the folder that holds this skill's `SKILL.md`.
 
 ## Contents
 
@@ -17,11 +17,11 @@ The job is done when each snippet is merged into the settings file that the setu
 
 ## Skills
 
-Every skill is already in `<copy>/.claude/skills/`, one folder per skill, because the steps of `setup-copy.md` copied the setup folders for the owner's choices. A setup folder is a folder in this skill's `assets/` that holds project files at the paths a project has them. Claude Code reads that folder. Codex reads `.agents/skills`, which becomes a link to that folder. `placing-files.md`, "4. The .agents/skills link", says how to make the link.
+Every skill is already in `<copy>/.claude/skills/`, one folder per skill, because the steps of `reference/setup-copy.md` copied the setup folders for the owner's choices. A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. Claude Code reads that folder. Codex reads `.agents/skills`, which becomes a link to that folder. `reference/placing-files.md`, "4. The .agents/skills link", says how to make the link.
 
 The shared skills are the same in every project (10): `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `session-summary`, `filechanges`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. The setup folder `every-project` holds them. A work choice adds the selected tracker references inside `managing-work-items`, not another skill.
 
-Each choice adds the skills in the table below. `setup-copy.md`, "Folders the choices add", says which setup folders hold them.
+Each choice adds the skills in the table below. `reference/setup-copy.md`, "Folders the choices add", says which setup folders hold them.
 
 | Choice | Skills |
 | --- | --- |
@@ -30,13 +30,13 @@ Each choice adds the skills in the table below. `setup-copy.md`, "Folders the ch
 | Work items in GitHub Issues | none |
 | Memory local | `managing-project-memory` |
 | Memory in Notion | `managing-project-memory`, `using-notion-cli` |
-| Memory in Hindsight | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
-| Salesforce | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
+| Memory in Hindsight | none: the agent uses the tools of Hindsight's coding-agent add-on (`references/hindsight-on-vps.md` in this folder) |
+| Salesforce | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`choices/salesforce/salesforce-setup.md` in this folder) |
 
 Two rows name another file of this skill:
 
-- In the row "Memory in Hindsight", `hindsight-on-vps.md`, "How the owner's Hindsight is set up", describes the add-on.
-- In the row "Salesforce", `salesforce.md`, "Salesforce's skills", says how to check that Salesforce's own skills are installed, and what to tell the owner when they are not.
+- In the row "Memory in Hindsight", `references/hindsight-on-vps.md`, "How the owner's Hindsight is set up", describes the add-on.
+- In the row "Salesforce", `choices/salesforce/salesforce-setup.md`, "Salesforce's skills", says how to check that Salesforce's own skills are installed, and what to tell the owner when they are not.
 
 A work choice adds tracker references, and a local or Notion memory choice adds store references. The finished `managing-work-items` folder contains one `SKILL.md` and one selected `references/work-tracker.md`. With local or Notion memory, the finished `managing-project-memory` folder contains one `SKILL.md` and one selected `references/memory-store.md`. Hindsight adds no Toolkit memory skill.
 
@@ -63,13 +63,13 @@ The Codex plugins-off snippet also sets `max_context_tokens = 10000` under `[ski
 
 Never try to turn off, in the project, a plugin from the owner's ChatGPT account. The name of such a plugin ends in `@openai-curated-remote`. The account's own setting replaces such a table.
 
-The Notion snippets hold `{{CURRENT_STATE_PAGE_ID}}`. Leave it in the setup copy. The Notion memory setup fills it with the id of the Notion page named "Current state". `notion.md`, "The links in PROJECT.md", says when and where to put that id.
+The Notion snippets hold `{{CURRENT_STATE_PAGE_ID}}`. Leave it in the setup copy. The Notion memory setup fills it with the id of the Notion page named "Current state". `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says when and where to put that id.
 
 Never change a snippet's hook commands or texts, because they are written to match the three hook commands.
 
 ## Merge rules
 
-- Start from the file that `<copy>` already holds, after the Salesforce removals. `setup-copy.md`, "Salesforce entries in the settings file", lists the entries to take out in a project that is not a Salesforce project.
+- Start from the file that `<copy>` already holds, after the Salesforce removals. `reference/setup-copy.md`, "Salesforce entries in the settings file", lists the entries to take out in a project that is not a Salesforce project.
   - When `<copy>` has no such file, the first snippet is the start. This is so for `.codex/hooks.json` and for `.codex/config.toml`.
 - Replace the toolkit's own hook handlers. Never join the old ones and the new ones. A hook handler is one entry in a settings file that says what a hook runs. The toolkit's own hook handlers are:
   - a handler whose `args` or `command` names `session-start.mjs`, `prompt-reminder.mjs`, or `codex-after-commit.mjs`;
@@ -78,14 +78,14 @@ Never change a snippet's hook commands or texts, because they are written to mat
 - When the file already has the toolkit's own hook handlers (an update, or a changed memory choice), show the owner the old and new handlers. Then remove the old ones and any group or event they leave empty, and merge the snippet. Never keep both.
   - When you cannot tell whether a handler is the toolkit's, ask the owner.
   - A new project's setup copy has none of them.
-- When the file holds an entry that an earlier version of the toolkit put there and the snippets no longer have, handle it as `update.md`, "4. What the toolkit no longer ships", says. Never add a `Stop` hook of type `prompt`.
+- When the file holds an entry that an earlier version of the toolkit put there and the snippets no longer have, handle it as `reference/update.md`, "4. What the toolkit no longer ships", says. Never add a `Stop` hook of type `prompt`.
 - Add a plain value (text, a number, true or false) that the file does not have.
   - When the file already has that plain value with a different value, and the file is in the setup copy, take the snippet's value.
-  - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `placing-files.md` and `update.md` send you to these rules for such a file.
+  - When the file already has that plain value with a different value, and the file is one that the project already had, ask the owner. `reference/placing-files.md` and `reference/update.md` send you to these rules for such a file.
 - Never delete any other entry. The copied permission rules, the Git deny and ask rules, the entries of `permissions.deny` for a production Salesforce org, and the hooks that the owner added all stay.
 - `.codex/hooks.json` holds only `description` and `hooks` at the top level.
   - The `description` is the snippet's text.
-  - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. One sentence is the exception: a sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the snippet's text. List that change in the numbered table that the owner sees. `placing-files.md`, "3. Files the project already has", and `update.md` say how to show that table.
+  - In a file that the project already had, a `description` that does not contain the snippet's text keeps the text it has, and the snippet's text is added after it with one space between them. One sentence is the exception: a sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the snippet's text. List that change in the numbered table that the owner sees. `reference/placing-files.md`, "3. Files the project already has", and `reference/update.md` say how to show that table.
 - When the snippet sets a key that the file writes another way, leave the file as it is and ask the owner. Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table.
 
 ## The older plugins, off in this project
@@ -123,4 +123,4 @@ Never turn off `toolkit@toolkit-v2`, which holds this skill. Never change the fi
 - `.codex/config.toml` has each table once, and `[skills]` holds `max_context_tokens = 10000`.
 - The `description` in `.codex/hooks.json` contains the snippet's description text (`jq -e` with `contains` shows it). When it does not, add it as "Merge rules" says.
 - Each of the toolkit's hook handlers is in each settings file once. Count the `hooks/*.mjs` names with `grep -o`, and the `echo` helper reminders with `jq`.
-  - The Codex helper reminder has only the matcher `^(collaboration)?(spawn_agent|wait_agent)$`, and `.claude/settings.json` has no `Stop` hook of type `prompt`. A Codex helper reminder with another matcher, or a `Stop` hook of type `prompt`, is an old handler to take out, as "Merge rules" above and `update.md`, "4. What the toolkit no longer ships", say.
+  - The Codex helper reminder has only the matcher `^(collaboration)?(spawn_agent|wait_agent)$`, and `.claude/settings.json` has no `Stop` hook of type `prompt`. A Codex helper reminder with another matcher, or a `Stop` hook of type `prompt`, is an old handler to take out, as "Merge rules" above and `reference/update.md`, "4. What the toolkit no longer ships", say.

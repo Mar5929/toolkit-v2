@@ -67,7 +67,7 @@ Fill the prompts in this order:
 
 ## Instructions the owner gives during setup
 
-When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Two examples of such an instruction are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as `salesforce.md`, "The org aliases", says.
+When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Two examples of such an instruction are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as `choices/salesforce/salesforce-setup.md`, "The org aliases", says.
 
 - Write the instruction as one list line in the owner's words.
 - Put the line under an area that the file's layout comment names. Use General when no area fits.
@@ -91,7 +91,7 @@ The owner can give an instruction before the setup copy exists. The setup copy i
 The project's Current State is the project's one short page of what is true now. Setup writes its first lines. Where you write them depends on where the project keeps its memory:
 
 - With local memory or Hindsight memory, write the first lines of `memory/CURRENT_STATE.md` now.
-- With Notion memory, the Notion memory setup already wrote these lines on the "Current state" page, in step 7 of "New project". `notion.md` is the file that step follows for Notion. Now bring the "Waiting on" lines of the page up to date.
+- With Notion memory, the Notion memory setup already wrote these lines on the "Current state" page, in step 7 of "New project". `choices/notion-shared/notion-setup.md` is the file that step follows for Notion. Now bring the "Waiting on" lines of the page up to date.
 
 Keep the five headings and their line limits. The list below says what to write on the "Last updated" line and under each of the five headings:
 
@@ -118,9 +118,9 @@ Run each check alone, from the project folder. Each check only reads. The checks
 4. **"Toolkit settings" is filled.** The "Toolkit settings" section of `PROJECT.md` must hold no prompt, except a prompt that waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
 5. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
 6. **The services.** For each service that the project uses, do the check that the service's own file gives:
-   - Notion: the check that starts "For a new project" under "Checks after any of these" in `notion-build/work-setup.md`;
-   - GitHub Issues: the checks under "Checks after either" in `github.md`;
-   - Hindsight: the check under "Check a Hindsight project, or connect a new computer" in `hindsight-on-vps.md`.
+   - Notion: the check that starts "For a new project" under "Checks after any of these" in `choices/notion-shared/reference/notion-work-item-pages.md`;
+   - GitHub Issues: the checks under "Checks after either" in `choices/work-items/github/github-work-items-setup.md`;
+   - Hindsight: the check under "Check a Hindsight project, or connect a new computer" in `references/hindsight-on-vps.md`.
 
 ### After the checks
 
@@ -152,7 +152,7 @@ The table lists the steps that the owner does. Say each one plainly, with the re
 | Run `gh auth login` in a terminal. | It signs the GitHub command-line tool in. | GitHub Issues, when `gh auth status` fails |
 | Trust the project folder in Codex. | Until the folder is trusted, Codex ignores the project's `.codex/config.toml` and `.codex/hooks.json`. Trust is tied to the folder path, so it is needed again after a move. | Always, the first time the owner opens the project in Codex |
 | Trust the hooks in Codex: type `/hooks` and trust them. | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file that the hook runs is not reviewed again. | Always. Again after "update the toolkit" changes an entry in `.codex/hooks.json`. With Hindsight, also the hooks of Hindsight's coding-agent add-on, after the add-on is installed |
-| Install Salesforce's own skills. `salesforce.md`, "Salesforce's skills", says where they come from in each host. | Salesforce publishes its own skills for Salesforce work. Setup never installs them. | Salesforce, when they are not installed yet |
+| Install Salesforce's own skills. `choices/salesforce/salesforce-setup.md`, "Salesforce's skills", says where they come from in each host. | Salesforce publishes its own skills for Salesforce work. Setup never installs them. | Salesforce, when they are not installed yet |
 | Connect the project's Salesforce org (`sf org login web --alias <alias>`) and tell the agent the alias. | The agent never picks or signs in to an org itself. | Salesforce, when the project's org does not exist yet or is not connected |
 | Enter the Hindsight API key in the owner's own Terminal window, with the command that the agent gives, never in the session. | The add-on and setup read the key from `~/.hindsight/coding-agent.json`. The agent never sees the key. | Hindsight, when the key is not set yet |
 | Sign in to the Hindsight dashboard with its own access key. | The dashboard asks for that key, not the API key, before it shows the bank. The bank is this project's store of memory on the Hindsight server. | Hindsight, the first time the owner opens the dashboard |

@@ -4,7 +4,7 @@ This file says which Salesforce facts setup records in a Salesforce project: the
 
 The setup copy is the project's finished files, built in a temporary folder before anything is put into the project.
 
-Everything else a Salesforce project needs comes with the `salesforce` setup folder: the rules, the three `sf-*` skills, and the Salesforce templates in `delivery/`. A setup folder is a folder in this skill's `assets/` that holds project files at the paths a project has them. Salesforce's own skills come from Salesforce, not from setup.
+Everything else a Salesforce project needs comes with the setup folder `choices/salesforce/files-to-add/`: the rules, the three `sf-*` skills, and the Salesforce templates in `delivery/`. A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. Salesforce's own skills come from Salesforce, not from setup.
 
 ## Salesforce's skills
 
@@ -16,11 +16,11 @@ Salesforce publishes its own skills in the GitHub repository `forcedotcom/sf-ski
   - the automatic deploy of `salesforce-development` (`SFDX_AUTO_DEPLOY`). It deploys each saved file to an org, and nothing in the project checks that deploy;
   - the usage data that the same plugin sends (`SF_DISABLE_TELEMETRY`).
 
-When Salesforce's skills are still missing at the end of setup, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
+When Salesforce's skills are still missing at the end of setup, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `reference/finishing.md`, "The project's Current State", says how to write that line.
 
 ## The org aliases
 
-Ask the owner for the org aliases in the interview, as `interview.md`, "Question 4: Salesforce", says. Write them while you build the setup copy, at the point that `setup-copy.md`, "The project name and "Toolkit settings"", gives.
+Ask the owner for the org aliases in the interview, as `reference/interview.md`, "Question 4: Salesforce", says. Write them while you build the setup copy, at the point that `reference/setup-copy.md`, "The project name and "Toolkit settings"", gives.
 
 The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce org aliases" line, as one nested line per org. Each nested line holds the alias, which org it is, and its purpose. Mark production. For example:
 
@@ -33,7 +33,7 @@ The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce o
 Use only the aliases the owner names for this project.
 
 - When none of this project's orgs is on this computer yet (the org does not exist or is not connected), never invent an alias, and never write an alias that the owner says belongs to another project into this project's files. Write ``- Salesforce org aliases: `none yet` ``.
-- The owner's step "Connect the project's Salesforce org" then gets a "Waiting on" line in the project's Current State, and the report lists the line as a prompt left. The line also says that the refuse list entries for production are still to be written. `finishing.md`, "The project's Current State", says how to write the "Waiting on" line.
+- The owner's step "Connect the project's Salesforce org" then gets a "Waiting on" line in the project's Current State, and the report lists the line as a prompt left. The line also says that the refuse list entries for production are still to be written. `reference/finishing.md`, "The project's Current State", says how to write the "Waiting on" line.
 - When the owner gives an instruction about what an agent may do in an org (for example "don't use those" about the other orgs), write it into `.claude/rules/salesforce-agent-permissions.md`, in the place that the first bullets of that file give.
 
 `.claude/rules/salesforce-agent-permissions.md` says what an agent may do in each kind of org, in Claude Code and in Codex.

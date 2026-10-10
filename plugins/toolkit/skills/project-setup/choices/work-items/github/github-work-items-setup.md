@@ -2,7 +2,7 @@
 
 This file gives the GitHub steps that setup runs when a project keeps its work items in GitHub Issues, for a new project and for bringing a project up to date. Open it at step 3 of "New project" in `SKILL.md` for the sign-in, at step 7 for the repository and the labels, and when a project with GitHub Issues is updated. Its job is done when every check under "Checks after either" passes.
 
-`work-tracker-gh-commands.md`, `work-tracker-labels.md`, and `work-tracker-searching.md` are the GitHub references added to `managing-work-items`. Their source is `assets/work-github/.claude/skills/managing-work-items/references/` in this skill.
+`work-tracker-gh-commands.md`, `work-tracker-labels.md`, and `work-tracker-searching.md` are the GitHub references added to `managing-work-items`. Their source is `choices/work-items/github/files-to-add/.claude/skills/managing-work-items/references/` in this skill.
 
 ## Contents
 
@@ -40,7 +40,7 @@ This file gives the GitHub steps that setup runs when a project keeps its work i
 
      Never make a public repository unless the owner asks for one in the owner's own words.
 
-     Do not push in this step. Never push until the owner says yes to the push question after the setup commit: "Push <default> to <owner>/<repo>?", where <default> is the branch the setup commit is on. `finishing.md`, "The commit offer", says when to ask that question.
+     Do not push in this step. Never push until the owner says yes to the push question after the setup commit: "Push <default> to <owner>/<repo>?", where <default> is the branch the setup commit is on. `reference/finishing.md`, "The commit offer", says when to ask that question.
    - When `hasIssuesEnabled` is false, ask the owner before you turn issues on (`gh repo edit <repo> --enable-issues`).
 3. **Record it** in `PROJECT.md`, as "Recording the repository in PROJECT.md" below shows.
 4. **Labels.** Create the missing labels after the owner's yes. `work-tracker-labels.md`, "Creating the labels", gives the question to ask the owner and the commands.
@@ -66,7 +66,7 @@ Do these steps when the owner says "update the toolkit", after the newer skill f
 
 1. Run `gh auth status` and read `<repo>`.
 2. List the labels and compare them with `work-tracker-labels.md`, "The full list". Ask the owner before you create the missing ones. Never change, rename, or delete an existing label.
-3. A project set up before toolkit 0.6.0 has `stage:` labels. Once the `state:` labels exist, move each open issue to its State as `earlier-versions.md`, "Work items from Stage to State", says: add the issue's `state:` label, then remove its `stage:` label from the issue.
+3. A project set up before toolkit 0.6.0 has `stage:` labels. Once the `state:` labels exist, move each open issue to its State as `reference/earlier-versions.md`, "Work items from Stage to State", says: add the issue's `state:` label, then remove its `stage:` label from the issue.
    - The `stage:` labels stay in the repository.
    - Tell the owner that the owner may delete them on the repository's Labels page.
 4. List the open issues without the layout, with the command in `work-tracker-searching.md`, "Issues without the layout". An issue made from an older template keeps its text. Add a missing section heading only after the owner's yes, and never rewrite the owner's text.

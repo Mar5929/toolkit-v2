@@ -23,12 +23,12 @@ The user dictates most messages with voice-to-text, so words may be misheard, mi
 
 ## How setup works
 
-There is no setup program. You copy and edit the files yourself, from this skill's `assets/` folder. This skill's folder is the folder that holds this `SKILL.md`. Claude Code and Codex each show its path when they load the skill.
+There is no setup program. You copy and edit the files yourself, from this skill's `every-project/` folder and from the `files-to-add/` folders under `choices/`. This skill's folder is the folder that holds this `SKILL.md`. Claude Code and Codex each show its path when they load the skill.
 
 This skill and its reference files use three names throughout:
 
 - **"Toolkit settings"** is the section of the project's `PROJECT.md` that records the owner's setup choices, for example where work items are kept.
-- A **setup folder** is a folder in `assets/` that holds project files at the paths a project has them. One setup folder, `every-project`, is for every project, and one or more setup folders are for each choice. [references/setup-copy.md](references/setup-copy.md) has the one table of choices and setup folders.
+- A **setup folder** is a folder in this skill that holds project files at the paths a project has them. One setup folder, `every-project/`, is for every project. Each `files-to-add/` folder under `choices/` is the setup folder of one choice. [reference/setup-copy.md](reference/setup-copy.md) has the one table of choices and setup folders.
 - The **setup copy** is the project's finished files, built in a temporary folder before anything is put into the project.
 
 ## Which setup job to do
@@ -53,17 +53,17 @@ Say in one line that setup stopped part way. Take the owner's choices from "Tool
 
 The project is set up when `PROJECT.md` has a filled "Toolkit settings" section and setup did not stop part way. What you do depends on what the owner asks for.
 
-- **Update the toolkit.** Follow [references/update.md](references/update.md), which gives every step of an update. An update is also the job when the owner says only "toolkit v2".
+- **Update the toolkit.** Follow [reference/update.md](reference/update.md), which gives every step of an update. An update is also the job when the owner says only "toolkit v2".
 - **Check the setup.** Do these three things in this order:
-  1. Build a new setup copy and compare it with the project, as `references/update.md`, sections 1 and 2, say.
-  2. Run the final checks in [references/finishing.md](references/finishing.md), "Final checks", and fix none that fail.
+  1. Build a new setup copy and compare it with the project, as `reference/update.md`, sections 1 and 2, say.
+  2. Run the final checks in [reference/finishing.md](reference/finishing.md), "Final checks", and fix none that fail.
   3. Report each difference and each failed check, with the fix you recommend.
 
   A check of the setup changes nothing in the project, with two exceptions:
-  - Put back a toolkit file that is missing in `work-items/` or `memory/`, as `references/finishing.md`, "Final checks", says.
+  - Put back a toolkit file that is missing in `work-items/` or `memory/`, as `reference/finishing.md`, "Final checks", says.
   - The session-start check may rebuild `memory/MEMORY.md`, which is a generated file.
-- **An update or a check in a project set up before the current folder layout.** Say that the project has the earlier layout, and list what [references/one-home-layout.md](references/one-home-layout.md) would move. The current folder layout keeps information the whole project needs in five places, as files in the repository: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`.
-- **Change a setup choice.** A setup choice is where work items are kept or where memory is kept. Follow `references/update.md`, "Changing a setup choice".
+- **An update or a check in a project set up before the current folder layout.** Say that the project has the earlier layout, and list what [reference/one-home-layout.md](reference/one-home-layout.md) would move. The current folder layout keeps information the whole project needs in five places, as files in the repository: `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and `reference/`.
+- **Change a setup choice.** A setup choice is where work items are kept or where memory is kept. Follow `reference/update.md`, "Changing a setup choice".
 
 ### Hindsight: the dashboard, the bank's settings, or a new computer
 
@@ -73,15 +73,15 @@ This case fits when the owner asks to open a project's Hindsight dashboard. It a
 
 When the owner asks to set up `SOUL.md` in a project that is set up, do these three things:
 
-1. When the project has no `SOUL.md`, copy `assets/soul/SOUL.md` into the project.
-2. Fill it with the owner's own words, as `references/finishing.md`, "SOUL.md", says.
+1. When the project has no `SOUL.md`, copy `every-project/SOUL.md` into the project.
+2. Fill it with the owner's own words, as `reference/finishing.md`, "SOUL.md", says.
 3. Offer to commit it.
 
 ### A folder with an earlier setup: move it over
 
 The folder has an earlier setup when it has no filled "Toolkit settings" section and its main checkout holds any of these: `AGENTS.md`, `CLAUDE.md`, `.work-items/`, `.toolkit.json`, or a file in `.claude/`, `.codex/`, or `.agents/` other than `.claude/settings.local.json` and `.claude/worktrees/`. The main checkout is the project's main folder: the first path that `git worktree list` prints.
 
-An earlier setup is one of three things: the older claude-toolkit, the retired `toolkit` program, or agent files made by hand. One hand-written `AGENTS.md` is enough to make it an earlier setup. Move the project over, as [references/move-over.md](references/move-over.md) says.
+An earlier setup is one of three things: the older claude-toolkit, the retired `toolkit` program, or agent files made by hand. One hand-written `AGENTS.md` is enough to make it an earlier setup. Move the project over, as [reference/move-over.md](reference/move-over.md) says.
 
 One case asks the owner first. The folder holds files of the older claude-toolkit, and the owner asked to update the toolkit or to check the setup without naming Toolkit V2.
 
@@ -99,15 +99,15 @@ When no case above fits, the project is new. Do the eight steps of "New project"
 
 ## New project
 
-1. **Look, then interview.** Check the folder first. Then ask one question per message, each with a recommendation: the name and the owner, where work items are kept, where memory is kept, Salesforce, and `SOUL.md`. [references/interview.md](references/interview.md) gives the checks to run before you ask, and the five questions with their recommendations.
-2. **Show the plan and wait for the owner's yes.** Name every thing that will be made outside this folder. `references/interview.md`, "The plan to confirm", says what the plan holds.
-3. **Ask for the sign-ins that the choices need now**, so the owner can do them while you copy the files: `ntn login` for Notion, and `gh auth login` for GitHub. [references/notion.md](references/notion.md) and [references/github.md](references/github.md) say how to check each sign-in.
-4. **Build the setup copy** in a temporary folder: the `every-project` setup folder and the setup folders for the owner's choices, with the project's name and "Toolkit settings" filled. [references/setup-copy.md](references/setup-copy.md) gives the commands.
-5. **Add the settings** to the setup copy, and check its skills and hook commands. [references/skills-hooks-settings.md](references/skills-hooks-settings.md) lists the skills and the settings snippets for each choice.
-6. **Put the setup copy into the project**, and make the `.agents/skills` link. Never replace a file the project already has without showing the difference and asking. [references/placing-files.md](references/placing-files.md) gives the steps.
-7. **Set up each service**, once its sign-in is done: the Notion pages, the GitHub repository and labels, the Hindsight bank and Hindsight's coding-agent add-on, and the Salesforce facts. Each service has its own file: `references/notion.md`, `references/github.md`, `references/hindsight-on-vps.md`, and [references/salesforce.md](references/salesforce.md).
-   - For a Salesforce project, also check that Salesforce's own skills are installed, and ask the owner what to have on or off. `references/salesforce.md` starts with this check and this question. Setup never installs them.
-8. **Finish.** Fill the prompts in the copied files with facts the owner confirms, write the project's Current State, run the final checks, name the owner's own steps, report, and offer the commit. `references/finishing.md` gives each of these parts.
+1. **Look, then interview.** Check the folder first. Then ask one question per message, each with a recommendation: the name and the owner, where work items are kept, where memory is kept, Salesforce, and `SOUL.md`. [reference/interview.md](reference/interview.md) gives the checks to run before you ask, and the five questions with their recommendations.
+2. **Show the plan and wait for the owner's yes.** Name every thing that will be made outside this folder. `reference/interview.md`, "The plan to confirm", says what the plan holds.
+3. **Ask for the sign-ins that the choices need now**, so the owner can do them while you copy the files: `ntn login` for Notion, and `gh auth login` for GitHub. [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) and [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) say how to check each sign-in.
+4. **Build the setup copy** in a temporary folder: the `every-project` setup folder and the setup folders for the owner's choices, with the project's name and "Toolkit settings" filled. [reference/setup-copy.md](reference/setup-copy.md) gives the commands.
+5. **Add the settings** to the setup copy, and check its skills and hook commands. [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) lists the skills and the settings snippets for each choice.
+6. **Put the setup copy into the project**, and make the `.agents/skills` link. Never replace a file the project already has without showing the difference and asking. [reference/placing-files.md](reference/placing-files.md) gives the steps.
+7. **Set up each service**, once its sign-in is done: the Notion pages, the GitHub repository and labels, the Hindsight bank and Hindsight's coding-agent add-on, and the Salesforce facts. Each service has its own file: `choices/notion-shared/notion-setup.md`, `choices/work-items/github/github-work-items-setup.md`, `references/hindsight-on-vps.md`, and [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md).
+   - For a Salesforce project, also check that Salesforce's own skills are installed, and ask the owner what to have on or off. `choices/salesforce/salesforce-setup.md` starts with this check and this question. Setup never installs them.
+8. **Finish.** Fill the prompts in the copied files with facts the owner confirms, write the project's Current State, run the final checks, name the owner's own steps, report, and offer the commit. `reference/finishing.md` gives each of these parts.
 
 ## Mistakes to avoid
 
@@ -128,13 +128,13 @@ These are the mistakes that are easy to make during setup, each with the rule th
 ### Where setup runs
 
 - Set up a new project in its main checkout, never from a worktree, even when a machine-wide rule asks for a worktree. A worktree is a separate folder with its own branch. The reason is that `memory/` and `work-items/`, which Git ignores, must be kept in the main checkout.
-- Only an update (`references/update.md`) and a move-over (`references/move-over.md`) use a worktree.
+- Only an update (`reference/update.md`) and a move-over (`reference/move-over.md`) use a worktree.
 
 ### Outside the project folder
 
 - Make nothing outside the project folder without the owner's yes: no Notion page, no GitHub repository or label, no Hindsight bank, and no install. The plan the owner approved covers only what it named.
 - Only two other kinds of file are written outside the project folder:
-  - The temporary folders: the one that `references/setup-copy.md`, "Make the temporary folder", makes for the setup copy, and a folder for a Notion body.
+  - The temporary folders: the one that `reference/setup-copy.md`, "Make the temporary folder", makes for the setup copy, and a folder for a Notion body.
   - The Hindsight add-on's files and settings, after the owner's yes, as `references/hindsight-on-vps.md` says.
 - Never save a path, a file list, or a diff in a file.
 - Remove each temporary folder once its step is done, and the setup copy after the final checks, so that nothing from setup is left in `/tmp`, `$TMPDIR`, or the session scratchpad.
@@ -153,7 +153,7 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 
 ### What setup never does
 
-- Never change anything in this skill's `assets/` folder, because it is the source for every project.
+- Never change anything in this skill's `every-project/` and `choices/` folders, because they are the source for every project.
 - Never write a script into a project. The only code a project runs is the three hook commands.
 - Never make setup a work item.
 - Jira is not offered yet.
@@ -163,27 +163,25 @@ The Codex sandbox refuses to create `.codex/` and `.agents/`, keeps `.git/` read
 
 | File | Open it when |
 | --- | --- |
-| [references/interview.md](references/interview.md) | Steps 1 and 2: you need the checks to run before asking, the five questions with their recommendations, and the plan the owner confirms. |
-| [references/setup-copy.md](references/setup-copy.md) | Step 4, and section 1 of an update: you need the temporary folder, the one table of choices and setup folders, what is never copied, the project's name and "Toolkit settings", the Salesforce entries in the settings file, the owner-preferences rule, and the checks of the setup copy. |
-| [references/skills-hooks-settings.md](references/skills-hooks-settings.md) | Step 5: you need the skills each choice adds, the three hook commands, the settings snippets and how to merge them, and how the older plugins are turned off. |
-| [references/placing-files.md](references/placing-files.md) | Step 6: you need the steps for copying into the project, the files it already has, and the `.agents/skills` link. |
-| [references/notion.md](references/notion.md) | Work items or memory are in Notion: you need the sign-in, the owner's yes, which Notion setup file to follow, and the links. |
-| [references/notion-build/work-setup.md](references/notion-build/work-setup.md) | Work items or memory are in Notion: you need the steps of a new project, how to remove the part kept elsewhere, the links in `PROJECT.md`, how to add work items or memory later, and the checks. |
-| [references/notion-build/setup.md](references/notion-build/setup.md) | Memory is in Notion: you need the memory steps of a new project and the links in `PROJECT.md`. Lore's databases and columns are described in the Notion files added to `managing-project-memory` from `assets/memory-notion/.claude/skills/`. |
-| [references/github.md](references/github.md) | Work items are in GitHub Issues: you need the sign-in, the repository, the labels, how to bring a project up to date, and the checks. |
+| [reference/interview.md](reference/interview.md) | Steps 1 and 2: you need the checks to run before asking, the five questions with their recommendations, and the plan the owner confirms. |
+| [reference/setup-copy.md](reference/setup-copy.md) | Step 4, and section 1 of an update: you need the temporary folder, the one table of choices and setup folders, what is never copied, the project's name and "Toolkit settings", the Salesforce entries in the settings file, the owner-preferences rule, and the checks of the setup copy. |
+| [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Step 5: you need the skills each choice adds, the three hook commands, the settings snippets and how to merge them, and how the older plugins are turned off. |
+| [reference/placing-files.md](reference/placing-files.md) | Step 6: you need the steps for copying into the project, the files it already has, and the `.agents/skills` link. |
+| [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | Work items or memory are in Notion: you need the sign-in, the owner's yes, which Notion setup file to follow, and the links. |
+| [choices/notion-shared/reference/notion-work-item-pages.md](choices/notion-shared/reference/notion-work-item-pages.md) | Work items or memory are in Notion: you need the steps of a new project, how to remove the part kept elsewhere, the links in `PROJECT.md`, how to add work items or memory later, and the checks. |
+| [choices/notion-shared/reference/notion-memory-pages.md](choices/notion-shared/reference/notion-memory-pages.md) | Memory is in Notion: you need the memory steps of a new project and the links in `PROJECT.md`. Lore's databases and columns are described in the Notion files added to `managing-project-memory` from `choices/memory/notion/files-to-add/.claude/skills/`. |
+| [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) | Work items are in GitHub Issues: you need the sign-in, the repository, the labels, how to bring a project up to date, and the checks. |
 | [references/hindsight-on-vps.md](references/hindsight-on-vps.md) | Memory is in Hindsight: you need how the owner's Hindsight is set up, what must be true when a project is set up for it, the defaults to offer the owner, the mistakes to avoid, how to check a Hindsight project or connect a new computer, and how to open the dashboard. |
-| [references/salesforce.md](references/salesforce.md) | The project is a Salesforce project: you need the check of Salesforce's skills and the question to the owner about them, the org aliases, the refuse list for production, and the API version. |
-| [references/finishing.md](references/finishing.md) | Step 8: you need the prompts in the copied files, `SOUL.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
-| [references/update.md](references/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice: you need the new setup copy, what to do with each kind of file that differs, whether a difference is the owner's edit, what the toolkit no longer ships, the services, the checks, and the report. |
-| [references/one-home-layout.md](references/one-home-layout.md) | An update or a check finds a project set up before the current folder layout: you need how to find the old layout, the plan table, where each old file or record goes, and the order of the moves. |
-| [references/earlier-versions.md](references/earlier-versions.md) | A project was set up before toolkit 0.6.0, 0.8.0, or 0.8.1, or is moved over from the older toolkit: you need the move of work items from Stage to State, the levels structure, and the Requirements layout. |
-| [references/move-over.md](references/move-over.md) | You move a project that was set up another way onto Toolkit V2: you need which earlier setup it is, the owner's choices, how to read the project, how to sort what it holds, the list and its template, the order of the changes after the owner's yes, how to carry over old records, and how to finish. |
-| [references/old-toolkit-pieces.md](references/old-toolkit-pieces.md) | A move-over, steps 2, 3, and 6: you need the old toolkit's plugins, rules, hook commands, tools, and knowledge files with what Toolkit V2 has in their place, the old records, and how an old work item and old memory map to the Toolkit V2 form. |
-| `assets/every-project/` | Step 4: this is the setup folder every project gets. Copy it first into the temporary folder. |
-| `assets/work-local/`, `assets/work-notion/`, `assets/work-github/` | Step 4: these are the setup folders of the work tracking choice. |
-| `assets/memory-local/`, `assets/memory-notion/`, `assets/memory-process/`, `assets/memory-hindsight/` | Step 4: these are the setup folders of the memory choice. |
-| `assets/notion-tools/` | Step 4: this is the setup folder for work items or memory in Notion. |
-| `assets/salesforce/` | Step 4: this is the setup folder of a Salesforce project. |
-| `assets/soul/` | Step 4: this is the setup folder that holds `SOUL.md`. |
-| `assets/owner-preferences.md` | Step 4: this is the starting `.claude/rules/owner-preferences.md` that every project gets. |
+| [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) | The project is a Salesforce project: you need the check of Salesforce's skills and the question to the owner about them, the org aliases, the refuse list for production, and the API version. |
+| [reference/finishing.md](reference/finishing.md) | Step 8: you need the prompts in the copied files, `SOUL.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
+| [reference/update.md](reference/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice: you need the new setup copy, what to do with each kind of file that differs, whether a difference is the owner's edit, what the toolkit no longer ships, the services, the checks, and the report. |
+| [reference/one-home-layout.md](reference/one-home-layout.md) | An update or a check finds a project set up before the current folder layout: you need how to find the old layout, the plan table, where each old file or record goes, and the order of the moves. |
+| [reference/earlier-versions.md](reference/earlier-versions.md) | A project was set up before toolkit 0.6.0, 0.8.0, or 0.8.1, or is moved over from the older toolkit: you need the move of work items from Stage to State, the levels structure, and the Requirements layout. |
+| [reference/move-over.md](reference/move-over.md) | You move a project that was set up another way onto Toolkit V2: you need which earlier setup it is, the owner's choices, how to read the project, how to sort what it holds, the list and its template, the order of the changes after the owner's yes, how to carry over old records, and how to finish. |
+| [reference/old-toolkit-pieces.md](reference/old-toolkit-pieces.md) | A move-over, steps 2, 3, and 6: you need the old toolkit's plugins, rules, hook commands, tools, and knowledge files with what Toolkit V2 has in their place, the old records, and how an old work item and old memory map to the Toolkit V2 form. |
+| `every-project/` | Step 4: this is the setup folder every project gets. Copy it first into the temporary folder. |
+| `choices/work-items/local/files-to-add/`, `assets/work-notion/`, `choices/work-items/github/files-to-add/` | Step 4: these are the setup folders of the work tracking choice. |
+| `choices/memory/local/files-to-add/`, `choices/memory/notion/files-to-add/`, `choices/memory/shared-by-local-and-notion/files-to-add/`, `assets/memory-hindsight/` | Step 4: these are the setup folders of the memory choice. |
+| `choices/notion-shared/files-to-add/` | Step 4: this is the setup folder for work items or memory in Notion. |
+| `choices/salesforce/files-to-add/` | Step 4: this is the setup folder of a Salesforce project. |
 | `assets/settings/` | Step 5: these are the settings snippets for each choice. |

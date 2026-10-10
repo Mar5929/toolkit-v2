@@ -2,7 +2,7 @@
 
 This file holds three parts of "update the toolkit". Each part is for a project that was set up before one version of the toolkit: the move from Stage to State (toolkit 0.6.0), the levels structure (toolkit 0.8.0), and the Requirements layout (toolkit 0.8.1). Open it when a project was set up before one of those versions. The move-over and the files for Notion and GitHub point to its parts. A part is done when the project is as that part describes and the owner has been told what changed.
 
-Make every change to a local work item or to `memory/` in the main checkout, at the time that `update.md`, "Before you start", gives. The main checkout is the project's main folder, the first path that `git worktree list` prints.
+Make every change to a local work item or to `memory/` in the main checkout, at the time that `reference/update.md`, "Before you start", gives. The main checkout is the project's main folder, the first path that `git worktree list` prints.
 
 ## Contents
 
@@ -28,7 +28,7 @@ Before toolkit 0.6.0, each work item had a stage (`01-discovery` to `14-spec-upd
 - In the same change, set the Status that goes with the new State. The Status and State table in `managing-work-items/references/lifecycle-rules.md` gives the Status for each State.
 - With local work items, change every work item in `work-items/`, sub-items and `archive/` included. A sub-item is a work item inside another work item. Replace the `stage:` line with a `state:` line, and set `status:` and `updated:` in the same edit.
 - With work items in Notion, change every row of Work Items, archived rows included. The Work Items database needs the State property and the Status options first. `work-tracker-database-layout.md` lists them. Add them only as the owner says.
-- With work items in GitHub, change open issues only, after the `state:` labels exist. `github.md`, "Bringing a project up to date", step 3, says which label to add to each issue and which to remove. A closed issue's labels are ignored.
+- With work items in GitHub, change open issues only, after the `state:` labels exist. `choices/work-items/github/github-work-items-setup.md`, "Bringing a project up to date", step 3, says which label to add to each issue and which to remove. A closed issue's labels are ignored.
 - When a Next action ends ", with <skill>.", and the skill is one that the project no longer has, remove that ending, so that the Next action matches a form that the work item template gives. In Notion, change the Current state on the work item's page and the Next action property together.
 - Add a Recent History row to each changed work item: "Toolkit update: stage <old> is now State <new>." Change nothing else in the work item.
 - Tell the owner in one short list how many work items moved to each State.
@@ -41,7 +41,7 @@ The same release gives a Notion task one status field (step 5) and removes "Untr
 
 Show the owner every change below in one numbered list, and make each change only after the owner's yes. Delete nothing except what a step names. Each work item keeps its task IDs.
 
-The steps name storage references, such as `work-tracker-field-mapping.md` for local work. The chosen work folder adds those files inside `managing-work-items`; their sources are this skill's `assets/work-local/`, `assets/work-notion/`, and `assets/work-github/` (under `.claude/skills/`).
+The steps name storage references, such as `work-tracker-field-mapping.md` for local work. The chosen work folder adds those files inside `managing-work-items`; their sources are this skill's `choices/work-items/local/files-to-add/`, `assets/work-notion/`, and `choices/work-items/github/files-to-add/` (under `.claude/skills/`).
 
 1. **Sub-items that have phases.** List every level-2 and level-3 work item that still has a phase that is not Cancelled, or a task under a phase. Convert each one with "A work item that changes level", "Phases to a plain list". With local work items that text is in `work-tracker-field-mapping.md`, with Notion in `work-tracker-database-layout.md`, and with GitHub in `work-tracker-issue-layout.md`. A level-3 work item that sits under a phase of its level-2 parent leaves that phase.
 2. **Top-level items with no phase.** List each top-level item that has left Backlog and has no phase. Give it one phase, as "A plain list to phases" says in the same storage file, with a name that the owner approves.
@@ -67,7 +67,7 @@ The steps name storage references, such as `work-tracker-field-mapping.md` for l
 Since toolkit 0.8.1, the Requirements section of a work item holds one block for each requirement, headed "Requirement <number>: <short name>". A block holds the original requirement word for word, its goal, its numbered Functional Requirements, and its numbered Acceptance Criteria. `managing-work-items/references/refining-requirements.md` gives the layout in full. Text in angle brackets in a template is an instruction, and a work item that an agent creates or changes keeps no such text.
 
 - **New work items get the new layout** through the work item template.
-  - With local work items, the template files in `work-items/work-item-template/` are "Other toolkit files" in the table in `update.md`, section 3. Take the toolkit's version of them after the owner's yes.
+  - With local work items, the template files in `work-items/work-item-template/` are "Other toolkit files" in the table in `reference/update.md`, section 3. Take the toolkit's version of them after the owner's yes.
   - With work items in Notion, the project's work item template is the owner's. Tell the owner what differs, and change it only as the owner says.
   - With work items in GitHub, there is nothing to do, because the template comes with the skills.
 - **Existing work items stay as they are.** Never rewrite the Requirements section of an existing work item in an update, wherever the project keeps its work items. The skills read the older layout as it is.

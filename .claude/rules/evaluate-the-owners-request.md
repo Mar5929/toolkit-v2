@@ -1,4 +1,4 @@
-<!-- An exact copy of the rule that `project-setup` gives every project, plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/evaluate-the-owners-request.md. Edit that file, then copy it over this file below this line and one blank line. `dev/tools/check-skills.mjs` fails when the two differ. -->
+<!-- An exact copy of the rule that `project-setup` gives every project, plugins/toolkit/skills/project-setup/every-project/.claude/rules/evaluate-the-owners-request.md. Edit that file, then copy it over this file below this line and one blank line. -->
 
 # Evaluate the Owner's Request Before You Act
 

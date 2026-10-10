@@ -1,10 +1,10 @@
 # Building the setup copy
 
-This file builds the setup copy. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. Open this file at step 4 of "New project" in `SKILL.md`, and at section 1 of an update (`update.md`, "1. Build a new setup copy"). The job is done when the temporary folder holds the setup folder every project gets and the setup folders for the owner's choices, with the project's name and "Toolkit settings" filled in.
+This file builds the setup copy. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. Open this file at step 4 of "New project" in `SKILL.md`, and at section 1 of an update (`reference/update.md`, "1. Build a new setup copy"). The job is done when the temporary folder holds the setup folder every project gets and the setup folders for the owner's choices, with the project's name and "Toolkit settings" filled in.
 
-A setup folder is a folder in this skill's `assets/` that holds project files at the paths a project has them. One setup folder, `every-project`, goes to every project. Each choice of the owner adds one or more.
+A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. The setup folder `every-project/` goes to every project. Each choice of the owner adds one or more.
 
-Two other files do the next two steps. `skills-hooks-settings.md` adds the settings to the setup copy, and `placing-files.md` puts the setup copy into the project.
+Two other files do the next two steps. `reference/skills-hooks-settings.md` adds the settings to the setup copy, and `reference/placing-files.md` puts the setup copy into the project.
 
 ## Contents
 
@@ -32,7 +32,7 @@ This file calls the temporary folder `<copy>`. Write the real path in place of `
 Copy the setup folder that every project gets into `<copy>`, hidden files included:
 
 ```text
-cp -R <skill folder>/assets/every-project/. <copy>/
+cp -R <skill folder>/every-project/. <copy>/
 ```
 
 `<skill folder>` is the folder that holds this skill's `SKILL.md`.
@@ -42,30 +42,31 @@ cp -R <skill folder>/assets/every-project/. <copy>/
 This table is the only list of which setup folders a choice copies. For each choice the owner made, copy each folder in the row of that choice into `<copy>`, hidden files included:
 
 ```text
-cp -R <skill folder>/assets/<folder>/. <copy>/
+cp -R <skill folder>/<folder>/. <copy>/
 ```
 
-Copy `every-project` first, then each chosen folder. A work choice adds its `references/work-tracker.md` and supporting files inside the `managing-work-items` skill that `every-project` already supplied. Local or Notion memory adds its `references/memory-store.md` and supporting files inside the `managing-project-memory` skill that `memory-process` supplied. Copy a chosen folder into the existing paths; it adds files to those skill folders. Only one work choice and one memory choice are copied, so the finished project has one version of each selected reference and no storage skill of its own.
+Copy `every-project` first, then each chosen folder. A work choice adds its `references/work-tracker.md` and supporting files inside the `managing-work-items` skill that `every-project` already supplied. Local or Notion memory adds its `references/memory-store.md` and supporting files inside the `managing-project-memory` skill that `choices/memory/shared-by-local-and-notion/files-to-add` supplied. Copy a chosen folder into the existing paths; it adds files to those skill folders. Only one work choice and one memory choice are copied, so the finished project has one version of each selected reference and no storage skill of its own.
+
+Each path in the table is from this skill's folder.
 
 | Choice | Folders to copy |
 | --- | --- |
-| Work items local | `work-local` |
-| Work items in Notion | `work-notion` and `notion-tools` |
-| Work items in GitHub Issues | `work-github` |
-| Memory local | `memory-process` and `memory-local` |
-| Memory in Notion | `memory-process`, `memory-notion`, and `notion-tools` |
-| Memory in Hindsight | `memory-hindsight`, and the one file below |
-| Salesforce | `salesforce` |
-| SOUL.md kept | `soul` |
+| Work items local | `choices/work-items/local/files-to-add` |
+| Work items in Notion | `assets/work-notion` and `choices/notion-shared/files-to-add` |
+| Work items in GitHub Issues | `choices/work-items/github/files-to-add` |
+| Memory local | `choices/memory/shared-by-local-and-notion/files-to-add` and `choices/memory/local/files-to-add` |
+| Memory in Notion | `choices/memory/shared-by-local-and-notion/files-to-add`, `choices/memory/notion/files-to-add`, and `choices/notion-shared/files-to-add` |
+| Memory in Hindsight | `assets/memory-hindsight`, and the one file below |
+| Salesforce | `choices/salesforce/files-to-add` |
 
 Two rows have a special case:
 
-- When work items and memory are both in Notion, copy `notion-tools` once.
-- When memory is in Hindsight, also copy one file of `memory-local`, and nothing else from that folder:
+- When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once.
+- When memory is in Hindsight, also copy one file of `choices/memory/local/files-to-add`, and nothing else from that folder:
 
 ```text
 mkdir -p <copy>/memory
-cp <skill folder>/assets/memory-local/memory/CURRENT_STATE.md <copy>/memory/
+cp <skill folder>/choices/memory/local/files-to-add/memory/CURRENT_STATE.md <copy>/memory/
 ```
 
 Every file is copied whole. A choice decides which files a project gets, never which lines inside a file. Change only what the three sections after "Never copied" name: the project name and "Toolkit settings", the Salesforce entries in the settings file, and the owner-preferences rule. Every other line of every file stays as it was copied.
@@ -81,19 +82,19 @@ find <copy> \( -name .DS_Store -o -name '*.log' \) -exec rm -f {} +
 
 The two kinds of file are these:
 
-- `.agents`: the `.agents/skills` in `every-project` is a link to the `.claude/skills` folder of `every-project`. `placing-files.md`, "4. The .agents/skills link", makes the project's own link after the copy.
+- `.agents`: the `.agents/skills` in `every-project` is a link to the `.claude/skills` folder of `every-project`. `reference/placing-files.md`, "4. The .agents/skills link", makes the project's own link after the copy.
 - `.DS_Store` and `*.log`: macOS and a local run leave these files in a folder.
 
 ## The project name and "Toolkit settings"
 
 Make these four changes in the copied files.
 
-- Replace `<Project name>` with the project's name in `AGENTS.md`, `README.md`, and `PROJECT.md`, on heading lines only. A heading line starts with one to six `#` and a space. The fill-in guide comments that name `<Project name>` stay as they are until finishing. `finishing.md`, "Fill the prompts", says when a fill-in guide comment is deleted.
+- Replace `<Project name>` with the project's name in `AGENTS.md`, `README.md`, and `PROJECT.md`, on heading lines only. A heading line starts with one to six `#` and a space. The fill-in guide comments that name `<Project name>` stay as they are until finishing. `reference/finishing.md`, "Fill the prompts", says when a fill-in guide comment is deleted.
 - In `PROJECT.md`, "People and ownership", replace the example row with the owner's row below. The example row is the line that starts with ``| `<role>` |``. Keep the header row and the separator row.
 
   `| Owner | <name from question 1> | Makes the project's decisions | Every decision: requirements, designs, results, merges, and Done | Setup, <YYYY-MM-DD> |`
 
-  - `<name from question 1>` is the owner's name, from the answer to question 1 of `interview.md`.
+  - `<name from question 1>` is the owner's name, from the answer to question 1 of `reference/interview.md`.
   - The work skills read the owner's name from this row.
   - The fourth cell, "May decide", says which decisions a person may make.
 - Leave every example ID in the copied files as it is, whatever prefix the owner chose. The example IDs are `WI-31`, `WI-031`, `[[WI-031]]`, `DEC-001`, `SRC-###`, and `SEC-04`. The skills read the real prefix from "Toolkit settings".
@@ -111,9 +112,9 @@ Make these four changes in the copied files.
 | GitHub repository | With work items in GitHub Issues, leave the prompt for the GitHub step. Otherwise write `not used`. |
 | Notion memory | With memory in Notion, leave the prompt for the Notion step, which writes nested bullets under the label line. Otherwise write `not used`. |
 | Hindsight bank, Hindsight server, Hindsight dashboard | With memory in Hindsight, leave the three prompts for the Hindsight step. Otherwise write `not used` on each line. |
-| Salesforce org aliases | In a Salesforce project, write the line in the form that `salesforce.md`, "The org aliases", shows: the label line, then one nested bullet per org (alias, which org it is, its purpose; mark production). The rule above about writing the value inside the backticks does not apply to that form. Otherwise write `not used`. |
+| Salesforce org aliases | In a Salesforce project, write the line in the form that `choices/salesforce/salesforce-setup.md`, "The org aliases", shows: the label line, then one nested bullet per org (alias, which org it is, its purpose; mark production). The rule above about writing the value inside the backticks does not apply to that form. Otherwise write `not used`. |
 
-The steps that set up each service fill the prompts that are left for them: `notion.md` for Notion, `github.md` for GitHub Issues, and `hindsight-on-vps.md` for Hindsight.
+The steps that set up each service fill the prompts that are left for them: `choices/notion-shared/notion-setup.md` for Notion, `choices/work-items/github/github-work-items-setup.md` for GitHub Issues, and `references/hindsight-on-vps.md` for Hindsight.
 
 Keep the fill-in guide comment of the "Toolkit settings" section itself, because later sessions read it.
 
@@ -122,7 +123,7 @@ Keep the fill-in guide comment of the "Toolkit settings" section itself, because
 In a project that is not a Salesforce project, take the Salesforce entries out of `<copy>/.claude/settings.json`. A Salesforce project keeps them. `.claude/settings.json` is the settings file of Claude Code. Every project gets it, and it holds Salesforce entries.
 
 - Delete these entries from `permissions.deny`: `Bash(sf project delete source *)`, `Bash(sfdx force:source:delete *)`, `Bash(sf org delete *)`, `PowerShell(sf project delete source *)`, `PowerShell(sfdx force:source:delete *)`, `PowerShell(sf org delete *)`.
-- In a Salesforce project, also add the entries for each production org that the owner named, as `salesforce.md`, "The refuse list for production", says.
+- In a Salesforce project, also add the entries for each production org that the owner named, as `choices/salesforce/salesforce-setup.md`, "The refuse list for production", says.
 - Keep every other entry: the Git deny and ask rules, `attribution`, `autoMemoryEnabled`, `enabledPlugins`, `outputStyle`, and `skillListingBudgetFraction`.
 
 `.gitignore` is copied whole in every project. Its lines for Salesforce tools ignore nothing in a project that has none of those files.
@@ -131,17 +132,11 @@ In a project that is not a Salesforce project, take the Salesforce entries out o
 
 Every project gets `.claude/rules/owner-preferences.md`, whatever its memory choice. The file keeps the owner's "from now on" instructions in one file that both Claude Code and Codex read. It starts with only the title, the lead paragraph, and a layout note.
 
-Copy its starting text into the setup copy:
+The file comes with `every-project/`. Add each instruction the owner gave during the interview. `reference/finishing.md`, "Instructions the owner gives during setup", says what counts as an instruction and how to write its line.
 
-```text
-cp <skill folder>/assets/owner-preferences.md <copy>/.claude/rules/owner-preferences.md
-```
+The file is the owner's own file from the first instruction on. So setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it afterwards.
 
-Then add each instruction the owner gave during the interview. `finishing.md`, "Instructions the owner gives during setup", says what counts as an instruction and how to write its line.
-
-The starting text is `assets/owner-preferences.md`, which is outside `every-project`. The reason is that the file is the owner's own file from the first instruction on. So setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it afterwards.
-
-A Salesforce project has a second file of this kind, `.claude/rules/salesforce-agent-permissions.md`. It comes with the `salesforce` folder and holds the owner's choices about what an agent may do in each kind of org, with the toolkit's defaults. Copy it whole and change nothing in it. When the owner gives such a choice during the interview, write it into the file, in the place that the first bullets of the file give. "Update the toolkit" copies the file only into a Salesforce project that has none, and never compares or replaces it afterwards.
+A Salesforce project has a second file of this kind, `.claude/rules/salesforce-agent-permissions.md`. It comes with the folder `choices/salesforce/files-to-add` and holds the owner's choices about what an agent may do in each kind of org, with the toolkit's defaults. Copy it whole and change nothing in it. When the owner gives such a choice during the interview, write it into the file, in the place that the first bullets of the file give. "Update the toolkit" copies the file only into a Salesforce project that has none, and never compares or replaces it afterwards.
 
 ## Check the setup copy
 
@@ -150,5 +145,5 @@ Run each check below. Each of these commands only reads.
 - `grep -n '<Project name>' <copy>/AGENTS.md <copy>/README.md <copy>/PROJECT.md` shows only fill-in guide comment lines, and never a heading.
 - `command grep -c -E '^- (Tracker|Memory|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md` prints 10. `command grep` runs the system grep. In Claude Code, plain grep skips the folders that the copied `.gitignore` names.
 - `jq empty <copy>/.claude/settings.json` prints nothing, which means that the JSON is valid.
-- Run `ls -A <skill folder>/assets/every-project`, the same command for each folder you copied, and `ls -A <copy>`. The last list holds every name of the other lists except `.agents`, plus `memory` with Hindsight memory, and no other name.
+- Run `ls -A <skill folder>/every-project`, the same command for each folder you copied, and `ls -A <copy>`. The last list holds every name of the other lists except `.agents`, plus `memory` with Hindsight memory, and no other name.
 - `find <copy> -name AGENTS.md -not -path '*/.claude/*'` lists the root file and one file in each of `system/`, `sources/`, `delivery/`, and `reference/`. With local work items it also lists one in `work-items/`, and with local memory it also lists one in `memory/`. Each of these files has a `CLAUDE.md` beside it that holds only the line `@AGENTS.md`.

@@ -4,7 +4,7 @@ Use this file to copy the finished setup copy into the project. The setup copy i
 
 The job is done when three things are true: the project has every file of the setup copy, except a file that the owner chose to keep as it was; no file that the project already had was overwritten without the owner's answer; and `.agents/skills` is a link to `.claude/skills`.
 
-Run every command from the project folder. `<copy>` stands for the temporary folder that holds the setup copy. `setup-copy.md`, "Make the temporary folder", says how that folder is made.
+Run every command from the project folder. `<copy>` stands for the temporary folder that holds the setup copy. `reference/setup-copy.md`, "Make the temporary folder", says how that folder is made.
 
 ## Contents
 
@@ -50,7 +50,7 @@ Then do what the table says for that file.
 | File | What to do |
 | --- | --- |
 | `.gitignore`, `.ignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. This change only adds lines, so no question is needed. |
-| `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge the setup copy's entries into the project's file. `skills-hooks-settings.md`, "Merge rules", gives the rules for the merge. Ask the owner before you change any value that the project already has. |
+| `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge the setup copy's entries into the project's file. `reference/skills-hooks-settings.md`, "Merge rules", gives the rules for the merge. Ask the owner before you change any value that the project already has. |
 | `CLAUDE.md` with more than the line `@AGENTS.md` | Keep the project's file. Ask the owner whether to add the line `@AGENTS.md` at its top, because while a `CLAUDE.md` exists, Claude Code reads `AGENTS.md` only through that line. |
 | `AGENTS.md` (a repository that had its own) | Keep the project's file. Show the owner what the Toolkit V2 version adds. After the owner's yes, add the sections of the Toolkit V2 version, and keep the owner's text. |
 | Every other file (`README.md`, a rule, a template) | In the file's row of the numbered table described below, say in one line what differs, and recommend one of three choices: keep the owner's file, take the toolkit's file, or merge the two. The owner's file stays until the owner chooses. |
@@ -93,4 +93,4 @@ git status --short
 - `.agents` shows `skills -> ../.claude/skills`, and `ls .agents/skills` shows the skills.
 - `git status` lists the new files and nothing under `work-items/` or `memory/`, because Git ignores both.
 
-Keep the temporary folder until the end of the final checks. `finishing.md`, "Final checks", lists those checks and says when to remove the folder.
+Keep the temporary folder until the end of the final checks. `reference/finishing.md`, "Final checks", lists those checks and says when to remove the folder.

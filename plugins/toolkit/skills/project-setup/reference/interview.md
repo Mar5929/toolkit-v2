@@ -68,7 +68,7 @@ Jira is not offered, because it is not built yet (the owner deferred it). If the
 The ID prefix of the work items depends on the choice:
 
 - When the owner chooses local folders, confirm the ID prefix in one line: say that IDs look like `WI-001`, and ask whether to keep `WI`.
-- When the owner chooses Notion, the Notion setup proposes the prefix later, because Notion allows each prefix in only one database of a workspace. `notion.md` says how the Notion setup proposes the prefix.
+- When the owner chooses Notion, the Notion setup proposes the prefix later, because Notion allows each prefix in only one database of a workspace. `choices/notion-shared/notion-setup.md` says how the Notion setup proposes the prefix.
 
 ## Question 3: where memory is kept
 
@@ -76,11 +76,11 @@ Recommend local memory with Obsidian, because it is private, fast, and needs no 
 
 - When work items are in Notion, recommend Notion memory in place of local memory. Work and memory then sit together and link to each other, and the owner can read both on a phone.
 - Offer Hindsight by name, for search by meaning across the records that the agent saved. Hindsight here is the owner's Hindsight server on the owner's VPS. Nothing is installed on this Mac except Hindsight's coding-agent add-on.
-- When the project is one that `hindsight-on-vps.md`, "Projects with their own review of saved knowledge", names, tell the owner what that section says before the owner picks Hindsight.
+- When the project is one that `references/hindsight-on-vps.md`, "Projects with their own review of saved knowledge", names, tell the owner what that section says before the owner picks Hindsight.
 - When the owner picks Hindsight, do three things in this order:
-  1. Explain that setup in plain words. Take the facts from `hindsight-on-vps.md`, "How the owner's Hindsight is set up". Say that the text of each save goes to OpenAI, through the owner's ChatGPT subscription.
+  1. Explain that setup in plain words. Take the facts from `references/hindsight-on-vps.md`, "How the owner's Hindsight is set up". Say that the text of each save goes to OpenAI, through the owner's ChatGPT subscription.
   2. Ask whether to create a separate memory bank for this project (or to use the one this project already has), and recommend yes. A memory bank is one project's store of memory on the Hindsight server. When the owner says no, ask question 3 again.
-  3. Show the owner the defaults for the bank and ask whether the owner wants them, as `hindsight-on-vps.md`, "The defaults, and the one question to the owner", says.
+  3. Show the owner the defaults for the bank and ask whether the owner wants them, as `references/hindsight-on-vps.md`, "The defaults, and the one question to the owner", says.
 
 Memory holds two things. The first is where the project stands now. That part is called the project's Current State: the project's one short page of what is true now. The second is what no other project file holds: facts about people and the client, where to find things, and what happened. Decisions, terms, sources, and the description of the system are never memory. With every choice, they are files in the repository.
 
@@ -98,22 +98,22 @@ Any mix of the work tracking choice and the memory choice works, for example wor
 
 When `sfdx-project.json` answered this question, skip the question. When the file is absent, ask the question and recommend no.
 
-When the answer is yes, the project gets the Salesforce rules and skills, and the Salesforce templates inside `delivery/`. Setup then checks that Salesforce's own skills are installed, and asks the owner what to have on or off. `salesforce.md`, "Salesforce's skills", gives the check and the question.
+When the answer is yes, the project gets the Salesforce rules and skills, and the Salesforce templates inside `delivery/`. Setup then checks that Salesforce's own skills are installed, and asks the owner what to have on or off. `choices/salesforce/salesforce-setup.md`, "Salesforce's skills", gives the check and the question.
 
 For a Salesforce project, ask for the org aliases, one question per message. Before the first of these questions, show the aliases on this computer with `sf org list`, which only reads.
 
 1. Ask for the sandbox that the agents may deploy to for testing.
    - Recommend an alias only when its name matches this project or the owner said it is this project's.
-   - When none of the listed orgs is for this project, recommend "none yet". `salesforce.md`, "The org aliases", says what to write in that case and how the aliases are written in `PROJECT.md`.
-2. Ask for production. Agents never deploy to production or change its data. The rule `salesforce-org-safety.md` forbids both, and Claude Code refuses a command that changes the production org and names it (`salesforce.md`, "The refuse list for production").
+   - When none of the listed orgs is for this project, recommend "none yet". `choices/salesforce/salesforce-setup.md`, "The org aliases", says what to write in that case and how the aliases are written in `PROJECT.md`.
+2. Ask for production. Agents never deploy to production or change its data. The rule `salesforce-org-safety.md` forbids both, and Claude Code refuses a command that changes the production org and names it (`choices/salesforce/salesforce-setup.md`, "The refuse list for production").
 
-The API version comes after the plan, in step 7 of "New project" in `SKILL.md`. It is a question of its own when the version cannot be read. `salesforce.md`, "The API version", says how to read the version and what to ask when it cannot be read.
+The API version comes after the plan, in step 7 of "New project" in `SKILL.md`. It is a question of its own when the version cannot be read. `choices/salesforce/salesforce-setup.md`, "The API version", says how to read the version and what to ask when it cannot be read.
 
 ## Question 5: SOUL.md
 
 `SOUL.md` is a short page about how the owner likes the agent to work with the owner. Recommend not now.
 
-- When the owner says yes, the setup copy gets `SOUL.md`, and you fill it with the owner's words while finishing. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. `finishing.md`, "SOUL.md", says how to fill the page.
+- When the owner says yes, the setup copy gets `SOUL.md`, and you fill it with the owner's words while finishing. The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. `reference/finishing.md`, "SOUL.md", says how to fill the page.
 - When the owner says no, the setup copy has no `SOUL.md`.
 
 ## The plan to confirm
@@ -134,7 +134,7 @@ After the owner has answered the questions, say in a few lines what will happen,
 | Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it; the bank gets the settings you chose" |
 | Local work and local memory | "nothing outside this folder" |
 
-For the row "Notion (work, memory, or both)": when the Project template does not exist, stop and tell the owner, as `notion.md`, "The owner's yes before anything is made", says.
+For the row "Notion (work, memory, or both)": when the Project template does not exist, stop and tell the owner, as `choices/notion-shared/notion-setup.md`, "The owner's yes before anything is made", says.
 
 To give the skill count, add the numbers that apply to the owner's choices: 10 shared, plus 1 for local or Notion memory (none for Hindsight), plus 1 for Notion work items or memory (`using-notion-cli`, once), plus 3 for Salesforce. Every project already has `managing-work-items` among its ten shared skills; its work choice adds reference files inside that skill.
 

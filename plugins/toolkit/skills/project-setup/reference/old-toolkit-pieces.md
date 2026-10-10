@@ -1,6 +1,6 @@
 # What the old toolkit left in a project
 
-This file lists what a project holds when it was set up with the older claude-toolkit, or with the retired `toolkit` program. For each old file, folder, and record it says which part of the move-over list it goes under, what Toolkit V2 has in its place, and how each old record is written in the Toolkit V2 form. Open it when `move-over.md` in this folder sends you here, which it does in its steps 2, 3, and 6. With this file, every old file, folder, and record gets one part of the list, and every record that is carried over gets its place in Toolkit V2.
+This file lists what a project holds when it was set up with the older claude-toolkit, or with the retired `toolkit` program. For each old file, folder, and record it says which part of the move-over list it goes under, what Toolkit V2 has in its place, and how each old record is written in the Toolkit V2 form. Open it when `reference/move-over.md` in this folder sends you here, which it does in its steps 2, 3, and 6. With this file, every old file, folder, and record gets one part of the list, and every record that is carried over gets its place in Toolkit V2.
 
 ## Contents
 
@@ -21,7 +21,7 @@ This file lists what a project holds when it was set up with the older claude-to
 Each row names an old file, folder, or record, and the part of the move-over list that it goes under. The parts are:
 
 - **Delete**: the old toolkit wrote it, and it holds nothing of the owner's.
-- **Compare**: the old toolkit wrote it, and the owner may have edited it. Compare it with the old toolkit's own copy, which the next section says how to find. Then sort it with the table in `move-over.md`, step 3, which has a row for each result of the comparison.
+- **Compare**: the old toolkit wrote it, and the owner may have edited it. Compare it with the old toolkit's own copy, which the next section says how to find. Then sort it with the table in `reference/move-over.md`, step 3, which has a row for each result of the comparison.
 - **Carry**: it holds the owner's words or facts. Those words or facts go to the place that the row names, and the row goes under Update.
 - **Kept**: it stays as it is.
 - **Update**, **Your call**: the row goes under that part as written.
@@ -53,7 +53,7 @@ diff -u <old copy> <project file>
 
 ## Plugins
 
-Turn off, for this project only, every plugin whose name ends in `@claude-toolkit`, and every `@toolkit-v2` plugin except `toolkit@toolkit-v2`, which is the toolkit's own plugin. `skills-hooks-settings.md`, "The older plugins, off in this project", gives the commands that list the plugins and the settings entries that turn one off. List the plugins on one Update line. Never uninstall a plugin, and never change `~/.claude` or `~/.codex`.
+Turn off, for this project only, every plugin whose name ends in `@claude-toolkit`, and every `@toolkit-v2` plugin except `toolkit@toolkit-v2`, which is the toolkit's own plugin. `reference/skills-hooks-settings.md`, "The older plugins, off in this project", gives the commands that list the plugins and the settings entries that turn one off. List the plugins on one Update line. Never uninstall a plugin, and never change `~/.claude` or `~/.codex`.
 
 ## Rules
 
@@ -81,7 +81,7 @@ This table is for files in `.claude/rules/`. "Same name" means that Toolkit V2 h
 | `capture-the-thinking.md`, `wrap-up-ritual.md`, `track-open-topics.md`, `spec-before-you-build.md` | Compare | `memory-review-and-save.md`, `keep-work-item-current.md`, and `managing-work-items` |
 | `writing-and-language.md`, `how-to-reply.md`, `treat-owner-as-non-technical.md`, `define-your-terms.md` | Compare | The output style named by `outputStyle` in `.claude/settings.json` |
 | `.claude/RULES.md`, `.claude/rules/README.md` (indexes of the rules) | Delete | Nothing: `AGENTS.md` tells Codex to read the rule files |
-| `.claude/toolkit-sync.md` (what the old sync skill recorded, with the owner's declines) | Carry | In step 6 of `move-over.md`, each decision in it that the owner confirms is still true goes to its new place: an instruction for the agent goes to `.claude/rules/owner-preferences.md`, and a decision about the project goes to `DECISIONS.md`. |
+| `.claude/toolkit-sync.md` (what the old sync skill recorded, with the owner's declines) | Carry | In step 6 of `reference/move-over.md`, each decision in it that the owner confirms is still true goes to its new place: an instruction for the agent goes to `.claude/rules/owner-preferences.md`, and a decision about the project goes to `DECISIONS.md`. |
 
 For the row `.claude/toolkit-sync.md`: delete the file only when every decision in it was saved, or the owner said to drop it. Otherwise the file is Kept.
 
@@ -98,12 +98,12 @@ This table is for files in `.claude/hooks/`. Each file has an entry in `.claude/
 | `knowledge-completion.mjs`, `spec-check-reminder.mjs`, `style-handshake.mjs`, and any `style-reminder`, `writing-guard`, `explain-simply-reminder`, `work-item-stage-reminder`, or `memory-pr-hook` file | Delete | Nothing: Toolkit V2 adds no end-of-reply check and no per-message style check |
 | A `.test.mjs` or `.test.js` file for a hook above, and `.claude/hooks/README.md` | Delete | Nothing |
 | `.claude/style-reminder.json`, `.claude/writing-guard.json` | Delete | Nothing |
-| `guard-protected-orgs.js`, `guard-permission-set-deploy.js` (Salesforce guards) | Delete | The entries of `permissions.deny` for each production org (`salesforce.md`, "The refuse list for production") |
+| `guard-protected-orgs.js`, `guard-permission-set-deploy.js` (Salesforce guards) | Delete | The entries of `permissions.deny` for each production org (`choices/salesforce/salesforce-setup.md`, "The refuse list for production") |
 | `.claude/protected-orgs.json` | Delete | The same entries. An org named in `alwaysProtect` gets entries after the owner confirms that it is production |
 | `no-ai-attribution-guard.mjs` | Kept | Nothing in the project: it is a machine-wide hook |
 
 - A guard that differs from the old toolkit's copy holds a change that the project made itself. Put it under "Your call": the owner may keep it.
-- Never leave a Salesforce project with nothing that refuses a change to production. The entries of `permissions.deny` go in before an old guard comes out. `move-over.md`, step 5, gives this order under "Delete".
+- Never leave a Salesforce project with nothing that refuses a change to production. The entries of `permissions.deny` go in before an old guard comes out. `reference/move-over.md`, step 5, gives this order under "Delete".
 
 This table is for the other entries of `.claude/settings.json`. The file's one Update line says which entries are removed, added, and kept.
 
@@ -122,19 +122,19 @@ This table is for the other entries of `.claude/settings.json`. The file's one U
 | The Git hook `pre-commit` in this copy's Git hooks folder, when its text names `check-knowledge` | Delete, in the same step as `.claude/tools/` | Nothing. Git does not track it, so each computer's copy of the project has its own. Say so on its line of the list. |
 | Any other Git hook of this copy (for example a `post-commit` that rebuilds a code graph) | Kept | Nothing |
 | `.claude/skills/sf-component-tracker/`, `sf-data-change/`, `sf-deploy-check/` | Compare | Same names |
-| `.agents/skills/` as a real folder of copies | Update | A link to `.claude/skills` (`placing-files.md`, step 4, says how to make it) |
+| `.agents/skills/` as a real folder of copies | Update | A link to `.claude/skills` (`reference/placing-files.md`, step 4, says how to make it) |
 | `.claude/output-styles/plain-english.md` | Compare | Same name |
 | `.claude/output-styles/terse.md`, `plain-language.md` | Kept when `outputStyle` names it; otherwise Compare | Nothing |
 | `tools/kb/`, `tools/permissions/` (Salesforce graph and permission set tools), with the rules `dependency-graph.md` and `permissions-source-control.md` | Kept | Nothing: the toolkit no longer ships these tools, and they stay in the project as its own |
 | `.system-guide.json`, and the System Guide pages (usually `knowledge/system/`) | Your call | `system/` and `reference/current-system/`. The list under this table gives the recommendation. |
-| `.toolkit-memory.json` | Delete, after step 6 of `move-over.md` | "Toolkit settings" in `PROJECT.md` |
-| A folder's own `AGENTS.md` with a `CLAUDE.md` beside it holding `@AGENTS.md` | Kept | Check it for old names, as the row for the owner's own files in `move-over.md`, step 3, says |
-| Root `CLAUDE.md`, root `AGENTS.md`, `README.md`, `.gitignore`, `.mcp.json` | Update | The table in `move-over.md`, step 3, says how each is updated |
+| `.toolkit-memory.json` | Delete, after step 6 of `reference/move-over.md` | "Toolkit settings" in `PROJECT.md` |
+| A folder's own `AGENTS.md` with a `CLAUDE.md` beside it holding `@AGENTS.md` | Kept | Check it for old names, as the row for the owner's own files in `reference/move-over.md`, step 3, says |
+| Root `CLAUDE.md`, root `AGENTS.md`, `README.md`, `.gitignore`, `.mcp.json` | Update | The table in `reference/move-over.md`, step 3, says how each is updated |
 
 For the row `.system-guide.json` and the System Guide pages: the pages are the owner's approved text.
 
 - Recommend moving each page to `reference/current-system/<area>.md` with `git mv`, so that its text and its Git history stay.
-- Recommend carrying over into `system/` only the rules that a work item the owner can name built. `one-home-layout.md`, "Where each old file or record goes", has the row for a verified description, which says how such a rule is written and marked.
+- Recommend carrying over into `system/` only the rules that a work item the owner can name built. `reference/one-home-layout.md`, "Where each old file or record goes", has the row for a verified description, which says how such a rule is written and marked.
 
 ## Knowledge files that hold no records
 
@@ -142,14 +142,14 @@ For the row `.system-guide.json` and the System Guide pages: the pages are the o
 | --- | --- | --- |
 | `knowledge/knowledge-manual.md`, `knowledge/toolkit-manual.md`, `docs/knowledge-manual.md`, `docs/toolkit-manual.md` | Compare | The skills' own files, `AGENTS.md`, and `PROJECT.md` |
 | `knowledge/README.md` | Compare | The project map in `AGENTS.md`, and the `AGENTS.md` of each folder |
-| `knowledge/memory/memory-index.md`, `knowledge/prds/prd-index.md` (generated indexes) | Delete, after step 6 of `move-over.md` | Nothing: the records they list are in the places where Toolkit V2 keeps them |
+| `knowledge/memory/memory-index.md`, `knowledge/prds/prd-index.md` (generated indexes) | Delete, after step 6 of `reference/move-over.md` | Nothing: the records they list are in the places where Toolkit V2 keeps them |
 | `ai-external-knowledge/README.md` (generated index) | Carry | `reference/outside-docs/INDEX.md`: one row per topic folder |
-| `.work-items/README.md` | Update | Its text becomes the one line that says the folder is history (`move-over.md`, step 6, point 8) |
+| `.work-items/README.md` | Update | Its text becomes the one line that says the folder is history (`reference/move-over.md`, step 6, point 8) |
 | `.work-items/DASHBOARD.md`, `.work-items/.work-tracker.yaml`, `.work-items/ACTIVE.json`, `.work-items/EVENTS.ndjson` | On the old work items' Update line: they stay with the old folder | Nothing |
 
 ## Old records
 
-The old records are the owner's. Each kind of old record gets one Update line, except where a row below says Kept or "Your call". `move-over.md`, step 3, says what the Update line holds, and step 6 says which records are carried over.
+The old records are the owner's. Each kind of old record gets one Update line, except where a row below says Kept or "Your call". `reference/move-over.md`, step 3, says what the Update line holds, and step 6 says which records are carried over.
 
 | Old record | Where | Count it with |
 | --- | --- | --- |
@@ -168,7 +168,7 @@ The old records are the owner's. Each kind of old record gets one Update line, e
 
 Read each work item's status from its `- Status:` line (`WORK-ITEM.md`), its `status:` line (`ITEM.yaml`), or its `"status"` value (`ITEM.json`). Read each memory file's status from the `status:` line in its header. The list gives the count for each status.
 
-The topic folders of `ai-external-knowledge/` and the old `delivery/` folders are renamed, and the client files in them are filed in `sources/`. `one-home-layout.md`, "Where each old file or record goes", has a row for each of these folders that gives its new place and how to move it.
+The topic folders of `ai-external-knowledge/` and the old `delivery/` folders are renamed, and the client files in them are filed in `sources/`. `reference/one-home-layout.md`, "Where each old file or record goes", has a row for each of these folders that gives its new place and how to move it.
 
 When a project already has a root `work-items/` folder from an earlier tracker, and its owner chose local work items, Toolkit V2 uses that same folder name. Put the old folder under "Your call". Recommend renaming the old folder to `work-items-old/` after the owner's yes, so that the two never mix.
 
@@ -182,7 +182,7 @@ The table uses two words for the level of a work item: a top-level item is a wor
 | --- | --- |
 | ID | With work items in local folders, the work item keeps the same ID. Notion and GitHub Issues give their own IDs. With either, write "Was <old ID> in the old tracker." as the first line of Notes, Context, and use the new ID wherever another carried-over work item or memory names the old ID. |
 | Title, Type, Priority | The same fields. A type that Toolkit V2 does not list becomes `task`. |
-| Status and Stage | State and Status, from the table in `earlier-versions.md`, "Work items from Stage to State". A work item that no row fits goes under "Your call". |
+| Status and Stage | State and Status, from the table in `reference/earlier-versions.md`, "Work items from Stage to State". A work item that no row fits goes under "Your call". |
 | Purpose (`description`) | Goal |
 | Current state, Next action (`next_step`), Blockers, Updated date | The lines of the work item's Current state |
 | Parent, children, and related items | `parent`, the parent's sub-items, and Related items. Create a parent before its sub-items. When the old work items have more than three levels, put them under "Your call". |
@@ -197,7 +197,7 @@ The table uses two words for the level of a work item: a top-level item is a wor
 | Recent History | The ten newest entries become Recent History rows. The rest stay in the old work item. |
 | Requirements | The Requirements section, in the layout that the project's work item template gives, with the owner's request and each requirement in the old wording. A part that the old text does not give is written "Not recorded." |
 | `DESIGN.md` | The work item's design |
-| Every other file in the work item's folder | A source: file it in `sources/` with an SRC number, and name it by that ID on the work item's Sources line. `one-home-layout.md`, "Where each old file or record goes", has the row for a source inside a work item, which says how. |
+| Every other file in the work item's folder | A source: file it in `sources/` with an SRC number, and name it by that ID on the work item's Sources line. `reference/one-home-layout.md`, "Where each old file or record goes", has the row for a source inside a work item, which says how. |
 | No old field | In a work item that is not Done or Cancelled, the `**Moved up:**` line stays empty, and "Lessons not proven yet" holds "None." |
 | Git branch and pull request fields, completion evidence, the schema version | No Toolkit V2 field. Name them on the Update line as not carried over. |
 
@@ -217,7 +217,7 @@ Toolkit V2 memory holds only what no other project file holds. So each fact in a
 | Header: `summary`, `source`, `work_item`, `approved_by` with `approval_date` | The new record's own lines. In a `DECISIONS.md` entry, these are Decision, Sources, Affects, and Decided. |
 | Header: `supersedes`, `superseded_by` | "Replaces or replaced by" in the entry, when the other file was carried over too; otherwise left out |
 | Header: `related_memories`, `confidence`, `context`, `source_quote`, `effective_from`, `effective_to`, `tags`, `group`, `project`, `auto_saved`, the dates | No Toolkit V2 line. Name them on the Update line as not carried over. The old file keeps them. |
-| `knowledge/memory/current.md` | The project's Current State, written new from what is true today, as `finishing.md`, "The project's Current State", says. The list under this table says what happens to each part of the old file. |
+| `knowledge/memory/current.md` | The project's Current State, written new from what is true today, as `reference/finishing.md`, "The project's Current State", says. The list under this table says what happens to each part of the old file. |
 | A save waiting in `knowledge/memory-inbox.md` | "Your call", one line for each save: the owner approves or declines it. Never file a waiting save without the owner's answer. |
 | `knowledge/memory-self-improvement.md` | The owner's instructions go to `.claude/rules/owner-preferences.md`, under Memory, in the owner's words |
 | `knowledge/project.md`, or the old root `PROJECT.md` | The matching sections of the Toolkit V2 `PROJECT.md`. |
@@ -238,12 +238,12 @@ For the row `knowledge/memory/current.md`: the project's Current State is the pr
 - An "Active work" entry becomes a "Now" line when its work item was carried over and has left Backlog.
 - Each "General project to-dos" entry goes under "Your call". Recommend a project task when the entry is administrative work for the whole project, and otherwise a new Backlog work item. A project task is a task that belongs to no work item. `managing-work-items/references/lifecycle-rules.md`, "Levels", describes both.
 - "Session handoffs" are not carried over.
-- "Project goal" is the suggestion for the outcome question in `finishing.md`.
+- "Project goal" is the suggestion for the outcome question in `reference/finishing.md`.
 
 For the row of a file in `knowledge/prds/` or `prds/`:
 
 - Recommend moving the whole file to `sources/` with `git mv` and an SRC number, so that its text and its Git history stay.
-- Recommend carrying its agreed requirements into the matching `system/` documents, as rules whose Source names that SRC. `one-home-layout.md`, "Where each old file or record goes", has the row for an agreed requirement, which says which document each rule goes in and how it is marked.
+- Recommend carrying its agreed requirements into the matching `system/` documents, as rules whose Source names that SRC. `reference/one-home-layout.md`, "Where each old file or record goes", has the row for an agreed requirement, which says which document each rule goes in and how it is marked.
 
 ## The retired toolkit program
 
@@ -251,5 +251,5 @@ For the row of a file in `knowledge/prds/` or `prds/`:
 | --- | --- | --- |
 | `.toolkit.json` | Delete | "Toolkit settings" in `PROJECT.md` |
 | `.codex/rules/toolkit.rules`, `.toolkit-cache/` | Delete | Nothing |
-| `DECISIONS.md` | Carry | The Toolkit V2 `DECISIONS.md` takes its path, so move the old file first: `git mv` it to `sources/` with an SRC number. In step 6 of `move-over.md`, each decision in it that the owner confirms is still true becomes an entry in the new file, with that SRC under Sources. |
-| `.work-items/`, `.memory/` | Update | These are old records. Carry them over as step 6 of `move-over.md` says, from the form that the files have. The old folders stay as they are. |
+| `DECISIONS.md` | Carry | The Toolkit V2 `DECISIONS.md` takes its path, so move the old file first: `git mv` it to `sources/` with an SRC number. In step 6 of `reference/move-over.md`, each decision in it that the owner confirms is still true becomes an entry in the new file, with that SRC under Sources. |
+| `.work-items/`, `.memory/` | Update | These are old records. Carry them over as step 6 of `reference/move-over.md` says, from the form that the files have. The old folders stay as they are. |

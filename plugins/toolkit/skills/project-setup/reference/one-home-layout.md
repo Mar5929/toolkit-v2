@@ -11,9 +11,9 @@ When the job is done, two things must be true:
 
 This file uses these names:
 
-- The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. `<copy>` is the new setup copy that `update.md`, "1. Build a new setup copy", builds.
+- The setup copy is the project's finished files, built in a temporary folder before anything is put into the project. `<copy>` is the new setup copy that `reference/update.md`, "1. Build a new setup copy", builds.
 - `<main>` is the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints.
-- A worktree is a separate folder with its own branch. `update.md`, "Before you start", has you make one for the update.
+- A worktree is a separate folder with its own branch. `reference/update.md`, "Before you start", has you make one for the update.
 - A source is anything the project was given by someone else, such as a client document. The current folder layout keeps every source, unchanged, in `sources/`.
 - The project's Current State is the project's one short page of what is true now.
 
@@ -51,7 +51,7 @@ Use the table to find out whether the project has the old layout. Each command o
 | Work items in the earlier form, in local files | Run `command grep -rL '^\*\*Moved up:\*\*' <main>/work-items --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=PROJECT-TASKS.md`. The command lists each file with no Moved up line. A listed file named `<ID>.md` is a work item in the earlier form. |
 | Work items in the earlier form, in Notion or GitHub | With the selected `references/work-tracker.md` inside `managing-work-items` in the setup copy, read one work item that is not Done or Cancelled. The work items are in the earlier form when that work item has no "Moved up" label. |
 | A `DECISIONS.md` in another form | Run `head -3 DECISIONS.md` and `head -3 <copy>/DECISIONS.md`. The project's file is in another form when the two commands print different lines. |
-| "Toolkit settings" in the earlier form | Run the count command in `setup-copy.md`, "Check the setup copy". The section is in the earlier form when that command prints fewer than 10 for `PROJECT.md`, or when `command grep -n -e '<!-- if ' -e '<!-- endif' PROJECT.md README.md AGENTS.md .claude/rules/*.md` prints a line. |
+| "Toolkit settings" in the earlier form | Run the count command in `reference/setup-copy.md`, "Check the setup copy". The section is in the earlier form when that command prints fewer than 10 for `PROJECT.md`, or when `command grep -n -e '<!-- if ' -e '<!-- endif' PROJECT.md README.md AGENTS.md .claude/rules/*.md` prints a line. |
 | A rules list in `AGENTS.md` | Run `grep -n 'toolkit:rules' AGENTS.md`. |
 | The two removed rules | Run `ls .claude/rules/work-item-folders.md .claude/rules/ai-external-knowledge.md 2>/dev/null`. |
 | Skills under a retired name | Run `ls .claude/skills`. This row applies when the list shows `running-work-item-lifecycle`, `using-work-tracker`, `curating-project-memory`, `using-memory-store`, `tracking-work-items`, `storing-project-memory`, or `managing-project-wide-records`. `managing-work-items` and `managing-project-memory` are current names, so their names alone do not show an old layout. |
@@ -62,7 +62,7 @@ For Notion memory, the project has the old layout when one of these three things
 - The "Terminology glossary" page beside the Memory page holds a row. Read the page's text as `using-notion-cli` says.
 - The "Current state" page holds the heading "Waiting on the owner".
 
-`update.md`, "3. What to do with each kind of file" and "4. What the toolkit no longer ships", make the changes for the last four rows of the table, so leave those four rows out of the plan below. A hit in one of those four rows shows that the other rows must be looked for.
+`reference/update.md`, "3. What to do with each kind of file" and "4. What the toolkit no longer ships", make the changes for the last four rows of the table, so leave those four rows out of the plan below. A hit in one of those four rows shows that the other rows must be looked for.
 
 ## The plan
 
@@ -256,7 +256,7 @@ The table says where each old file or record goes. The rules for each row are in
 
 **`PROJECT.md`**
 
-- Change "Toolkit settings" as `update.md`, "3. What to do with each kind of file", says in its row for that section.
+- Change "Toolkit settings" as `reference/update.md`, "3. What to do with each kind of file", says in its row for that section.
 - Add the "May decide" column to "People and ownership".
 - Write the text on the "Constraints" line as rules in `system/constraints.md`, as the rules for an agreed requirement say. The line then becomes the setup copy's link.
 - "Work and project records" becomes the setup copy's section.
@@ -283,7 +283,7 @@ Make these changes with the selected `references/work-tracker.md` inside `managi
 **The Notion work item template**
 
 - The project's work item template in Notion is the owner's. Tell the owner which sections differ from the sections that `references/work-tracker-page-layout.md` of `managing-work-items` lists, and change the template only as the owner says.
-- Follow every rule of "Where the templates are kept" in `notion-build/work-setup.md`, for example the rule never to restore a template through the API.
+- Follow every rule of "Where the templates are kept" in `choices/notion-shared/reference/notion-work-item-pages.md`, for example the rule never to restore a template through the API.
 - Never move the project's own work item template to the trash.
 
 ### The project's Current State in the earlier form
@@ -302,12 +302,12 @@ Toolkit files hold nothing of the owner's and need no new place. Give them one r
 
 - `AGENTS.md`, every template, and every `.gitkeep` in `project-wide-records/`, `requirements/`, and `system-guide/`.
 - `memory/decision_template.md`, which is removed.
-- `memory/project_topic_template.md`, the template for a memory file. Git does not track it. So show the owner how it differs from the setup copy's file, as `update.md`, "Whether a difference is the owner's edit", says for a file that Git does not track, and replace it after the owner's yes.
+- `memory/project_topic_template.md`, the template for a memory file. Git does not track it. So show the owner how it differs from the setup copy's file, as `reference/update.md`, "Whether a difference is the owner's edit", says for a file that Git does not track, and replace it after the owner's yes.
 - The generated `memory/MEMORY.md`. The setup copy's file replaces it, and the session-start hook fills it again at the next session start.
 - The template folders and `.gitkeep` files in the old `delivery/` folders, and the two `.gitignore` files `delivery/data/data-loads/.gitignore` and `delivery/data/production-backups/.gitignore`. The setup copy holds both `.gitignore` files at their new paths under `delivery/migrations/`.
 - `work-items/work-item-template/references/`.
 
-A template file in the old `delivery/` folders may hold the owner's facts, for example a filled `package.xml` or `component-tracker.csv`. Decide by the file's Git history. `update.md`, "Whether a difference is the owner's edit", says how to tell a commit of the owner's from a commit of the toolkit's.
+A template file in the old `delivery/` folders may hold the owner's facts, for example a filled `package.xml` or `component-tracker.csv`. Decide by the file's Git history. `reference/update.md`, "Whether a difference is the owner's edit", says how to tell a commit of the owner's from a commit of the toolkit's.
 
 - When a template has no commit of the owner's, it is a toolkit file. It is a toolkit file also when it differs from the file of the same name in `<copy>/delivery/`, because the toolkit changed some templates.
 - When a template has a commit of the owner's, move it with `git mv -f` to the new path, in place of the file that the setup copy put there.
@@ -315,7 +315,7 @@ A template file in the old `delivery/` folders may hold the owner's facts, for e
 
 ## After the owner's yes
 
-Do `update.md`, "3. What to do with each kind of file", "4. What the toolkit no longer ships", and "5. Services", first. Those sections add `DECISIONS.md`, `system/`, `sources/`, `delivery/`, `reference/`, and the new skills, which the moves need.
+Do `reference/update.md`, "3. What to do with each kind of file", "4. What the toolkit no longer ships", and "5. Services", first. Those sections add `DECISIONS.md`, `system/`, `sources/`, `delivery/`, `reference/`, and the new skills, which the moves need.
 
 Each change has one place where you make it:
 
@@ -333,7 +333,7 @@ Do the nine steps in this order.
    - First, remove each tracked old file that an approved row names, with `git rm`. When a file changed since you listed it, leave the file and ask again.
    - Then list every mention of an old path that is left in a tracked file: `command grep -rnE 'ai-external-knowledge/|delivery/(deployment|data|meeting-notes|references|communications|deliverables|archive)/|project-wide-records/|system-guide/|requirements/' . --exclude-dir=.git --exclude-dir=.claude`.
      In that list, a line that says "Carried over from" stays, and so does a source in `sources/`. Change each other line after the owner's yes.
-7. **Check, commit, and merge** as `update.md`, "6. Checks and report", says.
+7. **Check, commit, and merge** as `reference/update.md`, "6. Checks and report", says.
    - Before the commit, look for these two things in a project on the old layout, and fix them:
      - A closed work item has no filled Moved up line. The rules for a work item that is Done or Cancelled, above, give the line to write.
      - A `memory/` folder has an `AGENTS.md` and no `CLAUDE.md`. Copy `<copy>/memory/CLAUDE.md` into it.

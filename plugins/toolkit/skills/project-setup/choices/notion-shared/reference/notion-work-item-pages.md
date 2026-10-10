@@ -7,8 +7,8 @@ Every Notion project is a copy of the owner's "Project" template. The template i
 This file names files that are kept in three places:
 
 - `work-tracker-database-layout.md` is added to `managing-work-items` by the Notion work choice. Its source is `assets/work-notion/.claude/skills/managing-work-items/` in this skill.
-- `ntn-commands.md` is in the `using-notion-cli` skill, in `assets/notion-tools/.claude/skills/using-notion-cli/references/` in this skill. That skill's `SKILL.md` says how to run `ntn` in Codex.
-- The other reference files named here are in this folder (`setup.md`) or in this skill's `references/` folder (`update.md` and `finishing.md`).
+- `ntn-commands.md` is in the `using-notion-cli` skill, in `choices/notion-shared/files-to-add/.claude/skills/using-notion-cli/references/` in this skill. That skill's `SKILL.md` says how to run `ntn` in Codex.
+- The other reference files named here are in this folder (`choices/notion-shared/reference/notion-memory-pages.md`) or in this skill's `references/` folder (`reference/update.md` and `reference/finishing.md`).
 
 ## Contents
 
@@ -43,7 +43,7 @@ Never restore a template through the API (`in_trash` false). Notion's documentat
 
 When a template is in the trash, ask the owner to restore it from Trash in the Notion app, then run "Checks after any of these".
 
-When the Projects database has no "Project", not even in the trash, do what `notion.md`, "The owner's yes before anything is made", says.
+When the Projects database has no "Project", not even in the trash, do what `choices/notion-shared/notion-setup.md`, "The owner's yes before anything is made", says.
 
 Never add real work to a template, because a copy takes everything on the template with it.
 
@@ -67,7 +67,7 @@ Before the first step, two things must be true. The owner has signed in with `nt
    ```bash
    ntn api v1/blocks/<project-page-id>/children page_size==100 < /dev/null | jq -r '.results[] | select(.type=="child_database" or .type=="child_page") | [.type, .id, (.child_database.title // .child_page.title)] | @tsv'
    ```
-5. **Read each database's data source id.** Read it for Work Items, Phases, and Tasks, and for Memories, Facts, and Entities on the Memory page. `setup.md`, "A new project", step 1, shows how to find the databases on the Memory page.
+5. **Read each database's data source id.** Read it for Work Items, Phases, and Tasks, and for Memories, Facts, and Entities on the Memory page. `choices/notion-shared/reference/notion-memory-pages.md`, "A new project", step 1, shows how to find the databases on the Memory page.
 
    ```bash
    ntn api v1/databases/<database-id> < /dev/null | jq -r '.data_sources[0].id'
@@ -78,12 +78,12 @@ Before the first step, two things must be true. The owner has signed in with `nt
    ```bash
    ntn api v1/data_sources/<work-items-data-source-id> -X PATCH -d '{"properties":{"ID":{"unique_id":{"prefix":"<PREFIX>"}}}}' < /dev/null | jq -c '.properties.ID.unique_id'
    ```
-8. When memory is in Notion, run `setup.md`, "A new project", steps 2 and 4. Step 2 there makes the Lore project row, and step 4 there fills the "Current state" page. Lore is the name of the layout that Notion memory uses.
+8. When memory is in Notion, run `choices/notion-shared/reference/notion-memory-pages.md`, "A new project", steps 2 and 4. Step 2 there makes the Lore project row, and step 4 there fills the "Current state" page. Lore is the name of the layout that Notion memory uses.
 9. **Fill the project row.** In Notion, fill every field of the project's row that the setup answers cover, such as Tracker, Memory system, Local path, Repository, Salesforce, and Set up on. Ask the owner, in one question, only for the fields that only the owner knows, such as Priority and Target Date.
    - "Key" holds the project's work item ID prefix, wherever the project's work items are kept, for example TKV, or WI for local work items.
    - "Work items data source" and "Memory data source" hold the data source ids of this project's Work Items and Memories databases, when those databases are in Notion.
-   - `finishing.md`, "Fill the prompts", fills Desired Outcome at the end of setup, with the sentence the owner gives for the project's outcome.
-10. **Record the links** in `PROJECT.md` and read them back. "Recording the links in PROJECT.md" below gives the lines for work items, and `setup.md` gives the memory lines.
+   - `reference/finishing.md`, "Fill the prompts", fills Desired Outcome at the end of setup, with the sentence the owner gives for the project's outcome.
+10. **Record the links** in `PROJECT.md` and read them back. "Recording the links in PROJECT.md" below gives the lines for work items, and `choices/notion-shared/reference/notion-memory-pages.md` gives the memory lines.
 
 ## Removing the part a project keeps elsewhere
 
@@ -125,11 +125,11 @@ When work items are in Notion, write these lines:
   - Projects database: data source <id>
 ```
 
-`setup.md`, "Recording the links in PROJECT.md", gives the bullets of "Notion memory". When memory is in Notion and work items are kept elsewhere, "Notion work items" holds `not used`, and the "Project page" and "Projects database" bullets are the first two bullets under "Notion memory".
+`choices/notion-shared/reference/notion-memory-pages.md`, "Recording the links in PROJECT.md", gives the bullets of "Notion memory". When memory is in Notion and work items are kept elsewhere, "Notion work items" holds `not used`, and the "Project page" and "Projects database" bullets are the first two bullets under "Notion memory".
 
 ## Adding work items or memory later
 
-`update.md`, "Changing a setup choice", runs this section when a project has work items or memory in Notion and adds the other one.
+`reference/update.md`, "Changing a setup choice", runs this section when a project has work items or memory in Notion and adds the other one.
 
 Notion can move a page, but it cannot move a database. So the three memory pages move, and the work databases stay on the page that holds them. A moved page keeps its id. This command moves a page: `ntn api v1/pages/<page-id>/move -d '{"parent":{"type":"page_id","page_id":"<new-parent-id>"}}' < /dev/null`
 
@@ -138,7 +138,7 @@ Notion can move a page, but it cannot move a database. So the three memory pages
 1. Make a temporary row from "Project", as "A new project", steps 1, 3, and 4, says. Title it "<Project name> (temporary, safe to delete)".
 2. Add a "Project Memory" heading at the end of the project page, by sending `PATCH v1/blocks/<project-page-id>/children` with one `heading_1` block. Then move the temporary page's Memory page and "Current state" page to the project page. A Terminology glossary page stays on the temporary page.
 3. Move the temporary row to the trash, with `PATCH v1/pages/<id>` and `{"in_trash":true}`.
-4. Run `setup.md`, "A new project". Its four steps find the memory databases, name the project in Lore's Projects database, record the links, and fill the "Current state" page.
+4. Run `choices/notion-shared/reference/notion-memory-pages.md`, "A new project". Its four steps find the memory databases, name the project in Lore's Projects database, record the links, and fill the "Current state" page.
 5. The moved Memories, Facts, and Entities databases still link to the temporary Work Items database. Remove their "Work items" column and the Memories view "By work item", as "Removing the part a project keeps elsewhere" says for work items in steps 2 and 3.
 6. The memory databases now have no link to this project's work items. Add a "Work items" relation to each of Memories, Facts, and Entities, which points at this project's Work Items database. Send `PATCH v1/data_sources/<id>` with `{"properties":{"Work items":{"relation":{"data_source_id":"<work-items-data-source-id>","type":"dual_property","dual_property":{"synced_property_name":"<Memories, Facts, or Entities>"}}}}}`. The saving of memory uses that relation to link a record to a work item. This project's work item template has no "Linked memory" section. Tell the owner, who can add one in the Notion app. Then fill the memory fields of the project's row, as "A new project", step 9, says.
 
