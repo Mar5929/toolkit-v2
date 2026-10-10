@@ -76,7 +76,6 @@ The time depends on where the project keeps its work items.
   - Give `managing-project-memory` one line for "Waiting on" in the project's Current State. The project's Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
   - Tell the owner the same.
   - When the main checkout's files hold the record, write the ID in each work item, and ask `managing-project-memory` to remove that line.
-  - In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `managing-project-memory`.
 
 ### A work item that must follow a record that already exists
 
@@ -99,5 +98,5 @@ The record can be a rule in `system/`, an entry in `DECISIONS.md`, or a source. 
 | The commit of every change this skill makes | `publish-docs` |
 | Writing a record's ID in a work item, and reading a work item | `managing-work-items` |
 | Anything that one work item alone needs; a requirement that a new decision changes; the closing of a work item, which says what the work item built | `managing-work-items` |
-| A line under "Waiting on" in the project's Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `managing-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place. |
+| A line under "Waiting on" in the project's Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `managing-project-memory`. |
 | A captured outside page, or a record of the system as it is today | `reference/AGENTS.md` |

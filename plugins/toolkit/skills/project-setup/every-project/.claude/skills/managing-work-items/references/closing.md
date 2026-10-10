@@ -47,7 +47,7 @@ The Moved up line is a line in the work item's Overview. It answers one question
      - A cancelled work item did not build what any rule says.
      - `filing-project-records`, step "update a system document", holds the conditions for when a work item built what a rule says, and it checks them.
    - Each project term that this work item added or changed, and that `system/glossary.md` does not show yet.
-   - Each lesson that has no outcome at the end of its line. Step 5 gives the four outcomes. Before you list a lesson, search memory for the same lesson with `managing-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `managing-project-memory`. When the lesson was seen before, in another work item or another session, list it with the dates it was seen.
+   - Each lesson that has no outcome at the end of its line. Step 5 gives the four outcomes. Before you list a lesson, search memory for the same lesson with `managing-project-memory`. When the lesson was seen before, in another work item or another session, list it with the dates it was seen.
 2. When the list holds a decision, a rule to add, change, or retire, a project term, or a lesson, ask the owner once. When the list holds only rules that the work item may have built, or holds nothing, ask no question.
    - Add one Questions and Answers row that shows each line of the list with your recommendation and a one-line reason.
    - For a lesson, the owner chooses one of three: keep it for the whole project, keep it as not proven, or drop it. Recommend keeping a lesson for the whole project when it was seen before.
@@ -64,7 +64,6 @@ The Moved up line is a line in the work item's Overview. It answers one question
    | A lesson that the owner agreed to keep for the whole project, and that is about how to do a step, such as a deploy, a data load, or a test, or about how the agent works | Give the lesson to `managing-project-memory`, which writes the line in `.claude/rules/owner-preferences.md`. |
    | A lesson that is kept as not proven | Give the lesson to `managing-project-memory`, with the work item's ID and the dates it was seen. |
 
-   In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `managing-project-memory`.
 4. Do this step only when work items are local files: check that the main checkout holds each save. The main checkout is the project's main folder, which is the first path that `git worktree list` prints. With each ID, `filing-project-records` reports whether the main checkout holds the save of that record. Steps 5 and 6 write those IDs into the work item. A local work item is kept in the main checkout, so the record that it names must be there.
    - When the main checkout does not hold a save, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records in the project's Current State that the ID is still to be written in the work item.
    - When the main checkout holds the save, continue from this step.
@@ -96,7 +95,7 @@ For a small work item on the short path, read "Closing a small work item" below,
    - Blockers: "None."
 5. Update the project's Current State, which is the project's one short page of what is true now. `references/lifecycle-rules.md`, section "Work that another skill does", names the skill for each of these writes.
    - Remove the work item's line under Now.
-   - Ask `managing-project-memory` to remove the rest: each line under "Coming up" or "Waiting on" that is about this work item, and a "Next session starts with" line that names it. The reference file on the project's Current State in that skill, section "Removing what is no longer true", gives the steps. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `managing-project-memory`.
+   - Ask `managing-project-memory` to remove the rest: each line under "Coming up" or "Waiting on" that is about this work item, and a "Next session starts with" line that names it. The reference file on the project's Current State in that skill, section "Removing what is no longer true", gives the steps.
    - For a top-level work item, check its project phase, as `references/lifecycle-rules.md`, section "Levels", says. That section says what to ask the owner when the last open work item in a project phase is closed.
 6. After the owner's "no", record the owner's words, turn each problem into a task, and move the work item back to Building. After the fix, run the Testing Loop again and fill the Moved up line again, before you ask again.
 7. Report to the owner whether the work reached the default branch, what was deployed, and what was kept for the whole project: what the Moved up line says, and each lesson whose outcome starts "Moved up:". End the report with what the section "Leftover branches and worktrees" below asks the owner. When that section leaves nothing to ask, end with "Tell me the next thing to build."

@@ -42,4 +42,4 @@ playback.
 | For | Use |
 | --- | --- |
 | A rough idea to plan, meeting notes, or a dump the owner asks only to plan | `managing-work-items` |
-| Something worth keeping, after the owner's yes | `managing-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
+| Something worth keeping, after the owner's yes | `managing-project-memory` |

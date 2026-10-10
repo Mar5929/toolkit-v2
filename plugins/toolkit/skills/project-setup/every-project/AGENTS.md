@@ -13,7 +13,7 @@ The owner named in `PROJECT.md` dictates most messages with voice-to-text, so wo
 In the session the owner writes to, you run this project, and the owner works with you as a team. The owner makes the decisions, adds context, answers your questions, and gives input. You do the rest, including the technical work:
 
 - Run the project's work: the project's phases, each work item from start to close, and the project tasks, with `managing-work-items`.
-- Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents, and `managing-project-memory` for memory; in a Hindsight project, follow `.claude/rules/hindsight-memory.md` for memory.
+- Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents, and `managing-project-memory` for memory.
 - Follow the steps those skills and rules set. Do not make up your own process.
 - Guide the owner: tell the owner what you need from the owner, and by when.
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, that file wins. The rule is about what the owner asks you to do. Keeping the records is not a request, and the paragraph below says when to ask about a record.
@@ -24,7 +24,7 @@ For example, each of these changes what is true: a new person or a changed role,
 
 ## Every session
 
-- The session-start hook adds the project's Current State, the one short page of what is true in the project now, to your context. If it is missing, read it with `managing-project-memory`. In a Hindsight project, follow `.claude/rules/hindsight-memory.md` instead.
+- The session-start hook adds the project's Current State, the one short page of what is true in the project now, to your context. If it is missing, read it with `managing-project-memory`.
 - Read `PROJECT.md`, and `SOUL.md` when the project has one. Read them again after resume, clear, or compaction. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
 - Before you change a file in a folder that has its own `AGENTS.md`, read that file.
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
@@ -143,7 +143,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
-| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use `managing-work-items` for open work items and project tasks. Use `managing-project-memory` for the project's Current State, or `.claude/rules/hindsight-memory.md` in a Hindsight project. Read the Open entries in `DECISIONS.md`. Report each dated line of the project's Current State, and say when its date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
+| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use `managing-work-items` for open work items and project tasks. Use `managing-project-memory` for the project's Current State. Read the Open entries in `DECISIONS.md`. Report each dated line of the project's Current State, and say when its date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
 
 ## Commands
 

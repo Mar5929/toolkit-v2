@@ -265,8 +265,8 @@ This table names where to read or save each kind of record and which skill handl
 | A decision or an open question that more than one work item needs | `filing-project-records`, step "record a decision" |
 | A source that the owner gives: a transcript, a document, a file, or pasted text | `filing-project-records`, step "file a source" |
 | A rule in `system/` to add, change, retire, or mark Built | `filing-project-records`, step "update a system document" |
-| Writing the work item's line in the project's Current State | `managing-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place. |
-| Removing the other lines of the project's Current State that are no longer true, when a work item closes; a date or a deadline; a lesson to keep or to search for; an instruction for how the agent works | `managing-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place. |
+| Writing the work item's line in the project's Current State | `managing-project-memory`. |
+| Removing the other lines of the project's Current State that are no longer true, when a work item closes; a date or a deadline; a lesson to keep or to search for; an instruction for how the agent works | `managing-project-memory`. |
 | Merging a pull request | `merge-and-clean-up` |
 | Committing a change to documents only | `publish-docs` |
 | A Salesforce platform question | Salesforce's skills |

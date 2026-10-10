@@ -69,7 +69,7 @@ Deploy only when the result must go beyond the default branch. In a Salesforce p
 - Before each deploy, read what earlier deploys taught. Read these three:
   - the lines about deploying in `.claude/rules/owner-preferences.md`;
   - the entries in `DECISIONS.md` that name deploying or the target environment;
-  - the lessons and the earlier runs in memory. Search them as `managing-project-memory`, section "When to search memory", says. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+  - the lessons and the earlier runs in memory. Search them as `managing-project-memory`, section "When to search memory", says.
 
   Do what each one says before you run the command, and name each one you applied in the deployment record.
 - Use only the deploy command in `AGENTS.md`, section "Commands", or in `PROJECT.md`. When neither gives one, ask the owner how this project deploys.
@@ -79,7 +79,7 @@ Deploy only when the result must go beyond the default branch. In a Salesforce p
   - A release of several work items together also gets a release plan and release notes in `delivery/releases/`.
   - `delivery/AGENTS.md` gives the folder name of each record, its fields, and its Status values.
   - Add a Recent History row with the result.
-- A deploy that runs on a schedule, such as a monthly release, is also a recurring job. Give its run to `managing-project-memory`, which records the run of a recurring job. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+- A deploy that runs on a schedule, such as a monthly release, is also a recurring job. Give its run to `managing-project-memory`, which records the run of a recurring job.
 - When a deploy or a data load fails, fill Blockers with the error and tell the owner.
   - When the fix changes the result, move the work item back to the Testing Loop.
   - Write what caused the failure under Notes, "Lessons not proven yet", with the date.
