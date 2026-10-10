@@ -34,6 +34,7 @@
     "pull-latest": "off",
     "reset-to-remote": "off",
     "session-summary": "off",
+    "shaping-a-prompt": "off",
     "sf-component-tracker": "off",
     "sf-data-change": "off",
     "sf-deploy-check": "off",

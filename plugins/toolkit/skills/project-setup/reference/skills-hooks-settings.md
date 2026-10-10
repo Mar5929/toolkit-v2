@@ -20,7 +20,7 @@ In a setup, change the project's own settings files. In an update or a check of 
 
 Every skill is in `.claude/skills/`, one folder per skill. Claude Code reads that folder. Codex reads `.agents/skills`, which is a link to that folder.
 
-The shared skills are the same in every project (10): `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `session-summary`, `filechanges`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project/` holds them.
+The shared skills are the same in every project: `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `shaping-a-prompt`, `session-summary`, `filechanges`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project/` holds them.
 
 A choice may add a skill, or files inside a skill that the project already has. The setup file of each choice says what it adds.
 
@@ -69,7 +69,7 @@ These rules apply every time the toolkit's settings meet a settings file that al
 
 ## What must be true when the settings are done
 
-- `.claude/skills` holds the 10 shared skills and the skills that the setup files of the owner's choices name, each with a `SKILL.md`. It holds no skill of a choice the owner did not make. A skill of the owner's own may be there too.
+- `.claude/skills` holds the shared skills listed above and the skills that the setup files of the owner's choices name, each with a `SKILL.md`. It holds no skill of a choice the owner did not make. A skill of the owner's own may be there too.
 - `.claude/settings.json` and `.codex/hooks.json` are valid JSON.
 - Every hook command that the settings name is in `.claude/hooks/`.
 - Each of the toolkit's own hook handlers is in each settings file once, apart from a handler that the setup file of one of the owner's choices takes out.

@@ -140,6 +140,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
 | The owner asks which files you changed in your last set of changes, such as "what files did you change?" | `filechanges` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
+| The owner wants to shape a prompt together before starting work | `shaping-a-prompt` |
 | Committing an approved document edit to the default branch | `publish-docs` |
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
