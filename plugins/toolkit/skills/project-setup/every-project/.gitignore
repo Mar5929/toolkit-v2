@@ -2,8 +2,5 @@
 /work-items/
 /working-files/
 .obsidian/
-.sfdx/
-.sf/
-.localdevserver/
 .claude/worktrees/
 *.log

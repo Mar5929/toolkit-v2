@@ -46,7 +46,7 @@ Go through these parts:
    - each further place that the setup file of a choice names under "At the finish".
 
    When the owner gave no sentence, leave the outcome prompts, and list them in the report.
-2. **The other answers.** Check each answer against the table in `SKILL.md`, Step 4, which gives the place for each one. Then write `not used` on every line of "Toolkit settings" that no choice of the owner filled.
+2. **The other answers.** Check each answer against the table in `SKILL.md`, Step 4, which gives the place for each one.
 3. **The "Build, test, or deploy" row** under "Commands" in `AGENTS.md`. Fill it when the owner gave the commands during the interview. Otherwise leave the prompt, and list it in the report with what the repository shows as a suggestion, for example `npm test`.
 4. **The other prompts of `PROJECT.md` and `README.md`.** Follow the fill-in guide of each file.
    - Fill a prompt only with a fact that the owner gave or confirmed in this session. A fact that a file in the repository shows is a suggestion: offer it to the owner, and write it after the owner's yes.
@@ -109,7 +109,7 @@ Run each check alone, from the project folder. Each check only reads. The checks
 1. **The settings files are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
 2. **The session-start command runs.** `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local`, `notion`, or `hindsight`. The setup file of the memory choice gives the full command when the choice adds to it.
 3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.
-4. **"Toolkit settings" is filled.** The "Toolkit settings" section of `PROJECT.md` must hold no prompt, except a prompt that waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
+4. **"Toolkit settings" is complete.** The Tracker and the Memory line of `PROJECT.md`, "Toolkit settings", each name a choice, and the section holds the lines that the setup file of each of the owner's choices adds. A line may still lack its value only when the value waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
 5. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
 6. **Each choice.** For each choice of the owner, do the checks that its setup file gives.
 

@@ -68,12 +68,12 @@ The steps in `choices/notion-shared/reference/notion-work-item-pages.md` propose
 
 ## The links in PROJECT.md
 
-The links and ids go on three of the fixed lines of `PROJECT.md`, section "Toolkit settings":
+The links and ids go on lines that the Notion choices add to `PROJECT.md`, section "Toolkit settings". The setup file of each Notion choice names its lines.
 
 - The prefix goes on the "Work item ID prefix" line.
 - The ids go as nested bullets under the "Notion work items" line and under the "Notion memory" line.
 
-`choices/notion-shared/reference/notion-work-item-pages.md` and `choices/notion-shared/reference/notion-memory-pages.md` each have a section "Recording the links in PROJECT.md" that gives the bullets. After you write the lines, read them back. The Notion skills read every id from these lines. Add no other line and no heading to the "Toolkit settings" section.
+`choices/notion-shared/reference/notion-work-item-pages.md` and `choices/notion-shared/reference/notion-memory-pages.md` each have a section "Recording the links in PROJECT.md" that gives the bullets. After you write the lines, read them back. The Notion skills read every id from these lines. Add no heading to the "Toolkit settings" section.
 
 When memory is in Notion, the memory setup also fills the "Current state" page with the project's first lines. The "Current state" page is the Notion page that holds the project's Current State, which is the project's one short page of what is true now. `reference/finishing.md`, "The project's Current State", says what the first lines are.
 

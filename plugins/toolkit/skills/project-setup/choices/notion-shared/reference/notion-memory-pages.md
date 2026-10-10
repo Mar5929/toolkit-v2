@@ -46,7 +46,7 @@ Adding memory to a Notion project later runs all four steps.
 
 ## Recording the links in PROJECT.md
 
-In `PROJECT.md`, section "Toolkit settings", write the nested bullets below under the fixed "Notion memory" line, in place of the prompt. `choices/notion-shared/reference/notion-work-item-pages.md`, "Recording the links in PROJECT.md", says where the "Project page" and "Projects database" bullets go.
+In `PROJECT.md`, section "Toolkit settings", add the "Notion memory" line at the end of the section, with the nested bullets below. `choices/notion-shared/reference/notion-work-item-pages.md`, "Recording the links in PROJECT.md", says where the "Project page" and "Projects database" bullets go.
 
 ```markdown
 - Notion memory:

@@ -39,27 +39,17 @@ For example, each of these changes what is true: a new person or a changed role,
 
 ## Project map
 
-- A row marked "local work items", "local memory", "Hindsight memory", or "optional" is present only in a project set up that way.
 - Git does not track `work-items/`, `memory/`, and `working-files/`. They exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them.
 - Work items are kept in one place: local files, Notion, or GitHub Issues. Never copy a work item into another of these or a list of your own. Name a work item by its ID, never by a folder path.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
-| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, the work item ID prefix, and links. | Keep its facts current as they change. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
-| `PROJECT-ROADMAP.md` (local work items) | The plan at project level: the project's phases in order, and the top-level work items (with no parent) that belong to each phase. | `managing-work-items` decides the change. |
+| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
 | `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
 | `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in `work-items/` or `memory/`: they come from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
 | `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
-| `SOUL.md` (optional) | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
+| `SOUL.md` | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
 | `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read `work-items/` and `memory/`. | Only with the owner's yes. |
-| `work-items/` (local work items) | The work items: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. | `managing-work-items` for every read and save. |
-| `work-items/<ID>-<short-slug>/<ID>.md` (local work items) | One work item: its goal, requirements, questions and answers, tasks, Current state, and history. | `managing-work-items`. |
-| `work-items/<ID>-<short-slug>/DESIGN.md` (local work items) | The solution design for that one work item: the options considered and the approach the owner approved. | `managing-work-items`. |
-| `work-items/PROJECT-TASKS.md` (local work items) | The project tasks: administrative tasks that belong to no work item, such as giving a person access. | `managing-work-items`. |
-| `work-items/work-item-template/` (local work items) | The templates that are copied to start a new work item and its design. | Never edit; they come from the toolkit. |
-| `memory/` (local memory, Hindsight memory) | What a later session needs and no other file holds. Local memory: the project's Current State, and one file per subject. Hindsight memory: only `CURRENT_STATE.md`. | Local memory: `managing-project-memory`. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
-| `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | The project's Current State, in five parts. | As for `memory/`; with local memory, `managing-project-memory` writes it. |
-| `memory/MEMORY.md` (local memory) | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
 | `system/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, built, or retired. | `filing-project-records`, step "update a system document". |
 | `system/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. `system/AGENTS.md` gives the columns of a row. Read it before you use or define a project term. | As for `system/`. |
 | `system/constraints.md` | Rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect (CON-##). | As for `system/`. |

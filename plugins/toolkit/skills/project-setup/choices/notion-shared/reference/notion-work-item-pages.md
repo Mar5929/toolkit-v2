@@ -111,9 +111,9 @@ To remove a block, run `ntn api v1/blocks/<block-id> -X DELETE < /dev/null`. The
 
 ## Recording the links in PROJECT.md
 
-`PROJECT.md`, section "Toolkit settings", has two fixed lines for Notion: "Notion work items" and "Notion memory". The skills read the ids from those two lines every time. Write the ids as nested bullets under the label line, in place of its prompt. Never add a line or a heading of your own to the section.
+The Notion choices add two lines to `PROJECT.md`, section "Toolkit settings": "Notion work items" when work items are in Notion, and "Notion memory" when memory is in Notion. The skills read the ids from those lines every time, so write each label exactly as shown. Write the ids as nested bullets under the label line. Add no heading to the section.
 
-When work items are in Notion, write these lines:
+When work items are in Notion, add these lines below the Memory line:
 
 ```markdown
 - Work item ID prefix: `<PREFIX>`
@@ -125,7 +125,7 @@ When work items are in Notion, write these lines:
   - Projects database: data source <id>
 ```
 
-`choices/notion-shared/reference/notion-memory-pages.md`, "Recording the links in PROJECT.md", gives the bullets of "Notion memory". When memory is in Notion and work items are kept elsewhere, "Notion work items" holds `not used`, and the "Project page" and "Projects database" bullets are the first two bullets under "Notion memory".
+`choices/notion-shared/reference/notion-memory-pages.md`, "Recording the links in PROJECT.md", gives the bullets of "Notion memory". When memory is in Notion and work items are kept elsewhere, the section has no "Notion work items" line, and the "Project page" and "Projects database" bullets are the first two bullets under "Notion memory".
 
 ## Adding work items or memory later
 

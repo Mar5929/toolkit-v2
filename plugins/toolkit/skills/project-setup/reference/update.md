@@ -33,7 +33,7 @@ This file uses four names:
 ## Before you start
 
 - Read the project's choices in `PROJECT.md`, section "Toolkit settings": Tracker, Memory, the ID prefix, the links, and the Hindsight bank. Never change a choice unless the owner asks. "Changing a setup choice", at the end of this file, gives the steps for that.
-  - The project is a Salesforce project when the "Salesforce org aliases" line holds a value other than `not used`.
+  - The project is a Salesforce project when "Toolkit settings" has a "Salesforce org aliases" line with a value other than `not used`. A project set up with an earlier version of the toolkit has a line for every choice, and `not used` on the lines of the choices it did not make.
   - The choice "SOUL.md kept" applies when the file is present.
 - Take the new files from this skill's setup folders, in the toolkit plugin that is installed on this computer.
   - When the owner says that the toolkit itself changed, but this skill's setup folders do not have the change the owner names, ask the owner before you update the plugin, because updating the plugin changes the owner's computer.
@@ -91,7 +91,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
 | Missing files | every `>f+++++++` line | List the missing files, then copy them into the project. |
 | Ignore files | `.gitignore`, `.ignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. Ask no question. The change only adds lines, and the owner's request to update the toolkit is the owner's yes to it. |
 | `AGENTS.md` | the root file | Follow "Updating AGENTS.md" below. |
-| `PROJECT.md`, "Toolkit settings" | | Make the section hold the 10 lines of the setup copy's section, with the same labels, in the same order. |
+| `PROJECT.md`, "Toolkit settings" | | Make the section hold the lines of the setup copy's section, with the same labels. A line that says `not used` belongs to no choice of this project: show it to the owner as a line to remove. |
 | Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/INDEX.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
 | Rules in `.claude/rules/` | | Show the owner what differs. |
 | Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, and the output style | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
@@ -112,7 +112,7 @@ Most rows have special cases. They are listed under the table, in "Special cases
   - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Do not use `-a`, because `-a` would give the project folder the temporary folder's private permissions.
   - Copy into the main checkout after the branch was merged (section 6, step 4), and only when the setup copy has the folder. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
 - **`PROJECT.md`, "Toolkit settings".**
-  - Add each line that the project's section lacks, with the value `not used`.
+  - Add each line of the setup copy's section that the project's section lacks.
   - Keep the value of every line that stays. A line that the setup copy's section no longer has is handled as section 4 says.
   - Show the owner the section before and after.
 - **Rules in `.claude/rules/`.** "Whether a difference is the owner's edit" below says whether a rule holds an edit of the owner's.
@@ -208,7 +208,7 @@ A choice decides which files a project has, never which lines inside a file. So 
 1. Tell the owner what changes and what cannot move (for example Notion page history and comments), and get the owner's yes.
 2. Make your own worktree and branch, as "Before you start" says. In the worktree, change `PROJECT.md`, "Toolkit settings":
    - Change the Tracker or Memory line.
-   - Write `not used` on each line that only the old choice used.
+   - Remove each line that only the old choice used.
    - Write the new choice's lines as the setup file of the new choice says, and as `SKILL.md`, "The lines of "Toolkit settings"", says for every line.
 3. Build a new setup copy for the new choices and compare, as sections 1 and 2 say.
    - Add each file the project lacks, as the "Missing files" row says, except the affected merged skill folder. Keep that skill and its selected store reference in the old form until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.

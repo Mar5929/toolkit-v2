@@ -21,8 +21,19 @@ Tell the owner this in a few plain lines, and ask whether it is what the owner w
 | Files inside that skill | Copy `choices/memory/local/files-to-add/` into the project after it. It adds four files on how memory is kept as local files. `references/memory-store.md` is the one that the skill opens first. |
 | Files and folders | The same folder adds `memory/` with its guide, `CURRENT_STATE.md`, the index `MEMORY.md`, and the template for a memory file. |
 | Settings | Nothing. The settings in the full layout already name `local`. |
-| `PROJECT.md`, "Toolkit settings" | Memory: `local`. |
+| `PROJECT.md`, "Toolkit settings" | Write `local` on the Memory line. |
+| Text in `AGENTS.md` | Three rows in the "Project map" table. "The text in AGENTS.md" below gives them. |
 | Outside the project folder | Nothing. |
+
+## The text in AGENTS.md
+
+In the project's root `AGENTS.md`, in the "Project map" table, add these rows after the row for `.gitignore`, `.ignore`, and after the rows for `work-items/` when the project has them:
+
+```markdown
+| `memory/` | What a later session needs and no other file holds: the project's Current State, and one file per subject. | `managing-project-memory`. |
+| `memory/CURRENT_STATE.md` | The project's Current State, in five parts. | `managing-project-memory` writes it. |
+| `memory/MEMORY.md` | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
+```
 
 ## At the finish
 

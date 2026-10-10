@@ -43,7 +43,9 @@ Ask one question per message.
 | Rules, skills, files, and templates | Copy `choices/salesforce/files-to-add/` into the project. It holds three rules (`salesforce-org-safety.md`, `salesforce-agent-permissions.md`, and `salesforce-deployments.md`), the skills `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`, `sfdx-project.json` and `.forceignore`, and the templates in `delivery/`. |
 | Text in `AGENTS.md` | Two lines near the top, and the Salesforce rows of three tables. "The text in AGENTS.md" below gives them. |
 | Settings | Entries in `permissions.deny` of `.claude/settings.json`. "The refuse list" and "The refuse list for production" give them. |
-| `PROJECT.md`, "Toolkit settings" | Salesforce org aliases: one nested line for each org. "The org aliases" gives the form. |
+| Files inside a skill | The same folder adds one file inside `managing-work-items`, which every project has: `references/salesforce-deploying.md`. |
+| `PROJECT.md`, "Toolkit settings" | Add the line `- Salesforce org aliases:` at the end of the section, with one nested line for each org. "The org aliases" gives the form. |
+| Lines in `.gitignore` | Add these three lines, which keep the files of Salesforce's own tools out of Git: `.sfdx/`, `.sf/`, and `.localdevserver/`. |
 | Outside the project folder | Nothing is made. |
 
 `.claude/rules/salesforce-agent-permissions.md` is the owner's own file from the first day. "Update the toolkit" never compares or replaces it.

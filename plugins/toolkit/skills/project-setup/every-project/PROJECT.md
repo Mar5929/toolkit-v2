@@ -46,15 +46,7 @@ Keep this table short. Write no biography and no contact details.
 
 ## Toolkit settings
 
-<!-- Fill-in guide: the `project-setup` skill fills this section at setup and changes a value only when the owner changes a setup choice. The work and memory skills read these values, so keep every line and each label exactly as written. A line for a choice this project did not make holds `not used`. -->
+<!-- Fill-in guide: the `project-setup` skill fills this section at setup and changes a value only when the owner changes a setup choice. The work and memory skills read these values, so keep every line and each label exactly as written. Each setup choice adds its own lines below these two. -->
 
 - Tracker: `<local, notion, or github>`
 - Memory: `<local, notion, or hindsight>`
-- Work item ID prefix: `<WI>`
-- Notion work items: `<nested bullets under this line, written by the Notion setup step: the link to the project's Notion page, and the ids of its Work Items, Phases, Tasks, and Projects databases>`
-- GitHub repository: `<owner/name>`
-- Notion memory: `<nested bullets under this line, written by the Notion setup step: the ids of the Memory page, its Lore databases (Memories, Facts, Entities, Projects, Topics), and the "Current state" page>`
-- Hindsight bank: `<bank ID on the Hindsight server>`
-- Hindsight server: `<API address of the Hindsight server>`
-- Hindsight dashboard: `<link to this bank in the Hindsight dashboard>`
-- Salesforce org aliases: `<one line per org: alias, which org it is, and its purpose; mark production>`

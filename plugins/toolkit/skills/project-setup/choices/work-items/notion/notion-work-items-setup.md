@@ -27,7 +27,7 @@ Ask them at the points that `choices/notion-shared/notion-setup.md` gives.
 | Files inside a skill | Copy `choices/work-items/notion/files-to-add/` into the project. It adds the files on how a work item is kept as a Notion page inside `managing-work-items`, which every project has. `references/work-tracker.md` is the one that the skill opens first. |
 | Skill and rule | Copy `choices/notion-shared/files-to-add/` into the project. It holds the skill `using-notion-cli` and the rule `notion-records.md`. Notion memory brings the same folder, and a project gets it once. |
 | Settings | Nothing. |
-| `PROJECT.md`, "Toolkit settings" | Tracker: `notion`. Work item ID prefix: the prefix. Notion work items: the link to the project's page and the ids of its databases, as nested bullets. `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says how they are written. |
+| `PROJECT.md`, "Toolkit settings" | Write `notion` on the Tracker line. Add two lines below the Memory line: `- Work item ID prefix:` with the prefix, and `- Notion work items:` with the link to the project's page and the ids of its databases as nested bullets. `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says how they are written. |
 
 ## Outside the project folder
 

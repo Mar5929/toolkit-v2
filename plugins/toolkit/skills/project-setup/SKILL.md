@@ -20,8 +20,8 @@ There is no setup program. You copy and edit the files yourself. This guide give
 
 This skill's folder is the folder that holds this `SKILL.md`. Claude Code and Codex each show its path when they load the skill. Every path in this skill starts from that folder.
 
-- `every-project/` is the full layout: every folder, file, rule, skill, and setting that every project gets, at the paths a project has them.
-- `choices/` has one folder for each answer that adds something to the project. A folder holds what its answer needs:
+- `every-project/` is the full layout: every folder, file, rule, skill, and setting that every project gets, at the paths a project has them. Nothing in it belongs to one answer.
+- `choices/` has one folder for each answer that adds something to the project. A project gets an answer's part only when the owner gives that answer. A folder holds what its answer needs:
   - one setup file, which says how the toolkit sets the answer up by default, what to ask the owner, what the answer adds to the project, and what it needs at the finish;
   - `reference/`, when the answer has more detail than fits in the setup file;
   - `files-to-add/`, when the answer adds files to the project. The files are at the paths a project has them.
@@ -54,7 +54,7 @@ Say in one line which of these situations this is.
 | Nothing, or only the project's own code and documents. A `.claude/settings.local.json` and a `.claude/worktrees/` folder are Claude Code's own and count as nothing. | A new project | Step 3 |
 | Agent files that the toolkit did not put there, such as an `AGENTS.md`, a `CLAUDE.md`, rules, skills, hooks, or the older claude-toolkit | An existing project that is adopting the toolkit | "An existing project" below |
 | A `PROJECT.md` whose "Toolkit settings" section is filled | A project that already has Toolkit V2 | "A project that already has the toolkit" below |
-| A `PROJECT.md` whose "Toolkit settings" section still holds a prompt for an answer, or another sign under "Known problems" that setup stopped part way | A setup that stopped part way | Say so. Read the answers that are already written, and continue at the first question that has no answer. |
+| A `PROJECT.md` from the full layout whose "Toolkit settings" section is not complete, or another sign under "Known problems" that setup stopped part way | A setup that stopped part way | Say so. Read the answers that are already written, and continue at the first question that has no answer. |
 
 "Toolkit settings" is the section of the project's `PROJECT.md` that records the owner's setup choices. A prompt is text in angle brackets that says which fact to write in its place.
 
@@ -168,21 +168,18 @@ An answer adds its part in two moments:
 
 1. **Right after the answer, before the next question,** add what the setup file says the choice adds to the project:
    - the files. Copy each `files-to-add/` folder that the setup file names into the project, the way Step 3 copies the full layout;
-   - the lines in the settings files;
-   - the lines of "Toolkit settings" in `PROJECT.md`;
-   - the text in `AGENTS.md`, when the choice has any.
+   - the lines that it adds to a file the project already has: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, and `.gitignore`. A line whose value is not known yet, such as the id of a Notion page, is added when the value is known.
 2. **When the choice's sign-in is done and the owner has given the answers that the setup file needs,** set up what the choice needs outside the project folder, after the owner's yes. The Notion steps, for example, need the answers to questions 5, 6, and 7.
 
 Add the files of one work items choice and of one memory choice only. Each of those choices puts a file with the same name inside a skill, so a project with two of them would have the wrong one.
 
 ### The lines of "Toolkit settings"
 
-"Toolkit settings" has the same lines in every project, and the project's skills read them.
+"Toolkit settings" is the section of `PROJECT.md` that records the owner's setup choices. The project's skills read its lines.
 
-- Keep every line and every label as written.
-- Write each value inside the backticks, in place of the prompt, for example ``- Tracker: `local` ``. A setup file says so when one of its lines has another form.
-- Each setup file gives the values of its own lines.
-- At the finish, write `not used` on every line that no choice of the owner filled.
+- The full layout brings two lines, which every project has: Tracker and Memory.
+- Each choice adds its own lines, and its setup file gives them. A project has no line for a choice that the owner did not make.
+- Keep every label as the setup file writes it. Write each value inside backticks, for example ``- Tracker: `local` ``. A setup file says so when one of its lines has another form.
 - Keep the section's fill-in guide comment, because later sessions read it.
 
 ## Step 6: Finish
@@ -231,7 +228,7 @@ What you do depends on what the owner asks for.
 - **The folder is not a Git repository, or it sits inside another repository.** The hook commands and the skills find `.claude/hooks/`, `work-items/`, and `memory/` from the root of the Git repository. With no repository, offer `git init`. Inside another repository, recommend setting up the root of that repository, and recommend `git init` in this folder only when this folder is its own project.
 - **The session runs in a linked worktree.** A linked worktree is a separate folder with its own branch. The main checkout is the project's main folder, the first path that `git worktree list` prints. Git ignores `memory/` and `work-items/`, so they exist only in the main checkout, and the setup commit belongs on the default branch. Set up a new project in the main checkout, even when a rule for the whole computer asks for a worktree.
 - **The project has its own folder named `system/`, `sources/`, `delivery/`, or `reference/`.** The full layout puts a guide, `AGENTS.md`, into each of these folders, and that guide would describe the owner's files there as the project's records. Ask the owner before you copy anything into that folder.
-- **Setup stopped part way.** These are the signs: a line of "Toolkit settings" still holds a prompt, `{{CURRENT_STATE_PAGE_ID}}` is still in `.claude/settings.json` or `.codex/hooks.json`, or the project's Current State still has its fill-in guide.
+- **Setup stopped part way.** These are the signs: the Tracker or the Memory line of "Toolkit settings" still holds its prompt, one of those lines names a choice whose own lines are missing from the section, `{{CURRENT_STATE_PAGE_ID}}` is still in `.claude/settings.json` or `.codex/hooks.json`, or the project's Current State still has its fill-in guide.
 - **The folder holds the older claude-toolkit, and the owner says "update the toolkit" or "check the setup" without naming Toolkit V2.** The owner may mean the older toolkit, whose skill is `project-sync`. Ask which one the owner means before any other question. This skill never runs the older claude-toolkit.
 
 **Questions and failures**

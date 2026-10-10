@@ -6,7 +6,7 @@ A setup of a new project or of an existing project builds no setup copy. It copi
 
 A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. The setup folder `every-project/` goes to every project. Each choice of the owner adds one or more.
 
-The setup file of each choice gives the settings lines that the choice changes. Make those changes in the setup copy too. `SKILL.md`, Step 5, names the setup file of each choice.
+The setup file of each choice gives the lines that the choice adds to a file of the full layout: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, and `.gitignore`. Make those changes in the setup copy too. `SKILL.md`, Step 5, names the setup file of each choice.
 
 ## Contents
 
@@ -59,7 +59,7 @@ mkdir -p <copy>/memory
 cp <skill folder>/choices/memory/local/files-to-add/memory/CURRENT_STATE.md <copy>/memory/
 ```
 
-Every file is copied whole. A choice decides which files a project gets, never which lines inside a file. Change only what the three sections after "Never copied" name: the project name and "Toolkit settings", the Salesforce entries in the settings file, and the owner-preferences rule. Every other line of every file stays as it was copied.
+Every file is copied whole. Change in the copy only what the setup files of the project's choices and the sections after "Never copied" name. Every other line of every file stays as it was copied.
 
 ## Never copied
 
@@ -88,7 +88,7 @@ Make these four changes in the copied files. Take each value from the project's 
   - The work skills read the owner's name from this row.
   - The fourth cell, "May decide", says which decisions a person may make.
 - Leave every example ID in the copied files as it is, whatever prefix the owner chose. The example IDs are `WI-31`, `WI-031`, `[[WI-031]]`, `DEC-001`, `SRC-###`, and `SEC-04`. The skills read the real prefix from "Toolkit settings".
-- Fill every line of `PROJECT.md`, section "Toolkit settings", with the value that the project's own line holds. `SKILL.md`, "The lines of "Toolkit settings"", gives the lines, the values a line can hold, and how a value is written.
+- Give `PROJECT.md`, section "Toolkit settings", the Tracker and Memory values and the lines of each choice, each with the value that the project's own line holds. `SKILL.md`, "The lines of "Toolkit settings"", says how the section is built.
 
 ## Salesforce entries in the settings file
 
@@ -96,8 +96,6 @@ Make these four changes in the copied files. Take each value from the project's 
 
 - In a Salesforce project, add the Salesforce entries to `permissions.deny`, as `choices/salesforce/salesforce-setup.md`, "The refuse list" and "The refuse list for production", say.
 - Keep every other entry as it was copied.
-
-`.gitignore` is copied whole in every project. Its lines for Salesforce tools ignore nothing in a project that has none of those files.
 
 ## The owner-preferences rule
 
@@ -114,7 +112,7 @@ A Salesforce project has a second file of this kind, `.claude/rules/salesforce-a
 Run each check below. Each of these commands only reads.
 
 - `grep -n '<Project name>' <copy>/AGENTS.md <copy>/README.md <copy>/PROJECT.md` shows only fill-in guide comment lines, and never a heading.
-- `command grep -c -E '^- (Tracker|Memory|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md` prints 10. `command grep` runs the system grep. In Claude Code, plain grep skips the folders that the copied `.gitignore` names.
+- `command grep -c -E '^- (Tracker|Memory):' <copy>/PROJECT.md` prints 2, and the section holds the lines of each of the project's choices. `command grep` runs the system grep. In Claude Code, plain grep skips the folders that the copied `.gitignore` names.
 - `jq empty <copy>/.claude/settings.json` prints nothing, which means that the JSON is valid.
 - Run `ls -A <skill folder>/every-project`, the same command for each folder you copied, and `ls -A <copy>`. The last list holds every name of the other lists except `.agents`, plus `memory` with Hindsight memory, and no other name.
 - `find <copy> -name AGENTS.md -not -path '*/.claude/*'` lists the root file and one file in each of `system/`, `sources/`, `delivery/`, and `reference/`. With local work items it also lists one in `work-items/`, and with local memory it also lists one in `memory/`. Each of these files has a `CLAUDE.md` beside it that holds only the line `@AGENTS.md`.

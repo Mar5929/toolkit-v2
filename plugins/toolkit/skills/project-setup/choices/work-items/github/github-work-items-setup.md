@@ -41,7 +41,7 @@ Ask the owner for the sign-in as soon as the owner picks GitHub Issues, so that 
 | --- | --- |
 | Files inside a skill | Copy `choices/work-items/github/files-to-add/` into the project. It adds six files on how a work item is kept as an issue inside `managing-work-items`, which every project has. `references/work-tracker.md` is the one that the skill opens first. |
 | Settings | Nothing. |
-| `PROJECT.md`, "Toolkit settings" | Tracker: `github`. GitHub repository: the repository's name, as the example below shows. |
+| `PROJECT.md`, "Toolkit settings" | Write `github` on the Tracker line. Add the line `- GitHub repository:` below the Memory line, with the repository's name, as the example below shows. |
 
 The repository name here is an example:
 

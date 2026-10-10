@@ -26,7 +26,7 @@ Tell the owner this in a few plain lines, and ask whether it is what the owner w
 | Files inside that skill | Copy `choices/memory/notion/files-to-add/` into the project after it. It adds the files on how memory is kept as Notion pages, and two page templates. `references/memory-store.md` is the one that the skill opens first. |
 | Skill and rule | Copy `choices/notion-shared/files-to-add/` into the project. It holds the skill `using-notion-cli` and the rule `notion-records.md`. Notion work items bring the same folder, and a project gets it once. |
 | Settings | The session-start line names Notion and the "Current state" page. "The settings lines" below gives the change. |
-| `PROJECT.md`, "Toolkit settings" | Memory: `notion`. Notion memory: the ids of the Memory page, its databases, and the "Current state" page, as nested bullets. `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says how they are written. |
+| `PROJECT.md`, "Toolkit settings" | Write `notion` on the Memory line. Add the line `- Notion memory:` at the end of the section, with the ids of the Memory page, its databases, and the "Current state" page as nested bullets. `choices/notion-shared/notion-setup.md`, "The links in PROJECT.md", says how they are written. |
 
 ### The settings lines
 
