@@ -81,7 +81,7 @@ Every answer folder has the same shape. The Hindsight folder, `choices/memory/hi
 - **`reference/`.** The detail that the steps need: how the toolkit sets the choice up by default, the exact text and lines the choice adds to a file the project already has, the values and commands, and the known problems. Each file covers one subject, and its name says the subject.
 - **`files-to-add/`**, when the answer adds files to the project. It holds the skills, rules, files, and templates as the full files, at the paths a project has them.
 
-A folder holds only the parts that its answer needs. For example, the Hindsight folder has no `files-to-add/`, because the Hindsight answer adds no file to the project.
+A folder holds only the parts that its answer needs.
 
 A part that two answers share is kept once, in a folder of its own with the same shape. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
 

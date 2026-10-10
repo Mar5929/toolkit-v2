@@ -198,7 +198,7 @@ With each of the three, the agent also asks whether the owner wants Claude Code'
 | --- | --- |
 | Questions | Whether this project gets its own memory bank, and which of the two packages of settings the owner wants: the default, where Hindsight saves every session by itself, or the one where the agent saves on purpose. Then whether anything in that package should be different. |
 | Text in `AGENTS.md` | At the top: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
-| Files and folders | None. A Hindsight project has no `memory/` folder and no Current State. |
+| Files and folders | The rule `.claude/rules/hindsight-memory.md`. A Hindsight project has no `memory/` folder and no Current State. |
 | Settings | The word `hindsight` on the session-start line, and one more word on the every-message line. |
 | `PROJECT.md` | Memory: `hindsight`, and seven lines: the bank, the server's address, the link to the dashboard, the package, the template, what the owner wanted different, and the setup steps that are still open. |
 | Outside the project folder | The memory bank on the owner's Hindsight server, and Hindsight's own add-on for Claude Code and Codex on this computer. The add-on brings its own skill and tools, so the toolkit adds no memory skill. |
