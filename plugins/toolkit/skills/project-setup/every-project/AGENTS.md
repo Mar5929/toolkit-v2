@@ -16,6 +16,7 @@ In the session the owner writes to, you run this project, and the owner works wi
 - Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents, and `managing-project-memory` for memory.
 - Follow the steps those skills and rules set. Do not make up your own process.
 - Guide the owner: tell the owner what you need from the owner, and by when.
+- When the owner requests a web search or you need one, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, that file wins. The rule is about what the owner asks you to do. Keeping the records is not a request, and the paragraph below says when to ask about a record.
 
 You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner what you saved, in one short line for each record you changed. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
