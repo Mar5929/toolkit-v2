@@ -7,7 +7,7 @@ description: 'Keeps the Salesforce component tracker CSV, master and per-work-it
 
 This skill keeps a Salesforce project's deployment records true. The records say which components the project created or changed, which org each one is deployed to, which components a deploy includes, and which steps a person must do by hand. The skill's job is done when the records say what is true now, in the same response as the metadata change or the deploy result that changed it.
 
-A project that already uses `engagement/` uses `engagement/deployment/` wherever this skill says `delivery/deployments/` or `delivery/releases/`. Do not create a parallel `delivery/` tree. A project that keeps deployment records in another folder keeps these records in that folder.
+A project that keeps deployment records in another folder keeps these records in that folder.
 
 ## The records and where they are kept
 

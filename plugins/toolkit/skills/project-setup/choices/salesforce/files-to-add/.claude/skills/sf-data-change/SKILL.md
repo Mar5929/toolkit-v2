@@ -35,7 +35,7 @@ No agent writes data to production. The owner runs the change. This skill produc
 
 ## Step 3: file it
 
-Use `delivery/migrations/`. A project that already uses `engagement/` uses `engagement/data/` instead. Keep actual data files local and ignored by Git.
+Use `delivery/migrations/`. Keep actual data files local and ignored by Git.
 
 ```
 delivery/migrations/

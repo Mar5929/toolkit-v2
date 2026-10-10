@@ -2,10 +2,7 @@
 
 Use this file when you deploy a work item in a Salesforce project. It gives the detail for the section "A deployment" in `deploying.md`. The job is done when each deploy has run, its record is filled, and the component tracker says what is deployed in which org.
 
-Two things apply to the whole file:
-
-- `.claude/rules/salesforce-agent-permissions.md` and `.claude/rules/salesforce-org-safety.md` say who may run which command. When those rules and this file differ, follow the rules.
-- A project that keeps its client files in `engagement/` uses `engagement/deployment/` wherever this file says `delivery/deployments/` or `delivery/releases/`.
+One thing applies to the whole file: `.claude/rules/salesforce-agent-permissions.md` and `.claude/rules/salesforce-org-safety.md` say who may run which command. When those rules and this file differ, follow the rules.
 
 ## Before any deploy
 
