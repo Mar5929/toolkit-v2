@@ -111,14 +111,15 @@ ntn api v1/pages/<page-id>/markdown -X PATCH -d @edit.json < /dev/null
 
 ## Waiting for a template
 
-A page that is made or changed with `"template"` is filled in the background: the answer comes back before the content is on the page. Check every 5 seconds until the page has its blocks:
+A page that is made or changed with `"template"` is filled in the background: the answer comes back before the content is on the page. Check every 5 seconds until the content is there.
 
-```bash
-ntn api v1/blocks/<page-id>/children page_size==100 < /dev/null | jq '.results | length'
-```
+- A work item's page is filled when two reads of its text in a row are the same, and the text is longer than before the call. For a page that the call made, the text must not be empty. "Reading and changing page text" gives the call that reads the text. The text depends on the owner's template, so never wait for a fixed number of blocks.
+- A project page that is made from a project template shows its databases as `child_database` blocks. This call prints the type of each block of a page:
 
-- A work item that is made from the template has more than 20 blocks.
-- A project page that is made from a project template shows its databases as `child_database` blocks.
+  ```bash
+  ntn api v1/blocks/<page-id>/children page_size==100 < /dev/null | jq -r '.results[].type'
+  ```
+
 - Stop checking after two minutes, and tell the owner that the template did not finish.
 
 ## Database templates
