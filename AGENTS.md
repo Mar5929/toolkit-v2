@@ -50,6 +50,8 @@ Follow `.claude/rules/evaluate-the-owners-request.md` on every request, also whe
 - In this repository, "the whole project" in the rule means the whole toolkit: the filing system, memory, the work tracker, the project's records, the hook commands, setup and "update the toolkit", both hosts, and the projects that already use the toolkit.
 - The file is a copy of the starter rule, `<setup>assets/every-project/.claude/rules/evaluate-the-owners-request.md`. Edit the starter rule, then copy it over the copy. Never edit the copy.
 
+Follow `.claude/rules/document-clarity-standard.md` when writing or changing documents and artifact text.
+
 ## Three instructions for text that tells an agent what to do
 
 They apply to every skill, rule, guide, hook text, and brief. Put all three in the brief of every helper agent that writes such text.

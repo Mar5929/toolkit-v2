@@ -6,7 +6,7 @@ An artifact is something made for a person to look at, such as a diagram, chart,
 
 A document is a file that someone follows or relies on later. Skills, rules, agent guides (`AGENTS.md` and `CLAUDE.md`), requirements, designs, system documents, decisions, test plans, and delivery records are all documents.
 
-Replies to the owner in a session follow the output style. Text sent to another person follows the root `AGENTS.md`, "Text that goes to another person". If that text is an artifact, follow this standard for its words too.
+Replies to the owner in a session follow the output style. Text sent to another person also follows the project's instructions for that communication. If that text is an artifact, follow this standard for its words too.
 
 A helper agent is an agent started for one job. Helper agents and Codex do not get the output style, so they follow this standard for documents and artifacts.
 
@@ -63,7 +63,7 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 
 ## Extra rules for documents
 
-- Start from the whole document. First work out what the reader must know and what the reader must do. Then write that in the plainest order and words. Do not fix a document one line at a time.
+- Start from the whole document. First work out what the reader must know and what the reader must do. When a requirement changes, integrate it into the affected guidance and remove wording it supersedes. Keep the document coherent rather than appending a correction or reversal. Write the resulting guidance in the plainest order and words.
 - Choose the form that serves the reader's job. A tutorial helps someone learn by doing, a procedure helps someone complete a task, a reference gives facts to look up, and an explanation gives the reasons behind a choice. Put each kind of content where its reader will look for it.
 - Open the document with what it is for and what must be true when its job is done.
 - Organize the document so that a reader can find a thing from the headings alone. Give each section one subject, and put everything about that subject in that section. Put the sections in the order the reader needs them.
@@ -79,5 +79,7 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 ## Rewriting a document that exists
 
 - You may reorder the document, split or join its sections, and rename a heading. When you rename a heading, update every file that names it.
-- Change no rule, no limit, and no exact text that a tool or another file reads.
+- Preserve confirmed requirements, necessary detail, and exact text that a tool or another file reads. Change a rule or limit only when the owner authorized that change.
+- Before removing an exception or prohibition, identify the behavior it protects and check whether that behavior is still required. When the intent is uncertain, ask the owner.
+- Judge the result by clarity, consistency, and faithful behavior. Shorten the document only where it still communicates everything needed.
 - Leave a sentence or a name that is already clear. Change one only when a reader who is new to the project would not understand it.

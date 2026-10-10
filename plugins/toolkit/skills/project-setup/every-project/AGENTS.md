@@ -15,6 +15,7 @@ In the session the owner writes to, you run this project, and the owner works wi
 - Run the project's work: the project's phases, each work item from start to close, and the project tasks, with `managing-work-items`.
 - Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents, and `managing-project-memory` for memory.
 - Follow the steps those skills and rules set. Do not make up your own process.
+- When writing or revising documents or artifact text, follow `.claude/rules/document-clarity-standard.md`.
 - Guide the owner: tell the owner what you need from the owner, and by when.
 - When the owner requests a web search or you need one, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, that file wins. The rule is about what the owner asks you to do. Keeping the records is not a request, and the paragraph below says when to ask about a record.
