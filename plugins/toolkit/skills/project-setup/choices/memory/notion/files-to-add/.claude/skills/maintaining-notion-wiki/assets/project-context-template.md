@@ -23,7 +23,7 @@ Link the project's Wiki schemas and Long-Term Memory schemas pages. Those pages 
 - Skill entry and references: <published entry and reference links>.
 - Host and Notion access: <selected cloud or local host and connection; no credentials>.
 - Schedule: <confirmed scheduler, daily cadence, timezone and run reference; or pending setup>.
-- On-demand invocation: <how to start a pass from the skill entry>.
+- On-demand invocation: <filled invocation prompt link and how to start a pass from the skill entry>.
 - Writer coordination: <supported way to find and coordinate an active run across scheduled and on-demand hosts>.
 - Failure handling: <where recoverable work and access failures are recorded and when the owner needs to act>.
 

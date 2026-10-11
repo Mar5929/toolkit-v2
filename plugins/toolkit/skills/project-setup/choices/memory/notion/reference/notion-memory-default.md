@@ -3,7 +3,7 @@
 The owner’s revised Project template supplies Project Wiki. Setup connects that existing structure, confirms project-specific changes and copies it only when a new project needs it.
 
 - Coding agents read wiki knowledge and submit useful changes to Wiki Inbox. They keep work items current and capture reusable results at closure and handoff.
-- A librarian files supported information into Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Current state is a working snapshot; Long-Term Memory contains the existing Projects, Topics, Memories, Entities and Facts collections.
+- A librarian maintains existing wiki records and navigation even when no new captures arrive, using authoritative links instead of duplicate content. It files supported information into Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Current state is a working snapshot; Long-Term Memory contains the existing Projects, Topics, Memories, Entities and Facts collections.
 - Product Wiki owns finalized product documentation and product decisions with rationale. Terminology Glossary owns established project terms. Active requirements and working designs remain in work items. This Notion model keeps no duplicate local product specification, glossary or DECISIONS.md ledger.
 - The librarian runs daily and on demand through a supported mechanism selected with the owner. It owns unresolved captures, dismisses unusable captures with reasons and sends no routine report or owner review queue.
 - Current state may lag recent work. Coding agents read relevant pending captures and current work records, or request an on-demand pass when reconciled documentation is needed.

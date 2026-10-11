@@ -4,11 +4,13 @@ Daily processing and on-demand operations use the same librarian procedure. Read
 
 ## Coordinate writers
 
-Use one librarian writer per project operation. Before an on-demand pass, check the configured scheduler or run record for an active operation; join, wait for or coordinate that operation through the supported host. Processing status alone is not an atomic lock. When writer exclusivity cannot be established, leave captures pending rather than issuing competing destination writes.
+Use one librarian writer per project operation. Before an on-demand pass, check the configured scheduler or run record for an active operation; join, wait for or coordinate that operation through the supported host. Processing status alone is not an atomic lock. When writer exclusivity cannot be established, leave dependent work pending rather than issuing competing destination writes.
 
 Coding agents may continue contributing captures. Re-read each selected row before processing, record the input's Last updated and sources in Processing notes, and set Processing status to Processing. Before completing, read the capture again. When its input changed, reconcile the new evidence or leave a documented follow-up; do not mark unprocessed contributions Filed.
 
 ## Record outcomes
+
+For existing-wiki maintenance without an associated capture, keep verified record links, unresolved findings and the next recovery step in the configured run record. Resume from those records and recheck completed work before repeating writes.
 
 | Processing status | When to use it |
 | --- | --- |

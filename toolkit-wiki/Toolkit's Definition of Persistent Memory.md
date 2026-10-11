@@ -35,3 +35,5 @@ Wiki Inbox receives useful information for reconciliation. Capture is not lastin
 - Product Wiki owns finalized product documentation, architecture and product decisions. Working designs remain in work items until finalized; approval and implementation status are separate.
 
 The coding-agent skill routes retrieval to a focused reference for each destination. Agents read matching records and sources, check relevant pending captures for recent changes, and cite the information used. The librarian reconciles automatically, preserves history and sends no routine reports. Work-item closure may precede filing after captures are verified. Daily scheduling is chosen during project setup, with on-demand operation when current work needs it.
+
+The published librarian package includes a filled invocation prompt linking project context and the entry skill. The librarian also maintains existing wiki content when the inbox is empty, preserving history and distinct context, consolidating duplicate current authority and repairing verified navigation links. Unfinished maintenance stays in the configured run record; routine operation remains quiet.
