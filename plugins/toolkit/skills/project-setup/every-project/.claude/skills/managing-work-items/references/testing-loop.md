@@ -54,7 +54,7 @@ Check a small work item that takes the short path with steps 1 to 6 above. `refe
 - It changes a production system. Examples are a deploy to production, and a file of records that the owner will load into production.
 - It changes an environment that other people use, such as a shared test environment.
 - It gives a number, a list of records, or a finding to a person outside the project. A count in an email to the client is an example.
-- It builds or changes what a rule in `system/` says. Only a checker's verdict lets `filing-project-records` mark such a rule Built.
+- It builds or changes what a rule in `wiki/product-wiki/` says. Only a checker's verdict lets `filing-project-records` mark such a rule Built.
 
 For any other result, start no checker. Your own checks of step 2 take the checker's place.
 

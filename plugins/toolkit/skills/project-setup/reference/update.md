@@ -58,10 +58,13 @@ Build the setup copy for the choices that `PROJECT.md` records, in a new tempora
 
 While you build the setup copy, do the following:
 
+- Review [local wiki layout guidance](local-wiki-layout.md) before installing path-bearing files. Adapt the copy's skills, guides, templates, checks and maps to verified retained record homes when the owner keeps another layout. Preserve installed operational files affected by an unresolved migration until its destinations and links are verified.
 - Fill the project name and "Toolkit settings" from the project's own `PROJECT.md`.
 - With memory in Notion, also replace `{{CURRENT_STATE_PAGE_ID}}` in the copy's `.claude/settings.json` and `.codex/hooks.json` with the id on the "Current state page" bullet under "Notion memory" in `PROJECT.md`. The "Current state page" is the Notion page that holds the project's Current State, which is the project's one short page of what is true now.
 
 ## 2. See what differs
+
+Before treating a new wiki path as a missing file, review existing record folders with [Moving existing records into the local wiki](local-wiki-layout.md). An approved layout move preserves the owner's documents; it does not replace them with templates. Keep current guides and record routes until the destinations and links are verified. A check reports the proposed mapping without moving records.
 
 Compare the setup copy with the project. Run these commands:
 
@@ -82,7 +85,7 @@ For each different or missing file, use the section for its kind below. Show eve
 
 ### Toolkit skills
 
-For each toolkit skill in `<copy>/.claude/skills/`, replace the project's folder with the new folder:
+For each toolkit skill in `<copy>/.claude/skills/`, first verify that its project paths name the agreed current record homes. Use the adapted setup copy for a retained layout. Defer replacing a skill folder whose installed routes must remain active during an unresolved migration, as [local wiki layout guidance](local-wiki-layout.md) describes. Replace the other skill folders with the new folders:
 
 ```text
 rsync -a --delete <copy>/.claude/skills/<name>/ .claude/skills/<name>/
@@ -106,7 +109,7 @@ Merge `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, and `.
 
 ### Missing files
 
-List missing toolkit files, then copy them in two parts. An owner's record is never a missing toolkit file.
+List missing toolkit files, then copy them in two parts. An owner's record is never a missing toolkit file. Complete any approved local wiki move before this copy reaches its destination paths. When the move is pending, exclude its destination paths and deferred operational files or skill folders from the copy and retain current record routes. When the owner retains another layout, use the adapted setup copy from local wiki layout guidance.
 
 - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Use `-rlt` rather than `-a`, because `-a` would give the project folder the temporary folder's private permissions.
 - After the branch is merged (section 6, step 4), copy each ignored folder that the setup copy holds into the main checkout. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
@@ -127,20 +130,20 @@ Add each line the section lacks, keeping the setup copy's labels. Keep the value
 
 ### Files that hold the owner's facts
 
-Never overwrite the rest of `PROJECT.md`, `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, documents in `system/`, `sources/INDEX.md`, or `reference/outside-docs/INDEX.md`. Name only the toolkit's structural changes, such as a new section, changed heading, or changed guide comment. Make those changes after the owner's yes, keeping the facts and records.
+Never overwrite the rest of `PROJECT.md`, `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, documents in `wiki/product-wiki/`, `sources/INDEX.md`, or `wiki/reference/outside-docs/INDEX.md`. Name only the toolkit's structural changes, such as a new section, changed heading, or changed guide comment. Make those changes after the owner's yes, keeping the facts and records.
 
 ### Rules and other toolkit files
 
-For rules in `.claude/rules/`, show what differs. For each folder's `AGENTS.md`, the templates, and the output style, describe the change and whether it includes an owner's edit. The folder guides are `system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, and `memory/AGENTS.md`.
+For rules in `.claude/rules/`, show what differs. For each folder's `AGENTS.md`, the templates, and the output style, describe the change and whether it includes an owner's edit. The folder guides are `wiki/product-wiki/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `wiki/reference/AGENTS.md`, `work-items/AGENTS.md`, and `memory/AGENTS.md`.
 
 Use "Whether a difference is the owner's edit" below to check ownership. Recommend the toolkit's version when there is no owner's edit. Keep an owner's edit unless the owner approves replacing it. Take a changed toolkit file only after the owner's yes.
 
 ### The owner's own records
 
-Never compare or change the following during an update:
+Never compare or change the following during an update, except the owner-approved moves and path corrections in [local wiki layout guidance](local-wiki-layout.md):
 
 - work items and `work-items/PROJECT-TASKS.md`;
-- entries of `DECISIONS.md`, rules and terms in `system/`, sources in `sources/`, and records in `delivery/` and `reference/`;
+- entries of `DECISIONS.md`, rules and terms in `wiki/product-wiki/`, sources in `sources/`, and records in `delivery/` and `wiki/reference/`;
 - `memory/CURRENT_STATE.md` and every memory record whose name starts `user_`, `project_`, `reference_`, or `event_`;
 - `.claude/rules/owner-preferences.md` and `.claude/rules/salesforce-agent-permissions.md`;
 - the owner's own skills and rules.
@@ -195,7 +198,7 @@ A project may hold something that an earlier setup put there and that the new se
 - When the thing holds a choice or a line of the owner's, show it to the owner, and put it in the place that holds such a choice now before you remove the old one. For example, a choice about what an agent may do in a Salesforce org goes in `.claude/rules/salesforce-agent-permissions.md`, and an instruction for how the agent works goes in `.claude/rules/owner-preferences.md`.
 - Remove a hook command and its entry in the settings files in the same change, with any group or event that the entry leaves empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
-- This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
+- Renamed record folders follow [local wiki layout guidance](local-wiki-layout.md), not obsolete-file removal. This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
 
 ## 5. Services
 
@@ -215,7 +218,7 @@ Do these in order.
    - trust the hooks again in Codex `/hooks`, only when an entry or the `description` in `.codex/hooks.json` changed;
    - start a new session.
 3. **Commit and merge.** End with the commit offer in [reference/finishing.md](finishing.md), "The commit offer", made in your worktree. After the commit, merge the branch only after the owner's yes. Before the merge, whether it is by pull request or by `git merge`, do the merge-safety check in the project's `.claude/rules/shared-repository-work.md`. Merge the branch by pull request, or, when the project has no remote, by `git merge --ff-only <branch>` from the main checkout.
-4. **In the main checkout, after the branch was merged**, make every change to `memory/` and `work-items/`: the missing files (section 3), and each difference in those two folders that the owner said yes to.
+4. **In the main checkout, after the branch was merged**, make every change to `memory/` and `work-items/`: the missing files (section 3), and each difference in those two folders that the owner said yes to. Apply the approved link corrections from a local wiki move, preserve the original ignored records recoverably, and verify the corrected links before reporting the move complete.
 5. Remove the worktree and the branch, then the temporary folder.
 
 ## Changing a setup choice

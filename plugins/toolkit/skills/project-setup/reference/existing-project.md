@@ -8,6 +8,8 @@ The toolkit gives no instruction for each possible project. Use your judgment, a
 
 ## What to look for
 
+Before copying or comparing the full layout, review existing local product and reference folders with [Moving existing records into the local wiki](local-wiki-layout.md). Show the owner the mapping and destination conflicts before a move. A missing new path does not mean the owner's populated document should be replaced by a template.
+
 Before Step 3 copies the full layout, check whether an existing Notion memory layout needs migration to Project Wiki. If it does, prepare new files in a setup copy and follow the reviewed batch procedure in [reference/update.md](update.md), "Changing a setup choice". Preserve active guides, skills, record routes and settings until the approved destinations and moved records are verified.
 
 Read what the project holds before you ask the question, so that you can tell the owner what each of the two answers would change in this project. Look in the main checkout, because a folder that Git ignores exists only there. The main checkout is the project's main folder, the first path that `git worktree list` prints.
@@ -35,7 +37,7 @@ Read what the project holds before you ask the question, so that you can tell th
 
 **Old records**
 
-- **An old record is the owner's.** It stays where it is, unchanged. To carry one over, write a new record in the toolkit's form, and say in it where it came from.
+- **An old record is the owner's.** It stays where it is, unchanged, unless the owner approves a layout move under [local wiki layout guidance](local-wiki-layout.md). A layout move preserves its content and identity. To carry an old record into a new record form, write a new record in the toolkit's form, and say in it where it came from.
 - **Old records are already in the place where the new ones go**, such as issues in the same GitHub repository or pages in the same Notion database. Change none of them before the owner answers.
 - **Old work items have numbers.** With local work items, new IDs must continue above the highest old ID.
 - **A later session must be able to tell old records from current ones.** Say in `PROJECT.md`, under "Work and project records", which folders hold old records that are kept as history.

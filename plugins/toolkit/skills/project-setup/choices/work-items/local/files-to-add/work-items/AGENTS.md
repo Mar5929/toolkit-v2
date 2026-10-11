@@ -4,7 +4,7 @@ This folder is where the project keeps its work items. It holds one folder for e
 
 This guide says what each file and folder here is, the form of a work item's ID, which header fields say where a work item stands, and what must stay true in this folder.
 
-A work item stays in this folder after it is closed. Keep knowledge that later work needs in `DECISIONS.md`, `system/`, and `sources/`, so later work can find the current project guidance. Read a closed work item when its history or evidence is needed.
+A work item stays in this folder after it is closed. Keep knowledge that later work needs in `DECISIONS.md`, `wiki/product-wiki/`, and `sources/`, so later work can find the current project guidance. Read a closed work item when its history or evidence is needed.
 
 ## Files
 
@@ -59,7 +59,7 @@ Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status
 - Never `git add` a file from this folder.
 - A work item's folder holds no sources. A source is anything the project was given by someone else, such as a transcript or a client document. A source goes in `sources/`, and the work item holds the source's ID, in the form SRC-###.
 - When the owner put any other file in a work item's folder, leave the file there, and tell the owner that it is there.
-- Information that another work item needs is never kept only in this folder. That information is in `DECISIONS.md` or `system/`, and the work item holds the ID that the information has there.
+- Information that another work item needs is never kept only in this folder. That information is in `DECISIONS.md` or `wiki/product-wiki/`, and the work item holds the ID that the information has there.
 
 ## Which skill to use
 

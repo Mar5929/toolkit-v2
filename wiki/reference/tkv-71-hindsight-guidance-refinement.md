@@ -10,13 +10,13 @@ The default package's `toolGuideExtra` carries that submission guidance into the
 
 New Hindsight projects receive the revised rule, tool guidance and offered mission during setup. Existing projects receive them when their owner updates the installed plugin and requests “update the toolkit”; approved custom missions and settings remain protected. A published plugin update alone does not edit existing projects or their banks. This repository receives the tracked rule change when the branch is integrated; its shared checkout still holds concurrent work and was not overwritten.
 
-The significant-fixed-failure exception, significant events, useful evidence qualifications, source attribution, uncertainty, correction process and separate structural-survey criteria remain. No observation or Reflect mission, runtime, live bank configuration, capture setting, filter, model, hook or deadline changed. Version 0.9.63 is the branch's proposed release version and must be reconciled with any intervening release before integration.
+The significant-fixed-failure exception, significant events, useful evidence qualifications, source attribution, uncertainty, correction process and separate structural-survey criteria remain. No observation or Reflect mission, runtime, live bank configuration, capture setting, filter, model, hook or deadline changed. Version 0.9.64 follows the intervening 0.9.63 release. The delivery report uses its new wiki/reference/ location.
 
 ## Verification
 
 Both Claude marketplace/plugin validations and `git diff --check` passed. The root repository rule and delivered payload match exactly. A scratch project assembled from `every-project/` plus the Hindsight payload received the refined rule. Existing root-guide and template routes still identify that rule and the effective document extraction strategy.
 
-Codex installed and enabled Toolkit 0.9.63 from this local marketplace in a fresh scratch Codex home. The owner's host configuration and real project files were untouched. These checks establish package acceptance and payload propagation, not future agent adherence or live extraction behavior. No new native host session or non-storing extraction preview was run for this wording change.
+Codex installed and enabled Toolkit 0.9.64 from this local marketplace in a fresh scratch Codex home. The owner's host configuration and real project files were untouched. These checks establish package acceptance and payload propagation, not future agent adherence or live extraction behavior. No new native host session or non-storing extraction preview was run for this wording change.
 
 An independent reviewer examined the complete diff, official host documentation, the memory criteria, the surrounding setup/update and template procedures, survey protection and representative workflow cases. The reviewer found no actionable issue and independently confirmed the exact rule copy and clean whitespace.
 

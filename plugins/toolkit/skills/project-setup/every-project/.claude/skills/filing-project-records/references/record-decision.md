@@ -38,7 +38,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
      - When you cannot tell which work items the entry changes, ask the owner in one question.
    - On the Sources line, name each SRC ID the entry is based on. Add the DEC ID to the "Used by" cell of each of those rows in `sources/INDEX.md`.
    - When the entry is a lesson from a work item that is being closed, the owner's yes to keeping the lesson for the whole project is the decision. On the Decision line, state the lesson as what to do or what to avoid. On the Why line, say what happened and where it was seen, with the work item's ID.
-5. Decide whether the entry needs a rule in `system/`.
+5. Decide whether the entry needs a rule in `wiki/product-wiki/`.
    - A Decided entry that states how the system must work is also a rule. Write the rule now with `update-system-doc.md`, before the save in step 6.
    - An Open entry gets a rule now only when a work item under its Affects is designed or built to the proposed wording before the answer is given. That rule is marked Draft.
    - Otherwise, write the rule of an Open entry when the entry is answered.
@@ -53,7 +53,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 
 1. Check who gave the answer. Only the answer of a person who may decide closes the question. Step 2 of "A new entry" says who that is.
 2. Change the entry: set Status to Decided, fill the Decided line, replace the question on the Decision line with the decision, and write the reason on the Why line.
-3. Update the rules in `system/` with `update-system-doc.md`.
+3. Update the rules in `wiki/product-wiki/` with `update-system-doc.md`.
    - Update each rule marked Draft that waited for this entry.
    - When the decision states how the system must work and no rule holds it yet, add the rule there now.
 4. Save as step 6 of "A new entry" says.

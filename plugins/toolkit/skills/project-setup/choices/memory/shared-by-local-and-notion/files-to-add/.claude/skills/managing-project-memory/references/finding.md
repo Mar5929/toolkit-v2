@@ -7,8 +7,8 @@ Finding only reads. When you find a fact that is wrong or old, correct it with `
 ## Where to look, in order
 
 1. **The place where that kind of fact is kept.** The root `AGENTS.md`, section "Where information goes", names the place for each kind of information. Four examples:
-   - For a decision, read `DECISIONS.md`, then `system/`, then the work item.
-   - For a term, read `system/glossary.md`.
+   - For a decision, read `DECISIONS.md`, then `wiki/product-wiki/`, then the work item.
+   - For a term, read `wiki/product-wiki/glossary.md`.
    - For a person's role, read `PROJECT.md`.
    - For a source, read `sources/INDEX.md`.
 2. **Memory.** Read the memory records about the subject first. Then read the memory records that are linked to the work item the question is about. `references/memory-store.md` gives the search.

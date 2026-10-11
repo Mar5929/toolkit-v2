@@ -2,9 +2,9 @@
 
 When the project uses Notion memory, use `managing-project-memory` to capture the decision, finalized documentation or term with its source and existing approval evidence. The librarian updates the configured wiki destination. Return verified capture links to the calling skill; the local publication procedure below does not apply.
 
-Use this file to change a document in `system/`. That folder is the approved description of the system: how the system must work, written as numbered rules.
+Use this file to change a document in `wiki/product-wiki/`. That folder is the approved description of the system: how the system must work, written as numbered rules.
 
-`system/AGENTS.md` says which document holds what. It also gives the form of a document, the form of a rule and its four marks, a glossary term, an integration document, a diagram, and what must stay true. Read it before you write.
+`wiki/product-wiki/AGENTS.md` says which document holds what. It also gives the form of a document, the form of a rule and its four marks, a glossary term, an integration document, a diagram, and what must stay true. Read it before you write.
 
 The mark of a rule is one of four words: Draft (the owner has not approved the rule yet), Approved, Built (a work item built what the rule says), or Retired (the rule no longer applies).
 
@@ -21,16 +21,16 @@ Before you write a rule, name the DEC ID behind the change. When `DECISIONS.md` 
 
 ## Add or change a rule
 
-1. Search `system/` for the subject. When a rule already says it, add no second rule.
-2. Choose the mark from the Status of the decision's entry: Decided gives Approved, and Open gives Draft. `system/AGENTS.md` explains each mark under "What each mark means". For a Draft rule, add its DEC ID under the document's Open questions.
+1. Search `wiki/product-wiki/` for the subject. When a rule already says it, add no second rule.
+2. Choose the mark from the Status of the decision's entry: Decided gives Approved, and Open gives Draft. `wiki/product-wiki/AGENTS.md` explains each mark under "What each mark means". For a Draft rule, add its DEC ID under the document's Open questions.
 3. Write the rule. Do what applies to it:
-   - Give a new rule the next ID of the document's prefix, in the form that `system/AGENTS.md` gives.
+   - Give a new rule the next ID of the document's prefix, in the form that `wiki/product-wiki/AGENTS.md` gives.
    - For a changed rule, change its Rule line and its "Conditions and exceptions" line in place, under the same ID, and set its Source to the new DEC ID. Do not keep the old wording in the document, because the Superseded entry in `DECISIONS.md` holds it.
    - When the wording of a rule marked Built changes, set its mark back to Approved with the new DEC ID, because no work item has built the new wording yet.
    - For a rule that no longer applies, set its mark to Retired, and its Source to the DEC ID that retired it.
    - When a rule's Source names an SRC ID, add the rule ID to the "Used by" cell of that row in `sources/INDEX.md`.
 4. When an Open entry becomes Decided, change each Draft rule that waited for it to Approved, and remove its DEC ID from Open questions.
-5. Set the document's "Last changed via" line to the DEC ID. Set the document's Status again. `system/AGENTS.md`, section "The form of a document", says which Status applies.
+5. Set the document's "Last changed via" line to the DEC ID. Set the document's Status again. `wiki/product-wiki/AGENTS.md`, section "The form of a document", says which Status applies.
 6. Add one Changelog row. It holds the date, the change with the rule ID, the DEC ID, and the work item that caused the change or "none".
 7. Add the rule ID to the Affects line of the entry in `DECISIONS.md`. Step 7 of `record-decision.md` writes the rule ID into each work item.
 8. Make one save with `publish-docs`. The save holds the document, `DECISIONS.md`, and `sources/INDEX.md` when step 3 changed it.
@@ -52,7 +52,7 @@ Use this section when `managing-work-items` closes a work item and names a rule 
 
 ## A glossary term
 
-The glossary is `system/glossary.md`.
+The glossary is `wiki/product-wiki/glossary.md`.
 
 - Ask the owner first about a meaning that the owner did not give and no decision gives, such as one a source gives or one you worked out. Ask: "Add to the glossary: <term> means <meaning>?"
 - A term the owner defined in the session needs no entry in `DECISIONS.md`. The row's Source is the owner's words with the date, and the Changelog row's DEC cell says "none".
@@ -61,4 +61,4 @@ The glossary is `system/glossary.md`.
 
 ## An integration document or a diagram
 
-`system/AGENTS.md`, sections "An integration document" and "A diagram", give the steps for each. The rules inside an integration document follow "Add or change a rule" in this file. Save with `publish-docs`.
+`wiki/product-wiki/AGENTS.md`, sections "An integration document" and "A diagram", give the steps for each. The rules inside an integration document follow "Add or change a rule" in this file. Save with `publish-docs`.

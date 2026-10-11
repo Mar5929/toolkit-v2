@@ -40,7 +40,7 @@ updated: <YYYY-MM-DD>
 
 **Related items:** <For a top-level item, “Project phase P01.”, or “No project phase yet.”; for a sub-item, its parent's ID, and “Built from the design of”, then the parent's ID, when it has no design of its own. Related work item IDs (never folder paths) and external links. Each authoritative decision or rule this item must follow, by its configured record ID or wiki link. With Notion memory, distinguish verified capture links from filed wiki records.>
 
-**Moved up:** <Leave empty until the closing step of `managing-work-items`; the item cannot become Done or Cancelled while it is empty. Then record reusable outcomes by ID or link, with what happened. For Notion memory, name verified captures and their processing state; name filed destinations only after verification. Other choices name the entries in `DECISIONS.md` and rules in `system/` that changed. When there are none, write “Nothing:”, then the reason.>
+**Moved up:** <Leave empty until the closing step of `managing-work-items`; the item cannot become Done or Cancelled while it is empty. Then record reusable outcomes by ID or link, with what happened. For Notion memory, name verified captures and their processing state; name filed destinations only after verification. Other choices name the entries in `DECISIONS.md` and rules in `wiki/product-wiki/` that changed. When there are none, write “Nothing:”, then the reason.>
 
 ## Roadmap
 
