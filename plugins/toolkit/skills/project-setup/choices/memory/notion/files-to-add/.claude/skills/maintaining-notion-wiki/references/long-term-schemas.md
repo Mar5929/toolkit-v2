@@ -1,6 +1,6 @@
 # Long-Term Memory collection schemas
 
-This reference records the owner's template fields inspected on October 11, 2026. Inspect each installed project's live schema before using it. Names and types below are a reference, not authorization to add fields or options. Verify relations against the configured project and data source identifiers in `PROJECT.md`.
+This reference records the owner's template fields inspected on October 11, 2026. Inspect each installed project's live schema before using it. Names and types below are a reference, not authorization to add fields or options. Verify relations against the configured project and data source identifiers in Project context and connections, or `PROJECT.md` when working locally.
 
 ## Projects
 

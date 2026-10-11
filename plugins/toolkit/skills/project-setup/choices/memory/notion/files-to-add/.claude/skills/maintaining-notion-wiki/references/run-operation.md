@@ -1,6 +1,6 @@
 # Librarian runs and recovery
 
-Daily processing and on-demand operations use the same librarian procedure. Read the project's scheduler, access, invocation and coordination settings in `PROJECT.md`. Scheduling setup selects and verifies a supported mechanism with the owner; this skill does not activate one merely because the cadence is documented.
+Daily processing and on-demand operations use the same librarian procedure. Read the project's scheduler, access, invocation and coordination settings in Project context and connections, or `PROJECT.md` when working locally. Scheduling setup selects and verifies a supported mechanism with the owner; this skill does not activate one merely because the cadence is documented.
 
 ## Coordinate writers
 

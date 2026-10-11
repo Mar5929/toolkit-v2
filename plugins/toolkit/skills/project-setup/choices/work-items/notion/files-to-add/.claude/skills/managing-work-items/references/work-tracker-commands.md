@@ -14,7 +14,7 @@ Every query on Work Items needs `{"property":"Work item","title":{"is_not_empty"
 ntn api v1/data_sources/<data-source-id> < /dev/null | jq -r '.properties | to_entries[] | "\(.key)\t\(.value.type)\t\((.value.select // .value.status // .value.multi_select // {}).options // [] | map(.name) | join(", "))"'
 ```
 
-**Create a work item.** Send this body with `ntn api v1/pages -d @new.json < /dev/null`. The answer holds the page `id`, its `url`, and the new ID (`.properties.ID.unique_id`: prefix and number).
+**Create a work item.** The API requires `"template": {"type": "default"}` in the create request; omitting it creates an empty page even when Notion has a default template. This is part of creation, not a separate template application. Send this body with `ntn api v1/pages -d @new.json < /dev/null`. The answer holds the page `id`, its `url`, and the new ID (`.properties.ID.unique_id`: prefix and number).
 
 ```json
 {"parent": {"type": "data_source_id", "data_source_id": "<work-items-data-source-id>"},
@@ -70,7 +70,7 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"<phase
   "Work item":{"relation":[{"id":"<item-page-id>"}]}}}' < /dev/null | jq -r .id
 ```
 
-**Add a task.** For a sub-item's task, leave out "Phase". For a project task, leave out "Work item" and "Phase". "Depends on" takes the page ids of the tasks that the new task waits for.
+**Add a task.** For a task in a work item without phases, leave out "Phase" and use the plain-list Task ID form. For a project task, leave out "Work item" and "Phase". "Depends on" takes the page ids of the tasks that the new task waits for.
 
 ```bash
 ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"<tasks-data-source-id>"},

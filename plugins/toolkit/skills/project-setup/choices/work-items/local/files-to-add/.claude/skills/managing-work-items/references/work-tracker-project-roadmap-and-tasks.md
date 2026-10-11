@@ -4,7 +4,7 @@ This file says where the project's own phases and its project tasks are saved, a
 
 ## The project's roadmap: PROJECT-ROADMAP.md
 
-The project's phases are in `PROJECT-ROADMAP.md`, in the project folder.
+The project's phases are in `PROJECT-ROADMAP.md`, in the project folder. A top-level work item belongs to a project phase whether or not it uses work-item phases of its own. Work-item phases do not change project roadmap approval or placement.
 
 ### Reading and saving the file
 

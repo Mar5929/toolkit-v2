@@ -21,9 +21,9 @@ The file has two parts. "For the main agent" says how to start the verifier. "Br
 
 Start the verifier from `handoff`, after you draft the prompt and before the owner sees the prompt. Act on every verdict as step 6 of `handoff` says.
 
-Start the verifier as a new helper that does not see this session:
+Start the verifier as a new helper that does not see this session. Honor the project’s model preference; otherwise choose a suitable available model for the task.
 
-- In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose` and `model` set to `opus`. Never use a fork, because the verifier must not share this session.
+- In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose`. Never use a fork, because the verifier must not share this session.
 - In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`. Wait for its report with `wait_agent`.
 - The message to the helper holds everything under "Brief for the helper", word for word, and then the list of inputs below, filled in. The helper sees nothing else.
 - Give the verifier the configured record links and available read access. For records it cannot read, supply freshly read text with source links, dates and relevant properties. Include each work item, wiki destination, pending capture or Hindsight record that the draft relies on; Current state alone does not verify wiki claims.

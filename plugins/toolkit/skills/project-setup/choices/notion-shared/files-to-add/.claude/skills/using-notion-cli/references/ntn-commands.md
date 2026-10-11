@@ -146,14 +146,14 @@ ntn api v1/databases/<database-id> < /dev/null | jq -r '.data_sources[0].id'
 
 ## When a call fails
 
-`ntn api` prints the error and exits with a non-zero code. Nothing was changed unless the error says otherwise.
+`ntn api` prints the error and exits with a non-zero code. A failed write may have succeeded. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work. Follow the service’s retry guidance and backoff. Continue recovery while a correction or retry can make progress; report unresolved blockers when it cannot.
 
 | Error | Meaning | What to do |
 | --- | --- | --- |
 | 401 `unauthorized`, "no auth token", "ntn login" | `ntn` is not signed in, the sign-in expired, or this session cannot access the stored credential. | First check session network and keychain access under `SKILL.md`, "In Codex". Use a permitted access route when available, then check `ntn whoami`. If authentication still fails with access available, ask the owner to run `ntn login` and wait. Never ask for the credential itself. |
 | 404 `object_not_found` | The page is not shared with "Notion CLI", or the id is wrong. The error does not mean that the page is gone. | Check the id in `PROJECT.md`. When the id is right, ask the owner to share the page, as "Access and sign-in" says. |
-| 400 `validation_error` | The request body is wrong: a property name, an option, or an `old_str` that does not match the page text. | Read the page or the data source again, fix the body, and retry once. |
-| 409 `conflict_error` | Two writes happened at once. | Wait 5 seconds, and then retry once. |
+| 400 `validation_error` | The request body is wrong: a property name, an option, or an `old_str` that does not match the page text. | Read the page or data source again, correct the body from the error, and retry under the recovery guidance above. |
+| 409 `conflict_error` | The transaction could not complete, potentially because of a data collision or a temporary storage failure. | Recheck current parameters and target state, then retry under the recovery guidance above. |
 
 ## Limits
 

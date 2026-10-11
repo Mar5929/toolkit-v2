@@ -49,7 +49,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
    | A behavior, a rule, or an exception | A line in the Functional Requirements of the requirement it belongs to. When the check changes, also a line in that requirement's Acceptance Criteria. The question's row names the `R-xx` in its Affects column. `R-xx` is the short form of a requirement's number, such as R-01 for Requirement 1. |
    | A behavior, a rule, or an exception that no requirement covers | A new requirement, with the owner's words as its Original verbatim requirement. Then a line in its Functional Requirements and, when the check changes, a line in its Acceptance Criteria. The question's row names the `R-xx` in its Affects column. |
    | Something that is out of scope | A line in the Functional Requirements of the requirement it limits, in the form "Does not apply to ...". |
-   | A phase, the order of the phases, or a split | The Roadmap of a top-level work item, or the task list of a sub-item. |
+   | A phase, the order of the phases, or a split | The work item's plan: its Roadmap when it uses phases, or its plain task list. |
    | A fact that is not a requirement | Notes, Context. |
    | An idea for how to build it | Notes, "Solution options and considerations", with the `R-xx` it is for. |
 
@@ -73,7 +73,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 9. Stop asking when all four of these are true:
    - Every requirement has its Goal, at least one line in its Functional Requirements, and at least one line in its Acceptance Criteria.
    - No open question affects a requirement.
-   - The roadmap of a top-level work item has at least one phase.
+   - The work item's plan uses phases or a plain task list as the work needs.
    - The split is settled.
 
    Then ask once: "What have we not talked about yet that could change this?"
@@ -118,8 +118,8 @@ A source is anything the project was given, such as a transcript, a document, a 
 
 `references/lifecycle-rules.md`, section "Levels", gives the levels and says which ones have phases.
 
-- For a top-level work item, propose its phases as one question, with a one-line reason for each phase. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
-- During Refining Requirements, add a task only for work that Refining Requirements itself needs, such as "P1-T01 — Get the current persona list from the client". In a sub-item the task is "T01 — ...".
+- When phases help plan or track a top-level work item, propose them as one question, with a one-line reason for each phase. Otherwise, use a plain task list. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
+- During Refining Requirements, add a task only for work that Refining Requirements itself needs, such as "P1-T01 — Get the current persona list from the client". In a plain task list, the task is "T01 — ...".
 - Propose a split into sub-items when a part of the work meets one of these four conditions:
   - It can be approved, built, or shipped on its own.
   - It is for other people or for another area of the system.
@@ -129,13 +129,13 @@ A source is anything the project was given, such as a transcript, a document, a 
 - Show the split in one message, and ask for approval, for example "Shall I split WI-012 into these 4 sub-items?", with the real ID and number. The owner's yes covers the split only. For each sub-item, the message gives:
   - its title;
   - a one-line reason;
-  - the parent's phase it goes under, for a level-2 sub-item only;
+  - the parent's phase it goes under, when the parent uses phases;
   - the parent requirements it covers.
 - After the owner's yes, create each sub-item with the parent's ID, in State Refining Requirements. Give it one requirement for each parent requirement it covers:
   - Its Original verbatim requirement quotes the parent's words for that part, and names where the words are from, in the form "from <parent ID> R-02".
   - Its Functional Requirements and Acceptance Criteria copy the parent's lines it covers, word for word.
 - When the parent's requirements are already approved and cover the sub-item, create the sub-item in the parent's next State instead, with the approval copied from the parent.
-- List the ID of each level-2 sub-item under its phase on the top-level parent. List a level-3 sub-item on its level-2 parent, with no phase.
+- List each sub-item ID under its parent's phase when the parent uses phases. Otherwise, list it on the parent's Sub-items line, with no phase.
 
 ## Mistakes to avoid
 

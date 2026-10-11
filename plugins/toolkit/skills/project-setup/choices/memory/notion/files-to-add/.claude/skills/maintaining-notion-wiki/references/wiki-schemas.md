@@ -1,6 +1,6 @@
 # Wiki database schemas
 
-These template fields were inspected on October 11, 2026. Before using them, inspect the installed project’s live data source, options and relation targets. Read identifiers from `PROJECT.md`; copied template IDs must not be used. Preserve system-managed fields.
+These template fields were inspected on October 11, 2026. Before using them, inspect the installed project’s live data source, options and relation targets. Read identifiers from Project context and connections, or `PROJECT.md` when working locally; copied template IDs must not be used. Preserve system-managed fields.
 
 ## Wiki Inbox
 

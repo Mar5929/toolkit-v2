@@ -4,7 +4,7 @@ Use this file to take a work item with approved requirements to one design. The 
 
 - The owner's choice is a Questions and Answers row in the work item, and the design names that row by its Q-ID.
 - The design says how to build. It never adds or changes a requirement.
-- A work item has one design. Create it from `assets/design-template.md`, and save it with `references/work-tracker.md`. With Notion memory, working architecture also stays in the work item’s Solution Design; capture finalized documentation for Product Wiki through `managing-project-memory`.
+- A work item has one design. With Notion work items, fill the generated Solution Design page; when it is missing, follow the missing-design procedure in `references/work-tracker.md`. With local or GitHub work items, use `assets/design-template.md`. Read and save the design through `references/work-tracker.md`. With Notion memory, working architecture also stays in the work item’s Solution Design; capture finalized documentation for Product Wiki through `managing-project-memory`.
 
 Three kinds of helper do part of the work: a researcher looks up a fact, an architect writes one design option, and a critic checks a draft option against every requirement. `references/lifecycle-rules.md`, section "Starting a helper", says how to start one.
 
@@ -19,7 +19,7 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
 4. Start the design.
    - Unless step 1 kept the work item in Refining Requirements, set the State to Designing.
    - Set `design: proposed`.
-   - Create the design from the template, and keep every heading. Fill the header lines and the opening sections.
+   - Continue an existing design, or prepare it in the tracker's form as described above. Keep its headings. Fill the header lines and opening sections.
 5. Settle how the design work will go. Ask questions when their answers change the design. Present meaningfully different options when the requirements leave a real choice, with built-in mechanisms first. A built-in mechanism is one that the platform or the tool already provides.
 6. Research. Start one researcher for each research question, with `researcher-brief.md`. Start at the same time the researchers whose questions do not depend on each other's answers. In a Salesforce project, use Salesforce's skills for platform facts.
 7. Design and critique. Start one architect for each option, with `design-architect-brief.md`, and one critic for each draft, with `design-critic-brief.md`. Then run fix rounds. In a fix round, the architect corrects its option from the critic's findings, and the critic checks again the findings that remain.
@@ -40,10 +40,10 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
       - Fill "Recommendation and owner decision", "Selected design", and "Build and verification plan". Give the plan a check for every line of each requirement's Acceptance Criteria, because the acceptance checker checks against those lines.
       - Remove every template prompt that is left.
       - Set `design: approved`.
-      - Put the Build order into the work item's plan. In a top-level work item, the Build order becomes Tasks under its existing Roadmap phases, or becomes its phases when it has none. In a sub-item, the Build order becomes tasks in its plain list. `references/lifecycle-rules.md`, section "Levels", says which level has phases. Never renumber, replace, or drop an existing phase.
+      - Put the Build order into the work item's plan. The Build order becomes tasks under existing phases or in the work item's plain task list. For a top-level item, propose phases only when they help plan or track the outcomes. `references/lifecycle-rules.md`, section "Levels", says which level has phases. Keep existing phase and task IDs. Preserve cancelled or superseded phases with their history.
       - Add a Recent History row that names the Q-ID, and move the work item to Building.
 11. Apply the test in the root `AGENTS.md`, section "Where information goes", to the owner's choice, as `refining-requirements.md`, step 6, says. When a different work item would need the choice, that step gives the choice to `filing-project-records`. When the choice went to Refining Requirements as a change, do this step after the owner approves the change.
-12. The build runs next, from the Roadmap. Continue when the owner already authorized the build and its prerequisites are met. Otherwise, name the next action and ask only for authorization that is still missing.
+12. The build runs next, from the work item's plan. Continue when the owner already authorized the build and its prerequisites are met. Otherwise, name the next action and ask only for authorization that is still missing.
 
 ## A change to an approved design
 

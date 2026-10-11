@@ -33,8 +33,8 @@ Use `filing-project-records` for sources and the configured shared-record routes
 
 | File | Open it when |
 | --- | --- |
-| [assets/work-item-template.md](assets/work-item-template.md) | You create an item or need its field and section forms. |
-| [assets/design-template.md](assets/design-template.md) | You start a design. |
+| [assets/work-item-template.md](assets/work-item-template.md) | Local or GitHub: you create an item or need its field and section forms. Notion uses its database's default template. |
+| [assets/design-template.md](assets/design-template.md) | Local or GitHub: you start a design. Notion uses the generated Solution Design page. |
 | [references/requirements-analyst-brief.md](references/requirements-analyst-brief.md) | You start the helper that checks requirements. |
 | [references/researcher-brief.md](references/researcher-brief.md) | You start a research helper. |
 | [references/design-architect-brief.md](references/design-architect-brief.md) | You start a helper to write one design option. |

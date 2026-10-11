@@ -164,7 +164,7 @@ gh api repos/<repo>/issues/<number>/parent --jq .number
 
 ## When a call fails
 
-`gh` exits with 0 on success, with 1 on an error, and with 4 when no one is signed in. A failed mutation can leave its outcome uncertain. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work.
+`gh` exits with 0 on success, with 1 on an error, and with 4 when no one is signed in. A failed mutation can leave its outcome uncertain. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work. Follow the service’s retry guidance and backoff. Continue recovery while a correction or retry can make progress; report unresolved blockers when it cannot.
 
 | What you see | What it means and what to do |
 | --- | --- |
@@ -172,7 +172,7 @@ gh api repos/<repo>/issues/<number>/parent --jq .number
 | "Could not resolve to a Repository", or HTTP 404 on `repos/<repo>` | The name in `PROJECT.md` is wrong, or this account cannot see the repository. Check `<repo>`. When `<repo>` is right, ask the owner whether this account has access. |
 | "Could not resolve to an issue", or HTTP 404 on one issue | This repository has no issue with that number. Tell the owner. Never make a new issue to replace it. |
 | "could not add label: '<name>' not found" | The label does not exist, and the whole `gh issue edit` call fails. Ask the owner before you create the label. `work-tracker-labels.md` says how to create it. |
-| HTTP 422, "Validation Failed" | The request is not valid: a sub-issue was given by its number instead of its id, a child already has a parent, or a body is over 65,536 characters. Fix the request, and retry once. |
+| HTTP 422, "Validation Failed" | The request is not valid: a sub-issue was given by its number instead of its id, a child already has a parent, or a body is over 65,536 characters. Correct the request from the error and current target state, then retry under the recovery guidance above. |
 
 ## Limits
 

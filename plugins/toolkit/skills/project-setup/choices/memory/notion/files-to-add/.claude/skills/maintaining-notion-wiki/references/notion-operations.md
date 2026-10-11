@@ -1,6 +1,8 @@
 # Notion access, search and verified operations
 
-Use `using-notion-cli` for authentication, supported calls, pagination, Markdown and failed operations. Read the configured project, Project Wiki, page and data source identifiers in `PROJECT.md`. Stop dependent writes when access or identity cannot be verified.
+Use the Notion tools available to this librarian and verify their access to this project. When using the CLI, follow `using-notion-cli` for authentication and supported operations. Read the configured project, Project Wiki, page and data source identifiers from Project context and connections, or `PROJECT.md` when working locally. Stop dependent writes when access or identity cannot be verified.
+
+When a source is local or inaccessible to this host, use the configured accessible source or evidence captured with its origin. If the evidence cannot support filing, retain Needs review with the missing source and recovery step.
 
 ## Traverse and search
 

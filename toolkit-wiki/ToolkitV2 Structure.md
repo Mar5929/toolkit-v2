@@ -38,7 +38,7 @@ Every project gets the same layout, whatever the owner answers in the interview.
 
 | File | What it holds |
 | --- | --- |
-| `AGENTS.md` | The instructions every session reads first. Its sections: the agent's job, what to do in every session, the map of the project, where each kind of information goes, what to ask the owner first, how to write a question to the owner, which skill does which job, the project's commands, and how to write replies. |
+| `AGENTS.md` | The instructions every session reads first. Setup fills a short paragraph naming this repository’s chosen work tracker and memory store, including its Notion project link when either choice uses Notion. Its sections: the agent's job, what to do in every session, the map of the project, where each kind of information goes, what to ask the owner first, how to write a question to the owner, which skill does which job, the project's commands, and how to write replies. |
 | `CLAUDE.md` | The one line `@AGENTS.md`. Claude Code reads `AGENTS.md` through it. Each folder below that has its own `AGENTS.md` has this file beside it. |
 | `PROJECT.md` | The facts that stay true: what the project is for, what is in and out of scope, the systems and environments, the people and what each may decide, where the records are, the project's paths, and the "Toolkit settings" section, which records the owner's answers from setup. |
 | `SOUL.md` | How the owner wants the agent to work with the owner and the team. It starts as the toolkit's default, and the interview fits it to the project. |
@@ -147,7 +147,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 | Kind | What it adds |
 | --- | --- |
 | Questions | Where in Notion the project's page goes, and the prefix of a work item's ID. |
-| Files inside `managing-work-items` | One, `work-tracker.md`: where a work item is kept in Notion, how to create, fill, and change one, the exact names and values, the commands, and the known problems. The layout of a work item's page is the owner's template in Notion, and no file describes it. |
+| Files inside `managing-work-items` | Four references: work placement and properties, record updates, API calls, and recovery. Each project owns its Work Items, Phases and Tasks databases; phases organize project or work-item roadmaps, and tasks belong to a work item or project administration. The layout of a work item's page is the owner's template in Notion, and no file describes it. |
 | Skill and rule | `using-notion-cli`, which says how to run the Notion command-line tool, and the rule `notion-records.md`. The Notion memory module adds the same two, and a project gets them once. |
 | `PROJECT.md` | Tracker: `notion`, the ID prefix, and the links and IDs of the project's Notion page and its Work Items, Phases, and Tasks databases. |
 | Outside the project folder | The project's pages in Notion, made as a copy of the owner's "Project" template. The project's phases are kept in the Phases database. |
@@ -189,7 +189,8 @@ The Project Wiki in the owner's Project template supplies one Wiki Inbox and fou
 | Skills | `managing-project-memory`: short retrieval and capture steps with focused destination references. `maintaining-notion-wiki`: librarian steps with references for schemas, filing, metadata and recovery. |
 | Skill and rule | `using-notion-cli` and `notion-records.md`, once, as for Notion work items. |
 | Settings | The word `notion` on the session-start line and the Current state page ID. Startup directs the agent to check relevant pending captures for freshness. |
-| `PROJECT.md` | Memory: `notion`; configured Project Wiki, inbox, destination and data-source identifiers; librarian schedule and open setup steps. |
+| Published librarian skill | Every Project Wiki holds a short Librarian processing skill entry, linked procedure and schema references, and verified project context and connections. The selected cloud or local librarian starts from its entry link. |
+| `PROJECT.md` | Memory: `notion`; configured Project Wiki, published librarian and context links, inbox, destination and data-source identifiers; librarian schedule and open setup steps. |
 | Outside the project folder | The owner's existing Project Wiki model, copied with the Project template: Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. |
 | The owner's own steps | Sign in, grant the selected tools access and confirm the scheduler during setup. |
 

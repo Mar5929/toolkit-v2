@@ -166,7 +166,7 @@ git status --short -- <file>
 
 ### Updating AGENTS.md
 
-The root `AGENTS.md` reads the same in every project, except for two prompts that the owner filled, which are the outcome sentence and the "Build, test, or deploy" row, and the lines that the setup files of the project's choices add. The owner may also have added lines. List the `## ` headings of both files:
+The root `AGENTS.md` reads the same in every project, except for the outcome sentence, the work tracking and memory summary, and the "Build, test, or deploy" row, and the lines that the setup files of the project's choices add. The owner may also have added lines. List the `## ` headings of both files:
 
 ```text
 grep -n '^## ' AGENTS.md
@@ -178,7 +178,7 @@ Then compare the two lists. One of two cases applies.
 - **Every heading of the setup copy's file is in the project's file, in the same order.** Sections that the owner added do not matter for this comparison. Name each toolkit change in plain words (for example "a changed row in the Project map"). After the owner's yes, add, change, or remove only those lines, and keep the owner's lines.
 - **A heading of the setup copy's file is missing from the project's file, or the order differs.** This is the case when the toolkit moved, renamed, or added a section. Changing named lines cannot give the project the new layout, so build a new file:
   1. Start from `<copy>/AGENTS.md`, which already has the project's name.
-  2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones, and delete its fill-in guide comment.
+  2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones. Fill its work tracking and memory summary using [project-store-summary.md](project-store-summary.md) and the confirmed current record homes. Delete its fill-in guide comment only when its prompts are filled.
   3. Find the lines that the owner added or changed with `diff -u AGENTS.md <copy>/AGENTS.md`. Then decide for each of those lines:
      - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice).
      - Carry over a line that holds a fact, a command, or an instruction of the owner's own, into the section where it fits. A whole section that the owner added goes in right after "Commands".
@@ -201,7 +201,7 @@ A project may hold something that an earlier setup put there and that the new se
 
 Do each line that fits the project. Each line names the section that holds the steps.
 
-- For a Notion project, follow what the shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says for "update the toolkit". An update changes Notion only within an approved migration batch or another explicit owner instruction.
+- For a Notion project, follow what the shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says for "update the toolkit". An update changes Notion only within an approved migration batch or another explicit owner instruction. For Notion memory, include the published librarian package in that review using [librarian publication guidance](../choices/memory/notion/reference/librarian-package.md).
 - For a Hindsight project, follow what [choices/memory/hindsight/hindsight-setup.md](../choices/memory/hindsight/hindsight-setup.md) says for an update. Name the server the project uses in the report.
 - For a GitHub Issues project, follow what [choices/work-items/github/github-work-items-setup.md](../choices/work-items/github/github-work-items-setup.md) says for "update the toolkit". Add missing labels only after the owner's yes.
 - For a Salesforce project, write the entries for each production org as the step on the refuse list for production in [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md) says, before section 4 removes anything that refuses a change to production. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
@@ -231,7 +231,7 @@ A changed choice does four things: it adds the files of the new choice's setup f
    - Change the Tracker or Memory line.
    - Remove each line that only the old choice used.
    - Write the new choice's lines as the setup file of the new choice says, and as [SKILL.md](../SKILL.md), "The lines of "Toolkit settings"", says for every line.
-   - Take out the lines that the old choice's setup file adds to a file the project already has, such as rows in `AGENTS.md`, entries in the settings files, and lines in `.gitignore`. Put in the lines that the new choice's setup file adds.
+   - Take out the lines that the old choice's setup file adds to a file the project already has, such as rows in `AGENTS.md`, entries in the settings files, and lines in `.gitignore`. Put in the lines that the new choice's setup file adds. Refresh the root summary using [project-store-summary.md](project-store-summary.md) after the new destinations are verified.
 3. Build and compare the setup copy for the agreed choices using sections 1 and 2, including the planned settings and routing changes from step 2. Keep the installed configuration unchanged until step 6.
    - Add unrelated missing files as "Missing files" says. Keep affected operational files, including new skills, in the setup copy until the records have moved in step 5. Install them in step 6.
    - Keep the old choice's installed instructions until the records move in step 5. Read the old tracker reference or memory skill and its installed store instructions before the change. Read the new choice’s entry skill and applicable references in the setup copy to learn how to create and read back its records. Do not install the new instructions over the old ones yet.

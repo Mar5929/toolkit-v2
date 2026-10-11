@@ -24,8 +24,8 @@ This file says how one work item is laid out in its issue, and how to write each
   Sub-issues:  #14, #15                     GitHub's own list: levels 2 and 3
   Body:
     ## Overview                             Goal, Current state, Related items, Moved up
-    ## Roadmap                              one row per phase; its Sub-items cell names #14 (a top-level issue only)
-    ## Tasks                                one "### P1 — <name>" heading per phase, a checkbox per task; in a sub-issue, one plain list
+    ## Roadmap                              one row per phase; its Sub-items cell names #14 (optional in a top-level issue)
+    ## Tasks                                one "### P1 — <name>" heading per phase, a checkbox per task; without phases, one plain list and a Sub-items line
     ## Recent History
     ## Requirements
     ## Questions and Answers
@@ -47,8 +47,8 @@ A project that is set up for GitHub keeps no work item files in its folders. It 
    - Write "None." under Sources and under "Lessons not proven yet".
    - Leave the **Moved up** line under `## Overview` empty after its label. `managing-work-items` fills it when it closes the work item, with a change to the body, before the issue is closed.
    - Keep every heading, table header, label, and `<!-- ... -->` guide comment.
-2. Write IDs as `#12` wherever the template says a work item ID. Keep the form of the plan that the template's guide gives for the work item's level: a top-level item keeps the Roadmap, and a sub-item keeps only the sub-item form under Tasks. Write the Related items line for the work item's level:
-   - For a level-2 sub-item, Related items says "Parent #12, phase P2."
+2. Write IDs as `#12` wherever the template says a work item ID. Keep the form of the plan that the template's guide gives for its level and plan: a top-level item keeps the Roadmap when it uses phases; an item without phases keeps the plain-list form under Tasks. Write the Related items line for the work item's level:
+   - For a level-2 sub-item, Related items says "Parent #12, phase P2." when its parent uses phases, or "Parent #12." otherwise.
    - For a level-3 sub-item, Related items says "Parent #14."
    - For a top-level item, Related items says "Project phase P01." once the work item has a project phase. Before that, `references/lifecycle-rules.md`, section "Levels", says what to do.
 3. Create the issue with its labels: the State that `managing-work-items` gives it, the type, and the priority. Use `priority:medium` when no priority is named. Add no other label. `work-tracker-gh-commands.md`, section "Creating an issue", gives the command.
@@ -85,13 +85,13 @@ Insert a new row right after the table's `|---|---|---|` line, so that the newes
 
 - A **phase** belongs to a top-level issue only. It is a row of the Roadmap table: `P1 — <name>`, Outcome, Status, Exit result, Sub-items. The order of the rows is the plan order. The Tasks section has a matching `### P1 — <name>` heading for each phase, in the same order. A phase is never an issue.
 - A **sub-item** is an issue of its own, and it is a sub-issue of the work item above it.
-  - Under a top-level item, its phase is the Roadmap row whose Sub-items cell names it, as `#14`. Its own Related items line says "Parent #12, phase P2."
-  - Under a level-2 sub-item, it has no phase. The parent's `**Sub-items:**` line names it, and its own Related items line says "Parent #14."
-- A **task** is a checkbox line in the template's form. In a top-level issue, the task is under its phase's heading, and its ID has the form `P1-T01`. In a sub-issue, the task is in the plain list, and its ID is `T01`, `T02`, and so on, with the next unused number. End each of the task's lines with two spaces, which keep the lines apart when GitHub shows the body.
+  - Under a parent with phases, its phase is the Roadmap row whose Sub-items cell names it, as `#14`. Its own Related items line says "Parent #12, phase P2."
+  - Under a parent without phases, it has no phase. The parent's `**Sub-items:**` line names it, and its own Related items line says "Parent #14."
+- A **task** is a checkbox line in the template's form. A new task under a phase heading gets an ID such as `P1-T01`. A new task in a plain list gets `T01`, `T02`, and so on, with the next unused number. Existing task IDs stay unchanged when grouping changes. End each of the task's lines with two spaces, which keep the lines apart when GitHub shows the body.
 
 How to change them:
 
-- **Link a sub-item.** Make it a sub-issue of its parent, with the calls in `work-tracker-gh-commands.md`, section "Sub-issues". Then put `#<number>` in the parent's list: the Sub-items cell of its phase's Roadmap row, or the `**Sub-items:**` line of a level-2 parent. Replace "None." the first time. Add a Recent History row on the parent: "Sub-item #14 created: <title>."
+- **Link a sub-item.** Make it a sub-issue of its parent, with the calls in `work-tracker-gh-commands.md`, section "Sub-issues". Then put `#<number>` in the parent's list: the Sub-items cell of its phase's Roadmap row, or the `**Sub-items:**` line of a parent without phases. Replace "None." the first time. Add a Recent History row on the parent: "Sub-item #14 created: <title>."
 - **Start a task.** Change the status after `·` to In Progress, in one change to the body.
 - **Tick a task.** Change `- [ ]` to `- [x]`, and change the status after `·` to Done, in one change to the body. The owner may tick a box in the browser, and that tick counts.
 - **Move a task or a sub-item to another phase** (in a top-level issue only). Move the task's lines, or move `#<number>` from one Sub-items cell to the other. For a sub-item, also update the sub-item's Related items line.
@@ -102,26 +102,26 @@ How to change them:
   - Update the work item's Related items line.
   - When the work item is now top-level, put it in a milestone, as `work-tracker-project-roadmap-and-tasks.md` says.
   - When the work item is no longer top-level, remove its milestone.
-  - When its level changed, follow "A work item that changes level" below.
+  - When its level changed, follow "A work item that changes level or plan grouping" below.
 - The owner may move a sub-issue in the browser. At your next change, make the parents' lists and the Related items lines agree with what the owner did.
 - After you link or move a sub-issue, check the parent's sub-issues against its list.
 
-### A work item that changes level
+### A work item that changes level or plan grouping
 
-Use this part when a move puts a work item at another level.
+Use this part when a move puts a work item at another level or an approved plan changes between phases and a plain list. Moving an item to the top level does not require phases.
 
-- **Phases to a plain list** (the work item is now a sub-issue). Do these four things:
+- **Phases to a plain list.** Do these four things:
   1. Under `## Tasks`, write the `**Sub-items:**` line with every number from the work item's Sub-items cells, or "None.".
   2. After that line, write every task in plan order. Each task keeps its ID, its status, and its tick.
-  3. Delete the `### P1 — ...` headings and the whole `## Roadmap` section.
-  4. Add one Recent History row that keeps what was deleted: "Phases removed, because a sub-item has no phases: P1 — <name> (<status>; <outcome>), P2 — ... Tasks kept with their IDs."
-- **A plain list to phases** (the work item is now top-level). Do these four things:
-  1. Add the template's `## Roadmap` section above `## Tasks`, with one phase, `P1`, named as the owner approves.
-  2. Put the `### P1 — <name>` heading above the tasks. The tasks keep their IDs.
-  3. Move the numbers from the `**Sub-items:**` line into P1's Sub-items cell, and delete that line.
+  3. Add one Recent History row that keeps what was deleted: "Phases removed: <reason>; P1 — <name> (<status>; <outcome>; <exit result>; <sub-items>), P2 — ... Tasks kept with their IDs."
+  4. Remove phase references from each sub-item's Related items line. Delete the phase headings and the whole `## Roadmap` section.
+- **A plain list to phases** (a top-level item whose plan now benefits from phases). Do these four things:
+  1. Add the template's `## Roadmap` section above `## Tasks`, with the approved phases, using the next unused phase IDs.
+  2. Put the matching phase headings above their tasks. The tasks keep their IDs.
+  3. Move the numbers from the `**Sub-items:**` line into the matching phases' Sub-items cells, and delete that line. Update each sub-item's Related items line with its phase.
   4. Add a Recent History row.
 
-  New tasks take `P1-T` IDs.
+  New tasks under phases take IDs for those phases. A plain list that stays plain keeps its task and sub-item layout.
 
 ## The design comment
 

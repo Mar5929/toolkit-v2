@@ -12,6 +12,8 @@ Run each command on its own. In Codex, follow the active session permissions as 
 
 ## The project's phases: milestones
 
+A top-level work item belongs to a project phase whether or not it uses work-item phases of its own. Work-item phases do not change project roadmap approval or placement.
+
 - Each project phase is one milestone of the repository. The milestone's title is `P01 — <name>`: `P` and two digits, then the name. The order of the titles is the plan order.
 - The milestone's description holds three lines: `Status: <Not Started | In Progress | Done | Cancelled>`, `Outcome: <what it establishes>`, and `Exit result: <the evidence that it is complete>`.
 - A project phase that is Done or Cancelled is a closed milestone. Never delete a milestone.

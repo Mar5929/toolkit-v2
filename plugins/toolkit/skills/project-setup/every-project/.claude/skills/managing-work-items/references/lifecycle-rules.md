@@ -78,7 +78,7 @@ Every project divides its work into the same four levels, wherever it keeps its 
 | Level | Its phases | What it holds |
 | --- | --- | --- |
 | The project | Project phases `P01`, `P02`, and so on. They are the project's roadmap. | Its top-level work items, each under exactly one project phase. Its project tasks, in one plain list with no phases. |
-| Top-level work item (level 1) | Its own phases `P1`, `P2`, and so on. They are the work item's roadmap. It has at least one phase, even when it is small. | Its tasks and its level-2 sub-items, each under one of its phases. |
+| Top-level work item (level 1) | Optional phases `P1`, `P2`, and so on, when grouping by outcomes helps plan or track the work. They are the work item's roadmap. | Its tasks and its level-2 sub-items, under phases when it uses them, or in a plain list. |
 | Level-2 sub-item | None | One plain task list, and its level-3 sub-items. |
 | Level-3 sub-item | None | One plain task list. |
 
@@ -90,7 +90,7 @@ Every project divides its work into the same four levels, wherever it keeps its 
 
 A project phase (`P01`) and a work item's phase (`P1`) are different things. A project phase groups top-level work items. A work item's phase groups that work item's tasks and its level-2 sub-items. A phase is never a work item.
 
-- A top-level work item gets its own phases in Refining Requirements.
+- During Refining Requirements, use work-item phases when they help plan or track distinct outcomes. Otherwise, use a plain task list. A level-2 sub-item of a top-level parent without phases has no phase.
 - A top-level work item goes under a project phase when the owner places it, and at the latest when it leaves Backlog. When the owner has named no project phase by then, ask which one, with your recommendation.
 - The project's phases change only with the owner's yes. Propose new project phases, or a change to them, as one question, with a one-line reason for each new phase and for each change.
 - When a project has no phases yet, propose them the first time a work item leaves Backlog.
@@ -106,9 +106,10 @@ A project phase (`P01`) and a work item's phase (`P1`) are different things. A p
 - Every task belongs to exactly one place: the project, or one work item.
 - A task in a work item is a step toward that work item's goal. Triage work outside the approved goal as a separate Backlog work item. When a defect prevents the approved user flow from working, record the defect and the fix needed to meet the approved requirements in this item. If the fix changes those requirements or an owner decision, get the required approval through Refining Requirements before building it.
 - A task ID has one of three forms:
-  - `P1-T01` in a top-level work item: the work item's phase, then the task's number.
-  - `T01` in a sub-item.
+  - `P1-T01` for a new task under a work-item phase: the phase, then the task's number.
+  - `T01` for a new task in a plain list, in a top-level item or a sub-item.
   - `PT-01` for a project task.
+- Existing task and phase IDs stay unchanged when plan grouping changes.
 
 ### Project tasks
 
@@ -161,7 +162,7 @@ Use your judgment to decide from the owner's request whether the work item is sm
 1. Create the work item, as `references/refining-requirements.md`, steps 1 and 2, say. Then write what the interview would have written:
    - the goal, in the Overview;
    - for each requirement, its Goal, at least one line of Functional Requirements, and at least one line of Acceptance Criteria that a tester could check;
-   - one phase, with its tasks.
+   - a plain task list, with phases only when they help plan or track the work.
 2. Play the request back to the owner in one reply. This reply takes the place of steps 3 to 11 of `references/refining-requirements.md`.
    - Say the goal in concise sentences, what you will hand over, and how you will check it.
    - Name anything you are unsure of.
@@ -235,7 +236,7 @@ The remaining steps apply to local memory. The project's Current State holds one
 
 ### Never delete a part of a work item
 
-Never delete a requirement, a question row, or a phase. Mark it dropped, superseded, or cancelled.
+Never delete a requirement, a question row, or a phase record. Mark it dropped, superseded, or cancelled. When a work item changes level or plan grouping, use the tracker's conversion procedure to preserve each phase record in Recent History before removing its layout.
 
 ### A work item from an older template
 
@@ -256,9 +257,9 @@ The rule `.claude/rules/evaluate-the-owners-request.md` asks you to state the go
 
 ## Starting a helper
 
-A helper is a separate agent that the main agent starts for one job. Start every helper as a new agent that does not see this session. Never start a helper as a fork, which is a helper that starts with a copy of this session.
+A helper is a separate agent that the main agent starts for one job. Start every helper as a new agent that does not see this session. Never start a helper as a fork, which is a helper that starts with a copy of this session. Honor the project’s model preference; otherwise choose a suitable available model for the task.
 
-- In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose` and `model` set to `opus`.
+- In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose`.
 - In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`. Wait for the helper's report with `wait_agent`.
 - The message to the helper is everything under "Brief for the helper" in the helper's brief file, word for word, and then the list of inputs from that file, filled in. The References table below lists the brief file of each helper. The helper sees nothing else.
 

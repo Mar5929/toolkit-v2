@@ -9,7 +9,7 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
 - The `work-items/` folder holds one folder for each work item. It exists only in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints.
 - `work-items/AGENTS.md`, in the main checkout, says what each file and folder is, the form of a work item's ID, and what must stay true in the folder. Read it before your first change.
 - Work items can be nested. A top-level item is a work item with no parent, at level 1. A sub-item is a work item inside another work item, at level 2 or level 3. `references/lifecycle-rules.md`, section "Levels", says what each level holds.
-- A top-level item has phases of its own, which group its tasks and its level-2 sub-items. Its phases and tasks are in its file, under Roadmap and Tasks. A sub-item has no phases: its tasks are one plain list in its file. `references/work-tracker-field-mapping.md` says where each part of a work item goes in its file.
+- A top-level item may use phases to group its tasks and its level-2 sub-items. When it does, its phases and tasks are under Roadmap and Tasks. An item without phases has one plain task list and a Sub-items line. Sub-items have no phases. `references/work-tracker-field-mapping.md` says where each part of a work item goes in its file.
 - The project has phases of its own too, called project phases, which group the top-level items. It also has project tasks, which are tasks that belong to no work item. The project's phases are in `PROJECT-ROADMAP.md`, and its project tasks are in `work-items/PROJECT-TASKS.md`. `references/work-tracker-project-roadmap-and-tasks.md` says how to read and change both files.
 
 ## Steps for every read and every save

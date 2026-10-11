@@ -8,7 +8,7 @@ Use this file to connect the Project Wiki copied from the owner's Project templa
 2. Read each database and its data sources. Inspect the live properties, relations and available templates before writing. The memory choice supplies the destination references in `managing-project-memory` and the librarian procedure in `maintaining-notion-wiki`.
 3. Check that copied relations point to this project's collections, including relations among the long-term collections and Product Wiki's self-relation. When work items are in Notion, check their memory relations too. Identify template or other-project targets and repair them within the approved setup scope before writing records. Never change the owner's source template.
 4. Find this project's row in the copied Lore Projects collection. Reuse a matching row; otherwise create one using its live schema and the confirmed project name and local path. Verify the row before linking records to it.
-5. Record the links below and read them back. At the finish of setup, initialize Current state from the interview answers using the Notion memory choice's finish procedure. Confirm that the configured connection can read every destination and write Wiki Inbox.
+5. Within the approved setup scope, publish the project's [librarian processing skill](../../memory/notion/reference/librarian-package.md), with verified context, connections and schemas. Record the links below and read them back. At the finish of setup, initialize Current state from the interview answers using the Notion memory choice's finish procedure. Confirm that the configured connection can read every destination and write Wiki Inbox.
 
 For traversal, pagination, schema reads and verified writes, use `using-notion-cli`. Its shipped source is [files-to-add/.claude/skills/using-notion-cli/SKILL.md](../files-to-add/.claude/skills/using-notion-cli/SKILL.md). If a required destination or property is missing, report the difference and agree the fix with the owner before continuing that part of setup.
 
@@ -19,6 +19,8 @@ Add these nested bullets under `Notion memory` in `PROJECT.md`, section `Toolkit
 ```markdown
 - Notion memory:
   - Project Wiki page: <url>, page <id>
+  - Librarian processing skill: <url>, page <id>
+  - Librarian project context: <url>, page <id>
   - Wiki Inbox: database <id>, data source <id>
   - Current state page: <id>
   - Long-Term Memory page: <url>, page <id>

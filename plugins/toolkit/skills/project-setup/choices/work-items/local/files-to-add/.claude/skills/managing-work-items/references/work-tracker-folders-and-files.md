@@ -22,7 +22,7 @@ This file says how to make a work item's folder and ID, how to check for changes
 
 - **Levels.** A work item is at level 1 when its folder is at the top of `work-items/`, in a group, or at the top of `archive/`. Each work item folder that is nested inside another work item folder is one level deeper.
 - **Three things say the same.** The nesting of the folders, the sub-item's `parent:` line, and its parent's list of sub-items say the same thing. For example:
-  - WI-003 holds `parent: WI-002`, and the Sub-items cell of the phase of WI-002 that WI-003 delivers names `[[WI-003]]`.
+  - WI-003 holds `parent: WI-002`, and WI-002's list of sub-items names `[[WI-003]]`, in a phase cell when WI-002 uses phases or on its Sub-items line otherwise.
   - WI-004 holds `parent: WI-003`, and the `**Sub-items:**` line of WI-003 names `[[WI-004]]`.
 
   `work-tracker-field-mapping.md`, section "Roadmap and Tasks", says where a parent's list of sub-items is.
@@ -88,14 +88,14 @@ When the folders and the `parent:` line disagree, use the folders. Tell the owne
 
 - **The folders say that the parent is X, `parent:` says Y or `none`, and X's list of sub-items does not name the work item.** The owner moved the folder.
   - Set `parent: X`.
-  - Move the work item from Y's list of sub-items to X's list. When X is top-level, move it to the cell of the phase of X that it serves, and name the phase.
+  - Move the work item from Y's list of sub-items to X's list. When X uses phases, move it to the cell of the phase of X that it serves, and name the phase. Otherwise, use X's Sub-items line.
   - Add "Moved by hand" rows on the work item, on X, and on Y.
-  - When the work item's level changed, also follow `work-tracker-field-mapping.md`, section "A work item that changes level".
+  - When the work item's level changed, also follow `work-tracker-field-mapping.md`, section "A work item that changes level or plan grouping".
 - **The work item is at the top level or in a group, and `parent:` names a work item.**
   - Set `parent: none`.
   - Remove the work item from the old parent's list of sub-items.
   - Add rows on both work items.
-  - The work item is now top-level. Follow `work-tracker-field-mapping.md`, section "A work item that changes level", and ask the owner which project phase the work item goes under.
+  - The work item is now top-level. Follow `work-tracker-field-mapping.md`, section "A work item that changes level or plan grouping", and ask the owner which project phase the work item goes under.
 - **The work item is in `archive/`, and no Recent History row says so.** Add a row "Archived by hand". The `state` stays.
 - **The file name is not `<ID>.md`.** The file is still the work item. Tell the owner that `[[WI-031]]` links no longer reach it, and offer to rename it back.
 - **A template copy has a real title.** It is a work item that the owner made by hand. Follow "A work item that the owner made by hand", below.
@@ -128,10 +128,10 @@ Move a work item only when the owner asks.
 3. **Fields.** Set `parent:` to the new parent's ID, or to `none`. Set `updated:`.
 4. **Lists of sub-items and the roadmap.**
    - Remove the work item's `[[WI-007]]` from the old parent's list of sub-items. Write "None." when the list is then empty.
-   - Add it to the new parent's list. Under a top-level parent, put it in the cell of the phase that the owner names. When the owner names no phase, ask which phase, with your recommendation, and save the question as a Questions and Answers row.
+   - Add it to the new parent's list. When the parent uses phases, put it in the cell of the phase that the owner names. When the owner names no phase, ask which phase, with your recommendation, and save the question as a Questions and Answers row. When the parent has no phases, use its Sub-items line.
    - When the work item moved to the top level, list it under a project phase, as `work-tracker-project-roadmap-and-tasks.md` says.
    - When the work item moved from the top level, remove it from its project phase.
-   - When the work item's level changed, follow `work-tracker-field-mapping.md`, section "A work item that changes level".
+   - When the work item's level changed, follow `work-tracker-field-mapping.md`, section "A work item that changes level or plan grouping".
 5. **Recent History.** Add a row on the work item, on the old parent, and on the new parent, with the owner's words or the Q-ID: "Moved under [[WI-003]] at the owner's request (Q-05)."
 6. **Read back.** The work item is found by its ID at the new path, and its sub-items are found under it.
 
