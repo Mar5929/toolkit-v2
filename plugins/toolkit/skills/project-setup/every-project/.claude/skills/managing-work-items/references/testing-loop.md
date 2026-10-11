@@ -36,9 +36,9 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - Add a Recent History row in this form: "Independent check of commit `<short hash>`: <each requirement's verdict>. Evidence: <test plan path, test command and result line>. Gaps: <gaps, or none>." For a result that Git does not track, name the file's path and its SHA-256 hash in place of the commit.
    - Set a phase to Done when its tasks and its sub-items are done and the check confirmed its exit result.
 7. Ask for the result approval.
-   - Add the row "Do you approve this result? <ID> at commit <short hash>: <each requirement's verdict and the gaps, in one line>.", with the requirement IDs that were checked in its Affects column.
+   - Add a Questions and Answers row asking the owner to approve the result. Identify the work item, the checked commit or file hash, each requirement’s verdict and the gaps. Put the checked requirement IDs in its Affects column.
    - Set `waiting_on` to the owner.
-   - Show the result as "Showing the result" below says. The last line of the reply is exactly "Do you approve this result?"
+   - Show the result as "Showing the result" below says, and ask a clear question about approving that result.
 8. Record the owner's answer the moment the owner gives it.
    - Write the owner's exact words, in quotation marks, and the date in the row, with Decision? `yes` and Status Answered.
    - After a yes, set `result_approved` to `YYYY-MM-DD by <name>`, add a Recent History row that names the Q-ID, and move the work item to Reflecting. An instruction to go on, such as "ship it", that the owner gives after you showed the result is the owner's yes.
@@ -75,7 +75,7 @@ Keep the reply short, and give its parts in this order:
 3. The evidence: each requirement's verdict, the commit that was checked, and the tests that were run, with their result lines.
 4. The gaps: anything partly met, not run, or found outside the requirements. Never hide a gap to get a yes.
 5. The Sources list that the root `AGENTS.md`, "How to write replies", asks for.
-6. Last, "Do you approve this result?"
+6. Last, ask whether the owner approves the result you showed.
 
 ## Mistakes to avoid
 

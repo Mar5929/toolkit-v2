@@ -6,9 +6,9 @@ Use this reference when Building needs the procedures below. Follow the approved
 
 The team arrangement says whether one session runs the team, or one session coordinates other sessions that each have a team. After the owner authorizes agent delivery, settle the arrangement for the goal. When the owner already chose an arrangement or asked for a team inside this chat, record that choice and proceed without asking again. Record each answer as its own Questions and Answers row.
 
-- When the arrangement has not been chosen and this session has tools to list, read, and message other sessions and to offer new sessions, ask exactly "Do you want one team inside this chat, or do you want me to rename this chat to Main Orchestrator and coordinate other chats that each have their own team?" Check that the tools are there. Never assume it.
-- When the arrangement has not been chosen and those tools are unavailable, say that coordinating other chats is not available in this session. Then ask exactly "Shall I run one team of helpers inside this chat?"
-- After the owner chooses the Main Orchestrator, ask once more, exactly: "Do you want me to archive chats after their task is fully complete, everything is merged and shipped, and you approved?"
+- When the arrangement has not been chosen and this session has tools to list, read, and message other sessions and to offer new sessions, ask the owner to choose between one team inside this chat and a Main Orchestrator coordinating other chats with their own teams. Check that the tools are there. Never assume it.
+- When the arrangement has not been chosen and those tools are unavailable, say that coordinating other chats is not available in this session. Then ask whether to run one team of helpers inside this chat.
+- After the owner chooses the Main Orchestrator, ask whether to archive chats after their tasks are complete, their work is merged and shipped, and the owner approved the results, unless that authorization is already recorded.
 - The owner may change the arrangement at any time. Record the new answer as a new row, and mark the old row "Superseded by Q-xx".
 
 ### One team inside this session

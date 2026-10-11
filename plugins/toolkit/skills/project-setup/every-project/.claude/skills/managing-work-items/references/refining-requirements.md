@@ -26,7 +26,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
    - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
    - For an existing work item with open questions, say in one line what is settled, and then ask the first open question again. Never start the interview over.
 2. Read existing decisions and documentation for the affected area. With Notion memory, use `managing-project-memory` for wiki retrieval and relevant pending captures. Other choices use `DECISIONS.md`, the area document in `system/` and `system/constraints.md`. Read related work items with `references/work-tracker.md`. File each new source before you use it, as "Sources" below says.
-3. Agree the goal first. Ask "So the goal is <one sentence>?" After the owner's yes, write that sentence as the goal in the work item's Overview.
+3. Agree the goal first. Ask the owner to confirm the goal in one clear sentence. After the owner's yes, write that sentence as the goal in the work item's Overview.
 4. Offer a team of helper agents once. Ask after the goal is agreed, and only when both of these are true: the work item is clearly large, and `delivery` is `not-offered`. A work item is clearly large when a part of it meets one of the conditions for a split in "Roadmap, tasks, and sub-items" below.
    - Ask once whether the owner wants a team of helper agents to build the work item, and record the answer in `delivery`.
    - A sub-item takes its parent's answer.
@@ -63,7 +63,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
    - Never change an Original verbatim requirement. Add the owner's new words after it, with the date and the Q-ID.
    - When a shared record depends on the old answer, route its correction as step 6 says, preserving the original evidence and replacement link.
    - After the requirements were approved, a changed requirement and a new requirement each need the owner's yes for that requirement only.
-     - Add the row "Do you approve the change to R-02?" for a changed requirement, or "Do you approve R-05?" for a new one, and ask it.
+     - Add a row asking for approval, for example "Do you approve the change to R-02?" for a changed requirement, or "Do you approve R-05?" for a new one, and ask it.
      - While that row is open, that requirement is not approved. Design nothing, build nothing, and test nothing from it.
      - The other requirements stay approved, and `requirements_approved` stays as it is.
      - A design that the change affects goes back to Designing.
@@ -80,10 +80,10 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 10. Check that the requirements are ready. Do this check before you ask for approval, and after any change to an approved requirement. Start the requirements analyst helper, with `requirements-analyst-brief.md`. Then handle its findings:
     - When a finding needs wording that changes nothing the owner asked for, fix the wording yourself, and say so in one line.
     - When a finding would change what the owner asked for, make it a question with your recommendation.
-    - When there are more than three findings, give them to the owner as one numbered list.
+    - Present the findings in a form the owner can review clearly.
 11. Ask for the owner's yes on the requirements.
     - Show the goal, each requirement in one line with its Acceptance Criteria, and the next State you recommend, with the reason. The next State is Designing or Building. `references/lifecycle-rules.md`, section "Status and State", says when to recommend each.
-    - Add the row "Do you approve these requirements?", with every `R-xx` in its Affects column, and end the reply with exactly that question.
+    - Ask whether the owner approves the requirements you showed. Record the question in Questions and Answers, with every `R-xx` in its Affects column.
     - After the owner's yes, first save the owner's words and the date in that row, with Decision? `yes`. Then do these three things:
       - Set `requirements_approved` to `YYYY-MM-DD by <name>`.
       - Move the work item to the next State that the owner agreed to.
@@ -126,7 +126,7 @@ A source is anything the project was given, such as a transcript, a document, a 
   - It needs its own design.
   - It is large enough that the owner will want to track it by itself.
 - Never split off a single step. A single step is a task.
-- Show the split in one message, and ask "Shall I split WI-012 into these 4 sub-items?", with the real ID and number. The owner's yes covers the split only. For each sub-item, the message gives:
+- Show the split in one message, and ask for approval, for example "Shall I split WI-012 into these 4 sub-items?", with the real ID and number. The owner's yes covers the split only. For each sub-item, the message gives:
   - its title;
   - a one-line reason;
   - the parent's phase it goes under, for a level-2 sub-item only;

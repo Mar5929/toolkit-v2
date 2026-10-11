@@ -132,6 +132,8 @@ Whenever you report what waits on the owner or what other people owe, name each 
 
 Stop and ask the owner before each of these six steps. Record the owner's authorization and what it covers. An explicit instruction or an earlier approval for the same scope counts; ask only for an approval that is still missing. Authorization for one step does not authorize another step or a changed result.
 
+When approval is missing, ask a clear question that names what the owner is approving. Choose wording that fits the situation; example questions are not required phrases. Record the question and the owner’s answer with their scope.
+
 1. Approving the requirements, at the end of Refining Requirements.
 2. Choosing the design, at the end of Designing.
 3. Approving the finished result, at the end of the Testing Loop, after the separate checker has tested it.
@@ -164,8 +166,8 @@ Use your judgment to decide from the owner's request whether the work item is sm
    - Say the goal in concise sentences, what you will hand over, and how you will check it.
    - Name anything you are unsure of.
    - Name the project phase that the work item goes under. When the project has no phases yet, name the phases that you propose, as "Phases" above says.
-   - Say "This is small, so I will skip the interview and ask you one question at the end."
-   - End the reply with exactly "Is that right?"
+   - Explain that this small work item takes the short path, skipping the interview and combining result approval and closure in one question at the end.
+   - Ask the owner to confirm the request as you described it.
 
    Add that question as a Questions and Answers row, and set `waiting_on` to the owner, before the reply ends.
 3. Record the owner's answer in that row, with the owner's words and the date.
@@ -173,7 +175,7 @@ Use your judgment to decide from the owner's request whether the work item is sm
    - After a correction, change the work item, and play the request back again in the same form.
 4. Build the tasks, as `references/building.md` says. When every task is done, move the work item to the Testing Loop.
 5. Check the result, as `references/testing-loop.md`, section "A small work item", says. That section says when the separate checker runs, and what takes its place when it does not run.
-6. Ask one closing question, and close the work item after the owner's yes, as `references/closing.md`, section "Closing a small work item", says. That section gives the exact question. The owner's yes approves the result, and it is also the yes to mark the work item Done.
+6. Ask one closing question, and close the work item after the owner's yes, as `references/closing.md`, section "Closing a small work item", says. That section gives what the question must cover. The owner's yes approves the result, and it is also the yes to mark the work item Done.
 
 When the owner changes or adds a requirement and the work item is still small, record the change as `references/refining-requirements.md`, step 7, says. In place of the approval question of that step, and of the requirements analyst helper that the full path starts after such a change, play the change back in the form of step 2.
 

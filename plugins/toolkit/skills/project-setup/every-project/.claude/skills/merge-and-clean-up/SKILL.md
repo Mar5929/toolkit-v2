@@ -210,7 +210,7 @@ Verify four things:
   - the cleanup result;
   - whether the Recent History row was saved. When that save failed, start that line with "Not saved".
 
-  End with the one question for the owner, or with the exact words that continue, for example "Say 'finish WI-007' and I'll close the work item."
+  State any decision the owner must make or the next available action.
 
 ## Mistakes to avoid
 

@@ -63,7 +63,7 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
    - When there are several lockfiles, ask which package manager to use before you show the plan.
    - When `command -v <installer>` prints nothing, write "`<installer>` is not installed, so the install is skipped." Never install the installer.
 
-   Include, word for word, the line about the shared main checkout that is true. "Mistakes to avoid" below gives the two lines. Then wait for a yes.
+   Explain that the plan switches and resets branches in the shared main checkout, and state the evidence that no other session is working there. Then wait for approval of that plan.
 5. **Do the plan**, in this order:
    1. Run `git checkout <default-branch>`.
    2. Run `git reset --hard <upstream>` for the current branch, `git branch -f <branch> <upstream>` for each other branch to reset, and `git branch -D <branch>` for each branch to delete.
@@ -75,7 +75,7 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
    - the commits discarded, each with its short id and subject;
    - whether the install ran and changed anything, or why it was skipped.
 
-   End with the one question the owner must answer, or else the exact words the owner can say to start the next step.
+   State any decision the owner must make or the next available action.
 
 ## Mistakes to avoid
 
@@ -83,9 +83,7 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
   1. The owner asked for the reset in the owner's own words.
   2. `git worktree list` shows no other worktree, or the owner confirmed that no other session is working in this repository.
 
-  Put one of these two lines in the plan, word for word, whichever is true:
-  - "This switches branches and resets them in the project folder that other sessions share. No other worktree exists."
-  - "This switches branches and resets them in the project folder that other sessions share. You confirmed no other session is working here."
+  State in the plan that the reset affects the shared main checkout, and whether no other worktree exists or the owner confirmed that no other session is working there.
 - Git refuses to delete a branch that another worktree has checked out. Tell the owner, and leave the branch and the worktree as they are. Never remove a worktree to get past the refusal.
 - `work-items/`, `memory/`, and `.obsidian/` are Git-ignored, so the reset leaves them as they are. Never run `git clean` with `-x` or `-X`, because it deletes them and Git cannot bring them back.
 - Never run `git pull`, never use `--force` on `git fetch`, and never push.

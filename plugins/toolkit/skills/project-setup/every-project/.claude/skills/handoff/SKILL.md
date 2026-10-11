@@ -89,13 +89,13 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    Three cases change this step:
    - When the verifier fails to start or returns no report, say so in one line, and write the prompt anyway. Say inside the prompt that it was not checked.
    - When no tool can start a helper, check the draft yourself with the brief, and say inside the prompt that no independent check ran.
-   - Start a second verifier only when you rewrote a whole section. Give it the Goal section and each rewritten section under "Draft prompt". Never start a third verifier.
+   - Recheck changes that affect the goal or supported claims. Give the verifier the Goal section and changed sections under "Draft prompt". Continue until the claims are supported or clearly marked “not confirmed”; report checks that could not run.
 7. **Show the result**, with its parts in this order:
    1. The `session-summary` table. Show it only when the owner also asked for a recap.
    2. The saves: first anything that was not saved, then what was saved and where.
-   3. The check results. The first line is "Checked the handoff prompt: <n> fixed, <n> not confirmed." Then comes one line for each claim that you fixed, one line for each claim labeled "not confirmed", and one line for each check that was skipped.
+   3. The check results. Briefly report what was corrected, what remains “not confirmed”, and which checks were skipped.
    4. The prompt in one fenced block, with the fixed first line on top.
-   5. The last line: "Clear the context, then paste this prompt."
+   5. Instructions for starting the next session with the prompt.
 
    When a save failed, do three things:
    - Start its line with "Not saved" when the write failed, or with "Saved but not verified" when what you read back differs from what you wrote.
