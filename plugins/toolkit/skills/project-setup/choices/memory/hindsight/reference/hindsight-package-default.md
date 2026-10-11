@@ -11,13 +11,14 @@ Offer this package after confirming the server and bank, before choosing a templ
 - Offer the code survey on for software projects after its pre-storage security checks pass. A background agent reads the code and saves structural findings; this is separate from deliberate saves under the owner's memory criteria. Offer it off for a project without code.
 - Git history is not imported.
 - The agent excludes secrets and information whose storage could compromise system, product, or project security before sending records to Hindsight. Ordinary contact details may be saved when they meet the memory criteria. Automatic redaction is off by default; offer a filter only after verifying that it matches this policy.
-- Each project uses its own bank on the owner's server.
+- Each project uses its own recorded bank on the owner's server. The project's Claude Code and Codex sessions share that bank. Broader sharing is an explicit owner choice, agreed during the connection interview.
+- The shared service uses its verified working models and a provisional capacity and local-retrieval profile. [Recommended service settings](hindsight-server-settings.md) explains the profile, measured limits, authentication, and backup checks. A project's acceptance does not authorize changes affecting other banks.
 
 Ask: "These are our normal Hindsight settings. Do you want them, or any changes?"
 
 ## Costs and limits
 
-The saved records, observation building, page refreshes, and startup summaries use the owner's server's model provider. On this server that is OpenAI through the owner's ChatGPT subscription. A code survey also uses the Claude or Codex allowance. Only deliberately saved records and survey findings are available; an omitted fact is not remembered. Model extraction and synthesis can lose detail or produce wrong conclusions, so memory remains evidence to check.
+The saved records, observation building, page refreshes, and startup summaries use the owner's server's model provider. On this server that is OpenAI through the owner's ChatGPT subscription. A code survey also uses the Claude or Codex allowance. Only deliberately saved records and survey findings are available; an omitted fact is not remembered. Startup summaries, observations, and knowledge pages can lose detail or repeat old or mistaken claims. Check changeable claims against current project records and distinguish owner decisions from generated conclusions.
 
 ## Connection settings
 
@@ -52,6 +53,18 @@ Put these under `banks`, under the resolved bank ID. Read existing path and harn
 
 Keep the add-on's seeded knowledge pages on. Use its current defaults for settings not named here, including survey refresh frequency; report any inherited setting that conflicts with the owner's choice. The first-message hook timeout is 120 seconds in both hosts, allowing the summary and fallback budgets. Recheck it after installation.
 
+The 90-second reflection and 15-second fallback budgets are deadline allowances, not expected latency. The 2,500-token `recallOptions` limit applies to fallback Recall, not the startup Reflect context. [Memory-flow verification](hindsight-verification.md) checks actual generated reflection and scheduled page behavior; fallback alone does not pass the startup-summary check.
+
+## Complete startup delivery
+
+After installing the add-on, set `additionalContextLimit: 5000` on its existing Codex `UserPromptSubmit` command handler that returns startup memory. This is a native host setting, not a field in `coding-agent.json`. Preserve its command, other handlers and existing higher approved allowances; do not create a duplicate Hindsight hook. Check support in the installed Codex version, have the owner trust the changed entry, and verify actual delivery. Recheck the allowance and deadline after add-on updates.
+
+Codex's [large-output documentation](https://learn.chatgpt.com/docs/hooks#large-hook-output) describes the default approximate 2,500-token threshold and supported allowance control. The selected 5,000-token value passed this project's complete-delivery check; it is not an unlimited-output guarantee. Keep startup context relevant rather than raising the allowance without assessing its size and usefulness.
+
+Claude Code has a fixed 10,000-character limit per hook context string. It saves longer output to a file and supplies a preview; [its hook documentation](https://code.claude.com/docs/en/hooks#json-output) provides no setting to raise that limit. Install the delivered memory rule and its root-guide pointer so both agents read a supplied complete-output file before answering or relying on that memory. Verify the read in a normal session where file tools are available. A preview or successful Reflect call alone does not establish complete delivery.
+
+The recommended Reflect mission includes a startup-only compact briefing request. Preserve complete relevant facts, exact settings, qualifications and sources; brevity must not cut off a setting or sentence. The request is a soft target, not an enforced output limit, and does not replace native full-output recovery. Read back the effective mission and keep the owner's non-startup instructions intact.
+
 ## Bank settings
 
 Apply and verify these on the bank as well as in the add-on's `defaultBankConfig`. Set the bank's `retain_extraction_mode` to `"concise"` in the combined bank configuration too; that field does not belong in `defaultBankConfig`. That add-on field fills missing overrides; it does not replace explicit existing bank values. Owner-approved values take precedence over overlapping template values.
@@ -67,6 +80,12 @@ Each writer, including a code survey or automatic import, must enforce the same 
 The bundled `sensitive_data` filter also redacts personal identifiers and is not a secrets-only filter. Before offering automatic redaction, check the installed server's supported settings and verify that qualifying contact details pass while dummy secrets are removed, using a non-storing check when available. If no compatible filter is supported, report that limit and retain the agent's pre-save exclusion rule. Existing approved filters remain until replacement settings are verified; do not silently disable them. [Hindsight Memory Defense documentation](https://hindsight.vectorize.io/developer/memory-defense) describes the bundled filter and its limits.
 
 The three missions, labels, additional pages, and reflect directives come from the selected template or the owner's instructions. See `hindsight-template-for-the-project.md`.
+
+## Optional retrieval tuning
+
+When observation entity expansion adds cost without useful evidence, offer the measured starting option `reflect_default_options.reflect_search_observations_include_entities: false` on this bank. Read and merge the existing `reflect_default_options` map rather than replacing it. Verify support in the installed server and compare complete answers and provenance before accepting the change. This disables entity expansion for Reflect's observation search; it does not disable raw-memory entity enrichment. It is an optional bank choice, not a required default or a proven timeout fix.
+
+Explicit options supplied by a Reflect call or its model-selected tools can override bank defaults. Check the actual request and trace when tuning evidence budgets. Knowledge-page refresh uses its own trigger options and does not inherit this bank's `reflect_default_options`. Preserve raw recall chunks: disabling them was not validated as a quality-preserving remedy in the investigation. Use [known problems](hindsight-known-problems.md) to locate the cost before proposing a change.
 
 ## Guide shown to the agent
 
