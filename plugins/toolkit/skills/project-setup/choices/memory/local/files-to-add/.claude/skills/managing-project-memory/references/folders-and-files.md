@@ -1,12 +1,12 @@
-# Memory folder, file names, and sizes (local files)
+# Memory folder, file names, and subjects (local files)
 
-This file shows the `memory/` folder. It says how to name a memory file, how large a file may be, how to make, rename, retire, or delete a file, and how to change the project's Current State. Open it before you do one of those things.
+This file shows the `memory/` folder. It says how to name a memory file, how to keep each file focused, how to make, rename, retire, or delete a file, and how to change the project's Current State. Open it before you do one of those things.
 
 ## Contents
 
 - The memory folder
 - File names and prefixes
-- Size limits
+- Keeping files focused
 - Making a file from the template
 - Renaming, retiring, and deleting
 - The project's Current State
@@ -44,10 +44,10 @@ The prefix of a file name is the type of the memory record. There are four types
 - A file with none of these four prefixes is left out of the index.
 - `CURRENT_STATE.md` and `MEMORY.md` have fixed names and none of the four prefixes. The template has the fixed name `project_topic_template.md` and is not a memory record.
 
-## Size limits
+## Keeping files focused
 
-- A file for one subject holds about 20 sections or 300 lines at most. A bigger file is two subjects.
-- A file name is at most 60 characters before `.md`.
+- Keep each file focused on a subject a later session can find and use. Split distinct subjects when separate records would be clearer, and link them.
+- Use a concise file name that identifies the subject.
 
 ## Making a file from the template
 
@@ -68,7 +68,7 @@ The prefix of a file name is the type of the memory record. There are four types
 
 ## Renaming, retiring, and deleting
 
-- **Rename.** Rename the file, change `name`, and set `updated`. When the prefix changes, change `metadata.type` too. Links point at the file name. So search for the old name, and change each link and each `supersedes:` line to the new name. `searching.md`, section "Links to a file", gives the search.
+- **Rename.** Rename the file, change `name`, and update the header metadata as `record-format.md` says. When the prefix changes, change `metadata.type` too. Links point at the file name. So search for the old name, and change each link and each `supersedes` or `superseded_by` field to the new name. `searching.md`, section "Links to a file", gives the search.
 - **Retire or replace.** Leave the file where it is, and mark it the way `record-format.md`, section "Marks for what is not current", says. The index leaves the file out from the next session start.
 - **Delete.** Delete only the one file:
 
@@ -80,9 +80,9 @@ The prefix of a file name is the type of the memory record. There are four types
 
 ## The project's Current State
 
-`memory/CURRENT_STATE.md` holds the project's Current State. `managing-project-memory` says what each part of it holds, and the limits of each part. The skill that asked for the change decides what a line says.
+`memory/CURRENT_STATE.md` holds the project's Current State. `managing-project-memory` says what each part of it holds and how to keep it useful for the next session. The skill that asked for the change decides what a line says.
 
 - When a line changes, replace it. Never add a second line beside the old one.
 - Keep every heading, also the heading of an empty part. An empty part holds "None."
-- Set the "Last updated:" line in the same edit. The session-start hook reads the date after "Last updated:", written as `YYYY-MM-DD`, to tell when the file is old.
+- Set the "Last updated:" line in the same edit, with its date written as `YYYY-MM-DD`, so a later session can judge freshness against current records.
 - When the file is missing, do not create it. Tell the owner, and suggest "check the setup" with `project-setup`.

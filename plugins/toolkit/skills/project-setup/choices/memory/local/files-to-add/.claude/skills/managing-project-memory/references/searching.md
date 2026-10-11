@@ -80,8 +80,8 @@ find "$MAIN/memory" -maxdepth 1 -name '*_*.md' ! -name '*_template.md' -exec awk
 
 ## Links to a file
 
-This command finds every file that links to `project_billing.md`, or names it in `supersedes:`:
+This command finds mentions of the filename or its stem, including body links and scalar or list entries in `supersedes` and `superseded_by`. Read each match before changing it, because a longer filename can share the stem.
 
 ```bash
-grep -rlF --include='*.md' 'project_billing.md' "$MAIN/memory"
+grep -rlF --include='*.md' 'project_billing' "$MAIN/memory"
 ```

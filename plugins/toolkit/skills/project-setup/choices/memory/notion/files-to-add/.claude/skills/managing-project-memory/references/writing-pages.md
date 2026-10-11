@@ -6,6 +6,7 @@ This file says how to create, change, mark, link, merge, and delete a page of Me
 
 ## Contents
 
+- Metadata on every change
 - A new page for a subject
 - Adding to a page
 - A lesson
@@ -17,9 +18,13 @@ This file says how to create, change, mark, link, merge, and delete a page of Me
 - Linking a page to work items
 - Merging two pages about one subject
 
+## Metadata on every change
+
+Read the page's properties and body before a change. Maintain the metadata using `database-layout.md`, section "Where each part of a memory record goes". Read and merge Other fields rather than replacing its existing object. Preserve useful earlier provenance in Source note and the body. Update Saved and `modified_by` on each affected page, including lessons, runs, links, retirement, restoration, and supersession. Fill missing metadata from evidence without inventing history. Read the affected properties and body back before reporting the change as saved.
+
 ## A new page for a subject
 
-First choose the key. The key is `<prefix>_<slug>`: the prefix is the type of the memory record (`user`, `project`, `reference`, or `event`), then lower-case words joined by underscores, naming the subject (`project_client_plans`). The whole key, with its prefix, is at most 60 characters. An event that happened once ends its key with its date, as in `event_client_meeting_2026-10-05`.
+First choose the key. The key is `<prefix>_<slug>`: the prefix is the type of the memory record (`user`, `project`, `reference`, or `event`), then lower-case words joined by underscores, naming the subject (`project_client_plans`). Keep the key concise and clear. An event that happened once ends its key with its date, as in `event_client_meeting_2026-10-05`.
 
 Before you make the page, check that no page has the key. `searching.md`, section "A page by its key", gives the call.
 
@@ -39,7 +44,7 @@ The file `record.json` holds:
    "Keywords": {"rich_text": [{"text": {"content": "user_team_availability"}}]},
    "Synopsis": {"rich_text": [{"text": {"content": "Tom away to 2026-10-20; Sarah covers approvals"}}]},
    "Kind": {"select": {"name": "note"}},
-   "Tags": {"multi_select": [{"name": "user"}]},
+   "Tags": {"multi_select": [{"name": "user"}, {"name": "workflow"}]},
    "Status": {"select": {"name": "accepted"}},
    "Source": {"select": {"name": "manual"}},
    "Author": {"rich_text": [{"text": {"content": "<owner name>"}}]},
@@ -47,7 +52,8 @@ The file `record.json` holds:
    "Project": {"relation": [{"id": "<this project's row in Lore's Projects database>"}]},
    "Saved": {"date": {"start": "2026-09-30"}},
    "Review By": {"date": {"start": "2026-10-21"}},
-   "Source note": {"rich_text": [{"text": {"content": "The owner, 2026-09-30, kickoff call"}}]},
+   "Source note": {"rich_text": [{"text": {"content": "The owner, 2026-09-30, kickoff call, IML-3"}}]},
+   "Other fields": {"rich_text": [{"text": {"content": "{\"modified_by\":\"Claude Code\",\"context\":\"Approval coverage prevents a release delay.\",\"source_kind\":[\"stated\"],\"tags\":[\"availability\"]}"}}]},
    "Authorization": {"rich_text": [{"text": {"content": "Approved by the owner on 2026-09-30"}}]},
    "Last verified": {"rich_text": [{"text": {"content": "2026-09-30"}}]},
    "Work item IDs": {"rich_text": [{"text": {"content": "IML-3"}}]},
@@ -57,7 +63,7 @@ The file `record.json` holds:
 
 - When the page relates to no work item, leave out Work item IDs and Work items. When the work items are not in Notion, leave out Work items alone.
 - When the fact has no end, leave out Review By.
-- Notion sets the page's created time. Saved is the date of the last change.
+- Notion sets the page's created time. Saved is the date of the last change. Fill Other fields with the actual editor, project context, and derivation values. Replace the example Agent and `modified_by` when another host makes the page. Unset Supersedes and Superseded by mean no replacement.
 - Synopsis states the fact itself, with its dates, in one short line.
 
 ## Adding to a page
@@ -70,7 +76,7 @@ The file `record.json` holds:
      {"old_str":"## Gotchas and lessons","new_str":"## Export format\n**Remember:** …<br>**Why:** …<br>**How to apply:** …<br>**Evidence and limits:** …\n## Gotchas and lessons"}]}}
    ```
 3. Update the page's columns:
-   - Set Saved to today.
+   - Maintain the metadata as "Metadata on every change" says.
    - Set Authorization to what allowed the change.
    - When the subject now covers more, change Synopsis.
    - Set Review By to the earliest "Check or remove by" date that the page holds. When no such date is left, clear Review By.
@@ -101,7 +107,7 @@ Add a run as the first row under the header row, with one `update_content` call.
   {"old_str":"<tr><td>Date</td><td>Who ran it</td><td>What ran</td><td>Result</td><td>Problems and fix</td></tr>","new_str":"<tr><td>Date</td><td>Who ran it</td><td>What ran</td><td>Result</td><td>Problems and fix</td></tr>\n<tr><td>2026-10-05</td><td>agent</td><td>Weekly account load</td><td>1,204 rows loaded, 3 rejected</td><td>3 rows had no region; corrected and loaded</td></tr>"}]}}
 ```
 
-Then set Saved to today.
+Then maintain the metadata as "Metadata on every change" says.
 
 The page of a new job gets the table with its header row and its first run.
 
@@ -109,16 +115,20 @@ The page of a new job gets the table with its header row and its first run.
 
 1. Replace the old text in its section with the new text. The old wording does not stay beside the new text.
 2. Put the new source and date in the section's Evidence and limits line.
-3. Set Saved to today.
+3. Maintain the metadata as "Metadata on every change" says. Keep the same page and created time for ordinary corrections or added detail. Set Last verified only when the fact was checked against its source.
 
 ## Replacing a page
 
-1. On the old page, set Status "superseded", and set Superseded by to the new page's key.
-2. On the new page, add the old page to the Supersedes relation. Keep every page that is already in the relation.
+Make a separate replacement page and retain the earlier decisions or facts as history. When the earlier page also holds still-current material, mark and link the replaced section and keep the page accepted. Set the reciprocal properties in either case. When the whole earlier page is replaced, follow these steps.
+
+1. On the old page, set Status "superseded", and add the new page's key to Superseded by. Keep its existing keys: write one key as text, or a JSON array of keys when there are several. Keep its body and evidence, and add a link to the replacement at the start of the body.
+2. On the new page, add the old page to the Supersedes relation and link it as superseded history in the body. Keep every page that is already in the relation. The payload below illustrates the relation shape; include all existing IDs in the real payload.
 
    ```bash
    ntn api v1/pages/<new-page-id> -X PATCH -d '{"properties":{"Supersedes":{"relation":[{"id":"<old-page-id>"}]}}}' < /dev/null
    ```
+
+3. Maintain the metadata on both pages and read both pages' properties and bodies back. Verify the new page points to the old page and the old page points to the new page; report any incomplete save and finish the missing side before declaring supersession saved.
 
 A page with the wrong prefix is replaced the same way. Make a new page under the right key, and then replace the old page.
 
@@ -160,4 +170,4 @@ Find a work item's page id with `managing-work-items`.
 1. Add each section of the other page to the kept page, before `## Gotchas and lessons`, with one `update_content` call. The lessons of the other page go with its sections, and each section keeps its source.
 2. Join the two pages' Work item IDs lists and Work items lists, with no repeats.
 3. Replace the other page, as "Replacing a page" says.
-4. Update the kept page's Synopsis and Saved.
+4. Update the kept page's Synopsis and both pages' metadata. Join useful provenance and retrieval tags without dropping either page's evidence or unrelated Other fields keys.

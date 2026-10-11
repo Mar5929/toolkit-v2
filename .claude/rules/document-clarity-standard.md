@@ -72,7 +72,7 @@ A helper agent is an agent started for one job. Helper agents and Codex do not g
 - When one point needs several rules, give the main rule first. Then give each special case on its own line.
 - Decide whether each instruction is exact or general.
   - An exact instruction is a command, a name, a number, the form of an ID, or words that the owner must see. Keep an exact instruction exactly as it is written.
-  - A general instruction covers a class of cases. State a general instruction in one sentence, and then give two or three examples marked "for example".
+  - A general instruction covers a class of cases. State a general instruction in one sentence, and add examples marked "for example" when they help the reader apply it.
 - When you point to another file, say what is in the file and when to open it. Never leave a file name where the instruction should be.
 - When an instruction would look arbitrary, give the reason in one clause.
 

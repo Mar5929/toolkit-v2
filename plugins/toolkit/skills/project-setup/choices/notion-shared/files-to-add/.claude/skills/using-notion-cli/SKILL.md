@@ -27,15 +27,13 @@ This skill says how to run each call. It never says what to store. `managing-wor
 
 ## In Codex
 
-The Codex sandbox is the closed area where Codex runs commands. It blocks network access and the keychain, so `ntn` fails inside the sandbox with a sign-in error or a network error, even when the owner is signed in.
+Follow the active session's network, credential access, and approval settings. Some Codex environments restrict the network or keychain, so a call may report a sign-in error even when the owner is signed in. Diagnose access before asking the owner to sign in again.
 
-- Run each `ntn` command as its own escalated command. An escalated command is a command that Codex runs outside the sandbox.
-  - Keep the command's `| jq` filter in the same command. `jq` only reads, and the escalation covers the whole line.
-  - Never join two `ntn` calls with `&&`, `;`, or a loop.
-  - Never join an `ntn` call and a file write with `&&`, `;`, or a loop.
-- Ask for escalated permissions by setting `sandbox_permissions` to `require_escalated`, and give a one-line reason, for example "Read this project's page in Notion."
-- Never change the Codex sandbox mode for the whole session.
-- With approvals turned off (`codex exec`), Codex refuses the escalation. Then show the owner the exact command, ask the owner to run it in a terminal, and wait for its output.
+- Run each `ntn` command separately. Keep its `| jq` filter in the same command.
+- Never join two `ntn` calls, or an `ntn` call and a file write, with `&&`, `;`, or a loop.
+- When the active settings require and permit approval, use the host's supported permission mechanism and give a one-line reason, such as "Read this project's page in Notion." When escalation is forbidden, do not request it.
+- Never change the Codex sandbox mode for the whole session to get past an access failure.
+- When a required call is blocked and no permitted access is available, show the owner the exact command to run in a terminal and wait for its output before doing dependent work.
 
 ## Any Notion write
 

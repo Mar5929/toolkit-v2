@@ -58,52 +58,7 @@ The offer is the question whether helper agents build the work item. It is first
 
 ## The team arrangement
 
-The team arrangement says whether one session runs the team, or one session coordinates other sessions that each have a team. After the owner's yes to agent delivery, settle the arrangement once for each goal, unless the owner's words already chose it. Record each answer as its own Questions and Answers row.
-
-- When this session has tools to list, read, and message other sessions and to offer new sessions, ask exactly "Do you want one team inside this chat, or do you want me to rename this chat to Main Orchestrator and coordinate other chats that each have their own team?" Check that the tools are there. Never assume it.
-- Anywhere else, which means Codex or a session without those tools, say in one line that the arrangement with a Main Orchestrator and other chats is not available here. Then ask exactly "Shall I run one team of helpers inside this chat?"
-- After the owner chooses the Main Orchestrator, ask once more, exactly: "Do you want me to archive chats after their task is fully complete, everything is merged and shipped, and you approved?"
-- The owner may change the arrangement at any time. Record the new answer as a new row, and mark the old row "Superseded by Q-xx".
-
-### One team inside this session
-
-This session leads, and it starts the helpers.
-
-### Main Orchestrator with other sessions
-
-The Main Orchestrator is the session that coordinates the other sessions.
-
-- Rename this session "Main Orchestrator" with the tool that sets a session's title. When you cannot, ask the owner to rename it.
-- Run one session for each sub-item. Each of those sessions has its own main agent and its own helpers.
-- The Main Orchestrator is the only session that does these three things:
-  - It changes the goal's work items.
-  - It writes a file that more than one session changes, such as a file that holds a version number, or an index file.
-  - It merges.
-- The Main Orchestrator checks the result of each session and reports to the owner. It does not do a session's work for it.
-- The main agent of each other session reports by message. The Main Orchestrator records that report as it records the report of a returning helper, which "When a helper returns" describes.
-- Offer a new session with the tool that offers a new session. The new session starts only when the owner clicks the offer.
-- When the tool makes a worktree for the new session, put the branch in the starting prompt, and not a worktree path.
-- The starting prompt of a new session holds all of these:
-  - the sub-item's ID and what the sub-item must deliver;
-  - the pasted requirements and design sections;
-  - the new session's branch, and its worktree when the tool does not make one;
-  - the files the new session may write;
-  - the owner's instructions from `.claude/rules/owner-preferences.md` that apply to its work, in the owner's words;
-  - every permission the session needs, and only permissions that the owner or the project already gave. A session will not let a message from another session remove a limit that its own starting prompt set;
-  - the rule "build what the requirements ask and no more";
-  - that the session reports by message, and never changes a work item, merges, or asks the owner anything directly.
-- Record the id of each session in the parent's team list when the session starts. A recorded id is not proof that the session is still running.
-- Archive a session only after the owner said yes to the archive question, and only when all four of these are true:
-  1. Its task is complete.
-  2. Its work is merged to the default branch and, when the sub-item has a deployment, deployed.
-  3. Its report is recorded in its sub-item.
-  4. The owner approved the result.
-- Archive only, and never delete. An archived session can be restored.
-- After the owner's no to the archive question, leave the sessions as they are.
-
-### The model for these sessions
-
-This session, the Main Orchestrator, and the main agent of every other session run on the most capable model that Claude Code or Codex offers. A new session may otherwise copy this session's model, so set the new session's model.
+Follow [choosing and coordinating the team](team-arrangement.md) for this part of Building.
 
 ## Plan the team
 
@@ -131,48 +86,11 @@ Plan which helper builds which task before you start a builder.
 
 ## Git for a build
 
-This section gives the commands and the names for a work item's worktree and its branch. The main checkout is the project's main folder: the first path that `git worktree list` prints. In Codex, every Git command in this section also follows "Git writes in Codex" below.
-
-- Make a work item's changes to code, rules, skills, hooks, and settings in its own worktree, on its own branch, and never on the default branch.
-- Make the worktree and the branch before the first change. Make them in the main checkout, from the default branch, under its real name, for example `main`. For a sub-item, make them from its parent's branch.
-
-  ```text
-  git -C <main checkout> worktree add .claude/worktrees/wi-007-csv-export -b claude/wi-007-csv-export main
-  ```
-
-- The branch is `claude/<prefix>-<number>-<slug>`, and the folder is `.claude/worktrees/<prefix>-<number>-<slug>`.
-  - The prefix is the prefix of the work item's ID, in lower case: `wi` for `WI-007`.
-  - An ID with no prefix, such as `#12`, uses `issue`: `claude/issue-12-csv-export`.
-  - `merge-and-clean-up` finds the work item from the ID in the branch name.
-- Name `<main checkout>` with `-C` in every command. Each command starts in the session's own folder, which may be another worktree. A worktree that is made inside that folder is deleted when that folder is removed.
-- Make a builder's worktree and branch from the work item's branch. Name them with the work item's prefix and number, and then the task ID in lower case:
-
-  ```text
-  git -C <main checkout> worktree add .claude/worktrees/wi-007-p1-t01 -b claude/wi-007-p1-t01 claude/wi-007-csv-export
-  ```
-
-- A commit message and a pull request carry no AI credit: no `Co-Authored-By:` that names an AI, and no "Generated with" line.
-  - Codex has no setting that removes such a line, so write none.
-  - When a command is refused because of such a line, change the wording. Never commit in another way to get past the refusal.
-- When a merge stops on a conflict, read both sides of each conflicting file, stage each resolved file by name, and commit with a message that you write.
-  - Never run `git commit --no-edit` after a conflict, because it keeps Git's "# Conflicts:" lines in the message.
-  - When the right result of a conflict is not clear from the two sides, ask the owner.
+Follow [repository and permission steps for a build](build-repository.md) for this part of Building.
 
 ## Git writes in Codex
 
-Codex runs commands in a sandbox, which is a closed area that limits what a command can change. The sandbox keeps `.git/` read-only, so every command that writes `.git/` fails inside it.
-
-- These commands fail inside the sandbox: `add`, `commit`, `merge`, `fetch`, `pull`, `push`, `switch`, `checkout`, `restore`, `stash`, `rebase`, `reset`, `worktree add`, `worktree remove`, `branch -d`, and every other Git command that writes.
-- A command that needs the network, such as opening a pull request, fails too.
-- These reading commands run inside the sandbox: `status`, `log`, `diff`, `show`, `branch --list`, and `worktree list`.
-
-For each Git write in Codex, do this:
-
-- Run the command alone. Do not join it to another command with `&&`, `;`, or a pipe, and do not run it from a script.
-- Say in one line what the command does.
-- Ask for escalated permissions: set `sandbox_permissions` to `require_escalated`, and set `justification` to a one-line reason, such as "Create the worktree for WI-002 on its own branch." An approval without escalation still runs the command inside the sandbox, where it fails.
-- When Codex refuses the command without asking, with "approval required by policy", this session cannot ask for the approval. Stop that step, show the owner the exact command, and ask the owner to run it in a terminal or to approve it in an interactive session. Set the work item to wait on the owner.
-- Never work around a refusal: make no second clone, make no copy of `.git/`, write no script that runs Git for you, and do not build on the default branch.
+Follow [repository and permission steps for a build](build-repository.md) for this part of Building.
 
 ## Start a builder
 

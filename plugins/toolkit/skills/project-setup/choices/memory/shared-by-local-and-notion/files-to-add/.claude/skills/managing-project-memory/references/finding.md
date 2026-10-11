@@ -31,9 +31,9 @@ For a question about what was done or what changed in a period, such as "what di
 
 ## Reading what you found
 
-Read each hit whole, in this turn, and check its status:
+Read each relevant record whole, in this turn, and check its source, evidence, uncertainty, and status. Use memory as context, and verify changeable claims against the current authoritative record or system before acting:
 
-- Current: it is a fact.
+- Current: the record remains in use. Its status does not establish that every claim in it is true.
 - Replaced: answer from the memory record that replaces it.
 - Retired: it is history. Leave it out unless the owner asks for history.
 - Past its "check or remove by" date: say so, and check it before you act on it.

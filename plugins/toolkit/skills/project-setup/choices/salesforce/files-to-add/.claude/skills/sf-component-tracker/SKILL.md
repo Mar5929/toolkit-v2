@@ -105,7 +105,7 @@ When unsure, add the step. A step closed as "skipped" costs less than a missed a
 | Order | Sequence in the file. Use gaps of 10 (10, 20, 30). |
 | Owner | Who runs the step. |
 | Status | Not started, in progress, done, or skipped. |
-| Body | Purpose (one or two sentences), numbered operator instructions, a verification section (SOQL, screenshot, or UI check), and inline scripts in fenced code blocks. |
+| Body | Purpose (concise sentences), numbered operator instructions, a verification section (SOQL, screenshot, or UI check), and inline scripts in fenced code blocks. |
 
 - Put a script (anonymous Apex, SOQL, or command-line commands) in the body itself. Do not link to a file in the repository for a script that fits in the body.
 - Name the task that the step comes from and its work item by ID, for example `WI-031`. Add the work item's link when the work tracker has one.

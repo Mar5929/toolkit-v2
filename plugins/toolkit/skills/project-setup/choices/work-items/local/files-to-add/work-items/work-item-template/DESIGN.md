@@ -42,7 +42,7 @@ work_item: WI-001
 
 #### Approach
 
-<Three to five plain-language sentences explaining the approach, why it fits the goal, and what is reused, changed, or new.>
+<Explain in plain language the approach, why it fits the goal, and what is reused, changed, or new.>
 
 #### End-to-end behavior
 

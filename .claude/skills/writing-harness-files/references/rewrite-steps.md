@@ -47,7 +47,7 @@ When the project requires the owner's yes before a rule, a skill, or a hook chan
    - Correct each thing it reports, and have it read the correction.
 8. Test the file on a reader that knows nothing about the subject. Use a helper agent that is given only the project's root `AGENTS.md` and the file. For a reference file of a skill, the helper also gets that skill's `SKILL.md`, because a reader opens `SKILL.md` first.
    - Give the old version to one such helper and the new version to another, so that neither has seen the other text.
-   - Ask each one what it would do in three to five situations that the file covers, and which words or sentences it could not follow without guessing.
+   - Ask each one what it would do in representative situations that cover the file’s intended behavior, and which words or sentences it could not follow without guessing.
    - The actions for the old version and for the new version must match. Where they differ, the rewrite changed a rule: correct the new file and ask again.
    - Rewrite each word or sentence that the reader of the new version could not follow.
 9. Check the file the way the checklist section says under "Check" (step 6 of `SKILL.md`). Then tell the owner what step 8 of `SKILL.md` asks for, and also: each word you replaced and what replaced it, each heading you renamed, each other file you updated, and each question you could not answer without deciding what a sentence means.

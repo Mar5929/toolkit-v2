@@ -68,4 +68,4 @@ Git stores the link as a link. When the link cannot be made, tell the owner. Nev
 ## Checks after the copy
 
 - `ls -la .agents` shows `skills -> ../.claude/skills`, and `ls .agents/skills` shows the skills.
-- `git status --short` lists the new files, and nothing under `work-items/` or `memory/`, because Git ignores both.
+- `git status --short` lists the new files. `git ls-files -- work-items/ memory/` prints nothing, confirming that Git tracks neither private folder. When the chosen local folder is present, also run `git check-ignore work-items/PROJECT-TASKS.md` or `git check-ignore memory/CURRENT_STATE.md`; each must print its path.

@@ -46,7 +46,7 @@ Use only reading, file search, and web research, and change nothing. Do not appr
 
 Return short bullets, grouped as the question needs:
 
-- **Answer:** what the evidence supports, in two or three sentences.
+- **Answer:** what the evidence supports, in concise sentences.
 - **Findings:** one bullet for each finding, with the label, the link or the file path and lines, and the date. Separate what you opened and checked from what you worked out.
 - **Community claims to check:** the claims that would change the requirements or the design if they were true, and what would confirm or refute each one.
 - **Requirements concerns:** each requirement that is missing something, cannot mean what it says, or could be read two ways. Write "None" when there are none.

@@ -11,7 +11,7 @@ After the brief from `references/handoff-verifier.md`, word for word:
 Draft prompt: <the whole draft below>
 Main checkout: /Users/owner/Projects/acme-billing
 Tracker: local (work-items/ in the main checkout)
-Current State: memory/CURRENT_STATE.md in the main checkout
+Memory: local (memory/CURRENT_STATE.md in the main checkout)
 Sources for claims:
 - "WI-007 is in the Building State": file, WI-007 front matter
 - "Option A is approved": file, WI-007 front matter, `design: approved`

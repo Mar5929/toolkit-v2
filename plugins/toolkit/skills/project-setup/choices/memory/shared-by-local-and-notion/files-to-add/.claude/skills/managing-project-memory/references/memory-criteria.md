@@ -25,13 +25,13 @@ A memory record of the type reference may name one of these records, by its ID a
 
 ## Default test for a memory record
 
-Save a subject in a memory record when all five of these are true:
+Save information when all three of the owner's criteria hold:
 
-- it concerns this project;
-- it has a credible source;
-- it would matter in a future session;
-- it would be costly or unreliable to reconstruct;
-- no other file is the place for it.
+- It contains lasting project-specific facts, people, terminology, decisions, lessons, events, or constraints that another memory record does not already explain.
+- Losing it would cost a later agent real time or understanding.
+- It comes from the owner, or from work done together with the owner.
+
+Apply these criteria after identifying the authoritative record. A qualifying decision still belongs in `DECISIONS.md`; memory may preserve a useful pointer rather than repeat the decision.
 
 Prefer to update a memory record that exists. A new fact goes under a heading in the memory record for the subject it belongs to. Make a new memory record only for a new subject.
 

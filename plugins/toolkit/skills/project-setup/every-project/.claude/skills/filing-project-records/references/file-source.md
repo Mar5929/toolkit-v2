@@ -35,7 +35,8 @@ Filing a source decides nothing and approves nothing. Read the source, and do wh
 | A fact about how the system works today | Write it in `reference/current-system/`, as `reference/AGENTS.md` says. |
 | A term and its meaning | Follow `update-system-doc.md`, section "A glossary term". |
 | An action item: something a named person agreed to do | Save it at once, without asking. It is a task in the work item it belongs to, or a project task with that person as Who does it. A project task is a task that belongs to no work item. Use `managing-work-items`. |
-| A date or a deadline; a fact about a person or the client that fits no row above; a claim nobody checked | Use `managing-project-memory`. |
+| A date or a deadline for current work | Use `managing-work-items` to record it in its work item or project task. With local or Notion memory, also update the installed Current State when the date belongs there. With Hindsight, keep active dates in the tracker. |
+| A lasting fact about a person or the client that fits no row above; a claim nobody checked | With local or Notion memory, use `managing-project-memory`. With Hindsight, follow `.claude/rules/hindsight-memory.md` for qualifying lasting knowledge, preserving the source and whether the claim was checked. |
 
 ## When no work item is open for the source
 

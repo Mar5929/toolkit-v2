@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 'Updates this session''s work items and the project''s Current State, files decisions or sources left unfiled, and writes a checked, self-contained prompt for the next session or checks one the owner provides. Use when the owner ends a session, clears context, asks for a handoff prompt, or asks to check one. For a recap without a handoff, use session-summary.'
+description: 'Keeps this session''s work and project records current, reviews its chosen memory, and writes a checked prompt so the next session can continue. It also checks a prompt the owner provides. Use when the owner ends a session, clears context, asks for a handoff prompt, or asks to check one. For a recap without a handoff, use session-summary.'
 ---
 
 # Handoff
@@ -15,6 +15,9 @@ Two rules apply to every step:
 - Never hold back the prompt because a save or the check failed.
 
 A recap alone, with no handoff, is the job of `session-summary`.
+
+
+Read the memory choice in `PROJECT.md`. For local or Notion memory, use `managing-project-memory` and the installed Current State page. For Hindsight, follow `.claude/rules/hindsight-memory.md` wherever these steps call for memory recall, review, saves, or corrections. Keep current work, blockers, and next actions in the selected tracker and project records; do not create a Current State page or treat its absence as a setup failure.
 
 ## The first line of every prompt
 
@@ -59,12 +62,12 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - **An Open entry in `DECISIONS.md`.** Read the Open entries that this session raised or that name this session's work items. Put each one under "Open questions" in the prompt, with its DEC ID.
 
    When there is nothing to file, say so in one line.
-4. **Update the project's Current State.** The project's Current State is the project's one short page of what is true now. Read and write it with `managing-project-memory`.
+4. **Save the context for the next session.** In a Hindsight project, keep this session's next actions and outstanding blockers in the selected tracker and project records, review lasting knowledge under the Hindsight rule, and continue to step 5. With local or Notion memory, update the project's Current State. The project's Current State is the project's one short page of what is true now. Read and write it with `managing-project-memory`.
    - Write the part "Next session starts with". It has one line for each piece of work that this session worked on.
      - For a work item, the line holds the work item's ID and the words "read its Current state".
      - For a piece of work that is not a work item, the line says what the work is and its next step.
    - Check the line under "Now" for each of this session's work items. When that line is missing or no longer true, add or correct it as `managing-work-items` says.
-   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, a date that passed, or a thing owed that was delivered. `managing-project-memory/references/current-state.md`, "Removing what is no longer true", says how.
+   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, an event that ended, a resolved or cancelled deadline, or a thing owed that was delivered. `managing-project-memory/references/current-state.md`, "Removing what is no longer true", says how.
    - Set the "Last updated" line to the date, `handoff`, and `agent`.
    - When the project's Current State is missing, do not create it. Tell the owner that it is missing, and suggest the setup check (`project-setup`, "check the setup"). Put in the prompt the entry that this step would have written.
 5. **Draft the prompt. Do not show it yet.**

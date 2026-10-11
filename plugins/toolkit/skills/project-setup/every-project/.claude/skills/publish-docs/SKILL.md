@@ -177,7 +177,7 @@ The save is still finished. Say so in the reply in one line: "The main checkout 
 - Never make, stage, or commit this save's edit in the main checkout.
 - Never start a save from inside another save worktree.
 - Other `docsave-` worktrees in `git worktree list` belong to other sessions. Do not change or remove them.
-- In Codex, the sandbox keeps `.git/` read-only and blocks the network. Run each Git write and each network call in this skill alone, with escalated permissions (`sandbox_permissions` set to `require_escalated`, with a one-line reason). The commands in `references/recovery.md` are included. When Codex refuses without asking, show the owner the exact command and ask the owner to run it.
+- Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
 
 ## Work that another skill does
 

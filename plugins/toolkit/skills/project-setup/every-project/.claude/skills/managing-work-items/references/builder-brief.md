@@ -6,7 +6,7 @@ This file is the brief for the builder. The builder is a helper that builds one 
 
 Start the builder from Building, as `building.md`, section "Start a builder", says. Start one builder for each planned task that can run on its own.
 
-In Codex with approvals turned off (`codex exec`), make no builder worktrees. Run one builder at a time in the work item's own worktree, and tell it to commit nothing.
+When the active host permits file edits but does not permit the builder to create a worktree or commit, run one builder at a time in the work item's worktree and set "Commit: no". Follow the host's actual permissions; approvals being turned off does not by itself prohibit Git writes.
 
 After the builder's report, follow `building.md`, section "When a helper returns".
 
@@ -45,7 +45,7 @@ Work only in the worktree folder you were given. If none was given, stop and rep
 
 - When the list of inputs says "Commit: no", write the files and report without committing.
 - Start the commit message with the task ID, for example `P1-T02: add the CSV export button`. The message has no line that credits an AI.
-- In Codex, run each Git write alone, with `sandbox_permissions` set to `require_escalated` and a one-line reason. If the command is refused, stop and report the exact command.
+- Follow the host's active permissions for Git writes. Use its supported approval mechanism when required. If a command is denied, stop and report the command and reason; never bypass the denial.
 - Never push, merge, rebase, reset, or delete a branch.
 
 ### Boundaries

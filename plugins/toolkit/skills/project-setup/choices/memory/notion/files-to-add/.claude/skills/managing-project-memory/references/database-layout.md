@@ -50,11 +50,15 @@ One page of Memories is one of three things: one subject, one thing that happene
 | Date of the last change | Saved | 2026-10-05 |
 | Check or remove by, for a fact that is true only for a while | Review By (Lore's date column); empty when the fact has no end | 2026-10-21 |
 | Status | Status (see "Status") | accepted |
-| Who or what said it | Source note | The owner, 2026-09-30, kickoff call |
+| Provenance: specific supporting conversation, document, or work item, with its date and link or ID | Source note | The owner, 2026-09-30, kickoff call, IML-3 |
+| Modified by: actual last editor | Other fields: `modified_by` | Codex |
+| Context: why the memory matters to the project | Other fields: `context` | Approval coverage prevents a release delay. |
+| Source: how the content was derived | Other fields: `source_kind`, a JSON array of `stated`, `summarized`, or `inferred` | `["stated"]` |
+| Retrieval subjects | Existing Tags options alongside the type tag; Other fields: `tags` for subjects without an existing option | workflow; `["availability"]` |
 | Last checked against its source | Last verified: `YYYY-MM-DD`, or `unknown` | 2026-09-30 |
 | What allowed the save | Authorization: `Approved by <owner> on <date>`, for a save that the owner asked for or said yes to, or `Logged by the agent on <date>`, for every other save | Approved by the owner on 2026-09-30 |
 | Work item IDs | Work item IDs (text), and the Work items relation when work items are in Notion | IML-3 |
-| The page it replaced, and the page that replaced it | Supersedes (relation), and Superseded by (the key as text) | |
+| The page it replaced, and the page that replaced it | Supersedes (relation), and Superseded by (one key as text, or a JSON array of keys when several pages replace this one) | |
 | Anything else | Other fields, as JSON | |
 
 Always set these columns too:
@@ -65,7 +69,13 @@ Always set these columns too:
 - Agent: `Claude Code` or `Codex`
 - Project: the project's row in Lore's Projects database. The id of that row is in `PROJECT.md`.
 
-Lore's other columns stay empty.
+Lore's other columns stay empty unless the owner or another tool already populated them. Preserve their values.
+
+The owner's Source metadata describes derivation; Lore's Source column describes origin and keeps its existing options. Toolkit-created pages use `manual`. Preserve the origin on existing pages. Keep Author and Agent accurate for the record's creation; neither replaces `modified_by` for later edits.
+
+`stated` means a direct statement, `summarized` means a restatement, and `inferred` means a conclusion that the source does not state. Use each applicable value in `source_kind` and explain each claim's evidence and uncertainty in the body. These values do not establish truth or change the memory criteria.
+
+On every change, update Saved and `modified_by`, and keep Source note, tags, context, derivation, authorization, and links accurate. Preserve created time, useful earlier provenance, existing tags and relations, and unrelated properties. Parse Other fields as JSON and merge changed keys into the existing object; preserve unknown keys. If existing text cannot be parsed as an object, preserve it and resolve its representation before writing. For legacy pages, fill missing metadata from verified evidence and use `unknown` for history that cannot be established. Use existing Tags options. Put subjects without an existing option in the `tags` array in Other fields instead of adding options. This mapping requires no new columns or select options.
 
 ## Status
 
@@ -93,7 +103,7 @@ The body is the memory record without a title line, because Notion keeps the tit
 - **A lesson:** a `### <lesson>` heading under `## Gotchas and lessons`. Under the heading comes a `**Seen:**` line that names each time the lesson came up: the date, and the session or work item.
   - A lesson that became a rule, a skill, or a decision gets a `**Promoted:** <date>, to <where>` line. The lesson stays in the page as history.
 - **A retired page:** a last section `## Retired` with the date, and the owner's words as the reason.
-- **Size:** a page for one subject holds about 20 sections or 300 lines at most. A bigger page is two subjects.
+- **Focus:** keep each page focused on a subject a later session can find and use. Split distinct subjects when separate records would be clearer, and link them.
 
 ## Links to work items
 
@@ -213,7 +223,7 @@ The toolkit adds these columns to Memories only:
 | Column | Type | Holds |
 | --- | --- | --- |
 | Record Key | text | The page's key, `<prefix>_<slug>` (`project_client_plans`, `event_weekly_account_load`). Pages are found by it. |
-| Superseded by | text | The key of the page that replaced this one. |
+| Superseded by | text | One replacement key, or a JSON array of keys when several pages replace this one. Preserve existing keys when adding a replacement. |
 | Source note | text | Who or what said it, with a date. |
 | Saved | date | The date of the last change. |
 | Last verified | text | `YYYY-MM-DD`, or `unknown`. |

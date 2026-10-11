@@ -41,7 +41,7 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
 
 ## Mistakes to avoid
 
-- When Claude Code or Codex blocks a write outside the session's worktree, ask the owner to approve the write. For example, the Codex sandbox, which is the closed area where Codex runs commands, asks for approval or fails with a sandbox error.
+- When the active session blocks a write to the main checkout, use its supported approval mechanism only when approval is required and permitted. When no permitted route is available, tell the owner which save is blocked and what action is needed. Keep the work item in the main checkout.
 - Every lookup command except the search by words skips `DESIGN.md` files and `work-item-template/`. Never remove the flags that make a command skip them. The commands are in `references/work-tracker-searching.md`.
 - Leave out `archive/` unless the owner asks for archived work items.
 - An edit must match the old text exactly, including the spacing of a table. When an edit fails, read the file again, because the owner may have changed the file.

@@ -1,6 +1,6 @@
 # Managing project memory
 
-Use this reference to decide what goes into project memory, when to ask the owner, and when something in memory is corrected, retired, or deleted. The goal is that project memory stays true, so that a later session can rely on it. A session is one chat with the agent.
+Use this reference to decide what goes into project memory, when to ask the owner, and when something in memory is corrected, retired, or deleted. The goal is that later sessions can retrieve useful context, understand its evidence, and check what remains true. A session is one chat with the agent.
 
 Project memory has two parts:
 
@@ -9,7 +9,7 @@ Project memory has two parts:
 
 For every read and every write of memory, use `references/memory-store.md`. That reference gives the instructions for the memory store chosen during project setup.
 
-Two neighbouring jobs belong to other skills. A decision or an open question that more than one work item needs is saved with `filing-project-records`. A to-do is saved with `managing-work-items`.
+Use the entry skill's routing for authoritative records and work items. Memory supports those records rather than replacing them.
 
 ## Contents
 
@@ -58,7 +58,7 @@ Save, correct, and retire without a question. Ask the owner only when one of the
 
 - You cannot tell which of two things is true. For example, a memory record and a document that the owner shared give different dates for one deadline, and nothing shows which one is right.
 - The step is on the list in the root `AGENTS.md`, section "Ask the owner first". For example, a delete of a memory record cannot be undone in some memory stores, and an instruction that you inferred would add a line to a rule file, which the Project map marks "Only with the owner's yes".
-- You clean up all of memory, or a part of the project's Current State is over its limit with only true lines. `references/tidying.md` and `references/current-state.md` say to show the owner the plan first, because a clean-up changes many records at once, and a cut removes a line that is still true.
+- You clean up all of memory, or you propose removing a true line from the project's Current State. `references/tidying.md` and `references/current-state.md` say to show the owner the plan first, because a clean-up changes many records at once, and a cut removes a line that is still true.
 
 The owner's own request to keep, change, or forget something is the owner's yes. Act on it at once. When the owner told you to forget something or not to keep it, keep it nowhere else: not in the project's Current State and not in another memory record.
 

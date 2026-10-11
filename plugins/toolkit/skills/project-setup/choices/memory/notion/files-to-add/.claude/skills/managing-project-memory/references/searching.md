@@ -42,7 +42,7 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[
   "sorts":[{"property":"Saved","direction":"descending"}]}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.properties["Record Key"].rich_text[0].plain_text // "")\t\(.properties.Synopsis.rich_text[0].plain_text // "")"'
 ```
 
-- Try two or three words and their synonyms.
+- Search relevant words and their synonyms.
 - To search by type, use this clause with `user`, `project`, `reference`, or `event`: `{"property":"Tags","multi_select":{"contains":"event"}}`.
 - To find the subject that a new fact belongs to, take the Status clause out. A retired or replaced page then shows too.
 

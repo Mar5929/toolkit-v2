@@ -1,6 +1,6 @@
 ---
 name: filing-project-records
-description: 'Files sources the project receives in sources/, decisions and open questions that more than one work item needs in DECISIONS.md, and changes to documents about system rules in system/. Each record gets an ID so later work can find it. Use when the owner gives the project a source, a shared decision or question needs recording, or a system document needs updating. For a decision that only one work item needs, use managing-work-items.'
+description: 'Files sources the project receives in sources/, decisions and open questions that more than one work item needs in DECISIONS.md, and changes to documents about system rules in system/. Each record gets an ID so later work can find the authoritative record without copying it. Use when the owner gives the project a source, a shared decision or question needs recording, or a system document needs updating. For a decision that only one work item needs, use managing-work-items.'
 ---
 
 # Filing project records
@@ -16,6 +16,9 @@ If only one work item needs a decision or a requirement, do not save it here. It
 Before you save a decision, an open question, or a rule, check that more than one work item needs it. The root `AGENTS.md`, section "Where information goes", gives the test for that, and lists where every kind of information is kept.
 
 In this skill, a record is one saved source, one entry in `DECISIONS.md`, or one rule in `system/`. To save a record is to commit the change to the default branch with `publish-docs`.
+
+
+Read the memory choice in `PROJECT.md`. For local or Notion memory, use `managing-project-memory` and the installed Current State page. For Hindsight, follow `.claude/rules/hindsight-memory.md` wherever these steps call for memory recall, review, saves, or corrections. Keep current work, blockers, and next actions in the selected tracker and project records; do not create a Current State page or treat its absence as a setup failure.
 
 ## Which filing step to do
 
@@ -73,9 +76,9 @@ The time depends on where the project keeps its work items.
 - When work items are in Notion or GitHub, write the ID once the save is on the default branch.
 - When work items are local files, write the ID only after `publish-docs` reports that the main checkout holds the save. A local work item is kept in the main checkout, so the record that it names must be there.
 - When work items are local files and `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item. Do this in its place:
-  - Give `managing-project-memory` one line for "Waiting on" in the project's Current State. The project's Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
+  - With Hindsight, use `managing-work-items` to write a blocker note in the affected work items explaining the pending publication and next action. Leave authoritative record-link fields unchanged until the main checkout holds the save. With local or Notion memory, give `managing-project-memory` one line for "Waiting on" in the project's Current State. The project's Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
   - Tell the owner the same.
-  - When the main checkout's files hold the record, write the ID in each work item, and ask `managing-project-memory` to remove that line.
+  - When the main checkout's files hold the record, write the ID in each work item, and remove the deferred-link note from the tracker or Current State through its responsible skill.
 
 ### A work item that must follow a record that already exists
 
