@@ -1,0 +1,16 @@
+{
+  "description": "Toolkit Hindsight project reminder for this repository; Hindsight startup context comes from the installed add-on.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/prompt-reminder.mjs\" --skill hindsight",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
