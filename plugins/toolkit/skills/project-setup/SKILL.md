@@ -22,7 +22,7 @@ Paths start from the folder that holds this `SKILL.md`. Both hosts show that pat
 
 - `every-project/` holds the files every project gets, at their project paths.
 - Each folder in `choices/` has a setup file for an owner's choice, `reference/` for setup detail, and `files-to-add/` when that choice adds project files.
-- `choices/notion-shared/` supplies the shared Notion setup. `choices/memory/shared-by-local-and-notion/` supplies the shared memory skill. Copy a shared part once.
+- `choices/notion-shared/` supplies the shared Notion setup. Local memory also copies `choices/memory/shared-by-local-and-notion/`; Notion memory supplies its own coding-agent and librarian skills. Copy each chosen part once.
 - This skill's `reference/` holds the copy, interview, finishing, update, and diagnostic procedures. Read them at the steps that name them; copy only the project files.
 
 ## Rules for every step

@@ -31,6 +31,8 @@ This file uses four names:
 
 ## Before you start
 
+When an existing Notion project needs migration to Project Wiki, use the reviewed batch procedure in "Changing a setup choice" before installing the new operational files. Prepare new files in the setup copy, and preserve the installed skills, record routes and settings until the approved destinations and moved records are verified. Then resume the update. This applies even when Memory remains `notion`.
+
 - Read the project's choices in `PROJECT.md`, section "Toolkit settings": Tracker, Memory, the ID prefix, the links, and the Hindsight bank. Never change a choice unless the owner asks. "Changing a setup choice", at the end of this file, gives the steps for that.
   - The project is a Salesforce project when "Toolkit settings" has a "Salesforce org aliases" line.
   - A project whose owner deleted `SOUL.md` does not get it back.
@@ -199,7 +201,7 @@ A project may hold something that an earlier setup put there and that the new se
 
 Do each line that fits the project. Each line names the section that holds the steps.
 
-- For a Notion project, follow what the shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says for "update the toolkit". An update changes nothing in Notion.
+- For a Notion project, follow what the shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says for "update the toolkit". An update changes Notion only within an approved migration batch or another explicit owner instruction.
 - For a Hindsight project, follow what [choices/memory/hindsight/hindsight-setup.md](../choices/memory/hindsight/hindsight-setup.md) says for an update. Name the server the project uses in the report.
 - For a GitHub Issues project, follow what [choices/work-items/github/github-work-items-setup.md](../choices/work-items/github/github-work-items-setup.md) says for "update the toolkit". Add missing labels only after the owner's yes.
 - For a Salesforce project, write the entries for each production org as the step on the refuse list for production in [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md) says, before section 4 removes anything that refuses a change to production. `tools/kb/`, `tools/permissions/`, and the rules `dependency-graph.md` and `permissions-source-control.md` are the project's own, and they stay.
@@ -225,21 +227,21 @@ Change a setup choice only when the owner asks, for example "move memory to Noti
 A changed choice does four things: it adds the files of the new choice's setup folders, it removes the files of the old choice's setup folders, it changes lines of "Toolkit settings", and it changes the lines that a choice adds to a file the project already has. No other line of `AGENTS.md`, `README.md`, `PROJECT.md`, or a rule changes.
 
 1. Tell the owner what changes and what cannot move (for example Notion page history and comments), and get the owner's yes.
-2. Make your own worktree and branch, as "Before you start" says. In the worktree, change `PROJECT.md`, "Toolkit settings":
+2. Make your own worktree and branch, as "Before you start" says. Plan these changes for the setup copy; apply them to the project only after verification in step 6:
    - Change the Tracker or Memory line.
    - Remove each line that only the old choice used.
    - Write the new choice's lines as the setup file of the new choice says, and as [SKILL.md](../SKILL.md), "The lines of "Toolkit settings"", says for every line.
    - Take out the lines that the old choice's setup file adds to a file the project already has, such as rows in `AGENTS.md`, entries in the settings files, and lines in `.gitignore`. Put in the lines that the new choice's setup file adds.
-3. Build a new setup copy for the new choices and compare, as sections 1 and 2 say.
-   - Add each file the project lacks, as "Missing files" says, except the affected merged skill folder. Keep that skill and its selected store reference as the old choice has them until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
-   - Keep the old choice's installed instructions until the records move in step 5. Read the old `references/work-tracker.md` or `references/memory-store.md` before the change. Read the new choice's selected reference in the setup copy to learn how to create and read back its records. Do not install the new choice's reference over the old one yet.
-   - A new memory choice also replaces the toolkit's hook handlers in `.claude/settings.json` and `.codex/hooks.json` with the handlers of the new choice ([reference/skills-hooks-settings.md](skills-hooks-settings.md), "What a choice changes in the settings" and "Merge rules"). The owner trusts the changed Codex hooks again in `/hooks`.
+3. Build and compare the setup copy for the agreed choices using sections 1 and 2, including the planned settings and routing changes from step 2. Keep the installed configuration unchanged until step 6.
+   - Add unrelated missing files as "Missing files" says. Keep affected operational files, including new skills, in the setup copy until the records have moved in step 5. Install them in step 6.
+   - Keep the old choice's installed instructions until the records move in step 5. Read the old tracker reference or memory skill and its installed store instructions before the change. Read the new choice’s entry skill and applicable references in the setup copy to learn how to create and read back its records. Do not install the new instructions over the old ones yet.
+   - Prepare the new memory choice’s hook handlers in the setup copy’s `.claude/settings.json` and `.codex/hooks.json` ([reference/skills-hooks-settings.md](skills-hooks-settings.md), "What a choice changes in the settings" and "Merge rules"). After step 6 applies the change, the owner trusts the changed Codex hooks again in `/hooks`.
 4. Do what the setup file of the new choice gives for outside the project folder. [SKILL.md](../SKILL.md), Step 5, names the setup file of each choice.
    - When the project already has work items or memory in Notion and adds the other one, make no second project page. The shared Notion setup file, [choices/notion-shared/notion-setup.md](../choices/notion-shared/notion-setup.md), says, in a step or in the file that a step names, how a Notion project adds work items or memory later.
    - When memory moved out of Hindsight, after the owner's yes also remove the project's folder from the settings of Hindsight's coding-agent add-on, so that the add-on is switched off there.
 5. Preview the named records to move, their destination and any information that cannot transfer. One owner approval may cover that reviewed batch and its confirmed destination. Reuse that approval for the listed moves; ask again before changing the scope or destination. Preserve the originals and read every moved record back in its new place. Record which moves were verified or failed, so a later session can resume without creating duplicates.
    - When the records go into Hindsight, the add-on's tools load only in the next session. So save each record through the server's API, with the record's ID as the ID of the saved document, and read the record back with a search after the save has finished.
-6. After the records are moved and the owner says yes to the list, install the new choice's merged skill folder from the setup copy and remove the old choice's files. Check for owner edits before replacing or removing a skill file. The selected `references/work-tracker.md` or `references/memory-store.md` then contains the new choice's instructions.
+6. After the records are moved and the owner says yes to the list, apply the prepared project settings, guide routes and hook changes, install the new choice’s merged skill folder from the setup copy, and remove the old choice’s files. Check for owner edits before replacing or removing a skill file. The installed tracker reference or memory entry skill then routes to the new choice’s instructions.
    - The list is every file of the old choice's setup folders that no setup folder of the new choices holds. `(cd <skill folder>/<folder> && find . -type f)` prints a folder's files, and the setup file of each choice names its folders. [SKILL.md](../SKILL.md), Step 5, names the setup file of each choice. `<skill folder>` is the folder that holds this skill's `SKILL.md`.
    - A Hindsight project has no Current State. When memory moved to Hindsight, `memory/CURRENT_STATE.md` is on the list. Its lines are the owner's record, so show them in the migration preview and confirm where the still-current information will go before the file is removed. Reuse the batch approval when it already covers that mapping. Where the work stands is kept in the place where work items are kept.
    - A file in `work-items/` or `memory/` that is not in a setup folder is the owner's record. It stays until the owner says what to do with it.

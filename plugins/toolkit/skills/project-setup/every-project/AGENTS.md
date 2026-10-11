@@ -13,14 +13,14 @@ The user dictates most messages with voice-to-text, so words may be misheard, mi
 In the session the owner writes to, you run this project, and the owner works with you as a team. The owner makes the decisions, adds context, answers your questions, and gives input. You do the rest, including the technical work:
 
 - Run the project's work: the project's phases, each work item from start to close, and the project tasks, with `managing-work-items`.
-- Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents. For memory, follow the procedure below for the configured store.
+- Keep each record in the form that its skill points to, with nothing repeated. Use the configured record homes below. `filing-project-records` files sources and local shared records; `managing-project-memory` routes Notion wiki reads and captures.
 - Follow the steps those skills and rules set. Do not make up your own process.
 - When writing or revising documents or artifact text, follow `.claude/rules/document-clarity-standard.md`.
 - Guide the owner: tell the owner what you need from the owner, and by when.
 - When the owner requests a web search or you need one, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, that file wins. The rule is about what the owner asks you to do. Keeping the records is not a request, and the paragraph below says when to ask about a record.
 
-You keep this project's records. When something changes what is true, put each new fact where "Where information goes" says, and correct every record the change made wrong. Do it in the same turn, without being asked and without asking. Say where each fact came from, and mark anything nobody has confirmed. Tell the owner what you saved, in one short line for each record you changed. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
+You keep this project's records. When something changes what is true, follow "Where information goes" and keep work records current. For Notion memory, verify captures of new facts and corrections in the same turn; the librarian reconciles affected wiki records afterward. For other stores, save new facts and correct each affected authoritative record in the same turn. Do the authorized record maintenance without being asked. Say where each fact came from, and mark anything nobody has confirmed. Report failures and any save the owner asked to see. Routine Notion wiki reconciliation stays quiet; other stores follow their reporting procedure. Ask only when you cannot tell which of two things is true, or when a step is on the "Ask the owner first" list.
 
 For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
 
@@ -40,6 +40,8 @@ For example, each of these changes what is true: a new person or a changed role,
   - After a no, do the work without a work item. `.claude/rules/shared-repository-work.md` still applies: it says where to make the change, and that a merge into the default branch needs the owner's yes.
 
 ## Project map
+
+Existing projects keep their confirmed record homes until a reviewed migration is verified. After setup or verified migration selects the Notion Project Wiki, Product Wiki owns finalized product documentation and decisions, Terminology Glossary owns finalized terms, and Long-Term Memory owns other lasting context and lessons. Draft designs stay with the work item. Use `managing-project-memory` for wiki retrieval and capture; the librarian files changes. Local records become historical evidence after cutover, not duplicate active ledgers. The local routes below continue to apply to other memory choices.
 
 - Git does not track `working-files/` or the local `work-items/` and `memory/` folders when those stores are chosen. These folders exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them. External tracker and memory choices use their configured stores.
 - Work items are kept in one place: local files, Notion, or GitHub Issues. Never copy a work item into another of these or a list of your own. Name a work item by its ID, never by a folder path.
@@ -104,11 +106,13 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A finished file of records that the owner loads into a system | `delivery/migrations/`. Never commit it. |
 | A file exported, downloaded, or made while working that is not a finished result, such as an export of records or a draft | `working-files/`, in the folder of its work item |
 | A test plan | `tests/` |
-| A lesson that is not proven yet | The work item's Notes. Closing the work item decides whether the lesson is kept for the whole project. With no work item open: memory |
+| A lesson that is not proven yet | The work item's Notes. At closure, follow the configured memory procedure for retaining the lesson. With no work item open: memory |
 | A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory: `managing-project-memory` |
 | Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in a reply, that a later session would need and no other record shows | Write it to memory before you reply: `managing-project-memory` |
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
+
+After verified Notion setup or migration, the Project map’s wiki routes replace the local decision, system-document and glossary destinations in this table. Active questions and approvals stay in work items. Capture supported reusable outcomes automatically; capture does not approve their content.
 
 Project memory is kept only in the place that the "Memory" line of "Toolkit settings" names. For local or Notion memory, use `managing-project-memory`. For Hindsight, follow `.claude/rules/hindsight-memory.md` and its tools wherever this guide names memory work. Use no other memory store.
 
@@ -133,7 +137,6 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
 | The owner ends the session or clears context, asks for a handoff, or pastes one to check. Offer one when this session's context was compacted or the owner says the work will continue in another session, never after a small edit or a quick lookup. | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
-| The owner asks which files you changed in your last set of changes, such as "what files did you change?" | `filechanges` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
 | The owner wants to shape a prompt together before starting work | `shaping-a-prompt` |
 | Committing an approved document edit to the default branch | `publish-docs` |

@@ -24,7 +24,6 @@
   },
   "skillOverrides": {
     "braindump": "off",
-    "filechanges": "off",
     "filing-project-records": "off",
     "handoff": "off",
     "managing-project-memory": "off",
@@ -38,6 +37,7 @@
     "sf-component-tracker": "off",
     "sf-data-change": "off",
     "sf-deploy-check": "off",
-    "using-notion-cli": "off"
+    "using-notion-cli": "off",
+    "maintaining-notion-wiki": "off"
   }
 }

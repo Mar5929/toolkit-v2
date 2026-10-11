@@ -12,7 +12,8 @@
     {
       "name": "toolkit",
       "source": "./plugins/toolkit",
-      "description": "Sets up, checks, or updates Toolkit V2 in a project using shared project files and the selected work-tracker and memory modules."
+      "description": "Sets up, checks, or updates Toolkit V2 in a project using shared project files and the selected work-tracker and memory modules.",
+      "version": "0.9.54"
     }
   ]
 }

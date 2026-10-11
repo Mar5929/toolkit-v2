@@ -1,7 +1,12 @@
-# Known problems with Notion memory
+# Problems with Notion Project Wiki setup
 
-This file holds what is known to go wrong when memory in Notion is set up. Open it when a step of [notion-memory-setup.md](../notion-memory-setup.md) does not work as expected. Each line names a problem, and what to do.
+Use this reference when Notion memory setup or an operation fails. Preserve owner records while resolving the problem.
 
-- **`{{CURRENT_STATE_PAGE_ID}}` is still in a settings file at the finish.** The page's id was not put in. `grep -n '{{' .claude/settings.json .codex/hooks.json` shows where.
-- **In Codex, the session-start check prints "could not be read here".** The command could not reach Notion in this session. Check access and the active network permissions before treating it as a configuration failure. [reference/setup-problems.md](../../../../reference/setup-problems.md), "Host permissions", gives the process for a blocked command.
-- **The owner trusted the Codex hooks before the page's id was put in.** A changed hook must be trusted again. Tell the owner.
+- When a configured destination is missing, traverse the project and confirm its actual structure before creating anything. A customized project is not automatically invalid.
+- When copied relations still target the template, resolve and verify their project-specific targets before filing linked records.
+- When fields differ from the template, inspect the live schema and preserve existing values. Confirm a needed schema change with the owner rather than adding fields silently.
+- When Current state cannot be read at startup, check access and host permissions, then read it through `managing-project-memory`. [Setup problems](../../../../reference/setup-problems.md) describes host access failures.
+- When a page ID placeholder remains, fill the confirmed identifier in both hosts’ settings and rerun the startup check. Tell the owner when changed Codex hooks need trusting again.
+- When daily processing cannot be configured, record an open setup step and retain on-demand operation. Do not claim the schedule is active.
+- When processing is partial or stale, use `maintaining-notion-wiki` to inspect completed links and the run record before retrying writes. Processing status alone does not prevent overlapping writers.
+- When an existing project still has the former Memory layout, propose a reviewed migration batch using [update guidance](../../../../reference/update.md). Preserve its records and identifiers until the batch is authorized and verified.

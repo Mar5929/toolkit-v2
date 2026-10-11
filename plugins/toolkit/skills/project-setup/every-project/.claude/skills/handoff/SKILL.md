@@ -17,7 +17,7 @@ Two rules apply to every step:
 A recap alone, with no handoff, is the job of `session-summary`.
 
 
-Read the memory choice in `PROJECT.md`. For local or Notion memory, use `managing-project-memory` and the installed Current State page. For Hindsight, follow `.claude/rules/hindsight-memory.md` wherever these steps call for memory recall, review, saves, or corrections. Keep current work, blockers, and next actions in the selected tracker and project records; do not create a Current State page or treat its absence as a setup failure.
+Read the memory choice in `PROJECT.md`. For local memory, use `managing-project-memory` and the installed Current State page. For Notion memory, use that skill for retrieval, verified captures and on-demand reconciliation; the librarian maintains wiki destinations. For Hindsight, follow `.claude/rules/hindsight-memory.md` for recall, review, saves and corrections. Keep current work in the tracker and project records; Hindsight projects need no Current State page.
 
 ## The first line of every prompt
 
@@ -54,7 +54,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - Read the project task with `managing-work-items`.
    - Make its status and who does it true. `managing-work-items/references/lifecycle-rules.md`, "Levels", says what a project task is and when to tick it.
    - Read the project task back.
-3. **File what this session left unfiled.** Step 2 saved each decision that only one work item needs. Go through the five kinds below for the rest.
+3. **File what this session left unfiled.** Step 2 saved each decision that only one work item needs. With Notion memory, file received sources with `filing-project-records`, then use `managing-project-memory` to verify captures for reusable outcomes and corrections. Preserve source and approval evidence; include pending capture links in the handoff without claiming they are filed. Keep unresolved questions in the affected work items. The five local filing routes below apply to other memory choices.
    - **A decision or a question that more than one work item needs.** When one came from this session and `DECISIONS.md` does not hold it, record it with `filing-project-records`, step "record a decision". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs it. When the owner has not confirmed it, record it as Open. Do not wait for the owner's answer before you write the prompt.
    - **A source with no SRC ID.** A source is anything the project was given and keeps, such as a transcript or an email. When the owner gave this session a source that has no SRC ID, file it with `filing-project-records`, step "file a source".
    - **An instruction for how the agent works that is not written down.** Give it to `managing-project-memory`.
@@ -62,7 +62,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - **An Open entry in `DECISIONS.md`.** Read the Open entries that this session raised or that name this session's work items. Put each one under "Open questions" in the prompt, with its DEC ID.
 
    When there is nothing to file, say so in one line.
-4. **Save the context for the next session.** In a Hindsight project, keep this session's next actions and outstanding blockers in the selected tracker and project records, review lasting knowledge under the Hindsight rule, and continue to step 5. With local or Notion memory, update the project's Current State. The project's Current State is the project's one short page of what is true now. Read and write it with `managing-project-memory`.
+4. **Save the context for the next session.** With Notion memory, capture this session’s focus and resumption checkpoint through `managing-project-memory`; keep next actions in the tracker and include pending capture links in the prompt. Request an on-demand pass when the next task needs reconciled documentation, then continue to step 5. In a Hindsight project, keep this session's next actions and outstanding blockers in the selected tracker and project records, review lasting knowledge under the Hindsight rule, and continue to step 5. With local memory, update the project's Current State. The project's Current State is the project's one short page of what is true now. Read and write it with `managing-project-memory`.
    - Write the part "Next session starts with". It has one line for each piece of work that this session worked on.
      - For a work item, the line holds the work item's ID and the words "read its Current state".
      - For a piece of work that is not a work item, the line says what the work is and its next step.

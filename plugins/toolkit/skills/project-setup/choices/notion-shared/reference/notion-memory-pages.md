@@ -1,60 +1,35 @@
-# Setting up a project's Notion memory
+# Setting up a project's Notion Project Wiki
 
-This file gives the Notion steps for the memory of a new project. Open it when [notion-project-pages.md](notion-project-pages.md) or step 4 of [notion-setup.md](../notion-setup.md) sends you to one of its sections. Its job is done when `PROJECT.md` holds the ids of the memory pages and databases, the project is named in Lore's Projects database, and the Current state page holds the project's first lines.
-
-Some of the files named here are in other folders of this skill:
-
-- `current-state-page.md` is added to `managing-project-memory` by the Notion memory choice. Its source in this skill is [choices/memory/notion/files-to-add/.claude/skills/managing-project-memory/references/current-state-page.md](../../memory/notion/files-to-add/.claude/skills/managing-project-memory/references/current-state-page.md).
-- `ntn-commands.md` is in the `using-notion-cli` skill. Its source in this skill is [choices/notion-shared/files-to-add/.claude/skills/using-notion-cli/references/ntn-commands.md](../files-to-add/.claude/skills/using-notion-cli/references/ntn-commands.md). That skill's `SKILL.md` says how to run `ntn` in Codex.
-- [reference/finishing.md](../../../reference/finishing.md) is in this skill's `reference/` folder.
-
-## Contents
-
-- A new project
-- Recording the links in PROJECT.md
+Use this file to connect the Project Wiki copied from the owner's Project template. Setup is done when the project's destinations and relations are verified, its links are recorded, and Current state reflects the setup answers.
 
 ## A new project
 
-Before anything else, two things must be true: the owner has signed in (`ntn login`), and the owner has shared the owner's Notion root page, which is the page that holds the owner's projects, with the "Notion CLI" connection. `ntn-commands.md`, "Access and sign-in", says how the sign-in works and how the owner shares a page.
+1. Find Project Wiki under the new project page. Traverse its children to find Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Traverse Long-Term Memory to find Memories, Facts, Entities, Projects and Topics. Use the project's copies, not the template's descendant IDs.
+2. Read each database and its data sources. Inspect the live properties, relations and available templates before writing. The memory choice supplies the destination references in `managing-project-memory` and the librarian procedure in `maintaining-notion-wiki`.
+3. Check that copied relations point to this project's collections, including relations among the long-term collections and Product Wiki's self-relation. When work items are in Notion, check their memory relations too. Identify template or other-project targets and repair them within the approved setup scope before writing records. Never change the owner's source template.
+4. Find this project's row in the copied Lore Projects collection. Reuse a matching row; otherwise create one using its live schema and the confirmed project name and local path. Verify the row before linking records to it.
+5. Record the links below and read them back. At the finish of setup, initialize Current state from the interview answers using the Notion memory choice's finish procedure. Confirm that the configured connection can read every destination and write Wiki Inbox.
 
-[notion-project-pages.md](notion-project-pages.md), "A new project", makes the project page from the Projects database template "Project". That section runs the four steps below at these points:
-
-- step 1 below at its step 5;
-- steps 2 and 4 below at its step 8;
-- step 3 below at its step 10.
-
-Adding memory to a Notion project later runs all four steps.
-
-1. **Find the memory databases** on the Memory page, and each one's data source:
-
-   ```bash
-   ntn api v1/blocks/<memory-page-id>/children < /dev/null | jq -r '.results[] | select(.type=="child_database") | [.id, .child_database.title] | @tsv'
-   ntn api v1/databases/<database-id> < /dev/null | jq -r '.data_sources[0].id'
-   ```
-2. **Name the project in Lore's Projects database**, with the command below. Lore is the name of the Notion memory layout. Every memory record links to this row.
-
-   ```bash
-   ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"<lore-projects-data-source-id>"},
-     "properties":{"Name":{"title":[{"text":{"content":"<Project name>"}}]},
-       "Type":{"select":{"name":"project"}},"Status":{"select":{"name":"active"}},
-       "Path":{"rich_text":[{"text":{"content":"<project folder>"}}]}}}' < /dev/null | jq -r .id
-   ```
-3. **Record the links** in `PROJECT.md`, as the next section says, and read them back.
-4. **Fill the Current state page** with the project's first lines. The Current state page is the Notion page that holds the project's Current State, which is the project's one short page of what is true now.
-   - `current-state-page.md`, "Changing it", says how to change the page.
-   - [reference/finishing.md](../../../reference/finishing.md), "The project's Current State", says what the first lines are.
+For traversal, pagination, schema reads and verified writes, use `using-notion-cli`. Its shipped source is [files-to-add/.claude/skills/using-notion-cli/SKILL.md](../files-to-add/.claude/skills/using-notion-cli/SKILL.md). If a required destination or property is missing, report the difference and agree the fix with the owner before continuing that part of setup.
 
 ## Recording the links in PROJECT.md
 
-In `PROJECT.md`, section "Toolkit settings", add the "Notion memory" line at the end of the section, with the nested bullets below. [notion-project-pages.md](notion-project-pages.md), "Recording the links in PROJECT.md", says where the "Project page" and "Projects database" bullets go.
+Add these nested bullets under `Notion memory` in `PROJECT.md`, section `Toolkit settings`. Record each page's URL and ID, and each database's ID and data source ID. Keep these labels so later sessions can find the configured destinations.
 
 ```markdown
 - Notion memory:
-  - Memory page: <id>
+  - Project Wiki page: <url>, page <id>
+  - Wiki Inbox: database <id>, data source <id>
+  - Current state page: <id>
+  - Long-Term Memory page: <url>, page <id>
+  - Terminology Glossary: database <id>, data source <id>
+  - Product Wiki: database <id>, data source <id>
   - Memories: database <id>, data source <id>
   - Facts: database <id>, data source <id>
   - Entities: database <id>, data source <id>
-  - Lore Projects: data source <id>; this project's row <id>
-  - Topics: data source <id>
-  - Current state page: <id>
+  - Lore Projects: database <id>, data source <id>; this project's row <id>
+  - Topics: database <id>, data source <id>
+  - Librarian schedule: <confirmed scheduler, cadence, timezone, access and run reference; or pending setup>
 ```
+
+[notion-project-pages.md](notion-project-pages.md), "Recording the links in PROJECT.md", gives the Project page and Projects database bullets. Record any agreed differences in destination names or schemas alongside their configured links. Scheduler selection and access checks belong to [choices/memory/notion/notion-memory-setup.md](../../memory/notion/notion-memory-setup.md).

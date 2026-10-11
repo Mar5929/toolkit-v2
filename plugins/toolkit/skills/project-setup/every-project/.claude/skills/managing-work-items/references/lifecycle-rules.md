@@ -5,7 +5,8 @@ Use this reference to take one work item from an idea to Done. The goal is that 
 This reference says what each State means, how work is divided into levels, what to do in each State, and when to stop for the owner's yes. Two neighbouring jobs belong to other skills:
 
 - **Reading and saving a work item.** For every read and every save, use the installed `references/work-tracker.md`, which says where this project keeps its work items.
-- **Writing `DECISIONS.md`, `system/`, or `sources/`.** `filing-project-records` writes those three places. Never write those three places with this skill. Write the ID of one of their records into a work item only when `filing-project-records` has filed the record and given you the ID. The root `AGENTS.md`, section "Where information goes", gives the test for what belongs in those three places.
+- **Writing shared records.** With Notion memory, `managing-project-memory` captures decisions, finalized documentation and terms for librarian filing; active questions and designs stay in their work items. Verified capture links may be recorded before filing, with their processing state. For other memory choices, follow the local record procedure below.
+- **Writing local `DECISIONS.md`, `system/`, or `sources/`.** `filing-project-records` writes those three places. Never write those three places with this skill. Write the ID of one of their records into a work item only when `filing-project-records` has filed the record and given you the ID. The root `AGENTS.md`, section "Where information goes", gives the test for what belongs in those three places.
   - When a work item must follow a rule or a decision that already exists, give the ID of the rule or decision and the work item to `filing-project-records`. It writes the ID into the work item.
 
 ## Contents
@@ -212,6 +213,8 @@ While you work on a work item, keep the whole work item true, and not only its C
 
 ### A work item that waits for an answer in `DECISIONS.md`
 
+With Notion memory, keep an unresolved decision and its next action in the affected work item. Link related wiki records or captures without creating a duplicate local decision entry. The remaining steps apply when the project uses `DECISIONS.md`.
+
 A work item that cannot continue until an Open entry in `DECISIONS.md` is answered waits on the owner.
 
 - Set `waiting_on` to the owner.
@@ -220,7 +223,9 @@ A work item that cannot continue until an Open entry in `DECISIONS.md` is answer
 
 ### The work item's line in the project's Current State
 
-This section applies to local or Notion memory. The project's Current State holds one line for an active work item. With Hindsight, keep active work and next actions in the selected tracker instead; follow `.claude/rules/hindsight-memory.md` for lasting knowledge, and create no Current State page.
+With Notion memory, capture a checkpoint when active work or resumption context changes. `managing-project-memory` verifies the capture and the librarian reconciles Current state. Do not write the derived page directly.
+
+The remaining steps apply to local memory. The project's Current State holds one line for an active work item. With Hindsight, keep active work and next actions in the selected tracker instead; follow `.claude/rules/hindsight-memory.md` for lasting knowledge, and create no Current State page.
 
 - Decide the line in this skill, in the form that the project's memory gives for a line under Now. Now is one of the parts of the project's Current State.
 - Add, change, or remove the line as the table in "Work that another skill does" says.
@@ -262,7 +267,7 @@ This table names where to read or save each kind of record and which skill handl
 | For | Use |
 | --- | --- |
 | Every read and every save of a work item, a project phase, or a project task | Follow `references/work-tracker.md` in this skill. |
-| A decision or an open question that more than one work item needs | `filing-project-records`, step "record a decision" |
+| A shared decision, finalized documentation or term | With Notion memory, use `managing-project-memory` for capture. Other choices use `filing-project-records`. |
 | A source that the owner gives: a transcript, a document, a file, or pasted text | `filing-project-records`, step "file a source" |
 | A rule in `system/` to add, change, retire, or mark Built | `filing-project-records`, step "update a system document" |
 | Writing the work item's line in the project's Current State | `managing-project-memory`. |

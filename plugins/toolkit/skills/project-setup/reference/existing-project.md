@@ -8,6 +8,8 @@ The toolkit gives no instruction for each possible project. Use your judgment, a
 
 ## What to look for
 
+Before Step 3 copies the full layout, check whether an existing Notion memory layout needs migration to Project Wiki. If it does, prepare new files in a setup copy and follow the reviewed batch procedure in [reference/update.md](update.md), "Changing a setup choice". Preserve active guides, skills, record routes and settings until the approved destinations and moved records are verified.
+
 Read what the project holds before you ask the question, so that you can tell the owner what each of the two answers would change in this project. Look in the main checkout, because a folder that Git ignores exists only there. The main checkout is the project's main folder, the first path that `git worktree list` prints.
 
 - **Agent guides:** a root `AGENTS.md` or `CLAUDE.md`, and a guide inside a folder.

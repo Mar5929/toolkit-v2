@@ -80,7 +80,6 @@ A skill is a folder of instructions that the agent opens when a job needs it.
 | `handoff`                | Ending a session: update the records and write a prompt for the next session.                                      |
 | `braindump`              | Play back the owner's loose ideas and wait for a yes before starting.                                              |
 | `session-summary`        | A table of what the owner asked in this session and what came of it.                                               |
-| `filechanges`            | A list of the files the agent just changed.                                                                        |
 | `publish-docs`           | Save an approved edit to project documents on the default branch.                                                  |
 | `pull-latest`            | Bring in new commits from the remote and keep local work.                                                          |
 | `reset-to-remote`        | Make the local repository match the remote, after showing a plan.                                                  |
@@ -166,7 +165,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 
 ## Module: where memory is kept
 
-Memory holds only what no other file of the project holds. The owner picks one of three. With local files or Notion, the project has a Current State, the project's one short page of what is true now. A Hindsight project has none: where the work stands is in the place where work items are kept.
+Memory preserves useful context without duplicating records owned elsewhere. The owner picks one of three; the Notion choice also provides the project’s curated wiki documentation. With local files or Notion, the project has a Current State, the project's one short page of what is true now. A Hindsight project has none: where the work stands is in the place where work items are kept.
 
 With each of the three, the agent also asks whether the owner wants Claude Code's own memory on in the project. Claude Code's own memory is a folder of notes on the owner's computer that Claude Code loads into every session. The toolkit's default is off, so that the project's memory is kept in one place. The answer is one line in `.claude/settings.json`.
 
@@ -182,15 +181,23 @@ With each of the three, the agent also asks whether the owner wants Claude Code'
 
 ### Notion
 
+The Project Wiki in the owner's Project template supplies one Wiki Inbox and four curated destinations. Coding agents read relevant wiki records and capture useful information; the librarian reconciles and files it.
+
 | Kind | What it adds |
 | --- | --- |
-| Questions | Where in Notion the Memory page goes, when the project has no Notion page yet. |
-| Skill | `managing-project-memory`: the same process as for local files, five files on how memory is stored as Notion pages, and two page templates. |
+| Questions | Confirm the Project template and project placement, then choose a supported daily scheduler with the owner. |
+| Skills | `managing-project-memory`: short retrieval and capture steps with focused destination references. `maintaining-notion-wiki`: librarian steps with references for schemas, filing, metadata and recovery. |
 | Skill and rule | `using-notion-cli` and `notion-records.md`, once, as for Notion work items. |
-| Settings | The word `notion` on the session-start line, and the ID of the Notion page that holds the Current State. |
-| `PROJECT.md` | Memory: `notion`, and the IDs of the Memory page, its databases, and the "Current state" page. |
-| Outside the project folder | The Memory page with its databases, and the "Current state" page, in Notion. |
-| The owner's own steps | Sign the Notion command-line tool in. |
+| Settings | The word `notion` on the session-start line and the Current state page ID. Startup directs the agent to check relevant pending captures for freshness. |
+| `PROJECT.md` | Memory: `notion`; configured Project Wiki, inbox, destination and data-source identifiers; librarian schedule and open setup steps. |
+| Outside the project folder | The owner's existing Project Wiki model, copied with the Project template: Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. |
+| The owner's own steps | Sign in, grant the selected tools access and confirm the scheduler during setup. |
+
+Current state is short-term working context derived from current work records. Long-Term Memory holds qualifying lasting context and non-product decisions or lessons. Terminology Glossary owns finalized terms. Product Wiki owns finalized living product documentation, architecture and product decisions; documentation approval and implementation status remain separate.
+
+Working designs stay in the work item's Solution Design. Finalized outcomes are captured automatically and filed under existing approval evidence. Later changes use another work item and update existing wiki records. Work items can close after verified capture; pending filing is recorded honestly. This Notion model replaces equivalent local system documents, glossary and decision ledger rather than maintaining duplicate authoritative bodies.
+
+For any existing project, propose a review and migration batch.
 
 ### Hindsight
 
@@ -226,7 +233,7 @@ The owner answers yes to "Is this a Salesforce project?". The module adds what t
 | Part | Which modules bring it |
 | --- | --- |
 | `using-notion-cli` and the rule `notion-records.md` | Notion work items and Notion memory |
-| The process files of `managing-project-memory` | Local memory and Notion memory |
+
 
 A project that picks both modules of a row gets the part once.
 

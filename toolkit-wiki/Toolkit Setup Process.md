@@ -83,7 +83,7 @@ Every answer folder has the same shape. The Hindsight folder, `choices/memory/hi
 
 A folder holds only the parts that its answer needs.
 
-A part that two answers share is kept once, in a folder of its own, which holds only the parts it needs. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the memory skill that local memory and Notion memory both bring.
+A part that two answers share is kept once, in a folder of its own, which holds only the parts it needs. `choices/notion-shared/` holds what Notion work items and Notion memory share. `choices/memory/shared-by-local-and-notion/` holds the direct-write memory process used by the local choice. Notion supplies its own retrieval/capture skill and librarian because its operational responsibilities differ.
 
 When the owner gives an answer, the agent opens that answer's setup file and goes through its steps: it asks the questions, puts the skills and files where the steps say, and sets up whatever the choice needs outside the project folder.
 
@@ -93,7 +93,7 @@ Nothing is made outside the project folder without the owner's yes. Examples are
 
 1. It checks that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
 2. It writes the roadmap from question 12 in the place where work items are kept.
-3. With local or Notion memory, it writes the first lines of the project's Current State, which is the project's one short page of what is true now. They say where the project stands, from question 12. A Hindsight project has no Current State: where the work stands is in the place where work items are kept.
+3. With local memory, it writes the first lines of Current State from question 12. With Notion memory, it initializes Current state through the librarian and verifies the wiki destinations, retrieval/capture skills and the supported scheduler chosen with the owner. A Hindsight project keeps current work in its tracker and project records.
 4. It checks that the setup works: the settings files are valid, the session-start command prints the Current State when the project has one, and each service the owner chose answers.
 5. It tells the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
 6. It reports what was set up, what was made outside the folder, and what is still open.

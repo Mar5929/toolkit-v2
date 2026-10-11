@@ -24,5 +24,14 @@
 # Memory Principles the agents must follow
 * Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
 * Memory should not be treated as truth by the ai agent when referenced. Rather it should always be used to enrich reasoning and thinking.
-* The agent should always 
 * Memory should always be cited when the agent uses it in an answer.
+# Notion Project Wiki
+
+Wiki Inbox receives useful information for reconciliation. Capture is not lasting retention, truth or approval. Coding agents keep work records current and capture changes; the librarian owns curated destination updates.
+
+- Current state holds short-term priorities, blockers and resumption context. Work records remain authoritative for work status.
+- Long-Term Memory holds qualifying lasting context, non-product decisions and lessons, with the metadata above.
+- Terminology Glossary owns finalized terms, aliases and naming history.
+- Product Wiki owns finalized product documentation, architecture and product decisions. Working designs remain in work items until finalized; approval and implementation status are separate.
+
+The coding-agent skill routes retrieval to a focused reference for each destination. Agents read matching records and sources, check relevant pending captures for recent changes, and cite the information used. The librarian reconciles automatically, preserves history and sends no routine reports. Work-item closure may precede filing after captures are verified. Daily scheduling is chosen during project setup, with on-demand operation when current work needs it.

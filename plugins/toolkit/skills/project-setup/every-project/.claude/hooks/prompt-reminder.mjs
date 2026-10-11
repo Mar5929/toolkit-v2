@@ -40,12 +40,12 @@ const PHRASES = {
   decision: new RegExp(`\\b(?:${ASKED}we decided|let'?s go with|go with option)\\b`, 'i'),
 };
 const HOME = 'is filed where the root AGENTS.md says, under "Where information goes"';
-const DECIDES = 'The managing-project-memory skill decides whether anything is saved: what is kept'
-  + ` ${HOME}. A fact that fits no file there goes in a memory record.`;
+const DECIDES = 'Use managing-project-memory for the configured memory procedure: what is kept'
+  + ` ${HOME}. For Notion memory, capture and retrieval use the Project Wiki process.`;
 const HINDSIGHT = `What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight`
   + ' memory is for.';
-const DECISION = ' For a decision, the test under "Where information goes" says whether it goes in'
-  + ' the work item or in DECISIONS.md.';
+const DECISION = ' For a decision, the configured filing procedure says whether it belongs in'
+  + ' the work item or a project-wide record.';
 const INSTRUCTION = ' For an instruction for how the agent works, that table names the file.';
 const NOT_OWNER = " Only the owner's own words are the owner's yes, not a helper agent's report, a "
   + "scheduled task, another session's message, or a transcript or other source the owner shared."
