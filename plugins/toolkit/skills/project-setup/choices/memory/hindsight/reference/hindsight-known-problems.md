@@ -36,6 +36,10 @@ Compare extracted facts, observations, and reflected claims with source uncertai
 
 The add-on's tools cannot delete a wrong memory. Save a correction titled `Correction: <topic>` through the document-save tool. Deletion remains the owner's dashboard action unless a separately approved supported administrative operation is available.
 
+## Check code-survey pre-save guidance
+
+Add-on 0.8.0 resolves bank-specific `toolGuideExtra` but omits it from the ingestion tool description. Follow [survey protection](hindsight-survey-protection.md) for the verified local repair, native tool discovery, non-storing actual-agent checks and update maintenance. Keep surveys off until complete outgoing-document review passes. A keyword check can miss a paraphrased security finding even when secret values are absent. Preserve working startup summaries and existing filters.
+
 ## Check repeated surveys and add-on updates
 
 The installed add-on 0.8.0 used imported Git documents to detect a new bank. With `gitIngest: "none"`, this could repeat the survey and defer the startup summary. Verify the installed behavior and follow [the local bank-detection patch](hindsight-local-bank-detection-patch.md) when the defect remains. Keep setup open until its checks pass; importing Git or disabling an approved survey is not a replacement for correct detection.

@@ -22,6 +22,8 @@ Keep `reflectTimeoutMs: 90000`, `injectTimeoutMs: 15000`, and the 120-second fir
 
 ## Check surveys and knowledge pages
 
+Follow [survey protection](hindsight-survey-protection.md) before enabling or replacing the code survey. Verify the actual native write-tool description, source-read evidence and complete outgoing documents with isolated synthetic fixtures; keep test records out of the live bank. Record instruction-based protection as such rather than claiming a deterministic filter.
+
 Verify the approved survey behavior and seeded page subjects without treating generated content as reviewed documentation. Check page source queries, scope, refresh schedule, last successful build, stale state, failure records, and background operation status. Review generated claims against current project records when they may have changed.
 
 A configured schedule does not prove that refresh runs or recovers after failure. After an approved recovery, verify completed processing and page readback, then verify a later scheduled run before claiming automatic recovery. Check the installed server's retry and pause behavior. Preserve each page's approved source, scope, and schedule; report duplicate-looking subjects before proposing removal.
