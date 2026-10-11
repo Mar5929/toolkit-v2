@@ -15,8 +15,8 @@ These kinds of fact never go in memory:
 | Fact | The one place where it is kept |
 | --- | --- |
 | A decision or an open question that more than one work item needs | `DECISIONS.md` (`filing-project-records`, step "record a decision") |
-| A project term | `system/glossary.md` (`filing-project-records`, step "update a system document") |
-| How the system must work, or how it works today | `system/`, or `reference/current-system/` |
+| A project term | `wiki/product-wiki/glossary.md` (`filing-project-records`, step "update a system document") |
+| How the system must work, or how it works today | `wiki/product-wiki/`, or `wiki/reference/current-system/` |
 | A person's lasting role and what the person may decide; a stable fact about how the client's business works | `PROJECT.md` |
 | A to-do or an action item, whoever owes it | A project task, or a task in its work item (`managing-work-items`) |
 | A source: something the project was given, such as a transcript, a note, or a document | `sources/` (`filing-project-records`, step "file a source") |

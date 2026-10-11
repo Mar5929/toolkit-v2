@@ -53,16 +53,16 @@ The librarian owns Current state updates. When closure changes the project's foc
 
 ### Local and Hindsight records
 
-The six steps below apply to local and Hindsight memory. They record changes to `system/` and `DECISIONS.md`.
+The six steps below apply to local and Hindsight memory. They record changes to `wiki/product-wiki/` and `DECISIONS.md`.
 
 1. List what the whole project may need to keep. Read the work item's Questions and Answers rows marked Decision? `yes`, its design, its Related items line, and its Notes, "Lessons not proven yet". Put these five kinds of thing on the list:
    - Each decision that more than one work item needs, and whose row does not end "Filed as DEC-###". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs a decision.
-   - Each rule that several work items rely on, that this work item added, changed, or retired, and that `system/` does not show yet.
-   - Each rule that this work item may have built. Such a rule is one whose behaviour a requirement of this work item built or changed. It is either a rule already on this list, or a rule that `system/` holds with the mark Approved. The mark is the word on a rule in `system/` that says whether the rule is Draft, Approved, Built, or Retired.
+   - Each rule that several work items rely on, that this work item added, changed, or retired, and that `wiki/product-wiki/` does not show yet.
+   - Each rule that this work item may have built. Such a rule is one whose behaviour a requirement of this work item built or changed. It is either a rule already on this list, or a rule that `wiki/product-wiki/` holds with the mark Approved. The mark is the word on a rule in `wiki/product-wiki/` that says whether the rule is Draft, Approved, Built, or Retired.
      - A work item that only names, explains, or documents a rule did not build what the rule says.
      - A cancelled work item did not build what any rule says.
      - `filing-project-records`, step "update a system document", holds the conditions for when a work item built what a rule says, and it checks them.
-   - Each project term that this work item added or changed, and that `system/glossary.md` does not show yet.
+   - Each project term that this work item added or changed, and that `wiki/product-wiki/glossary.md` does not show yet.
    - Each lesson that has no outcome at the end of its line. Step 5 gives the outcomes. Before you list a lesson, search and read relevant memory: use `managing-project-memory` for local memory, or `.claude/rules/hindsight-memory.md` for Hindsight. When the lesson was seen before, in another work item or another session, list it with the dates it was seen.
 2. When the list holds a decision, a rule to add, change, or retire, a project term, or a lesson, ask the owner once. When the list holds only rules that the work item may have built, or holds nothing, ask no question.
    - Add one Questions and Answers row that shows each line of the list with your recommendation and a one-line reason.
@@ -90,8 +90,8 @@ The six steps below apply to local and Hindsight memory. They record changes to 
    - "Kept in work item."
    - "Dropped (Q-12)."
 6. Fill the Moved up line.
-   - Name every entry in `DECISIONS.md` and every rule in `system/` that this work item added or changed. Name each one by its ID, and say what happened to it.
-   - Name every project term in `system/glossary.md` that this work item added or changed, by the term.
+   - Name every entry in `DECISIONS.md` and every rule in `wiki/product-wiki/` that this work item added or changed. Name each one by its ID, and say what happened to it.
+   - Name every project term in `wiki/product-wiki/glossary.md` that this work item added or changed, by the term.
    - Include the entries and rules that were filed before this step. The Questions and Answers rows of those entries end "Filed as DEC-###".
    - When there are none, write "Nothing: <the reason>."
    - Add a Recent History row that names the Q-ID of the question from step 2, or says that no question was needed.

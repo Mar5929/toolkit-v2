@@ -6,7 +6,7 @@ This reference says what each State means, how work is divided into levels, what
 
 - **Reading and saving a work item.** For every read and every save, use the installed `references/work-tracker.md`, which says where this project keeps its work items.
 - **Writing shared records.** With Notion memory, `managing-project-memory` captures decisions, finalized documentation and terms for librarian filing; active questions and designs stay in their work items. Verified capture links may be recorded before filing, with their processing state. For other memory choices, follow the local record procedure below.
-- **Writing local `DECISIONS.md`, `system/`, or `sources/`.** `filing-project-records` writes those three places. Never write those three places with this skill. Write the ID of one of their records into a work item only when `filing-project-records` has filed the record and given you the ID. The root `AGENTS.md`, section "Where information goes", gives the test for what belongs in those three places.
+- **Writing local `DECISIONS.md`, `wiki/product-wiki/`, or `sources/`.** `filing-project-records` writes those three places. Never write those three places with this skill. Write the ID of one of their records into a work item only when `filing-project-records` has filed the record and given you the ID. The root `AGENTS.md`, section "Where information goes", gives the test for what belongs in those three places.
   - When a work item must follow a rule or a decision that already exists, give the ID of the rule or decision and the work item to `filing-project-records`. It writes the ID into the work item.
 
 ## Contents
@@ -272,7 +272,7 @@ This table names where to read or save each kind of record and which skill handl
 | Every read and every save of a work item, a project phase, or a project task | Follow `references/work-tracker.md` in this skill. |
 | A shared decision, finalized documentation or term | With Notion memory, use `managing-project-memory` for capture. Other choices use `filing-project-records`. |
 | A source that the owner gives: a transcript, a document, a file, or pasted text | `filing-project-records`, step "file a source" |
-| A rule in `system/` to add, change, retire, or mark Built | `filing-project-records`, step "update a system document" |
+| A rule in `wiki/product-wiki/` to add, change, retire, or mark Built | `filing-project-records`, step "update a system document" |
 | Writing the work item's line in the project's Current State | `managing-project-memory`. |
 | Removing the other lines of the project's Current State that are no longer true, when a work item closes; a date or a deadline; a lesson to keep or to search for; an instruction for how the agent works | `managing-project-memory`. |
 | Merging a pull request | `merge-and-clean-up` |

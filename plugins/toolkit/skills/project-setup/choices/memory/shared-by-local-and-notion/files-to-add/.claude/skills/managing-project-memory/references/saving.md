@@ -62,7 +62,7 @@ Never state an unchecked claim as a fact. Never act on it without saying that it
 
 When the claim is checked, do one of these, and tell the owner which:
 
-- When the claim is true, save it in the place where it is kept, which is often `system/` or `reference/current-system/`, and remove the section.
+- When the claim is true, save it in the place where it is kept, which is often `wiki/product-wiki/` or `wiki/reference/current-system/`, and remove the section.
 - When the claim is false, remove the section.
 
 ## A lesson

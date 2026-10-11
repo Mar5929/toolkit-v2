@@ -156,7 +156,7 @@ flowchart TD
 
 | Claim or decision | Source | Date | Evidence type | Checked how |
 | --- | --- | --- | --- | --- |
-| <Fact or choice that changes the design> | <DEC-###, a rule ID in `system/`, SRC-###, an exact link, or the Q-ID of the owner's answer> | <YYYY-MM-DD> | <Official documentation / Project evidence / Owner decision / Community claim> | <Verification or Pending> |
+| <Fact or choice that changes the design> | <DEC-###, a rule ID in `wiki/product-wiki/`, SRC-###, an exact link, or the Q-ID of the owner's answer> | <YYYY-MM-DD> | <Official documentation / Project evidence / Owner decision / Community claim> | <Verification or Pending> |
 
 <Do not treat an unchecked community claim or an assistant proposal as a verified fact or owner decision.>
 

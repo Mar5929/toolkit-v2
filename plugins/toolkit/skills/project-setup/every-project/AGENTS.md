@@ -56,15 +56,15 @@ Existing projects keep their confirmed record homes until a reviewed migration i
 | `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
 | `SOUL.md` | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
 | `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read `work-items/` and `memory/`. | Only with the owner's yes. |
-| `system/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, built, or retired. | `filing-project-records`, step "update a system document". |
-| `system/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. `system/AGENTS.md` gives the columns of a row. Read it before you use or define a project term. | As for `system/`. |
-| `system/constraints.md` | Rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect (CON-##). | As for `system/`. |
-| `system/architecture.md` | The main parts of the system, what each part is responsible for, and how the parts connect (ARC-##). | As for `system/`. |
-| `system/data-model.md` | The data the system keeps: each object or table, its important fields, and how records relate to each other (DAT-##). | As for `system/`. |
-| `system/security-model.md` | Who can see, create, change, and delete each kind of record, who can use each function, and how that access is given (SEC-##). | As for `system/`. |
-| `system/automation.md` | Everything that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes (AUT-##). | As for `system/`. |
-| `system/integrations/` | One document per connection between this system and another one: what data is sent, in which direction, when, and which system holds the true value (INT-##). | As for `system/`. |
-| `system/diagrams/` | Diagrams that explain the system, such as a data model diagram, a process flow, or a map of the integrations. | As for `system/`. |
+| `wiki/product-wiki/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, built, or retired. | `filing-project-records`, step "update a system document". |
+| `wiki/product-wiki/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. `wiki/product-wiki/AGENTS.md` gives the columns of a row. Read it before you use or define a project term. | As for `wiki/product-wiki/`. |
+| `wiki/product-wiki/constraints.md` | Rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect (CON-##). | As for `wiki/product-wiki/`. |
+| `wiki/product-wiki/architecture.md` | The main parts of the system, what each part is responsible for, and how the parts connect (ARC-##). | As for `wiki/product-wiki/`. |
+| `wiki/product-wiki/data-model.md` | The data the system keeps: each object or table, its important fields, and how records relate to each other (DAT-##). | As for `wiki/product-wiki/`. |
+| `wiki/product-wiki/security-model.md` | Who can see, create, change, and delete each kind of record, who can use each function, and how that access is given (SEC-##). | As for `wiki/product-wiki/`. |
+| `wiki/product-wiki/automation.md` | Everything that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes (AUT-##). | As for `wiki/product-wiki/`. |
+| `wiki/product-wiki/integrations/` | One document per connection between this system and another one: what data is sent, in which direction, when, and which system holds the true value (INT-##). | As for `wiki/product-wiki/`. |
+| `wiki/product-wiki/diagrams/` | Diagrams that explain the system, such as a data model diagram, a process flow, or a map of the integrations. | As for `wiki/product-wiki/`. |
 | `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
 | `sources/INDEX.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
 | `delivery/` | The records of putting the work into use, in the four folders below. It does not hold the work itself, or its requirements and tasks: those are in the work item. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
@@ -72,9 +72,9 @@ Existing projects keep their confirmed record homes until a reviewed migration i
 | `delivery/deployments/` | One folder per deployment of a work item to an environment. `delivery/AGENTS.md` gives the fields of its record. | As for `delivery/`. |
 | `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk. Data files and backups are never committed. | As for `delivery/`. |
 | `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for `delivery/`. |
-| `reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions are in `system/` and `DECISIONS.md`. | Commit with `publish-docs`. |
-| `reference/outside-docs/` | Documentation captured from outside the project, such as vendor and product documentation, one folder per topic. `INDEX.md` lists the topics. | As for `reference/`. |
-| `reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `reference/`. |
+| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions are in `wiki/product-wiki/` and `DECISIONS.md`. | Commit with `publish-docs`. |
+| `wiki/reference/outside-docs/` | Documentation captured from outside the project, such as vendor and product documentation, one folder per topic. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
+| `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
 | `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named with its ID and a short form of its title: `working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
@@ -97,12 +97,12 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | Where one work item stands and its next action | The Current state at the top of that work item |
 | A decision only one work item needs | A row in that work item's Questions and Answers |
 | A decision or open question more than one work item needs | `DECISIONS.md` (DEC-###) |
-| A rule for one area of the system that several work items rely on | That area's document in `system/` |
-| A rule that covers several areas | `system/constraints.md` (CON-##) |
-| A project term | `system/glossary.md` |
+| A rule for one area of the system that several work items rely on | That area's document in `wiki/product-wiki/` |
+| A rule that covers several areas | `wiki/product-wiki/constraints.md` (CON-##) |
+| A project term | `wiki/product-wiki/glossary.md` |
 | A source the project received and keeps | `sources/` (SRC-###); the work item holds the ID |
-| Outside documentation | `reference/outside-docs/` |
-| An analysis of how the system works today, for the owner or a work item | Write it to `reference/current-system/` before you reply (`reference/AGENTS.md`). |
+| Outside documentation | `wiki/reference/outside-docs/` |
+| An analysis of how the system works today, for the owner or a work item | Write it to `wiki/reference/current-system/` before you reply (`wiki/reference/AGENTS.md`). |
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A finished file made for the client, or for the owner to pass on, such as a report or a spreadsheet | `delivery/client-handoffs/` |
 | A finished file of records that the owner loads into a system | `delivery/migrations/`. Never commit it. |
