@@ -33,12 +33,14 @@ Write `hindsight` on the Memory line, then add or update these lines:
 
 | Line | What it holds |
 | --- | --- |
-| Hindsight bank | The bank's ID. |
+| Hindsight bank | The stable bank ID used by this project's intended hosts and checkouts. |
+| Hindsight bank scope | What the bank's memory covers, which projects or agents share it, and any approved tag convention. |
 | Hindsight server | The API address. |
 | Hindsight dashboard | The bank's dashboard link. |
 | Hindsight package | `default`, with approved changes recorded below. |
 | Hindsight template | `Toolkit coding-project instructions`, the selected published template, or `own instructions`. |
 | Hindsight changes | The owner's changes to the package and template, including capture behavior. |
+| Hindsight service | The operator and runbook location, verified provider/model profile, capacity and retrieval profile, authentication-persistence check, and backup/recovery status. Record shared-service facts without credentials. |
 | Hindsight setup | `done`, or the remaining onboarding checks. |
 
 ## Hook settings

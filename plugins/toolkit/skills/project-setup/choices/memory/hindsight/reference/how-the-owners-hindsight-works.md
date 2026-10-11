@@ -9,6 +9,8 @@ Read this file before you set up a project's Hindsight bank, or when you need to
 - Each project has one bank. A bank is one project's memory store on the server. The memory stays on the server, so nothing is copied when the owner works on another computer.
 - Hindsight does its model work with a model at OpenAI, through the owner's ChatGPT subscription. So the text of each save goes to OpenAI, and that work uses the owner's ChatGPT usage allowance.
 
+The add-on's API credential connects the agent to Hindsight. Hindsight's provider login lets the service process memory through OpenAI. These are separate connections. Use [the recommended service settings](hindsight-server-settings.md) to check persistent, service-only Codex authentication, operation models, capacity, and backup ownership. Shared-service administration affects other projects; a project's bank interview does not authorize unrelated service changes.
+
 ## How an agent reaches it
 
 - On this computer, Hindsight's coding-agent add-on (`@vectorize-io/hindsight-coding-agents`) connects Claude Code and Codex to the bank. The toolkit's files call it the add-on.
@@ -23,6 +25,8 @@ Read this file before you set up a project's Hindsight bank, or when you need to
 - Hindsight writes knowledge pages. A knowledge page is a summary page on one subject, such as the project's components or its key decisions.
 - At the start of a session, the add-on gives the agent a short summary of what the bank holds about the owner's message. After that, the agent searches the bank with the add-on's tools.
 - Hindsight is a record of the past. The project's own files, the work items, and Git say what is true now.
+
+Generated summaries, observations, and knowledge pages can omit details or repeat mistaken or superseded claims. They supply evidence for the agent to verify, and do not establish current status or permission. [Memory-flow verification](hindsight-verification.md) checks processing and actual host behavior separately from content accuracy.
 
 ## Rules that hold in every step
 
