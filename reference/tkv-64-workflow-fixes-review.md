@@ -1,6 +1,6 @@
 # Eleven workflow fixes
 
-Version 0.9.56 fixes the eleven gaps from the wider shipped-content review and includes the earlier three Notion routing fixes. The patch is ready on `codex/tkv-62-routing-fixes`, uncommitted and unmerged. Broader wording-policy cleanup and concurrent TKV-60 changes remain separate.
+The patch reviewed as 0.9.56 fixes the eleven gaps from the wider shipped-content review and includes the earlier three Notion routing fixes. Delivery uses version 0.9.57 because concurrent Hindsight work reached main as 0.9.56. That upstream release was integrated without changing the reviewed procedures. The patch is committed on `codex/tkv-62-routing-fixes` and awaiting merge. Broader wording-policy cleanup and concurrent TKV-60 changes remain separate.
 
 ## What changed
 
@@ -38,4 +38,4 @@ The review used official skill/instruction guidance read on October 11 or eligib
 
 Fixtures and tabletop replays do not prove live Notion/GitHub/Hindsight/Salesforce operations, scheduler execution or full host loading. No live record or schedule changed. Review reports retain detailed limits.
 
-Next, commit and merge the reviewed patch; then resume the separate wording-policy cleanup.
+Next, merge the reviewed patch; then resume the separate wording-policy cleanup.
