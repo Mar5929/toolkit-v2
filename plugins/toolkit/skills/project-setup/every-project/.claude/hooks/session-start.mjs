@@ -32,8 +32,11 @@ if (memory !== 'hindsight') try {
   const state = String(memory === 'notion' ? attempt(() => JSON.parse(page()).markdown)
     : read('CURRENT_STATE.md')).trim();
   // Keep relevance review with the agent; length and age alone do not prove staleness.
-  if (state) out.push('Review Current State with managing-project-memory; retain what the'
-    + ' next session needs and remove lines that are no longer true.');
+  if (state) out.push(memory === 'notion'
+    ? 'Use managing-project-memory to read relevant wiki records and pending Wiki Inbox captures.'
+      + ' Verify current work in the tracker; the librarian reconciles Current state.'
+    : 'Review Current State with managing-project-memory; retain what the'
+      + ' next session needs and remove lines that are no longer true.');
   if (state) out.push("The project's Current State:", state);
   else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
     + ' Read it with the managing-project-memory skill.');

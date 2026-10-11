@@ -4,7 +4,7 @@ Use this file to take a work item with approved requirements to one design. The 
 
 - The owner's choice is a Questions and Answers row in the work item, and the design names that row by its Q-ID.
 - The design says how to build. It never adds or changes a requirement.
-- A work item has one design. Create it from `assets/design-template.md`, and save it with `references/work-tracker.md`.
+- A work item has one design. Create it from `assets/design-template.md`, and save it with `references/work-tracker.md`. With Notion memory, working architecture also stays in the work item’s Solution Design; capture finalized documentation for Product Wiki through `managing-project-memory`.
 
 Three kinds of helper do part of the work: a researcher looks up a fact, an architect writes one design option, and a critic checks a draft option against every requirement. `references/lifecycle-rules.md`, section "Starting a helper", says how to start one.
 
@@ -14,7 +14,7 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
    - When a design is in progress, continue from the work item's Current state and from the design's Notes, "Open design questions".
    - When the work is a single Salesforce platform question that needs no options, such as "Flow or Apex?", use Salesforce's skills and stop.
    - When the requirements are not approved yet, send a missing or changed requirement to `refining-requirements.md`. Continue with the design only when the owner asked for options first. In that case, keep the work item in Refining Requirements and the design `proposed`, and say that the owner's approval of the requirements is still needed. When the owner did not ask for options first, stop and tell the owner that the approval of the requirements comes first.
-2. Read what is already decided: `DECISIONS.md`, `system/constraints.md`, the document in `system/` for the area the work item changes, `.claude/rules/owner-preferences.md`, and the existing build. List every source you use, so that you can cite it.
+2. Read existing decisions and documentation for the affected area. With Notion memory, use `managing-project-memory` for wiki retrieval and relevant pending captures. Other choices use `DECISIONS.md`, `system/constraints.md` and the area document in `system/`. Read `.claude/rules/owner-preferences.md` and the existing build. List every source you use, so that you can cite it.
 3. Check that the requirements are ready. Nothing is missing, each requirement is explicit from start to finish, and no requirement is likely to be misread. Send each gap back to `refining-requirements.md`.
 4. Start the design.
    - Unless step 1 kept the work item in Refining Requirements, set the State to Designing.

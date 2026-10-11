@@ -2,7 +2,7 @@
 
 This file builds the setup copy. The setup copy is the files that the project would get from the toolkit today, built in a temporary folder, so that they can be compared with the project's own files. Open this file in an update or a check of the setup, at [reference/update.md](update.md), "1. Build a new setup copy". The job is done when the temporary folder holds the setup folder every project gets and the setup folders for the project's choices, with the project's name and "Toolkit settings" filled in.
 
-A setup of a new project or of an existing project builds no setup copy. It copies the folders straight into the project, as [SKILL.md](../SKILL.md), Steps 3 and 5, say.
+A new project normally copies the folders straight into the project, as [SKILL.md](../SKILL.md), Steps 3 and 5, say. An existing project does the same unless a reviewed migration requires a setup copy to stage new instructions before the records and destinations are verified.
 
 A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. The setup folder `every-project/` goes to every project. Each choice of the owner adds one or more.
 
@@ -49,7 +49,7 @@ cp -R <skill folder>/<folder>/. <copy>/
 
 Copy `every-project` first, then each chosen folder. A chosen folder adds files inside skill folders that an earlier folder supplied, so copy it into the existing paths.
 
-When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once.
+When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once. Local memory copies `choices/memory/shared-by-local-and-notion/files-to-add`; Notion memory copies only `choices/memory/notion/files-to-add` and the shared Notion tools. Apply the chosen module's guide and documentation changes in the setup copy too.
 
 Every file is copied whole. Change in the copy only what the setup files of the project's choices and the sections after "Never copied" name. Every other line of every file stays as it was copied.
 

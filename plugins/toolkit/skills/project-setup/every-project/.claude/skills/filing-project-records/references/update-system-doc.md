@@ -1,5 +1,7 @@
 # Update a system document
 
+When the project uses Notion memory, use `managing-project-memory` to capture the decision, finalized documentation or term with its source and existing approval evidence. The librarian updates the configured wiki destination. Return verified capture links to the calling skill; the local publication procedure below does not apply.
+
 Use this file to change a document in `system/`. That folder is the approved description of the system: how the system must work, written as numbered rules.
 
 `system/AGENTS.md` says which document holds what. It also gives the form of a document, the form of a rule and its four marks, a glossary term, an integration document, a diagram, and what must stay true. Read it before you write.

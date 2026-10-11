@@ -1,11 +1,11 @@
 # Closing
 
-Use this file to take a work item through Reflecting after the owner approved its result, and to close a work item as Done or Cancelled. The job is done when the work item is closed and its Moved up line says what the work item added or changed in `DECISIONS.md` and `system/`.
+Use this file to take a work item through Reflecting after the owner approved its result, and to close a work item as Done or Cancelled. The job is done when the work item is closed and its Moved up line accurately records reusable outcomes in the configured record homes.
 
 Fill the Moved up line at every close: when you mark a work item Done, when you cancel it, and when the owner closed it by hand. The section "Filling the Moved up line" gives the steps. Never set a work item to Done or Cancelled while its Moved up line is empty.
 
 
-Read the memory choice in `PROJECT.md`. For local or Notion memory, use `managing-project-memory` and the installed Current State page. For Hindsight, follow `.claude/rules/hindsight-memory.md` wherever these steps call for memory recall, review, saves, or corrections. Keep current work, blockers, and next actions in the selected tracker and project records; do not create a Current State page or treat its absence as a setup failure.
+Read the memory choice in `PROJECT.md`. For local memory, use `managing-project-memory` and the installed Current State page. For Notion memory, use that skill to read the wiki and capture reusable outcomes; the librarian maintains its destinations. For Hindsight, follow `.claude/rules/hindsight-memory.md` for recall, review, saves and corrections. Keep current work in the tracker and project records; Hindsight projects need no Current State page.
 
 ## Contents
 
@@ -40,7 +40,20 @@ After the checklist, do one of these:
 
 ## Filling the Moved up line
 
-The Moved up line is a line in the work item's Overview. It answers one question: did this work item change `system/` or `DECISIONS.md`? Do these six steps at every close.
+The Moved up line is a line in the work item's Overview. It records what the whole project keeps from this work item. Follow the procedure for the configured memory choice.
+
+### Notion wiki captures
+
+- Review the work item's decisions, finalized design, verified implementation evidence, changed terms and useful lessons. Use `managing-project-memory` to check existing records and capture supported reusable outcomes with their sources and approval evidence.
+- Read back each capture. Capture and filing need no separate promotion approval. New decisions, changed requirements and harness instructions still require their applicable approvals.
+- Fill Moved up with the verified capture links and their actual processing state, or write "Nothing: <the reason>." Name filed destinations only when filing has been verified. Add a Recent History row recording the capture check.
+- Continue closure after verified capture; routine librarian filing may finish later. Use an on-demand pass when subsequent work needs reconciled information.
+
+The librarian owns Current state updates. When closure changes the project's focus or resumption context, capture that checkpoint through `managing-project-memory` instead of editing Current state directly.
+
+### Local and Hindsight records
+
+The six steps below apply to local and Hindsight memory. They record changes to `system/` and `DECISIONS.md`.
 
 1. List what the whole project may need to keep. Read the work item's Questions and Answers rows marked Decision? `yes`, its design, its Related items line, and its Notes, "Lessons not proven yet". Put these five kinds of thing on the list:
    - Each decision that more than one work item needs, and whose row does not end "Filed as DEC-###". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs a decision.
@@ -50,7 +63,7 @@ The Moved up line is a line in the work item's Overview. It answers one question
      - A cancelled work item did not build what any rule says.
      - `filing-project-records`, step "update a system document", holds the conditions for when a work item built what a rule says, and it checks them.
    - Each project term that this work item added or changed, and that `system/glossary.md` does not show yet.
-   - Each lesson that has no outcome at the end of its line. Step 5 gives the outcomes. Before you list a lesson, search and read relevant memory: use `managing-project-memory` for local or Notion memory, or `.claude/rules/hindsight-memory.md` for Hindsight. When the lesson was seen before, in another work item or another session, list it with the dates it was seen.
+   - Each lesson that has no outcome at the end of its line. Step 5 gives the outcomes. Before you list a lesson, search and read relevant memory: use `managing-project-memory` for local memory, or `.claude/rules/hindsight-memory.md` for Hindsight. When the lesson was seen before, in another work item or another session, list it with the dates it was seen.
 2. When the list holds a decision, a rule to add, change, or retire, a project term, or a lesson, ask the owner once. When the list holds only rules that the work item may have built, or holds nothing, ask no question.
    - Add one Questions and Answers row that shows each line of the list with your recommendation and a one-line reason.
    - For a lesson, the owner chooses one of three: keep it for the whole project, keep it as not proven, or drop it. Recommend keeping a lesson for the whole project when it was seen before.
@@ -64,11 +77,11 @@ The Moved up line is a line in the work item's Overview. It answers one question
    | A rule that this work item may have built | `filing-project-records`, step "update a system document". That step checks the conditions and, when they are met, sets the rule's mark to Built, with this work item's ID. |
    | A project term | `filing-project-records`, step "update a system document" |
    | A lesson that the owner agreed to keep for the whole project, and that is about the system or the project | `filing-project-records`, step "record a decision" |
-   | A lesson that the owner agreed to keep for the whole project, and that is about how to do a step, such as a deploy, a data load, or a test, or about how the agent works | With local or Notion memory, give the lesson to `managing-project-memory`, which writes the line in `.claude/rules/owner-preferences.md`. With Hindsight, write the approved standing instruction in `owner-preferences.md` or its applicable rule, preserving the owner's approval, source, and date. Hindsight may keep qualifying history or a pointer under its rule; a memory save does not replace the instruction. |
-   | A lesson that is kept as not proven | With local or Notion memory, give the lesson to `managing-project-memory`, with the work item's ID and the dates it was seen. With Hindsight, follow `.claude/rules/hindsight-memory.md` and preserve its unproven status, work item, and dates. Keep lessons that do not qualify for lasting memory in the work item. |
+   | A lesson that the owner agreed to keep for the whole project, and that is about how to do a step, such as a deploy, a data load, or a test, or about how the agent works | With local memory, give the lesson to `managing-project-memory`, which writes the line in `.claude/rules/owner-preferences.md`. With Hindsight, write the approved standing instruction in `owner-preferences.md` or its applicable rule, preserving the owner's approval, source, and date. Hindsight may keep qualifying history or a pointer under its rule; a memory save does not replace the instruction. |
+   | A lesson that is kept as not proven | With local memory, give the lesson to `managing-project-memory`, with the work item's ID and the dates it was seen. With Hindsight, follow `.claude/rules/hindsight-memory.md` and preserve its unproven status, work item, and dates. Keep lessons that do not qualify for lasting memory in the work item. |
 
 4. Do this step only when work items are local files: check that the main checkout holds each save. The main checkout is the project's main folder, which is the first path that `git worktree list` prints. With each ID, `filing-project-records` reports whether the main checkout holds the save of that record. Steps 5 and 6 write those IDs into the work item. A local work item is kept in the main checkout, so the record that it names must be there.
-   - When the main checkout does not hold a save, stop here, and tell the owner what `filing-project-records` reported. With local or Notion memory, `filing-project-records` records in the project's Current State that the ID is still to be written in the work item. With Hindsight, it records the pending publication and next action as a tracker blocker note. Authoritative record-link fields stay unchanged until the main checkout holds the save.
+   - When the main checkout does not hold a save, stop here, and tell the owner what `filing-project-records` reported. With local memory, `filing-project-records` records in the project's Current State that the ID is still to be written in the work item. With Hindsight, it records the pending publication and next action as a tracker blocker note. Authoritative record-link fields stay unchanged until the main checkout holds the save.
    - When the main checkout holds the save, continue from this step.
 5. Write each lesson's outcome at the end of its line. Choose the outcome that describes what was saved, with the real ID in place of the example:
    - "Moved up: DEC-021."
@@ -97,9 +110,9 @@ For a small work item on the short path, read "Closing a small work item" below,
    - Next action: "None. Finished."
    - Waiting on: "Nothing."
    - Blockers: "None."
-5. With Hindsight, keep the closed item and any remaining follow-up current in the tracker, and review lasting knowledge under the Hindsight rule. With local or Notion memory, update the project's Current State, which is the project's one short page of what is true now. `references/lifecycle-rules.md`, section "Work that another skill does", names the skill for each of these writes.
-   - With local or Notion memory, remove the work item's line under Now.
-   - With local or Notion memory, ask `managing-project-memory` to remove the rest: each line under "Coming up" or "Waiting on" that is about this work item, and a "Next session starts with" line that names it. The reference file on the project's Current State in that skill, section "Removing what is no longer true", gives the steps.
+5. With Notion memory, capture the closure checkpoint with `managing-project-memory`. With Hindsight, keep the closed item and any remaining follow-up current in the tracker, and review lasting knowledge under the Hindsight rule. With local memory, update the project's Current State, which is the project's one short page of what is true now. `references/lifecycle-rules.md`, section "Work that another skill does", names the skill for each of these writes.
+   - With local memory, remove the work item's line under Now.
+   - With local memory, ask `managing-project-memory` to remove the rest: each line under "Coming up" or "Waiting on" that is about this work item, and a "Next session starts with" line that names it. The reference file on the project's Current State in that skill, section "Removing what is no longer true", gives the steps.
    - For a top-level work item, check its project phase, as `references/lifecycle-rules.md`, section "Levels", says. That section says what to ask the owner when the last open work item in a project phase is closed.
 6. After the owner's "no", record the owner's words, turn each problem into a task, and move the work item back to Building. After the fix, run the Testing Loop again and fill the Moved up line again, before you ask again.
 7. Report to the owner whether the work reached the default branch, what was deployed, and what was kept for the whole project: what the Moved up line says, and each lesson whose outcome starts "Moved up:". End the report with what the section "Leftover branches and worktrees" below asks the owner. When that section leaves nothing to ask, end with "Tell me the next thing to build."
@@ -108,18 +121,18 @@ For a small work item on the short path, read "Closing a small work item" below,
 
 Use this section for a small work item that takes the short path. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is and gives the steps of the short path.
 
-On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the question in "Filling the Moved up line", step 2, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
+On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the promotion question in "Local and Hindsight records", step 2, when that procedure applies, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
 
-1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then list what the whole project may need to keep, as "Filling the Moved up line", step 1, says.
+1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then review reusable outcomes through "Filling the Moved up line" for the configured store. For Notion memory, verify the captures before asking to close.
 2. Ask the closing question. Add the Questions and Answers row "Approve this result and mark <ID> Done?", with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
-   - When "Filling the Moved up line", step 2, would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
+   - For local or Hindsight memory, when "Local and Hindsight records", step 2, would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
    - When a merge, a deploy, or a data load is still to come, say what it is and who runs it, and say that the owner's yes to the closing question does not cover it.
    - The last line of the reply is exactly "Approve this result and mark <ID> Done?"
 3. After the owner's yes, do these four things in order:
    - Save the owner's words and the date in the row, and set `result_approved` to `YYYY-MM-DD by <name>`.
    - Add one answered Questions and Answers row for each line that you showed under "To keep for the whole project", because the yes also covers those lines. The row holds the line, your recommendation, and the owner's words.
    - When a merge, a deploy, or a data load is still to come, move the work item to Deploying, and follow `deploying.md`.
-   - Follow "Marking Done". The owner's yes has already answered the question in "Filling the Moved up line", step 2, for the lines that you showed, and the question in "Marking Done", step 3. Do not ask those questions again. Where those steps name their question's Q-ID, name the Q-ID of the closing question.
+   - Follow "Marking Done". The owner's yes has already answered the promotion question in "Local and Hindsight records", step 2, when that procedure applies, for the lines that you showed, and the question in "Marking Done", step 3. Do not ask those questions again. Where those steps name their question's Q-ID, name the Q-ID of the closing question.
 4. After the owner's "no" or a change, record the owner's words in the row, add a task for each problem that the owner named, and move the work item back to Building. Continue with the short path from its step 4, in `references/lifecycle-rules.md`, section "A small work item", and ask the closing question in a new row. That section also says what to do when the work item stops being small.
 
 ## Cancelling a work item
@@ -132,7 +145,7 @@ Use this section when the owner cancels a work item.
 4. Set the State to Cancelled and `waiting_on` to `none`. Rewrite the work item's Current state. Write these two of its lines as follows:
    - Where it stands: "Cancelled on `YYYY-MM-DD`: <the owner's reason>."
    - Next action: "None. Cancelled."
-5. With Hindsight, keep the closed item and any remaining follow-up current in the tracker, and review lasting knowledge under the Hindsight rule. With local or Notion memory, update the project's Current State, as step 5 of "Marking Done" says.
+5. With Notion memory, capture the closure checkpoint with `managing-project-memory`. With Hindsight, keep the closed item and any remaining follow-up current in the tracker, and review lasting knowledge under the Hindsight rule. With local memory, update the project's Current State, as step 5 of "Marking Done" says.
 6. Leave the work item's open pull request, its branch, and its worktree as they are until the owner says what to do with them. Delete nothing. The offer in "Leftover branches and worktrees" covers only a merged branch, so it does not cover the unmerged branch of a cancelled work item.
 
 ## Done or Cancelled by hand
@@ -142,7 +155,7 @@ Use this section when the owner marked the work item Done or Cancelled without t
 1. Add the Recent History row "Marked Done by the owner by hand on `YYYY-MM-DD`". For a cancelled work item, write "Cancelled" in place of "Done".
 2. Tell the owner in one line what had not happened yet: the result approval, the checker, the merge, or the filling of the Moved up line. Ask the owner what to do about it.
 3. Fill the Moved up line, as "Filling the Moved up line" says. Fill the line whatever the owner says about the rest.
-4. Rewrite the work item's Current state with the lines that "Marking Done", step 4, gives for Done, or that "Cancelling a work item", step 4, gives for Cancelled. Then follow step 5 of "Marking Done": update the installed Current State for local or Notion memory, or update tracker follow-up and review lasting knowledge under the Hindsight rule.
+4. Rewrite the work item's Current state with the lines that "Marking Done", step 4, gives for Done, or that "Cancelling a work item", step 4, gives for Cancelled. Then follow step 5 of "Marking Done" for the configured memory choice.
 
 ## Leftover branches and worktrees
 

@@ -52,7 +52,7 @@ Go through these parts:
    - Fill a prompt only with a fact that the owner gave or confirmed in this session. A fact that a file in the repository shows is a suggestion: offer it to the owner, and write it after the owner's yes.
    - The "In scope" and "Outside scope" lines in `PROJECT.md` describe the product. They never describe setup choices or toolkit files.
    - A file keeps its fill-in guide comment for as long as the file holds a prompt. Delete the guide when the last prompt is filled.
-5. **`DECISIONS.md` and the documents in `system/`** hold no prompt. Write into them only a decision or a rule that the owner confirmed, in the form that the guide of each gives.
+5. **Decisions and system documentation** hold only confirmed content. With local or Hindsight memory, use `DECISIONS.md` and `system/`. With Notion memory, use the configured wiki destinations and the Notion memory module's documentation guidance.
 6. **The fill-in guide comments.** Delete each fill-in guide comment when its own text says to delete it. Keep the guide comment inside "Toolkit settings", because later sessions read it.
 
 ## Instructions the owner gives during setup
@@ -91,7 +91,9 @@ The project's Current State is the project's one short page of what is true now.
 
 A Hindsight project has no Current State and no `memory/` folder. Where the work stands is in the place where work items are kept, so the rest of this section does not apply to a Hindsight project. For a Hindsight project, write each of the owner's steps that is still open as a project task, with the project's `managing-work-items` skill, so that a later session finds it. Use the words that the "Waiting on" line below gives, and name each step in the report too.
 
-Keep the five headings concise and retain what a later session needs. The list below says what to write on the "Last updated" line and under each of the five headings:
+With Notion memory, initialize the existing Current state sections through [choices/memory/notion/notion-memory-setup.md](../choices/memory/notion/notion-memory-setup.md). Record the current priorities, deadlines, open setup steps and next action from the interview. Keep the copied page's structure and verify the update.
+
+With local memory, keep the five headings concise and retain what a later session needs. The list below says what to write on the "Last updated" line and under each of the five headings:
 
 - Last updated: the date, "setup", and "agent".
 - Now: the work that is going on now, from question 12, or "None."

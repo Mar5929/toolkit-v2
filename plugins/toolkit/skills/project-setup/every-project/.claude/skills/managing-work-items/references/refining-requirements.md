@@ -25,7 +25,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 1. Start the work item, or continue it.
    - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
    - For an existing work item with open questions, say in one line what is settled, and then ask the first open question again. Never start the interview over.
-2. Read what the project already decided: `DECISIONS.md`, the document in `system/` for the area the work item changes, `system/constraints.md`, and the related work items, which you read with `references/work-tracker.md`. File each new source before you use it, as "Sources" below says.
+2. Read existing decisions and documentation for the affected area. With Notion memory, use `managing-project-memory` for wiki retrieval and relevant pending captures. Other choices use `DECISIONS.md`, the area document in `system/` and `system/constraints.md`. Read related work items with `references/work-tracker.md`. File each new source before you use it, as "Sources" below says.
 3. Agree the goal first. Ask "So the goal is <one sentence>?" After the owner's yes, write that sentence as the goal in the work item's Overview.
 4. Offer a team of helper agents once. Ask after the goal is agreed, and only when both of these are true: the work item is clearly large, and `delivery` is `not-offered`. A work item is clearly large when a part of it meets one of the conditions for a split in "Roadmap, tasks, and sub-items" below.
    - Ask once whether the owner wants a team of helper agents to build the work item, and record the answer in `delivery`.
@@ -55,13 +55,13 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 
    Third, check whether more than one work item needs the answer. The root `AGENTS.md`, section "Where information goes", gives the test: would an agent that works on a different work item need the answer?
    - When the answer passes that test, give it to `filing-project-records`. Use step "record a decision" for a decision or an open question, and step "update a system document" for a rule that several work items rely on.
-   - That step adds "Filed as DEC-014.", with the real ID, to the end of the row. The row keeps the original answer and its source evidence.
-   - A requirement that is based on a rule in `system/` names the rule's ID, and never copies the rule's text.
+   - With Notion memory, record verified capture or destination links and their processing state. Other choices add "Filed as DEC-014.", with the real ID, to the end of the row. The row keeps the original answer and its source evidence.
+   - A requirement based on an existing rule names its authoritative ID or wiki link rather than copying the rule. Working designs stay with the work item.
 7. Handle a change to an earlier answer or to an approved requirement.
    - Never rewrite the old row. Add a row "Change to Q-03: <the question now>", with the new answer, its speaker, date and source evidence, and set the old row to "Superseded by Q-09". Use the real Q-IDs.
    - Change the lines of each `R-xx` that the change affects, and keep the old wording in the Recent History row, in the form "R-02 was: ...; changed by Q-12".
    - Never change an Original verbatim requirement. Add the owner's new words after it, with the date and the Q-ID.
-   - When the old row ends "Filed as DEC-###", or a rule in `system/` is based on the old row, give the change to `filing-project-records`, as step 6 says.
+   - When a shared record depends on the old answer, route its correction as step 6 says, preserving the original evidence and replacement link.
    - After the requirements were approved, a changed requirement and a new requirement each need the owner's yes for that requirement only.
      - Add the row "Do you approve the change to R-02?" for a changed requirement, or "Do you approve R-05?" for a new one, and ask it.
      - While that row is open, that requirement is not approved. Design nothing, build nothing, and test nothing from it.

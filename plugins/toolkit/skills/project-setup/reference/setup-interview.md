@@ -34,10 +34,10 @@ The three choices:
 | Choice | "Memory" value | Good when | What to know |
 | --- | --- | --- | --- |
 | Local files | `local` | Most projects. | Memory is Markdown files in `memory/`, which Git ignores, so it exists only on this computer. It is private and needs no server. |
-| Notion | `notion` | Work items are in Notion, or the owner reads memory on a phone. | Work and memory then sit together and link to each other. It needs `ntn`, signed in. |
+| Notion | `notion` | Work items are in Notion, or the owner reads memory on a phone. | Project Wiki holds current context, lasting memory, finalized terms and product documentation. Coding agents capture in Wiki Inbox; a librarian files daily and on demand. It needs `ntn`, signed in. |
 | Hindsight | `hindsight` | Search by meaning across the saved records matters. | Memory is in a memory bank on the owner's own Hindsight server. A memory bank is one project's store of memory on that server. The project has no `memory/` folder and no Current State. |
 
-Any mix of the work items choice and the memory choice works, for example work items in Notion with local memory. With every choice, the project's decisions, terms, sources, and the description of its system are files in the repository, and they are never memory.
+Any mix of the work items choice and the memory choice works, for example work items in Notion with local memory. With local or Hindsight memory, decisions, terms and system documentation remain repository records. With Notion memory, Product Wiki owns finalized product documentation and decisions, Terminology Glossary owns finalized terms, and Long-Term Memory holds other lasting decisions and lessons. Working designs stay with their work items. Sources remain in their configured homes.
 
 After the owner has said where memory is kept, ask about Claude Code's own memory. Claude Code can keep notes of its own in a folder on the owner's computer and load them into every session. The toolkit turns that off, so that the project's memory is kept in one place. Say so, and ask: "Do you want Claude Code's own memory on in this project?"
 

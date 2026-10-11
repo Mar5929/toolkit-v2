@@ -1,6 +1,6 @@
 {
   "name": "toolkit",
-  "version": "0.9.50",
+  "version": "0.9.54",
   "description": "Sets up, checks, or updates Toolkit V2 in a project: copies shared project files, adds the chosen work-tracker and memory modules, and configures their hooks.",
   "author": {
     "name": "Mike Rihm",
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Toolkit V2",
     "shortDescription": "Set up a project with Toolkit V2, move one onto it, or check or update its setup.",
-    "longDescription": "Holds the project-setup skill. It records the owner’s project choices, copies the shared layout and selected modules, and verifies the setup in Claude Code and Codex. It also checks or updates an existing toolkit project. The plugin itself has no hooks, so it runs nothing in other projects.",
+    "longDescription": "Holds the project-setup skill. It records the owner\u2019s project choices, copies the shared layout and selected modules, and verifies the setup in Claude Code and Codex. It also checks or updates an existing toolkit project. The plugin itself has no hooks, so it runs nothing in other projects.",
     "developerName": "Mike Rihm",
     "category": "Productivity",
     "capabilities": [

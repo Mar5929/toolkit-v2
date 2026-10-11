@@ -1,5 +1,9 @@
 # Record a decision
 
+A sourced answer counts as decided only when its speaker, documented authority, date and unambiguous decision are verified. Retain the source passage or timestamp; a tentative statement or interpretation remains unresolved.
+
+When the project uses Notion memory, use `managing-project-memory` to capture the decision, finalized documentation or term with its source and existing approval evidence. The librarian updates the configured wiki destination. Return verified capture links to the calling skill; the local publication procedure below does not apply.
+
 Use this file to record a decision or an open question that more than one work item needs, so that later work on any work item finds it. Each one is an entry in `DECISIONS.md`, with an ID in the form DEC-###.
 
 The comment at the top of `DECISIONS.md` gives the form of an entry, its four statuses, who may decide, and what must never change. Read it before you write.

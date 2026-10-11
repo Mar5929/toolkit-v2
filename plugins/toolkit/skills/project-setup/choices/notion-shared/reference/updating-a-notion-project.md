@@ -1,7 +1,7 @@
 # Updating a Notion project
 
-This file holds what "update the toolkit" does for a project that keeps work items or memory in Notion. The closing lines of [notion-setup.md](../notion-setup.md) name it, and [reference/update.md](../../../reference/update.md), "5. Services", sends you to that setup file.
+Use this file during "update the toolkit" for a project with Notion work items or memory. The update preserves the owner's records, schemas and templates.
 
-An update changes nothing in Notion. The project's databases, views, and work item template are the owner's.
+For any existing project, propose a review and migration batch.
 
-When a newer skill file names a property or a section that the project's Notion pages do not have, tell the owner in one short list. Change Notion only as the owner says.
+Use [reference/update.md](../../../reference/update.md), "Changing a setup choice", for approval, preservation and verification. When a newer skill expects missing properties or sections, name the differences in the proposed batch. Change Notion only within the owner's agreed scope. Reuse existing approvals that cover the same records and destination.

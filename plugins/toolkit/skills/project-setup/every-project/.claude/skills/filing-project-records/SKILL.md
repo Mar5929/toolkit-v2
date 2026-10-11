@@ -1,11 +1,15 @@
 ---
 name: filing-project-records
-description: 'Files sources the project receives in sources/, decisions and open questions that more than one work item needs in DECISIONS.md, and changes to documents about system rules in system/. Each record gets an ID so later work can find the authoritative record without copying it. Use when the owner gives the project a source, a shared decision or question needs recording, or a system document needs updating. For a decision that only one work item needs, use managing-work-items.'
+description: 'Files received sources and routes shared decisions and system documentation to their configured homes. Use when the project receives a source, a shared decision needs recording, or documentation changes. Work-item-only records belong to managing-work-items.'
 ---
 
 # Filing project records
 
-Use this skill to file records that later work may need. File the three kinds of record as follows:
+Use this skill to file records that later work may need. Read the memory choice in `PROJECT.md` first.
+
+For Notion memory, file received sources here, but use `managing-project-memory` to capture shared decisions, finalized documentation, terms and corrections in Wiki Inbox. Working designs stay in their work items. Link verified captures in work items and distinguish them from the librarian’s filed destinations. Do not maintain duplicate local decision or system records. The decision and system publication steps below apply to other memory choices.
+
+File local records as follows:
 
 1. Save every source the project receives from someone else in `sources/`, unchanged, with an ID like SRC-001. Sources include meeting transcripts, emails, client documents, and screenshots. File a source even when only one work item uses it, or none does yet.
 2. Record decisions and open questions that more than one work item needs in `DECISIONS.md`. Give each entry an ID like DEC-001.
@@ -18,7 +22,7 @@ Before you save a decision, an open question, or a rule, check that more than on
 In this skill, a record is one saved source, one entry in `DECISIONS.md`, or one rule in `system/`. To save a record is to commit the change to the default branch with `publish-docs`.
 
 
-Read the memory choice in `PROJECT.md`. For local or Notion memory, use `managing-project-memory` and the installed Current State page. For Hindsight, follow `.claude/rules/hindsight-memory.md` wherever these steps call for memory recall, review, saves, or corrections. Keep current work, blockers, and next actions in the selected tracker and project records; do not create a Current State page or treat its absence as a setup failure.
+Read the memory choice in `PROJECT.md`. For local memory, use `managing-project-memory` and the installed Current State page. For Notion memory, use that skill for pending-aware retrieval and capture; the librarian maintains Current state. For Hindsight, follow `.claude/rules/hindsight-memory.md` for recall, review, saves and corrections. Keep current work in the tracker and project records; Hindsight projects need no Current State page.
 
 ## Which filing step to do
 

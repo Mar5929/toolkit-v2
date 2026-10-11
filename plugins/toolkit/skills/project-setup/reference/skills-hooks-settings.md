@@ -20,7 +20,7 @@ In a setup, change the project's own settings files. In an update or a check of 
 
 Every skill is in `.claude/skills/`, one folder per skill. Claude Code reads that folder. Codex reads `.agents/skills`, which is a link to that folder.
 
-The shared skills are the same in every project: `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `shaping-a-prompt`, `session-summary`, `filechanges`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project/` holds them.
+The shared skills are the same in every project: `managing-work-items`, `filing-project-records`, `handoff`, `braindump`, `shaping-a-prompt`, `session-summary`, `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project/` holds them.
 
 A choice may add a skill, or files inside a skill that the project already has. The setup file of each choice says what it adds.
 
