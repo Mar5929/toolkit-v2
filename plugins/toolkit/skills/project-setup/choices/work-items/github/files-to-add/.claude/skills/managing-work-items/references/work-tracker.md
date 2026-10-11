@@ -15,7 +15,7 @@ This reference says where each part of a work item is kept in GitHub Issues, and
 - The header fields of the work item template are labels on the issue: State, type, priority, who the work item waits on, who builds it, and the approvals. Status has no label.
 - A work item that is Done is an issue closed as completed. A work item that is Cancelled is an issue closed as not planned.
 - Work items can be nested, up to three levels. A top-level item is a work item with no parent, at level 1. A sub-item is a work item inside another work item, at level 2 or level 3. A sub-item is a GitHub sub-issue. `references/lifecycle-rules.md`, section "Levels", says what each level holds.
-- A top-level item has phases of its own, which group its tasks and its level-2 sub-items. Each phase is a row of the Roadmap table in the body, and each task is a checkbox line under its phase. A sub-item has no Roadmap: its tasks are one plain checkbox list.
+- A top-level item may use phases to group its tasks and its level-2 sub-items. Each phase is a Roadmap row in the body, and its tasks are checkbox blocks under its heading. An item without phases has one plain task list and a Sub-items line. Sub-items have no phases.
 - The project has phases of its own too, called project phases, which group the top-level items. It also has project tasks, which are tasks that belong to no work item.
   - The project's phases are milestones, one milestone for each project phase. Each top-level issue is in the milestone of its project phase.
   - The project's tasks are checkboxes in one pinned issue, titled "Project tasks".

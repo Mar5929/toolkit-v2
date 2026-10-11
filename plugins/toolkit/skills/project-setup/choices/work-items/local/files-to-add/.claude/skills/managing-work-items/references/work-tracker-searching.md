@@ -50,8 +50,8 @@ grep -rHE --include='*.md' --exclude=DESIGN.md '^(id|title|state|status|parent|w
 grep -nE '^\| *P[0-9]+ —|^\*\*Sub-items:\*\*|^- \[ \] \*\*(P[0-9]+-)?T[0-9]+' "<item file>"
 ```
 
-- The second command shows a work item's list of sub-items and its open tasks. For a top-level item, it shows the phases with their Sub-items cells. For a sub-item, it shows the `**Sub-items:**` line.
-- Under a top-level item, a sub-item that no Sub-items cell names goes last, under "No phase".
+- The second command shows a work item's list of sub-items and its open tasks. For an item with phases, it shows their Sub-items cells. For an item without phases, it shows the `**Sub-items:**` line.
+- Under a parent with phases, a sub-item that no Sub-items cell names goes last, under "No phase". Under a parent without phases, use its Sub-items line without phase grouping.
 
 ## Search by words or by a field
 

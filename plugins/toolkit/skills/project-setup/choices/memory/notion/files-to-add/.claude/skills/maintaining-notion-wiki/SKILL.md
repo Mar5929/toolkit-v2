@@ -9,7 +9,7 @@ Keep the Project Wiki current, supported by sources and free of duplicated autho
 
 ## Operation sequence
 
-1. Read the project's configured Notion identifiers and librarian operating settings in `PROJECT.md`. Follow [Notion access and traversal](references/notion-operations.md) and [run coordination](references/run-operation.md).
+1. Read this project's Project context and connections page from the published skill, or its configured link in `PROJECT.md`. Confirm the project, authoritative sources, Notion identifiers and librarian operating settings before writing. Follow [Notion access and traversal](references/notion-operations.md) and [run coordination](references/run-operation.md).
 2. Select pending captures or the explicitly requested correction. Read each capture, relevant work items, sources and existing destinations before changing records.
 3. Open [destination rules](references/destination-rules.md) and the applicable schema reference. Inspect live fields and relation targets; use the installed project's IDs, not template IDs.
 4. Reconcile supported information with existing records. Preserve approvals, uncertainty, metadata and history using [record maintenance](references/record-maintenance.md). Filing never grants approval or proves implementation.
@@ -20,6 +20,7 @@ Keep the Project Wiki current, supported by sources and free of duplicated autho
 
 | Reference | Open it when |
 | --- | --- |
+| [Project context and connections template](assets/project-context-template.md) | Setup fills this template for the published project page; the librarian reads that filled page before processing. |
 | [Notion access and traversal](references/notion-operations.md) | You read, search, parse or write Notion records. |
 | [Destination rules](references/destination-rules.md) | You choose or reconcile a destination. |
 | [Wiki schemas](references/wiki-schemas.md) | You access Wiki Inbox, Product Wiki or Terminology Glossary fields. |

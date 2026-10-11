@@ -77,14 +77,13 @@ Check that the memory record that each link leads to exists.
 
 ## Stale records
 
-A stale record is a memory record, or a section of one, that may no longer be true. Check three kinds.
+A stale record is a memory record, or a section of one, that may no longer be true. Choose review dates from the information’s usefulness, likelihood of changing and available evidence. Verify uncertain or changing information against its source before consequential use.
 
-- **Its "check or remove by" date is today or earlier.** Check whether the memory record or the section is still true.
-  - When it is still true, set a new date.
-  - When it is no longer true, retire the memory record or remove the section. This change does not go on the plan. Tell the owner.
-  - When you cannot tell, ask the owner.
-- **It is an unchecked claim that is past its date.** Check the claim when you can, as `references/saving.md`, section "An unchecked claim", says. When you cannot check it, ask the owner whether to keep it.
-- **It is about something that changes, such as a vendor, a process, or a person's role, and its last-verified date is unknown or more than six months old.** Check the memory record against its source. When you cannot, ask the owner. Then set the date you checked it, correct it, or retire it.
+- When a "check or remove by" date is due, check the record or section. If it is still true, choose its next review date. If it is no longer true, retire the record or remove the section; this change does not go on the plan. Tell the owner.
+- For an unchecked claim, follow `references/saving.md`, section "An unchecked claim". A passed review date does not prove the claim false.
+- For information that changes, such as a vendor, a process or a person’s role, use the source and last-verified date to decide when another check is needed. Update the last-verified date only after checking.
+
+When verification is unavailable, keep the uncertainty visible and preserve useful context. Ask the owner only when the unresolved issue blocks the work. Required approval for other cleanup changes still follows "Plan first, then ask" above.
 
 ## The wrong place, the wrong type, or a memory record changed by hand
 

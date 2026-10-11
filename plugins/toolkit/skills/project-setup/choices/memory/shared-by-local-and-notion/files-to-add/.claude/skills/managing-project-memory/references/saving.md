@@ -56,7 +56,7 @@ An unchecked claim is a statement that nobody has confirmed. It is something a p
 
 - what was claimed, the date, and who said it and to whom, or what you concluded it from;
 - the words "Not checked." and what would check the claim;
-- a "check or remove by" date, 30 days ahead unless the owner names one.
+- a "check or remove by" date chosen for the claim’s usefulness and likelihood of changing, or the date the owner names.
 
 Never state an unchecked claim as a fact. Never act on it without saying that it is unchecked.
 

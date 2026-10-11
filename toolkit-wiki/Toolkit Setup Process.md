@@ -93,7 +93,7 @@ Nothing is made outside the project folder without the owner's yes. Examples are
 
 1. It checks that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
 2. It writes the roadmap from question 12 in the place where work items are kept.
-3. With local memory, it writes the first lines of Current State from question 12. With Notion memory, it initializes Current state through the librarian and verifies the wiki destinations, retrieval/capture skills and the supported scheduler chosen with the owner. A Hindsight project keeps current work in its tracker and project records.
+3. With local memory, it writes the first lines of Current State from question 12. With Notion memory, it initializes Current state through the librarian and verifies the wiki destinations, retrieval/capture skills, the librarian skill published inside Project Wiki with verified project context and schemas, and the supported scheduler chosen with the owner. A Hindsight project keeps current work in its tracker and project records.
 4. It checks that the setup works: the settings files are valid, the session-start command prints the Current State when the project has one, and each service the owner chose answers.
 5. It tells the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
 6. It reports what was set up, what was made outside the folder, and what is still open.
@@ -179,3 +179,7 @@ A folder for an answer has the shape that Step 5 gives:
 1. **One definition of memory.** Mike's three criteria say what counts as memory, whatever the place it is kept. The proposal is to put them in the `AGENTS.md` that every project gets, and to let the Hindsight choice add only the sentence that names Hindsight and the bank.
 2. **The update of a project that already has the toolkit.** See "A project that already has the toolkit" above.
 3. **The text of the default `SOUL.md`.** A default needs real text: how Mike wants an agent to work with him in any project. That text is Mike's to give or to approve.
+
+## Root project guide
+
+After setup verifies the selected stores, root `AGENTS.md` names this repository’s work tracker and memory store in a short paragraph. Each choice supplies its sentence. Notion choices include this project’s Project page and, for memory, Project Wiki link. Skills hold the procedures; `PROJECT.md` holds connection details. Setup checks and updates keep the paragraph consistent with the current record homes.

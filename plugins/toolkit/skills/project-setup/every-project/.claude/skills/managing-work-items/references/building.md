@@ -22,7 +22,7 @@ A session is one chat with the agent. Use “chat” when explaining the arrange
 
 ## Build, task by task
 
-1. Read the work item's tasks and its design. Take the first task whose Depends on line is met. Before you start the task, set it In Progress. In a top-level work item, also set the task's phase In Progress when the phase is Not Started.
+1. Read the work item's tasks and its design. Take the first task whose Depends on line is met. Before you start the task, set it In Progress. When the task has a phase, also set that phase In Progress when it is Not Started.
 2. Work in the work item's own worktree, on its own branch, and never on the default branch. A worktree is a separate folder with its own branch. "Git for a build" below says how to make both. Build what the requirements ask, and no more. When the requirements need work that no task covers, add a task for that work first, and then do it.
 3. Tick the task only when its Done when proof is met. Save the proof in Recent History: the command and its exact result line, or what you saw. A task that is partly done stays open, and you add a task for what is left.
 4. When you cannot check a task in one go, split it into smaller tasks. When a part can be approved, built, or shipped on its own, propose a sub-item, as `refining-requirements.md`, section "Roadmap, tasks, and sub-items", says.
@@ -65,14 +65,14 @@ Follow [choosing and coordinating the team](team-arrangement.md) for this part o
 Plan which helper builds which task before you start a builder.
 
 - Build only after the requirements are approved, and after the design is approved when the work item has one. A requirement with an open row that asks the owner to approve it is not approved. Build nothing from it.
-- Start from three things: the design's build order; the Roadmap of the top-level work item, which holds its phases with their tasks and level-2 sub-items; and the task list of each sub-item. `references/lifecycle-rules.md`, section "Levels", describes these levels.
+- Start from three things: the design's build order; the top-level work item's plan, which holds its tasks and level-2 sub-items under phases or in a plain list; and the task list of each sub-item. `references/lifecycle-rules.md`, section "Levels", describes these levels.
 - Start one builder for each task that can run on its own. A builder is a helper that builds one task.
   - Tasks of one sub-item that depend on each other run one after another.
   - A sub-item that needs another sub-item's code starts after that code is merged into the branch of the sub-item that needs the code.
   - The main agent may build a small task itself.
 - Make what is missing with `references/work-tracker.md`:
-  - A sub-item gets `parent` set to the parent, its phase as `references/lifecycle-rules.md`, section "Levels", says, and `delivery` set to the parent's value. It gets `requirements_approved` copied from the parent when it covers the parent's requirements.
-  - A task is `P1-T01 — <name>` in a top-level work item, or `T01 — <name>` in a sub-item. It has Work, Deliverable, Done when, Who does it, and Depends on. It goes on the lowest-level work item it belongs to.
+  - A sub-item gets `parent` set to the parent, its phase only when its parent uses phases, as `references/lifecycle-rules.md`, section "Levels", says, and `delivery` set to the parent's value. It gets `requirements_approved` copied from the parent when it covers the parent's requirements.
+  - A new task is `P1-T01 — <name>` under a phase, or `T01 — <name>` in a plain list. Existing tasks keep their IDs. It has Work, Deliverable, Done when, Who does it, and Depends on. It goes on the lowest-level work item it belongs to.
 - Allow one writer for each file at a time. Tasks that need the same file run one after another, in the order that their Depends on lines give. The same holds for tasks that need the same shared environment, such as a sandbox org, a database, or a test service.
 - Start only as many builders as you can check and merge as they return.
 - Tell the owner the team in one line, such as "Team for P2: three builders, one per sub-item." The owner's answer about the arrangement already allows the team. Do not ask again.

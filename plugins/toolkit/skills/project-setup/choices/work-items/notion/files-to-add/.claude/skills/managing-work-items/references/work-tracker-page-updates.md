@@ -5,7 +5,7 @@ Use this reference to create or update a work item, its Solution Design page, ph
 ## Create a work item
 
 1. Count the levels by following "Parent item" up from the parent. When the parent is already at the third level, stop. The work becomes a task, as `managing-work-items` says.
-2. Create the row with the default template and the properties that `managing-work-items` gave you. [work-tracker-commands.md](work-tracker-commands.md) gives the call. Notion builds the page from the work item template. Write none of the template's sections yourself.
+2. Create the row using its database's default template and fill the applicable properties from the live schema and `managing-work-items`. [work-tracker-commands.md](work-tracker-commands.md) gives the call. Notion builds the page from the work item template as part of creation; do not apply it again or reconstruct its sections.
 3. Wait until the template's content is on the page. `using-notion-cli`, section "Waiting for a template", says how to check.
 4. Put the work item's ID in the title of its Solution Design page, as "The Solution Design page" says.
 5. Fill the page, as the next section says.
@@ -53,14 +53,15 @@ Phases and tasks are rows, so a change to the plan is a change to rows. The work
 - **IDs.** A Phase ID or a Task ID never changes, also when the phase or the task moves. A new Phase ID is one more than the highest that the work item, or the project, ever used, cancelled ones included. A new Task ID takes the next unused number in its phase or its plain list.
 - **Which "Phase" a row gets.**
   - A top-level item's "Phase" is its project phase. Leave it out until the owner has named one. Write the project phase in the item's "Related items" line too: "Project phase P01."
-  - A level-2 sub-item's "Phase" is one of its parent's phases: the one that `managing-work-items` gives, or the one that the owner names when you ask. First check that the phase's "Work item" is the parent.
+  - A level-2 sub-item's "Phase" is one of its parent's phases when the parent uses phases. First check that the phase's "Work item" is the parent. When the parent has a plain plan, leave the sub-item's "Phase" empty.
   - A level-3 sub-item has no "Phase". A sub-item's task has none either.
 - **Dropping or merging a phase.** First move or cancel its sub-items and its tasks. Then set its Status to Cancelled, and write what happened in its Exit result: "Merged into P1", or "Dropped: <reason>".
 - **Cancelling a task.** Set its Status to Cancelled, and start its title with "Cancelled: ".
 - **Moving a work item under another parent.** Count the levels first, as step 1 of "Create a work item" says, for the work item and for every level under it. Set "Parent item" to the new parent, or empty it to make the work item top-level. Then set "Phase" as the list above says, and never keep a phase of the old parent. Add Recent History rows on the work item, on the old parent, and on the new parent. When the owner changed "Parent item" by hand, add the same rows at your next change.
-- **A work item that is now a sub-item.** A sub-item has no phases. Give its tasks the Orders 1, 2, 3, and so on, in plan order, and empty each task's "Phase". Empty "Phase" on each of its sub-items. Set each of its phases to Cancelled, with the Exit result "Removed: a sub-item has no phases. Its tasks are now one plain list." Add one Recent History row that names each phase removed.
-- **A work item that is now top-level.** Add phase `P1`, named as the owner approves, and set it as "Phase" on each of the work item's tasks and sub-items. Set the work item's own "Phase" to the project phase that the owner names. Add a Recent History row.
-- **After a change to the plan.** List the work item's phases, and check their order.
+- **Changing between phases and a plain task list.** When adding phases, assign tasks and sub-items to the applicable phases and set their Order within each phase. When removing phase grouping, flatten tasks in the existing plan order into one ordered list and clear the tasks’ and sub-items’ "Phase" relations. Retain stable IDs and phase records; mark removed phases Cancelled and add the conversion reason to their Exit result without discarding existing outcomes. Record the change in Recent History. The top-level work item’s own "Phase" still refers to its project phase.
+- **A work item that is now a sub-item.** Convert its plan to a plain task list using the grouping procedure above, because sub-items have no phases.
+- **A work item that is now top-level.** Use phases when they help organize its plan; otherwise retain a plain list. Apply the grouping procedure when changing the plan, and set the work item’s own "Phase" to the project phase that the owner names. Add a Recent History row.
+- **After a change to the plan.** List its phases and tasks, and check their order and relations against the resulting plan.
 
 ## Exact names and values
 

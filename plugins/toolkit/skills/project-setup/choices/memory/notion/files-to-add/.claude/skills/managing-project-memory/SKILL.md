@@ -5,7 +5,7 @@ description: 'Finds Notion project knowledge and captures useful changes in Wiki
 
 # Managing Notion project memory
 
-Keep useful project knowledge discoverable. Coding agents read the Project Wiki and capture changes in Wiki Inbox; `maintaining-notion-wiki` reconciles destinations.
+Keep useful project knowledge discoverable. Coding agents read the Project Wiki and capture changes in Wiki Inbox; `maintaining-notion-wiki` reconciles destinations. For on-demand filing, use the configured Librarian schedule invocation and published Librarian processing skill link; coordinate with any active run.
 
 ## Read project knowledge
 

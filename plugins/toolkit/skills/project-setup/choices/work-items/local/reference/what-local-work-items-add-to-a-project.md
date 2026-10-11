@@ -27,3 +27,11 @@ In the project's root `AGENTS.md`, in the "Project map" table, add the first row
 | `work-items/PROJECT-TASKS.md` | The project tasks: administrative tasks that belong to no work item, such as giving a person access. | `managing-work-items`. |
 | `work-items/work-item-template/` | The templates that are copied to start a new work item and its design. | Never edit; they come from the toolkit. |
 ```
+
+## Root guide summary
+
+At setup completion, contribute this sentence to the root `AGENTS.md` summary. [Work tracking and memory summary](../../../../reference/project-store-summary.md) gives placement and verification.
+
+```markdown
+Work items are tracked in `work-items/` with `managing-work-items`.
+```

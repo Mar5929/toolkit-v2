@@ -44,11 +44,11 @@ The front matter is the block between the two `---` lines at the top of `<ID>.md
 
 ## Roadmap and Tasks
 
-A top-level item (`parent: none`) has a Roadmap, and its tasks are under phase headings. A sub-item has no Roadmap: its tasks are one plain list, in the template's sub-item form.
+A top-level item (`parent: none`) uses a Roadmap when phases help plan or track its outcomes. Its tasks then sit under phase headings. An item without phases uses the template's plain-list form, including its Sub-items line. Sub-items have no phases.
 
 - A **phase** belongs to a top-level item only. It is one row of the Roadmap table, and the rows are in plan order. The row has a phase ID (`P1`, `P2`), an Outcome, a Status (Not Started, In Progress, Done, Cancelled), an Exit result, and a Sub-items cell.
 - Each phase has a matching `### P2 — <name>` heading under Tasks, with the same ID and name. The headings are in the same order as the rows.
-- A **task** is a checkbox block. In a top-level item, the block is under its phase heading, and its ID has the form `P2-T01`. In a sub-item, the block is in the plain list, and its ID has the form `T01`. Every line of the block except the last ends with two spaces, which Markdown reads as a line break:
+- A **task** is a checkbox block. A new task under a phase heading gets an ID such as `P2-T01`. A new task in a plain list gets an ID such as `T01`. Existing task IDs stay unchanged when grouping changes. Every line of the block except the last ends with two spaces, which Markdown reads as a line break:
 
   ```markdown
   - [ ] **P2-T01 — Save a transaction** · Not Started  
@@ -59,9 +59,9 @@ A top-level item (`parent: none`) has a Roadmap, and its tasks are under phase h
     **Depends on:** None.
   ```
 
-- A **sub-item** is a work item of its own, in a folder inside this work item's folder. Its parent lists it once, as `[[WI-033]]`. Where the parent lists it depends on the parent's level:
-  - A top-level parent lists it in the Sub-items cell of one of its phases.
-  - A level-2 parent lists it in its `**Sub-items:**` line under Tasks, with no phase.
+- A **sub-item** is a work item of its own, in a folder inside this work item's folder. Its parent lists it once, as `[[WI-033]]`. Where the parent lists it depends on whether the parent uses phases:
+  - A parent with phases lists it in the Sub-items cell of one of its phases.
+  - A parent without phases lists it in its `**Sub-items:**` line under Tasks, with no phase.
 
   This file and `work-tracker-folders-and-files.md` call either place the parent's list of sub-items.
 - A new phase ID or task ID is one more than the highest ID ever used, cancelled ones included.
@@ -75,42 +75,42 @@ A top-level item (`parent: none`) has a Roadmap, and its tasks are under phase h
   | P3 — Monthly report | A report of spending by category | Not Started | The report matches the test data | None. |
   ```
 
-- **A task in a top-level item.** Add the block under its phase heading, after that phase's last task. Its ID is the phase ID plus its number in that phase, for example `P2-T04`.
-- **A task in a sub-item.** Add the block at the end of the list. Its ID is `T` plus its number in the work item, for example `T05`.
+- **A new task under a phase.** Add the block under its phase heading, after that phase's last task. Its ID is the phase ID plus its number in that phase, for example `P2-T04`.
+- **A new task in a plain list.** Add the block at the end of the list. Its ID is `T` plus its number in the work item, for example `T05`.
 - In both kinds of task, "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
 - **A sub-item.** First make the sub-item. `work-tracker-folders-and-files.md`, section "Creating a work item's folder and ID", gives the steps. Then do these three things:
   - Add `[[WI-033]]` to the parent's list of sub-items. Replace "None." when it is there, and separate several IDs with commas.
   - Add a Recent History row on the parent: "Sub-item [[WI-033]] created: <title>."
   - Set the parent's `updated:`.
-- **The form of a new work item's plan.** Follow what the template's guide comments under Roadmap and Tasks say for the work item's level.
+- **The form of a new work item's plan.** Follow the template's guide comments under Roadmap and Tasks for the work item's level and whether it uses phases.
 
 ### Changing
 
 - **Merge two phases.** Move the second phase's tasks and sub-items to the first phase. Set the second row's Status to Cancelled and its Exit result to "Merged into P1". The second phase's heading stays, with the line "Merged into P1." under it.
 - **Drop a phase.** First move or cancel each of its tasks and sub-items. Then set its Status to Cancelled and its Exit result to "Dropped: <reason>".
-- Delete only the template's example rows, example headings, and example tasks. A real row, heading, or task that is cancelled stays, with its history. The one exception is "A work item that changes level", below.
+- Delete only the template's example rows, example headings, and example tasks. A real row, heading, or task that is cancelled stays, with its history. The one exception is "A work item that changes level or plan grouping", below.
 - Read the plan back after a change. The rows and the headings must list the same IDs in the same order:
 
   ```bash
   grep -nE '^\| *P[0-9]+ —|^### P[0-9]+ —' "<item file>"
   ```
 
-### A work item that changes level
+### A work item that changes level or plan grouping
 
-Use this part when a move puts a work item at another level.
+Use this part when a move puts a work item at another level or an approved plan changes between phases and a plain list. Moving an item to the top level does not require phases.
 
-- **Phases to a plain list** (the work item is now a sub-item). Do these four things:
+- **Phases to a plain list.** Do these four things:
   1. Under `## Tasks`, write the `**Sub-items:**` line with every ID from the work item's Sub-items cells, or "None.".
   2. After that line, write every task block in plan order. Each task block keeps its ID, its status, and its tick.
-  3. Delete the `### P1 — ...` headings and the whole `## Roadmap` section.
-  4. Add one Recent History row that keeps what was deleted: "Phases removed, because a sub-item has no phases: P1 — <name> (<status>; <outcome>), P2 — ... Tasks kept with their IDs."
-- **A plain list to phases** (the work item is now top-level). Do these four things:
-  1. Add the template's `## Roadmap` section above `## Tasks`, with one phase, `P1`, named as the owner approves.
-  2. Put the `### P1 — <name>` heading above the task blocks. The task blocks keep their IDs.
-  3. Move the IDs from the `**Sub-items:**` line into P1's Sub-items cell, and delete that line.
+  3. Add one Recent History row that keeps what was deleted: "Phases removed: <reason>; P1 — <name> (<status>; <outcome>; <exit result>; <sub-items>), P2 — ... Tasks kept with their IDs."
+  4. Remove phase references from each sub-item's Related items line. Delete the phase headings and the whole `## Roadmap` section.
+- **A plain list to phases** (a top-level item whose plan now benefits from phases). Do these four things:
+  1. Add the template's `## Roadmap` section above `## Tasks`, with the approved phases, using the next unused phase IDs.
+  2. Put the matching phase headings above their task blocks. The task blocks keep their IDs.
+  3. Move the IDs from the `**Sub-items:**` line into the matching phases' Sub-items cells, and delete that line. Update each sub-item's Related items line with its phase.
   4. Add a Recent History row.
 
-  New tasks take `P1-T` IDs.
+  New tasks under phases take IDs for those phases. A plain list that stays plain keeps its task and sub-item layout.
 
 ### A task's writes
 
@@ -170,8 +170,8 @@ Fill these values after the folder and the file exist. `work-tracker-folders-and
 - **Recent History.** Write "Created from the owner's request." in place of the placeholder row.
 - **Every other angle-bracket prompt is deleted.**
   - Delete the example phase rows, the example phase headings and tasks, and the example question rows.
-  - In a sub-item, delete the whole `## Roadmap` section, and write `**Sub-items:** None.`.
-  - In a top-level item, delete the sub-item form with its `<!-- Sub-item form ... -->` comment.
+  - In an item without phases, delete the example `## Roadmap` section, and write `**Sub-items:** None.`.
+  - In a top-level item that uses phases, delete the plain-list form with its `<!-- Plain-list form ... -->` comment.
   - Under Notes, write "None." under Sources and under "Lessons not proven yet". Delete the prompt lines under Context and under "Solution options and considerations".
   - Keep every heading, table header, label, and `<!-- ... -->` guide comment. The one exception is the comment that starts "Fill-in guide for a new work item": delete that comment.
 - **Check** that no prompt is left:

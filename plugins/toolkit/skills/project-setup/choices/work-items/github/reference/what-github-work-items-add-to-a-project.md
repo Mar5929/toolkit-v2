@@ -33,3 +33,11 @@ The setup file and the files of this folder link to four of the six files that t
 - [files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md)
 - [files-to-add/.claude/skills/managing-work-items/references/work-tracker-searching.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-searching.md)
 - [files-to-add/.claude/skills/managing-work-items/references/work-tracker-project-roadmap-and-tasks.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-project-roadmap-and-tasks.md)
+
+## Root guide summary
+
+At setup completion, contribute this sentence to the root `AGENTS.md` summary. [Work tracking and memory summary](../../../../reference/project-store-summary.md) gives placement and verification.
+
+```markdown
+Work items are tracked in [GitHub Issues](<verified tracking repository issues URL>) with `managing-work-items`.
+```

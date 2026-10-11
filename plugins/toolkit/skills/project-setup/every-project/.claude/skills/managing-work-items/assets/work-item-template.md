@@ -44,7 +44,7 @@ updated: <YYYY-MM-DD>
 
 ## Roadmap
 
-<!-- Only a top-level item (`parent: none`) has a Roadmap, with at least one phase. A sub-item has no phases: delete this whole Roadmap section, and use the sub-item form at the end of Tasks. -->
+<!-- A top-level item (`parent: none`) uses a Roadmap only when phases help plan or track its outcomes. A new item without phases and every sub-item omit this Roadmap section and use the plain-list form at the end of Tasks. -->
 
 A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
 
@@ -57,7 +57,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Tasks
 
-<!-- A top-level item: under each phase heading, add that phase's tasks only, and delete the sub-item form at the end of this section. A sub-item: delete the phase headings and their tasks, and keep only the sub-item form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+<!-- An item with phases: under each phase heading, add that phase's tasks only, and delete the plain-list form at the end of this section. An item without phases: delete the example phase headings and tasks, and keep the plain-list form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
 
 ### P1 — <Phase 1 name>
 
@@ -83,9 +83,9 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
   **Who does it:** <agent | owner>  
   **Depends on:** P1 completion.
 
-<!-- Sub-item form: a sub-item's tasks in one plain list, numbered T01, T02, and so on, after the line that lists its own sub-items. -->
+<!-- Plain-list form: an item without phases lists its tasks here. New tasks use T01, T02, and so on; existing tasks keep their IDs. The Sub-items line lists its own sub-items. -->
 
-**Sub-items:** <A level-2 sub-item: the IDs of its level-3 sub-items, or “None.” A level-3 sub-item: “None.”>
+**Sub-items:** <A top-level item without phases: the IDs of its level-2 sub-items, or “None.” A level-2 sub-item: the IDs of its level-3 sub-items, or “None.” A level-3 sub-item: “None.”>
 
 - [ ] **T01 — <Task 1 name>** · Not Started  
   **Work:** <The action to take.>  

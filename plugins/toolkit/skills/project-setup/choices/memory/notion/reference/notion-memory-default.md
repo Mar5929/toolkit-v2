@@ -9,4 +9,4 @@ The owner’s revised Project template supplies Project Wiki. Setup connects tha
 - Current state may lag recent work. Coding agents read relevant pending captures and current work records, or request an on-demand pass when reconciled documentation is needed.
 - Existing approvals and evidence remain attached. Filing is not approval and does not prove implementation. Explicit corrections and forgetting use immediate on-demand reconciliation.
 
-`using-notion-cli` supplies Notion access. Setup verifies the resulting project’s schemas and relations instead of relying on template IDs. Other memory choices retain their own procedures.
+The librarian processing skill is published inside each Project Wiki with verified project context and schemas. The selected cloud or local librarian uses its available Notion tools; local CLI access follows `using-notion-cli`. Setup verifies the resulting project’s schemas and relations instead of relying on template IDs. Other memory choices retain their own procedures.

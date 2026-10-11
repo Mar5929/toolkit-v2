@@ -49,4 +49,4 @@ The Main Orchestrator is the session that coordinates the other sessions.
 
 ### The model for these sessions
 
-This session, the Main Orchestrator, and the main agent of every other session run on the most capable model that Claude Code or Codex offers. A new session may otherwise copy this session's model, so set the new session's model.
+For this session, the Main Orchestrator and other sessions, honor the project’s model preference; otherwise choose a suitable available model for the task. Check the model a new session inherits and set it when needed.

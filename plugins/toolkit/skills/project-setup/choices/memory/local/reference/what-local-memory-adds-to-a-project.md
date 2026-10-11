@@ -25,3 +25,11 @@ In the project's root `AGENTS.md`, in the "Project map" table, add these rows af
 | `memory/CURRENT_STATE.md` | The project's Current State, in five parts. | `managing-project-memory` writes it. |
 | `memory/MEMORY.md` | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
 ```
+
+## Root guide summary
+
+At setup completion, contribute this sentence to the root `AGENTS.md` summary. [Work tracking and memory summary](../../../../reference/project-store-summary.md) gives placement and verification.
+
+```markdown
+Project memory is stored in `memory/` with `managing-project-memory`.
+```

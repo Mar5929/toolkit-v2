@@ -22,7 +22,7 @@ Add this section and replace obsolete Hindsight memory instructions rather than 
 ```markdown
 ## Hindsight memory
 
-This project's memory is the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings". Read `.claude/rules/hindsight-memory.md` at session start and after compaction, and follow it for memory reads, reviews, saves, and corrections. It applies wherever this guide or a toolkit skill names `managing-project-memory`. Current work is in the work tracker. Wherever a toolkit guide or skill names the local Current State file, use the current tracker and project records instead, including handoff context; do not create that file or report its absence as a setup failure. The existing prompt reminder suggests when to review memory, and the agent reviews lasting lessons at handoff even when no reminder fires.
+Read `.claude/rules/hindsight-memory.md` at session start and after compaction, and follow it for memory reads, reviews, saves, and corrections. It applies wherever this guide or a toolkit skill names `managing-project-memory`. Current work is in the work tracker. Wherever a toolkit guide or skill names the local Current State file, use the current tracker and project records instead, including handoff context; do not create that file or report its absence as a setup failure. The existing prompt reminder suggests when to review memory, and the agent reviews lasting lessons at handoff even when no reminder fires.
 ```
 
 Keep the root `CLAUDE.md` that loads `AGENTS.md`. In the root guide, replace the local Current State startup instruction with the Hindsight section's instruction. Make references to memory lookup use Hindsight. Replace local Current State instructions in startup, status, handoff, and setup checks with the tracker and project-record instruction above; keep unrelated work-tracker and authoritative-record instructions.
@@ -54,3 +54,11 @@ The reminder's phrases flag possible memory; the copied rule supplies the criter
 ## Verify the project wiring
 
 Confirm the copied rule is present, the root guide points to it, and no local memory files or skills were copied into a new Hindsight project. Check both hosts' hook configuration. Run the existing prompt reminder with a representative owner message and `--skill hindsight` and confirm it names the Hindsight rule. A message without a matching phrase must not request an automatic save. In a new session, confirm the agent reads the rule and the add-on reaches the recorded bank. Report any check that cannot run.
+
+## Root guide summary
+
+At setup completion, contribute this sentence to the root `AGENTS.md` summary. [Work tracking and memory summary](../../../../reference/project-store-summary.md) gives placement and verification.
+
+```markdown
+Project memory is stored in the Hindsight bank `<confirmed bank ID>`; follow `.claude/rules/hindsight-memory.md`.
+```

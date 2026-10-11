@@ -2,9 +2,11 @@
 
 ## <Project name>: agent guide
 
-<!-- Project setup fill-in guide: the `project-setup` skill replaces <Project name> in the heading. Replace the outcome sentence below, and the "Build, test, or deploy" row under Commands, with this project's confirmed values. Keep text such as `<ID>` in the tables, and change nothing else. Remove this guide when both prompts are filled. -->
+<!-- Project setup fill-in guide: the `project-setup` skill replaces <Project name> in the heading. Replace the outcome sentence, the work tracking and memory summary, and the "Build, test, or deploy" row under Commands with this project's confirmed values. Each selected choice supplies its summary sentence. Keep text such as `<ID>` in the tables. Remove this guide when these prompts are filled. -->
 
 <One sentence describing this project and its outcome.> A session is one chat with the agent.
+
+<Work tracking and memory summary for this project.>
 
 The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things. This is similar in philosophy to @.claude/rules/evaluate-the-owners-request.md
 

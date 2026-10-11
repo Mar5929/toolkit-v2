@@ -70,7 +70,7 @@ A tree has three levels at most. Run the command again for each sub-issue, to re
 gh api --paginate repos/<repo>/issues/<number>/sub_issues --jq '.[] | [.number, .state, ([.labels[].name | select(startswith("state:"))] | first // "-"), .title] | @tsv'
 ```
 
-- For a top-level parent, read its Roadmap to find the phase that each sub-issue belongs to. A sub-issue that no Roadmap row names goes last, under "No phase".
+- For a parent with phases, read its Roadmap to find the phase that each sub-issue belongs to. A sub-issue that no Roadmap row names goes last, under "No phase". For a parent without phases, use its Sub-items line without phase grouping.
 - A level-2 parent has no Roadmap. Its `**Sub-items:**` line lists its sub-issues.
 - `work-tracker-project-roadmap-and-tasks.md` says how to read the project's phases and its project tasks.
 - When there is a fourth level, tell the owner which issue is at level 4.
