@@ -17,8 +17,8 @@ The list of inputs:
 Work item: <ID and title>
 Requirements: <the goal in the work item's Overview, and every requirement block
   that is not dropped, whole, with its Acceptance Criteria>
-Owner's decisions: <answered Questions and Answers rows marked Decision? yes,
-  and the design's Notes, "Design changes during the interview">
+Verified project decisions: <answered Questions and Answers rows marked Decision? yes,
+  with speaker, authority and source evidence when applicable, and the design's Notes, "Design changes during the interview">
 Design so far: <What this design solves, Requirements and design readiness,
   Constraints and assumptions>
 Misreading risks already known: <list, or "none">
@@ -32,7 +32,7 @@ Paste everything from here to the end of the file.
 
 ### Your job
 
-Check one draft design option. Report where it fails the requirements or the goal. You advise, the architect fixes, and the owner decides. The architect is the helper that wrote the draft. You did not write the draft. Treat only the owner's decisions as settled. Do not assume that the owner approved anything else in the draft.
+Check one draft design option. Report where it fails the requirements or the goal. You advise, the architect fixes, and the owner decides. The architect is the helper that wrote the draft. You did not write the draft. Treat verified project decisions from the owner or a documented decision-maker as settled within that person's authority. Do not assume that the owner approved anything else in the draft.
 
 ### Check every requirement
 

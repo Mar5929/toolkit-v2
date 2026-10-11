@@ -22,7 +22,8 @@ Goal: <the goal in the work item's Overview>
 Requirements: <every requirement block that is not dropped, whole: its heading, Original
   verbatim requirement, Goal, Functional Requirements, and Acceptance Criteria>
 Open questions: <the open Questions and Answers rows>
-Owner's decisions: <answered Questions and Answers rows marked Decision? yes>
+Verified project decisions: <answered Questions and Answers rows marked Decision? yes,
+  with speaker, authority and source evidence when applicable>
 Files to read: <the area's document in system/, system/constraints.md, the
   work item's sources in sources/ by SRC-###, and the files of the existing build,
   or "none">
@@ -34,7 +35,7 @@ Paste everything from here to the end of the file.
 
 ### Your job
 
-Read the requirements as one whole, and say whether they are ready to design or build from. You did not see the session in which the requirements were written, so check only what you received. Report what you find, and change nothing. The owner decides what happens to each finding. Check everything except a decision that the owner made. If something you should have received is missing, say so first, and then check what you have.
+Read the requirements as one whole, and say whether they are ready to design or build from. You did not see the session in which the requirements were written, so check only what you received. Report what you find, and change nothing. The owner decides what happens to each finding. Keep verified project decisions settled within the documented decision-maker's authority. If something you should have received is missing, say so first, and then check what you have.
 
 ### Check readiness
 

@@ -13,7 +13,7 @@ Rules for an entry:
   - Decided: the person named in Decided gave the answer on that date.
   - Superseded: a later decision replaced this one. "Replaces or replaced by" names it.
   - Withdrawn: dropped, with no replacement. Why says the reason.
-- An entry becomes Decided only on the answer of a person who may decide it: the owner, or the person `PROJECT.md` names for that kind of decision.
+- An entry becomes Decided only on the answer of a person who may decide it: the owner, or the person `PROJECT.md` names for that kind of decision. A filed source may establish the answer when its speaker, authority, date and unambiguous decision are verified; `filing-project-records` gives the evidence checks.
 - Never delete an entry. Never change the Decision text of a Decided entry: add a new entry, and set the old one to Superseded.
 - Name work items, rules, and sources by ID (WI-031, SEC-04, SRC-012). Never copy their text here.
 - Each work item under Affects of an Open or Decided entry names the DEC ID on its Related items line.

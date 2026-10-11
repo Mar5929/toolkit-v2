@@ -11,14 +11,14 @@ The Notion steps make the project page as a row of the owner's Projects database
    ```
 
 2. Leave out every data source whose title column is `Name`. Such a data source is Lore's Projects database under another project's Memory page. Lore is the name of the Notion memory layout. The owner's Projects database has the title column `Project`.
-3. Ask the owner one question, with a recommendation: "I'll add this project as a row of your Projects database (<link>). OK?"
-   - Ask the question as a message of its own, before the ID prefix question, and make no project page until the owner answers.
-   - The owner's yes to making the pages does not cover which database. A line about the database inside a message that asks something else does not count as asking.
-   - When more than one data source is left, list each with its link and ask which one. Recommend the one that holds the owner's other projects.
+3. When an approved migration batch names this exact Projects database as its destination, use that approval. Otherwise, ask the owner one question, with a recommendation: "I'll add this project as a row of your Projects database (<link>). OK?"
+   - When a question is needed, ask it before the ID prefix question. Make no project page until its listed writes and exact destination are approved.
+   - Approval must cover the exact database. A generic yes to making pages does not choose a destination; a reviewed migration batch may confirm both the listed writes and their destination.
+   - When the destination is not already confirmed and more than one data source is left, list each with its link and ask which one. Recommend the one that holds the owner's other projects.
    - When the owner has no Projects database, stop. Tell the owner that a Notion project needs a Projects database because the template is kept in one, and ask the owner to make one in Notion.
 4. Use the id the owner confirms as `<projects-data-source-id>`.
 
 When the owner names a page to put the project under, still run step 1, and keep the Projects data sources whose database is on that page. The last column that step 1 prints is the id of the page that holds the database. Compare the ids without their dashes.
 
-- When one of those data sources has the title column `Project`, ask in the same way, as a message of its own: "I'll add this project as a row of the Projects database on <page>. OK?"
+- When one of those data sources has the title column `Project`, use an existing reviewed migration approval that confirms this exact destination, or ask: "I'll add this project as a row of the Projects database on <page>. OK?"
 - When that page has no such database, stop. Tell the owner that the page has no Projects database, and ask the owner to make one on that page or to name another page.

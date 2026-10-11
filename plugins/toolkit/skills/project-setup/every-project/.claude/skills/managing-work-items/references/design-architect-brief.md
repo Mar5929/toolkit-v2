@@ -17,7 +17,8 @@ Work item: <ID and title>
 Option: <letter and short name>, and how it must differ from the others
 Requirements: <the goal in the work item's Overview, and every requirement block
   that is not dropped, whole, with its Acceptance Criteria>
-Owner's decisions: <answered Questions and Answers rows marked Decision? yes>
+Verified project decisions: <answered Questions and Answers rows marked Decision? yes,
+  with speaker, authority and source evidence when applicable>
 Design so far: <What this design solves, Requirements and design readiness,
   What exists today, Constraints and assumptions, Notes>
 Research findings: <the researcher's report, or "none">
@@ -32,7 +33,7 @@ Paste everything from here to the end of the file.
 
 ### Your job
 
-Write one design option that a junior developer could build from, or fix the option you were given. Return the whole option in your reply. The main agent saves it, and the owner chooses. Treat only the owner's decisions as settled. Proposals and unanswered questions stay open. Read the existing build for this area yourself.
+Write one design option that a junior developer could build from, or fix the option you were given. Return the whole option in your reply. The main agent saves it, and the owner chooses. Treat verified project decisions from the owner or a documented decision-maker as settled within that person's authority. Proposals and unanswered questions stay open. Read the existing build for this area yourself.
 
 ### First check the requirements
 

@@ -72,7 +72,7 @@ The table is in the body under `## Questions and Answers`. In any table, write `
 - **A new row.** Its ID is the highest Q-ID in this work item plus one. Insert the row after the last open row. When no row is open, insert it right after the separator line. Open rows then stay on top, oldest first.
   - When the template's two example rows are still there, delete them in the same change to the body.
   - When the owner must answer, add `waiting-on:owner`. When someone else must answer, add `waiting-on:external`.
-- **An answer.** Put the owner's words in quotation marks under Answer, and write the date as `YYYY-MM-DD`. Then move the row to just below the last open row, so that answered rows are newest first.
+- **An answer.** Put the answer in the speaker's words in quotation marks under Answer, name its speaker and source evidence when applicable, and write the decision date as `YYYY-MM-DD`. Use the authority checks in `filing-project-records/references/record-decision.md` for a sourced decision. Then move the row to just below the last open row, so that answered rows are newest first.
   - After the owner's last open question is answered, swap `waiting-on:owner` for `waiting-on:agent` when you continue the work, or remove `waiting-on:owner`.
   - Keep `waiting-on:owner` while another question for the owner is open.
 - **A superseded row.** Change only the row's Status cell, to `Superseded by Q-09`.

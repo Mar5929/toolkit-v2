@@ -12,7 +12,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 | --- | --- |
 | A decision was made, or a question was raised | A new entry |
 | The answer to an Open entry was given | Answering an open question |
-| The owner changes a Decided entry | Replacing a decision |
+| A person who may decide changes a Decided entry | Replacing a decision |
 | The owner drops a question or a decision, and nothing replaces it | Withdrawing an entry |
 
 ## A new entry
@@ -23,7 +23,8 @@ The Status of an entry is one of four words: Open (a question that waits for an 
    - When a Decided entry says something different, go to "Replacing a decision".
 2. Choose the Status from who gave the answer.
    - When a person who may decide it gave the answer, the Status is Decided. `DECISIONS.md` says who may decide: the owner, or the person `PROJECT.md` names for that kind of decision.
-   - When anyone else said it, a source says it, or you worked it out, the Status is Open. Write the exact question on the Decision line.
+   - A filed source may establish that answer without a second confirmation. Verify the speaker, their authority for this decision, the date, and the unambiguous decision in the source; retain its SRC ID and the passage or timestamp that supports the entry.
+   - When the statement is tentative, the speaker or authority is unverified, or the answer is your interpretation, the Status is Open. Write the exact question on the Decision line.
    - When `PROJECT.md` names no person for this kind of decision, ask the owner who decides. A job title alone does not show who decides.
 3. File each source the entry is based on that has no SRC ID yet. `file-source.md` gives the steps.
 4. Add the entry in the form that `DECISIONS.md` gives, with the next DEC number. Fill these lines as follows.
@@ -39,7 +40,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
    - Otherwise, write the rule of an Open entry when the entry is answered.
 6. Make one save with `publish-docs`. The save holds `DECISIONS.md`, `sources/INDEX.md` when step 4 changed it, and every system document that step 5 changed.
 7. Write the IDs in each work item under Affects, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write them. Wait until then. On the work item's Related items line, write the DEC ID and the ID of each rule that step 5 added or changed.
-   - When a Questions and Answers row in a work item raised the decision, add "Filed as DEC-###." at the end of that row's Answer cell, after the owner's words. The row keeps the owner's words.
+   - When a Questions and Answers row in a work item raised the decision, add "Filed as DEC-###." at the end of that row's Answer cell, after the original answer. The row keeps the answer and its source evidence.
    - When a work item cannot continue without the answer to an Open entry, that work item waits on the owner. Continue with `managing-work-items` for that work item.
    - When no work item waits on an Open entry, keep its DEC ID and who must answer in `DECISIONS.md`. With local or Notion memory, also give `managing-project-memory` a "Waiting on" line in Current State. With Hindsight, use the tracker for any follow-up task and the Hindsight rule for qualifying lasting knowledge.
 8. Tell the owner the DEC ID, its Status, and the work items that now name it.
@@ -58,7 +59,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 
 ## Replacing a decision
 
-Use this section when the owner changes a Decided entry.
+Use this section when a person who may decide changes a Decided entry. Apply the authority and evidence checks in "A new entry" first. When the proposed replacement is not verified as Decided, record an Open question and leave the existing decision and rules in force.
 
 1. Add a new entry for the new decision, with steps 2 to 4 of "A new entry". Its "Replaces or replaced by" line says "replaces DEC-###".
 2. In the old entry, set Status to Superseded and "Replaces or replaced by" to "replaced by DEC-###". Change no other line of the old entry.
