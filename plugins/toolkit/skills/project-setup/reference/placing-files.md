@@ -8,6 +8,8 @@ The job is done when three things are true: the project has every file of the fo
 
 ## See what would change
 
+Before copying into an existing project, check whether records at older paths would now appear as missing wiki files. Follow [Moving existing records into the local wiki](local-wiki-layout.md) to review the mapping before comparing or copying. Complete an approved move before copying templates into its destinations; when a move is pending or declined, follow that reference to adapt the setup copy to verified retained homes or defer affected operational files. Exclude pending destinations and deferred operational files or skill folders from copying, and retain current record routes. A setup check reports the proposed move without changing records.
+
 This command writes nothing.
 
 ```text

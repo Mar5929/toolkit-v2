@@ -81,7 +81,7 @@ The other records are in these places:
 
 - Read `PROJECT.md` for the configured record homes. Local memory uses `memory/CURRENT_STATE.md` in the main checkout; Hindsight has no Current State page. Check current work against the selected tracker and lasting knowledge against the configured memory records or supplied evidence.
 - For Notion after verified wiki cutover, use the relevant Current state, Product Wiki, Terminology Glossary, Long-Term Memory and pending Wiki Inbox records. Check sources, dates, approval, implementation and supersession status separately. A pending capture is not verified filing.
-- For other choices or before verified migration, shared decisions and system rules use their confirmed homes, normally `DECISIONS.md` and `system/`. Filed sources remain in `sources/`.
+- For other choices or before verified migration, shared decisions and system rules use their confirmed homes, normally `DECISIONS.md` and `wiki/product-wiki/`. Filed sources remain in `sources/`.
 
 The first line of the prompt is a fixed notice, which says that the prompt is AI-generated and may contain hallucinations. That notice is not a claim. When the draft has no such line, say so under "Also noticed".
 

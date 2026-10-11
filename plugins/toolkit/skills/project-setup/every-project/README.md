@@ -18,10 +18,10 @@
 
 - [PROJECT.md](PROJECT.md): purpose, scope, systems, people, and the setup choices.
 - [DECISIONS.md](DECISIONS.md): every decision and open question that more than one work item needs.
-- [system/](system/): the approved description of the system, as numbered rules.
+- [wiki/product-wiki/](wiki/product-wiki/): the approved description of the system, as numbered rules.
 - [sources/](sources/): the sources, which are the documents and messages the project received, such as meeting notes and client documents.
 - [delivery/](delivery/): each release, deployment, data migration, and client handoff.
-- [reference/](reference/): outside documentation, and the record of the system as it is today.
+- [wiki/reference/](wiki/reference/): outside documentation, and the record of the system as it is today.
 - [AGENTS.md](AGENTS.md): how the agent works in this project, where each kind of information goes, and the full project map.
 - Active work, each work item's design and decisions, the project's phases, and the project's own tasks: the place chosen at setup, which the "Tracker" line in `PROJECT.md` under "Toolkit settings" names.
 

@@ -52,7 +52,7 @@ Go through these parts:
    - Fill a prompt only with a fact that the owner gave or confirmed in this session. A fact that a file in the repository shows is a suggestion: offer it to the owner, and write it after the owner's yes.
    - The "In scope" and "Outside scope" lines in `PROJECT.md` describe the product. They never describe setup choices or toolkit files.
    - A file keeps its fill-in guide comment for as long as the file holds a prompt. Delete the guide when the last prompt is filled.
-5. **Decisions and system documentation** hold only confirmed content. With local or Hindsight memory, use `DECISIONS.md` and `system/`. With Notion memory, use the configured wiki destinations and the Notion memory module's documentation guidance.
+5. **Decisions and system documentation** hold only confirmed content. With local or Hindsight memory, use `DECISIONS.md` and `wiki/product-wiki/`. With Notion memory, use the configured wiki destinations and the Notion memory module's documentation guidance.
 6. **The fill-in guide comments.** Delete each fill-in guide comment when its own text says to delete it. Keep the guide comment inside "Toolkit settings", because later sessions read it.
 
 ## Instructions the owner gives during setup

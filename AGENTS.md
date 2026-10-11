@@ -17,9 +17,9 @@ This repository authors the toolkit. Its starter skills remain disabled here. Wh
 | Information | Where the agent keeps it |
 | --- | --- |
 | Current work, decisions, questions, progress, and history | Keep them in the corresponding Notion work item. |
-| Intended Toolkit behavior | Keep it in the relevant file in `toolkit-wiki/`. |
+| Intended Toolkit behavior | Keep it in the relevant file in `wiki/product-wiki/`. |
 | Lasting project context and lessons | Save qualifying memory to Hindsight under its memory rule, with a pointer to the authoritative record when one exists. |
-| Research sources and records of how the owner works | Keep them in the relevant root `reference/` record. |
+| Research sources and records of how the owner works | Keep them in the relevant `wiki/reference/` record. |
 | Standing instructions for this repository | Keep them in this guide or the applicable rule, using `writing-harness-files`. |
 
 Use the Notion work item for decisions about the work; do not create `DECISIONS.md` merely because the shared reminder names it.
@@ -41,7 +41,7 @@ Guiding Design Principles - follow these on every request in this project:
 This file holds what an agent needs on every request in this repository, and nothing else.
 
 - When a line here is no longer true, replace it. Do not add a paragraph below it.
-- Keep decisions, questions, progress, and history in the corresponding Notion work item. Keep intended Toolkit behavior in `toolkit-wiki/`. They do not go here.
+- Keep decisions, questions, progress, and history in the corresponding Notion work item. Keep intended Toolkit behavior in `wiki/product-wiki/`. They do not go here.
 - The detail of one feature goes in the file that holds the feature. This file names that file.
 - Use Git history and the relevant work item when you need the reason for an earlier rule.
 
@@ -76,13 +76,13 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 ## Read first
 
 - The corresponding Notion work item: Mike's request, decisions, current work, and next step. Update it before you stop. Mike's words take priority over agent proposals.
-- `toolkit-wiki/Toolkit Guiding Design Principles.md`: how Toolkit changes are designed.
-- `toolkit-wiki/Toolkit Setup Process.md`: the intended setup process.
-- `toolkit-wiki/ToolkitV2 Structure.md`: what each choice gives a project.
-- `toolkit-wiki/Toolkit's Definition of Persistent Memory.md`: what counts as memory and how it is represented. Read it before changing memory guidance.
+- `wiki/product-wiki/Toolkit Guiding Design Principles.md`: how Toolkit changes are designed.
+- `wiki/product-wiki/Toolkit Setup Process.md`: the intended setup process.
+- `wiki/product-wiki/ToolkitV2 Structure.md`: what each choice gives a project.
+- `wiki/product-wiki/Toolkit's Definition of Persistent Memory.md`: what counts as memory and how it is represented. Read it before changing memory guidance.
 - The relevant earlier work items and Git history: how the project got here. Read them before proposing a wider change.
-- `reference/how-the-owner-works-with-agents.md`: what Mike asks agents to do in his real projects. Read it before you propose a change to how a project runs.
-- `reference/davis-memory-system.md`: the memory system of his Davis project, which he named as the example to follow. Read it before you change how a project keeps memory.
+- `wiki/reference/how-the-owner-works-with-agents.md`: what Mike asks agents to do in his real projects. Read it before you propose a change to how a project runs.
+- `wiki/reference/davis-memory-system.md`: the memory system of his Davis project, which he named as the example to follow. Read it before you change how a project keeps memory.
 
 ## Where things are
 
@@ -99,12 +99,12 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 | `<setup>choices/notion-shared/`, `<setup>choices/salesforce/` | The shared Notion tools and Salesforce module. |
 | `.claude/skills/writing-harness-files/` | This repository's harness-writing procedure and official guidance checklist. |
 | `.claude/settings.json`, `.codex/hooks.json`, `.claude/rules/` | The host settings, prompt reminder, and rules for sessions that work on this repository. |
-| `ai-external-knowledge/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
-| `reference/` (root of this repository) | Records of how Mike works in his real projects. |
+| `wiki/reference/outside-docs/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
+| `wiki/reference/` | Records of how Mike works in his real projects. |
 | `archive/` | Earlier setup material and Salesforce tools. Not shipped. |
-| `toolkit-wiki/` | Mike's definition of intended Toolkit behavior. |
+| `wiki/product-wiki/` | Mike's definition of intended Toolkit behavior. |
 
-Only `plugins/toolkit/` is shipped. Nothing shipped reads the repository's `archive/`, root `reference/`, `toolkit-wiki/`, or `ai-external-knowledge/`.
+Only `plugins/toolkit/` is shipped. Nothing shipped reads the repository's `archive/`, `wiki/reference/`, `wiki/product-wiki/`, or `wiki/reference/outside-docs/`.
 
 ## The starter project
 

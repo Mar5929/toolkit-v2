@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TKV-70 · Local wiki structure</title>
+<style>
+:root{color-scheme:light;--paper:#faf9f5;--ink:#202e37;--muted:#52616b;--line:#d8dfdf;--blue:#185f92;--blue-soft:#eaf2f7;--green:#246451;--green-soft:#eaf4ee;--amber:#76580d;--amber-soft:#fff4d7;--white:#fff;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1180px;margin:auto;padding:48px 36px 64px}header{padding-bottom:28px;border-bottom:1px solid var(--line)}.eyebrow{margin:0 0 8px;color:var(--blue);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}h1{font-size:clamp(30px,4.5vw,48px);line-height:1.15;letter-spacing:-.035em;margin:0 0 18px;max-width:900px}h2{font-size:25px;line-height:1.25;letter-spacing:-.02em;margin:0 0 16px}h3{font-size:17px;line-height:1.35;margin:0 0 8px}p{margin:0 0 14px}.lead{max-width:800px;font-size:19px;line-height:1.5}.muted{color:var(--muted)}.meta{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--muted);font-size:13px;margin-top:20px}.status{color:var(--amber);font-weight:650}.section{margin-top:38px}a{color:var(--blue);text-underline-offset:3px}code{font: .9em var(--mono);overflow-wrap:anywhere}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.tabs{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}button.scope{padding:10px 18px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:transparent;min-height:44px}button.scope[aria-selected="true"]{color:var(--white);background:var(--blue);border-color:var(--blue)}[hidden]{display:none!important}.scope-note{max-width:870px;color:var(--muted)}.trees{display:grid;grid-template-columns:1fr 1fr;gap:24px}.tree{min-width:0}.tree h3{padding:10px 0;border-bottom:2px solid var(--line)}.tree.after h3{color:var(--green);border-color:var(--green)}pre{margin:0;background:var(--white);padding:20px 16px;border:1px solid var(--line);border-radius:8px;font:13px/1.65 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}.moved{color:var(--blue);font-weight:700}.new{color:var(--green);font-weight:700}.note{margin-top:14px;font-size:14px;color:var(--muted)}.map{border-collapse:collapse;width:100%;margin:14px 0;font-size:15px}.map th{text-align:left;color:var(--muted);font-weight:600}.map td,.map th{padding:12px 12px 12px 0;border-bottom:1px solid var(--line);vertical-align:top}.map td:first-child{width:46%}.github{margin-top:20px;padding:20px 0;border-top:1px solid var(--line)}.github-list{display:flex;flex-wrap:wrap;gap:12px 32px;margin:0;padding-left:20px;font-size:14px}.flow{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:12px;align-items:stretch;margin:20px 0}.node{padding:18px 20px;background:var(--blue-soft);border-left:3px solid var(--blue)}.node.final{background:var(--green-soft);border-color:var(--green)}.node p{font-size:14px;margin:0}.node small{display:block;margin-top:8px;color:var(--muted);font-size:12px}.arrow{display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:26px}.support{display:grid;grid-template-columns:1fr 1fr;gap:24px}.support>div{padding-top:18px;border-top:1px solid var(--line)}.support p{font-size:15px}.migration{display:grid;grid-template-columns:38px 1fr;column-gap:14px;row-gap:16px;max-width:900px;margin:20px 0}.step{width:32px;height:32px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:650;color:var(--blue)}.migration p{margin:0;font-size:15px}.findings{display:grid;grid-template-columns:1fr 1fr;gap:24px}.finding{padding:20px 0;border-top:1px solid var(--line)}.finding p{font-size:15px;margin:0}.label{font-size:12px;color:var(--amber);font-weight:700;letter-spacing:.045em;text-transform:uppercase;margin-bottom:8px}.checks{background:var(--amber-soft);border-left:3px solid var(--amber);padding:22px 24px}.checks h3{color:var(--amber)}.checks ul{padding-left:20px;margin:12px 0 0}.checks li{margin:7px 0;font-size:14px}footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}@media(max-width:760px){main{padding:28px 20px 44px}.trees,.findings,.support{grid-template-columns:1fr}.flow{grid-template-columns:1fr;gap:6px}.arrow{transform:rotate(90deg);height:28px}.lead{font-size:17px}pre{font-size:12px;padding:16px 12px}.map{font-size:13px}.map td,.map th{overflow-wrap:anywhere}.meta{gap:7px 14px}}@media print{body{background:white}main{padding:0;max-width:none}.tabs{display:none}[hidden]{display:block!important}.section{break-inside:avoid}.trees{grid-template-columns:1fr 1fr}pre{font-size:10px}footer{margin-bottom:0}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<p class="eyebrow">Toolkit V2 · TKV-70</p>
+<h1>A common home for product intent and supporting knowledge</h1>
+<p class="lead">Local documentation moves under <code>wiki/</code>. Product Wiki describes intended behavior; reference material supports it. Work tracking, memory, sources, and delivery keep their existing homes.</p>
+<div class="meta"><span>Approved layout · October 11, 2026</span><span>Branch: <code>codex/tkv-70-local-wiki</code></span><span>Baseline: <code>f69b2175</code> · 0.9.62</span><span>Release target: 0.9.63</span><span class="status" id="delivery-status">Not merged</span></div>
+</header>
+<section class="section" aria-labelledby="layout-heading">
+<h2 id="layout-heading">Before and after</h2>
+<div class="tabs" role="tablist" aria-label="Project structure scope">
+<button type="button" class="scope" id="starter-tab" role="tab" aria-controls="starter-panel" aria-selected="true">Delivered starter</button>
+<button type="button" class="scope" id="toolkit-tab" role="tab" aria-controls="toolkit-panel" aria-selected="false">Toolkit repository</button>
+</div>
+<div id="starter-panel" role="tabpanel" aria-labelledby="starter-tab">
+<p class="scope-note">This example uses local memory and GitHub Issues work tracking. The application folders depend on the project. The starter supplies record folders and templates; working-files/ is created when needed.</p>
+<table class="map"><thead><tr><th>Previous home</th><th>New home</th></tr></thead><tbody><tr><td><code>system/</code></td><td><code>wiki/product-wiki/</code></td></tr><tr><td><code>reference/</code></td><td><code>wiki/reference/</code></td></tr></tbody></table>
+<div class="trees">
+<div class="tree"><h3>Before · local memory + GitHub</h3><pre>project/
+├── README.md
+├── AGENTS.md
+├── CLAUDE.md
+├── PROJECT.md
+├── SOUL.md
+├── DECISIONS.md
+├── .gitignore
+├── .ignore
+│
+<span class="moved">├── system/</span>
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── architecture.md
+│   ├── data-model.md
+│   ├── security-model.md
+│   ├── automation.md
+│   ├── constraints.md
+│   ├── glossary.md
+│   ├── integrations/
+│   │   ├── INDEX.md
+│   │   └── INTEGRATION-TEMPLATE.md
+│   └── diagrams/
+<span class="moved">├── reference/</span>
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── current-system/
+│   └── outside-docs/INDEX.md
+│
+├── memory/                    [Git ignored]
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── CURRENT_STATE.md
+│   ├── MEMORY.md
+│   ├── project_topic_template.md
+│   └── … subject records
+├── sources/
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── INDEX.md
+│   └── … original documents
+├── delivery/
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── releases/
+│   ├── deployments/
+│   ├── migrations/
+│   └── client-handoffs/
+├── working-files/
+├── tests/TEST-PLAN-TEMPLATE.md
+├── … application code
+│
+├── .claude/
+│   ├── rules/
+│   ├── skills/
+│   │   ├── managing-work-items/
+│   │   │   └── references/ … GitHub storage
+│   │   ├── managing-project-memory/
+│   │   │   └── references/ … local storage
+│   │   └── … shared procedures
+│   ├── hooks/
+│   ├── output-styles/
+│   └── settings.json
+├── .codex/
+│   ├── config.toml
+│   └── hooks.json
+└── .agents/skills → ../.claude/skills</pre></div>
+<div class="tree after"><h3>After · local memory + GitHub</h3><pre>project/
+├── README.md
+├── AGENTS.md
+├── CLAUDE.md
+├── PROJECT.md
+├── SOUL.md
+├── DECISIONS.md
+├── .gitignore
+├── .ignore
+│
+<span class="new">├── wiki/</span>
+<span class="new">│   ├── product-wiki/</span>
+│   │   ├── AGENTS.md + CLAUDE.md
+│   │   ├── architecture.md
+│   │   ├── data-model.md
+│   │   ├── security-model.md
+│   │   ├── automation.md
+│   │   ├── constraints.md
+│   │   ├── glossary.md
+│   │   ├── integrations/
+│   │   │   ├── INDEX.md
+│   │   │   └── INTEGRATION-TEMPLATE.md
+│   │   └── diagrams/
+<span class="new">│   └── reference/</span>
+│       ├── AGENTS.md + CLAUDE.md
+│       ├── current-system/
+│       └── outside-docs/INDEX.md
+│
+├── memory/                    [Git ignored]
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── CURRENT_STATE.md
+│   ├── MEMORY.md
+│   ├── project_topic_template.md
+│   └── … subject records
+├── sources/
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── INDEX.md
+│   └── … original documents
+├── delivery/
+│   ├── AGENTS.md + CLAUDE.md
+│   ├── releases/
+│   ├── deployments/
+│   ├── migrations/
+│   └── client-handoffs/
+├── working-files/
+├── tests/TEST-PLAN-TEMPLATE.md
+├── … application code
+│
+├── .claude/
+│   ├── rules/
+│   ├── skills/
+│   │   ├── managing-work-items/
+│   │   │   └── references/ … GitHub storage
+│   │   ├── managing-project-memory/
+│   │   │   └── references/ … local storage
+│   │   └── … shared procedures
+│   ├── hooks/
+│   ├── output-styles/
+│   └── settings.json
+├── .codex/
+│   ├── config.toml
+│   └── hooks.json
+└── .agents/skills → ../.claude/skills</pre></div>
+</div>
+<p class="note">Guide pairs remain together. Every <code>CLAUDE.md</code> beside a folder guide points to <code>AGENTS.md</code>. Host internals are collapsed for readability.</p>
+<div class="github"><h3>GitHub holds the active work</h3><ul class="github-list"><li>Issues: requirements, working designs, tasks, approvals, progress</li><li>Milestones: project phases</li><li>“Project tasks” issue: administration</li><li>Pull requests: code review and delivery</li></ul><p class="note">This example has no local <code>work-items/</code> or <code>PROJECT-ROADMAP.md</code>. Local memory keeps its current Git-ignore policy.</p></div>
+</div>
+<div id="toolkit-panel" role="tabpanel" aria-labelledby="toolkit-tab" hidden>
+<p class="scope-note">This repository authors the Toolkit. Its actual work tracking remains in Notion, and its memory remains in Hindsight. Only <code>plugins/toolkit/</code> ships to other projects.</p>
+<table class="map"><thead><tr><th>Previous home</th><th>New home</th></tr></thead><tbody><tr><td><code>toolkit-wiki/</code></td><td><code>wiki/product-wiki/</code></td></tr><tr><td><code>reference/</code></td><td><code>wiki/reference/</code></td></tr><tr><td><code>ai-external-knowledge/</code></td><td><code>wiki/reference/outside-docs/</code></td></tr></tbody></table>
+<div class="trees"><div class="tree"><h3>Before · Toolkit authoring</h3><pre>toolkit-v2/
+├── README.md
+├── AGENTS.md + CLAUDE.md
+├── PROJECT.md
+├── .gitignore + .gitattributes
+│
+<span class="moved">├── toolkit-wiki/</span>
+│   ├── Toolkit Guiding Design Principles.md
+│   ├── Toolkit Setup Process.md
+│   ├── ToolkitV2 Structure.md
+│   ├── Toolkit's Definition of Persistent Memory.md
+│   └── … intended Toolkit behavior
+<span class="moved">├── reference/</span>
+│   ├── how-the-owner-works-with-agents.md
+│   ├── davis-memory-system.md
+│   └── … research and project evidence
+<span class="moved">├── ai-external-knowledge/</span>
+│   ├── INDEX.md
+│   └── … captured official documentation
+│
+├── plugins/toolkit/            [shipped]
+│   ├── .claude-plugin/plugin.json
+│   ├── .codex-plugin/plugin.json
+│   └── skills/project-setup/
+│       ├── SKILL.md
+│       ├── reference/          setup procedures
+│       ├── every-project/      starter files
+│       └── choices/            selected modules
+├── archive/                    [not shipped]
+│
+├── .claude/
+│   ├── rules/
+│   ├── skills/writing-harness-files/
+│   └── settings.json
+├── .codex/hooks.json
+├── .claude-plugin/marketplace.json
+└── .agents/
+    └── plugins/marketplace.json
+
+External records:
+• Notion: Toolkit work items
+• Hindsight: lasting project memory</pre></div>
+<div class="tree after"><h3>After · Toolkit authoring</h3><pre>toolkit-v2/
+├── README.md
+├── AGENTS.md + CLAUDE.md
+├── PROJECT.md
+├── .gitignore + .gitattributes
+│
+<span class="new">├── wiki/</span>
+<span class="new">│   ├── product-wiki/</span>
+│   │   ├── Toolkit Guiding Design Principles.md
+│   │   ├── Toolkit Setup Process.md
+│   │   ├── ToolkitV2 Structure.md
+│   │   ├── Toolkit's Definition of Persistent Memory.md
+│   │   └── … intended Toolkit behavior
+<span class="new">│   └── reference/</span>
+│       ├── how-the-owner-works-with-agents.md
+│       ├── davis-memory-system.md
+│       ├── … research and project evidence
+<span class="new">│       └── outside-docs/</span>
+│           ├── INDEX.md
+│           └── … captured official documentation
+│
+├── plugins/toolkit/            [shipped]
+│   ├── .claude-plugin/plugin.json
+│   ├── .codex-plugin/plugin.json
+│   └── skills/project-setup/
+│       ├── SKILL.md
+│       ├── reference/          setup procedures
+│       ├── every-project/      updated starter
+│       └── choices/            selected modules
+├── archive/                    [not shipped]
+│
+├── .claude/
+│   ├── rules/
+│   ├── skills/writing-harness-files/
+│   └── settings.json
+├── .codex/hooks.json
+├── .claude-plugin/marketplace.json
+└── .agents/
+    └── plugins/marketplace.json
+
+External records:
+• Notion: Toolkit work items
+• Hindsight: lasting project memory</pre></div></div>
+<p class="note">The report belongs to <code>wiki/reference/</code>. Toolkit setup’s own <code>reference/</code> folder remains beside its skill because it contains setup procedures. Historical paths in preserved evidence remain historical.</p>
+</div>
+</section>
+<section class="section" aria-labelledby="relationship-heading"><h2 id="relationship-heading">How the records relate</h2>
+<p>The storage choice changes where records live. Their purposes guide how an agent uses them.</p>
+<div class="flow" aria-label="Active work establishes approved decisions. Eligible finalized outcomes maintain Product Wiki under existing filing policies."><div class="node"><h3>Active work</h3><p>Requirements, proposals, working designs, tasks, and progress.</p><small>Chosen work tracker</small></div><div class="arrow" aria-hidden="true">→</div><div class="node"><h3>Approved decisions</h3><p>The owner’s agreement and its supporting evidence remain traceable.</p><small>Work records or existing decision ledger</small></div><div class="arrow" aria-hidden="true">→</div><div class="node final"><h3>Product Wiki</h3><p>Eligible finalized product intent updates maintained documents.</p><small>Existing promotion and filing policies apply</small></div></div>
+<div class="support"><div><h3>Reference supplies evidence</h3><p>Research, outside documentation, and dated current-system findings support work and product records. Original received material remains in <code>sources/</code>.</p></div><div><h3>Memory preserves lasting context</h3><p>Qualifying lessons and context help future sessions. Memory points to authoritative records instead of becoming another copy of the product specification.</p></div></div>
+<p class="note">This relationship explains the intended distinction. TKV-70 changes local names and paths; it does not replace provider-specific approval, promotion, or memory rules. Approved product intent and verified implementation remain separate.</p>
+</section>
+<section class="section" aria-labelledby="migration-heading"><h2 id="migration-heading">How an existing project adopts the layout</h2>
+<div class="migration"><span class="step" aria-hidden="true">1</span><div><h3>Review the populated records</h3><p>Identify the project’s authoritative documents, owner customizations, selected modules, and any content already at the destination paths.</p></div><span class="step" aria-hidden="true">2</span><div><h3>Move records before copying templates</h3><p>Move the populated old folders into the approved new homes. Review collisions with the owner; preserve content and keep originals recoverable.</p></div><span class="step" aria-hidden="true">3</span><div><h3>Update the routes together</h3><p>Update links, guide paths, project maps, setup and update guidance. Preserve document IDs, guide pairs, file meanings, and owner-owned files.</p></div><span class="step" aria-hidden="true">4</span><div><h3>Check the result and update ignored records</h3><p>Verify setup, update, and retrieval workflows. After the project’s tracked layout branch merges, apply its approved link corrections to ignored records without staging them. Other projects adopt the change through their own reviewed “update the toolkit” work.</p></div></div>
+<p class="note">This delivery does not migrate another project or change live Notion, GitHub, or Hindsight configuration. Active TKV-62 work is accounted for in the isolated worktree.</p>
+</section>
+<section class="section" aria-labelledby="findings-heading"><h2 id="findings-heading">Broader findings for follow-up</h2><p>These questions support consistent methodology across providers. They are outside the local layout implementation.</p>
+<div class="findings"><div class="finding"><p class="label">Follow-up · document form</p><h3>Readable product documentation and numbered rules</h3><p>Local system documents emphasize numbered rules. Product explanations, workflows, and diagrams may need a broader form while preserving useful IDs and traceability.</p></div><div class="finding"><p class="label">Follow-up · promotion</p><h3>When finalized work becomes product knowledge</h3><p>Compare local promotion criteria with the Notion Product Wiki workflow. Lasting product behavior may deserve a maintained record even when it arose from one work item.</p></div><div class="finding"><p class="label">Follow-up · ownership</p><h3>One authoritative home for each subject</h3><p>Confirm that local and hosted wiki choices avoid competing documents. Keep approved intent, current findings, work status, and lasting lessons distinguishable.</p></div><div class="finding"><p class="label">Follow-up · maintenance</p><h3>Later changes update living records</h3><p>Compare how each provider handles corrections, supersession, diagrams, and supporting decision links. Preserve the shared methodology while adapting storage operations.</p></div></div>
+</section>
+<section class="section checks" aria-labelledby="checks-heading" id="verification"><h2 id="checks-heading">Verification</h2><h3 id="verification-status">Checks passed within the reviewed scope</h3><p id="verification-summary">Content, links, assembly, scratch migration operations, package acceptance, and independent review passed. No installed project was migrated, and no live external workflow or full interactive host session was tested.</p><ul id="verification-results"><li>Both Claude marketplace and Toolkit plugin validations passed; whitespace check passed.</li><li>All 511 baseline files retained at their mapped homes; 158 captured documentation files preserved byte-for-byte.</li><li>All 594 previously valid authored relative-link targets preserved. External URLs and existing policy meanings preserved.</li><li>Nine tracker/memory assemblies passed; local startup state/index, private-memory ignore/search behavior, guide pairs and exact templates passed.</li><li>Hooks and host settings unchanged; Codex accepted Toolkit 0.9.63 in a scratch home.</li><li>Manual scratch migration preserved populated records and customized guides, corrected relative links, retained recoverable originals and tolerated repeated template copying. Conflict inspection left both records intact.</li><li>Independent content and migration review passed after corrections. Report tabs and desktop/320px presentation were inspected.</li><li>Full live setup/update runs, live Notion or GitHub operations, installed-project migration and interactive host loading were not exercised.</li></ul></section>
+<footer><a href="https://app.notion.com/p/3f6b381da176818bb772d9209a9bee5c">TKV-70 · Evaluate local Product Wiki naming and repository structure</a><br>Scope: local layout and supporting path instructions. Broader methodology changes remain findings.</footer>
+</main>
+<script>
+const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+function selectTab(tab) {
+  tabs.forEach(item => {
+    const selected = item === tab;
+    item.setAttribute('aria-selected', String(selected));
+    document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
+  });
+}
+tabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => selectTab(tab));
+  tab.addEventListener('keydown', event => {
+    let next;
+    if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
+    if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
+    if (event.key === 'Home') next = tabs[0];
+    if (event.key === 'End') next = tabs[tabs.length - 1];
+    if (next) { event.preventDefault(); selectTab(next); next.focus(); }
+  });
+});
+</script>
+</body>
+</html>

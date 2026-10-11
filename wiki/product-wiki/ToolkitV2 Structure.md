@@ -16,10 +16,11 @@ Every project gets the same layout, whatever the owner answers in the interview.
 ├── README.md              the project's one README
 ├── .gitignore, .ignore    what Git and the search tools skip
 │
-├── system/                what the system is and how it works (living SOT)
+├── wiki/                  maintained product documentation and reference
+│   ├── product-wiki/      what the system is and how it works (living SOT)
+│   └── reference/         material to look things up in
 ├── sources/               what the project received from someone
 ├── delivery/              what the project hands over or ships
-├── reference/             material to look things up in
 ├── tests/                 the test plan template
 │
 ├── .claude/               the rules, skills, hook commands, output style, and settings
@@ -50,13 +51,13 @@ Every project gets the same layout, whatever the owner answers in the interview.
 
 | Folder       | What it holds                                                                                                                                                                                                                                         |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `system/`    | The description of the system the project builds or changes: `architecture.md`, `data-model.md`, `automation.md`, `security-model.md`, `constraints.md`, `glossary.md`, `integrations/` (one file per integration, from a template, listed in its `INDEX.md`), and `diagrams/`. |
+| `wiki/product-wiki/`    | The description of the system the project builds or changes: `architecture.md`, `data-model.md`, `automation.md`, `security-model.md`, `constraints.md`, `glossary.md`, `integrations/` (one file per integration, from a template, listed in its `INDEX.md`), and `diagrams/`. |
 | `sources/`   | Every document or message the project receives from someone, kept unchanged. `INDEX.md` lists them, one row per source.                                                                                                                                              |
 | `delivery/`  | What the project hands over or ships: `releases/`, `deployments/`, `migrations/`, and `client-handoffs/`.                                                                                                                                             |
-| `reference/` | Material to look things up in: `current-system/` for the system as it is before the project changes it, and `outside-docs/` for copies of outside documentation, listed in its `INDEX.md`.                                                                       |
+| `wiki/reference/` | Material to look things up in: `current-system/` for the system as it is before the project changes it, and `outside-docs/` for copies of outside documentation, listed in its `INDEX.md`.                                                                       |
 | `tests/`     | The test plan template.                                                                                                                                                                                                                               |
 
-Each of `system/`, `sources/`, `delivery/`, and `reference/` has its own `AGENTS.md`, which says what belongs in that folder and how a record there is written.
+Each of `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/` has its own `AGENTS.md`, which says what belongs in that folder and how a record there is written.
 
 ### The rules every project gets
 

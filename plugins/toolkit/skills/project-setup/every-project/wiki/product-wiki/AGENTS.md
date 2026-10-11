@@ -1,4 +1,4 @@
-# system/: local system documentation
+# wiki/product-wiki/: local system documentation
 
 Read the memory choice in `PROJECT.md`. After verified Notion Project Wiki setup or migration, Product Wiki and Terminology Glossary own finalized documentation and terms. Use `managing-project-memory` for retrieval and capture; working designs stay with their work items. In an existing project, this folder remains authoritative until its reviewed migration is verified. After cutover, preserve its content as historical evidence rather than a second active authority. The local procedures below apply before that cutover and to other memory choices.
 
@@ -93,7 +93,7 @@ What each mark means:
 
 - A rule is added, changed, or retired only because of a decision. The rule's Source, the document's "Last changed via", and the Changelog row of the change name that DEC-###.
 - A rule that one work item proposes stays in that work item's design. It comes here only when more than one work item depends on it, as a Draft rule.
-- This folder describes the system the owner approved. The record of how the system works today (what was observed, in which environment, and on which date) goes in `reference/current-system/`.
+- This folder describes the system the owner approved. The record of how the system works today (what was observed, in which environment, and on which date) goes in `wiki/reference/current-system/`.
 - Name work items, decisions, and sources by ID. Never copy their text into a document.
 
 ## Which skill to use

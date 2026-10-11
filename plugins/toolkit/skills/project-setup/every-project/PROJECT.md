@@ -11,7 +11,7 @@
 
 - In scope: `<Business capabilities or systems this project owns.>`
 - Outside scope: `<Important exclusions or adjacent owners.>`
-- Constraints: the approved rules that cover several areas of the system are in [system/constraints.md](system/constraints.md).
+- Constraints: the approved rules that cover several areas of the system are in [wiki/product-wiki/constraints.md](wiki/product-wiki/constraints.md).
 
 ## Systems and environments
 
@@ -31,7 +31,7 @@ Keep this table short. Write no biography and no contact details.
 
 - Work items, the project's phases, and the project's tasks: in the place that the "Tracker" line under "Toolkit settings" below names.
 - Decisions and open questions that more than one work item needs: [DECISIONS.md](DECISIONS.md).
-- The approved description of the system: [system/](system/).
+- The approved description of the system: [wiki/product-wiki/](wiki/product-wiki/).
 - Sources, which are the documents and messages the project received: [sources/](sources/).
 - Project memory: in the place that the "Memory" line under "Toolkit settings" below names.
 
@@ -42,7 +42,7 @@ Keep this table short. Write no biography and no contact details.
 
 ## Operating conventions
 
-<Stable facts about how the client's business and this project's team work that are not rules of the system and not instructions for the agent, such as the month the fiscal year starts, the days a release may happen, or who must review a change. Give the source of each: who said it and the date, or an ID. A rule the system must follow goes in `system/`. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`. Write “None yet” if there are none.>
+<Stable facts about how the client's business and this project's team work that are not rules of the system and not instructions for the agent, such as the month the fiscal year starts, the days a release may happen, or who must review a change. Give the source of each: who said it and the date, or an ID. A rule the system must follow goes in `wiki/product-wiki/`. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`. Write “None yet” if there are none.>
 
 ## Toolkit settings
 

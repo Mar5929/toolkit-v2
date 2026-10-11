@@ -13,13 +13,13 @@ File local records as follows:
 
 1. Save every source the project receives from someone else in `sources/`, unchanged, with an ID like SRC-001. Sources include meeting transcripts, emails, client documents, and screenshots. File a source even when only one work item uses it, or none does yet.
 2. Record decisions and open questions that more than one work item needs in `DECISIONS.md`. Give each entry an ID like DEC-001.
-3. Record rules about how the system must work that more than one work item needs in a document in `system/`. Give each rule an ID like SEC-04.
+3. Record rules about how the system must work that more than one work item needs in a document in `wiki/product-wiki/`. Give each rule an ID like SEC-04.
 
 If only one work item needs a decision or a requirement, do not save it here. It stays in that work item: use `managing-work-items`.
 
 Before you save a decision, an open question, or a rule, check that more than one work item needs it. The root `AGENTS.md`, section "Where information goes", gives the test for that, and lists where every kind of information is kept.
 
-In this skill, a record is one saved source, one entry in `DECISIONS.md`, or one rule in `system/`. To save a record is to commit the change to the default branch with `publish-docs`.
+In this skill, a record is one saved source, one entry in `DECISIONS.md`, or one rule in `wiki/product-wiki/`. To save a record is to commit the change to the default branch with `publish-docs`.
 
 
 Read the memory choice in `PROJECT.md`. For local memory, use `managing-project-memory` and the installed Current State page. For Notion memory, use that skill for pending-aware retrieval and capture; the librarian maintains Current state. For Hindsight, follow `.claude/rules/hindsight-memory.md` for recall, review, saves and corrections. Keep current work in the tracker and project records; Hindsight projects need no Current State page.
@@ -44,7 +44,7 @@ The rest of this file applies to all three steps.
 - Read how the record must be written, in the same turn in which you write it. This skill does not show the form of a record. The place where the record is kept shows it:
   - for a decision or an open question, the comment at the top of `DECISIONS.md`;
   - for a source, `sources/AGENTS.md`;
-  - for a rule or anything else in `system/`, `system/AGENTS.md`.
+  - for a rule or anything else in `wiki/product-wiki/`, `wiki/product-wiki/AGENTS.md`.
 - Read the file you will change again, right before you change it. The owner edits these files by hand, and another session may have committed a change.
 - Search before you add a record. When a record already covers the subject, change that record. Never add a second record for the same subject.
 
@@ -52,7 +52,7 @@ The rest of this file applies to all three steps.
 
 A worktree is a separate folder with its own branch. The main checkout is the project's main folder: the first path that `git worktree list` prints.
 
-When this session's folder is not the main checkout, read and write `DECISIONS.md`, `sources/`, and `system/` only in the save worktree. The save worktree is the folder that `publish-docs` makes from the default branch. Never read or write them in the session's own worktree, because its branch can lack records that the default branch holds.
+When this session's folder is not the main checkout, read and write `DECISIONS.md`, `sources/`, and `wiki/product-wiki/` only in the save worktree. The save worktree is the folder that `publish-docs` makes from the default branch. Never read or write them in the session's own worktree, because its branch can lack records that the default branch holds.
 
 - When no save worktree exists yet, do steps 1 to 3 of `publish-docs` before you read or write a record.
 - Where a step in this skill says to save, continue from step 4 of `publish-docs`.
@@ -86,7 +86,7 @@ The time depends on where the project keeps its work items.
 
 ### A work item that must follow a record that already exists
 
-The record can be a rule in `system/`, an entry in `DECISIONS.md`, or a source. Make no new record. Do these three things in this order:
+The record can be a rule in `wiki/product-wiki/`, an entry in `DECISIONS.md`, or a source. Make no new record. Do these three things in this order:
 
 1. Add the work item's ID to the record's Affects line or "Used by" cell, where the record has one. An entry in `DECISIONS.md` has an Affects line, and a row in `sources/INDEX.md` has a "Used by" cell.
 2. Save.
@@ -106,4 +106,4 @@ The record can be a rule in `system/`, an entry in `DECISIONS.md`, or a source. 
 | Writing a record's ID in a work item, and reading a work item | `managing-work-items` |
 | Anything that one work item alone needs; a requirement that a new decision changes; the closing of a work item, which says what the work item built | `managing-work-items` |
 | A line under "Waiting on" in the project's Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `managing-project-memory`. |
-| A captured outside page, or a record of the system as it is today | `reference/AGENTS.md` |
+| A captured outside page, or a record of the system as it is today | `wiki/reference/AGENTS.md` |

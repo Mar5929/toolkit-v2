@@ -6,12 +6,12 @@ The toolkit consists of written procedures, project files, host settings, and th
 
 ## How Toolkit V2 is defined
 
-Mike defines the intended behavior in [toolkit-wiki](toolkit-wiki/). The plugin implements that behavior. Existing implementation text can contain an assumption or an older decision; it is not evidence that Mike approved it.
+Mike defines the intended behavior in [Product Wiki](wiki/product-wiki/). The plugin implements that behavior. Existing implementation text can contain an assumption or an older decision; it is not evidence that Mike approved it.
 
-- [Guiding design principles](toolkit-wiki/Toolkit%20Guiding%20Design%20Principles.md) explain the agent's role and the freedom it retains.
-- [Setup process](toolkit-wiki/Toolkit%20Setup%20Process.md) gives the interview and the outcomes of setup.
-- [Project structure](toolkit-wiki/ToolkitV2%20Structure.md) describes the project files and what each choice adds.
-- [Persistent memory](toolkit-wiki/Toolkit%27s%20Definition%20of%20Persistent%20Memory.md) defines what belongs in memory and its metadata.
+- [Guiding design principles](wiki/product-wiki/Toolkit%20Guiding%20Design%20Principles.md) explain the agent's role and the freedom it retains.
+- [Setup process](wiki/product-wiki/Toolkit%20Setup%20Process.md) gives the interview and the outcomes of setup.
+- [Project structure](wiki/product-wiki/ToolkitV2%20Structure.md) describes the project files and what each choice adds.
+- [Persistent memory](wiki/product-wiki/Toolkit%27s%20Definition%20of%20Persistent%20Memory.md) defines what belongs in memory and its metadata.
 
 Toolkit work is tracked in the [Toolkit V2 Notion project](https://app.notion.com/3edb381da17681eeb7ddd0a6d662f9b2). Work items hold the request, questions, decisions, progress, and approval. When the wiki and implementation differ, the agent checks the relevant owner decisions before changing behavior.
 
@@ -54,9 +54,9 @@ Every project has these shared records:
 | --- | --- |
 | `PROJECT.md` | Stable project facts and confirmed setup choices. |
 | `DECISIONS.md` | Decisions and open questions needed across work items. |
-| `system/` | The approved description of what the system should do. |
+| `wiki/product-wiki/` | The approved description of what the system should do. |
 | `sources/` | Material received from someone, kept unchanged with its provenance. |
-| `reference/` | Material to look up, including verified observations of the system today. |
+| `wiki/reference/` | Material to look up, including verified observations of the system today. |
 | `delivery/` | Releases, deployments, migrations, and handoffs. |
 
 The [filing-project-records](plugins/toolkit/skills/project-setup/every-project/.claude/skills/filing-project-records/SKILL.md) skill maintains shared decisions, sources, and approved system records. The project guides route stable facts, observed system details, and delivery records to their appropriate files. The [managing-work-items](plugins/toolkit/skills/project-setup/every-project/.claude/skills/managing-work-items/SKILL.md) skill manages the work lifecycle and uses the installed tracker instructions.
@@ -99,4 +99,4 @@ After a plugin version changes, update the marketplace and installed plugin usin
 
 Change `plugins/toolkit/skills/project-setup/every-project/` for shared project content, or the appropriate module under `choices/` for a selected feature. Preserve owner decisions and necessary behavior, keep reference routes current, verify the affected workflows, and raise the version in both plugin manifests and the Claude marketplace metadata.
 
-[AGENTS.md](AGENTS.md) gives this repository's instructions and checks. [reference](reference/) contains evidence of Mike's ways of working. [archive](archive/) contains earlier setup material and tools; the plugin ships neither folder.
+[AGENTS.md](AGENTS.md) gives this repository's instructions and checks. [reference](wiki/reference/) contains evidence of Mike's ways of working. [archive](archive/) contains earlier setup material and tools; the plugin ships neither folder.
