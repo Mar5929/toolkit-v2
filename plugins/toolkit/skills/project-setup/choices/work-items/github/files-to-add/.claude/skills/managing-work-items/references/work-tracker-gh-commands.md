@@ -164,7 +164,7 @@ gh api repos/<repo>/issues/<number>/parent --jq .number
 
 ## When a call fails
 
-`gh` exits with 0 on success, with 1 on an error, and with 4 when no one is signed in. Nothing changed unless the error says otherwise.
+`gh` exits with 0 on success, with 1 on an error, and with 4 when no one is signed in. A failed mutation can leave its outcome uncertain. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work.
 
 | What you see | What it means and what to do |
 | --- | --- |

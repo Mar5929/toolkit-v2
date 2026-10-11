@@ -19,7 +19,7 @@ Sources for claims:
 - "branch claude/wi-007-csv-export": repository, git worktree list
 - "credit notes show negative amounts": owner, the owner's words "just make them negative"
 - "the bank rejects files over 5 MB": worked out
-Supplied text: none
+Record access and supplied text: local files; no supplied text
 ```
 
 ## What the owner sees (step 7)

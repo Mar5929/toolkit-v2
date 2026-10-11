@@ -7,9 +7,9 @@ description: 'Keeps project memory and Current State useful across sessions. Use
 
 Keep lasting context available to later sessions and keep the project's Current State accurate. A memory record covers one subject. Current State is a short view of current priorities, commitments, and where the next session should begin.
 
-This skill serves projects that chose local or Notion memory. Setup installs that store's instructions in [references/memory-store.md](references/memory-store.md). Hindsight projects use their Hindsight rule and tools instead.
+This skill serves projects that chose local memory. Setup installs its storage instructions in [references/memory-store.md](references/memory-store.md). Hindsight projects use their Hindsight rule and tools instead.
 
-Make sure that you apply those metadata tags and keep them up to date on the memory files. For Notion pages, use the equivalent fields in [references/database-layout.md](references/database-layout.md).
+Make sure that you apply those metadata tags and keep them up to date on the memory files.
 
 ## Choose the procedure
 
@@ -24,7 +24,7 @@ Read [the memory process](references/memory-process.md) for retention, authoriza
 | [references/owner-instructions.md](references/owner-instructions.md) | The owner gives a standing instruction, or approves turning a lesson into a rule. |
 | [references/current-state.md](references/current-state.md) | You read or update priorities, commitments, or next-session context. |
 | [references/tidying.md](references/tidying.md) | You review or clean up memory as a whole. |
-| [references/memory-store.md](references/memory-store.md) | You access local or Notion records; it routes to storage formats, search, and write procedures. |
+| [references/memory-store.md](references/memory-store.md) | You access local records; it routes to storage formats, search, and write procedures. |
 
 ## Storage detail for the chosen memory system
 
@@ -32,12 +32,9 @@ Setup installs only the files for the chosen store. Read the relevant file below
 
 | File | Store and when to open it |
 | --- | --- |
-| [references/searching.md](references/searching.md) | Local or Notion: you need the store's search procedure. |
+| [references/searching.md](references/searching.md) | Local: you need the search procedure. |
 | [references/folders-and-files.md](references/folders-and-files.md) | Local: you locate records or maintain their folders and index. |
 | [references/record-format.md](references/record-format.md) | Local: you create or update a memory file. |
-| [references/database-layout.md](references/database-layout.md) | Notion: you locate the memory databases and inspect their fields. |
-| [references/current-state-page.md](references/current-state-page.md) | Notion: you read or update Current State. |
-| [references/writing-pages.md](references/writing-pages.md) | Notion: you create or update memory pages and verify the save. |
 
 ## Route other project records
 

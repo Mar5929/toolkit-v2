@@ -26,8 +26,8 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
 2. **Stop when work is at risk.** Run each of these commands on its own: `git remote -v`, `git status --porcelain`, `git stash list`, `git worktree list --porcelain`. Then check the four things below. Report what blocks the reset, and wait.
    - **Remotes.**
      - When there is no remote, there is nothing to reset to. Never fetch.
-     - When no remote is named `origin`, for example because it was renamed to `upstream`, ask which remote is the source.
-     - When there are several remotes, default to `origin` and name the others.
+     - Use the source remote the owner named. Otherwise use `origin` when it exists, and name any other remotes. When no `origin` exists, ask which remote is the source.
+     - Record the selected source as `<remote>`. Use it for default-branch resolution and the install plan. Each branch reset still targets its own verified upstream, which the plan must name.
    - **Uncommitted changes.**
      - The owner commits or stashes uncommitted changes first. Discard them only after an explicit yes for exactly that.
      - When the only uncommitted changes are untracked files, name the files and ask whether to go on. `git reset --hard` overwrites an untracked file at a path that the remote branch also has.
@@ -35,7 +35,7 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
    - **Other worktrees.** Run `git -C <path> status --porcelain` in each other worktree.
      - Any output is another session's work. So is another worktree that has a branch with an upstream checked out. In either case, stop and report it.
      - Even when all other worktrees are clean, name each worktree and its branch, and ask whether another session is working in this repository. Go on only after the owner confirms that no other session is.
-3. **Fetch and find the default branch.** Run `git fetch --all --prune`. Then run `git symbolic-ref --short refs/remotes/origin/HEAD`, which prints `origin/<default-branch>`. When that command fails, read the "HEAD branch" line of `git remote show origin`. Never assume `main`.
+3. **Fetch and find the default branch.** Run `git fetch --all --prune`. Then run `git symbolic-ref --short refs/remotes/<remote>/HEAD`, which prints `<remote>/<default-branch>`. When that command fails, read the "HEAD branch" line of `git remote show <remote>`. Never assume `main`.
 4. **Show the plan.** List the branches with this command:
 
    ```text
@@ -50,7 +50,7 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
    - **Delete**: the track column says `[gone]`. Give the branch and its commits that are on no remote branch, marked "will be discarded".
    - **Keep**: the branch has no upstream. Write one line for each such branch: "not linked to the remote; may hold work that is only on this computer; kept". Delete such a branch only on the owner's yes for that branch.
 
-   Add one **Install** line to the plan. It names the install command that step 5 will run. The lockfile decides the command. A lockfile is the file that records the exact versions of the project's packages. Use the lockfile that `git ls-tree --name-only origin/<default-branch>` lists:
+   Add one **Install** line to the plan. It names the install command that step 5 will run. The lockfile decides the command. A lockfile is the file that records the exact versions of the project's packages. Use the lockfile that `git ls-tree --name-only <remote>/<default-branch>` lists:
 
    | Lockfile | Install command |
    | --- | --- |

@@ -96,22 +96,24 @@ Follow [repository and permission steps for a build](build-repository.md) for th
 
 For each builder:
 
-1. Make its worktree and its branch, as "Git for a build" says.
+1. Choose the permitted builder mode with `builder-brief.md`. Normally make its worktree and branch as "Git for a build" says. When the builder cannot create a worktree or commit, run one builder at a time in the item worktree with "Commit: no". Record that mode, folder and starting state in the team list.
 2. Set its sub-item to State Building, and `waiting_on` to the agent. Set its task In Progress, and also the task's phase when the task has one. Add the builder's line to the parent's team list.
-3. Start the builder with the brief in `builder-brief.md` and that file's list of inputs, filled in. Start at the same time the builders that do not depend on each other.
+3. Start the builder with the brief in `builder-brief.md` and that file's list of inputs, filled in. Start builders according to their dependencies and the recorded mode; shared-worktree builders run one at a time.
 
 ## When a helper returns
 
 Do these steps for each helper as soon as it returns, before you start another helper or reply to the owner.
 
 1. Read the helper's report: the result, the changed files, the tests and checks, the commit, and what the helper could not do.
-2. Check the report. The files that the helper changed must be the files it was given, and its tests must pass when you run them yourself on its branch. When either check fails, do not merge, and keep the helper's branch. Treat the task as not done, and record what failed.
-3. Merge the helper's branch into the branch of its work item, from that work item's worktree. Then remove the helper's worktree and branch.
+2. Check the report. Verify the changed files against the helper's assigned paths, and rerun its tests in the worktree that holds its changes. When either check fails, preserve the changes, leave the task open, and record what failed.
+3. Integrate the verified changes according to the helper's recorded mode.
+   - When the helper returned committed work on its own branch, merge that branch into the work item's branch from the item worktree. Then remove only the helper's worktree and branch.
+   - When the helper used "Commit: no" in the item worktree, the changes are already there. Review its diff against the starting state, and commit the verified paths only when the host permits it. Otherwise preserve the uncommitted changes and record what remains before the Testing Loop. Never merge or remove the item worktree as helper cleanup.
 4. Read the work item again, and then change these six things:
    - **The task.** Set it to Done, and tick it, only when its Done when check is met. When the task is partly done or not done, leave it open. Add a task for what is left, or add an open Questions and Answers row for a question that the owner must answer.
    - **The sub-item.** When every task is done, move it to the Testing Loop. When tasks are left, it stays in Building. Set `waiting_on` to the agent, or to the owner when the report raised a question for the owner.
-   - **Recent History on the sub-item.** Add one row in this form: "Builder returned: P1-T01 done, commit 3f9c2ab, tests pass. Gaps: none."
-   - **Recent History on the parent.** Add one row that names the sub-item, in this form: "WI-041 P1-T01 built (3f9c2ab)."
+   - **Recent History on the sub-item.** Record the task, result, check evidence, commit hash or uncommitted state, and remaining gaps.
+   - **Recent History on the parent.** Record the sub-item, task and the same commit hash or uncommitted state.
    - **The phase of a top-level work item.** Set it to Done when every task in it is Done, every sub-item in it is Done or Cancelled, and its exit result was checked.
    - **The team list.** Remove the helper's line.
 5. Start the next helper whose dependencies are now met.
@@ -139,7 +141,8 @@ Use this section when a new session continues a build that an earlier session st
 - After compaction in the same session, a helper may still be running. Wait for its report. Compaction is when Claude Code or Codex shortens the session's history to make room.
 - In a new session, the builders from the old session are not running.
 - A session under a Main Orchestrator may still be running. Message it, and wait for its report before you start anything for its sub-item.
-- For each builder line in the team list, look at the builder's branch with `git log --oneline <item branch>..<builder branch>`. Then do the one of these three that fits:
+- For a builder recorded as "Commit: no" in the item worktree, inspect the preserved changes against its recorded starting state and assigned paths. Follow "When a helper returns" for verification and integration; keep the item worktree.
+- For each builder with its own branch in the team list, look at the builder's branch with `git log --oneline <item branch>..<builder branch>`. Then do the one of these three that fits:
   - When the command lists commits, treat the commits as the helper's report, as "When a helper returns" says, and run the tests against the task's Done when. What is missing stays open.
   - When the command lists nothing, and `git -C <builder worktree> status --short` prints nothing, remove the builder's worktree and branch, and start a new builder.
   - When the builder's worktree has uncommitted changes, keep them, tell the owner in one line, and ask whether to use them or to remove them.

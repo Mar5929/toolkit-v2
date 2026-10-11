@@ -26,20 +26,21 @@ Start the verifier as a new helper that does not see this session:
 - In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose` and `model` set to `opus`. Never use a fork, because the verifier must not share this session.
 - In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`. Wait for its report with `wait_agent`.
 - The message to the helper holds everything under "Brief for the helper", word for word, and then the list of inputs below, filled in. The helper sees nothing else.
-- The verifier can open local files and run `gh`. It cannot read Notion or Hindsight. So paste, under "Supplied text", the text of each Notion work item, the Notion "Current state" page, and each Hindsight memory record that the draft relies on.
+- Give the verifier the configured record links and available read access. For records it cannot read, supply freshly read text with source links, dates and relevant properties. Include each work item, wiki destination, pending capture or Hindsight record that the draft relies on; Current state alone does not verify wiki claims.
 
 The list of inputs:
 
 ```text
 Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
-Tracker: local (work-items/ in the main checkout) | Notion (work item text
-  pasted below) | GitHub Issues (<account/repository>)
+Tracker: local (work-items/ in the main checkout) | Notion (configured links
+  or supplied work item text) | GitHub Issues (<account/repository>)
 Memory: local (memory/CURRENT_STATE.md in the main checkout) | Notion
-  (page text pasted below) | Hindsight (no Current State page; supplied records)
+  (configured wiki links or supplied records) | Hindsight (no Current State page)
 Sources for claims: <for each claim you can: file, repository, owner (with
   the owner's words when you have them), or worked out>
-Supplied text: <Notion work items, the Notion Current state page, Hindsight memories>
+Record access and supplied text: <configured links and read access; freshly read
+  work items, wiki destinations, pending captures or Hindsight records as needed>
 ```
 
 ## Brief for the helper
@@ -55,7 +56,7 @@ You have not seen the session that wrote the draft. So give a claim the verdict 
 ### Read-only means read-only
 
 - Never create, change, move, or delete a file, a work item, or anything in memory.
-- Run only commands that read, and run each one on its own: `git status`, `log`, `diff`, `show`, `worktree list`, `ls`, `cat`, `grep`, `rg`, `gh issue view`, `gh pr view`.
+- Use only read operations through the available file, Git, tracker and memory tools. Follow the installed Notion access procedure before using Notion tools.
 - When you believe that something needs to change, say what and where.
 - Never run tests, builds, installs, or any script. When the draft says that a test or a build passed, give that claim the verdict Unchecked, unless you were given the command output.
 - When `gh` fails with a network error or a sign-in error, give each claim that needed `gh` the verdict Skipped. List the check, with the error, under "Skipped".
@@ -74,19 +75,19 @@ Work items are named by ID, never by path. How you open a work item depends on t
 
 - Local: find the file under `work-items/` in the main checkout whose front matter says `id: WI-014` (for example `grep -rlE '^id: *"?WI-014"? *$' <main checkout>/work-items`; the value may be in quotes). The front matter is the block of fields at the top of the file. The design of the work item is `DESIGN.md` in the same folder.
 - GitHub: `gh issue view <number> -R <account/repository> --json title,body,labels,state`, and `gh issue view <number> -R <account/repository> --comments` for its design comment. The list of inputs names the repository. Pass `-R` on every `gh` command.
-- Notion: check against the supplied text.
+- Notion: read the configured record or check freshly supplied text and properties. State which evidence was used.
 
 The other records are in these places:
 
-- Local memory uses `memory/CURRENT_STATE.md` in the main checkout; Notion memory uses its supplied Current state page. Hindsight has no Current State page. Check current work against the selected tracker and supplied project records, and lasting knowledge against the supplied Hindsight records.
-- For the Notion "Current state" page and for Hindsight memory records, use only the supplied text.
-- A decision that more than one work item needs is an entry in `DECISIONS.md`. An approved rule of the system is in `system/`. A filed source, which is something the project was given and keeps, is in `sources/`. All three are in the repository.
+- Read `PROJECT.md` for the configured record homes. Local memory uses `memory/CURRENT_STATE.md` in the main checkout; Hindsight has no Current State page. Check current work against the selected tracker and lasting knowledge against the configured memory records or supplied evidence.
+- For Notion after verified wiki cutover, use the relevant Current state, Product Wiki, Terminology Glossary, Long-Term Memory and pending Wiki Inbox records. Check sources, dates, approval, implementation and supersession status separately. A pending capture is not verified filing.
+- For other choices or before verified migration, shared decisions and system rules use their confirmed homes, normally `DECISIONS.md` and `system/`. Filed sources remain in `sources/`.
 
 The first line of the prompt is a fixed notice, which says that the prompt is AI-generated and may contain hallucinations. That notice is not a claim. When the draft has no such line, say so under "Also noticed".
 
 ### Job one: is the goal there
 
-Check that the draft states three things: the overarching goal, why the goal matters, and where the goal is written down. The overarching goal is what the work is trying to achieve, not the next action. The place where the goal is written down is a work item ID, a rule ID in `system/`, a DEC ID in `DECISIONS.md`, or an issue or pull request number.
+Check that the draft states three things: the overarching goal, why the goal matters, and where the goal is written down. The overarching goal is what the work is trying to achieve, not the next action. The goal's source may be a work item, an authoritative project or wiki record, or an issue or pull request.
 
 Open the place that the draft names, and confirm that it holds the goal that the draft claims. Then give one verdict: Confirmed, or one of these three:
 
@@ -98,7 +99,7 @@ Open the place that the draft names, and confirm that it holds the goal that the
 
 - For every file path and folder path, and every claim about what a file says, check that the path exists and that the file says what the draft claims. When a path is close to a real path, name the real path.
 - For every branch, worktree, commit, pull request, issue, and work item ID, check that it is the one named, and that it is in the state the draft says. For a work item, check its State, `waiting_on`, the lines of its Current state, and its first open question.
-- For every decision (DEC), source (SRC), and rule ID, check that it exists, with the Status or the Mark that the draft says. The Mark of a rule is one of four words: Draft, Approved, Built, or Retired.
+- For each decision, source, rule, wiki record or capture, check that it exists and that its status matches the claim. Use the configured store's fields; distinguish approval from implementation and capture from completed filing.
 - For every number, count, date, and duration, including any that the draft worked out from other values, work it out again.
 - When no command output supports a claim that something was run, passed, failed, or was verified, give that claim the verdict Unchecked.
 - An earlier handoff prompt is not a source. Check again, as a new claim, anything that was carried over from one.
