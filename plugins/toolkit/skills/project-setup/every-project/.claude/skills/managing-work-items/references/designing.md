@@ -24,7 +24,7 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
 6. Research. Start one researcher for each research question, with `researcher-brief.md`. Start at the same time the researchers whose questions do not depend on each other's answers. In a Salesforce project, use Salesforce's skills for platform facts.
 7. Design and critique. Start one architect for each option, with `design-architect-brief.md`, and one critic for each draft, with `design-critic-brief.md`. Then run fix rounds. In a fix round, the architect corrects its option from the critic's findings, and the critic checks again the findings that remain.
    - Stop the fix rounds when the critic returns "Clean", or when the owner has decided every finding that remains.
-   - When a finding is still disputed after two rounds, give it to the owner as one question.
+   - When a dispute needs an owner decision or further fix rounds are not resolving it, present the unresolved issue, evidence and recommendation to the owner.
    - When no design can meet a requirement, send the requirement back to `refining-requirements.md`. Never put a weaker form of the requirement into the design as a compromise.
 8. Save the design as proposed. Merge the drafts into the design. Add the question that asks the owner to choose as a Questions and Answers row, with your recommendation, and set `waiting_on` to the owner. Add a Recent History row.
 9. Present the design and ask. Describe each option concisely, your recommendation and its reason, what the owner will see when the work is done, the main risks, and the build order.

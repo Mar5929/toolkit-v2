@@ -67,7 +67,7 @@ The six steps below apply to local and Hindsight memory. They record changes to 
 2. When the list holds a decision, a rule to add, change, or retire, a project term, or a lesson, ask the owner once. When the list holds only rules that the work item may have built, or holds nothing, ask no question.
    - Add one Questions and Answers row that shows each line of the list with your recommendation and a one-line reason.
    - For a lesson, the owner chooses one of three: keep it for the whole project, keep it as not proven, or drop it. Recommend keeping a lesson for the whole project when it was seen before.
-   - Set `waiting_on` to the owner, and end the reply with exactly "Do these move up as listed?" In that question, "move up" means that the owner agrees to keep the thing for the whole project.
+   - Set `waiting_on` to the owner, and ask whether the owner agrees to keep each listed item for the whole project, with the proposed outcome.
 3. File what the owner agreed to. This table says what to do with each thing.
 
    | What it is | What to do |
@@ -104,7 +104,7 @@ For a small work item on the short path, read "Closing a small work item" below,
 
 1. Check three things: that every change is merged, or the owner said to leave it on its branch; that the result of each deploy is recorded; and that every Roadmap phase that the work item completed says Done.
 2. Fill the Moved up line, as the section above says.
-3. Ask the owner. Add the Questions and Answers row for the question, with the Next action "Waiting on the owner: Q-12 (mark WI-031 Done). After his answer: record Done." Put the evidence in one line first: the checker's verdict and commit, the merged pull request, the deploy result, and the Moved up line. End the reply with "Mark WI-031 Done?" Use the real Q-ID and work item ID in both.
+3. Ask the owner. Add the Questions and Answers row for the question, with the Next action "Waiting on the owner: Q-12 (mark WI-031 Done). After his answer: record Done." Put the evidence in one line first: the checker's verdict and commit, the merged pull request, the deploy result, and the Moved up line. Ask whether the owner agrees to mark the work item Done. Use the real Q-ID and work item ID in the record and question.
 4. After the owner's yes, save the owner's words first. Then set the State to Done and `waiting_on` to `none`, and rewrite the work item's Current state. Write these four of its lines as follows:
    - Where it stands: "Done on `YYYY-MM-DD`: <evidence>."
    - Next action: "None. Finished."
@@ -124,10 +124,10 @@ Use this section for a small work item that takes the short path. `references/li
 On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the promotion question in "Local and Hindsight records", step 2, when that procedure applies, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
 
 1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then review reusable outcomes through "Filling the Moved up line" for the configured store. For Notion memory, verify the captures before asking to close.
-2. Ask the closing question. Add the Questions and Answers row "Approve this result and mark <ID> Done?", with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
+2. Ask the closing question. Add a Questions and Answers row asking the owner to approve the result and mark the work item Done, with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
    - For local or Hindsight memory, when "Local and Hindsight records", step 2, would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
    - When a merge, a deploy, or a data load is still to come, say what it is and who runs it, and say that the owner's yes to the closing question does not cover it.
-   - The last line of the reply is exactly "Approve this result and mark <ID> Done?"
+   - Ask one clear question covering approval of the result, the listed outcomes to keep for the whole project, and marking the work item Done.
 3. After the owner's yes, do these four things in order:
    - Save the owner's words and the date in the row, and set `result_approved` to `YYYY-MM-DD by <name>`.
    - Add one answered Questions and Answers row for each line that you showed under "To keep for the whole project", because the yes also covers those lines. The row holds the line, your recommendation, and the owner's words.

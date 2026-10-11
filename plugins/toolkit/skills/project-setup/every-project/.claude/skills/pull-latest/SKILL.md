@@ -59,8 +59,8 @@ now.
 4. **The branch has no upstream:** run
    `git log --oneline HEAD..<remote>/<default>`. Nothing listed: the branch
    already holds everything on the default branch. Otherwise tell the owner
-   how many commits it lists and ask "Merge the latest `<default>` into this
-   branch?" After the owner's yes, run `git merge --no-edit <remote>/<default>`.
+   how many commits it lists and ask whether to merge that default branch into
+   this branch. After the owner's yes, run `git merge --no-edit <remote>/<default>`.
 5. **Report** the incoming commits (one line each, then one line on what they
    change together), the final state, and anything step 3 found: another
    session's commits, or content already on the remote under another commit
@@ -70,14 +70,11 @@ now.
    - with no upstream: "holds everything on <remote>/<default>", or "N commits
      behind <remote>/<default>; not merged".
 
-   From your own worktree, add one line on the main checkout: "The main
-   project folder is updated to <short commit id>.", "The main project
-   folder was already up to date.", or "I left the main project folder
-   alone: <it is on branch X | it has uncommitted changes | the pull
-   error>."
+   From your own worktree, report whether the main checkout was updated,
+   was already up to date, or was left alone. Give the new commit or the
+   reason it was left alone.
 
-   End with the one question the owner must answer, or else the exact words
-   the owner can say to start the next step.
+   State any decision the owner must make or the next available action.
 
 ## Mistakes to avoid
 

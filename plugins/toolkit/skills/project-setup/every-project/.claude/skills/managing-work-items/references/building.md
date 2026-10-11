@@ -4,7 +4,7 @@ Use this file to build a work item that has approved requirements, and an approv
 
 The main agent is the agent of the session that leads the build. It either does the tasks itself or runs a team of helper agents. In both cases it is the only one that changes the work item, and the only one that talks to the owner. The owner stays the product owner: the owner decides, approves, and marks work Done.
 
-A session is one chat with the agent. The exact questions in this file say "chat", because "chat" is the word the owner sees.
+A session is one chat with the agent. Use “chat” when explaining the arrangement to the owner.
 
 ## Contents
 
@@ -42,7 +42,7 @@ The offer is the question whether helper agents build the work item. It is first
 - **The owner gives the work item to the agent in the owner's own words,** for example "you drive". Those words are the owner's yes. Add an answered row for it, and do not ask the offer.
 - **`delivery` is `not-offered`, the owner has not given the work item to the agent, and the work item is not small.** Make the offer now.
   - Add the offer as an open row with your recommendation, and set `waiting_on` to the owner.
-  - Make the last line of the reply exactly "Would you like agents to take responsibility for delivering this, with you acting as product owner?"
+  - Ask whether agents should take responsibility for delivering the work, with the owner acting as product owner.
   - Build nothing until the owner answers.
 - **The work item is small.** `references/lifecycle-rules.md`, section "A small work item", gives the definition of a small work item. A small work item gets no offer. Set `delivery: owner-led`, and add a Recent History row: "Small item, so no delivery offer." The owner's own later "you drive" still counts.
 - **The owner says yes.** Set `delivery: agent-led`.
