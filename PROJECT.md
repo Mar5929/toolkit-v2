@@ -26,7 +26,7 @@ The approved startup delivery changes preserve generated Reflect. The owner's Co
 
 - Verify every enabled writer's protection of the whole submitted document, including the existing code survey. Preserve working capture settings until a verified replacement is ready.
 - Verify generated claim accuracy and sustained startup reliability under expected background work. The successful normal host samples below do not establish reliability or explain the earlier API cutoff.
-- Verify scheduled page builds actually succeed and recover from failure, and verify the remaining pages' accuracy and schedule provenance.
+- Verify continued page accuracy and scheduled operation during normal activity. Manual failure recovery and automatic build provenance are verified below.
 - Verify routing from the intended computers and worktrees, persistent service-only provider authentication, and backup recovery. Record unavailable checks without marking setup done.
 
 ## Verification on October 11, 2026
@@ -38,3 +38,9 @@ The approved startup delivery changes preserve generated Reflect. The owner's Co
 - Manual onboarding-page recovery completed in about 174 seconds with 8,538 content characters, cleared the failure flag, and read back `is_stale: false`. Source and trigger configuration were unchanged. This verifies manual recovery, not a later scheduled run.
 
 Follow the [shipped memory-flow verification](plugins/toolkit/skills/project-setup/choices/memory/hindsight/reference/hindsight-verification.md) for these checks. Current progress and decisions belong in the corresponding Notion work item, not this setup record.
+
+## Knowledge-page recovery verified on October 11, 2026
+
+The repository Hindsight wiring was committed and pushed as [1cc1631](https://github.com/Mar5929/toolkit-v2/commit/1cc1631). All ten pages carrying old failure timestamps were rebuilt successfully. Live readback confirmed fifteen nonempty pages with zero failure flags or failure-based pauses; every original source query, name, tag, output budget and trigger was preserved. New memory can make a page stale again without causing failure.
+
+Automatic operation payloads verified successful scheduled builds of the onboarding and component pages. Targeted corrections reconciled generated claims about new-installation redaction defaults, authoritative filing and the current setup layout. Five affected pages were rebuilt and independently reviewed; the Key Decisions page needed a full rebuild after correction processing completed. Its original incremental trigger was restored and verified. The [findings report](reference/tkv-60-hindsight-timeout-findings.md) holds the operation evidence and limits. Continued accuracy, sustained startup reliability, writer protection, other-host routing, authentication ownership and restore remain open.
