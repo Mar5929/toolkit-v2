@@ -26,19 +26,23 @@ Four rules apply to every step:
 
 ## Step 1: resolve the exact pull request
 
-Run these two commands:
+Use the number or URL the owner or `managing-work-items` supplied. Resolve its repository from that URL or the confirmed project repository. Only when no pull request was supplied, use the current branch to identify it with `gh pr view`. Confirm that the result matches the requested pull request before continuing.
+
+Read that exact pull request, the worktrees and the configured remotes:
 
 ```text
-gh pr view --json number,url,state,headRefName,headRefOid,baseRefName,isCrossRepository,title,body,commits
+gh pr view <number-or-url> --repo <owner/repo> --json number,url,state,headRefName,headRefOid,baseRefName,baseRefOid,isCrossRepository,title,body,commits
 git worktree list --porcelain
+git remote -v
 ```
 
 Record these facts:
 
-- the repository;
+- the repository, including its GitHub host;
+- the verified local remote whose fetch and push URLs identify that repository, as `<remote>`; when no matching remote exists, skip local update and cleanup;
 - the pull request number and URL;
 - the head branch and the head commit (`headRefOid`);
-- the base branch;
+- the base branch and its commit (`baseRefOid`);
 - the worktrees that hold the head branch and the base branch;
 - whether the head branch is in a fork.
 
@@ -68,7 +72,7 @@ A standing merge instruction is a line in `.claude/rules/owner-preferences.md` i
 Run these two commands:
 
 ```text
-gh pr view <number> --repo <owner/repo> --json state,isDraft,mergeable,mergeStateStatus,reviewDecision,statusCheckRollup,headRefOid,baseRefName
+gh pr view <number> --repo <owner/repo> --json state,isDraft,mergeable,mergeStateStatus,reviewDecision,statusCheckRollup,headRefOid,baseRefName,baseRefOid
 gh pr checks <number> --repo <owner/repo>
 ```
 
@@ -78,7 +82,7 @@ Merge only when all of these are true:
 - The pull request is mergeable.
 - The required reviews are satisfied.
 - The required checks passed.
-- The head and the base still match what step 1 recorded.
+- The head commit, base branch and base commit still match what step 1 recorded.
 
 These cases change the step:
 
@@ -90,18 +94,14 @@ These cases change the step:
 
 ## Step 4: merge-safety check
 
-Other sessions may have uncommitted work in the main checkout. Fetch first, so that the comparison uses the remote's default branch:
+Other sessions may have uncommitted work in the main checkout. Read the files changed by this exact pull request against its actual base, then check the main checkout:
 
 ```text
-git fetch origin
-git diff --name-only origin/<default-branch>...<head-branch>
+gh pr diff <number> --repo <owner/repo> --name-only
 git -C <main-checkout> status --porcelain
 ```
 
-The second command lists the files that the pull request changes. The third command lists the files with uncommitted changes in the main checkout.
-
-- With no local head branch, use `origin/<head-branch>` in the second command.
-- For a pull request from a fork, use `gh pr diff <number> --repo <owner/repo> --name-only` in place of the second command.
+The first command lists the files that the pull request changes, including a pull request from a fork or into a non-default branch. The second lists the files with uncommitted changes in the main checkout. When the base worktree exists and differs from the main checkout, also run `git -C <base-worktree> status --porcelain`. Compare the pull request's changed files with uncommitted paths in both worktrees. Re-read the pull request's head and base as in step 3 after the diff. If either commit or the base branch changed, repeat the checks for the newly resolved pull request. Apply step 2 to the checked head; do not merge a new head under the earlier head's approval.
 
 When a file is in both lists, stop, name exactly those files, and let the owner decide whether to commit, stash, or wait. Never change, stage, stash, or discard the main checkout's changes.
 
@@ -147,9 +147,9 @@ In both cases the pull request is not merged yet. Remove nothing, and tell the o
 
 ### Update the base worktree
 
-Run `git -C <base-worktree> fetch --prune origin` and `git -C <base-worktree> status --porcelain`.
+When no base worktree or matching remote exists, skip the checkout update and local cleanup, and report what remains. Verify that the base branch's upstream is the pull request's base branch in that same repository. When it is not, skip local update and cleanup; do not retarget it. Otherwise run `git -C <base-worktree> fetch --prune <remote>` and `git -C <base-worktree> status --porcelain`.
 
-A blocking file is an uncommitted file in the base worktree that is also in step 4's list of the files that this pull request changed. Leave every other uncommitted file as it is.
+List the update's affected files with `git -C <base-worktree> diff --name-only HEAD..@{u}`. Compare that list with the base worktree's uncommitted paths separately from the pull request overlap check. A blocking file is in both lists. Leave every unrelated uncommitted file as it is.
 
 - When there is no blocking file and the base worktree is on the base branch, run `git -C <base-worktree> pull --ff-only`.
 - When there is a blocking file, or the base worktree is on another branch, or the pull fails, change nothing in the base worktree and skip the local cleanup. Report which of the three it was.
@@ -176,7 +176,7 @@ git -C <base-worktree> worktree prune
 ```
 
 - After a squash merge, `git branch -d` can refuse. Use `git branch -D <head-branch>` only for this pull request's head branch, and only when all five proofs hold.
-- When GitHub did not delete the remote branch, run `git -C <base-worktree> push origin --delete <head-branch>`, but only when the branch is in the same repository and belongs to this pull request. Then run `git -C <base-worktree> fetch --prune origin`.
+- When GitHub did not delete the remote branch, run `git -C <base-worktree> push <remote> --delete <head-branch>`, but only when the branch is in the same repository and belongs to this pull request. Then run `git -C <base-worktree> fetch --prune <remote>`.
 - Never delete a fork branch.
 
 ## Step 7: work item note and report

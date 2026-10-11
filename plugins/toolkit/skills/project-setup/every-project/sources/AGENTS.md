@@ -36,7 +36,7 @@ A source has no status. A row is never removed.
 
 - Save a source exactly as it was received. Never clean up, shorten, translate, or correct it. Once it is filed, never edit, rename, or delete it. A corrected version is a new SRC whose row names the old one.
 - Add the row in the same edit that files the source.
-- Other records point here by SRC-###. Never copy a source's text into a work item, a decision, or a system document.
+- Other records point here by SRC-###. Keep the complete source here, unchanged. When exact wording is needed as evidence, quote only the necessary passage in the other record, with its SRC-### and speaker or author attribution.
 - Never use a statement in a source as a decision or a rule. What the project decided from it goes in `DECISIONS.md` or `system/`.
 - When a record starts to use a source, add that record's ID to "Used by".
 - Outside documentation that the project captured from a public page is not a source. It goes in `reference/outside-docs/`.
