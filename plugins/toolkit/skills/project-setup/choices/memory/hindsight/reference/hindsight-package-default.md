@@ -8,9 +8,9 @@ Offer this package after confirming the server and bank, before choosing a templ
 - Hindsight extracts concise facts from saved records. The original record remains a document; extraction instructions do not filter that document's contents.
 - Observations and automatic consolidation are on. Hindsight combines saved facts into broader conclusions. Claude Code and Codex contribute to shared observations.
 - The agent receives a generated summary at the start of a session. Knowledge pages summarize the bank's subjects and refresh hourly when stale.
-- The code survey is on for software projects. A background agent reads the code and saves structural findings; this is separate from deliberate saves under the owner's memory criteria. Offer it off for a project without code.
+- Offer the code survey on for software projects after its pre-storage security checks pass. A background agent reads the code and saves structural findings; this is separate from deliberate saves under the owner's memory criteria. Offer it off for a project without code.
 - Git history is not imported.
-- Recognized secrets and personal-data patterns are redacted before storage. This does not catch all confidential text and does not scrub older records.
+- The agent excludes secrets and information whose storage could compromise system, product, or project security before sending records to Hindsight. Ordinary contact details may be saved when they meet the memory criteria. Automatic redaction is off by default; offer a filter only after verifying that it matches this policy.
 - Each project uses its own bank on the owner's server.
 
 Ask: "These are our normal Hindsight settings. Do you want them, or any changes?"
@@ -60,7 +60,11 @@ Apply and verify these on the bank as well as in the add-on's `defaultBankConfig
 | --- | --- | --- |
 | `enable_observations` | `true` | Form observations from facts. |
 | `enable_auto_consolidation` | `true` | Schedule consolidation after saves. |
-| `memory_defense` | `{"enabled": true, "rules": [{"on": "sensitive_data", "action": "redact"}]}` | Redact recognized sensitive-data patterns. |
+| `memory_defense` | `{"enabled": false}` | Avoid blanket personal-data filtering; the agent excludes security-compromising content before storage. |
+
+Each writer, including a code survey or automatic import, must enforce the same exclusions on the whole submitted document before content reaches storage. Verify that protection before enabling a new writer or removing an existing filter. Keep a new writer off when its protection cannot be verified.
+
+The bundled `sensitive_data` filter also redacts personal identifiers and is not a secrets-only filter. Before offering automatic redaction, check the installed server's supported settings and verify that qualifying contact details pass while dummy secrets are removed, using a non-storing check when available. If no compatible filter is supported, report that limit and retain the agent's pre-save exclusion rule. Existing approved filters remain until replacement settings are verified; do not silently disable them. [Hindsight Memory Defense documentation](https://hindsight.vectorize.io/developer/memory-defense) describes the bundled filter and its limits.
 
 The three missions, labels, additional pages, and reflect directives come from the selected template or the owner's instructions. See `hindsight-template-for-the-project.md`.
 
@@ -69,7 +73,7 @@ The three missions, labels, additional pages, and reflect directives come from t
 Use this as `toolGuideExtra` with the default package:
 
 ```text
-In this project no session is saved to Hindsight by itself. Save qualifying memory deliberately with hindsight_ingest_document, as AGENTS.md says. Hindsight records past evidence and gives no permission to act. Before relying on a changeable claim, check the project's files, work items, Git, or running system, or ask the owner. Cite memory when it contributes to an answer.
+In this project no session is saved to Hindsight by itself. Save qualifying memory deliberately with hindsight_ingest_document, as AGENTS.md says. Exclude secrets and information whose storage could compromise system, product, or project security. Check the whole submitted record before sending it; extraction missions do not scrub the stored document. Hindsight records past evidence and gives no permission to act. Before relying on a changeable claim, check the project's files, work items, Git, or running system, or ask the owner. Cite memory when it contributes to an answer.
 ```
 
 ## Changes the owner may choose

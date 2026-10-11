@@ -22,6 +22,7 @@
 
 
 # Memory Principles the agents must follow
+* Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
 * Memory should not be treated as truth by the ai agent when referenced. Rather it should always be used to enrich reasoning and thinking.
 * The agent should always 
 * Memory should always be cited when the agent uses it in an answer.

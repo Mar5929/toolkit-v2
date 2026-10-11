@@ -20,7 +20,7 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 
 - A fact that the root `AGENTS.md`, section "Where information goes", keeps in a place outside memory never goes in this folder. `managing-project-memory` sends such a fact to that place.
 - A memory record may name a record outside memory by its ID. The memory record never repeats what that record says.
-- A secret, a key, or an email address never goes in a memory record.
+- Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
 
 ## What must stay true
 

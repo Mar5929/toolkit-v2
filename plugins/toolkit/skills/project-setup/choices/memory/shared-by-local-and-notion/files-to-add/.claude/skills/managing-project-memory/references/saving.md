@@ -111,11 +111,11 @@ Use [events-and-recurring-jobs.md](events-and-recurring-jobs.md), section "A sha
 Delete a memory record in these cases:
 
 - the owner says to delete it;
-- it holds a secret or an email address. In this case, ask the owner first.
+- removing the security-compromising text would leave no useful memory. In this case, ask the owner before deleting the whole record.
 
 In your reply, say whether the deleted memory record can be brought back. `references/memory-store.md` says whether it can.
 
-When you find a secret or an email address in memory, remove that text at once, and tell the owner.
+When you find secrets or information whose storage could compromise system, product, or project security in memory, remove that text at once and tell the owner. Describe the removal without repeating the excluded text or offering to restore it; this overrides the old-text and undo wording elsewhere in this file.
 
 ## The owner's instructions
 
