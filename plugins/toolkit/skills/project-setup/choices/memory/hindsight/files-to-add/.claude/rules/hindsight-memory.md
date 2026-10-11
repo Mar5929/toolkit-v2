@@ -9,7 +9,7 @@ Keep this project's lasting memory in the Hindsight bank recorded in `PROJECT.md
 - Keep the authoritative project record where `AGENTS.md`, "Where information goes", places it. A qualifying memory can name that record and preserve the lasting context; do not create a second source of current work status.
 - Keep proposals, unchecked claims, and unresolved questions marked as such. Never turn an agent's report into an owner-approved decision.
 - Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
-- Keep transcripts, routine status updates, and facts that matter only for the moment out of deliberate memory saves.
+- When saving a work outcome, preserve the lasting decision, lesson, or significant event with its useful context and source pointer. Keep evolving implementation status, routine verification receipts, transcripts, and facts that matter only for the moment in the work tracker or project records.
 
 ## When to review and save
 
