@@ -6,7 +6,7 @@
 
 ## Purpose
 
-<Describe the business problem, intended users, and outcome in one or two paragraphs.>
+<Describe the business problem, intended users, and outcome concisely.>
 
 ## Start here
 

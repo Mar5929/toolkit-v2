@@ -26,7 +26,7 @@ This file says how to reach the owner's Notion with `ntn`, gives the form of eve
 - The connection sees only the pages that the owner shared with it at sign-in, and everything under those pages. A page that the connection cannot see returns 404 `object_not_found`, even when the page exists.
   - Only the owner can fix that error. In the Notion app, the owner opens the page, chooses "…" → Connections, and adds "Notion CLI".
   - Sharing the project's parent page once reaches every project under it.
-- `ntn` works in Claude Code, in a terminal, and in hooks. It works in Codex when each call runs with escalated permissions, as `SKILL.md`, section "In Codex", says.
+- `ntn` works in Claude Code, in a terminal, and in hooks. In Codex, follow the active session access and permission process in `SKILL.md`, section "In Codex".
 - The Notion connector, whose tools have names like `notion-fetch`, is for a session in which `ntn` cannot run and the connector is signed in.
   - Every step is written for `ntn`. The data model is the same: `notion-fetch` reads, `notion-query-data-sources` finds rows, `notion-create-pages` creates, and `notion-update-page` changes.
   - The connector is not tested in Codex.
@@ -150,7 +150,7 @@ ntn api v1/databases/<database-id> < /dev/null | jq -r '.data_sources[0].id'
 
 | Error | Meaning | What to do |
 | --- | --- | --- |
-| 401 `unauthorized`, "no auth token", "ntn login" | `ntn` is not signed in, or the sign-in expired. In Codex, the call may have run inside the sandbox. | Tell the owner to run `ntn login`. Stop and wait. In Codex, first run the same call again with escalated permissions, and ask for `ntn login` only if it still fails. |
+| 401 `unauthorized`, "no auth token", "ntn login" | `ntn` is not signed in, the sign-in expired, or this session cannot access the stored credential. | First check session network and keychain access under `SKILL.md`, "In Codex". Use a permitted access route when available, then check `ntn whoami`. If authentication still fails with access available, ask the owner to run `ntn login` and wait. Never ask for the credential itself. |
 | 404 `object_not_found` | The page is not shared with "Notion CLI", or the id is wrong. The error does not mean that the page is gone. | Check the id in `PROJECT.md`. When the id is right, ask the owner to share the page, as "Access and sign-in" says. |
 | 400 `validation_error` | The request body is wrong: a property name, an option, or an `old_str` that does not match the page text. | Read the page or the data source again, fix the body, and retry once. |
 | 409 `conflict_error` | Two writes happened at once. | Wait 5 seconds, and then retry once. |

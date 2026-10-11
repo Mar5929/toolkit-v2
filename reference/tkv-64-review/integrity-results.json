@@ -1,0 +1,51 @@
+{
+  "scratch": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tkv64-assembly-31t0x89y",
+  "assemblies": [
+    {
+      "tracker": "local",
+      "memory": "local",
+      "missing_links": []
+    },
+    {
+      "tracker": "local",
+      "memory": "notion",
+      "missing_links": []
+    },
+    {
+      "tracker": "local",
+      "memory": "hindsight",
+      "missing_links": []
+    },
+    {
+      "tracker": "notion",
+      "memory": "local",
+      "missing_links": []
+    },
+    {
+      "tracker": "notion",
+      "memory": "notion",
+      "missing_links": []
+    },
+    {
+      "tracker": "notion",
+      "memory": "hindsight",
+      "missing_links": []
+    },
+    {
+      "tracker": "github",
+      "memory": "local",
+      "missing_links": []
+    },
+    {
+      "tracker": "github",
+      "memory": "notion",
+      "missing_links": []
+    },
+    {
+      "tracker": "github",
+      "memory": "hindsight",
+      "missing_links": []
+    }
+  ],
+  "parse_hook_errors": []
+}

@@ -90,7 +90,7 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
 - `work-items/`, `memory/`, and `.obsidian/` are Git-ignored, so the reset leaves them as they are. Never run `git clean` with `-x` or `-X`, because it deletes them and Git cannot bring them back.
 - Never run `git pull`, never use `--force` on `git fetch`, and never push.
 - In Claude Code, the project's settings ask the owner before every `git reset --hard` and every `git clean`. That prompt is expected.
-- In Codex, the sandbox keeps `.git/` read-only and blocks the network. Run each Git write and each network call alone, with escalated permissions (`sandbox_permissions` set to `require_escalated`, with a one-line reason). The `gh pr list` check and the lockfile install are included. When Codex refuses without asking, show the owner the exact command and ask the owner to run it.
+- Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
 
 ## Work that another skill does
 

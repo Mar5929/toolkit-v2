@@ -23,13 +23,13 @@ Setting up or updating the toolkit in a project is the job of `project-setup`.
    - Use a copy that the project keeps only when it was captured in the last 14 days. Otherwise, read the live page.
    - When you cannot read the page, tell the owner before you write. Name the page, and say that the change is based on the checklist alone.
 3. Open the section for that kind of file in [references/checklist.md](references/checklist.md). It gives the practices and checks for the file. If the live page and checklist differ, follow the page. Tell the owner which checklist line needs correction.
-4. Read the project's own rules for these files in its root `AGENTS.md`. Then read two existing files of the same kind in the project, and match their form.
+4. Read the project's own rules for these files in its root `AGENTS.md`. Read relevant existing files of the same kind to understand the project's established names, locations, and form.
 5. Write the change.
    - Follow the project's `.claude/rules/document-clarity-standard.md` when it exists. The owner may have changed that file.
    - In a folder without that rule, follow [references/writing-rule.md](references/writing-rule.md). It is an exact copy of the rule that `project-setup` gives every project.
    - A file that both products read uses only what both support.
 6. Check the change the way the checklist section says under "Check".
-7. Have an agent that did not write the change review it against the official page, the checklist, and the writing rule. Fix each confirmed finding and have the reviewer read the fix. A small edit gets one reviewer and one read.
+7. Have an agent that did not write the change review it against the official page, the checklist, and the writing rule. Fix each confirmed finding and have the reviewer read the fix. Use review coverage appropriate to the change and its effects.
    - If the product cannot start a helper agent, review the change yourself against all three sources. Tell the owner in step 8 that no separate review ran.
 8. Tell the owner which pages you read and their dates, what you changed, and what the review found.
 

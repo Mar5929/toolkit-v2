@@ -25,7 +25,7 @@ Entry form:
 - Status: <Open, Decided, Superseded, or Withdrawn>
 - Raised: <YYYY-MM-DD>, <who raised it>
 - Decided: <YYYY-MM-DD>, <who decided>; or "not yet"
-- Decision: <the decision in one or two sentences; for an Open entry, the exact question>
+- Decision: <the decision in concise sentences; for an Open entry, the exact question>
 - Why: <the reason for the decision, or why the question matters>
 - Affects: <work item IDs and rule IDs, or "none yet">
 - Replaces or replaced by: <"replaces DEC-###", "replaced by DEC-###", or "none">

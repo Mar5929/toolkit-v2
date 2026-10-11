@@ -28,16 +28,16 @@ Guiding Design Principles - follow these on every request in this project:
 This file holds what an agent needs on every request in this repository, and nothing else.
 
 - When a line here is no longer true, replace it. Do not add a paragraph below it.
-- The reason for a decision, its date, Mike's words, a size he was told, and what an earlier version did go in `dev/GOAL.md` (his decisions) or `dev/PROGRESS.md` (what was done). They do not go here.
+- Keep decisions, questions, progress, and history in the corresponding Notion work item. Keep intended Toolkit behavior in `toolkit-wiki/`. They do not go here.
 - The detail of one feature goes in the file that holds the feature. This file names that file.
-- The file as it was before the clean-up of 2026-10-09, with the history behind each rule, is `dev/archive/AGENTS-before-cleanup-2026-10-09.md`. Read it when you need the reason for a rule below.
+- Use Git history and the relevant work item when you need the reason for an earlier rule.
 
 ## What this repository is
 
 - It builds Toolkit V2 for Mike Rihm, a solo developer. The agent runs each of his projects; Mike decides and steers. `README.md` explains the toolkit for Mike.
-- The toolkit is rules, skills, and three small hook commands. There is no custom program. It ships as one plugin, `toolkit`, for Claude Code and Codex, with two skills:
+- The toolkit is rules, skills, and three small hook commands. There is no custom program. It ships as one plugin, `toolkit`, for Claude Code and Codex, with one entry skill:
   - `project-setup` sets up a project by copying files: the folder every project gets, the folder for each of the owner's choices, and the settings. It also runs "check the setup" and "update the toolkit".
-  - `writing-harness-files` holds the steps for writing or changing a harness file ("Harness files" under Rules).
+- This repository's `.claude/skills/writing-harness-files/` holds the steps for writing or changing a harness file.
 - Work on the toolkit is tracked in Notion, in the Toolkit V2 project (page ID `3edb381d-a176-81ee-b7dd-d0a6d662f9b2`). Its work items, with IDs starting TKV, are in the Work Items data source `b22b381d-a176-8301-a22c-0766e27d8dc9`.
 - `OUTSIDE-TOOLS.md` in the root is Mike's list of the outside tools he uses. It is a plain file: not a skill, not shipped, and never copied into a project. Never add a tool he has not chosen.
 
@@ -48,7 +48,7 @@ Follow `.claude/rules/evaluate-the-owners-request.md` on every request, also whe
 - Claude Code loads the rule by itself, and one entry in `.claude/settings.json` prints it again on every message. In Codex, read it at the start of each session and again after compaction.
 - A helper agent may not load the rule, so put its path in every brief.
 - In this repository, "the whole project" in the rule means the whole toolkit: the filing system, memory, the work tracker, the project's records, the hook commands, setup and "update the toolkit", both hosts, and the projects that already use the toolkit.
-- The file is a copy of the starter rule, `<setup>assets/every-project/.claude/rules/evaluate-the-owners-request.md`. Edit the starter rule, then copy it over the copy. Never edit the copy.
+- The file is a copy of the starter rule, `<setup>every-project/.claude/rules/evaluate-the-owners-request.md`. Edit the starter rule, then copy it over the copy. Never edit the copy.
 
 Follow `.claude/rules/document-clarity-standard.md` when writing or changing documents and artifact text.
 
@@ -56,17 +56,18 @@ Follow `.claude/rules/document-clarity-standard.md` when writing or changing doc
 
 They apply to every skill, rule, guide, hook text, and brief. Put all three in the brief of every helper agent that writes such text.
 
-- Write the general rule. Do not add a sentence for each small case. A situation is a test in `dev/evals/`, never a line in an instruction.
+- Write the general rule. Do not add a sentence for each small case. Use review situations to verify the instruction, rather than adding a line for each situation.
 - State the goal and the process. Do not tell the agent how to think.
 - Do not put a count or a limit where the agent should use its judgment. Say what the step is for, and let the agent decide. When a question to Mike is about the edge of a count or a limit, first ask whether the count should be there at all.
 
 ## Read first
 
-- `dev/GOAL.md`: Mike's goal and his decisions. His words there win over every other file.
-- `dev/PROGRESS.md`: what is done, what is in progress, and the next step. Update it before you stop.
-- `dev/research/layout-audit/DESIGN-SPEC.md`: the layout of a project, the filing rule, and the one job of each skill.
-- `dev/HISTORY.md`: how the project got here, and what not to repeat. Read it before you propose anything bigger than a skill edit.
-- `dev/SKILL-INDEX.md`: every skill, its folder, and its description.
+- The corresponding Notion work item: Mike's request, decisions, current work, and next step. Update it before you stop. Mike's words take priority over agent proposals.
+- `toolkit-wiki/Toolkit Guiding Design Principles.md`: how Toolkit changes are designed.
+- `toolkit-wiki/Toolkit Setup Process.md`: the intended setup process.
+- `toolkit-wiki/ToolkitV2 Structure.md`: what each choice gives a project.
+- `toolkit-wiki/Toolkit's Definition of Persistent Memory.md`: what counts as memory and how it is represented. Read it before changing memory guidance.
+- The relevant earlier work items and Git history: how the project got here. Read them before proposing a wider change.
 - `reference/how-the-owner-works-with-agents.md`: what Mike asks agents to do in his real projects. Read it before you propose a change to how a project runs.
 - `reference/davis-memory-system.md`: the memory system of his Davis project, which he named as the example to follow. Read it before you change how a project keeps memory.
 
@@ -76,34 +77,33 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 
 | Path | What is there |
 | --- | --- |
-| `plugins/toolkit/` | The plugin: its two manifests (`.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`) and its two skills. |
+| `plugins/toolkit/` | The plugin: its two manifests (`.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`) and `project-setup`. |
 | `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json` | The `toolkit-v2` marketplace, for Claude Code and for Codex. |
-| `<setup>SKILL.md`, `<setup>references/` | Setup, "check the setup", "update the toolkit", and the move-over from the older toolkit. |
-| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files, the rules, the shared skills, and the three hook commands. |
-| `<setup>assets/work-local/`, `work-notion/`, `work-github/` | The files for each choice of work tracker. |
-| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The files for each choice of memory. |
-| `<setup>assets/notion-tools/`, `salesforce/`, `soul/` | The files for a project that uses Notion, for a Salesforce project, and for a project whose owner keeps `SOUL.md`. |
-| `<setup>assets/settings/` | The snippets that setup merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml`. |
-| `plugins/toolkit/skills/writing-harness-files/` | The steps, the checklist, and the rewrite steps for a harness file. |
+| `<setup>SKILL.md`, `<setup>reference/` | Setup, "check the setup", and "update the toolkit". |
+| `<setup>every-project/` | Everything every project gets, at the paths a project has: project files, rules, shared skills, settings, and three hook commands. |
+| `<setup>choices/work-items/` | The local, Notion, and GitHub work-tracker modules. |
+| `<setup>choices/memory/` | The local, Notion, and Hindsight memory modules, and the process shared by local and Notion memory. |
+| `<setup>choices/notion-shared/`, `<setup>choices/salesforce/` | The shared Notion tools and Salesforce module. |
+| `.claude/skills/writing-harness-files/` | This repository's harness-writing procedure and official guidance checklist. |
 | `.claude/settings.json`, `.claude/rules/` | The settings and the one rule for sessions that work on this repository. |
 | `ai-external-knowledge/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
 | `reference/` (root of this repository) | Records of how Mike works in his real projects. |
-| `salesforce-tools/` | Two Python tools for a Salesforce project, with the rule for each. Not shipped: a project that wants one adds it as its own. |
-| `dev/` | Goal, progress, research, reviews, test runs, evals, the check tools in `dev/tools/`, and the tests in `dev/tests/`. |
+| `archive/` | Earlier setup material and Salesforce tools. Not shipped. |
+| `toolkit-wiki/` | Mike's definition of intended Toolkit behavior. |
 
-Only `plugins/toolkit/` is shipped. Nothing shipped reads a file under `dev/`, the root `reference/`, or `ai-external-knowledge/`.
+Only `plugins/toolkit/` is shipped. Nothing shipped reads the repository's `archive/`, root `reference/`, `toolkit-wiki/`, or `ai-external-knowledge/`.
 
 ## The starter project
 
-The folders under `<setup>assets/` together are the starter project: the source of every file a project gets. Older text and the check tools also call it "the model". Edit these folders directly.
+`<setup>every-project/` and the selected `<setup>choices/` modules together supply the starter project. Edit these folders directly.
 
 - A change that alters what a project file means needs Mike's yes.
-- A choice decides which files a project gets, never which lines inside a file. A file every project gets goes in `every-project/`, and a file for one choice goes in that choice's folder. No file holds a setup marker such as `<!-- if ... -->`. Setup fills only blanks: the project name, the owner's answers, and the "Toolkit settings" lines in `PROJECT.md`.
-- `<setup>references/setup-copy.md`, "Folders the choices add", is the only table of choices and folders. A new folder under `<setup>assets/` needs a row there.
+- Each choice supplies complete files and the additions to project guides and settings documented by its module. A file every project gets goes in `every-project/`, and a file for one choice goes in that choice's folder. No delivered file holds a conditional setup marker such as `<!-- if ... -->`. Setup records confirmed owner answers in the documented places.
+- `<setup>reference/placing-files.md` describes how setup copies files. `<setup>SKILL.md` routes each answer to its choice module. Keep those routes current when adding a module.
 - Two files are the owner's own from the first day: `owner-preferences.md` and, in a Salesforce project, `salesforce-agent-permissions.md`. Setup copies each once. "Update the toolkit" never compares or replaces them.
-- Skills sit under `.claude/skills/` in every setup folder, because Codex would otherwise load each one in every folder on the computer. This repository's `.claude/settings.json` turns each project skill off by name, and stops the starter project's instruction files from loading here.
+- Delivered skills sit under `.claude/skills/`; setup links `.agents/skills` to that folder so Codex reads the same project skills. This repository's `.claude/settings.json` turns each project skill off by name, and stops the starter project's instruction files from loading here.
 - Each folder guide, `AGENTS.md`, has a `CLAUDE.md` beside it that holds only `@AGENTS.md`. Never delete one.
-- After a change, run every check below and raise the version. A project gets the change when its owner says "update the toolkit" there. `<setup>references/update.md`, "4. What the toolkit no longer ships", holds the one general rule for a file that an existing project still has and the toolkit no longer ships.
+- After a change, run the applicable checks below and raise the version. A project gets the change when its owner says "update the toolkit" there. `<setup>reference/update.md` describes how to handle files the toolkit no longer ships.
 
 ## Checks
 
@@ -112,17 +112,14 @@ Run them from the repository root before you hand work back.
 ```bash
 claude plugin validate .
 claude plugin validate ./plugins/toolkit
-node dev/tools/check-skills.mjs
-node dev/tools/check-rules.mjs
-node --test 'dev/tests/*.test.mjs'
+git diff --check
 ```
 
-- Keep the quotes around the test pattern, so that Node reads it and not the shell.
-- `check-skills.mjs` checks the skills, the setup folders, and every text that is kept as a copy. `check-rules.mjs` checks the starter project's rules. When one fails, its message names the file to change.
-- The `CHOICE_RULES` list in `check-rules.mjs` is a second copy of part of the table in `<setup>references/setup-copy.md`. Change both together.
-- The checks and tests need LF line endings. `.gitattributes` keeps them in every checkout.
-- The tests run on Windows and on a Mac. A new test takes what differs between the two from `dev/tests/support.mjs`.
-- Codex has no validate command. To prove that Codex accepts the plugin, install it into a scratch Codex home ("Tests stay in scratch folders" under Rules).
+- Verify skill front matter, reference links, exact copies, and both hosts' settings. Use representative workflows and independent review to check behavior.
+- The former `dev/` checks and tests are no longer present. Report unavailable checks accurately; do not claim they passed.
+- Checks and tests use LF line endings. `.gitattributes` keeps them in every checkout.
+- Use scratch folders for setup and host-loading tests. Keep real project records and the owner's host configuration intact.
+- Codex has no validate command. To prove that Codex accepts the plugin, install it into a scratch Codex home.
 
 ## Rules
 

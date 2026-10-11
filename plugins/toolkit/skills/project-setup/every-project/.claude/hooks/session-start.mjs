@@ -31,13 +31,9 @@ if (memory !== 'hindsight') try {
   const page = () => execSync(`ntn api v1/pages/${arg('page')}/markdown`, opts);
   const state = String(memory === 'notion' ? attempt(() => JSON.parse(page()).markdown)
     : read('CURRENT_STATE.md')).trim();
-  // A prune request (40 lines or more, or over 7 days old), printed first so it is never cut off.
-  const lines = state.split('\n').length;
-  const updated = state.match(/Last updated:\W*(\d{4}-\d{2}-\d{2})/i)?.[1];
-  const days = Math.floor((Date.now() - Date.parse(updated)) / 864e5) || 0;
-  const prune = 'Remove the lines that are no longer true with the managing-project-memory skill';
-  const size = lines >= 40 ? `${lines} lines (limit: under 40)` : days > 7 && `${days} days old`;
-  if (size) out.push(`The project's Current State is ${size}. ${prune}.`);
+  // Keep relevance review with the agent; length and age alone do not prove staleness.
+  if (state) out.push('Review Current State with managing-project-memory; retain what the'
+    + ' next session needs and remove lines that are no longer true.');
   if (state) out.push("The project's Current State:", state);
   else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
     + ' Read it with the managing-project-memory skill.');

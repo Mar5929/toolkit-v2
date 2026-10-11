@@ -41,12 +41,11 @@ This command prints the signed-in account and the scopes. A private repository n
 
 ## In Codex
 
-The Codex sandbox is the closed area where Codex runs commands. It blocks the network, and it blocks the keychain where `gh` keeps the sign-in. So a `gh` call inside the sandbox fails with a network error or a sign-in error.
+Follow the active session's filesystem, network, keychain, and approval settings. A `gh` call may be allowed, require approval, or be blocked. Use a supported approval mechanism only when those settings require and permit it. Never request escalation when the session forbids it, or loosen the sandbox for the whole session.
 
-- Run each `gh` command on its own. Never join it to another command with `&&`, `;`, or a pipe. Writing its output to a file with `>` is fine.
-- Ask for escalated permissions (`sandbox_permissions` set to `require_escalated`) with a one-line reason, for example "Read issue #12 from GitHub." Codex then asks the owner, unless the project's Codex command rules already let `gh` run outside the sandbox.
-- Never loosen the sandbox for the whole session.
-- With approvals turned off (`codex exec`), Codex refuses the escalation. Then show the owner the exact command, ask the owner to run it in a terminal, and wait for its output.
+Run each `gh` command on its own. Never join it to another command with `&&`, `;`, or a pipe. Writing its output to a file with `>` is fine.
+
+When a required call is blocked and no permitted route is available, show the owner the exact command to run in a terminal. Wait for the result before doing dependent work. Preserve the repository, sign-in, and write-verification rules in this reference.
 
 ## Names used in the commands
 

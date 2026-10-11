@@ -11,7 +11,7 @@ Start with [the lifecycle rules](references/lifecycle-rules.md). They define the
 
 If the owner asks only a question about a work item, read the current record and answer it. Do not advance the work item merely because you read it. If the item is unclear, use the root `AGENTS.md` identification order and ask when more than one item remains plausible.
 
-Use `filing-project-records` for a source, a decision or open question that several work items need, or a rule in `system/`. Use `managing-project-memory` for the project's Current State. The lifecycle rules say when each of these jobs applies.
+Use `filing-project-records` for a source, a decision or open question that several work items need, or a rule in `system/`. For memory, follow the choice recorded in `PROJECT.md`: use `managing-project-memory` for local or Notion memory, or `.claude/rules/hindsight-memory.md` for Hindsight. Hindsight projects keep current work in the tracker and have no Current State page. The lifecycle rules say when each of these jobs applies.
 
 ## Work-item procedures
 
@@ -22,6 +22,8 @@ Use `filing-project-records` for a source, a decision or open question that seve
 | [references/refining-requirements.md](references/refining-requirements.md) | The item is in Refining Requirements, or a requirement changes in any State. |
 | [references/designing.md](references/designing.md) | The item is in Designing. |
 | [references/building.md](references/building.md) | The item is in Building, or the owner wants a team of helpers. |
+| [references/team-arrangement.md](references/team-arrangement.md) | Building involves choosing or coordinating helpers or other chats. |
+| [references/build-repository.md](references/build-repository.md) | Building needs a branch, worktree, Git writes, or permission handling. |
 | [references/testing-loop.md](references/testing-loop.md) | The item is in the Testing Loop. |
 | [references/closing.md](references/closing.md) | The item is in Reflecting, is being marked Done or Cancelled, or was closed by hand. |
 | [references/deploying.md](references/deploying.md) | The item is in Deploying. |
@@ -40,4 +42,22 @@ Use `filing-project-records` for a source, a decision or open question that seve
 | [references/builder-brief.md](references/builder-brief.md) | You start a builder. |
 | [references/acceptance-checker-brief.md](references/acceptance-checker-brief.md) | You start the separate checker in the Testing Loop. |
 
-The installed [work tracker instructions](references/work-tracker.md) list their own supporting reference files. Open only the files needed for the current action.
+With Notion work items, setup also installs these references. Open them for the corresponding action; they are absent with other tracker choices.
+
+| File | Open it when |
+| --- | --- |
+| [references/work-tracker-page-updates.md](references/work-tracker-page-updates.md) | You update a Notion work-item page. |
+| [references/work-tracker-commands.md](references/work-tracker-commands.md) | You need the Notion tracker commands. |
+| [references/work-tracker-known-problems.md](references/work-tracker-known-problems.md) | A Notion tracker read or write fails, or you need a documented workaround. |
+
+Local and GitHub trackers install the supporting files below. Open only the files supplied by the selected tracker and needed for the current action.
+
+| File | Tracker and when to open it |
+| --- | --- |
+| [references/work-tracker-folders-and-files.md](references/work-tracker-folders-and-files.md) | Local: you locate or create work-item folders and files. |
+| [references/work-tracker-field-mapping.md](references/work-tracker-field-mapping.md) | Local: you fill or update the work item's fields. |
+| [references/work-tracker-issue-layout.md](references/work-tracker-issue-layout.md) | GitHub: you create or update an issue's body. |
+| [references/work-tracker-labels.md](references/work-tracker-labels.md) | GitHub: you map work-item fields to labels. |
+| [references/work-tracker-gh-commands.md](references/work-tracker-gh-commands.md) | GitHub: you need issue, label, or sub-issue commands. |
+| [references/work-tracker-project-roadmap-and-tasks.md](references/work-tracker-project-roadmap-and-tasks.md) | Local or GitHub: you maintain project phases or tasks outside a work item. |
+| [references/work-tracker-searching.md](references/work-tracker-searching.md) | Local or GitHub: you find work items, recent changes, or project tasks. |

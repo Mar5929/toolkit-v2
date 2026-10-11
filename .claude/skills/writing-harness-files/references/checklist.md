@@ -27,13 +27,13 @@ The practices were checked against the official pages on 2026-10-05 (Claude Code
 - Codex reads only `name`, `description`, and `metadata.short-description` from the front matter. A field that only Claude Code reads, such as `when_to_use`, `allowed-tools`, `paths`, or `disable-model-invocation`, does nothing in Codex. So a skill that both products read must work with `name` and `description` alone.
 - The description says what the skill does and when to use it, in the third person, with the words the owner would say. Put the main use first. When the list of skills is over its budget, Codex cuts each description from the end, and Claude Code drops whole descriptions, starting with the skills used least. Keep it far below the limit: every session reads every description.
 - Name a neighbour skill in the description only where the two compete: "Not for ...; use <skill>."
-- `SKILL.md` stays under 500 lines. It opens as the writing rule says a document opens, then gives the steps, then a table that links every file in the folder and says when to open it.
-- A reference over 100 lines starts with a contents list. References link from `SKILL.md`, not from each other.
+- Keep `SKILL.md` focused on the entry procedure; move supporting detail into references. It opens as the writing rule says a document opens, then gives the steps, then a table that links every file in the folder and says when to open it.
+- Give a reference a contents list when it helps the reader find its sections. Link supporting files directly from `SKILL.md`, with guidance on when to open each one. Cross-links may guide related work, but must not be the only way to discover a necessary file.
 - A skill names its own files by a path from the skill folder, and reads no file outside that folder.
 - In Claude Code a personal or project skill with the name of a built-in command or a bundled skill replaces it. A personal or project skill named `verify` or `simplify` is run before each commit. Choose another name unless that is the purpose.
 - Claude Code loads a skill in a `.claude/skills/` folder below the folder a session started in once the agent reads or edits a file there. A copy of a skill kept in a repository as a template is loaded this way.
 
-Check: run the project's skill checks when the project has them. After a new or changed name or description, test in each product that reads the skill that it is chosen for three requests that should choose it and not for three that should not.
+Check: run the project's skill checks when the project has them. After a new or changed name or description, test representative requests in each product that reads the skill, including requests that should choose it and requests that should not.
 
 ## Rule
 
@@ -50,7 +50,7 @@ Check: open a session in Claude Code, read a matching file when the rule has `pa
 
 ## AGENTS.md and CLAUDE.md
 
-- The file holds what every session needs and nothing else. Keep each file under 200 lines.
+- The file holds what every session needs and nothing else. Keep each file concise and retain what every session needs.
 - Write instructions that are specific and can be checked.
 - Codex reads `AGENTS.md`. Claude Code reads `CLAUDE.md`; it reads `AGENTS.md` by itself only when no `CLAUDE.md` or `CLAUDE.local.md` is in the working folder or above it (Claude Code 2.1.277 or later). A `CLAUDE.md` that holds the one line `@AGENTS.md` makes both products read one text in every case.
 - In Claude Code, a folder's `CLAUDE.md` loads when the agent reads, writes, or edits a file in that folder. The folder's `AGENTS.md` loads by itself only when the agent reads a file there and the folder has no `CLAUDE.md`.

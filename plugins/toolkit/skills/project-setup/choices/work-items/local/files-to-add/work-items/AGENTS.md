@@ -4,7 +4,7 @@ This folder is where the project keeps its work items. It holds one folder for e
 
 This guide says what each file and folder here is, the form of a work item's ID, which header fields say where a work item stands, and what must stay true in this folder.
 
-A work item stays in this folder after it is closed. Later work does not read a closed work item. What later work needs is in `DECISIONS.md`, `system/`, and `sources/`.
+A work item stays in this folder after it is closed. Keep knowledge that later work needs in `DECISIONS.md`, `system/`, and `sources/`, so later work can find the current project guidance. Read a closed work item when its history or evidence is needed.
 
 ## Files
 

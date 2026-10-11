@@ -21,7 +21,6 @@ This file uses four names:
 - 1. Build a new setup copy
 - 2. See what differs
 - 3. What to do with each kind of file
-  - Special cases for the rows of the table
   - Whether a difference is the owner's edit
   - Updating AGENTS.md
 - 4. What the toolkit no longer ships
@@ -43,7 +42,7 @@ This file uses four names:
 - Before you change any file, make your own worktree and branch, as the project's `.claude/rules/shared-repository-work.md` says, because other sessions may be working in the main checkout. The command is `git -C <main checkout> worktree add .claude/worktrees/toolkit-update-<YYYY-MM-DD> -b claude/toolkit-update-<YYYY-MM-DD>`, where `<main checkout>` is the first path that `git worktree list` prints.
   - Run sections 2 to 4 in your worktree, with `rsync` and `diff` pointed at the worktree in place of `./`.
   - Run the service steps (section 5) from your worktree too, so that a file they change, such as `.mcp.json`, `.codex/config.toml`, or `PROJECT.md`, is committed on your branch.
-  - Checking the setup changes nothing and needs no worktree.
+  - Checking the setup needs no worktree. It inspects and reports, with the generated-index and missing-template maintenance in [reference/finishing.md](finishing.md), "The final checks in "check the setup"".
 - Git ignores `memory/` and `work-items/`, so these two folders are not in the worktree.
   - Compare them in the main checkout (section 2).
   - Change them in the main checkout, and only after the branch was merged (section 6, step 4). A work item or a memory record must never name a record that is not on the default branch.
@@ -77,53 +76,74 @@ rsync -rcni <copy>/work-items/ <main checkout>/work-items/
 
 ## 3. What to do with each kind of file
 
-For each file that differs, and each file the project lacks, find its kind in the table below and do what the row says.
+For each different or missing file, use the section for its kind below. Show every change that needs the owner's answer in one numbered table, with one row per file and its reason, and ask once. This file calls that table "the numbered table". For changes that require approval, carry out only what the owner approves. The sections below also identify changes the update request already authorizes.
 
-Show the owner every file that needs the owner's answer in one numbered table, with one line per file and the reason on that line, and ask once. Carry out what the owner says yes to. The rest of this file calls that table "the numbered table".
+### Toolkit skills
 
-Most rows have special cases. They are listed under the table, in "Special cases for the rows of the table", by the name of the row. Read the special cases of a row before you act on that row.
+For each toolkit skill in `<copy>/.claude/skills/`, replace the project's folder with the new folder:
 
-| Kind | Files | What to do |
-| --- | --- | --- |
-| Toolkit skills | each folder in `<copy>/.claude/skills/` | Replace the project's folder with the new folder, one skill at a time: `rsync -a --delete <copy>/.claude/skills/<name>/ .claude/skills/<name>/` |
-| Hook commands | `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs` | Replace each file after the owner's yes: `cp <copy>/.claude/hooks/<file> .claude/hooks/<file>` |
-| Settings | `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge each file with the rules in [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules". |
-| Missing files | every `>f+++++++` line | List the missing files, then copy them into the project. |
-| Ignore files | `.gitignore`, `.ignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. Ask no question. The change only adds lines, and the owner's request to update the toolkit is the owner's yes to it. |
-| `AGENTS.md` | the root file | Follow "Updating AGENTS.md" below. |
-| `PROJECT.md`, "Toolkit settings" | | Make the section hold the lines of the setup copy's section, with the same labels. |
-| Files that hold the owner's facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/INDEX.md`, `reference/outside-docs/INDEX.md` | Never overwrite one of these files. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment), and make them after the owner's yes. |
-| Rules in `.claude/rules/` | | Show the owner what differs. |
-| Other toolkit files | the `AGENTS.md` of each folder (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, and the output style | Say in one line what changed, and whether the file holds an edit of the owner's. Take the toolkit's version after the owner's yes. |
-| The owner's own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the sources in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/`; `.claude/rules/owner-preferences.md`; `.claude/rules/salesforce-agent-permissions.md`; the owner's own skills and rules | Never compare or change one of these. |
+```text
+rsync -a --delete <copy>/.claude/skills/<name>/ .claude/skills/<name>/
+```
 
-### Special cases for the rows of the table
+Before running the command, list each file in the project's skill folder that the new folder lacks, and ask the owner about those files. The command deletes them. The owner's own skills are records protected under "The owner's own records" below.
 
-- **Toolkit skills.** The command deletes every file in the project's folder that the new folder lacks. So before you run the command for a skill, list each file inside the project's folder that the new folder lacks, and ask the owner about those files.
-- **Hook commands.**
-  - Codex trusts the hook entry in `.codex/hooks.json`, not the file that the entry runs, so a replaced command file is not reviewed again. For that reason, put each replaced `.mjs` file in the numbered table, with one plain line that says what its diff changes, and copy the file only after the owner's yes.
-- **Settings.** [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules", gives the merge rules in full. All of the following apply:
-  - Add what is missing.
-  - Ask before you change a value.
-  - Replace the toolkit's own hook handlers. Do not add a second copy of one.
-  - Delete no other entry.
-  - A changed Codex hook must be trusted again in `/hooks`. Tell the owner.
-- **Missing files.** Copy the missing files in two parts.
-  - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Do not use `-a`, because `-a` would give the project folder the temporary folder's private permissions.
-  - Copy into the main checkout after the branch was merged (section 6, step 4), and only when the setup copy has the folder. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
-- **`PROJECT.md`, "Toolkit settings".**
-  - Add each line of the setup copy's section that the project's section lacks.
-  - Keep the value of every line that stays. A line that the setup copy's section no longer has is handled as section 4 says.
-  - Show the owner the section before and after.
-- **Rules in `.claude/rules/`.** "Whether a difference is the owner's edit" below says whether a rule holds an edit of the owner's.
-  - When a rule holds no edit of the owner's, recommend the toolkit's version.
-  - When a rule holds an edit of the owner's, the edit stays unless the owner says to take the toolkit's version.
-  - A project with no `owner-preferences.md` gets the setup copy's file through the "Missing files" row. A project that has `owner-preferences.md` follows the row "The owner's own records". The same holds for `salesforce-agent-permissions.md` in a Salesforce project.
-- **Other toolkit files.** "Whether a difference is the owner's edit" below says whether a file holds an edit of the owner's. When a file holds no edit of the owner's, recommend the toolkit's version.
-- **The owner's own records.**
-  - A memory record is each file in `memory/` whose name starts `user_`, `project_`, `reference_`, or `event_`. The one exception is `project_topic_template.md`: it is a template, and the "Other toolkit files" row covers it.
-  - `memory/MEMORY.md` is the generated index. The session-start hook rebuilds it, so do not compare it either.
-  - `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices about what an agent may do in each kind of Salesforce org. A Salesforce project that has no such file gets the setup copy's file through the "Missing files" row.
+### Hook commands
+
+For `session-start.mjs`, `prompt-reminder.mjs`, and `codex-after-commit.mjs`, put each changed command in the numbered table with a plain description of its diff. Copy it only after the owner's yes:
+
+```text
+cp <copy>/.claude/hooks/<file> .claude/hooks/<file>
+```
+
+Codex trusts the entry in `.codex/hooks.json`, not the command file it runs. A replacement `.mjs` file is not reviewed again, so the owner reviews the command change here.
+
+### Settings files
+
+Merge `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, and `.mcp.json` as [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules", says. Add missing entries, ask before changing a value, replace the toolkit's own hook handlers without keeping a second copy, and delete no unrelated entry. Tell the owner when a changed Codex hook must be trusted again in `/hooks`.
+
+### Missing files
+
+List missing toolkit files, then copy them in two parts. An owner's record is never a missing toolkit file.
+
+- Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Use `-rlt` rather than `-a`, because `-a` would give the project folder the temporary folder's private permissions.
+- After the branch is merged (section 6, step 4), copy each ignored folder that the setup copy holds into the main checkout. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
+
+A missing `owner-preferences.md`, or `salesforce-agent-permissions.md` in a Salesforce project, gets its setup copy once. An existing one is the owner's record and is never compared or replaced.
+
+### Ignore files
+
+For `.gitignore` and `.ignore`, add each line the project's file lacks, at the end after one blank line. Ask no question: the change only adds lines, and the request to update the toolkit authorizes it.
+
+### AGENTS.md
+
+For the root file, follow "Updating AGENTS.md" below.
+
+### PROJECT.md, "Toolkit settings"
+
+Add each line the section lacks, keeping the setup copy's labels. Keep the value of every line that stays. Handle a line the setup copy no longer has under section 4. Show the owner the section before and after.
+
+### Files that hold the owner's facts
+
+Never overwrite the rest of `PROJECT.md`, `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, documents in `system/`, `sources/INDEX.md`, or `reference/outside-docs/INDEX.md`. Name only the toolkit's structural changes, such as a new section, changed heading, or changed guide comment. Make those changes after the owner's yes, keeping the facts and records.
+
+### Rules and other toolkit files
+
+For rules in `.claude/rules/`, show what differs. For each folder's `AGENTS.md`, the templates, and the output style, describe the change and whether it includes an owner's edit. The folder guides are `system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, and `memory/AGENTS.md`.
+
+Use "Whether a difference is the owner's edit" below to check ownership. Recommend the toolkit's version when there is no owner's edit. Keep an owner's edit unless the owner approves replacing it. Take a changed toolkit file only after the owner's yes.
+
+### The owner's own records
+
+Never compare or change the following during an update:
+
+- work items and `work-items/PROJECT-TASKS.md`;
+- entries of `DECISIONS.md`, rules and terms in `system/`, sources in `sources/`, and records in `delivery/` and `reference/`;
+- `memory/CURRENT_STATE.md` and every memory record whose name starts `user_`, `project_`, `reference_`, or `event_`;
+- `.claude/rules/owner-preferences.md` and `.claude/rules/salesforce-agent-permissions.md`;
+- the owner's own skills and rules.
+
+`memory/project_topic_template.md` is a template, so "Rules and other toolkit files" covers it. `memory/MEMORY.md` is a generated index that the session-start hook rebuilds; do not compare it either.
 
 ### Whether a difference is the owner's edit
 
@@ -161,7 +181,7 @@ Then compare the two lists. One of two cases applies.
      - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice).
      - Carry over a line that holds a fact, a command, or an instruction of the owner's own, into the section where it fits. A whole section that the owner added goes in right after "Commands".
      - When you cannot tell whether to drop a line or carry it over, carry the line over and mark it in the list in step 5.
-  4. Run `wc -lc <copy>/AGENTS.md`. The limits are at most 200 lines and at most 24,576 bytes. When the owner's added lines put the file over either limit, say so in the list in step 5, and recommend which of those lines to move, and where. Cut no line of the owner's without the owner's yes.
+  4. Check that `AGENTS.md` holds only what every session needs and fits within the host's instruction budget, including other loaded instruction files. For Codex, check the configured `project_doc_max_bytes` (32 KiB by default). When instructions risk being cut off, say so in step 5 and recommend what to move and where. Cut no line of the owner's without the owner's yes.
   5. Show the owner the whole new file, and under it one short list: each line you carried over, and each of the owner's lines you dropped, with the reason. Write nothing until the owner says yes. After the owner's yes, write the new file as `AGENTS.md` in your worktree.
 
 ## 4. What the toolkit no longer ships
@@ -211,7 +231,7 @@ A changed choice does four things: it adds the files of the new choice's setup f
    - Write the new choice's lines as the setup file of the new choice says, and as [SKILL.md](../SKILL.md), "The lines of "Toolkit settings"", says for every line.
    - Take out the lines that the old choice's setup file adds to a file the project already has, such as rows in `AGENTS.md`, entries in the settings files, and lines in `.gitignore`. Put in the lines that the new choice's setup file adds.
 3. Build a new setup copy for the new choices and compare, as sections 1 and 2 say.
-   - Add each file the project lacks, as the "Missing files" row says, except the affected merged skill folder. Keep that skill and its selected store reference as the old choice has them until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
+   - Add each file the project lacks, as "Missing files" says, except the affected merged skill folder. Keep that skill and its selected store reference as the old choice has them until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
    - Keep the old choice's installed instructions until the records move in step 5. Read the old `references/work-tracker.md` or `references/memory-store.md` before the change. Read the new choice's selected reference in the setup copy to learn how to create and read back its records. Do not install the new choice's reference over the old one yet.
    - A new memory choice also replaces the toolkit's hook handlers in `.claude/settings.json` and `.codex/hooks.json` with the handlers of the new choice ([reference/skills-hooks-settings.md](skills-hooks-settings.md), "What a choice changes in the settings" and "Merge rules"). The owner trusts the changed Codex hooks again in `/hooks`.
 4. Do what the setup file of the new choice gives for outside the project folder. [SKILL.md](../SKILL.md), Step 5, names the setup file of each choice.

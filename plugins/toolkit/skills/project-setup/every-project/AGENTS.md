@@ -6,14 +6,14 @@
 
 <One sentence describing this project and its outcome.> A session is one chat with the agent.
 
-The owner named in `PROJECT.md` dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the owner means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
+The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things. This is similar in philosophy to @.claude/rules/evaluate-the-owners-request.md
 
 ## Your job as the agent
 
 In the session the owner writes to, you run this project, and the owner works with you as a team. The owner makes the decisions, adds context, answers your questions, and gives input. You do the rest, including the technical work:
 
 - Run the project's work: the project's phases, each work item from start to close, and the project tasks, with `managing-work-items`.
-- Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents, and `managing-project-memory` for memory.
+- Keep each record in the form that its skill points to, with nothing repeated. Use `filing-project-records` for decisions, sources, and system documents. For memory, follow the procedure below for the configured store.
 - Follow the steps those skills and rules set. Do not make up your own process.
 - When writing or revising documents or artifact text, follow `.claude/rules/document-clarity-standard.md`.
 - Guide the owner: tell the owner what you need from the owner, and by when.
@@ -26,14 +26,14 @@ For example, each of these changes what is true: a new person or a changed role,
 
 ## Every session
 
-- The session-start hook adds the project's Current State, the one short page of what is true in the project now, to your context. If it is missing, read it with `managing-project-memory`.
+- With local or Notion memory, read the project's Current State with `managing-project-memory` when it is absent from startup context. With Hindsight, read current work from the configured tracker and project records; follow `.claude/rules/hindsight-memory.md` for lasting knowledge.
 - Read `PROJECT.md`, and `SOUL.md` when the project has one. Read them again after resume, clear, or compaction. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
 - Before you change a file in a folder that has its own `AGENTS.md`, read that file.
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 - The bullets below are for the session the owner writes to. A helper agent (a separate agent started for one job) follows its brief.
 - On every turn, decide whether the owner's message concerns a work item, a source, a project record that several work items need, project memory, or none of these. More than one may apply. Decide whether the owner asks for an answer or a change. Use "Where information goes" and "Which skill" below to choose the work.
 - When a turn concerns a work item, find the work item, read its Current state (the five lines at its top), and use `managing-work-items` for the requested work.
-  - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's Current State names.
+  - Check in order: the work item the owner names, the one this branch or session is working on, the one the project's current tracker or Current State names.
   - Stop at the first check that finds one. Ask the owner only when it finds two.
 - When the owner asks for work and no work item covers it, ask the owner whether to make a work item, before you start the work. Ask in one short line that names the work and says whether you recommend a work item. Do not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in your reply, when the request is only to save or correct a fact or a project task in the project's records, or when one skill in "Which skill" other than `managing-work-items` does the whole request.
   - After a yes, use `managing-work-items`.
@@ -41,12 +41,12 @@ For example, each of these changes what is true: a new person or a changed role,
 
 ## Project map
 
-- Git does not track `work-items/`, `memory/`, and `working-files/`. They exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them.
+- Git does not track `working-files/` or the local `work-items/` and `memory/` folders when those stores are chosen. These folders exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them. External tracker and memory choices use their configured stores.
 - Work items are kept in one place: local files, Notion, or GitHub Issues. Never copy a work item into another of these or a list of your own. Name a work item by its ID, never by a folder path.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
-| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
+| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
 | `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
 | `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in `work-items/` or `memory/`: they come from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
 | `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
@@ -110,21 +110,15 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
-Project memory is kept only in the place that the "Memory" line of "Toolkit settings" names, never in the memory feature of Claude Code or Codex or of another plugin.
+Project memory is kept only in the place that the "Memory" line of "Toolkit settings" names. For local or Notion memory, use `managing-project-memory`. For Hindsight, follow `.claude/rules/hindsight-memory.md` and its tools wherever this guide names memory work. Use no other memory store.
 
-To find what was decided before, read `DECISIONS.md`, then `system/`, then the work item. Before you say nothing is recorded, search `work-items/` and `memory/` too (`managing-work-items`, `managing-project-memory`). Search memory before you ask the owner to repeat something, name who does or decides something, set a date, deploy, load data, or run a recurring job.
+Before asking the owner to repeat information or making a decision that depends on prior context, check the relevant project records and the project's configured work tracker and memory store. Follow their skills or rules for retrieval. Before saying nothing is recorded, search the relevant stores.
 
 ## Ask the owner first
 
-Ask the owner, and record the answer, before you:
+Follow the approval requirements in `managing-work-items/references/lifecycle-rules.md`, "When to stop for the owner's yes", and the Project map. Obtain the owner's authorization before irreversible actions, spending money, or account changes outside the authorized task. An explicit request or existing approval for the same scope counts; ask only when authorization is missing. Record the authorization and what it covers.
 
-- take a step of a work item that needs the owner's yes (`managing-work-items/references/lifecycle-rules.md`, "When to stop for the owner's yes", lists them);
-- do anything that cannot be undone, spend money, sign in, or change an account;
-- change a file that the Project map marks "Only with the owner's yes", or change what `PROJECT.md` says the project is for or its scope.
-
-When the owner's own words state the change, those words are the yes.
-
-## How to write a question to the owner
+## How to write a question to the owner in the ai chat session
 
 Write a question so that the owner can answer it without reading earlier messages. When the question asks the owner to choose, say what the owner is choosing, give each option with what it gains and what it costs, and recommend one. When another part of this guide or a step of a skill says how to ask, follow that part or that step. An example is "The question format" in `managing-work-items`, `references/refining-requirements.md`.
 
@@ -146,7 +140,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
-| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use `managing-work-items` for open work items and project tasks. Use `managing-project-memory` for the project's Current State. Read the Open entries in `DECISIONS.md`. Report each dated line of the project's Current State, and say when its date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
+| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use `managing-work-items` for open work items and project tasks. With local or Notion memory, use `managing-project-memory` for the project's Current State. With Hindsight, use current tracker and project records. Read the Open entries in `DECISIONS.md`. Report applicable dated commitments from those records, and say when a date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
 
 ## Commands
 

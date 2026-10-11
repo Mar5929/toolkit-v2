@@ -1,7 +1,7 @@
 {
   "name": "toolkit",
-  "version": "0.9.43",
-  "description": "Sets up Toolkit V2 in a project, or moves a project from the older toolkit onto it: copies the model files, the chosen work tracking and memory skills, and their hooks.",
+  "version": "0.9.47",
+  "description": "Sets up, checks, or updates Toolkit V2 in a project: copies shared project files, adds the chosen work-tracker and memory modules, and configures their hooks.",
   "author": {
     "name": "Mike Rihm",
     "email": "michael@rihm.com"
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Toolkit V2",
     "shortDescription": "Set up a project with Toolkit V2, move one onto it, or check or update its setup.",
-    "longDescription": "Holds one skill. project-setup asks where to track work, which memory to use, and whether it is a Salesforce project, then copies the model project, the skills for those choices, three small hook commands, and their settings into the project. It also checks and updates an existing setup, and moves a project that was set up with the older toolkit onto Toolkit V2 from one list the owner approves first. The plugin itself has no hooks and no command, so it runs nothing in other projects.",
+    "longDescription": "Holds the project-setup skill. It records the owner’s project choices, copies the shared layout and selected modules, and verifies the setup in Claude Code and Codex. It also checks or updates an existing toolkit project. The plugin itself has no hooks, so it runs nothing in other projects.",
     "developerName": "Mike Rihm",
     "category": "Productivity",
     "capabilities": [

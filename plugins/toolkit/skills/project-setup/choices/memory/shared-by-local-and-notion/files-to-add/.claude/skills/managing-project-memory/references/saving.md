@@ -44,7 +44,7 @@ Search before every save. Search for the fact's words and their synonyms, and re
   - Add each related work item, and keep every work item that is already there.
 - **A new memory record.** Name it for the subject, and not for one fact. Use the type that fits: user, project, reference, or event. Give it a first section and an empty lessons section. Set its created date and its last-changed date to today.
 - Each section says four things: what to remember, why it matters, how to apply it, and where it came from, with its date and what is uncertain.
-- The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary to one line of about 100 characters or fewer.
+- The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary concise and informative.
 - A fact that is true only for a while gets a "check or remove by" date. `references/memory-criteria.md`, section "A fact that is true only for a while", says which date.
 - Record what allowed the save. Write "Approved by <owner> on <date>" when the owner asked for the save or said yes to it. Write "Logged by the agent on <date>" for every other save.
 - When several independent things call for a save, group them into one save.
@@ -77,56 +77,27 @@ A lesson is something you learned that is not proven yet.
 
 An instruction that the owner gives is never a lesson. It is a rule at once, and "The owner's instructions" below gives the steps.
 
-When a lesson has come up in two or more sessions or work items, offer it to the owner as a rule or a skill. Make the offer in the turn in which you add the second date. `references/tidying.md`, section "Lessons that should become rules or skills", gives the steps.
+When a lesson has enough supporting evidence to guide future work, offer it to the owner as a rule or a skill. State the evidence and its limits. `references/tidying.md`, section "Lessons that should become rules or skills", gives the steps.
 
 ## An event
 
-An event is one of two things:
-
-- work done for the owner that no work item, project task, commit, or filed record shows;
-- anything else that happened and that a later session must know, such as a meeting, a call, or an outage.
-
-Make one event record for it. The event record holds four things:
-
-- the date, and who took part;
-- what was done or what happened;
-- the result, in a few lines;
-- where the output is: an SRC ID, a file path, a work item or project task ID, or "said in chat only".
-
-Name the event record for what happened and its date.
-
-One kind of result gets no event record. When the root `AGENTS.md`, section "Where information goes", names a place for the result, write the result in that place. An analysis of how the system works today is an example.
+Use [events-and-recurring-jobs.md](events-and-recurring-jobs.md), section "An event", to record something that happened and that no other record already covers.
 
 ## A recurring job and its runs
 
-A recurring job is a job that the team runs again and again, such as a weekly data load, a monthly release, or the update of a shared sheet after each meeting. A recurring job has one event record. That event record holds two things:
-
-- a first section that says what the job is, when it runs, who runs it, and the exact steps or the file that holds the steps;
-- a section "Runs" with one row per run. `references/memory-store.md` gives the form of the table.
-
-Add a row for each run. The owner may report a run in words such as "the weekly load ran fine" or "the nightly job broke again".
-
-- A failed run gets a row too, with the error and the fix.
-- When the owner reports a run without its detail, write the row with the date and the owner's words, and write "not known yet" in each cell that the owner did not give. Complete the row when the detail is known.
-- When the job has no event record yet, make one with what is known. Add the job's line under "Standing jobs and shared files" in the project's Current State, as `references/current-state.md` says.
-- When another record, such as a work item, already shows an earlier run, the row for that run holds only the date and that record's ID.
-
-Before you run the job again, and before you answer how the last run went, read the Runs table.
+Use [events-and-recurring-jobs.md](events-and-recurring-jobs.md), section "A recurring job and its runs", to maintain one event record with a row per run.
 
 ## A shared file
 
-A shared file is a file kept outside the project's records that people keep up to date, such as an open-items spreadsheet that the client shares. A shared file has one memory record of the type reference. That memory record says where the file is, who shares it, what it is for, and how and when it is updated.
-
-- The shared file gets a line under "Standing jobs and shared files" in the project's Current State.
-- The updates of the shared file are a recurring job, as the section above describes. The job's event record names the shared file's memory record under "Related memories".
+Use [events-and-recurring-jobs.md](events-and-recurring-jobs.md), section "A shared file", to record where the file is and how it is kept up to date.
 
 ## Correcting a fact
 
-- Replace the text of the fact's section, with the new source and date, and set the last-verified date to today.
+- For an ordinary correction or added detail, update the existing record with the new evidence and date. Update its metadata, and set the last-verified date only when you checked the fact against its source.
   - Do not leave the old wording beside the new text.
   - Put the old text in your reply, so that the owner can say "undo that" and you can put it back.
-- Search the other memory records and the project's Current State for the old value, and correct each place that holds it.
-- When a whole subject is replaced, make the new memory record, and say in it that it replaces the old one. Mark the old memory record as replaced. Change every link to the old memory record so that it leads to the new one.
+- Search the other memory records and the project's Current State for the old value. Correct current claims and guidance that need the change; preserve dated evidence and superseded history.
+- When a decision or fact is replaced, retain the earlier content as history and link the old and new records in both directions. Make a separate replacement record and use the store's replacement procedure. When the earlier record also holds still-current material, mark and link the replaced section while leaving the record current. Update both records' metadata and read both back. Route links used for current guidance to the replacement, and preserve links that document history.
 
 ## "Forget that", retiring, and deleting
 
@@ -148,25 +119,13 @@ When you find a secret or an email address in memory, remove that text at once, 
 
 ## The owner's instructions
 
-An instruction from the owner for how the agent works is a rule, and never memory. So is a preference of the owner, and a correction of how the agent works. The owner's own words are the owner's yes.
-
-Write a line that the owner dictates with the steps below alone. Every other change to a rule file follows `.claude/rules/document-clarity-standard.md` and needs the owner's yes first, as the Project map in the root `AGENTS.md` says.
-
-1. Read `.claude/rules/owner-preferences.md` again, right before you change it. Then do the one of these that fits:
-   - When a bullet already says the same, add nothing, and tell the owner so.
-   - When a bullet says the opposite, replace it with the owner's new words, and name the old line in your reply.
-   - Otherwise, add one bullet in the owner's words under the `## ` area that the instruction is about: Replies, Questions, Testing, Git, Work items, Memory, or General. End the bullet with `(<YYYY-MM-DD>, <owner name>, in chat)`. Write one instruction per bullet.
-   - When the owner asks to change or remove an instruction, change or remove that bullet.
-2. When the owner's words say that the instruction is for every project, add the bullet to the files that the root `AGENTS.md` names for every project, in place of this project's file. The root `AGENTS.md` names those files in the section "Where information goes", in the row for the owner's preference. Ask "This project or all projects?" only when the owner's words leave it unclear.
-3. A request that a problem never happens again, such as "don't let that happen again", is an instruction. Write the bullet as the check or the step that prevents the problem. In the bullet, name the record that explains the problem by its ID: a DEC, a work item, or a memory record. Show the owner the bullet in your reply.
-4. When you inferred an instruction that the owner did not give, ask first: "Add to the project rules: <one line>?". A rule file changes only with the owner's yes.
-5. When `managing-work-items` closes a work item and the owner agreed to keep a lesson from it as a rule, write that rule in the same way. Its bullet ends with the work item's ID in place of "in chat".
+Use [owner-instructions.md](owner-instructions.md) to record the owner's standing instructions, preferences, and corrections in the applicable rule file. That reference preserves the distinction between an instruction the owner gave and one the agent inferred.
 
 ## Reply lines
 
 Give the owner one short line for each record you changed, in the form below, and add nothing else about the save. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link. The line for a change that removes or replaces text in a memory record or in the project rules also gives what the section for that change asks for: the old text, and the words that undo or restore it. A correction, a removed section, and a retire are such changes. No other line gives undo words.
 
-After the lines, give the next step. The next step is the question that still waits for the owner. When no question waits, it is the exact words that continue the work: "Say 'keep going' and I'll <next action>."
+After reporting the saves, continue the authorized work. When progress needs an owner decision, name the pending question and what it affects.
 
 The line for each kind of save:
 

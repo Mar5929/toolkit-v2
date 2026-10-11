@@ -2,7 +2,7 @@
 
 This file says where the project's own phases and its project tasks are saved on GitHub, and it gives the `gh` commands that read and change them. `references/lifecycle-rules.md`, section "Levels", says what a project phase and a project task are.
 
-Run each command on its own. In Codex, run each command with escalated permissions, as `work-tracker-gh-commands.md`, section "In Codex", says.
+Run each command on its own. In Codex, follow the active session permissions as `work-tracker-gh-commands.md`, section "In Codex", says.
 
 ## Contents
 

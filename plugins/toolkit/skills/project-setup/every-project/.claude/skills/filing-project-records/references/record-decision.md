@@ -41,7 +41,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 7. Write the IDs in each work item under Affects, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write them. Wait until then. On the work item's Related items line, write the DEC ID and the ID of each rule that step 5 added or changed.
    - When a Questions and Answers row in a work item raised the decision, add "Filed as DEC-###." at the end of that row's Answer cell, after the owner's words. The row keeps the owner's words.
    - When a work item cannot continue without the answer to an Open entry, that work item waits on the owner. Continue with `managing-work-items` for that work item.
-   - When no work item waits on an Open entry, give `managing-project-memory` a line for "Waiting on" in the project's Current State, with the DEC ID and who must answer.
+   - When no work item waits on an Open entry, keep its DEC ID and who must answer in `DECISIONS.md`. With local or Notion memory, also give `managing-project-memory` a "Waiting on" line in Current State. With Hindsight, use the tracker for any follow-up task and the Hindsight rule for qualifying lasting knowledge.
 8. Tell the owner the DEC ID, its Status, and the work items that now name it.
 
 ## Answering an open question

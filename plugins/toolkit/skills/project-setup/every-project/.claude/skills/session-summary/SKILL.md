@@ -42,7 +42,7 @@ session is one chat with the agent.
 
 ## One row per request
 
-A row is a request, not a step; a long session usually holds one to three.
+A row is an owner request, not a step taken to carry it out.
 The owner choosing from options you offered, answering your question, or
 adjusting work under way, parts of one job, and work you suggested and then
 did all belong to the request that prompted them. If a cell turns into a list

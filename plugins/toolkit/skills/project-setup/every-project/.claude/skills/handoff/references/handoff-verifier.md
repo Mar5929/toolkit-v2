@@ -35,8 +35,8 @@ Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
 Tracker: local (work-items/ in the main checkout) | Notion (work item text
   pasted below) | GitHub Issues (<account/repository>)
-Current State: memory/CURRENT_STATE.md in the main checkout | Notion
-  (page text pasted below)
+Memory: local (memory/CURRENT_STATE.md in the main checkout) | Notion
+  (page text pasted below) | Hindsight (no Current State page; supplied records)
 Sources for claims: <for each claim you can: file, repository, owner (with
   the owner's words when you have them), or worked out>
 Supplied text: <Notion work items, the Notion Current state page, Hindsight memories>
@@ -78,7 +78,7 @@ Work items are named by ID, never by path. How you open a work item depends on t
 
 The other records are in these places:
 
-- The project's Current State is the project's one short page of what is true now. It is `memory/CURRENT_STATE.md` in the main checkout, except in a project with Notion memory.
+- Local memory uses `memory/CURRENT_STATE.md` in the main checkout; Notion memory uses its supplied Current state page. Hindsight has no Current State page. Check current work against the selected tracker and supplied project records, and lasting knowledge against the supplied Hindsight records.
 - For the Notion "Current state" page and for Hindsight memory records, use only the supplied text.
 - A decision that more than one work item needs is an entry in `DECISIONS.md`. An approved rule of the system is in `system/`. A filed source, which is something the project was given and keeps, is in `sources/`. All three are in the repository.
 
@@ -131,5 +131,5 @@ Skipped (a check that could not run; never report it as Confirmed)
 - <check that could not run, and why>   (or "Nothing skipped.")
 
 Also noticed
-- <at most two lines, or "Nothing.">
+- <relevant findings, or "Nothing.">
 ```

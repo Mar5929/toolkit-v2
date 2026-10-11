@@ -1,24 +1,44 @@
 ---
 name: managing-project-memory
-description: 'Finds, saves, corrects, and retires project memory and keeps the project’s Current State accurate. Use when the owner asks to remember, find, change, or forget something; reports a fact, date, or recurring job run; or a turn leaves information that no other project record holds and a later session needs. For a work item, use managing-work-items; for a shared decision or source, use filing-project-records.'
+description: 'Keeps project memory and Current State useful across sessions. Use to find, save, correct, retire, or forget lasting project knowledge, record a recurring job, or update current priorities and commitments. Work-item records belong to managing-work-items; shared decisions and sources belong to filing-project-records.'
 ---
 
 # Managing project memory
 
-Use this skill to keep project memory accurate and useful to a later session. A memory record holds one subject that no other project record holds. The project's Current State is the short page of what is true now. A session is one chat with the agent.
+Keep lasting context available to later sessions and keep the project's Current State accurate. A memory record covers one subject. Current State is a short view of current priorities, commitments, and where the next session should begin.
 
-Open [references/memory-process.md](references/memory-process.md) whenever a turn might need a memory read, save, correction, or update to the project's Current State. It gives the rules for what to keep, what to file elsewhere, and when to ask the owner. For every memory read or write, also open [references/memory-store.md](references/memory-store.md). Setup places only this project's local or Notion storage instructions at that path.
+This skill serves projects that chose local or Notion memory. Setup installs that store's instructions in [references/memory-store.md](references/memory-store.md). Hindsight projects use their Hindsight rule and tools instead.
 
-A work item and its project tasks belong to `managing-work-items`. A decision or question that several work items need, a source, a project term, or a fact about the system belongs to `filing-project-records`.
+Make sure that you apply those metadata tags and keep them up to date on the memory files. For Notion pages, use the equivalent fields in [references/database-layout.md](references/database-layout.md).
 
-## References
+## Choose the procedure
+
+Read [the memory process](references/memory-process.md) for retention, authorization, and maintenance rules. Choose the procedure below for the current job. Read the installed storage instructions before accessing or changing records, and read each change back before reporting it as saved.
 
 | File | Open it when |
 | --- | --- |
-| [references/memory-process.md](references/memory-process.md) | Every turn that might involve memory or the project's Current State. It gives the process, and says when to ask the owner. |
-| [references/memory-criteria.md](references/memory-criteria.md) | You decide whether information belongs in memory, which record type it needs, or which other file holds it. |
-| [references/saving.md](references/saving.md) | You save, correct, retire, or delete information, including a lesson, event, recurring run, or project rule. |
-| [references/current-state.md](references/current-state.md) | You read or change the project's Current State or remove a line that is no longer true. |
-| [references/finding.md](references/finding.md) | You find memory, answer what was recorded, or need a remembered fact. |
-| [references/tidying.md](references/tidying.md) | You review or clean up all of memory. |
-| [references/memory-store.md](references/memory-store.md) | You read or write memory. Setup installs this project's storage instructions and its linked files. |
+| [references/memory-criteria.md](references/memory-criteria.md) | You decide whether information qualifies for memory, which type it needs, or which project record owns it. |
+| [references/finding.md](references/finding.md) | You find remembered context or answer what was recorded. |
+| [references/saving.md](references/saving.md) | You save, correct, retire, or delete memory. |
+| [references/events-and-recurring-jobs.md](references/events-and-recurring-jobs.md) | You record an event, recurring run, or shared file. |
+| [references/owner-instructions.md](references/owner-instructions.md) | The owner gives a standing instruction, or approves turning a lesson into a rule. |
+| [references/current-state.md](references/current-state.md) | You read or update priorities, commitments, or next-session context. |
+| [references/tidying.md](references/tidying.md) | You review or clean up memory as a whole. |
+| [references/memory-store.md](references/memory-store.md) | You access local or Notion records; it routes to storage formats, search, and write procedures. |
+
+## Storage detail for the chosen memory system
+
+Setup installs only the files for the chosen store. Read the relevant file below when the storage instructions call for its detail.
+
+| File | Store and when to open it |
+| --- | --- |
+| [references/searching.md](references/searching.md) | Local or Notion: you need the store's search procedure. |
+| [references/folders-and-files.md](references/folders-and-files.md) | Local: you locate records or maintain their folders and index. |
+| [references/record-format.md](references/record-format.md) | Local: you create or update a memory file. |
+| [references/database-layout.md](references/database-layout.md) | Notion: you locate the memory databases and inspect their fields. |
+| [references/current-state-page.md](references/current-state-page.md) | Notion: you read or update Current State. |
+| [references/writing-pages.md](references/writing-pages.md) | Notion: you create or update memory pages and verify the save. |
+
+## Route other project records
+
+Use `managing-work-items` for a work item or project task. Use `filing-project-records` for a shared decision or open question, a source, a project term, or an authoritative fact about the system. Memory can point to those records when the pointer helps retrieval; it does not duplicate their content or replace them.

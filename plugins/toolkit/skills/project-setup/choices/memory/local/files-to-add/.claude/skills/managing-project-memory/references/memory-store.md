@@ -51,7 +51,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 2. Read the whole file in this turn, and read it again right before you change it. The owner edits these files by hand in Obsidian, and a newer edit must not be overwritten.
 3. Make the change the way the matching reference file says. The References table at the end of this file names the file for each job.
    - Change only the lines that change. Keep every other line, heading, and body label. A body label is one of the bold labels of a section, such as `**Remember:**`.
-   - Set `updated` to today.
+   - Maintain the header metadata as `references/record-format.md` says.
    - Never rewrite the whole file.
 4. Read the file back.
    - Check that what you wrote is there, and that the file passes the list in `references/record-format.md`, section "A file is right when".
@@ -65,20 +65,20 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 - Skip every file with `status: template`. That file is the template, and not a memory record. The commands in `references/searching.md` skip it.
 - Never `git add` anything under `memory/`, not even with `-f`.
 - Memory is kept only in the main checkout. When this session runs in a worktree, change memory in the main checkout. Never copy memory into the worktree.
-  - In Codex, the sandbox limits where a session may write. It can block a session that runs in a worktree from writing outside that worktree. The write then asks for approval, or fails with a sandbox error. Ask the owner to approve the write. Never write the memory record into the worktree instead.
+  - When the active session blocks a write to the main checkout, use its supported approval mechanism only when approval is required and permitted. When no permitted route is available, tell the owner which save is blocked and what action is needed. Never write the memory record into the worktree instead.
 - In zsh, a `*` pattern that matches nothing stops the whole command. Use the commands in `references/searching.md` as written.
 
 ## Work that another skill does
 
 | For | Use |
 | --- | --- |
-| Deciding what to save, when to save it, and when to ask the owner; what each part of the project's Current State holds, and its limits | `managing-project-memory` |
+| Deciding what to save, when to save it, and when to ask the owner; what each part of the project's Current State holds | `managing-project-memory` |
 | What a work item's line says under Now, which is a part of the project's Current State | `managing-work-items` |
 
 ## References
 
 | File | Open it when |
 | --- | --- |
-| [references/folders-and-files.md](folders-and-files.md) | You need to see how the folder looks; choose a file name and prefix; make a file from the template; rename, retire, or delete a file; check the size limits; or read or change the project's Current State. |
+| [references/folders-and-files.md](folders-and-files.md) | You need to see how the folder looks; choose a file name and prefix; make a file from the template; rename, retire, or delete a file; keep records focused; or read or change the project's Current State. |
 | [references/record-format.md](record-format.md) | You write or check a file. It gives the header fields and dates, the statuses, how to mark a memory record that was replaced or retired, the body labels, the links to memory files and work items, the lessons, the Runs table of a recurring job, and the list that says when a file is right. |
 | [references/searching.md](searching.md) | You need to find or read memory. It gives the commands for every file's summary and status, a search by topic, by work item, by status, or by date, the lessons, and the links to a file. |

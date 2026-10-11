@@ -114,7 +114,7 @@ Use `--squash` unless the owner or the project's rules name another method (`--m
 The merge must put no AI credit on the base branch: no `Co-Authored-By:` line that names an AI, and no "Generated with" line. Look for such a line in the title, the description, and each commit message that step 1 read.
 
 - When the line is in the title or the description, remove it with `gh pr edit <number> --repo <owner/repo>` and `--title` or `--body-file`.
-- When the line is in a commit message and the method is `--squash`, GitHub writes the new commit's message from the commits' messages. So add `--subject '<title> (#<number>)'` and `--body '<what changed, in one or two plain sentences>'` to the merge command. Never write a word that closes an issue or a work item in the subject or the body.
+- When the line is in a commit message and the method is `--squash`, GitHub writes the new commit's message from the commits' messages. So add `--subject '<title> (#<number>)'` and `--body '<what changed, in concise plain sentences>'` to the merge command. Never write a word that closes an issue or a work item in the subject or the body.
 - When the line is in a commit message and the method is `--merge` or `--rebase`, the commits reach the base branch as they are. Stop and tell the owner.
 
 ### Run the merge
@@ -214,7 +214,7 @@ Verify four things:
 
 ## Mistakes to avoid
 
-- In Codex, the sandbox keeps `.git/` read-only and blocks the network. Run each Git write and each network call alone, with escalated permissions (`sandbox_permissions` set to `require_escalated`, with a one-line reason). Every `gh` call is a network call. When Codex refuses without asking, show the owner the exact command and ask the owner to run it.
+- Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
 - When the repository has no remote (`git remote` prints nothing), there is no pull request, so this skill does not apply. Never fetch. Tell the owner in one line.
 
 ## Work that another skill does

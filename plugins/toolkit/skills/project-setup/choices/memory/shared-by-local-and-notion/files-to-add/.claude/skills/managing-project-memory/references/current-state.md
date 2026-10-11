@@ -1,6 +1,6 @@
 # The project's Current State
 
-Use this file when you read or change the project's Current State. It says what each part holds, the limit of each part, when to change a line, and when to remove one. The goal is that every line is true now, and that the whole of it is short enough for a session to show at its start.
+Use this file when you read or change the project's Current State. It says what each part holds, when to change a line, and when to remove one. The goal is that every line is true now, and that the whole of it is short enough for a session to show at its start.
 
 `references/memory-store.md` says where the project's Current State is kept and how to edit it.
 
@@ -19,17 +19,17 @@ The project's Current State says where the project stands right now. It is not a
 - Start it with "Last updated: <YYYY-MM-DD, source, and person or agent>", and set that line with every change.
 - An empty part says "None."
 
-It has five parts. Each part has a limit in lines.
+Keep these five parts concise and retain what a later session needs.
 
-| Part | What goes in it | Limit, in lines |
-| --- | --- | --- |
-| Now | One line per active piece of work. | 5 |
-| Coming up | A dated event or deadline. | 3 |
-| Waiting on | Who owes what. | 4 |
-| Standing jobs and shared files | A recurring job, or a shared file that is kept up to date. | 3 |
-| Next session starts with | One line per piece of work that was worked on last. | 3 |
+| Part | What goes in it |
+| --- | --- |
+| Now | One line per active piece of work. |
+| Coming up | A dated event or deadline. |
+| Waiting on | Who owes what. |
+| Standing jobs and shared files | A recurring job, or a shared file that is kept up to date. |
+| Next session starts with | One line per piece of work that was worked on last. |
 
-The whole of the project's Current State stays under 40 lines, so that a session can show it whole at its start. Write each line in as few words as say it. When a part has more true lines than its limit, follow step 4 of "Steps for removing lines that are no longer true" below.
+Write each line in as few words as convey its meaning. Keep details in the linked records so that Current State remains useful at session start.
 
 ### A line under "Now"
 
@@ -80,22 +80,24 @@ The line holds the name of the recurring job or the shared file, when it runs or
 Two skills remove lines:
 
 - `managing-work-items` removes a work item's line under "Now" when the work item finishes.
-- This skill removes every other line: a piece of work that ended, a date that passed, a thing owed that was delivered or answered, a job that stopped, and a file that is no longer shared.
+- This skill removes every other line: a piece of work that ended, an event that ended or a deadline whose outcome is recorded, a thing owed that was delivered or answered, a job that stopped, and a file that is no longer shared.
+
+A passed deadline can still represent unfinished work. Check the work record, preserve the unresolved commitment, and update its date or follow-up when known.
 
 Before you remove a line for something that happened and that a later session must know, check that a record holds it. That record is a work item, a project task, a filed source, or an event record. `references/saving.md`, section "An event", says how to make an event record.
 
 ## Steps for removing lines that are no longer true
 
-The session-start hook asks for these steps when it prints that the project's Current State is too long or too old.
+Use these steps when the project's Current State contains stale, repeated, or unnecessary detail.
 
 1. Read the project's Current State. Read the status of every work item that it names, with `managing-work-items`. Read each project task that it names.
 2. Remove every line that is no longer true. These removals do not go on the plan that `references/tidying.md` describes. Tell the owner what you removed, in the one line that `references/saving.md`, section "Reply lines", gives for the project's Current State. Remove each of these:
    - under "Now", a finished or cancelled work item, or a piece of work that ended;
-   - a line under "Coming up" whose date has passed;
+   - a line under "Coming up" whose event ended or whose deadline was met, cancelled, or moved;
    - a line under "Waiting on" that was answered or delivered, or whose project task is done, or whose decision is no longer Open;
    - a job that no longer runs, or a file that is no longer shared;
    - a line under "Next session starts with" that names a closed work item.
 
    A line that copies a work item's status or next step is not removed: cut it to the work item's ID and a few words.
 3. Set "Last updated:". Remove any sample line or prompt that is still there. A prompt is text in angle brackets.
-4. A part that is still over its limit now holds only true lines. Put the lines you propose to cut on the plan that `references/tidying.md` describes, each with its reason. Choose the lines that the next session is least likely to need. Cut a true line only after the owner's yes.
+4. When a true line is no longer useful at session start, propose removing it on the plan that `references/tidying.md` describes, with its reason. Preserve the fact in its proper record. Cut a true line only after the owner's yes.

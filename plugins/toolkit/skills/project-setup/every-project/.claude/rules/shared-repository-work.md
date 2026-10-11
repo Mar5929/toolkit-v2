@@ -13,7 +13,7 @@ git fetch origin
 git log --oneline -10
 ```
 
-- In Codex, run each Git write (`git fetch`, `commit`, `merge`, `worktree add`) alone with escalated permissions, because a Git write changes `.git/`.
+- Run Git writes under the active host's filesystem, network, and approval settings. Use its supported permission mechanism when required. If a command is denied, report the command and reason and follow the host's approval process; never bypass the denial.
 - When the repository has no remote (`git remote` prints nothing), skip `git fetch`, and never report a fetch failure as a blocker.
 - An unknown worktree, a moved branch, or a change you did not make means that other sessions are working. Do not fix it. Tell the owner.
 

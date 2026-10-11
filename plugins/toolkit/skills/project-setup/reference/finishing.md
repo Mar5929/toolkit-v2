@@ -8,7 +8,7 @@ This file is the last step of a setup: Step 6 in [SKILL.md](../SKILL.md). Open i
 - the owner has been told the steps that only the owner does;
 - the reply ends with the report and the commit offer.
 
-Other jobs of this skill use single sections of this file. For example, "check the setup" runs "Final checks" without fixing anything.
+Other jobs of this skill use single sections of this file. For example, "check the setup" runs "Final checks" to inspect and report, with the generated-index and missing-template maintenance described there.
 
 ## Contents
 
@@ -91,7 +91,7 @@ The project's Current State is the project's one short page of what is true now.
 
 A Hindsight project has no Current State and no `memory/` folder. Where the work stands is in the place where work items are kept, so the rest of this section does not apply to a Hindsight project. For a Hindsight project, write each of the owner's steps that is still open as a project task, with the project's `managing-work-items` skill, so that a later session finds it. Use the words that the "Waiting on" line below gives, and name each step in the report too.
 
-Keep the five headings and their line limits. The list below says what to write on the "Last updated" line and under each of the five headings:
+Keep the five headings concise and retain what a later session needs. The list below says what to write on the "Last updated" line and under each of the five headings:
 
 - Last updated: the date, "setup", and "agent".
 - Now: the work that is going on now, from question 12, or "None."
@@ -104,7 +104,7 @@ Then delete the file's fill-in guide comment, as the comment says.
 
 ## Final checks
 
-Run each check alone, from the project folder. Each check only reads. The checks show that setup worked. They do not test whether the project matches the toolkit: a project that holds more than setup gave it, such as a skill or a rule of its own, is as it should be.
+Run each check alone, from the project folder. The checks show that setup worked. Most checks only read; the local session-start command may rebuild the generated memory index. In "check the setup", the next section also allows restoration of missing toolkit guides and templates in the ignored folders. They do not test whether the project matches the toolkit: a project that holds more than setup gave it, such as a skill or a rule of its own, is as it should be.
 
 ### The checks
 
@@ -112,24 +112,22 @@ Run each check alone, from the project folder. Each check only reads. The checks
 2. **The session-start command runs.** With local or Notion memory, `node .claude/hooks/session-start.mjs --memory <memory> </dev/null` must print the project's Current State. `<memory>` is the value of the Memory line in "Toolkit settings": `local` or `notion`. The setup file of the memory choice gives the full command when the choice adds to it. A Hindsight project has no Current State, so this check does not apply to it. The Hindsight setup file, [choices/memory/hindsight/hindsight-setup.md](../choices/memory/hindsight/hindsight-setup.md), gives the checks of that choice.
 3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.
 4. **"Toolkit settings" is complete.** The Tracker and the Memory line of `PROJECT.md`, "Toolkit settings", each name a choice, and the section holds the lines that the setup file of each of the owner's choices adds. A line may still lack its value only when the value waits on the owner. "People and ownership" in `PROJECT.md` must name the owner.
-5. **Git does not track `work-items/` or `memory/`.** `git status --short` must list nothing under `work-items/` or `memory/`.
+5. **Git does not track `work-items/` or `memory/`.** `git ls-files -- work-items/ memory/` must print nothing. For local work items, `git check-ignore work-items/PROJECT-TASKS.md` must print that path. For local memory, `git check-ignore memory/CURRENT_STATE.md` must print that path. These checks inspect existing paths and create no sample records.
 6. **Each choice.** For each choice of the owner, do the checks that its setup file gives.
 
 ### After the checks
 
 - When a check fails, fix what the check found, then run the check again.
 - Report each check that you cannot make pass, with what it printed.
-- In an update or a check, remove the temporary folder that holds the setup copy after the checks: `rm -rf <copy>`. The setup copy is the files the project would get today, built in a temporary folder, as [reference/setup-copy.md](setup-copy.md) says.
+- Keep the setup copy until the job that made it has finished using it. In "check the setup", remove it after the report and any missing-template restoration. In an update, [reference/update.md](update.md), "6. Checks and report", removes it after the merge and the changes to ignored folders. The removal command is `rm -rf <copy>`. The setup copy is the files the project would get today, built in a temporary folder, as [reference/setup-copy.md](setup-copy.md) says.
 
 ### The final checks in "check the setup"
 
-"Check the setup" is one of the jobs in [SKILL.md](../SKILL.md), "A project that already has the toolkit". In that job, fix nothing. Report each failed check with the fix that you recommend.
+"Check the setup" compares and reports; it does not repair the project's configuration or replace existing files. Two maintenance actions are allowed: the local session-start hook may rebuild `memory/MEMORY.md`, and the check restores missing toolkit guides and templates in the ignored folders from the list below. Name each restored file in the report.
 
-With local memory, the session-start hook command may rebuild the generated index `memory/MEMORY.md`. That index is the one file a check may change.
+Git does not track `work-items/` or `memory/`, so Git cannot restore their missing toolkit files. The restoration adds missing guides and templates only; it never changes an existing file or an owner's record.
 
-"Check the setup" puts one kind of file back: a toolkit file that is missing from `work-items/` or `memory/`. Git does not track `work-items/` and `memory/`, so a toolkit file that was deleted there cannot be brought back from Git.
-
-When one of the files listed below is missing in the main checkout, copy it from the setup copy with `cp -n <copy>/<file> <main checkout>/<file>`, and name the file in the report. The `-n` option never replaces a file. The main checkout is the project's main folder, the first path that `git worktree list` prints.
+When one of the files listed below is missing in the main checkout, create its parent folder if needed with `mkdir -p <main checkout>/<parent folder>`. For example, the work-item templates need `work-items/work-item-template/`. Then copy the missing file from the setup copy with `cp -n <copy>/<file> <main checkout>/<file>`, and name the file in the report. The `-n` option never replaces a file. The main checkout is the project's main folder, the first path that `git worktree list` prints.
 
 - With local work items, the files are `work-items/AGENTS.md`, `work-items/CLAUDE.md`, `work-items/work-item-template/WORK-ITEM.md`, and `work-items/work-item-template/DESIGN.md`.
 - With local memory, the files are `memory/AGENTS.md`, `memory/CLAUDE.md`, and `memory/project_topic_template.md`.

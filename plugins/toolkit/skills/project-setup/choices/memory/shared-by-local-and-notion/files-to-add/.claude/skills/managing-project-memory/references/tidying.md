@@ -48,8 +48,8 @@ When two memory records are about the same subject, merge them into the broader 
 
 1. Move each section of the other memory record into the kept one, above its lessons. Keep each section's source. Move the lessons too. When both memory records hold the same lesson, join the Seen lines of that lesson.
 2. Join the two lists of work items, and name no work item twice.
-3. Mark the other memory record as replaced by the kept one. Update the kept record's summary and date.
-4. Change every link to the other memory record so that it leads to the kept one.
+3. Mark the other memory record as replaced by the kept one, and link them in both directions with the store's replacement procedure. Preserve both records' provenance and useful tags. Update their metadata and the kept record's summary.
+4. Route links used for current guidance to the kept record, and preserve links that document history.
 
 Three more rules apply to merges:
 
@@ -57,7 +57,7 @@ Three more rules apply to merges:
 - Never merge an event record into a memory record of the type user, project, or reference.
 - When two event records are for one recurring job, merge them into one, and keep every row of both Runs tables.
 
-When a memory record is past the size limit that `references/memory-store.md` gives, move the sections of one sub-topic to a new memory record. Link the two under "Related memories", and correct every link that led to a section you moved.
+When a memory record covers distinct subjects that a later session would need separately, move the sections of one sub-topic to a new memory record. Link the two under "Related memories", and correct every link that led to a section you moved.
 
 ## Links to work items
 
@@ -72,7 +72,7 @@ When a memory record is past the size limit that `references/memory-store.md` gi
 Check that the memory record that each link leads to exists.
 
 - When that memory record is missing, change the link so that it leads to the right memory record, or keep the link's words and remove the link.
-- When that memory record is replaced, change the link so that it leads to the memory record that replaced it.
+- When that memory record is replaced, route links used for current guidance to its replacement. Preserve links that document history or supersession.
 - When that memory record is retired, add " (retired)" after the link.
 
 ## Stale records
@@ -104,11 +104,7 @@ The text that is shown at the start of a session can end with "Cut short to fit 
 
 ## Lessons that should become rules or skills
 
-A lesson has proved itself when one of these three is true:
-
-- its Seen line names two or more sessions or work items;
-- a lesson like it is in the memory record for another subject;
-- the owner confirmed it.
+Propose promoting a lesson when its evidence supports a reusable rule or procedure. Describe where it has worked, any conflicting evidence, and whether the owner confirmed it. Repetition alone does not prove a lesson.
 
 1. Decide where the lesson goes.
    - An instruction that is followed every time, such as a check before a deploy, a load, or a test, is a rule.
@@ -152,4 +148,4 @@ Memory tidied:
 
 When the owner asks how to undo a change, give the owner the words to say, for example "bring back Old dashboard".
 
-End the report with the questions that are still open. When no question is open, end with the exact words that continue the work: "Say 'keep going' and I'll <next action>."
+Report any questions that remain open and what they affect. Continue the authorized work when no owner decision is needed.

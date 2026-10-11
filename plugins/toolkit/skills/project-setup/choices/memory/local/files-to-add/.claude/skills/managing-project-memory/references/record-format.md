@@ -29,17 +29,24 @@ The header is the block of fields between the two `---` lines at the top of the 
 | `check_by` | The date on which to check or remove the file, as `YYYY-MM-DD`, when the fact is true only for a while. Otherwise `none`. |
 | `metadata.type` | The file's prefix: `user`, `project`, `reference`, or `event`. |
 | `status` | One of the values under "Status". |
-| `source` | The person, conversation, or document that the fact came from, with its absolute date. |
+| `modified_by` | The actual last editor: the owner's name or the agent host that made the edit. Owner approval does not make the owner the editor. |
+| `provenance` | A YAML list of supporting conversations, documents, or work items, with absolute dates and links, paths, or IDs that let a later session find the evidence. |
+| `tags` | A YAML list of subjects that help retrieval. Type remains in `metadata.type`. |
+| `context` | A concise explanation of why the memory matters to this project. |
+| `source` | A YAML list of how the content was derived: `stated` for a direct statement, `summarized` for a restatement, or `inferred` for a conclusion the source does not state. Use each applicable value and explain each claim's evidence and uncertainty in its section. |
 | `last_verified` | The date the fact was last checked against its source, or `unknown`. |
 | `authorization` | What allowed the save, in one of the two forms under this table. |
 | `work_items` | One entry for each related work item, in the form that "Links to work items" gives, or `[]` when no work item applies. |
-| `supersedes` | The name of the file that this file replaces, or `none`. |
+| `supersedes` | The filename stem this file replaces, a YAML list when it replaces several files, or `none`. |
+| `superseded_by` | The filename stem that replaces this file, a YAML list when several files replace it, or `none`. |
 
 - `check_by` is for the whole file. When a single section has its own date, that section carries a `**Check or remove by:**` line.
 - `authorization` has one of these forms:
   - `Approved by <owner> on <date>`, for a save that the owner asked for or said yes to.
   - `Logged by the agent on <date>`, for every other save.
-- Keep any other field that Claude Code, Codex, or an import wrote.
+- On every change, update `updated` and `modified_by`, and keep the evidence, tags, context, derivation, authorization, and links accurate. Preserve `created`, useful earlier provenance, and fields written by the owner or another tool.
+- When updating a legacy file whose `source` names a person or document, move that evidence into `provenance` before setting the new derivation values. Fill missing metadata from verified evidence; use `unknown` for an editor or date that cannot be established. Do not infer missing history.
+- Ordinary corrections and added detail update the existing file. When a decision or fact is replaced, retain the earlier record and link the replacement in both directions. Use a separate record for the replacement. When the earlier file also holds still-current material, mark and link the replaced section while leaving the file current.
 
 ## Status
 
@@ -64,7 +71,7 @@ Find the case in the first column. The other three columns give what to write in
 | The file is no longer used for answers, and nothing replaces it | `retired` | `Retired <date>:` | First line under the title: `**Retired:** <date>. <reason, in the owner's words when the owner gave one>` |
 
 - A file with the status `superseded` or `retired` keeps its body as history.
-- In a file that replaces another file, set `supersedes:` to the name of the file it replaces.
+- In the replacement, set `supersedes` to the earlier file and link it in the body. In the earlier file, set `superseded_by` to the replacement. Preserve prior links, update both files' metadata, and read both back to verify the chain.
 
 ## Body layout
 
@@ -88,7 +95,7 @@ Find the case in the first column. The other three columns give what to write in
 - Link another memory file with a relative Markdown link to its file name, as in `[client plans](project_client_plans.md)`.
 - Link one section with `#` and its heading, with each space written as `%20`, as in `[deploy window](project_deploys.md#Deploy%20window)`.
 - After a link to a retired file, write " (retired)".
-- When a file has the status `superseded`, link to the file that replaces it instead.
+- For current guidance, link to the replacement of a superseded file. Keep links to earlier records where they document history or supersession.
 - Name a record outside `memory/` by its path, ID, or web address, under **Authoritative records**.
 - The examples in this skill sit in backticks, and Obsidian does not count text in backticks as a link. Write a real link without backticks.
 
@@ -137,7 +144,7 @@ An `event_` file for a recurring job has a first section that says what the job 
 | 2026-10-05 | agent | Weekly account load, file accounts-2026-10-05.csv | 1,204 rows loaded, 3 rejected | 3 rows had no region; the client corrected them and they loaded on the second run |
 ```
 
-- Insert a new row right after the table's separator line, and set `updated`.
+- Insert a new row right after the table's separator line, and update the header metadata for the change.
 - A `|` inside a cell ends the cell. Write `\|` in its place.
 - Never change an older row. The one exception is a fix that was found later: add it to the row's last cell, with the date.
 

@@ -103,7 +103,7 @@ A project phase (`P01`) and a work item's phase (`P1`) are different things. A p
 ### Tasks
 
 - Every task belongs to exactly one place: the project, or one work item.
-- A task in a work item is a step toward that work item's goal. Work that the goal does not need is a new Backlog work item, and never a task in this work item. This rule holds even for a small fix found along the way.
+- A task in a work item is a step toward that work item's goal. Triage work outside the approved goal as a separate Backlog work item. When a defect prevents the approved user flow from working, record the defect and the fix needed to meet the approved requirements in this item. If the fix changes those requirements or an owner decision, get the required approval through Refining Requirements before building it.
 - A task ID has one of three forms:
   - `P1-T01` in a top-level work item: the work item's phase, then the task's number.
   - `T01` in a sub-item.
@@ -129,7 +129,7 @@ Whenever you report what waits on the owner or what other people owe, name each 
 
 ## When to stop for the owner's yes
 
-Stop and ask the owner before each of these six steps. Record the owner's yes only when the owner answers the question you asked.
+Stop and ask the owner before each of these six steps. Record the owner's authorization and what it covers. An explicit instruction or an earlier approval for the same scope counts; ask only for an approval that is still missing. Authorization for one step does not authorize another step or a changed result.
 
 1. Approving the requirements, at the end of Refining Requirements.
 2. Choosing the design, at the end of Designing.
@@ -160,7 +160,7 @@ Use your judgment to decide from the owner's request whether the work item is sm
    - for each requirement, its Goal, at least one line of Functional Requirements, and at least one line of Acceptance Criteria that a tester could check;
    - one phase, with its tasks.
 2. Play the request back to the owner in one reply. This reply takes the place of steps 3 to 11 of `references/refining-requirements.md`.
-   - Say the goal in one or two sentences, what you will hand over, and how you will check it.
+   - Say the goal in concise sentences, what you will hand over, and how you will check it.
    - Name anything you are unsure of.
    - Name the project phase that the work item goes under. When the project has no phases yet, name the phases that you propose, as "Phases" above says.
    - Say "This is small, so I will skip the interview and ask you one question at the end."
@@ -220,7 +220,7 @@ A work item that cannot continue until an Open entry in `DECISIONS.md` is answer
 
 ### The work item's line in the project's Current State
 
-The project's Current State is the project's one short page of what is true now. It holds one line for a work item from the time the work item leaves Backlog until it is Done or Cancelled.
+This section applies to local or Notion memory. The project's Current State holds one line for an active work item. With Hindsight, keep active work and next actions in the selected tracker instead; follow `.claude/rules/hindsight-memory.md` for lasting knowledge, and create no Current State page.
 
 - Decide the line in this skill, in the form that the project's memory gives for a line under Now. Now is one of the parts of the project's Current State.
 - Add, change, or remove the line as the table in "Work that another skill does" says.

@@ -2,7 +2,7 @@
 
 This file says how the project's Notion "Current state" page is laid out, and how to read and change it. That page holds the project's Current State. Open this file before you read or change the page.
 
-`managing-project-memory` says what each part of the page holds, the limit of each part, and when to change it. The skill that asked for the change decides what a line says.
+`managing-project-memory` says what each part of the page holds and when to change it. The skill that asked for the change decides what a line says.
 
 The page's id is in `PROJECT.md`, section "Toolkit settings": the nested bullet "Current state page" under the fixed line "Notion memory".
 
@@ -10,7 +10,7 @@ The page's id is in `PROJECT.md`, section "Toolkit settings": the nested bullet 
 
 The page is plain text, not a database. `assets/current-state.md` is its starting text.
 
-- Keep the first line in the form `Last updated: YYYY-MM-DD`, followed by what caused the change and who made it. The session-start hook reads the date after "Last updated:" to tell when the page is old.
+- Keep the first line in the form `Last updated: YYYY-MM-DD`, followed by what caused the change and who made it. A later session uses this date to judge freshness against current records.
 - Keep every heading, also the heading of an empty part. An empty part holds "None."
 
 ## Reading it
