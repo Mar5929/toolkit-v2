@@ -86,7 +86,8 @@ On or after that date, check the fact. Then correct it or retire it. `references
 
 ## Never save in a memory record
 
-- Secrets, credentials, sensitive personal data, transcripts, scratch reasoning, raw logs, dropped guesses, or a claim that names neither who said it nor what you concluded it from.
+- Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
+- Transcripts, scratch reasoning, raw logs, dropped guesses, or a claim that names neither who said it nor what you concluded it from.
 - A fact that the same change already saves in the place where it is kept. The one exception is a short memory record of the type reference that says where that record is, when a later session needs it.
 - The live status of a work item, a pending approval, unshipped requirements, the steps of a procedure, or a restatement of code.
 - Something that the owner told you to forget or not to keep, saved again under a new name or in wider wording. The owner's no stands until the owner changes it.

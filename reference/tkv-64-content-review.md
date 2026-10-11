@@ -69,7 +69,7 @@ These are questions, not findings that Mike approved the existing wording. The r
 | --- | --- |
 | Editorial caps | Mike approved replacing editorial caps with judgment on October 11. The follow-up removes these caps and preserves host limits and exact tool formats. |
 | Memory metadata | Mike approved YAML for local metadata, existing Lore properties and Other fields for Notion, updates for ordinary changes, and linked superseded records. Version 0.9.46 implements the mapping; result review remains open. No live memory schema changed. |
-| Contact details | Does the local/Notion prohibition on every email address reflect intended sensitive-data policy, or should it distinguish ordinary project contacts from private data? |
+| Contact details | Mike resolved this on October 11: ordinary contact details may qualify; exclude secrets and information whose storage could compromise system, product, or project security. Version 0.9.48 applies the policy across memory choices; see [the security follow-up](tkv-64-review/memory-security-follow-up.md). |
 | Source decisions | Can a verified transcript statement from an authorized decision-maker count as a decision, or must the owner confirm it again? Existing sourced decisions remain Open under the preserved rule. |
 | Update/migration approvals | Must each record migration and destination confirmation get a separate answer, or may a reviewed named batch be authorized? Existing approval granularity remains. |
 | Work-item conventions | Are fixed hierarchy/slug/prefix formats, mandatory field sets, exact approval questions and retry counts intentional? Existing exact forms remain. |
@@ -78,7 +78,7 @@ These are questions, not findings that Mike approved the existing wording. The r
 | Salesforce manifests | Does the same-members rule apply only to the master deploy manifest, allowing reverse-engineering/work-item manifests outside the component tracker? Platform-specific deployment prohibitions also need current validation before removal. |
 | Setup tracking | Does “setup never becomes a work item” cover substantial migration/update work as well as first onboarding? Existing wording remains. |
 
-The Hindsight onboarding work in TKV-60 is still in progress. This review preserves its configuration/package and does not redesign its setup file. The structure wiki contains historical Hindsight package wording that should be reconciled in that work item against Mike's current decisions.
+The Hindsight onboarding work in TKV-60 is still in progress. The security follow-up updates its exclusions and redaction default to match Mike's October 11 policy; the remaining onboarding work stays in TKV-60. The structure wiki contains historical Hindsight package wording that should be reconciled in that work item against Mike's current decisions.
 
 ## Verification and its limits
 

@@ -36,7 +36,7 @@ A clean-up reads every memory record whole, which takes time. So a helper does t
   - A contradiction between two memory records is a question on the list. Never settle a contradiction by date alone.
   - A delete is its own numbered line, and the line names the memory record. In every other case, retire the memory record or mark it as replaced, as `references/memory-process.md`, section "A memory record that is out of date or no longer needed", says.
 - Change nothing until the owner says yes. The owner's answer often comes in the next turn. Open this file again in that turn, because Codex does not keep a skill across turns.
-- These changes do not go on the plan: removing lines of the project's Current State that are no longer true, removing a secret or an email address at once, and retiring a memory record or removing a section whose "check or remove by" date has passed and that is no longer true, as "Stale records" below says.
+- These changes do not go on the plan: removing lines of the project's Current State that are no longer true, removing secrets or information whose storage could compromise system, product, or project security at once, and retiring a memory record or removing a section whose "check or remove by" date has passed and that is no longer true, as "Stale records" below says.
 
 ## The project's Current State
 

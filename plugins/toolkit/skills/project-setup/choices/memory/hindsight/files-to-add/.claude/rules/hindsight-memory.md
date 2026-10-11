@@ -8,7 +8,8 @@ Keep this project's lasting memory in the Hindsight bank recorded in `PROJECT.md
 - A significant failure the agent found and fixed itself may also be saved, with its cause and fix.
 - Keep the authoritative project record where `AGENTS.md`, "Where information goes", places it. A qualifying memory can name that record and preserve the lasting context; do not create a second source of current work status.
 - Keep proposals, unchecked claims, and unresolved questions marked as such. Never turn an agent's report into an owner-approved decision.
-- Keep secrets, sensitive personal details, transcripts, routine status updates, and facts that matter only for the moment out of deliberate memory saves.
+- Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
+- Keep transcripts, routine status updates, and facts that matter only for the moment out of deliberate memory saves.
 
 ## When to review and save
 
