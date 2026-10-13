@@ -99,12 +99,12 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 | `<setup>choices/notion-shared/`, `<setup>choices/salesforce/` | The shared Notion tools and Salesforce module. |
 | `.claude/skills/writing-harness-files/` | This repository's harness-writing procedure and official guidance checklist. |
 | `.claude/settings.json`, `.codex/hooks.json`, `.claude/rules/` | The host settings, prompt reminder, and rules for sessions that work on this repository. |
-| `wiki/reference/outside-docs/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
+| `wiki/reference/ai-external-knowledge/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
 | `wiki/reference/` | Records of how Mike works in his real projects. |
 | `archive/` | Earlier setup material and Salesforce tools. Not shipped. |
 | `wiki/product-wiki/` | Mike's definition of intended Toolkit behavior. |
 
-Only `plugins/toolkit/` is shipped. Nothing shipped reads the repository's `archive/`, `wiki/reference/`, `wiki/product-wiki/`, or `wiki/reference/outside-docs/`.
+Only `plugins/toolkit/` is shipped. Nothing shipped reads the repository's `archive/`, `wiki/reference/`, `wiki/product-wiki/`, or `wiki/reference/ai-external-knowledge/`.
 
 ## The starter project
 
