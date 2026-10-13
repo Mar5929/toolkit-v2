@@ -53,16 +53,7 @@ Every project has `SOUL.md`. Fill it with the owner's own words, show the owner 
 
 File each document, link, and note that the owner gives as a source, in the form that the project's `sources/AGENTS.md` gives. Read the material before you ask question 11.
 
-### Context from past work
-
-When the project had work before setup, such as code, commits, documents, or earlier agent sessions, build the project's context from that past work too. The goal is that the project's files start out holding what the owner and earlier agents already worked out, so that the owner does not have to explain it again.
-
-1. Look on this computer for the project's past sessions in Claude Code and Codex, including sessions that ran in the project's worktrees. Each host keeps them in the owner's home folder: at the time of writing, Claude Code under `~/.claude/projects/` and Codex under `~/.codex/sessions/`. Confirm where the installed version keeps them.
-2. Tell the owner what you found, such as how many sessions there are and the dates they cover. Ask whether you may read them, and whether there is anywhere else to look, such as Notion pages, documents, other repositories, or sessions on another computer. Read only what the owner says yes to.
-3. Read the material and pick out what a later session would need: what the project is for, the people and what each may decide, the systems, decisions and their reasons, terms, constraints, lessons, open questions, and the work that is in progress.
-4. Show the owner what you found, grouped by where each fact would go. Use the place that the project's `AGENTS.md`, "Where information goes", gives for each kind of fact, in the form that the guide of that folder gives. Use the project's memory choice for memory. Mark what only an agent said in a session as not confirmed. Write each fact after the owner confirms it.
-5. Name the host and the date of the session as the source of each fact. Never file a session file itself as a source, and never copy a secret, such as a key, a password, or a token, into a project file.
-6. When a fact changes an answer the owner already gave, show the difference and ask. Use what you found to offer answers for question 11.
+When Step 2 read past work, show the owner the facts that no answer has used yet, and write the ones the owner confirms, as [reference/context-from-past-work.md](context-from-past-work.md), "In Step 4: use what you found", says.
 
 ## Project roadmap (question 11)
 
