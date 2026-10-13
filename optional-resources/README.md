@@ -15,9 +15,7 @@ needs it.
 
 ### Skills
 
-| Skill | What it does | Where it came from |
-| --- | --- | --- |
-| [`devops-center-work-item`](skills/devops-center-work-item/SKILL.md) | The steps to run a Salesforce DevOps Center work item by command: create it, commit components with Git, open the review, and promote it. | A Salesforce org merger project, 2026-10-13. It is a template: the project's own org names and limits are left as values in angle brackets. |
+None yet. A skill that a vendor already ships as its own skill is not copied here.
 
 ### AI external knowledge
 
