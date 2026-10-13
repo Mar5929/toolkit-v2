@@ -83,13 +83,13 @@ Host settings also remind the agent to update a work item after helper work. Hoo
 
 ## Install the plugin
 
-The installation changes host configuration. Run it yourself or authorize the agent to do so.
+The installation changes host configuration. Run it yourself or authorize the agent to do so. Replace `<toolkit-v2 folder>` with the path of your copy of this repository.
 
 ```bash
-claude plugin marketplace add /Users/michaelrihm/Documents/Projects/toolkit-v2
+claude plugin marketplace add <toolkit-v2 folder>
 claude plugin install toolkit@toolkit-v2
 claude plugin enable toolkit@toolkit-v2 --scope user
-codex plugin marketplace add /Users/michaelrihm/Documents/Projects/toolkit-v2
+codex plugin marketplace add <toolkit-v2 folder>
 codex plugin add toolkit@toolkit-v2
 ```
 

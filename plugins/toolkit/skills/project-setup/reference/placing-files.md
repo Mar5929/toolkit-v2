@@ -6,6 +6,8 @@ The job is done when three things are true: the project has every file of the fo
 
 `<source>` stands for the folder you copy, with the path of this skill's folder in front of it. Run every command from the project folder.
 
+The commands below use `rsync`, `diff`, and `ln`, which macOS and Linux have. When a computer lacks one, such as Windows with Git Bash, which has no `rsync`, reach the same result another way. Each section says what its command must achieve.
+
 ## See what would change
 
 Before copying into an existing project, check whether records at older paths would now appear as missing wiki files. Follow [Moving existing records into the local wiki](local-wiki-layout.md) to review the mapping before comparing or copying. Complete an approved move before copying templates into its destinations; when a move is pending or declined, follow that reference to adapt the setup copy to verified retained homes or defer affected operational files. Exclude pending destinations and deferred operational files or skill folders from copying, and retain current record routes. A setup check reports the proposed move without changing records.
@@ -65,7 +67,7 @@ diff -r .agents/skills .claude/skills
 - When the command prints no difference, or only lines that start with "Only in .claude/skills", every file in `.agents/skills` is also in `.claude/skills`. Tell the owner, and after the owner's yes remove the folder and make the link.
 - When the command prints anything else, ask the owner. The folder may hold the owner's own Codex skills. After the owner's yes, move each of those skills into `.claude/skills/` first.
 
-Git stores the link as a link. When the link cannot be made, tell the owner. Never put copied folders in its place.
+Git stores the link as a link. On Windows, Git makes it only when symbolic links are allowed (Developer Mode on, and the Git setting `core.symlinks` set to `true`). Otherwise the link arrives as a short text file that holds its target. Tell the owner, and after the owner's yes allow symbolic links and make the link again, for example with PowerShell's `New-Item -ItemType SymbolicLink -Path .agents\skills -Target ..\.claude\skills`. When the link cannot be made, tell the owner. Never put copied folders in its place.
 
 ## Checks after the copy
 

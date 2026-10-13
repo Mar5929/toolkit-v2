@@ -1,3 +1,24 @@
+---
+paths:
+  - "AGENTS.md"
+  - "**/AGENTS.md"
+  - "PROJECT.md"
+  - "README.md"
+  - "SOUL.md"
+  - "DECISIONS.md"
+  - "PROJECT-ROADMAP.md"
+  - "wiki/product-wiki/**"
+  - "wiki/reference/current-system/**"
+  - "delivery/**"
+  - "tests/**"
+  - "work-items/**"
+  - "memory/**"
+  - ".claude/skills/**"
+  - ".claude/rules/**"
+  - ".claude/output-styles/**"
+  - "**/*.html"
+---
+
 # Document Clarity Standard
 
 Write documents and the words inside artifacts so that a reader who is new to the project, and who was not in the session, can understand them after one read.

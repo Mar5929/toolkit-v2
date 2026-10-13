@@ -1,22 +1,24 @@
 # The org aliases of a Salesforce project
 
-This file holds the two questions about the project's Salesforce orgs, the form of the aliases line in `PROJECT.md`, and what to write when an org is not known yet. Steps 3 and 7 of [salesforce-setup.md](../salesforce-setup.md) use it.
+This file holds the three questions about the project's Salesforce orgs, the form of the aliases line in `PROJECT.md`, and what to write when an org is not known yet. Steps 3 and 7 of [salesforce-setup.md](../salesforce-setup.md) use it.
 
-## The two questions
+## The three questions
 
 Ask the owner for the org aliases, one question per message. Before the first of these questions, show the aliases on this computer with `sf org list`, which only reads.
 
 1. Ask for the sandbox that the agents may deploy to for testing. Recommend an alias only when its name matches this project or the owner said it is this project's. When none of the listed orgs is for this project, recommend "none yet".
 2. Ask for production. Agents never deploy to production or change its data. The rule `salesforce-org-safety.md` forbids both, and Claude Code refuses a command that changes the production org and names it, as [salesforce-refuse-list.md](salesforce-refuse-list.md), "The entries for each production org", says.
+3. Ask whether the project has orgs that agents may only read, such as an org whose data or metadata is being moved into the new one. Agents read them and never change them.
 
 ## The aliases line in PROJECT.md
 
-The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce org aliases" line, as one nested line per org. Each nested line holds the alias, which org it is, and its purpose. Mark production. For example:
+The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce org aliases" line, as one nested line per org. Each nested line holds the alias, which org it is, and its purpose. Mark production and each read-only org. For example:
 
 ```text
 - Salesforce org aliases:
   - `acme-uat`: the UAT sandbox; agents deploy here for testing.
   - `acme-prod`: production.
+  - `legacy-prod`: the old org that data moves from; read-only.
 ```
 
 Use only the aliases the owner names for this project.

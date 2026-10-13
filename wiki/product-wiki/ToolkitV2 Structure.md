@@ -61,12 +61,12 @@ Each of `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/` has
 
 ### The rules every project gets
 
-A rule is a short file that Claude Code loads in every session. `AGENTS.md` tells Codex which rules to read.
+A rule is a short file that Claude Code loads in every session, or, when the rule names paths, only when the agent works on matching files. `AGENTS.md` tells Codex which rules to read, and when.
 
 | Rule                             | What it tells the agent                                                                                       |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `evaluate-the-owners-request.md` | Work out the goal behind a request and the best solution for the whole project before acting.                 |
-| `document-clarity-standard.md`   | How to write a document so that a reader new to the project understands it after one read.                    |
+| `document-clarity-standard.md`   | How to write a document so that a reader new to the project understands it after one read. It loads only when the agent works on the project's documents, and `AGENTS.md` tells the agent to read it before writing any other document. |
 | `shared-repository-work.md`      | How to work in a repository that other sessions also edit: branches, worktrees, and the check before a merge. |
 | `owner-preferences.md`           | The owner's "from now on" instructions for this project. It is the owner's own file from the first day.       |
 
@@ -247,7 +247,6 @@ These answers are written into a file that every project already has. [[Toolkit 
 - The people, and who may decide what
 - The systems the project touches, and which are production
 - The outside tools and services the project uses
-- What the agent may do without asking
 - How the agent works with the owner (`SOUL.md`)
 - The material to start from
 - Where the project stands: the roadmap and its phases

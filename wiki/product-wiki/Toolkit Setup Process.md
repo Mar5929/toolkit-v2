@@ -37,11 +37,11 @@ The agent copies one folder, `every-project/`, into the project. That folder hol
 - the settings files, with every setting that is the same in every project;
 - the small commands that run by themselves, such as the one that prints the project's Current State when a session starts.
 
-The agent never replaces a file that the project already has. When the project already holds a file with the same name, the agent shows the owner how the two differ and asks.
+The agent never replaces a file that the project already has. When the project already holds a file with the same name, the agent shows the owner how the two differ and asks. When the project already has records, the agent first agrees with the owner how they move into the toolkit's folders, and copies into those folders only after the move.
 
 ### Step 4: The agent asks the questions
 
-The agent asks one question at a time, each with a recommendation and the reason for it. It uses what it found in the folder in Step 2: where the folder already shows an answer, the agent says what it found, and the owner confirms or corrects it.
+The agent asks one question at a time, each with a recommendation and the reason for it. It uses what it found in the folder in Step 2: where the folder or past work already shows the answers to several questions, the agent shows them together, and the owner confirms or corrects them in one reply.
 
 | Order | Question                                                                                             | The answers                                                                                | Where the answer goes                                                                                                                    |
 | ----- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |

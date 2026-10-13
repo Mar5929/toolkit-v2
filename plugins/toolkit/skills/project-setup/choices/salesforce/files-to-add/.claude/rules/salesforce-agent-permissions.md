@@ -16,23 +16,23 @@ This file holds the owner's choices for this project. It starts with the toolkit
 
 ## Actions
 
-| Action | Sandbox or scratch org | Production |
-| --- | --- | --- |
-| Read data or metadata | Allowed | Allowed |
-| Validate a deploy | Allowed | Never (fixed) |
-| Deploy metadata | Allowed | Never (fixed) |
-| Deploy with a destructive changes file | Ask first | Never (fixed) |
-| Deploy a profile | Never | Never (fixed) |
-| Run Apex or Flow tests | Allowed | Never (fixed) |
-| Change data | Ask first | Never (fixed) |
-| Run anonymous Apex | Ask first | Never (fixed) |
-| Create or change DevOps Center records | Ask first | Never |
-| Promote through a DevOps Center pipeline | Never | Never (fixed) |
-| Any other change to an org | Ask first | Never |
+| Action | Sandbox or scratch org | Production | Read-only org |
+| --- | --- | --- | --- |
+| Read data or metadata | Allowed | Allowed | Allowed |
+| Validate a deploy | Allowed | Never (fixed) | Never |
+| Deploy metadata | Allowed | Never (fixed) | Never |
+| Deploy with a destructive changes file | Ask first | Never (fixed) | Never |
+| Deploy a profile | Never | Never (fixed) | Never |
+| Run Apex or Flow tests | Allowed | Never (fixed) | Never |
+| Change data | Ask first | Never (fixed) | Never |
+| Run anonymous Apex | Ask first | Never (fixed) | Never |
+| Create or change DevOps Center records | Ask first | Never | Never |
+| Promote through a DevOps Center pipeline | Never | Never (fixed) | Never |
+| Any other change to an org | Ask first | Never | Never |
 
 A row covers its action whatever tool carries it out: the command line, an API, anonymous Apex, or a tool that wraps one of them. When two rows fit one action, the narrower row decides.
 
-`PROJECT.md`, "Toolkit settings", names this project's orgs and says which one is production.
+`PROJECT.md`, "Toolkit settings", names this project's orgs and says which one is production and which are read-only. A read-only org is one that agents only read, such as an org whose data is being moved into the new one.
 
 ## Confirm with the owner first
 

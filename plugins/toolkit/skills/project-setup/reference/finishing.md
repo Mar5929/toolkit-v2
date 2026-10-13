@@ -143,7 +143,7 @@ The table lists the steps that the owner does in every project. The setup file o
 | Trust the project folder in Codex. | Until the folder is trusted, Codex ignores the project's `.codex/config.toml` and `.codex/hooks.json`. Trust is tied to the folder path, so it is needed again after a move. | Always, the first time the owner opens the project in Codex |
 | Trust the hooks in Codex: type `/hooks` and trust them. | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file that the hook runs is not reviewed again. | Always. Again after "update the toolkit" changes an entry in `.codex/hooks.json`. |
 | Open the project folder as an Obsidian vault. | The owner can then browse the project's records, and local work items and memory, with their links. The project's `README.md` says how. | Optional |
-| Start a new session in each of Claude Code and Codex. | The skills, hooks, and settings load at session start. | Always |
+| Start a new session in each of Claude Code and Codex. | Some parts load only at session start, such as the root `AGENTS.md`. Claude Code picks up edits to skills and to most settings in the running session, needs `/reload-plugins` for a changed plugin, and `/reload-skills` for a new skills folder. For Codex, or when unsure, start a new session. | Always |
 | Say yes to committing the setup files. | New worktree sessions (the Claude desktop app, the Codex app) see only committed files. A worktree is a separate folder with its own branch. | Always |
 
 ## The report
