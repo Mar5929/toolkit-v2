@@ -12,7 +12,7 @@ Keep useful project knowledge discoverable. Coding agents read the Project Wiki 
 1. Read the Notion memory identifiers in `PROJECT.md`. Choose the destination below and open its reference.
 2. Search that destination within this project. Read matching records and relevant sources, including status, dates and replacement links.
 3. When recent work matters, read relevant pending inbox captures and current work items. Use `maintaining-notion-wiki` on demand when work needs reconciled information.
-4. Cite the records used. Verify changeable claims against current evidence. Before saying nothing is recorded, search the other relevant destinations and linked work items.
+4. Verify changeable claims against current evidence. Before saying nothing is recorded, search the other relevant destinations and linked work items.
 
 ## Capture changes
 

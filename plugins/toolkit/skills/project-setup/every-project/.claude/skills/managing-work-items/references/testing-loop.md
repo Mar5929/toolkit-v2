@@ -74,8 +74,7 @@ Keep the reply short, and give its parts in this order:
 2. How the owner can see the result: a link, a screenshot, or a command. Put `cd <worktree path>` before a command, because the change is only in the work item's worktree until it is merged.
 3. The evidence: each requirement's verdict, the commit that was checked, and the tests that were run, with their result lines.
 4. The gaps: anything partly met, not run, or found outside the requirements. Never hide a gap to get a yes.
-5. A short Sources list that names each recalled source you used.
-6. Last, ask whether the owner approves the result you showed.
+5. Last, ask whether the owner approves the result you showed.
 
 ## Mistakes to avoid
 

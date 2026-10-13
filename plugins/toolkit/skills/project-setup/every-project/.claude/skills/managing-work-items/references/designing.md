@@ -28,9 +28,7 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
    - When no design can meet a requirement, send the requirement back to `refining-requirements.md`. Never put a weaker form of the requirement into the design as a compromise.
 8. Save the design as proposed. Merge the drafts into the design. Add the question that asks the owner to choose as a Questions and Answers row, with your recommendation, and set `waiting_on` to the owner. Add a Recent History row.
 9. Present the design and ask. Describe each option concisely, your recommendation and its reason, what the owner will see when the work is done, the main risks, and the build order.
-   - Cite each recalled source where you use it.
-   - Put a short Sources list after the rest of the reply.
-   - Put the question on the last line, after the Sources list.
+   - Put the question on the last line.
 10. Record the owner's choice at once. First write the owner's words and the date in the row, with Decision? `yes` and Status Answered. Then compare what the owner said with every requirement and its Acceptance Criteria, and do the first of these three cases that fits:
     - **The answer removes, narrows, or adds to what an approved requirement asks for.** An example is "B, but keep the finance people out of it" when R-02 gives them access. That answer is a change to a requirement, and not a design change. Handle the change as `refining-requirements.md`, step 7, says.
       - Until the owner approves the change, keep the design `proposed`, make no build tasks, and revise nothing.

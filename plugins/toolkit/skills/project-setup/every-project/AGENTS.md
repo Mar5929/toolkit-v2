@@ -20,7 +20,8 @@ You, the ai agent, manage this project, and the owner works with you as a team. 
 - Follow the steps that the skills and rules set. Do not make up your own process. "Which skill" below names the skill for each situation.
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, owner preferences wins. The rule covers what the owner asks you to do. Keeping the records is part of your job, not a request, so it needs no evaluation of this kind.
 - When the owner requests a web search or you need one, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
-- When you write or revise content for a document or the text of an artifact, follow `.claude/rules/document-clarity-standard.md`.
+- When you write or revise content for a document or the text of an artifact, follow `.claude/rules/document-clarity-standard.md`. Open it first when it is not already loaded, such as for a work item or a pull request description.
+- Cite your sources when a reply uses something from memory, the project's records, or an outside source.
 
 ### Keep the records, memory, and context organized
 
