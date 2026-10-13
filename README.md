@@ -100,3 +100,7 @@ After a plugin version changes, update the marketplace and installed plugin usin
 Change `plugins/toolkit/skills/project-setup/every-project/` for shared project content, or the appropriate module under `choices/` for a selected feature. Preserve owner decisions and necessary behavior, keep reference routes current, verify the affected workflows, and raise the version in both plugin manifests and the Claude marketplace metadata.
 
 [AGENTS.md](AGENTS.md) gives this repository's instructions and checks. [reference](wiki/reference/) contains evidence of Mike's ways of working. [archive](archive/) contains earlier setup material and tools; the plugin ships neither folder.
+
+## Optional resources
+
+[optional-resources](optional-resources/) holds skills and outside knowledge that Mike made in his projects and may want again. It is not part of the toolkit: setup does not install it, and the plugin does not ship it. Its [README](optional-resources/README.md) lists what is there and says what may be added.
