@@ -44,7 +44,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 7. Write the IDs in each work item under Affects, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write them. Wait until then. On the work item's Related items line, write the DEC ID and the ID of each rule that step 5 added or changed.
    - When a Questions and Answers row in a work item raised the decision, add "Filed as DEC-###." at the end of that row's Answer cell, after the original answer. The row keeps the answer and its source evidence.
    - When a work item cannot continue without the answer to an Open entry, that work item waits on the owner. Continue with `managing-work-items` for that work item.
-   - When no work item waits on an Open entry, keep its DEC ID and who must answer in `DECISIONS.md`. Also record the wait in the project's current state, as "Project memory" in the root `AGENTS.md` says.
+   - When no work item waits on an Open entry, keep its DEC ID and who must answer in `DECISIONS.md`. Also record the wait as `managing-work-items/references/project-memory-steps.md`, section "Recording a wait", says.
 8. Tell the owner the DEC ID, its Status, and the work items that now name it.
 
 ## Answering an open question
@@ -57,7 +57,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 4. Save as step 6 of "A new entry" says.
 5. Leave the DEC ID in each work item under Affects as it is. The work item holds only the ID, so nothing there changes.
    - When a work item waited on this entry, it continues now. Continue with `managing-work-items` for that work item.
-   - When the project's current state records a wait on this entry, remove that line, as "Project memory" in the root `AGENTS.md` says.
+   - When a recorded wait names this entry, remove it as `managing-work-items/references/project-memory-steps.md`, section "Recording a wait", says.
 
 ## Replacing a decision
 

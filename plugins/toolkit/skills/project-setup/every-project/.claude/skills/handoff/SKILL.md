@@ -53,7 +53,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - Read the project task with `managing-work-items`.
    - Make its status and who does it true. `managing-work-items/references/lifecycle-rules.md`, "Levels", says what a project task is and when to tick it.
    - Read the project task back.
-3. **File what this session left unfiled.** Step 2 saved each decision that only one work item needs. Keep the source and approval evidence of each record you file. When a record is captured but not yet filed in its final place, put its link in the prompt and say that it is not filed yet.
+3. **File what this session left unfiled.** Step 2 saved each decision that only one work item needs. Keep the source and approval evidence of each record you file.
    - **A decision or a question that more than one work item needs.** When one came from this session and the project's shared records do not hold it, record it with `filing-project-records`, step "record a decision". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs it, and says where those records are kept. When the owner has not confirmed it, record it as an open question. Do not wait for the owner's answer before you write the prompt.
    - **A source with no SRC ID.** A source is anything the project was given and keeps, such as a transcript or an email. When the owner gave this session a source that has no SRC ID, file it with `filing-project-records`, step "file a source".
    - **An instruction for how the agent works that is not written down.** Record it in `.claude/rules/owner-preferences.md`, with the steps that "Project memory" in the root `AGENTS.md` names.
@@ -61,16 +61,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - **A shared open question.** Read the open questions in the project's shared records that this session raised or that name this session's work items. Put each one under "Open questions" in the prompt, with its ID or link.
 
    When there is nothing to file, say so in one line.
-4. **Save the context for the next session** in the project's current state, as "Project memory" in the root `AGENTS.md` says. Keep next actions and blockers in the work tracker.
-   - Record where the next session starts, with one entry for each piece of work that this session worked on.
-     - For a work item, the entry holds the work item's ID and the words "read its Current state".
-     - For a piece of work that is not a work item, the entry says what the work is and its next step.
-   - Check the project's current state for each of this session's work items. When what it says about a work item is missing or no longer true, add or correct it as `managing-work-items` says.
-   - Remove everything else that is no longer true, for example a piece of work that ended, an event that ended, a resolved or cancelled deadline, or a thing owed that was delivered.
-   - When the project's current state records when it was last updated and by whom, set that to the date, `handoff`, and `agent`.
-   - When the next task needs records that are captured but not yet filed, ask for that filing now, as "Project memory" says. Do not wait for it before step 5.
-   - Review memory for lasting lessons from this session, as "Project memory" says.
-   - When the project keeps its current state in a file or a page and that file or page is missing, do not create it. Tell the owner that it is missing, and suggest the setup check (`project-setup`, "check the setup"). Put in the prompt the entry that this step would have written.
+4. **Save the context for the next session.** Follow `references/project-memory-steps.md`, section "Saving the context for the next session". The project's memory choice supplies that file.
 5. **Draft the prompt. Do not show it yet.**
    - Start from the template `assets/handoff-prompt-template.md`. It holds the fixed first line and the headings.
    - Write the prompt as instructions to an agent that knows nothing about this session.
@@ -124,12 +115,13 @@ When the owner gives you a handoff prompt that was written elsewhere and wants i
 | What no record holds yet; every read and write of the project's current state; which parts of it are no longer true | Project memory, as the root `AGENTS.md` says |
 | An instruction for how the agent works | `.claude/rules/owner-preferences.md`, with the steps that "Project memory" in the root `AGENTS.md` names |
 | The recap table, when the owner also asked for one | `session-summary` |
-| The project's current state file or page is missing | `project-setup` ("check the setup") |
+| The file `references/project-memory-steps.md` is missing | `project-setup` ("check the setup") |
 
 ## References
 
 | File | Open it when |
 | --- | --- |
 | [assets/handoff-prompt-template.md](assets/handoff-prompt-template.md) | Step 5: you need the fixed first line and the headings of the prompt, to copy and fill in. |
+| [references/project-memory-steps.md](references/project-memory-steps.md) | Step 4: you save the context for the next session. The memory choice supplies this file. |
 | [references/handoff-verifier.md](references/handoff-verifier.md) | Step 6, and when you check a prompt the owner gives you: you need the way to start the verifier, its brief, and the list of inputs. |
 | [examples/handoff-example.md](examples/handoff-example.md) | Steps 6 and 7: you need to see a filled list of inputs, the lines for the saves, the check results, and a filled prompt. |

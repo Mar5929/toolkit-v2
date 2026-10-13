@@ -7,7 +7,7 @@ description: 'Finds and manages work items from idea to Done, keeping requiremen
 
 Use this skill when a turn concerns a work item, a project phase, or a project task. The goal is to keep the work record accurate and follow the required steps and approvals from the first idea through Done or Cancelled.
 
-Start with [the lifecycle rules](references/lifecycle-rules.md). They define the work item's State and Status, the four levels of work, the approval points, and the rules that apply in every State. Then open [the installed work tracker instructions](references/work-tracker.md) for every read and save. This project has only the local, Notion, or GitHub version that setup selected. Read the relevant procedure below for the work item's current State or the change requested.
+Start with [the lifecycle rules](references/lifecycle-rules.md). They define the work item's State and Status, the four levels of work, the approval points, and the rules that apply in every State. Then open [the installed work tracker instructions](references/work-tracker.md) for every read and save. This project has only the version that setup selected. Read the relevant procedure below for the work item's current State or the change requested.
 
 If the owner asks only a question about a work item, read the current record and answer it. Do not advance the work item merely because you read it. If the item is unclear, use the root `AGENTS.md` identification order and ask when more than one item remains plausible.
 
@@ -27,37 +27,17 @@ Use `filing-project-records` for sources and for shared decisions and system rul
 | [references/testing-loop.md](references/testing-loop.md) | The item is in the Testing Loop. |
 | [references/closing.md](references/closing.md) | The item is in Reflecting, is being marked Done or Cancelled, or was closed by hand. |
 | [references/deploying.md](references/deploying.md) | The item is in Deploying. |
-| [references/salesforce-deploying.md](references/salesforce-deploying.md) | You deploy this item in a Salesforce project. |
+| [references/project-memory-steps.md](references/project-memory-steps.md) | Closing a work item, or active work changes, names its steps. The memory choice supplies this file. |
 
 ## Templates and helper briefs
 
 | File | Open it when |
 | --- | --- |
-| [assets/work-item-template.md](assets/work-item-template.md) | Local or GitHub: you create an item or need its field and section forms. Notion uses its database's default template. |
-| [assets/design-template.md](assets/design-template.md) | Local or GitHub: you start a design. Notion uses the generated Solution Design page. |
+| [assets/work-item-template.md](assets/work-item-template.md) | You create an item or need its field and section forms, when `references/work-tracker.md` says the project uses this template. |
+| [assets/design-template.md](assets/design-template.md) | You start a design, when `references/work-tracker.md` says the project uses this template. |
 | [references/requirements-analyst-brief.md](references/requirements-analyst-brief.md) | You start the helper that checks requirements. |
 | [references/researcher-brief.md](references/researcher-brief.md) | You start a research helper. |
 | [references/design-architect-brief.md](references/design-architect-brief.md) | You start a helper to write one design option. |
 | [references/design-critic-brief.md](references/design-critic-brief.md) | You start a helper to check a design option. |
 | [references/builder-brief.md](references/builder-brief.md) | You start a builder. |
 | [references/acceptance-checker-brief.md](references/acceptance-checker-brief.md) | You start the separate checker in the Testing Loop. |
-
-With Notion work items, setup also installs these references. Open them for the corresponding action; they are absent with other tracker choices.
-
-| File | Open it when |
-| --- | --- |
-| [references/work-tracker-page-updates.md](references/work-tracker-page-updates.md) | You update a Notion work-item page. |
-| [references/work-tracker-commands.md](references/work-tracker-commands.md) | You need the Notion tracker commands. |
-| [references/work-tracker-known-problems.md](references/work-tracker-known-problems.md) | A Notion tracker read or write fails, or you need a documented workaround. |
-
-Local and GitHub trackers install the supporting files below. Open only the files supplied by the selected tracker and needed for the current action.
-
-| File | Tracker and when to open it |
-| --- | --- |
-| [references/work-tracker-folders-and-files.md](references/work-tracker-folders-and-files.md) | Local: you locate or create work-item folders and files. |
-| [references/work-tracker-field-mapping.md](references/work-tracker-field-mapping.md) | Local: you fill or update the work item's fields. |
-| [references/work-tracker-issue-layout.md](references/work-tracker-issue-layout.md) | GitHub: you create or update an issue's body. |
-| [references/work-tracker-labels.md](references/work-tracker-labels.md) | GitHub: you map work-item fields to labels. |
-| [references/work-tracker-gh-commands.md](references/work-tracker-gh-commands.md) | GitHub: you need issue, label, or sub-issue commands. |
-| [references/work-tracker-project-roadmap-and-tasks.md](references/work-tracker-project-roadmap-and-tasks.md) | Local or GitHub: you maintain project phases or tasks outside a work item. |
-| [references/work-tracker-searching.md](references/work-tracker-searching.md) | Local or GitHub: you find work items, recent changes, or project tasks. |

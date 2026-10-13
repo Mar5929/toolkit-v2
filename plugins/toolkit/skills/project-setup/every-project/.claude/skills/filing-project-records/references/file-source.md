@@ -4,8 +4,6 @@ Use this file to save a source and give it an ID, so that other records can name
 
 `sources/AGENTS.md` gives the form of a row in the list of sources, the file name, what must stay true, and which sources need the owner's answer before they are filed. Read it before you write.
 
-The steps are the same whether the project keeps its work items in local files, in Notion, or in GitHub, because a source is never saved where the work items are kept.
-
 ## Steps
 
 1. Search `sources/INDEX.md`, the list of sources, for this source. Search by its date, who it came from, and its subject.
@@ -17,11 +15,11 @@ The steps are the same whether the project keeps its work items in local files, 
    - Save a file as a copy with its own extension. An email with attachments is one folder.
    - For a source kept outside Git, save no file.
 5. Add the source's row to `sources/INDEX.md`. In its "Used by" cell, name each work item that uses the source now.
-6. Save with `publish-docs` now, before you use the source. The save is what makes the number yours, and a link from Notion or GitHub works only once the file is on the default branch.
+6. Save with `publish-docs` now, before you use the source. The save is what makes the number yours, and a link to the file works only once the file is on the default branch.
 7. Write the source's line in each work item that uses it, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write it. Wait until then.
    - The line goes under Notes, Sources.
    - The line holds the SRC ID, what the source is, and the IDs taken from it. Those are the IDs of the requirements, questions, and tasks in that work item that came from the source.
-   - In Notion and GitHub, the line may add the web address of the file on the default branch.
+   - `managing-work-items/references/work-tracker.md`, section "Writing a record's ID in a work item", says whether the line also holds the web address of the file.
 8. Tell the owner the SRC ID, and give it to the skill that asked for this step.
 
 ## What to do with what the source says

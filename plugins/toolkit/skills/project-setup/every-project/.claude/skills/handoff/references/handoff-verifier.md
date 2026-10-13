@@ -33,8 +33,9 @@ The list of inputs:
 ```text
 Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
-Tracker: local (work-items/ in the main checkout) | Notion (configured links
-  or supplied work item text) | GitHub Issues (<account/repository>)
+Tracker: <the work tracker that PROJECT.md names, and the lines of
+  managing-work-items/references/work-tracker.md, section "How a helper
+  opens a work item by ID", copied word for word>
 Memory and shared records: <where this project keeps its current state and
   memory ("Project memory" in the root AGENTS.md), and its shared decisions,
   system rules, and project terms ("Where information goes"); links or
@@ -58,7 +59,7 @@ You have not seen the session that wrote the draft. So give a claim the verdict 
 ### Read-only means read-only
 
 - Never create, change, move, or delete a file, a work item, or anything in memory.
-- Use only read operations through the available file, Git, tracker and memory tools. Follow the installed Notion access procedure before using Notion tools.
+- Use only read operations through the available file, Git, tracker and memory tools.
 - When you believe that something needs to change, say what and where.
 - Never run tests, builds, installs, or any script. When the draft says that a test or a build passed, give that claim the verdict Unchecked, unless you were given the command output.
 - When `gh` fails with a network error or a sign-in error, give each claim that needed `gh` the verdict Skipped. List the check, with the error, under "Skipped".
@@ -73,11 +74,7 @@ How you check a claim depends on its source:
 - A claim that the owner made: check it against the owner's words that you were given, and write "checked against supplied text" in the Detail column. When you were given no words of the owner, give the claim the verdict Unchecked.
 - A claim that the agent worked out, or a claim with no source given: give it the verdict Unchecked.
 
-Work items are named by ID, never by path. How you open a work item depends on the "Tracker" line of the list of inputs:
-
-- Local: find the file under `work-items/` in the main checkout whose front matter says `id: WI-014` (for example `grep -rlE '^id: *"?WI-014"? *$' <main checkout>/work-items`; the value may be in quotes). The front matter is the block of fields at the top of the file. The design of the work item is `DESIGN.md` in the same folder.
-- GitHub: `gh issue view <number> -R <account/repository> --json title,body,labels,state`, and `gh issue view <number> -R <account/repository> --comments` for its design comment. The list of inputs names the repository. Pass `-R` on every `gh` command.
-- Notion: read the configured record or check freshly supplied text and properties. State which evidence was used.
+Work items are named by ID, never by path. The "Tracker" line of the list of inputs says how to open a work item and its design.
 
 The other records are in these places:
 

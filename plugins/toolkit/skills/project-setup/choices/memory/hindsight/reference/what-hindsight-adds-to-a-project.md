@@ -7,7 +7,7 @@ Use this during Hindsight setup to install its memory rule, connect the shared r
 | Part | What setup adds or changes |
 | --- | --- |
 | Decision and system records | Copy `choices/memory/repository-records/files-to-add/` and write its rows in the root `AGENTS.md`, as [what-repository-records-add-to-a-project.md](../../repository-records/reference/what-repository-records-add-to-a-project.md) says. |
-| `.claude/rules/hindsight-memory.md` | Copy this choice's `files-to-add/` into the project. The rule defines qualifying memory, review triggers, recall, corrections, and filing boundaries. |
+| `.claude/rules/hindsight-memory.md` and steps inside other skills | Copy this choice's `files-to-add/` into the project. It also adds `references/project-memory-steps.md` inside `managing-work-items` and `handoff`: the steps of those skills that depend on Hindsight memory. The rule defines qualifying memory, review triggers, recall, corrections, and filing boundaries. |
 | Root `AGENTS.md` | Add the "Project memory" section below, and the summary sentence. |
 | `PROJECT.md`, "Toolkit settings" | Record the bank, connection, package, template, changes, and open checks. |
 | Existing `.claude/hooks/prompt-reminder.mjs` | Reuse the file supplied by `every-project`; add no hook file. Set its existing prompt entries to use `--skill hindsight`. |

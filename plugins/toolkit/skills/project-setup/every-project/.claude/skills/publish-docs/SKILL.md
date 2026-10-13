@@ -25,7 +25,7 @@ A project document is a file under one of these paths.
 - `delivery/**`
 - `tools/**/*.md`
 - `**/README.md`
-- Each file or folder in the repository that the root `AGENTS.md`, section "Where information goes", names as the place for a shared decision, an open question, a system rule, or a project term
+- Each path that `references/shared-record-paths.md` lists. The project's memory choice supplies that file, because it decides whether shared decisions and system rules are kept in the repository.
 
 ## Names used in the commands
 
@@ -150,7 +150,7 @@ When to remove the copy depends on the remote:
 
 ## The main checkout
 
-The third thing that step 8 notes is whether the main checkout holds the save. The reason is that local work items are kept in the main checkout, and a work item must not name a record that the main checkout does not hold.
+The third thing that step 8 notes is whether the main checkout holds the save. The reason is that a work item kept in the main checkout must not name a record that the main checkout does not hold. `managing-work-items/references/work-tracker.md` says whether this project's work items are kept there.
 
 ### With no remote
 
@@ -191,4 +191,5 @@ The save is still finished. Say so in the reply in one line: "The main checkout 
 
 | File | Open it when |
 | --- | --- |
+| [references/shared-record-paths.md](references/shared-record-paths.md) | You check whether a file is a project document. The memory choice supplies this file. |
 | [references/recovery.md](references/recovery.md) | The push or the fast-forward is refused, the default branch got new commits, the repository has no `origin`, or the save cannot finish now. |

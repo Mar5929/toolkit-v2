@@ -221,12 +221,9 @@ A shared open question is an open question that more than one work item needs, k
 - Write Next action in the form that the work item template, `assets/work-item-template.md`, gives for a work item that waits. Put the ID or link of the shared open question in place of the Q-ID, which is the ID of a question in the work item. Never copy the question into a second shared record.
 - When the question is decided, continue from the work item's State.
 
-### The work item in the project's current state
+### Active work in the project's memory
 
-The project's current state is a short record of what is true now. "Project memory" in the root `AGENTS.md` says where it is kept and how to change it. Keep it true about active work: when work on a work item starts, when its next step or what it waits on changes, and when it closes, update the project's current state as that section says.
-
-- When the project's current state holds a line for each active work item, decide that line in this skill, in the form that the project's memory gives.
-- When the project's current state names where the next session starts, make it name the work item, in the same write or in the turn in which the session starts work on it: its ID and "read its Current state". A work item's Current state is the five lines at the top of the work item that say where it stands.
+When work on a work item starts, when its next step or what it waits on changes, and when it closes, follow `references/project-memory-steps.md`, section "Active work". The project's memory choice supplies that file.
 
 ### Never delete a part of a work item
 
@@ -271,11 +268,7 @@ This table names where to read or save each kind of record and which skill handl
 | An instruction for how the agent works | `.claude/rules/owner-preferences.md`, with the steps that "Project memory" in the root `AGENTS.md` names |
 | Merging a pull request | `merge-and-clean-up` |
 | Committing a change to documents only | `publish-docs` |
-| A Salesforce platform question | Salesforce's skills |
-| Salesforce: updating the component tracker | `sf-component-tracker` |
-| Salesforce: checking a deploy to a shared org | `sf-deploy-check` |
-| Salesforce: a production data change | `sf-data-change` |
-| Pull request text, and Salesforce release notes that go to a client | `humanizer`, as the root `AGENTS.md`, "Text that goes to another person", says |
+| Pull request text, and release notes that go to a client | `humanizer`, as the root `AGENTS.md`, "Text that goes to another person", says |
 
 ## References
 
@@ -287,7 +280,7 @@ This table names where to read or save each kind of record and which skill handl
 | [references/testing-loop.md](testing-loop.md) | The work item is in the Testing Loop. |
 | [references/closing.md](closing.md) | The work item is in Reflecting, is being marked Done or Cancelled, or was closed by the owner by hand. |
 | [references/deploying.md](deploying.md) | The work item is in Deploying. |
-| [references/salesforce-deploying.md](salesforce-deploying.md) | You deploy in a Salesforce project. |
+| [references/project-memory-steps.md](project-memory-steps.md) | Closing a work item, active work changes, or a wait must be recorded. The memory choice supplies this file. |
 | [references/requirements-analyst-brief.md](requirements-analyst-brief.md) | You start the helper that checks that the requirements are complete. |
 | [references/researcher-brief.md](researcher-brief.md) | You start a helper to look up a fact for planning or design. |
 | [references/design-architect-brief.md](design-architect-brief.md) | You start a helper to write one design option. |

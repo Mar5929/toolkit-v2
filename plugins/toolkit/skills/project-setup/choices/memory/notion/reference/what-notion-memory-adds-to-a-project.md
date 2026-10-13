@@ -5,6 +5,7 @@ Use this reference when copying the Notion memory choice and recording its setti
 | Kind | What setup adds |
 | --- | --- |
 | Coding-agent skill | `files-to-add/.claude/skills/managing-project-memory/` provides a short retrieval and capture procedure with focused destination references. |
+| Steps inside other skills | `files-to-add/` also adds `references/project-memory-steps.md` inside `managing-work-items` and `handoff`, `references/record-decision.md` and `references/update-system-doc.md` inside `filing-project-records`, and `references/shared-record-paths.md` inside `publish-docs`: the steps of those skills that depend on Notion memory. |
 | Librarian skill | `files-to-add/.claude/skills/maintaining-notion-wiki/` provides reconciliation, schemas, verified writes, metadata and recovery. |
 | Published librarian package | Project Wiki holds a Librarian processing skill entry, focused references and filled Project context and connections. [Publication steps](librarian-package.md) verify cloud or local access. |
 | Shared Notion access | `choices/notion-shared/files-to-add/` supplies `using-notion-cli` and `notion-records.md`, once even when the tracker also uses Notion. |

@@ -8,6 +8,7 @@ This file lists what setup adds to a project that keeps its work items in local 
 | --- | --- |
 | Files and folders | Copy `choices/work-items/local/files-to-add/` into the project. It holds `PROJECT-ROADMAP.md`, and `work-items/` with its guide, `PROJECT-TASKS.md`, and the templates for a work item and its design. |
 | Files inside a skill | The same folder adds five files inside `managing-work-items`, which every project has. `references/work-tracker.md` is the one that the skill opens first. |
+| Lines in `.gitignore` and `.ignore` | Add `/work-items/` to `.gitignore`, so Git does not track the folder, and `!/work-items/` to `.ignore`, so the search tools still read it. Add each line only when the file lacks it. |
 | Settings | Nothing. |
 | `PROJECT.md`, "Toolkit settings" | Write `local` on the Tracker line. Add this line below the Memory line, with the prefix that the owner confirmed: ``- Work item ID prefix: `WI` `` |
 | Text in `AGENTS.md` | Six rows in the "Project map" table. "The text in AGENTS.md" below gives them. |

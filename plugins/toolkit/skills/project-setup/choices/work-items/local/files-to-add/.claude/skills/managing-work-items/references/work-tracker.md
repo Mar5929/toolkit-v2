@@ -54,6 +54,19 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
 - A work item that the owner made by hand can still hold the template's example rows and example tasks. Never count an example row or an example task as real.
 - Use the `grep -r` commands as the reference files write them. In zsh, a `*` pattern that matches nothing stops the whole command.
 
+## Writing a record's ID in a work item
+
+A local work item is kept in the main checkout, so a record that it names must be there. The main checkout is the project's main folder, the first path that `git worktree list` prints.
+
+- Write the ID of a record that `filing-project-records` saved only after `publish-docs` reports that the main checkout holds the save.
+- When `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item yet. `filing-project-records`, section "When to write the ID", says what to do in its place.
+
+A work item's design is its `DESIGN.md`, made from `assets/design-template.md`.
+
+## How a helper opens a work item by ID
+
+Find the file under `work-items/` in the main checkout whose front matter says `id: WI-014` (for example `grep -rlE '^id: *"?WI-014"? *$' <main checkout>/work-items`; the value may be in quotes). The front matter is the block of fields at the top of the file. The design of the work item is `DESIGN.md` in the same folder.
+
 ## Related work
 
 | For | Use |

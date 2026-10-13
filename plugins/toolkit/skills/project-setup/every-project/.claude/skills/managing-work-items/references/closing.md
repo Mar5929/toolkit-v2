@@ -41,48 +41,7 @@ After the checklist, do one of these:
 
 The Moved up line is a line in the work item's Overview. It records what the whole project keeps from this work item: the shared decisions, system rules, and project terms that it added or changed, and the lessons that it moved up.
 
-1. List what the whole project may need to keep. Read the work item's Questions and Answers rows marked Decision? `yes`, its design, its Related items line, its verified implementation evidence, and its Notes, "Lessons not proven yet". Put these five kinds of thing on the list:
-   - Each decision that more than one work item needs, and whose row does not end "Filed as <the record's ID or link>". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs a decision.
-   - Each rule that several work items rely on, that this work item added, changed, or retired, and that the project's system rules do not show yet.
-   - Each rule that this work item may have built. Such a rule is one whose behaviour a requirement of this work item built or changed. It is either a rule already on this list, or an approved rule that the project's system rules do not yet mark as built.
-     - A work item that only names, explains, or documents a rule did not build what the rule says.
-     - A cancelled work item did not build what any rule says.
-     - `filing-project-records`, step "update a system document", holds the conditions for when a work item built what a rule says, and it checks them.
-   - Each project term that this work item added or changed, and that the project's terms do not show yet.
-   - Each lesson that has no outcome at the end of its line. Step 5 gives the outcomes. Before you list a lesson, search and read relevant memory, as "Project memory" in the root `AGENTS.md` says. When the lesson was seen before, in another work item or another session, list it with the dates it was seen.
-2. When the list holds a decision, a rule to add, change, or retire, a project term, or a lesson, ask the owner once. When the list holds only rules that the work item may have built, or holds nothing, ask no question. Also ask no question for an item when the reference of the `filing-project-records` step that files it says that the item needs no approval from the owner to be filed.
-   - Add one Questions and Answers row that shows each line of the list with your recommendation and a one-line reason.
-   - For a lesson, the owner chooses one of three: keep it for the whole project, keep it as not proven, or drop it. Recommend keeping a lesson for the whole project when it was seen before.
-   - Set `waiting_on` to the owner, and ask whether the owner agrees to keep each listed item for the whole project, with the proposed outcome.
-   - Filing a record does not approve its content. A new decision, a changed requirement, and a harness instruction still need their own approvals.
-3. File what the owner agreed to, and each item that needs no approval. This table says what to do with each thing.
-
-   | What it is | What to do |
-   | --- | --- |
-   | A decision or an open question | `filing-project-records`, step "record a decision" |
-   | A rule to add, change, or retire | `filing-project-records`, step "update a system document" |
-   | A rule that this work item may have built | `filing-project-records`, step "update a system document". That step checks the conditions and, when they are met, marks the rule as built, with this work item's ID. |
-   | A project term | `filing-project-records`, step "update a system document" |
-   | A lesson that the owner agreed to keep for the whole project, and that is about the system or the project | `filing-project-records`, step "record a decision" |
-   | A lesson that the owner agreed to keep for the whole project, and that is about how to do a step, such as a deploy, a data load, or a test, or about how the agent works | Write it as a standing instruction in `.claude/rules/owner-preferences.md` or the rule it applies to, with the owner's approval, the source, and the date. Use the steps that "Project memory" in the root `AGENTS.md` names. Memory may also keep its history or a pointer to it; a memory record never replaces the instruction. |
-   | A lesson that is kept as not proven | Keep it in memory, as "Project memory" in the root `AGENTS.md` says, marked as not proven, with the work item's ID and the dates it was seen. When a lesson does not qualify for memory, keep it in the work item. |
-
-4. Do this step only when work items are local files: check that the main checkout holds each save. The main checkout is the project's main folder, which is the first path that `git worktree list` prints. With each ID, `filing-project-records` reports whether the main checkout holds the save of that record. Steps 5 and 6 write those IDs into the work item. A local work item is kept in the main checkout, so the record that it names must be there.
-   - When the main checkout does not hold a save, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records the wait in the project's current state. The record's ID stays out of the work item until the main checkout holds the save.
-   - When the main checkout holds the save, continue from this step.
-5. Write each lesson's outcome at the end of its line. Choose the outcome that describes what was saved, with the record's real ID or link in place of the prompt:
-   - "Moved up: <the record's ID or link>."
-   - "Moved up: owner-preferences.md."
-   - "Kept in memory."
-   - "Kept in work item."
-   - "Dropped (Q-12)."
-6. Fill the Moved up line.
-   - Name every shared decision and every system rule that this work item added or changed. Name each one by its ID or link, and say what happened to it.
-   - Name every project term that this work item added or changed, by the term.
-   - When `filing-project-records` said that a record still waits to be filed in its final place, name the link it gave and say so. Name the final place only after the filing is verified. Closing does not wait for that filing.
-   - Include the records that were filed before this step. The Questions and Answers rows of those records end "Filed as <the record's ID or link>".
-   - When there are none, write "Nothing: <the reason>."
-   - Add a Recent History row that names the Q-ID of the question from step 2, or says that no question was needed.
+Follow `references/project-memory-steps.md`, section "Filling the Moved up line". The project's memory choice supplies that file, because where these records are kept depends on it.
 
 ## Marking Done
 
@@ -98,10 +57,7 @@ For a small work item on the short path, read "Closing a small work item" below,
    - Next action: "None. Finished."
    - Waiting on: "Nothing."
    - Blockers: "None."
-5. Update the project's current state, which is the project's short record of what is true now, as "Project memory" in the root `AGENTS.md` says.
-   - Remove from it everything about this work item that is no longer true, such as the work item's own line, a line about what is coming up or waited on for it, and a note that the next session starts with it.
-   - Keep any follow-up that remains in the work tracker.
-   - Review memory for lasting lessons from the work item, as "Project memory" says.
+5. Follow `references/project-memory-steps.md`, section "When a work item closes".
    - For a top-level work item, check its project phase, as `references/lifecycle-rules.md`, section "Levels", says. That section says what to ask the owner when the last open work item in a project phase is closed.
 6. After the owner's "no", record the owner's words, turn each problem into a task, and move the work item back to Building. After the fix, run the Testing Loop again and fill the Moved up line again, before you ask again.
 7. Report to the owner whether the work reached the default branch, what was deployed, and what was kept for the whole project: what the Moved up line says, and each lesson whose outcome starts "Moved up:". End the report with what the section "Leftover branches and worktrees" below asks the owner. When that section leaves nothing to ask, end with "Tell me the next thing to build."
@@ -110,18 +66,18 @@ For a small work item on the short path, read "Closing a small work item" below,
 
 Use this section for a small work item that takes the short path. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is and gives the steps of the short path.
 
-On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the question in "Filling the Moved up line", step 2, when that step asks one, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
+On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the question that "Filling the Moved up line" asks the owner, when it asks one, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
 
-1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then make the list in "Filling the Moved up line", step 1.
+1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then do what "Filling the Moved up line" says to do before the owner is asked.
 2. Ask the closing question. Add a Questions and Answers row asking the owner to approve the result and mark the work item Done, with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
-   - When "Filling the Moved up line", step 2, would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
+   - When "Filling the Moved up line" would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
    - When a merge, a deploy, or a data load is still to come, say what it is and who runs it, and say that the owner's yes to the closing question does not cover it.
    - Ask one clear question covering approval of the result, the listed outcomes to keep for the whole project, and marking the work item Done.
 3. After the owner's yes, do these four things in order:
    - Save the owner's words and the date in the row, and set `result_approved` to `YYYY-MM-DD by <name>`.
    - Add one answered Questions and Answers row for each line that you showed under "To keep for the whole project", because the yes also covers those lines. The row holds the line, your recommendation, and the owner's words.
    - When a merge, a deploy, or a data load is still to come, move the work item to Deploying, and follow `deploying.md`.
-   - Follow "Marking Done". The owner's yes has already answered the question in "Filling the Moved up line", step 2, when that step asks one, for the lines that you showed, and the question in "Marking Done", step 3. Do not ask those questions again. Where those steps name their question's Q-ID, name the Q-ID of the closing question.
+   - Follow "Marking Done". The owner's yes has already answered the question that "Filling the Moved up line" asks, when it asks one, for the lines that you showed, and the question in "Marking Done", step 3. Do not ask those questions again. Where those steps name their question's Q-ID, name the Q-ID of the closing question.
 4. After the owner's "no" or a change, record the owner's words in the row, add a task for each problem that the owner named, and move the work item back to Building. Continue with the short path from its step 4, in `references/lifecycle-rules.md`, section "A small work item", and ask the closing question in a new row. That section also says what to do when the work item stops being small.
 
 ## Cancelling a work item
@@ -134,7 +90,7 @@ Use this section when the owner cancels a work item.
 4. Set the State to Cancelled and `waiting_on` to `none`. Rewrite the work item's Current state. Write these two of its lines as follows:
    - Where it stands: "Cancelled on `YYYY-MM-DD`: <the owner's reason>."
    - Next action: "None. Cancelled."
-5. Update the project's current state, as step 5 of "Marking Done" says.
+5. Do step 5 of "Marking Done".
 6. Leave the work item's open pull request, its branch, and its worktree as they are until the owner says what to do with them. Delete nothing. The offer in "Leftover branches and worktrees" covers only a merged branch, so it does not cover the unmerged branch of a cancelled work item.
 
 ## Done or Cancelled by hand

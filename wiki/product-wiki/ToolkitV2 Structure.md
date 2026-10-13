@@ -45,7 +45,7 @@ Every project gets the same layout, whatever the owner answers in the interview.
 | `SOUL.md` | How the owner wants the agent to work with the owner and the team. It starts as the toolkit's default, and the interview fits it to the project. |
 | `DECISIONS.md` | Each decision that more than one piece of work needs, with an ID, and each open question. Only a project with local or Hindsight memory has it; a Notion-memory project keeps these in its Project Wiki. |
 | `README.md` | The project's one README. It is at the root, and no other folder has one. |
-| `.gitignore`, `.ignore` | `.gitignore` keeps `work-items/` and `memory/` out of Git. `.ignore` lets the search tools read those two folders all the same. |
+| `.gitignore`, `.ignore` | `.gitignore` keeps `working-files/` out of Git; local work items and local memory add their folders. `.ignore` lets the search tools read those folders all the same. |
 
 ### The folders for the project's records
 

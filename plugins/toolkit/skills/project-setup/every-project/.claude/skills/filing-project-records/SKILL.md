@@ -65,14 +65,11 @@ The work item template gives the place for each ID:
 
 ### When to write the ID
 
-The time depends on where the project keeps its work items.
+`managing-work-items/references/work-tracker.md`, section "Writing a record's ID in a work item", says when the ID may be written. When it says to wait, write no ID in the work item. Do this in its place:
 
-- When work items are in Notion or GitHub, write the ID once the save is on the default branch.
-- When work items are local files, write the ID only after `publish-docs` reports that the main checkout holds the save. A local work item is kept in the main checkout, so the record that it names must be there.
-- When work items are local files and `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item. Do this in its place:
-  - Record the wait in the project's current state, as "Project memory" in the root `AGENTS.md` says. Name the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
-  - Tell the owner the same.
-  - When the main checkout's files hold the record, write the ID in each work item, and remove the wait from the project's current state.
+- Record the wait as `managing-work-items/references/project-memory-steps.md`, section "Recording a wait", says. Name the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
+- Tell the owner the same.
+- When the record may be written, write the ID in each work item, and remove the recorded wait.
 
 ### A work item that must follow a record that already exists
 
