@@ -76,7 +76,7 @@ Skill descriptions tell the agent which procedure applies. The selected `SKILL.m
 | Hook command | When it runs | What it supplies |
 | --- | --- | --- |
 | `session-start.mjs` | At session start or compaction | Current State and the local memory index when applicable; a reminder to reread active records after compaction. |
-| `prompt-reminder.mjs` | On an owner message | The owner-request rule and reminders to use relevant skills and the chosen memory instructions. |
+| `prompt-reminder.mjs` | On an owner message | A reminder to use the project's relevant skills and, when the message has a keep or decision phrase, where to file it under the chosen memory setup. |
 | `codex-after-commit.mjs` | After a Codex commit | A reminder to keep the work item current. |
 
 Host settings also remind the agent to update a work item after helper work. Hooks remind the agent; they do not decide what to save or approve a result.
