@@ -1,6 +1,24 @@
 Guiding Design Principles - This is how every agent should be solutioning and adding functionality to the toolkit.
 
 1. The toolkit is an operating system and framework for AI agents. It provides a set of harness tools and instructions (like skills, rules, agents.md, system context, hooks, etc.) to tell the agent the owner’s procedures and processes that the agent should follow. The goal of the toolkitv2 is to create a harness around the agent so that it stays free to use its intelligence, reasoning, critical thinking, etc., but it just follows the ways of working that the owner defined (like how to manage work items, where and when to store files and why they are stored a certain way, how to keep things tidy, what is considered memory, what external apps the user uses on a project, etc. etc.)
+   1. A skill that the toolkit ships holds the owner's process: the steps, their order, the policies, the
+      templates, and anything that must be exact. It trusts the agent to work out
+      the rest. Example: a step says "When you create or update a work item, fill
+      in every relevant field correctly." It does not list every field, unless a
+      field needs a rule the agent could not work out by itself.
+      1. Process is clear. A reader can see the steps and their order.
+      2. Right level of detail. Exact where it must be exact (a command, a name,
+         an ID form, words the owner must see). General everywhere else. No lists
+         of every field, case, or example the agent could work out.
+      3. General rules, not case-by-case lines. No sentence added for one small
+         situation (again - unless more detail is truly necessary).
+      4. Does not tell the agent how to think or reason.
+      5. No count or limit where the agent should use judgment.
+      6. No duplication. Nothing repeats what AGENTS.md, a rule, the output style,
+         or another skill already says.
+      7. Small load on the agent's context. The SKILL.md is short, and detail sits
+         in a reference file that opens only when needed.
+      8. Follows the document clarity standard.
 2. Solutions should always evaluate the out of the box mechanisms for the request (like skills, hooks, instruction files, etc.)
 3. Solutions should always be able to apply to any project that uses the toolkit. Nothing the toolkit ships names a single project. A fact that is true for only one project, or only some, is asked at setup and written in that project’s own files.
 4. Every project that uses the toolkit will have this project scaffolding, set of shared rules, and skills and hooks installed. The toolkitv2 installation will then run through an interview with the user to make sure the user has certain machine-wide or project specific things setup properly (such as MCPs, tools, plugins, etc.)
@@ -8,5 +26,5 @@ Guiding Design Principles - This is how every agent should be solutioning and ad
 6. Keeping shared text free of setup choices must never make it vaguer. When a step differs by choice, each choice supplies a file with its exact steps, and the shared skill points to that file. The shared skill does not restate the step in general words, because general words lose the exact detail that each choice needs.
 7. A skill holds your procedures, policies, rules, templates, and the order of the steps. It does not tell the agent how to reason. Every instruction the toolkit ships describes the owner's ways of working: procedures, templates, where things are kept, and details of the owner's outside tools, such as where to find things in Notion. An instruction does not add a rule that the agent already follows on its own judgment, such as asking before an action that cannot be undone; a point where the owner has asked to approve, such as a merge into the default branch, is one of the owner's ways of working and stays.
 8. Projects that have the toolkitv2 installed will use the framework and structure of the toolkit but could always layer on extra stuff or tweak certain things to meet the needs of the project. This should not be an issue. That is why we are trying to avoid writing custom scripts or programs to check for project setup, configuration, etc. as much as possible because it could cause the project to hit roadblocks because the toolkitv2 would restrict any possible deviation from what it is checking for. That is why we are opting to define the general rules, context, skills, and hooks in plain English instructions and guidelines so the agent remains free to reason and is equipped to handle anything that may come up on a project. We can still make the project follow the toolkitv2’s framework and guidelines while allowing the project to layer on certain extra rules or add tools, tweak settings, etc.
-    1. An example would be: In the toolkit we ask the owner (aka user) where they want to store and track memory for the project. If the user chooses hindsight, great, we just provide the agent with a simple setup file that outlines what the agent should walk the owner through to make sure the memory bank is setup and maybe list out the default settings that the owner chose in the toolkitv2 blueprint that every project starts with. During that interview the user could say “for this project I think we should use this setting” or something like that.
+   1. An example would be: In the toolkit we ask the owner (aka user) where they want to store and track memory for the project. If the user chooses hindsight, great, we just provide the agent with a simple setup file that outlines what the agent should walk the owner through to make sure the memory bank is setup and maybe list out the default settings that the owner chose in the toolkitv2 blueprint that every project starts with. During that interview the user could say “for this project I think we should use this setting” or something like that.
 9. Follow the official Claude Code and Codex pages, and use what they already provide.
