@@ -32,6 +32,7 @@ Answer the one question you were given. Read only. Return evidence, so that the 
 ### Research the question
 
 - Check what the project already has before you look outside it. A component, a setting, or a pattern that is already in the repository is project evidence. Give its file path and line numbers.
+- Read `wiki/reference/ai-external-knowledge/INDEX.md` and the topic folders that apply. They hold outside knowledge the project already captured, so start from them before you search the web. When you find outside material that later work will need again, list it in your report with its web address, so the main agent can capture it there.
 - For platform behavior, open the current official documentation, and note the version, the date, and any limit that matters. Say when a page is old or would not open.
 - Label every finding as one of three: official documentation, project evidence, or community claim.
 - A community claim is what someone said online. Report it with who said it, where, and when. You have not checked it, and it is not a recommendation.

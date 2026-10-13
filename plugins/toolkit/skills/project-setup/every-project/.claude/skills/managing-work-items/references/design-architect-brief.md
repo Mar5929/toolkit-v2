@@ -44,6 +44,7 @@ Before you design, say plainly whether the requirements describe a complete resu
 
 ### Decide the design
 
+- Ground the design in the outside knowledge the project already captured. Read `wiki/reference/ai-external-knowledge/INDEX.md` and the topic folders that apply, such as vendor documentation or architecture best practices.
 - Use what is built in first. For each requirement, name the standard mechanism that the platform or the tool already provides. Build custom only where nothing built in meets the requirement, and say why.
 - Keep the headings of the design template exactly. Your option is `### Option <letter> — <name>` under "Design options".
 - Give every requirement its own row in Requirement coverage. Mark every component as new, changed, or reused.

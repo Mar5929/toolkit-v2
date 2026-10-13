@@ -69,36 +69,5 @@
     ]
   },
   "outputStyle": "Plain English",
-  "permissions": {
-    "deny": [
-      "Bash(git add -A)",
-      "Bash(git add -A *)",
-      "Bash(git add --all)",
-      "Bash(git add --all *)",
-      "Bash(git add .)",
-      "Bash(git add . *)",
-      "Bash(git commit -a *)",
-      "Bash(git commit -am *)",
-      "Bash(git commit --all *)",
-      "Bash(git commit --no-verify *)",
-      "Bash(git commit * --no-verify)",
-      "Bash(git commit * --no-verify *)",
-      "Bash(git commit -n *)",
-      "Bash(git commit * -n)",
-      "Bash(git commit * -n *)",
-      "Bash(git push --force *)",
-      "Bash(git push * --force)",
-      "Bash(git push * --force *)",
-      "Bash(git push -f *)",
-      "Bash(git push * -f)",
-      "Bash(git push * -f *)",
-      "Bash(git push --force-with-lease*)",
-      "Bash(git push * --force-with-lease*)"
-    ],
-    "ask": [
-      "Bash(git reset --hard *)",
-      "Bash(git clean *)"
-    ]
-  },
   "skillListingBudgetFraction": 0.03
 }

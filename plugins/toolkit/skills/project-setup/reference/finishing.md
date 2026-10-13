@@ -57,7 +57,7 @@ Go through these parts:
 
 ## Instructions the owner gives during setup
 
-When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. The owner's answers to question 9 are such instructions. Two more examples are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as the step on the org aliases in the Salesforce setup file, [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md), says.
+When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Examples are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as the step on the org aliases in the Salesforce setup file, [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md), says.
 
 - Write the instruction as one list line in the owner's words.
 - Put the line under an area that the file's layout comment names. Use General when no area fits.
@@ -73,13 +73,13 @@ A setup answer is not an instruction. These answers never go in `owner-preferenc
 
 `SOUL.md` is the owner's own description of how the agent should work with the owner and the project team. Every project gets the file.
 
-- Fill each prompt with the owner's own words, from question 10, and show the owner the text.
+- Fill each prompt with the owner's own words, from question 9, and show the owner the text.
 - Delete the file's fill-in guide after the owner's yes to the text.
 - When the owner wants no `SOUL.md` in this project, delete the file.
 
 ## The roadmap
 
-The roadmap is the project's phases: what each phase is for, which phases are done, which phase the project is in now, and what comes next. Write it from the owner's answers to question 12, in the place where the project keeps its work items.
+The roadmap is the project's phases: what each phase is for, which phases are done, which phase the project is in now, and what comes next. Write it from the owner's answers to question 11, in the place where the project keeps its work items.
 
 The setup file of the work items choice says where the roadmap is kept, in its step for the finish of setup. Write it straight into that place, as [SKILL.md](../SKILL.md), Step 4, says for every record of a setup.
 
@@ -96,11 +96,11 @@ With Notion memory, verify the published librarian package and selected host acc
 With local memory, keep the five headings concise and retain what a later session needs. The list below says what to write on the "Last updated" line and under each of the five headings:
 
 - Last updated: the date, "setup", and "agent".
-- Now: the work that is going on now, from question 12, or "None."
+- Now: the work that is going on now, from question 11, or "None."
 - Coming up: each dated event or deadline that the owner named, or "None."
 - Waiting on: one line for each of the owner's steps that is still open. "The owner's steps" below lists the steps. Each line starts with "Owner:" and ends with "Setup step; remove this line when it is done."
 - Standing jobs and shared files: "None."
-- Next session starts with: the next step on the roadmap, from question 12.
+- Next session starts with: the next step on the roadmap, from question 11.
 
 Then delete the file's fill-in guide comment, as the comment says.
 

@@ -87,10 +87,9 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 6 | Where is memory kept? Then: is Claude Code's own memory on in this project? | Local files, or Notion when work items are in Notion. Claude Code's own memory: off. | The "Memory" line of "Toolkit settings", `autoMemoryEnabled` in `.claude/settings.json`, and Step 5 |
 | 7 | Is this a Salesforce project? | Yes when the folder holds `sfdx-project.json`, otherwise no | Step 5 |
 | 8 | Which outside tools and services does this project use? | The ones that the folder and the earlier answers show | One line for each under "Resources and project paths" in `PROJECT.md` |
-| 9 | What may the agent do without asking? | The toolkit's default in [reference/setup-interview.md](reference/setup-interview.md), "Agent permissions (question 9)" | `.claude/rules/owner-preferences.md` |
-| 10 | How should the agent work with the owner on this project? | The `SOUL.md` that the full layout brought | `SOUL.md` |
-| 11 | Is there material to start from? | None | `sources/` |
-| 12 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
+| 9 | How should the agent work with the owner on this project? | The `SOUL.md` that the full layout brought | `SOUL.md` |
+| 10 | Is there material to start from? | None | `sources/` |
+| 11 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
 
 The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one. A Hindsight project has none: where the work stands is in the place where work items are kept.
 
@@ -149,8 +148,8 @@ Add the files of one work items choice and of one memory choice only. Each of th
 [reference/finishing.md](reference/finishing.md) gives the detail of each part.
 
 1. Check that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
-2. Write the roadmap from question 12 in the place where work items are kept.
-3. With local or Notion memory, write the first lines of the project's Current State. They say where the project stands, from question 12. A Hindsight project has no Current State: where the work stands is in the place where work items are kept.
+2. Write the roadmap from question 11 in the place where work items are kept.
+3. With local or Notion memory, write the first lines of the project's Current State. They say where the project stands, from question 11. A Hindsight project has no Current State: where the work stands is in the place where work items are kept.
 4. Check that the setup works: the settings files are valid, the session-start command prints the project's Current State when the project has one, and each service that the owner chose answers.
 5. Tell the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
 6. Report what was set up, what was made outside the project folder, and what is still open.

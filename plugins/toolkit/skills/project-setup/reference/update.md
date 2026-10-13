@@ -130,7 +130,7 @@ Add each line the section lacks, keeping the setup copy's labels. Keep the value
 
 ### Files that hold the owner's facts
 
-Never overwrite the rest of `PROJECT.md`, `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, documents in `wiki/product-wiki/`, `sources/INDEX.md`, or `wiki/reference/outside-docs/INDEX.md`. Name only the toolkit's structural changes, such as a new section, changed heading, or changed guide comment. Make those changes after the owner's yes, keeping the facts and records.
+Never overwrite the rest of `PROJECT.md`, `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, documents in `wiki/product-wiki/`, `sources/INDEX.md`, or `wiki/reference/ai-external-knowledge/INDEX.md`. Name only the toolkit's structural changes, such as a new section, changed heading, or changed guide comment. Make those changes after the owner's yes, keeping the facts and records.
 
 ### Rules and other toolkit files
 
@@ -197,6 +197,7 @@ A project may hold something that an earlier setup put there and that the new se
 - A skill, a rule, or a hook that the owner added is the owner's. When you cannot tell whether a thing came from the toolkit or from the owner, leave it and ask.
 - When the thing holds a choice or a line of the owner's, show it to the owner, and put it in the place that holds such a choice now before you remove the old one. For example, a choice about what an agent may do in a Salesforce org goes in `.claude/rules/salesforce-agent-permissions.md`, and an instruction for how the agent works goes in `.claude/rules/owner-preferences.md`.
 - Remove a hook command and its entry in the settings files in the same change, with any group or event that the entry leaves empty.
+- Earlier versions put Git commands in `.claude/settings.json`, under `permissions.deny` and `permissions.ask`, such as `Bash(git add -A)`, `Bash(git push --force *)`, and `Bash(git reset --hard *)`. The toolkit no longer ships them. List them as one row, and remove them after the owner's yes. The entries for a production Salesforce org stay. Remove `permissions` only when it is left empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
 - Renamed record folders follow [local wiki layout guidance](local-wiki-layout.md), not obsolete-file removal. This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
 

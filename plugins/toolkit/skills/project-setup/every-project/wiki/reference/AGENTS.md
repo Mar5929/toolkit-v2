@@ -1,20 +1,27 @@
 # wiki/reference/: material that is not the project's own decision
 
-This folder holds two kinds of material the project reads but did not decide: documentation captured from outside the project, and the record of how the existing system works today. Never use a page here as a decision or a rule of this project: what the project decided is in `wiki/product-wiki/` or `DECISIONS.md`.
+This folder holds two kinds of material the project reads but did not decide: knowledge captured from outside the project, and the record of how the existing system works today. Never use a page here as a decision or a rule of this project: what the project decided is in `wiki/product-wiki/` or `DECISIONS.md`.
 
 ## Folders
 
 | Folder | What goes in it |
 | --- | --- |
-| `outside-docs/` | Documentation captured from outside the project, such as a vendor's guide, a product's API reference, or a release note. One folder per topic. |
-| `outside-docs/INDEX.md` | One row per topic folder. |
+| `ai-external-knowledge/` | Knowledge captured from outside the project, such as a vendor's guide, a product's API reference, a release note, or architecture best practices. One folder per topic. |
+| `ai-external-knowledge/INDEX.md` | One row per topic folder. |
 | `current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. One file per area of the system. |
 
 Never put any of these here: a client file, a meeting note, or a transcript, which go in `sources/`; a project decision; an instruction for agents.
 
-## The form of a topic folder in outside-docs/
+## How the agent uses ai-external-knowledge/
 
-- `outside-docs/<topic>/` holds the captured pages as Markdown, and one `SOURCE-RECORD.md`.
+The agent uses this folder to ground itself in a topic before it solves a problem, designs a solution, or answers a question about that topic. The captured pages let it work as a specialist from current, cited material instead of from what it remembers.
+
+- Before you research or design, read `ai-external-knowledge/INDEX.md` and the topic folders that apply.
+- When you find outside material that later work on the project will need again, capture it here.
+
+## The form of a topic folder in ai-external-knowledge/
+
+- `ai-external-knowledge/<topic>/` holds the captured pages as Markdown, and one `SOURCE-RECORD.md`.
 - `SOURCE-RECORD.md` gives, for each page: the publisher, the web address, the date it was captured, and what it covers.
 - The row in `INDEX.md` gives: the topic folder, the source and subject, the capture date, and when to consult it.
 

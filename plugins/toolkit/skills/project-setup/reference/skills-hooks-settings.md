@@ -57,7 +57,7 @@ The owner's answer about Claude Code's own memory is one line in `.claude/settin
 These rules apply every time the toolkit's settings meet a settings file that already exists: in a project that had its own settings file before setup, in an update, and when the memory choice changes.
 
 - **Add what is missing.** Add each entry and each plain value (text, a number, true or false) that the file does not have.
-- **Never delete any other entry.** Apart from the toolkit's own hook handlers, which the rule on replacing them lists below, every entry stays: the permission rules, the Git deny and ask rules, the entries of `permissions.deny` for a production Salesforce org, and the hooks that the owner added.
+- **Never delete any other entry.** Apart from the toolkit's own hook handlers, which the rule on replacing them lists below, every entry stays: the permission rules, the entries of `permissions.deny` for a production Salesforce org, and the hooks that the owner added.
 - **Ask before you change a value.** When a file that the project already had holds a plain value that differs from the toolkit's value, ask the owner. In a file that the copy just brought, take the toolkit's value.
 - **Replace the toolkit's own hook handlers. Never keep an old one beside a new one.** A hook handler is one entry in a settings file that says what a hook runs. The toolkit's own hook handlers are:
   - a handler whose `args` or `command` names `session-start.mjs`, `prompt-reminder.mjs`, or `codex-after-commit.mjs`;
