@@ -268,7 +268,7 @@ This table names where to read or save each kind of record and which skill handl
 | An instruction for how the agent works | `.claude/rules/owner-preferences.md`, with the steps that "Project memory" in the root `AGENTS.md` names |
 | Merging a pull request | `merge-and-clean-up` |
 | Committing a change to documents only | `publish-docs` |
-| Pull request text, and release notes that go to a client | `humanizer`, as the root `AGENTS.md`, "Text that goes to another person", says |
+| Pull request text, and release notes that go to a client | `humanizer`, as the root `AGENTS.md`, "How to write text that goes to another person or is client/customer facing", says |
 
 ## References
 

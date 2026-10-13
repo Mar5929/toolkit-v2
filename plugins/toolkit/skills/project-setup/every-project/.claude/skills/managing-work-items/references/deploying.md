@@ -19,7 +19,7 @@ Open a pull request only when the work item changed files and the project has a 
 - `git -C <item worktree> rev-parse HEAD` must equal the commit that the checker passed, which Recent History names. When the head is a different commit, start the checker on the new head, as `testing-loop.md`, step 4, says. A pass on the new head is enough.
 - Push the branch, and never push with force. Set the pull request's base to the parent's branch for a sub-item, or the default branch for a top-level item. Open the pull request with its body in a file.
   - Write the title and the description in plain words, with no AI credit. Say what changed, why, how it was checked, and the work item's ID.
-  - Run the title and the description through `humanizer`, as the root `AGENTS.md`, "Text that goes to another person", says.
+  - Run the title and the description through `humanizer`, as the root `AGENTS.md`, "How to write text that goes to another person or is client/customer facing", says.
 - The merge must never close the work item, because only the owner marks it Done. `references/work-tracker.md` says whether and how to write the work item's ID in the pull request.
 - Record the pull request on the work item with `references/work-tracker.md`. It goes under the work item's Related items, unless that skill names another place. Add the Recent History row "Pull request #14 opened."
 

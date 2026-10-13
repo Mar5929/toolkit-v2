@@ -66,7 +66,7 @@ A rule is a short file that Claude Code loads in every session, or, when the rul
 | Rule                             | What it tells the agent                                                                                       |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `evaluate-the-owners-request.md` | Work out the goal behind a request and the best solution for the whole project before acting.                 |
-| `document-clarity-standard.md`   | How to write a document so that a reader new to the project understands it after one read. It loads only when the agent works on the project's documents, and `AGENTS.md` tells the agent to read it before writing any other document. |
+| `document-clarity-standard.md`   | How to write a document so that a reader new to the project understands it after one read. It loads only when the agent works on the project's documents. `AGENTS.md` tells the agent to follow it for every document and artifact. |
 | `shared-repository-work.md`      | How to work in a repository that other sessions also edit: branches, worktrees, and the check before a merge. |
 | `owner-preferences.md`           | The owner's "from now on" instructions for this project. It is the owner's own file from the first day.       |
 

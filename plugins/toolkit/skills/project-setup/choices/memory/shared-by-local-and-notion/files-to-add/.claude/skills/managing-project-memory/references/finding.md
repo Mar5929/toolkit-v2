@@ -44,5 +44,5 @@ Some remembered claims are about something that changes, such as a vendor, a pro
 
 ## Answering
 
-- Cite each source you use, as the root `AGENTS.md`, "How to write replies", says.
+- Cite each source you use.
 - When nothing covers the question, say "I don't know; nothing recorded covers that." Never guess.
