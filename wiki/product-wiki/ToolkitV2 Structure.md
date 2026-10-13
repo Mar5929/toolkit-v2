@@ -54,7 +54,7 @@ Every project gets the same layout, whatever the owner answers in the interview.
 | `wiki/product-wiki/`    | The description of the system the project builds or changes: `architecture.md`, `data-model.md`, `automation.md`, `security-model.md`, `constraints.md`, `glossary.md`, `integrations/` (one file per integration, from a template, listed in its `INDEX.md`), and `diagrams/`. |
 | `sources/`   | Every document or message the project receives from someone, kept unchanged. `INDEX.md` lists them, one row per source.                                                                                                                                              |
 | `delivery/`  | What the project hands over or ships: `releases/`, `deployments/`, `migrations/`, and `client-handoffs/`.                                                                                                                                             |
-| `wiki/reference/` | Material to look things up in: `current-system/` for the system as it is before the project changes it, and `outside-docs/` for copies of outside documentation, listed in its `INDEX.md`.                                                                       |
+| `wiki/reference/` | Material to look things up in: `current-system/` for the system as it is before the project changes it, and `ai-external-knowledge/` for knowledge captured from outside the project, such as vendor documentation or architecture best practices, which the agent reads to ground itself in a topic, listed in its `INDEX.md`.                                                                       |
 | `tests/`     | The test plan template.                                                                                                                                                                                                                               |
 
 Each of `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/` has its own `AGENTS.md`, which says what belongs in that folder and how a record there is written.
@@ -109,7 +109,6 @@ A fourth hook has no file of its own: after a helper agent runs, a reminder to u
 - no AI credit on a commit or a pull request;
 - Claude Code's own memory off, unless the owner turns it on in the interview;
 - the Plain English output style;
-- the forbidden Git commands (`git add -A`, `git commit -a`, skipping the commit check, a force push), and a question before `git reset --hard` and `git clean`;
 - the four hooks above;
 - more room for the list of skills.
 

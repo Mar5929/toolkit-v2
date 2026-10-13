@@ -38,7 +38,7 @@ This repository also has a local [writing-harness-files](.claude/skills/writing-
 
 Open Claude Code or Codex in the project's main folder and say **“set up this project.”** The agent examines what is already there and asks the interview questions in order, one question at a time.
 
-The interview records the project name, purpose, people and authority, systems and production environments, work tracker, memory system, Salesforce needs, outside tools, permissions, working relationship, source material, and roadmap. For each selected module, the agent shows its defaults and records any changes the owner wants.
+The interview records the project name, purpose, people and authority, systems and production environments, work tracker, memory system, Salesforce needs, outside tools, working relationship, source material, and roadmap. For each selected module, the agent shows its defaults and records any changes the owner wants.
 
 The agent preserves existing files and records. Before replacing an existing file, it shows the difference and gets approval. Before creating or changing something outside the project folder, it gets approval for the destination and the named change. Examples include Notion pages, GitHub labels, a Hindsight bank, and host configuration.
 

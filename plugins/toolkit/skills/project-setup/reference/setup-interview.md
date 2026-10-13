@@ -45,18 +45,14 @@ After the owner has said where memory is kept, ask about Claude Code's own memor
 
 After the owner's answer, check that each tool is installed and signed in on this computer, and tell the owner what is missing.
 
-## Agent permissions (question 9)
-
-The toolkit's default is in three places of the project: "Ask the owner first" in `AGENTS.md`, "Committing and merging" in `.claude/rules/shared-repository-work.md`, and the Git commands that `.claude/settings.json` refuses or asks about. Tell the owner the default in a few plain lines. Examples to ask about are a push, a merge, a deploy, and sending a message. Write each thing the owner wants different as one line in `.claude/rules/owner-preferences.md`. [reference/finishing.md](finishing.md), "Instructions the owner gives during setup", gives the form of a line.
-
-## Working with the owner (question 10)
+## Working with the owner (question 9)
 
 Every project has `SOUL.md`. Fill it with the owner's own words, show the owner the text, and change it until the owner says yes.
 
-## Starting material (question 11)
+## Starting material (question 10)
 
-File each document, link, and note that the owner gives as a source, in the form that the project's `sources/AGENTS.md` gives. Read the material before you ask question 12.
+File each document, link, and note that the owner gives as a source, in the form that the project's `sources/AGENTS.md` gives. Read the material before you ask question 11.
 
-## Project roadmap (question 12)
+## Project roadmap (question 11)
 
 Work with the owner until you understand the whole roadmap: the phases of the project, what each phase is for, what is already done, which phase the project is in now, and what comes next. A project that is just starting has a roadmap too, even when it holds only the first phase or two. The work starts from the roadmap. Step 6 says where to write it.

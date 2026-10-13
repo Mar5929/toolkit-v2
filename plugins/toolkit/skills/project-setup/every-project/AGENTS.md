@@ -73,7 +73,7 @@ Existing projects keep their confirmed record homes until a reviewed migration i
 | `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk. Data files and backups are never committed. | As for `delivery/`. |
 | `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for `delivery/`. |
 | `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions are in `wiki/product-wiki/` and `DECISIONS.md`. | Commit with `publish-docs`. |
-| `wiki/reference/outside-docs/` | Documentation captured from outside the project, such as vendor and product documentation, one folder per topic. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
+| `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
 | `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
 | `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named with its ID and a short form of its title: `working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
@@ -101,7 +101,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A rule that covers several areas | `wiki/product-wiki/constraints.md` (CON-##) |
 | A project term | `wiki/product-wiki/glossary.md` |
 | A source the project received and keeps | `sources/` (SRC-###); the work item holds the ID |
-| Outside documentation | `wiki/reference/outside-docs/` |
+| Knowledge captured from outside the project | `wiki/reference/ai-external-knowledge/` |
 | An analysis of how the system works today, for the owner or a work item | Write it to `wiki/reference/current-system/` before you reply (`wiki/reference/AGENTS.md`). |
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A finished file made for the client, or for the owner to pass on, such as a report or a spreadsheet | `delivery/client-handoffs/` |

@@ -39,7 +39,7 @@ A source has no status. A row is never removed.
 - Other records point here by SRC-###. Keep the complete source here, unchanged. When exact wording is needed as evidence, quote only the necessary passage in the other record, with its SRC-### and speaker or author attribution.
 - Never use a statement in a source as a decision or a rule. What the project decided from it goes in `DECISIONS.md` or `wiki/product-wiki/`.
 - When a record starts to use a source, add that record's ID to "Used by".
-- Outside documentation that the project captured from a public page is not a source. It goes in `wiki/reference/outside-docs/`.
+- Outside knowledge that the project captured from a public page is not a source. It goes in `wiki/reference/ai-external-knowledge/`.
 
 ## Which skill to use
 
