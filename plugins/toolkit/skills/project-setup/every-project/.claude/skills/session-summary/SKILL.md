@@ -16,8 +16,9 @@ session is one chat with the agent.
    One row per request, in the order asked. Use only the eight statuses
    below. Write `What you asked` in the owner's own words, cut down to the
    part that says what the owner asked; the outcome goes in `Result`, where you name
-   the place that holds the work: a work item id (`WI-014`), a decision or
-   source ID (`DEC-004`, `SRC-012`), a pull request number, or a file path.
+   the place that holds the work: a work item id (`WI-014`), a source ID
+   (`SRC-012`), the ID or link of a decision, a pull request number, or a
+   file path.
    Apart from the status words, bold only the one phrase the owner most
    needs to see.
 3. **Then the open block.** A horizontal rule (`---`), then the heading

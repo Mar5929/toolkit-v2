@@ -11,7 +11,7 @@ Start with [the lifecycle rules](references/lifecycle-rules.md). They define the
 
 If the owner asks only a question about a work item, read the current record and answer it. Do not advance the work item merely because you read it. If the item is unclear, use the root `AGENTS.md` identification order and ask when more than one item remains plausible.
 
-Use `filing-project-records` for sources and the configured shared-record routes. Follow the memory choice in `PROJECT.md`: `managing-project-memory` handles local memory or Notion wiki retrieval and capture; `.claude/rules/hindsight-memory.md` handles Hindsight. Working questions and designs stay in their work items. Hindsight projects keep current work in the tracker and have no Current State page. The lifecycle rules say when each of these jobs applies.
+Use `filing-project-records` for sources and for shared decisions and system rules. For memory and the project's current state, follow "Project memory" in the root `AGENTS.md`. Working questions and designs stay in their work items. The lifecycle rules say when each of these jobs applies.
 
 ## Work-item procedures
 

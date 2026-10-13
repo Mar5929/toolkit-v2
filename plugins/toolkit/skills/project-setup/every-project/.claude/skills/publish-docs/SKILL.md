@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in DECISIONS.md, sources/, or wiki/product-wiki/, use filing-project-records. For code, rules, skills, or work items, use managing-work-items.'
+description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in sources/ or in the project's records of shared decisions and system rules, use filing-project-records. For code, rules, skills, or work items, use managing-work-items.'
 ---
 
 # Commit project documents to the default branch
@@ -19,14 +19,13 @@ Run each Git command on its own, with `git -C <folder>`, which names the folder 
 
 A project document is a file under one of these paths.
 
-- `wiki/product-wiki/**`
 - `PROJECT*.md`
-- `DECISIONS.md`
 - `sources/**`
 - `wiki/reference/**`
 - `delivery/**`
 - `tools/**/*.md`
 - `**/README.md`
+- Each file or folder in the repository that the root `AGENTS.md`, section "Where information goes", names as the place for a shared decision, an open question, a system rule, or a project term
 
 ## Names used in the commands
 

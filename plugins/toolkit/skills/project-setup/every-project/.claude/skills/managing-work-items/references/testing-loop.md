@@ -54,7 +54,7 @@ Check a small work item that takes the short path with steps 1 to 6 above. `refe
 - It changes a production system. Examples are a deploy to production, and a file of records that the owner will load into production.
 - It changes an environment that other people use, such as a shared test environment.
 - It gives a number, a list of records, or a finding to a person outside the project. A count in an email to the client is an example.
-- It builds or changes what a rule in `wiki/product-wiki/` says. Only a checker's verdict lets `filing-project-records` mark such a rule Built.
+- It builds or changes what a shared system rule says. Only a checker's verdict lets `filing-project-records` mark such a rule Built.
 
 For any other result, start no checker. Your own checks of step 2 take the checker's place.
 
@@ -81,7 +81,7 @@ Keep the reply short, and give its parts in this order:
 
 - The checker runs before every result approval, whoever built the change. The owner decided this rule on 2026-09-28. On 2026-10-07 the owner made one exception: a small work item that takes the short path, as "A small work item" above says.
   - When the owner asks to skip the checker where this file says that it runs, say that it runs, as the owner decided, and ask whether the owner wants to change that decision.
-  - When the owner does change the decision, give the owner's words to `managing-project-memory`, which writes the line in `.claude/rules/owner-preferences.md`.
+  - When the owner does change the decision, record the owner's words in `.claude/rules/owner-preferences.md`, with the steps that "Project memory" in the root `AGENTS.md` names.
 - A commit after the check needs a new checker. A change to a result that Git does not track needs a new check too.
 - A change after the owner's yes to the result needs a new check, and a new yes from the owner to what changed.
 - In Codex, each Git write, such as the test plan commit, follows `building.md`, section "Git writes in Codex".

@@ -8,7 +8,7 @@ const GIT_COMMIT = /\bgit(?:\s+(?:-[cC]\s+[^\s-]\S*|-[\w-]+(?:=\S+)?))*\s+commit
 // The hook does not see whether the commit succeeded: Codex also runs it after a failed command.
 const additionalContext = 'A git commit command just ran. If the commit succeeded, update the work'
   + " item's Recent History and status with managing-work-items, and the work item's"
-  + " line in the project's Current State when that line changed.";
+  + " entry in the project's current state when that entry changed.";
 try {
   const input = JSON.parse(readFileSync(0, 'utf8'));
   const command = [input.tool_input?.command ?? ''].flat().join(' ');

@@ -1,6 +1,6 @@
 # Example: one handoff, end to end
 
-A project with local work items and local memory. This session worked on
+A project with local work items. This session worked on
 WI-007 in its own worktree. Another session works in the main checkout.
 
 ## The list of inputs given to the verifier (step 6)
@@ -11,11 +11,13 @@ After the brief from `references/handoff-verifier.md`, word for word:
 Draft prompt: <the whole draft below>
 Main checkout: /Users/owner/Projects/acme-billing
 Tracker: local (work-items/ in the main checkout)
-Memory: local (memory/CURRENT_STATE.md in the main checkout)
+Memory and shared records: the places that the root AGENTS.md in the main
+  checkout names, in "Project memory" and "Where information goes"
 Sources for claims:
 - "WI-007 is in the Building State": file, WI-007 front matter
 - "Option A is approved": file, WI-007 front matter, `design: approved`
-- "DEC-006 is Open": file, DECISIONS.md
+- "SRC-014 is filed": file, sources/INDEX.md
+- "Q-06 is open": file, WI-007 Questions and Answers
 - "branch claude/wi-007-csv-export": repository, git worktree list
 - "credit notes show negative amounts": owner, the owner's words "just make them negative"
 - "the bank rejects files over 5 MB": worked out
@@ -27,10 +29,10 @@ Record access and supplied text: local files; no supplied text
 ```markdown
 Not saved: nothing.
 Saved: WI-007 Current state and one Recent History row; Q-05
-(negative amounts) added to Questions and Answers. Current State: "Next
-session starts with" rewritten.
-Filed: DEC-006 (the date format every bank export uses), Open, with its
-ID in WI-007 and WI-009.
+(negative amounts) added to Questions and Answers. Project's current
+state: where the next session starts, rewritten.
+Filed: SRC-014 (the bank's CSV specification, from the owner's email),
+with its ID in WI-007.
 
 Checked the handoff prompt: 1 fixed, 1 not confirmed.
 
@@ -58,7 +60,7 @@ credit note exports with the same columns as an invoice and the tests in
 ## Read first
 
 1. WI-007, opened with `managing-work-items`: its Current state, and Q-06.
-   Q-06 points to DEC-006 in `DECISIONS.md`.
+   Q-06 cites SRC-014, the bank's CSV specification.
 2. `DESIGN.md` in WI-007's folder: Option A is approved.
 3. `src/export.js`, from line 40.
 
@@ -68,8 +70,8 @@ credit note exports with the same columns as an invoice and the tests in
 
 ## Open questions
 
-- DEC-006 in `DECISIONS.md` (Open): which date format every bank export
-  uses. WI-007 and WI-009 wait on it. The owner answers.
+- Q-06 in WI-007: which date format the export uses, because SRC-014
+  allows two. WI-007 waits on it. The owner answers.
 - The bank rejects files over 5 MB (worked out, this session; saved
   nowhere; not confirmed). The owner confirms or corrects it.
 

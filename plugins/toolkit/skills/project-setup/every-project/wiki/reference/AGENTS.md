@@ -1,6 +1,6 @@
 # wiki/reference/: material that is not the project's own decision
 
-This folder holds two kinds of material the project reads but did not decide: knowledge captured from outside the project, and the record of how the existing system works today. Never use a page here as a decision or a rule of this project: what the project decided is in `wiki/product-wiki/` or `DECISIONS.md`.
+This folder holds two kinds of material the project reads but did not decide: knowledge captured from outside the project, and the record of how the existing system works today. Never use a page here as a decision or a rule of this project: what the project decided is where the root `AGENTS.md`, section "Where information goes", says.
 
 ## Folders
 
@@ -55,8 +55,8 @@ When the owner asks how a part of the existing system works today, or a work ite
 - Add or change the `INDEX.md` row in the same edit as the topic folder.
 - A file in `current-system/` holds observed facts only. Put the evidence beside each claim, and put anything unsure under Known gaps.
 - Every file in `current-system/` says the date and the environment it was observed in.
-- When a page here disagrees with `wiki/product-wiki/`, use what `wiki/product-wiki/` says. Tell the owner about the disagreement.
-- What the project concluded from a page goes in `wiki/product-wiki/`, `DECISIONS.md`, or the work item, with the page's path beside it.
+- When a page here disagrees with a decision or a system rule that the project keeps, use what the decision or the rule says. Tell the owner about the disagreement.
+- What the project concluded from a page goes in the work item, or where the root `AGENTS.md`, section "Where information goes", says, with the page's path beside it.
 
 ## Which skill to use
 

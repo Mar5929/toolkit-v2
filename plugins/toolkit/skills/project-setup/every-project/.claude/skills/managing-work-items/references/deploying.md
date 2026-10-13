@@ -66,7 +66,7 @@ A project has no remote when `git remote` prints nothing. Such a project has no 
 
 Deploy only when the result must go beyond the default branch. In a Salesforce project, also follow `salesforce-deploying.md`, which gives the Salesforce detail for a deployment.
 
-- Before each deploy, read the applicable deployment instructions in `.claude/rules/owner-preferences.md`, decisions in the configured project record homes, and earlier deployment lessons and runs. Read the memory choice in `PROJECT.md`: local and Notion use `managing-project-memory`; Hindsight uses `.claude/rules/hindsight-memory.md`. For Notion, check relevant wiki records, pending captures and current work records. Apply the supported current guidance and name it in the deployment record.
+- Before each deploy, read the applicable deployment instructions in `.claude/rules/owner-preferences.md`, the shared decisions where the root `AGENTS.md`, section "Where information goes", says they are kept, current work records, and earlier deployment lessons and runs. Find the lessons and runs in memory, as "Project memory" in the root `AGENTS.md` says, including records that are captured but not yet filed. Apply the supported current guidance and name it in the deployment record.
 - Use only the deploy command in `AGENTS.md`, section "Commands", or in `PROJECT.md`. When neither gives one, ask the owner how this project deploys.
 - Get the owner's yes before a deploy when `references/lifecycle-rules.md`, section "When to stop for the owner's yes", stop 5, asks for it.
 - Never run a production deploy or data load unless a project rule, such as `.claude/rules/salesforce-agent-permissions.md`, allows it. Otherwise give the owner the exact command, what it deploys, and what to check afterwards. Record the owner's report in the owner's words.
@@ -74,7 +74,7 @@ Deploy only when the result must go beyond the default branch. In a Salesforce p
   - A release of several work items together also gets a release plan and release notes in `delivery/releases/`.
   - `delivery/AGENTS.md` gives the folder name of each record, its fields, and its Status values.
   - Add a Recent History row with the result.
-- A deploy that runs on a schedule, such as a monthly release, is also a recurring job. Give its run to `managing-project-memory`, which records the run of a recurring job.
+- A deploy that runs on a schedule, such as a monthly release, is also a recurring job. Write its run to memory, as "Project memory" in the root `AGENTS.md` says.
 - When a deploy or a data load fails, fill Blockers with the error and tell the owner.
   - When the fix changes the result, move the work item back to the Testing Loop.
   - Write what caused the failure under Notes, "Lessons not proven yet", with the date.

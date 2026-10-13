@@ -9,4 +9,4 @@ A sourced answer counts as decided only when its speaker, documented authority, 
 3. Read the capture back, and give the verified capture link to the skill that asked for this step. That skill writes the link in each work item that needs it.
 4. When the owner corrects or withdraws a decision, capture the correction the same way, and name the record it replaces.
 
-Active questions and approvals for one work item stay in that work item, with `managing-work-items`.
+Filing a capture needs no approval from the owner, because a capture does not approve its content. Active questions and approvals for one work item stay in that work item, with `managing-work-items`.
