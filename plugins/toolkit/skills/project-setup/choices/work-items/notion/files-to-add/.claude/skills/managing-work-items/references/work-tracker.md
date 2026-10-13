@@ -59,7 +59,7 @@ Write the ID of a record that `filing-project-records` saved once the save is on
 
 ## The templates for a work item and its design
 
-Notion makes a work item from the database's default template, with its Solution Design page, so the templates in `assets/` are not used. A work item's design is its Solution Design page. When the page is missing, [work-tracker-page-updates.md](work-tracker-page-updates.md), section "The Solution Design page", says what to do.
+Notion makes a work item from the database's default template, with its Solution Design page, so `assets/work-item-template.md` is not used. `assets/design-template.md` is used only to make a missing Solution Design page. A work item's design is its Solution Design page. When the page is missing, [work-tracker-page-updates.md](work-tracker-page-updates.md), section "The Solution Design page", says what to do.
 
 ## How a helper opens a work item by ID
 

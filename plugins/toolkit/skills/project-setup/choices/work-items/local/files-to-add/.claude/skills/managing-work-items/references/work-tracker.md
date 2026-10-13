@@ -63,7 +63,7 @@ A local work item is kept in the main checkout, so a record that it names must b
 
 ## The templates for a work item and its design
 
-Use `assets/work-item-template.md` for a work item's fields and sections, and `assets/design-template.md` for its design. A work item's design is the `DESIGN.md` in its folder.
+A new work item and its design are copied from `work-items/work-item-template/`, as `references/work-tracker-folders-and-files.md` says. `assets/work-item-template.md` and `assets/design-template.md` hold the same forms; read them for a work item's fields and sections and for its design. A work item's design is the `DESIGN.md` in its folder.
 
 ## How a helper opens a work item by ID
 
