@@ -28,7 +28,7 @@ This project keeps its memory in the Hindsight bank recorded in `PROJECT.md`, un
 - The prompt reminder suggests when to review memory. Review lasting lessons at handoff even when no reminder fires.
 ```
 
-Keep the root `CLAUDE.md` that loads `AGENTS.md`. The rest of the root guide refers to "Project memory" for memory work and the project's current state, so no other line of it changes.
+Keep the root `CLAUDE.md` that loads `AGENTS.md`. The rest of the root guide refers to "Project memory" for memory work and the project's current state, so no other shared line changes. The record rows come from the repository-records folder, as the table above says.
 
 ## `PROJECT.md`, section "Toolkit settings"
 

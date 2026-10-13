@@ -13,10 +13,15 @@ Use this reference when the owner chooses local or Hindsight memory. Those proje
 
 ## The text in AGENTS.md
 
-In the project's root `AGENTS.md`, in the "Project map" table, add the `DECISIONS.md` row after the row for `AGENTS.md`, `CLAUDE.md`, and the other rows before the row for `sources/`:
+In the project's root `AGENTS.md`, in the "Project map" table, add this row after the row for `AGENTS.md`, `CLAUDE.md`:
 
 ```markdown
 | `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
+```
+
+Add these rows directly before the row for `sources/`:
+
+```markdown
 | `wiki/product-wiki/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, built, or retired. | `filing-project-records`, step "update a system document". |
 | `wiki/product-wiki/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. `wiki/product-wiki/AGENTS.md` gives the columns of a row. Read it before you use or define a project term. | As for `wiki/product-wiki/`. |
 | `wiki/product-wiki/constraints.md` | Rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect (CON-##). | As for `wiki/product-wiki/`. |

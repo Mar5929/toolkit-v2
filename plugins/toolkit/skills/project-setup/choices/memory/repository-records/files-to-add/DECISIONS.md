@@ -1,7 +1,5 @@
 # Decisions
 
-After verified Notion Project Wiki setup or migration, use `managing-project-memory` to read or capture lasting decisions in the configured wiki; active questions stay in work items. In an existing project, this ledger remains authoritative until its reviewed migration is verified. After cutover, preserve its entries as historical evidence rather than a duplicate active ledger. The entry procedure below applies before that cutover and to other memory choices.
-
 <!-- Keep this guide.
 
 What goes here: every decision and open question that more than one work item needs. A decision only one work item needs stays in that work item's Questions and Answers.

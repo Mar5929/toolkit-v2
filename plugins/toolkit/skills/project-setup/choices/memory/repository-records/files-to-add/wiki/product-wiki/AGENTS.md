@@ -1,7 +1,5 @@
 # wiki/product-wiki/: local system documentation
 
-Read the memory choice in `PROJECT.md`. After verified Notion Project Wiki setup or migration, Product Wiki and Terminology Glossary own finalized documentation and terms. Use `managing-project-memory` for retrieval and capture; working designs stay with their work items. In an existing project, this folder remains authoritative until its reviewed migration is verified. After cutover, preserve its content as historical evidence rather than a second active authority. The local procedures below apply before that cutover and to other memory choices.
-
 This folder is the approved description of the system: how it must work, as numbered rules. Each rule carries a mark that says whether the owner approved it and whether it is built. Work items, decisions, and tests point to a rule by its ID, and never copy its text.
 
 ## Documents

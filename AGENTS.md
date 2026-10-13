@@ -95,7 +95,7 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 | `<setup>SKILL.md`, `<setup>reference/` | Setup, "check the setup", and "update the toolkit". |
 | `<setup>every-project/` | Everything every project gets, at the paths a project has: project files, rules, shared skills, settings, and three hook commands. |
 | `<setup>choices/work-items/` | The local, Notion, and GitHub work-tracker modules. |
-| `<setup>choices/memory/` | The local, Notion, and Hindsight memory modules, and the process shared by local and Notion memory. |
+| `<setup>choices/memory/` | The local, Notion, and Hindsight memory modules, the process shared by local and Notion memory, and `repository-records/` (`DECISIONS.md` and `wiki/product-wiki/`) shared by local and Hindsight memory. |
 | `<setup>choices/notion-shared/`, `<setup>choices/salesforce/` | The shared Notion tools and Salesforce module. |
 | `.claude/skills/writing-harness-files/` | This repository's harness-writing procedure and official guidance checklist. |
 | `.claude/settings.json`, `.codex/hooks.json`, `.claude/rules/` | The host settings, prompt reminder, and rules for sessions that work on this repository. |

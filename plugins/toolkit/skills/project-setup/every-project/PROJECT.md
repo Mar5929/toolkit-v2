@@ -41,7 +41,7 @@ Write one row for each person or team, with what they do and what they may decid
 
 ## Operating conventions
 
-<Stable facts about how the client's business and this project's team work that are not rules of the system and not instructions for the agent, such as the month the fiscal year starts, the days a release may happen, or who must review a change. Give the source of each: who said it and the date, or an ID. A rule the system must follow goes in `wiki/product-wiki/`. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`. Write “None yet” if there are none.>
+<Stable facts about how the client's business and this project's team work that are not rules of the system and not instructions for the agent, such as the month the fiscal year starts, the days a release may happen, or who must review a change. Give the source of each: who said it and the date, or an ID. A rule the system must follow goes where `AGENTS.md`, "Where information goes", says. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`. Write “None yet” if there are none.>
 
 ## Toolkit settings
 

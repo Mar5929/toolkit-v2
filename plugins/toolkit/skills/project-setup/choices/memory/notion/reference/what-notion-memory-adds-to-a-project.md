@@ -26,6 +26,8 @@ The startup snapshot is derived context. The coding-agent skill checks pending i
 
 A Notion-memory project gets no `DECISIONS.md` or `wiki/product-wiki/`. Its root `AGENTS.md` gets the "Project memory" section and the rows below. In an existing project, write this text only after the reviewed move to Project Wiki is verified; until then the project keeps its earlier text and record homes, and the local records stay in place until the owner approves their removal.
 
+In a new project, write the section and the rows during setup.
+
 In the "Project map" table, add this row after the row for `AGENTS.md`, `CLAUDE.md`:
 
 ```markdown
@@ -35,7 +37,8 @@ In the "Project map" table, add this row after the row for `AGENTS.md`, `CLAUDE.
 In the "Where information goes" table, add these rows after the row "A decision only one work item needs":
 
 ```markdown
-| A decision or open question more than one work item needs | Project Wiki: Product Wiki for a product decision, Long-Term Memory for another lasting decision (`filing-project-records`) |
+| A decision more than one work item needs | Project Wiki: Product Wiki for a product decision, Long-Term Memory for another lasting decision (`filing-project-records`) |
+| An open question more than one work item needs | Each affected work item, with a link to the other affected work items (`managing-work-items`). When it is decided, record the decision as the row above says. |
 | A rule about how the system must work that several work items rely on | Product Wiki (`filing-project-records`) |
 | A project term | Terminology Glossary (`filing-project-records`) |
 ```
@@ -43,7 +46,7 @@ In the "Where information goes" table, add these rows after the row "A decision 
 Replace the prompt under the heading "Project memory" in the root `AGENTS.md` with this text, below the heading:
 
 ```markdown
-This project keeps its memory in the Notion Project Wiki, with the skill `managing-project-memory`. The librarian, the skill `maintaining-notion-wiki` run on its schedule or on demand, files captured changes into the wiki.
+This project keeps its memory in the Notion Project Wiki, with the skill `managing-project-memory`. The librarian is the skill `maintaining-notion-wiki`, which runs on a schedule or on demand. It files captured changes into the wiki.
 
 - The project's current state, a short page of what is true now, is the Current state page in Project Wiki. The session-start command prints it. When it is not in the session's context, read it with `managing-project-memory`.
 - Use `managing-project-memory` to find memory and to capture new facts, corrections, and reusable outcomes in Wiki Inbox. Verify each capture in the same turn. The librarian reconciles the affected wiki records afterward, and routine reconciliation needs no report to the owner. Report a capture that failed.

@@ -201,7 +201,7 @@ A project may hold something that an earlier setup put there and that the new se
 - Earlier versions put Git commands in `.claude/settings.json`, under `permissions.deny` and `permissions.ask`, such as `Bash(git add -A)`, `Bash(git push --force *)`, and `Bash(git reset --hard *)`. The toolkit no longer ships them. List them as one row, and remove them after the owner's yes. The entries for a production Salesforce org stay. Remove `permissions` only when it is left empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
 - Renamed record folders follow [local wiki layout guidance](local-wiki-layout.md), not obsolete-file removal. This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
-- A Notion-memory project no longer gets `DECISIONS.md` or `wiki/product-wiki/`. In a project that has them, they stay, with their folder guide, until the reviewed move to Project Wiki is verified and the owner approves their removal. Until then, keep the project's existing record rows in the root `AGENTS.md`.
+- A Notion-memory project no longer gets `DECISIONS.md` or `wiki/product-wiki/`. In a project that has them, they stay, with their folder guide, until the reviewed move to Project Wiki is verified and the owner approves their removal. Until then, keep the project's existing record rows in the root `AGENTS.md` and its installed `filing-project-records` references for `DECISIONS.md` and `wiki/product-wiki/`.
 
 ## 5. Services
 
