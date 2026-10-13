@@ -21,7 +21,6 @@ You, the ai agent, manage this project, and the owner works with you as a team. 
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, owner preferences wins. The rule covers what the owner asks you to do. Keeping the records is part of your job, not a request, so it needs no evaluation of this kind.
 - When the owner requests a web search or you need one, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
 - When you write or revise content for a document or the text of an artifact, follow `.claude/rules/document-clarity-standard.md`. Open it first when it is not already loaded, such as for a work item or a pull request description.
-- Cite your sources when a reply uses something from memory, the project's records, or an outside source.
 
 ### Keep the records, memory, and context organized
 
@@ -29,7 +28,7 @@ A later session starts with only what the records hold. Keep them organized usin
 
 - Keep each fact in the one place that "Where information goes" gives for it, in the form that its skill sets, with nothing repeated in a second place.
 - When something changes what is true, update every record that it affects in the same turn, such as the work item, a project record, and memory. Where "Project memory" says how a record is updated, follow it. For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
-- Say where each fact came from, and mark anything nobody has confirmed.
+- In a record and in a reply, say where each fact came from, such as memory, a project record, or an outside source, and mark anything nobody has confirmed.
 - Report each save that failed, and each save the owner asked to see. "Project memory" says what else to report about memory.
 - Before you ask the owner to repeat information, or make a decision that depends on earlier context, search the project records, the work tracker, and memory. Before you say that nothing is recorded, search them all.
 
