@@ -28,7 +28,7 @@ A choice may add a skill, or files inside a skill that the project already has. 
 
 A hook command is a command that Claude Code or Codex runs by itself at a fixed moment, for example at session start. Every project has three, in `.claude/hooks/`: `session-start.mjs`, `prompt-reminder.mjs`, and `codex-after-commit.mjs`. `every-project/` holds them. Both Claude Code and Codex run the three commands from `.claude/hooks/`.
 
-`prompt-reminder.mjs` runs on every message. It prints one line that tells the agent to check the project's skills, then a memory reminder when the message has a phrase such as "remember this", and then the whole text of the rule `.claude/rules/evaluate-the-owners-request.md`. It reads that rule file each time it runs, so the project's rule file is the only place where the rule's text is kept.
+`prompt-reminder.mjs` runs on every message. It prints one line that tells the agent to check the project's skills, then a memory reminder when the message has a phrase such as "remember this". It does not print the rule `.claude/rules/evaluate-the-owners-request.md`, which Claude Code loads at session start and `AGENTS.md` tells Codex to read.
 
 ## The settings every project gets
 

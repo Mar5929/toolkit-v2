@@ -93,7 +93,7 @@ A hook command runs by itself at a fixed moment. Claude Code and Codex both run 
 | Command | When it runs | What it does |
 | --- | --- | --- |
 | `session-start.mjs` | A session starts | Prints the project's Current State, when the project has one. |
-| `prompt-reminder.mjs` | Every message | Reminds the agent to check the project's skills, and prints the rule `evaluate-the-owners-request.md`. |
+| `prompt-reminder.mjs` | Every message | Reminds the agent to check the project's skills, and points to where something worth keeping is filed. |
 | `codex-after-commit.mjs` | After a `git commit` | Reminds the agent to update the work item. |
 
 A fourth hook has no file of its own: after a helper agent runs, a reminder to update the work item that the helper worked on.

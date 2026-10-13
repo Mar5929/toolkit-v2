@@ -58,7 +58,7 @@ This file holds what an agent needs on every request in this repository, and not
 
 Follow `.claude/rules/evaluate-the-owners-request.md` on every request, also when Mike does not mention it.
 
-- Claude Code loads the rule by itself, and one entry in `.claude/settings.json` prints it again on every message. In Codex, read it at the start of each session and again after compaction.
+- Claude Code loads the rule by itself at session start. In Codex, read it at the start of each session and again after compaction.
 - A helper agent may not load the rule, so put its path in every brief.
 - In this repository, "the whole project" in the rule means the whole toolkit: the filing system, memory, the work tracker, the project's records, the hook commands, setup and "update the toolkit", both hosts, and the projects that already use the toolkit.
 - The file is a copy of the starter rule, `<setup>every-project/.claude/rules/evaluate-the-owners-request.md`. Edit the starter rule, then copy it over the copy. Never edit the copy.

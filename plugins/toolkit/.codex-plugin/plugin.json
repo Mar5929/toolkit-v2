@@ -1,6 +1,6 @@
 {
   "name": "toolkit",
-  "version": "0.9.71",
+  "version": "0.9.72",
   "description": "Sets up, checks, or updates Toolkit V2 in a project: copies shared project files, adds the chosen work-tracker and memory modules, and configures their hooks.",
   "author": {
     "name": "Mike Rihm",
