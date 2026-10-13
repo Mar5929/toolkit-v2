@@ -41,7 +41,7 @@ Preserve settings for other projects.
 15. Install the add-on for Claude Code and Codex when missing, with the owner's server named. During migration, preserve the approved endpoint, bank, and capture choices.
 16. Apply the default package's startup deadline and native Codex context allowance to the existing handler, and confirm that the delivered memory rule covers full saved-output reading.
 17. Read [the local bank-detection patch](reference/hindsight-local-bank-detection-patch.md). Check whether the installed add-on and the chosen Git settings are affected by the bug that file describes.
-18. When the add-on and settings are affected, explain the known bug and the proposed local patch, obtain or use the owner's existing approval, and apply the patch. When a fixed release is installed, record that no patch is needed. Installing the add-on can replace patched files, so apply an approved patch again after each later installation.
+18. When the add-on and settings are affected, explain the known bug and the proposed local patch, obtain or use the owner's existing approval, and apply the patch. When a fixed release is installed, record that no patch is needed. Installing the add-on can replace patched files, so check each later installation again, and apply the approved patch only when that installation is still affected.
 19. Have the owner trust changed Codex hooks with `/hooks`.
 
 ### Create or configure the bank
@@ -65,7 +65,7 @@ Keep capture off until step 28. Keep a writer off when its protection cannot be 
 ### Turn capture on and verify
 
 28. Enable the approved capture settings only after the checks in steps 23 to 27 pass.
-29. Follow [the memory-flow verification](reference/hindsight-verification.md) for processing, Recall, Reflect, surveys, pages, and new interactive sessions in both intended hosts. If a check needs a saved sample, agree on that sample with the owner first.
+29. Follow [the memory-flow verification](reference/hindsight-verification.md) for processing, Recall, Reflect, surveys, pages, and new interactive sessions in both intended hosts. If a check needs a saved sample, agree on that sample with the owner first. When the bank-detection patch from step 18 was applied, also run the checks in [the local bank-detection patch](reference/hindsight-local-bank-detection-patch.md), "Verify before calling it fixed", that need the real bank or a new session.
 30. In a new session, confirm that the agent reads the memory rule and that the add-on reaches the recorded bank, as [what Hindsight adds to a project](reference/what-hindsight-adds-to-a-project.md), "Verify the project wiring", says.
 31. Report failed or unavailable checks; use [known problems](reference/hindsight-known-problems.md) for diagnosis.
 32. Report what is configured, what was checked, and what remains. When the bank-detection patch from step 18 was applied, include its maintenance and rollback in this setup handoff. Update the open steps in `PROJECT.md`. Mark setup done only when the checks pass.

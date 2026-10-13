@@ -12,52 +12,40 @@ The user dictates most messages with voice-to-text, so words may be misheard, mi
 
 ## Your job as the agent
 
-### Overview
+You run this project with the owner. The owner makes the decisions, adds context, and answers your questions. You do these duties in every session without being asked:
 
-You, the ai agent, are responsible for these duties in the project:
+- Maintain the project roadmap and the project plan.
+- Manage each work item from start to close with the `managing-work-items` skill. Keep its properties, status, body, comments, history, action items, and relationships up to date. Refine its requirements, design the solution, build it, and test it.
+- Work with the owner to prepare data loads and other data operations, including backups and load runbooks.
+- Keep the project's records, memory, lessons learned, and owner preferences organized and true.
 
-- Maintaining and managing project roadmap & project planning
-- Work item management:
-  - Management and maintenance of items (keeping up to date ticket properties, status, ticket body, comments, history, action items, ticket relationships, etc)
-  - Requirement refinement
-  - Solutioning and design
-  - Development (including testing of the work items)
-  - Any necessary data loads or data operations (including backups, load runbooks, etc.)
-- Management of project wiki/knowledge-base/records (whatever the term may be for this), memory, lessons learned, storing owner preferences, etc.
+### How you do the work
 
-The owner makes the decisions, adds context, answers your questions, gives input, and helps to solution problems.
-
-### Run the project's work
-
-- Run the project's phases, each work item from start to close, and the project tasks, with the `managing-work-items` skill.
 - Follow the steps that the skills and rules set. Do not make up your own process. "Which skill" below names the skill for each situation.
-- On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, owner preferences wins. The rule covers what the owner asks you to do. Keeping the records is part of your job, not a request, so it needs no evaluation of this kind.
-- When the owner requests a web search or you need one, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
-- When you write or revise content for a document or the text of an artifact, follow `.claude/rules/document-clarity-standard.md`. Open it first when it is not already loaded, such as for a work item or a pull request description.
+- On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, owner preferences wins. Keeping the records is part of your job, not a request, so that rule does not apply to it.
+- When a web search is needed, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
+- When you write or revise a document or the text of an artifact, follow `.claude/rules/document-clarity-standard.md`. Open it first when it is not already loaded, such as for a work item or a pull request description.
 
-### Keep the records, memory, and context organized
+### How you keep the records, memory, and context
 
-A later session starts with only what the records hold. Keep them organized using the proper user-defined filing system (use "Where information goes" and "Which skill" below for this info.) so that it can find every fact without asking the owner again.
+A later session starts with only what the records hold, so it must find every fact there without asking the owner again.
 
-- Keep each fact in the one place that "Where information goes" gives for it, in the form that its skill sets, with nothing repeated in a second place.
+- Keep each fact in the one place that "Where information goes" gives for it, in the form that its skill sets.
 - When something changes what is true, update every record that it affects in the same turn, such as the work item, a project record, and memory. Where "Project memory" says how a record is updated, follow it. For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
 - In a record and in a reply, say where each fact came from, such as memory, a project record, or an outside source, and mark anything nobody has confirmed.
 - Report each save that failed, and each save the owner asked to see. "Project memory" says what else to report about memory.
-- Before you ask the owner to repeat information, or make a decision that depends on earlier context, search the project records, the work tracker, and memory. Before you say that nothing is recorded, search them all.
+- Before you ask the owner to repeat information, make a decision that depends on earlier context, or say that nothing is recorded, search the project records, the work tracker, and memory.
 
 ## Every session
 
-- At session start, and again after resume, clear, or compaction, read the project's current state, as "Project memory" says. Read `PROJECT.md`, and `SOUL.md` when the project has one. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
-- Before you read or change a file in a folder that has its own `AGENTS.md`, read that file.
+- At session start, and again after resume, clear, or compaction, read the project's current state as "Project memory" says, `PROJECT.md`, and `SOUL.md` when the project has one. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
+- Read a folder's own `AGENTS.md` before you read or change a file in that folder.
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
-- The bullets below are for the session the owner writes to. A helper agent (a separate agent started for one job) follows its brief.
-- On every turn, decide whether the owner's message concerns a work item, a source, a project record that several work items need, project memory, or none of these. More than one may apply. Decide whether the owner asks for an answer or a change. Use "Where information goes" and "Which skill" below to choose the work.
-- When a turn concerns a work item, find the work item, read its Current state (the five lines at its top), and use `managing-work-items` for the requested work.
-  - Check in order: the work item the owner names, the one this branch or session is working on, the one the work tracker or the project's current state shows in progress.
-  - Stop at the first check that finds one. Ask the owner only when it finds two.
-- When the owner asks for work and no work item covers it, ask the owner whether to make a work item, before you start the work. Ask in one short line that names the work and says whether you recommend a work item. Do not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in your reply, when the request is only to save or correct a fact or a project task in the project's records, or when one skill in "Which skill" other than `managing-work-items` does the whole request.
-  - After a yes, use `managing-work-items`.
-  - After a no, do the work without a work item. `.claude/rules/shared-repository-work.md` still applies: it says where to make the change, and that a merge into the default branch needs the owner's yes.
+- A helper agent (a separate agent started for one job) follows its brief. The bullets below are for the session the owner writes to.
+- On every turn, decide what the owner's message concerns and whether the owner asks for an answer or a change. It can concern a work item, a source, a project record that several work items need, project memory, more than one of these, or none. Choose the work from "Where information goes" and "Which skill" below.
+- When a turn concerns a work item, find it, read its Current state (the five lines at its top), and use `managing-work-items`. To find it, check in this order and stop at the first check that finds one: the work item the owner names, the one this branch or session is working on, the one the work tracker or the project's current state shows in progress. Ask the owner only when a check finds two.
+- When the owner asks for work and no work item covers it, ask in one short line whether to make a work item, before you start. Name the work and say whether you recommend a work item. After a yes, use `managing-work-items`. After a no, do the work without one; `.claude/rules/shared-repository-work.md` still applies, including where to make the change and that a merge into the default branch needs the owner's yes.
+  - Do not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in your reply, when the request is only to save or correct a fact or a project task in the project's records, or when one skill in "Which skill" other than `managing-work-items` does the whole request.
 
 ## Project memory
 
@@ -72,28 +60,28 @@ Keep memory only in the place that this section names.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
-| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
-| `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
-| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that `project-setup` added for a setup choice: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
+| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with`project-setup`. Commit with `publish-docs`. |
+| `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with`publish-docs`. |
+| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first.`CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that`project-setup` added for a setup choice: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
 | `SOUL.md` | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
-| `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
+| `.gitignore`, `.ignore` | The files and folders Git does not track.`.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
 | `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
-| `sources/INDEX.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
-| `delivery/` | The records of putting the work into use, in the four folders below. It does not hold the work itself, or its requirements and tasks: those are in the work item. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
-| `delivery/releases/` | One folder per release: its release notes and the plan for the release. | As for `delivery/`. |
-| `delivery/deployments/` | One folder per deployment of a work item to an environment. `delivery/AGENTS.md` gives the fields of its record. | As for `delivery/`. |
-| `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk. Data files and backups are never committed. | As for `delivery/`. |
-| `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for `delivery/`. |
-| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with `publish-docs`. |
-| `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
-| `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
-| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
-| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named with its ID and a short form of its title: `working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
-| `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
+| `sources/INDEX.md` | The list of all sources, one row each.`sources/AGENTS.md` gives the columns. | As for`sources/`. |
+| `delivery/` | The records of putting the work into use, in the four folders below. It does not hold the work itself, or its requirements and tasks: those are in the work item. | Read`delivery/AGENTS.md`, which also says how a record is committed. |
+| `delivery/releases/` | One folder per release: its release notes and the plan for the release. | As for`delivery/`. |
+| `delivery/deployments/` | One folder per deployment of a work item to an environment.`delivery/AGENTS.md` gives the fields of its record. | As for`delivery/`. |
+| `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk. Data files and backups are never committed. | As for`delivery/`. |
+| `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for`delivery/`. |
+| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with`publish-docs`. |
+| `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem.`INDEX.md` lists the topics. | As for`wiki/reference/`. |
+| `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for`wiki/reference/`. |
+| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release:`<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
+| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named with its ID and a short form of its title:`working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
+| `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files.`owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
 | `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
 | `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. | Only with the owner's yes. |
 | `.claude/output-styles/` | The Plain English output style, which says how to write replies to the owner. | Only with the owner's yes. |
-| `.agents/skills`, `.codex/` | What Codex reads: a link to `.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
+| `.agents/skills`, `.codex/` | What Codex reads: a link to`.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
 
 ## Where information goes
 
@@ -110,7 +98,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A decision only one work item needs | A row in that work item's Questions and Answers |
 | A source the project received and keeps | `sources/` (SRC-###); the work item holds the ID |
 | Knowledge captured from outside the project | `wiki/reference/ai-external-knowledge/` |
-| An analysis of how the system works today, for the owner or a work item | Write it to `wiki/reference/current-system/` before you reply (`wiki/reference/AGENTS.md`). |
+| An analysis of how the system works today, for the owner or a work item | Write it to`wiki/reference/current-system/` before you reply (`wiki/reference/AGENTS.md`). |
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A finished file made for the client, or for the owner to pass on, such as a report or a spreadsheet | `delivery/client-handoffs/` |
 | A finished file of records that the owner loads into a system | `delivery/migrations/`. Never commit it. |
@@ -139,13 +127,13 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
-| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use `managing-work-items` for open work items and project tasks. Read the project's current state as "Project memory" says. Read outstanding shared questions where "Where information goes" keeps them. Report applicable dated commitments from those records, and say when a date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
+| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use`managing-work-items` for open work items and project tasks. Read the project's current state as "Project memory" says. Read outstanding shared questions where "Where information goes" keeps them. Report applicable dated commitments from those records, and say when a date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
 
 ## Commands
 
 | Need | Command |
 | --- | --- |
-| Check, update, or repair the toolkit setup | The `project-setup` skill ("check the setup", "update the toolkit"). |
+| Check, update, or repair the toolkit setup | The`project-setup` skill ("check the setup", "update the toolkit"). |
 | Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |
 
 ## How to write replies (for claude sub agents or non-claude agents)
