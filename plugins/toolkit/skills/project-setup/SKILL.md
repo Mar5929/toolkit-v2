@@ -63,6 +63,8 @@ These facts about the folder give you answers to offer:
 - `sfdx-project.json` in the folder means that this is a Salesforce project.
 - The files in the folder show the language, the framework, and the systems the project touches.
 
+When the project had work before setup, such as code, commits, documents, or earlier agent sessions, ask the owner whether you may read the project's past Claude Code and Codex sessions, and whether there is anywhere else to look. What you find gives you more answers to offer. [reference/context-from-past-work.md](reference/context-from-past-work.md) gives the steps.
+
 Toolkit V2 is set up at the root of a Git repository, in its main checkout. [reference/setup-problems.md](reference/setup-problems.md), "Project folder problems", explains how to handle another folder.
 
 ## Step 3: Copy the full layout
@@ -88,7 +90,7 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 7 | Is this a Salesforce project? | Yes when the folder holds `sfdx-project.json`, otherwise no | Step 5 |
 | 8 | Which outside tools and services does this project use? | The ones that the folder and the earlier answers show | One line for each under "Resources and project paths" in `PROJECT.md` |
 | 9 | How should the agent work with the owner on this project? | The `SOUL.md` that the full layout brought | `SOUL.md` |
-| 10 | Is there material to start from? In a project that had work before setup: may the agent read its past Claude Code and Codex sessions, and is there anywhere else to look? | None. For past sessions, what you found on this computer | `sources/`, and each fact from past work in the place the project's `AGENTS.md` gives for it |
+| 10 | Is there material to start from? | None. When Step 2 read past work, the facts that no answer has used yet | `sources/`, and each confirmed fact from past work in the place the project's `AGENTS.md` gives for it |
 | 11 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
 
 The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one. A Hindsight project has none: where the work stands is in the place where work items are kept.
@@ -203,6 +205,7 @@ The table lists the files of `reference/`, the setup file of each answer, and th
 | [reference/placing-files.md](reference/placing-files.md) | Steps 3 and 5: you copy `every-project/` or a `files-to-add/` folder into the project, the project already has one of the files, or you make the `.agents/skills` link. |
 | [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Whenever a settings file changes: you need the skills and the three hook commands every project has, the settings every project gets, and the rules for a settings file that already exists. |
 | [reference/finishing.md](reference/finishing.md) | Step 6: you need the places an answer is written, the form of a line in `owner-preferences.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
+| [reference/context-from-past-work.md](reference/context-from-past-work.md) | Step 2 and question 10: the project had work before setup, and you read its past sessions or other material to offer answers and fill the project's files. |
 | [reference/existing-project.md](reference/existing-project.md) | The folder already has agent files that the toolkit did not put there: you need what to look for, how the branch works with the folders that Git ignores, and the known problems. |
 | [reference/local-wiki-layout.md](reference/local-wiki-layout.md) | Before copying or comparing new wiki paths in an existing project: review and verify owner-approved record moves; a setup check reports only. |
 | [reference/update.md](reference/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice. |
