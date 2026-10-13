@@ -39,7 +39,7 @@ Paths start from the folder that holds this `SKILL.md`. Both hosts show that pat
 The owner said "set up this project" or named this skill.
 
 - Put Steps 2 to 6 in the plan tool. In Claude Code the plan tool is the task list, and in Codex it is `update_plan`. When the one you work in has no plan tool, continue without one.
-- Record each answer the owner gives as a checked line there, for example `- [x] Work items: local`, because a later turn may start without this skill loaded.
+- Record each answer the owner gives as a checked line there, for example `- [x] Work items: local`, because a later turn may start without this skill loaded. The checked lines help a later turn; the files that each answer is written into are the lasting record.
 
 ## Step 2: Look at the folder
 
@@ -69,13 +69,13 @@ Toolkit V2 is set up at the root of a Git repository, in its main checkout. [ref
 
 ## Step 3: Copy the full layout
 
-Copy `every-project/` into the project, hidden files included. Add each file that the project does not have. For a file that the project already has with different content, show the owner the difference and ask.
+Copy `every-project/` into the project, hidden files included. Add each file that the project does not have. In a project that already has records, hold back the folders that moving those records would fill. Agree the move with the owner after question 6, because the memory choice decides where some records belong; [reference/local-wiki-layout.md](reference/local-wiki-layout.md) says how. Copy into those folders only after the move. For a file that the project already has with different content, show the owner the difference and ask.
 
 [reference/placing-files.md](reference/placing-files.md) gives a copy command that never replaces a file, what to do with each kind of file the project already has, and the link `.agents/skills` that lets Codex read the same skills as Claude Code.
 
 ## Step 4: Ask the questions
 
-Ask one question per message, in the order of the table. Give each question a recommendation and the reason for it. Where the folder already shows an answer, say what you found, and the owner confirms or corrects it.
+Ask one question per message, in the order of the table. Give each question a recommendation and the reason for it. When the folder or past work already shows the answers to several questions, show those answers together, and ask the owner to confirm or correct them in one reply. Ask each remaining question by itself.
 
 Write each answer in its place as soon as the owner gives it. During setup, write a record straight into the project folder, in the form that the guide of its folder gives. Make no worktree and no pull request for it, even where a project skill says to save a record that way: nothing is committed yet, and the setup commit in Step 6 saves every record.
 

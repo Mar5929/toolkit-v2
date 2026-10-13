@@ -9,7 +9,7 @@ The goal is that the project's files start out holding what the owner and earlie
 1. Look on this computer for the project's past sessions in Claude Code and Codex, including sessions that ran in the project's worktrees. Each host keeps them in the owner's home folder: at the time of writing, Claude Code under `~/.claude/projects/` and Codex under `~/.codex/sessions/`. Confirm where the installed version keeps them.
 2. Tell the owner what you found, such as how many sessions there are and the dates they cover. Ask whether you may read them, and whether there is anywhere else to look, such as Notion pages, documents, other repositories, or sessions on another computer. Read only what the owner says yes to.
 3. Read the material and pick out what a later session would need: what the project is for, the people and what each may decide, the systems, decisions and their reasons, terms, constraints, lessons, open questions, and the work that is in progress.
-4. Keep a short list of what you found in the plan tool, so that a later turn can still use it. Write nothing in the project yet: the owner has not confirmed the facts, and the places for memory and work items are not chosen yet.
+4. Keep a short list of what you found in the plan tool, or, without one, in your message to the owner, so that a later turn can still use it. Write nothing in the project yet: the owner has not confirmed the facts, and the places for memory and work items are not chosen yet.
 
 ## In Step 4: use what you found
 

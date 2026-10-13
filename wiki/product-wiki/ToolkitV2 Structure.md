@@ -61,12 +61,12 @@ Each of `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/` has
 
 ### The rules every project gets
 
-A rule is a short file that Claude Code loads in every session. `AGENTS.md` tells Codex which rules to read.
+A rule is a short file that Claude Code loads in every session, or, when the rule names paths, only when the agent works on matching files. `AGENTS.md` tells Codex which rules to read, and when.
 
 | Rule                             | What it tells the agent                                                                                       |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `evaluate-the-owners-request.md` | Work out the goal behind a request and the best solution for the whole project before acting.                 |
-| `document-clarity-standard.md`   | How to write a document so that a reader new to the project understands it after one read.                    |
+| `document-clarity-standard.md`   | How to write a document so that a reader new to the project understands it after one read. It loads only when the agent works on the project's documents, and `AGENTS.md` tells the agent to read it before writing any other document. |
 | `shared-repository-work.md`      | How to work in a repository that other sessions also edit: branches, worktrees, and the check before a merge. |
 | `owner-preferences.md`           | The owner's "from now on" instructions for this project. It is the owner's own file from the first day.       |
 
@@ -219,13 +219,13 @@ The owner answers yes to "Is this a Salesforce project?". The module adds what t
 
 | Kind | What it adds |
 | --- | --- |
-| Questions | Which sandbox the agents may deploy to. Which org is production. Whether the toolkit's defaults for what an agent may do in each kind of org are what the owner wants. The API version, when it cannot be read. Which of Salesforce's own skills to have on. |
-| Rules | Three. `salesforce-org-safety.md`: the limits that are the same in every project, such as no deploy and no data change in production. `salesforce-agent-permissions.md`: the owner's choices for this project, starting from the toolkit's defaults. `salesforce-deployments.md`: when to update the list of changed components, when to write down a manual deployment step, when to check what a deploy includes, and how the Salesforce templates in `delivery/` are used. |
+| Questions | Which sandbox the agents may deploy to. Which org is production. Which orgs agents may only read. Whether the toolkit's defaults for what an agent may do in each kind of org are what the owner wants. The API version, when it cannot be read. Which of Salesforce's own skills to have on. |
+| Rules | Three. `salesforce-org-safety.md`: the limits that are the same in every project, such as no deploy and no data change in production, and no change to an org marked read-only. `salesforce-agent-permissions.md`: the owner's choices for this project, starting from the toolkit's defaults. `salesforce-deployments.md`: when to update the list of changed components, when to write down a manual deployment step, when to check what a deploy includes, and how the Salesforce templates in `delivery/` are used. |
 | Text in `AGENTS.md` | Two lines: use Salesforce's own skills for Salesforce work, and this project's rules and its three `sf-*` skills win over them. The "Which skill" and "Commands" tables get their Salesforce rows. |
 | Skills | `sf-component-tracker`: keeps the list of changed components and the deployment files in step with the metadata. `sf-deploy-check`: checks that a deploy holds only the intended change. `sf-data-change`: prepares the owner's handoff for a change to production data. |
 | Files and templates | `sfdx-project.json` and `.forceignore` at the root. In `delivery/deployments/`: `component-tracker.csv`, a template for a deployment of the full project, and a template for the deployment of one work item. In `delivery/migrations/`: a template for one area of data (the area, the field mapping, the transformation rules), and the folders `data-loads/` and `production-backups/`. In `delivery/releases/`: a template with a cutover plan and release notes. |
-| Settings | Six forbidden commands that delete source or an org, and one entry for each production org the owner names, so that Claude Code refuses a command that changes it. |
-| `PROJECT.md` | The org aliases: one line per org, with what the org is for, and production marked. |
+| Settings | Six forbidden commands that delete source or an org, and entries for each production org and read-only org the owner names, so that Claude Code refuses a command that changes it. |
+| `PROJECT.md` | The org aliases: one line per org, with what the org is for, and production and read-only orgs marked. |
 | Outside the project folder | Nothing is made. The agent checks that Salesforce's own skills are installed, and tells the owner when they are not. |
 | The owner's own steps | Install Salesforce's own skills, and connect the project's orgs. |
 
@@ -247,7 +247,6 @@ These answers are written into a file that every project already has. [[Toolkit 
 - The people, and who may decide what
 - The systems the project touches, and which are production
 - The outside tools and services the project uses
-- What the agent may do without asking
 - How the agent works with the owner (`SOUL.md`)
 - The material to start from
 - Where the project stands: the roadmap and its phases

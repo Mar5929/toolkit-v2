@@ -25,7 +25,7 @@
 | --- | --- | --- | --- | --- |
 | `<role>` | `<name or unknown>` | `<what this person does or knows for the project>` | `<the kinds of decision this person may make, or none>` | `<source and date>` |
 
-Keep this table short. Write no biography and no contact details.
+Write one row for each person or team, with what they do and what they may decide. Write no biography and no contact details.
 
 ## Work and project records
 

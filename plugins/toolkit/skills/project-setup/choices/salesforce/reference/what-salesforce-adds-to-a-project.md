@@ -8,7 +8,7 @@ This file lists what setup adds to a Salesforce project: the files, the text in 
 | --- | --- |
 | Rules, skills, files, and templates | Copy `choices/salesforce/files-to-add/` into the project. It holds three rules (`salesforce-org-safety.md`, `salesforce-agent-permissions.md`, and `salesforce-deployments.md`), the skills `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`, `sfdx-project.json` and `.forceignore`, and the templates in `delivery/`. |
 | Text in `AGENTS.md` | Two lines near the top, and the Salesforce rows of three tables. "The text in AGENTS.md" below gives them. |
-| Settings | Entries in `permissions.deny` of `.claude/settings.json`. [salesforce-refuse-list.md](salesforce-refuse-list.md), "The entries that every Salesforce project gets" and "The entries for each production org", give them. |
+| Settings | Entries in `permissions.deny` of `.claude/settings.json`. [salesforce-refuse-list.md](salesforce-refuse-list.md), "The entries that every Salesforce project gets" and "The entries for each production or read-only org", give them. |
 | Files inside a skill | The same folder adds one file inside `managing-work-items`, which every project has: `references/salesforce-deploying.md`. |
 | `PROJECT.md`, "Toolkit settings" | Add the line `- Salesforce org aliases:` at the end of the section, with one nested line for each org. [salesforce-org-aliases.md](salesforce-org-aliases.md), "The aliases line in PROJECT.md", gives the form. |
 | Lines in `.gitignore` | Add these three lines, which keep the files of Salesforce's own tools out of Git: `.sfdx/`, `.sf/`, and `.localdevserver/`. |
@@ -38,7 +38,7 @@ In the "Project map" table, add this row after the row for `working-files/`:
 In the same table, add one sentence to each of two rows:
 
 - to the row for `delivery/deployments/`, in "What it holds": "Also the component tracker and the package files."
-- to the row for `.claude/hooks/`, `.claude/settings.json`, in "What it holds": "In Claude Code, the settings file also refuses a command that changes a production org and names it."
+- to the row for `.claude/hooks/`, `.claude/settings.json`, in "What it holds": "In Claude Code, the settings file also refuses a command that changes a production org or a read-only org and names it."
 
 In the "Which skill" table, add this row:
 

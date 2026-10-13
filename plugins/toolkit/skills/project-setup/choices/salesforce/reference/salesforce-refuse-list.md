@@ -15,9 +15,9 @@ Add these six entries in every Salesforce project. They refuse a command that de
 - `PowerShell(sfdx force:source:delete *)`
 - `PowerShell(sf org delete *)`
 
-Then add the entries for each production org, as the next section says.
+Then add the entries for each production org and each read-only org, as the next section says.
 
-## The entries for each production org
+## The entries for each production or read-only org
 
 For each production org that the owner names, add entries to the refuse list, so that Claude Code refuses a command that changes that org. Write them into the project's `.claude/settings.json` when you write the org aliases. Claude Code matches an entry against the text of a command, and `*` stands for any text.
 
@@ -26,6 +26,7 @@ For each production org that the owner names, add entries to the refuse list, so
 - Write no entry for a command that only reads, such as `sf data query` or `sf project retrieve`.
 - When the owner gives the production username as well as the alias, write the same entries for the username.
 - Write each entry a second time with `PowerShell(` in place of `Bash(`, for a session that runs on Windows.
+- Write the same entries for each read-only org that the owner names.
 - When no production org is known yet, write no entry. [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "How setup records what is still open", says how the project's Current State records that the entries are still to be written.
 
-Tell the owner in one line for which org Claude Code now refuses changes. The list stops a command that names the org as a word of its own, as in `-o acme-prod` or `--target-org acme-prod`. It is not a full check: a command that writes the name another way, such as `--target-org=acme-prod`, is not refused. Codex has no such list. `.claude/rules/salesforce-org-safety.md` forbids every change to production in both.
+Tell the owner in one line for which org Claude Code now refuses changes. The list stops a command that names the org as a word of its own, as in `-o acme-prod` or `--target-org acme-prod`. It is not a full check: a command that writes the name another way, such as `--target-org=acme-prod`, is not refused. Codex has no such list. `.claude/rules/salesforce-org-safety.md` forbids every change to production and to a read-only org in both.
