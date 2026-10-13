@@ -1,22 +1,22 @@
 ---
 name: sf-data-change
-description: 'Prepares the owner''s handoff for a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs the change.'
+description: 'Prepares a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs the change unless the project''s Salesforce permissions allow the agent to.'
 ---
 
-# Salesforce data change handoff
+# Salesforce production data change
 
-No agent writes data to production. The owner runs the change. This skill produces everything the owner needs to run the change without asking follow-up questions.
+By default no agent writes data to production: the owner runs the change, and this skill produces everything the owner needs to run it without asking follow-up questions. When `.claude/rules/salesforce-agent-permissions.md` allows a production data change, prepare the same files, then run the change as that file says.
 
 ## Limits
 
 | Operation | Production | Sandbox |
 |---|---|---|
 | Read (SOQL, export, describe) | Allowed | Allowed |
-| Create, update, upsert, delete data | Never | As `.claude/rules/salesforce-agent-permissions.md` says |
-| Anonymous Apex | Never | As `.claude/rules/salesforce-agent-permissions.md` says |
+| Create, update, upsert, delete data | As `.claude/rules/salesforce-agent-permissions.md` says; Never by default | As `.claude/rules/salesforce-agent-permissions.md` says |
+| Anonymous Apex | As `.claude/rules/salesforce-agent-permissions.md` says; Never by default | As `.claude/rules/salesforce-agent-permissions.md` says |
 
 - `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for this project, and says how long a yes holds. A line there may differ from this table, and then that line wins.
-- No agent writes production data by CLI, API, anonymous Apex, or any tool that wraps them.
+- The owner's file covers every route to production data: the command line, an API, anonymous Apex, or a tool that wraps them.
 
 ## Step 1: build the handoff
 
@@ -56,9 +56,16 @@ delivery/migrations/
 - Record the work item, date, org, objects and population, exact file paths and row counts, operation, mappings, settings, success check, and undo steps (or the backup file's path) in the work item for this change and in the step 4 handoff. Write no separate README or other record for the event.
 - Before the first data change in a project (no event folder under `delivery/migrations/data-loads/` yet), put a test `.csv` file in `delivery/migrations/production-backups/` and in `delivery/migrations/data-loads/`, check that `git status` lists neither, then delete both files.
 
-## Step 4: hand over
+## Step 4: hand over, or run it when allowed
 
-Give the owner the handoff in the reply: both file paths, which file is which, the numbered steps, the success check, and the undo steps. "You'll need to update those records" is not a handoff.
+When `.claude/rules/salesforce-agent-permissions.md` says Never for a production data change, give the owner the handoff in the reply: both file paths, which file is which, the numbered steps, the success check, and the undo steps. "You'll need to update those records" is not a handoff.
+
+When that file allows the change, or says Ask first and the owner said yes:
+
+1. Run the change with the matching `sf data` command from `.claude/rules/salesforce-org-safety.md`, "The commands", naming the production org with `-o`. Load the exact file from the load event folder.
+2. Keep the success and error files with the load evidence, and run the success check yourself.
+3. Record the result in the work item, with the details step 3 lists, and add a Recent History row that names the org, the file, the row counts, and the permission that allowed it.
+4. Tell the owner the result, the paths of the backup and the load evidence, and the undo steps.
 
 ## Hand-offs
 

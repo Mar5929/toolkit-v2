@@ -4,6 +4,7 @@ This file holds the owner's choices for this project. It starts with the toolkit
 
 - Read this file before any command that changes an org.
 - Change this file only when the owner told you to in this session. A choice for every sandbox or scratch org, or for production, is a cell of the table: change the cell, and add the date and the owner's name in it. A narrower choice, such as one org, is a line under "Only in this project". A newer choice replaces the older one that says the opposite.
+- When you change a production cell, change the refuse list in `.claude/settings.json` in the same edit, as `.claude/rules/salesforce-org-safety.md`, "Keeping the refuse list in step", says.
 - Keep the choice only in this file. Write nothing about it in `owner-preferences.md` or in memory.
 - `.claude/rules/salesforce-org-safety.md` holds the limits that are the same in every project. No line here changes them. That rule also says how this file and the refuse list in `.claude/settings.json` fit together.
 
@@ -19,15 +20,15 @@ This file holds the owner's choices for this project. It starts with the toolkit
 | Action | Sandbox or scratch org | Production | Read-only org |
 | --- | --- | --- | --- |
 | Read data or metadata | Allowed | Allowed | Allowed |
-| Validate a deploy | Allowed | Never (fixed) | Never (fixed) |
-| Deploy metadata | Allowed | Never (fixed) | Never (fixed) |
-| Deploy with a destructive changes file | Ask first | Never (fixed) | Never (fixed) |
-| Deploy a profile | Never | Never (fixed) | Never (fixed) |
-| Run Apex or Flow tests | Allowed | Never (fixed) | Never (fixed) |
-| Change data | Ask first | Never (fixed) | Never (fixed) |
-| Run anonymous Apex | Ask first | Never (fixed) | Never (fixed) |
+| Validate a deploy | Allowed | Never | Never (fixed) |
+| Deploy metadata | Allowed | Never | Never (fixed) |
+| Deploy with a destructive changes file | Ask first | Never | Never (fixed) |
+| Deploy a profile | Never | Never | Never (fixed) |
+| Run Apex or Flow tests | Allowed | Never | Never (fixed) |
+| Change data | Ask first | Never | Never (fixed) |
+| Run anonymous Apex | Ask first | Never | Never (fixed) |
 | Create or change DevOps Center records | Ask first | Never | Never (fixed) |
-| Promote through a DevOps Center pipeline | Never | Never (fixed) | Never (fixed) |
+| Promote through a DevOps Center pipeline | Never | Never | Never (fixed) |
 | Any other change to an org | Ask first | Never | Never (fixed) |
 
 A row covers its action whatever tool carries it out: the command line, an API, anonymous Apex, or a tool that wraps one of them. When two rows fit one action, the narrower row decides.

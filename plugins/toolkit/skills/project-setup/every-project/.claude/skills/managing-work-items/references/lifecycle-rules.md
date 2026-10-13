@@ -141,7 +141,7 @@ When approval is missing, ask a clear question that names what the owner is appr
 4. Each merge into the default branch, in Deploying.
    - A merge that the owner's standing merge instruction in `.claude/rules/owner-preferences.md` covers needs no new yes from the owner. `references/deploying.md`, section "What a merge into the default branch needs", says when the instruction covers a merge.
    - A merge that a helper makes into the work item's own branch needs no yes from the owner. "Starting a helper" below says what a helper is.
-5. Each deploy to an environment that other people use, such as a test or staging environment. A production deploy is the owner's to run.
+5. Each deploy to an environment that other people use, such as a test or staging environment. A production deploy is the owner's to run unless a project rule allows the agent to run it.
    - A deploy that a rule of the project allows without a question needs no new yes from the owner.
 6. Marking the work item Done.
 

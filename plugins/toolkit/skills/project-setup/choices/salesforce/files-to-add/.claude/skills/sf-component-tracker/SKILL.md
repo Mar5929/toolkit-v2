@@ -143,7 +143,7 @@ An org flag is the `Yes` or `No` in a row's column for one org.
 - Each org's flag is independent of the others. A component can be in one org, in another, or in both.
 - A new component that is not deployed yet has `No` in every flag.
 - When a deploy to an org succeeds, set that org's flag to `Yes`.
-- The owner runs production deploys. When the owner reports a successful production deploy, set `Production` to `Yes` for its components.
+- When a production deploy succeeds, whether you or the owner ran it, set `Production` to `Yes` for its components.
 - The order of the deploys does not matter. `Sandbox=No, Production=Yes` is valid when that is what happened.
 - Never change a flag for a deploy that failed.
 
