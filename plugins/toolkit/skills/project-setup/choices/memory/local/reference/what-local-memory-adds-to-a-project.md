@@ -11,19 +11,28 @@ This file lists what setup adds to a project that keeps its memory in local file
 | Files and folders | The same folder adds `memory/` with its guide, `CURRENT_STATE.md`, the index `MEMORY.md`, and the template for a memory file. |
 | Settings | Nothing. The settings in the full layout already name `local`. |
 | `PROJECT.md`, "Toolkit settings" | Write `local` on the Memory line. |
-| Text in `AGENTS.md` | Three rows in the "Project map" table. "The text in AGENTS.md" below gives them. |
+| Text in `AGENTS.md` | Three rows in the "Project map" table, and the "Project memory" section. "The text in AGENTS.md" below gives them. |
 | Outside the project folder | Nothing. |
 
-Step 2 of the setup file copies the folder of the first row. Step 3 copies the folder of the second and third rows. Step 4 writes the line in `PROJECT.md` and the rows in `AGENTS.md`.
+Step 2 of the setup file copies the folder of the first row. Step 3 copies the folder of the second and third rows. Step 4 writes the line in `PROJECT.md`, and the rows and the section in `AGENTS.md`.
 
 ## The text in AGENTS.md
 
 In the project's root `AGENTS.md`, in the "Project map" table, add these rows after the row for `.gitignore`, `.ignore`, and after the rows for `work-items/` when the project has them:
 
 ```markdown
-| `memory/` | What a later session needs and no other file holds: the project's Current State, and one file per subject. | `managing-project-memory`. |
+| `memory/` | What a later session needs and no other file holds: the project's Current State, and one file per subject. Git does not track this folder. | `managing-project-memory`. |
 | `memory/CURRENT_STATE.md` | The project's Current State, in five parts. | `managing-project-memory` writes it. |
 | `memory/MEMORY.md` | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
+```
+
+Replace the prompt under the heading "Project memory" with this section's text, below the heading:
+
+```markdown
+This project keeps its memory in local files in `memory/`, with the skill `managing-project-memory`.
+
+- The project's current state, a short page of what is true now, is `memory/CURRENT_STATE.md`. The session-start command prints it. When it is not in the session's context, read it with `managing-project-memory`.
+- Use `managing-project-memory` to find, save, correct, and tidy memory. Save each new fact and correct each record it affects in the same turn, and report the save as that skill says.
 ```
 
 ## Root guide summary

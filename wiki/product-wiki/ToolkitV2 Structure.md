@@ -39,7 +39,7 @@ Every project gets the same layout, whatever the owner answers in the interview.
 
 | File | What it holds |
 | --- | --- |
-| `AGENTS.md` | The instructions every session reads first. Setup fills a short paragraph naming this repository’s chosen work tracker and memory store, including its Notion project link when either choice uses Notion. Its sections: the agent's job, what to do in every session, the map of the project, where each kind of information goes, what to ask the owner first, how to write a question to the owner, which skill does which job, the project's commands, and how to write replies. |
+| `AGENTS.md` | The instructions every session reads first. Setup fills a short paragraph naming this repository’s chosen work tracker and memory store, including its Notion project link when either choice uses Notion. Its sections: the agent's job (running the project's work, and keeping the records, memory, and context organized), what to do in every session, the project's memory, the map of the project, where each kind of information goes, how to write a question to the owner, which skill does which job, the project's commands, and how to write replies. |
 | `CLAUDE.md` | The one line `@AGENTS.md`. Claude Code reads `AGENTS.md` through it. Each folder below that has its own `AGENTS.md` has this file beside it. |
 | `PROJECT.md` | The facts that stay true: what the project is for, what is in and out of scope, the systems and environments, the people and what each may decide, where the records are, the project's paths, and the "Toolkit settings" section, which records the owner's answers from setup. |
 | `SOUL.md` | How the owner wants the agent to work with the owner and the team. It starts as the toolkit's default, and the interview fits it to the project. |
@@ -122,7 +122,7 @@ A module holds only the parts its choice needs. These are the kinds of thing a m
 | A skill, or files inside a skill the project already has | The Notion module adds its files inside `managing-work-items`. |
 | A rule | The Salesforce module adds `salesforce-org-safety.md`. |
 | Files, folders, and templates | Local work items add the folder `work-items/`. |
-| Text in `AGENTS.md` | The Hindsight module adds its text at the top. |
+| Text in `AGENTS.md` | Each memory module fills the "Project memory" section with its own text. The shared text of `AGENTS.md` names no memory choice. |
 | Lines in the settings | The Salesforce module adds six forbidden commands. |
 | Lines in `PROJECT.md`, "Toolkit settings" | The GitHub module writes the repository's name. |
 | Something outside the project folder, after the owner's yes | The Notion module makes the project's pages in Notion. |
@@ -205,7 +205,7 @@ For any existing project, propose a review and migration batch.
 | Kind | What it adds |
 | --- | --- |
 | Questions | Confirm the bank's stable identity and who shares its memory. Offer one bank for the project and the deliberate-save default package, then ask what the owner wants different. Explain service readiness, recommended model and capacity settings with their evidence limits, and the checks that must pass. Broader sharing and changes affecting the shared service are explicit owner choices. |
-| Text in `AGENTS.md` | At the top: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
+| Text in `AGENTS.md` | In the "Project memory" section: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
 | Files and folders | The rule `.claude/rules/hindsight-memory.md`. A Hindsight project has no `memory/` folder and no Current State. |
 | Settings | The word `hindsight` on the session-start line, and one more word on the every-message line. |
 | `PROJECT.md` | Memory: `hindsight`, the stable bank ID and sharing scope, the server's address, the dashboard link, the package, the template, the owner's changes, service operator and verified profile, and open setup steps. |

@@ -21,7 +21,7 @@ In the project's root `AGENTS.md`, in the "Project map" table, add the first row
 
 ```markdown
 | `PROJECT-ROADMAP.md` | The plan at project level: the project's phases in order, and the top-level work items (with no parent) that belong to each phase. | `managing-work-items` decides the change. |
-| `work-items/` | The work items: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. | `managing-work-items` for every read and save. |
+| `work-items/` | The work items: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. Git does not track this folder. | `managing-work-items` for every read and save. |
 | `work-items/<ID>-<short-slug>/<ID>.md` | One work item: its goal, requirements, questions and answers, tasks, Current state, and history. | `managing-work-items`. |
 | `work-items/<ID>-<short-slug>/DESIGN.md` | The solution design for that one work item: the options considered and the approach the owner approved. | `managing-work-items`. |
 | `work-items/PROJECT-TASKS.md` | The project tasks: administrative tasks that belong to no work item, such as giving a person access. | `managing-work-items`. |

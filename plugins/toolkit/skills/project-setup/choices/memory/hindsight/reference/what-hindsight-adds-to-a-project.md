@@ -7,7 +7,7 @@ Use this during Hindsight setup to install its memory rule, connect the shared r
 | Part | What setup adds or changes |
 | --- | --- |
 | `.claude/rules/hindsight-memory.md` | Copy this choice's `files-to-add/` into the project. The rule defines qualifying memory, review triggers, recall, corrections, and filing boundaries. |
-| Root `AGENTS.md` | Add the short Hindsight section below. |
+| Root `AGENTS.md` | Add the "Project memory" section below, and the summary sentence. |
 | `PROJECT.md`, "Toolkit settings" | Record the bank, connection, package, template, changes, and open checks. |
 | Existing `.claude/hooks/prompt-reminder.mjs` | Reuse the file supplied by `every-project`; add no hook file. Set its existing prompt entries to use `--skill hindsight`. |
 | Toolkit `SessionStart` entries | Remove the entries that run the local `session-start.mjs`; they read local Current State. Preserve unrelated entries and the Hindsight add-on's hooks. |
@@ -17,15 +17,15 @@ Do not copy `shared-by-local-and-notion/files-to-add/` or local memory files for
 
 ## Root `AGENTS.md`
 
-Add this section and replace obsolete Hindsight memory instructions rather than keeping competing versions. Preserve unrelated owner instructions.
+Replace the prompt under the heading "Project memory" with this text, below the heading. In a project set up before this section existed, this text replaces an older "Hindsight memory" section; keep one version only. Preserve unrelated owner instructions.
 
 ```markdown
-## Hindsight memory
+This project keeps its memory in the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings". The project's current state is the current work in the work tracker and the project records; read them at session start.
 
 Read `.claude/rules/hindsight-memory.md` at session start and after compaction, and follow it for memory reads, reviews, saves, and corrections. It applies wherever this guide or a toolkit skill names `managing-project-memory`. Current work is in the work tracker. Wherever a toolkit guide or skill names the local Current State file, use the current tracker and project records instead, including handoff context; do not create that file or report its absence as a setup failure. The existing prompt reminder suggests when to review memory, and the agent reviews lasting lessons at handoff even when no reminder fires.
 ```
 
-Keep the root `CLAUDE.md` that loads `AGENTS.md`. In the root guide, replace the local Current State startup instruction with the Hindsight section's instruction. Make references to memory lookup use Hindsight. Replace local Current State instructions in startup, status, handoff, and setup checks with the tracker and project-record instruction above; keep unrelated work-tracker and authoritative-record instructions.
+Keep the root `CLAUDE.md` that loads `AGENTS.md`. The rest of the root guide refers to "Project memory" for memory work and the project's current state, so no other line of it changes.
 
 ## `PROJECT.md`, section "Toolkit settings"
 

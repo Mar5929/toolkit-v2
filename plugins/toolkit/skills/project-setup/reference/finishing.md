@@ -46,7 +46,7 @@ Go through these parts:
    - each further place that a step of a choice's setup file names for the finish of setup.
 
    When the owner gave no sentence, leave the outcome prompts, and list them in the report.
-2. **The other answers.** Fill the root `AGENTS.md` work tracking and memory paragraph using [project-store-summary.md](project-store-summary.md), after the selected stores have been checked. Check each answer against the table in [SKILL.md](../SKILL.md), Step 4, which gives the place for each one.
+2. **The other answers.** Fill the root `AGENTS.md` work tracking and memory paragraph using [project-store-summary.md](project-store-summary.md), after the selected stores have been checked. Fill its "Project memory" section with the text that the memory choice's "what it adds" reference gives. Check each answer against the table in [SKILL.md](../SKILL.md), Step 4, which gives the place for each one.
 3. **The "Build, test, or deploy" row** under "Commands" in `AGENTS.md`. Fill it when the owner gave the commands during the interview. Otherwise leave the prompt, and list it in the report with what the repository shows as a suggestion, for example `npm test`.
 4. **The other prompts of `PROJECT.md` and `README.md`.** Follow the fill-in guide of each file.
    - Fill a prompt only with a fact that the owner gave or confirmed in this session. A fact that a file in the repository shows is a suggestion: offer it to the owner, and write it after the owner's yes.

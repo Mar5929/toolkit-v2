@@ -169,7 +169,7 @@ git status --short -- <file>
 
 ### Updating AGENTS.md
 
-The root `AGENTS.md` reads the same in every project, except for the outcome sentence, the work tracking and memory summary, and the "Build, test, or deploy" row, and the lines that the setup files of the project's choices add. The owner may also have added lines. List the `## ` headings of both files:
+The root `AGENTS.md` reads the same in every project, except for the outcome sentence, the work tracking and memory summary, the "Project memory" section, the "Build, test, or deploy" row, and the lines that the setup files of the project's choices add. The owner may also have added lines. List the `## ` headings of both files:
 
 ```text
 grep -n '^## ' AGENTS.md
@@ -181,9 +181,10 @@ Then compare the two lists. One of two cases applies.
 - **Every heading of the setup copy's file is in the project's file, in the same order.** Sections that the owner added do not matter for this comparison. Name each toolkit change in plain words (for example "a changed row in the Project map"). After the owner's yes, add, change, or remove only those lines, and keep the owner's lines.
 - **A heading of the setup copy's file is missing from the project's file, or the order differs.** This is the case when the toolkit moved, renamed, or added a section. Changing named lines cannot give the project the new layout, so build a new file:
   1. Start from `<copy>/AGENTS.md`, which already has the project's name.
-  2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones. Fill its work tracking and memory summary using [project-store-summary.md](project-store-summary.md) and the confirmed current record homes. Delete its fill-in guide comment only when its prompts are filled.
+  2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones. Fill its work tracking and memory summary using [project-store-summary.md](project-store-summary.md) and the confirmed current record homes. Fill its "Project memory" section with the text that the project's memory choice supplies. Delete its fill-in guide comment only when its prompts are filled.
   3. Find the lines that the owner added or changed with `diff -u AGENTS.md <copy>/AGENTS.md`. Then decide for each of those lines:
-     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice).
+     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice). Lines about one memory choice that sat outside "Project memory", and an older "Hindsight memory" section, are of this kind.
+     - Drop the "Ask the owner first" section of an older file; the toolkit no longer ships it. When the owner added a line to that section, carry it over and mark it in the list in step 5.
      - Carry over a line that holds a fact, a command, or an instruction of the owner's own, into the section where it fits. A whole section that the owner added goes in right after "Commands".
      - When you cannot tell whether to drop a line or carry it over, carry the line over and mark it in the list in step 5.
   4. Check that `AGENTS.md` holds only what every session needs and fits within the host's instruction budget, including other loaded instruction files. For Codex, check the configured `project_doc_max_bytes` (32 KiB by default). When instructions risk being cut off, say so in step 5 and recommend what to move and where. Cut no line of the owner's without the owner's yes.
