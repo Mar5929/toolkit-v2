@@ -150,7 +150,7 @@ The table lists the steps that the owner does in every project. The setup file o
 
 Give the owner a short, plain report. It has these parts, in this order:
 
-1. **What was set up.** Say where work items and memory are kept, whether the project is a Salesforce project, how many skills it has, the three hook commands, where the roadmap is, and each line that was added to `owner-preferences.md`, in the owner's words.
+1. **What was set up.** Say where work items and memory are kept, whether the project is a Salesforce project, how many skills it has, the three hook commands, where the roadmap is, and each line that was added to `owner-preferences.md`, in the owner's words. Then tell the owner that they can say at any time how they want the agent to work, such as "always ask me before you push", and that the agent saves each such instruction in `.claude/rules/owner-preferences.md`.
 2. **What was made outside the project folder.** Name the Notion pages, the GitHub repository and labels, the Hindsight bank, and the add-on's changes in `~/.claude`, `~/.codex`, and `~/.hindsight`.
 3. **What was skipped**, and why.
 4. **What the owner must do**, each step with the reason for it.

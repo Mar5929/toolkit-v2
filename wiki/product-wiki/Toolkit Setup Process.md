@@ -95,7 +95,7 @@ Nothing is made outside the project folder without the owner's yes. Examples are
 3. With local memory, it writes the first lines of Current State from question 11. With Notion memory, it initializes Current state through the librarian and verifies the wiki destinations, retrieval/capture skills, the librarian skill published inside Project Wiki with verified project context and schemas, and the supported scheduler chosen with the owner. A Hindsight project keeps current work in its tracker and project records.
 4. It checks that the setup works: the settings files are valid, the session-start command prints the Current State when the project has one, and each service the owner chose answers.
 5. It tells the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
-6. It reports what was set up, what was made outside the folder, and what is still open.
+6. It reports what was set up, what was made outside the folder, and what is still open. It also tells the owner that any instruction for how the agent works can be given at any time, and that the agent saves it in `owner-preferences.md`.
 7. It offers to commit the setup files.
 
 ## One answer worked through: memory in Hindsight
