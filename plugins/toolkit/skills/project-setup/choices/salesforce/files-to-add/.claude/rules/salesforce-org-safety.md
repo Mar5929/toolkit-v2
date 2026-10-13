@@ -47,7 +47,7 @@ The production entries follow the production cells of the owner's file. Each ent
 
 ## Enforcement
 
-- In Claude Code, the project's `.claude/settings.json` refuses some commands. When a command names a read-only org, or a production org for a change the owner's file says Never, and it is a deploy, a deploy validation, a data change, anonymous Apex, or an Apex or Flow test run. It refuses `sf project delete source` and `sf org delete` on every org. Setup writes the entries for the production orgs and read-only orgs that the owner names.
+- In Claude Code, the project's `.claude/settings.json` refuses a deploy, a deploy validation, a data change, anonymous Apex, or an Apex or Flow test run when the command names a read-only org. It refuses the same commands when the command names a production org and the owner's file says Never for that change in production. It refuses `sf project delete source` and `sf org delete` on every org. Setup writes the entries for the production orgs and read-only orgs that the owner names.
 - The refuse list matches the text of a command. It does not stop a command that reaches production without naming it, a command that names no org, or a script. This rule forbids all three.
 - Codex has no refuse list. There, this rule and the owner's file are the only protection for production and read-only orgs.
 - Follow this rule and the owner's file whether or not a command is refused.
