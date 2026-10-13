@@ -30,7 +30,7 @@ For example, each of these changes what is true: a new person or a changed role,
 
 - With local or Notion memory, read the project's Current State with `managing-project-memory` when it is absent from startup context. With Hindsight, read current work from the configured tracker and project records; follow `.claude/rules/hindsight-memory.md` for lasting knowledge.
 - Read `PROJECT.md`, and `SOUL.md` when the project has one. Read them again after resume, clear, or compaction. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
-- Before you change a file in a folder that has its own `AGENTS.md`, read that file.
+- Before you read or change a file in a folder that has its own `AGENTS.md`, read that file.
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 - The bullets below are for the session the owner writes to. A helper agent (a separate agent started for one job) follows its brief.
 - On every turn, decide whether the owner's message concerns a work item, a source, a project record that several work items need, project memory, or none of these. More than one may apply. Decide whether the owner asks for an answer or a change. Use "Where information goes" and "Which skill" below to choose the work.
