@@ -68,7 +68,7 @@ Use this section for a small work item that takes the short path. `references/li
 
 On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the question that "Filling the Moved up line" asks the owner, when it asks one, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
 
-1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then do what "Filling the Moved up line" says to do before the owner is asked.
+1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then do what `references/project-memory-steps.md`, section "Filling the Moved up line", says to do on the short path.
 2. Ask the closing question. Add a Questions and Answers row asking the owner to approve the result and mark the work item Done, with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
    - When "Filling the Moved up line" would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
    - When a merge, a deploy, or a data load is still to come, say what it is and who runs it, and say that the owner's yes to the closing question does not cover it.

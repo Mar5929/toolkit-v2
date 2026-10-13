@@ -33,7 +33,8 @@ The list of inputs:
 ```text
 Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
-Tracker: <the work tracker that PROJECT.md names, and the lines of
+Tracker: <the work tracker that PROJECT.md names, its repository when
+  PROJECT.md names one, and the lines of
   managing-work-items/references/work-tracker.md, section "How a helper
   opens a work item by ID", copied word for word>
 Memory and shared records: <where this project keeps its current state and

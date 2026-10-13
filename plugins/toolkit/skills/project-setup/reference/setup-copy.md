@@ -6,7 +6,7 @@ A new project normally copies the folders straight into the project, as [SKILL.m
 
 A setup folder is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`. The setup folder `every-project/` goes to every project. Each choice of the owner adds one or more.
 
-The setup file of each choice gives, in a step or in the file that a step names, the lines that the choice adds to a file of the full layout: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, and `.gitignore`. Make those changes in the setup copy too. [SKILL.md](../SKILL.md), Step 5, names the setup file of each choice.
+The setup file of each choice gives, in a step or in the file that a step names, the lines that the choice adds to a file of the full layout: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, `.gitignore`, and `.ignore`. Make those changes in the setup copy too. [SKILL.md](../SKILL.md), Step 5, names the setup file of each choice.
 
 ## Contents
 

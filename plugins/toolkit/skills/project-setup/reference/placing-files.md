@@ -45,7 +45,7 @@ diff -u <file> <source>/<file>
 | `AGENTS.md` (a project that had its own) | Keep the project's file. Show the owner what the toolkit's version adds. After the owner's yes, add the sections of the toolkit's version, and keep the owner's text. |
 | Every other file, such as `README.md`, a rule, or a template | Say in one line what differs, and recommend one of three choices: keep the owner's file, take the toolkit's file, or merge the two. The owner's file stays until the owner chooses. |
 
-The file `.ignore`, in the first row, makes the search tools that skip what `.gitignore` names read `work-items/` and `memory/`. Those tools are ripgrep and the search tools of Claude Code.
+The file `.ignore`, in the first row, makes the search tools that skip what `.gitignore` names read a folder that a local choice adds, such as `work-items/` or `memory/`; each local choice adds its own `!/<folder>/` line. Those tools are ripgrep and the search tools of Claude Code.
 
 Show every file that needs the owner's answer in one numbered table, with one row per file, and ask once. Carry out each row as the owner answers it.
 

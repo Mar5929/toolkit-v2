@@ -4,7 +4,7 @@ This file holds the steps of `managing-work-items` that depend on where this pro
 
 ## Filling the Moved up line
 
-These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`.
+These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`. On the short path for a small work item, make the list in step 1 before you ask the closing question.
 
 1. List what the whole project may need to keep. Read the work item's Questions and Answers rows marked Decision? `yes`, its design, its Related items line, and its Notes, "Lessons not proven yet". Put these five kinds of thing on the list:
    - Each decision that more than one work item needs, and whose row does not end "Filed as DEC-###". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs a decision.
@@ -32,7 +32,7 @@ These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`.
    | A lesson that is kept as not proven | Give the lesson to `managing-project-memory`, with the work item's ID and the dates it was seen. |
 
 4. Check that each record's ID may be written in the work item now. `references/work-tracker.md`, section "Writing a record's ID in a work item", says when it may. With each ID, `filing-project-records` reports whether the main checkout holds the save of that record. Steps 5 and 6 write those IDs into the work item.
-   - When an ID may not be written yet, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records the wait as "Recording a wait" below says.
+   - When an ID may not be written yet, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records the wait as "Recording a wait for a record or a decision" below says.
    - When every ID may be written, continue from this step.
 5. Write each lesson's outcome at the end of its line. Choose the outcome that describes what was saved, with the real ID in place of the example:
    - "Moved up: DEC-021."
@@ -49,20 +49,20 @@ These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`.
 
 ## When a work item closes
 
-Update the project's Current State, which is the project's one short page of what is true now. `references/lifecycle-rules.md`, section "Work that another skill does", names the skill for each of these writes.
+Update the project's Current State, which is the project's one short page of what is true now, with `managing-project-memory`.
 
 - Remove the work item's line under Now.
 - Ask `managing-project-memory` to remove the rest: each line under "Coming up" or "Waiting on" that is about this work item, and a "Next session starts with" line that names it. The reference file on the project's Current State in that skill, section "Removing what is no longer true", gives the steps.
 
-## Active work
+## Keeping active work current
 
 The project's Current State holds one line for an active work item.
 
 - Decide the line in this skill, in the form that the project's memory gives for a line under Now. Now is one of the parts of the project's Current State.
-- Add, change, or remove the line as the table in `references/lifecycle-rules.md`, "Work that another skill does", says.
+- Add, change, or remove the line with `managing-project-memory`.
 - In the same write, or in the turn in which the session starts work on a work item whose line is already there, make "Next session starts with" name the work item: its ID and "read its Current state". A work item's Current state is the five lines at the top of the work item that say where it stands.
 
-## Recording a wait
+## Recording a wait for a record or a decision
 
 Use this section when something the project needs is waiting, such as a record's ID that cannot be written in a work item yet, or an Open entry in `DECISIONS.md` that no work item waits on.
 

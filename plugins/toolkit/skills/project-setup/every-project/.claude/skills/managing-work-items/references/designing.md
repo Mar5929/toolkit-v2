@@ -4,7 +4,7 @@ Use this file to take a work item with approved requirements to one design. The 
 
 - The owner's choice is a Questions and Answers row in the work item, and the design names that row by its Q-ID.
 - The design says how to build. It never adds or changes a requirement.
-- A work item has one design. `references/work-tracker.md` says where it is kept and what it is made from. Read and save the design through that file. The working design stays with its work item. When the owner approves a rule about the system that more than one work item needs, give it to `filing-project-records`, step "update a system document".
+- A work item has one design. `references/work-tracker.md`, section "The templates for a work item and its design", says where it is kept and what it is made from. Read and save the design through that file. The working design stays with its work item. When the owner approves a rule about the system that more than one work item needs, give it to `filing-project-records`, step "update a system document".
 
 Three kinds of helper do part of the work: a researcher looks up a fact, an architect writes one design option, and a critic checks a draft option against every requirement. `references/lifecycle-rules.md`, section "Starting a helper", says how to start one.
 

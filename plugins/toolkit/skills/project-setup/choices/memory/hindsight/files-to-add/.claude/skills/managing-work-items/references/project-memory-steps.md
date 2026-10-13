@@ -4,7 +4,7 @@ This file holds the steps of `managing-work-items` that depend on where this pro
 
 ## Filling the Moved up line
 
-These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`.
+These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`. On the short path for a small work item, make the list in step 1 before you ask the closing question.
 
 1. List what the whole project may need to keep. Read the work item's Questions and Answers rows marked Decision? `yes`, its design, its Related items line, and its Notes, "Lessons not proven yet". Put these five kinds of thing on the list:
    - Each decision that more than one work item needs, and whose row does not end "Filed as DEC-###". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs a decision.
@@ -32,7 +32,7 @@ These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`.
    | A lesson that is kept as not proven | Follow `.claude/rules/hindsight-memory.md` and preserve its unproven status, work item, and dates. Keep lessons that do not qualify for lasting memory in the work item. |
 
 4. Check that each record's ID may be written in the work item now. `references/work-tracker.md`, section "Writing a record's ID in a work item", says when it may. With each ID, `filing-project-records` reports whether the main checkout holds the save of that record. Steps 5 and 6 write those IDs into the work item.
-   - When an ID may not be written yet, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records the wait as "Recording a wait" below says.
+   - When an ID may not be written yet, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records the wait as "Recording a wait for a record or a decision" below says.
    - When every ID may be written, continue from this step.
 5. Write each lesson's outcome at the end of its line. Choose the outcome that describes what was saved, with the real ID in place of the example:
    - "Moved up: DEC-021."
@@ -51,11 +51,11 @@ These six steps record changes to `wiki/product-wiki/` and `DECISIONS.md`.
 
 Keep the closed item and any remaining follow-up current in the tracker, and review lasting knowledge under `.claude/rules/hindsight-memory.md`.
 
-## Active work
+## Keeping active work current
 
 Keep active work and next actions in the work tracker. Follow `.claude/rules/hindsight-memory.md` for lasting knowledge. This project has no Current State page; create none.
 
-## Recording a wait
+## Recording a wait for a record or a decision
 
 Use this section when something the project needs is waiting, such as a record's ID that cannot be written in a work item yet, or an Open entry in `DECISIONS.md` that no work item waits on.
 

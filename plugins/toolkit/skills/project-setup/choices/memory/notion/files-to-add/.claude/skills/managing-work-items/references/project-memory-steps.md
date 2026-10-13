@@ -14,11 +14,11 @@ This file holds the steps of `managing-work-items` that depend on where this pro
 
 The librarian owns Current state updates. Capture the closure checkpoint with `managing-project-memory`. When closure changes the project's focus or resumption context, capture that checkpoint instead of editing Current state directly.
 
-## Active work
+## Keeping active work current
 
 Capture a checkpoint with `managing-project-memory` when active work or resumption context changes. `managing-project-memory` verifies the capture and the librarian reconciles Current state. Do not write the derived page directly.
 
-## Recording a wait
+## Recording a wait for a record or a decision
 
 Use this section when something the project needs is waiting, such as a record's ID that cannot be written in a work item yet.
 

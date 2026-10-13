@@ -61,7 +61,9 @@ A local work item is kept in the main checkout, so a record that it names must b
 - Write the ID of a record that `filing-project-records` saved only after `publish-docs` reports that the main checkout holds the save.
 - When `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item yet. `filing-project-records`, section "When to write the ID", says what to do in its place.
 
-A work item's design is its `DESIGN.md`, made from `assets/design-template.md`.
+## The templates for a work item and its design
+
+Use `assets/work-item-template.md` for a work item's fields and sections, and `assets/design-template.md` for its design. A work item's design is the `DESIGN.md` in its folder.
 
 ## How a helper opens a work item by ID
 

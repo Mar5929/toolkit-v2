@@ -223,7 +223,7 @@ A shared open question is an open question that more than one work item needs, k
 
 ### Active work in the project's memory
 
-When work on a work item starts, when its next step or what it waits on changes, and when it closes, follow `references/project-memory-steps.md`, section "Active work". The project's memory choice supplies that file.
+When work on a work item starts, when its next step or what it waits on changes, and when it closes, follow `references/project-memory-steps.md`, section "Keeping active work current". The project's memory choice supplies that file.
 
 ### Never delete a part of a work item
 

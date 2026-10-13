@@ -33,8 +33,8 @@ Use `filing-project-records` for sources and for shared decisions and system rul
 
 | File | Open it when |
 | --- | --- |
-| [assets/work-item-template.md](assets/work-item-template.md) | You create an item or need its field and section forms, when `references/work-tracker.md` says the project uses this template. |
-| [assets/design-template.md](assets/design-template.md) | You start a design, when `references/work-tracker.md` says the project uses this template. |
+| [assets/work-item-template.md](assets/work-item-template.md) | You create an item or need its field and section forms, when `references/work-tracker.md`, section "The templates for a work item and its design", says the project uses this template. |
+| [assets/design-template.md](assets/design-template.md) | You start a design, when `references/work-tracker.md`, section "The templates for a work item and its design", says the project uses this template. |
 | [references/requirements-analyst-brief.md](references/requirements-analyst-brief.md) | You start the helper that checks requirements. |
 | [references/researcher-brief.md](references/researcher-brief.md) | You start a research helper. |
 | [references/design-architect-brief.md](references/design-architect-brief.md) | You start a helper to write one design option. |

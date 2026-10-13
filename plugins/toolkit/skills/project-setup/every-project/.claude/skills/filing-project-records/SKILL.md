@@ -67,9 +67,9 @@ The work item template gives the place for each ID:
 
 `managing-work-items/references/work-tracker.md`, section "Writing a record's ID in a work item", says when the ID may be written. When it says to wait, write no ID in the work item. Do this in its place:
 
-- Record the wait as `managing-work-items/references/project-memory-steps.md`, section "Recording a wait", says. Name the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
+- Record the wait as `managing-work-items/references/project-memory-steps.md`, section "Recording a wait for a record or a decision", says. Name the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
 - Tell the owner the same.
-- When the record may be written, write the ID in each work item, and remove the recorded wait.
+- When the ID may be written, write it in each work item, and remove the recorded wait.
 
 ### A work item that must follow a record that already exists
 
