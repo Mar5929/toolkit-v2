@@ -28,11 +28,11 @@ In the session the owner writes to, you run this project, and the owner works wi
 A later session starts with only what the records hold. Keep them so that it can find every fact without asking the owner again.
 
 - Keep each fact in the one place that "Where information goes" gives for it, in the form that its skill sets, with nothing repeated in a second place.
-- When something changes what is true, update every record that it affects in the same turn: the work item, the project record, and memory, as "Project memory" says. For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
+- When something changes what is true, update every record that it affects in the same turn, such as the work item, a project record, and memory. Where "Project memory" says how a record is updated, follow it. For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
 - Say where each fact came from, and mark anything nobody has confirmed.
 - Report each save that failed, and each save the owner asked to see. "Project memory" says what else to report about memory.
 - Before you ask the owner to repeat information, or make a decision that depends on earlier context, search the project records, the work tracker, and memory. Before you say that nothing is recorded, search them all.
-- Ask the owner only when you cannot tell which of two things is true, or when the Project map says that a change needs the owner's yes.
+- About a record, ask the owner only when you cannot tell which of two things is true, or when the Project map says that a change needs the owner's yes.
 
 ## Every session
 
@@ -50,11 +50,11 @@ A later session starts with only what the records hold. Keep them so that it can
 
 ## Project memory
 
+Keep memory only in the place that this section names. Use no other memory store.
+
 <The "Project memory" section supplied by this project's memory choice.>
 
 ## Project map
-
-When "Project memory" gives another home for a kind of record in this map, that home applies.
 
 - Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them.
 - Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. Name a work item by its ID, never by a folder path.
@@ -63,19 +63,9 @@ When "Project memory" gives another home for a kind of record in this map, that 
 | --- | --- | --- |
 | `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
 | `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
-| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that a setup choice added, such as a local work items or memory folder: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
-| `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
+| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that `project-setup` added for a setup choice: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
 | `SOUL.md` | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
 | `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
-| `wiki/product-wiki/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, built, or retired. | `filing-project-records`, step "update a system document". |
-| `wiki/product-wiki/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. `wiki/product-wiki/AGENTS.md` gives the columns of a row. Read it before you use or define a project term. | As for `wiki/product-wiki/`. |
-| `wiki/product-wiki/constraints.md` | Rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect (CON-##). | As for `wiki/product-wiki/`. |
-| `wiki/product-wiki/architecture.md` | The main parts of the system, what each part is responsible for, and how the parts connect (ARC-##). | As for `wiki/product-wiki/`. |
-| `wiki/product-wiki/data-model.md` | The data the system keeps: each object or table, its important fields, and how records relate to each other (DAT-##). | As for `wiki/product-wiki/`. |
-| `wiki/product-wiki/security-model.md` | Who can see, create, change, and delete each kind of record, who can use each function, and how that access is given (SEC-##). | As for `wiki/product-wiki/`. |
-| `wiki/product-wiki/automation.md` | Everything that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes (AUT-##). | As for `wiki/product-wiki/`. |
-| `wiki/product-wiki/integrations/` | One document per connection between this system and another one: what data is sent, in which direction, when, and which system holds the true value (INT-##). | As for `wiki/product-wiki/`. |
-| `wiki/product-wiki/diagrams/` | Diagrams that explain the system, such as a data model diagram, a process flow, or a map of the integrations. | As for `wiki/product-wiki/`. |
 | `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
 | `sources/INDEX.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
 | `delivery/` | The records of putting the work into use, in the four folders below. It does not hold the work itself, or its requirements and tasks: those are in the work item. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
@@ -83,7 +73,7 @@ When "Project memory" gives another home for a kind of record in this map, that 
 | `delivery/deployments/` | One folder per deployment of a work item to an environment. `delivery/AGENTS.md` gives the fields of its record. | As for `delivery/`. |
 | `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk. Data files and backups are never committed. | As for `delivery/`. |
 | `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for `delivery/`. |
-| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions are in `wiki/product-wiki/` and `DECISIONS.md`. | Commit with `publish-docs`. |
+| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with `publish-docs`. |
 | `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
 | `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
@@ -96,7 +86,7 @@ When "Project memory" gives another home for a kind of record in this map, that 
 
 ## Where information goes
 
-File at the narrowest scope that covers everyone affected. When "Project memory" gives another home for a kind of information in this table, that home applies. The test: would an agent working on a different work item need to know this? If yes, file it at the wider scope and write one line with its ID in the work item.
+File at the narrowest scope that covers everyone affected. The test: would an agent working on a different work item need to know this? If yes, file it at the wider scope and write one line with its ID in the work item.
 
 | Information | Where it is kept |
 | --- | --- |
@@ -107,10 +97,6 @@ File at the narrowest scope that covers everyone affected. When "Project memory"
 | The requirements, questions, tasks, design, and history of one change | That work item and its design |
 | Where one work item stands and its next action | The Current state at the top of that work item |
 | A decision only one work item needs | A row in that work item's Questions and Answers |
-| A decision or open question more than one work item needs | `DECISIONS.md` (DEC-###) |
-| A rule for one area of the system that several work items rely on | That area's document in `wiki/product-wiki/` |
-| A rule that covers several areas | `wiki/product-wiki/constraints.md` (CON-##) |
-| A project term | `wiki/product-wiki/glossary.md` |
 | A source the project received and keeps | `sources/` (SRC-###); the work item holds the ID |
 | Knowledge captured from outside the project | `wiki/reference/ai-external-knowledge/` |
 | An analysis of how the system works today, for the owner or a work item | Write it to `wiki/reference/current-system/` before you reply (`wiki/reference/AGENTS.md`). |
@@ -124,8 +110,6 @@ File at the narrowest scope that covers everyone affected. When "Project memory"
 | Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in a reply, that a later session would need and no other record shows | Write it to memory before you reply, as "Project memory" says |
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
-
-Project memory is kept only in the place that "Project memory" names. Use no other memory store.
 
 ## How to write a question to the owner in the ai chat session
 
@@ -171,7 +155,7 @@ Claude Code applies the Plain English output style to replies to the owner. Code
 
 This line applies in Claude Code too:
 
-- When a reply uses something recalled from project knowledge (a project record, a work item, memory, or a rule), name the source where you use it, by its ID when it has one, such as "(DEC-012)", and end the reply with a short Sources list just above the closing question or the words that continue the work. Each line of the list names one source and what you took from it.
+- When a reply uses something recalled from project knowledge (a project record, a work item, memory, or a rule), name the source where you use it, by its ID when it has one, such as "(SRC-004)", and end the reply with a short Sources list just above the closing question or the words that continue the work. Each line of the list names one source and what you took from it.
 
 ## Text that goes to another person
 

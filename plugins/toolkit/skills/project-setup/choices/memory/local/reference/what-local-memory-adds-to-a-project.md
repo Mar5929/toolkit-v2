@@ -9,6 +9,7 @@ This file lists what setup adds to a project that keeps its memory in local file
 | Skill | Copy `choices/memory/shared-by-local-and-notion/files-to-add/` into the project. It holds the skill `managing-project-memory`: what counts as memory, and how to save, find, and tidy it. |
 | Files inside that skill | Copy `choices/memory/local/files-to-add/` into the project after it. It adds four files on how memory is kept as local files. `references/memory-store.md` is the one that the skill opens first. |
 | Files and folders | The same folder adds `memory/` with its guide, `CURRENT_STATE.md`, the index `MEMORY.md`, and the template for a memory file. |
+| Decision and system records | Copy `choices/memory/repository-records/files-to-add/` and write its rows in the root `AGENTS.md`, as [what-repository-records-add-to-a-project.md](../../repository-records/reference/what-repository-records-add-to-a-project.md) says. |
 | Settings | Nothing. The settings in the full layout already name `local`. |
 | `PROJECT.md`, "Toolkit settings" | Write `local` on the Memory line. |
 | Text in `AGENTS.md` | Three rows in the "Project map" table, and the "Project memory" section. "The text in AGENTS.md" below gives them. |

@@ -6,6 +6,7 @@ Use this during Hindsight setup to install its memory rule, connect the shared r
 
 | Part | What setup adds or changes |
 | --- | --- |
+| Decision and system records | Copy `choices/memory/repository-records/files-to-add/` and write its rows in the root `AGENTS.md`, as [what-repository-records-add-to-a-project.md](../../repository-records/reference/what-repository-records-add-to-a-project.md) says. |
 | `.claude/rules/hindsight-memory.md` | Copy this choice's `files-to-add/` into the project. The rule defines qualifying memory, review triggers, recall, corrections, and filing boundaries. |
 | Root `AGENTS.md` | Add the "Project memory" section below, and the summary sentence. |
 | `PROJECT.md`, "Toolkit settings" | Record the bank, connection, package, template, changes, and open checks. |
@@ -20,9 +21,11 @@ Do not copy `shared-by-local-and-notion/files-to-add/` or local memory files for
 Replace the prompt under the heading "Project memory" with this text, below the heading. In a project set up before this section existed, this text replaces an older "Hindsight memory" section; keep one version only. Preserve unrelated owner instructions.
 
 ```markdown
-This project keeps its memory in the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings". The project's current state is the current work in the work tracker and the project records; read them at session start.
+This project keeps its memory in the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings".
 
-Read `.claude/rules/hindsight-memory.md` at session start and after compaction, and follow it for memory reads, reviews, saves, and corrections. It applies wherever this guide or a toolkit skill names `managing-project-memory`. Current work is in the work tracker. Wherever a toolkit guide or skill names the local Current State file, use the current tracker and project records instead, including handoff context; do not create that file or report its absence as a setup failure. The existing prompt reminder suggests when to review memory, and the agent reviews lasting lessons at handoff even when no reminder fires.
+- Read `.claude/rules/hindsight-memory.md` at session start and after compaction, and follow it for memory reads, reviews, saves, corrections, and what to report. It applies wherever a toolkit skill names `managing-project-memory`.
+- The project's current state is the current work in the work tracker and the project records. Read them at session start, and keep handoff context there. Wherever a toolkit skill names the local Current State file, use them instead; do not create that file or report its absence as a setup failure.
+- The prompt reminder suggests when to review memory. Review lasting lessons at handoff even when no reminder fires.
 ```
 
 Keep the root `CLAUDE.md` that loads `AGENTS.md`. The rest of the root guide refers to "Project memory" for memory work and the project's current state, so no other line of it changes.
@@ -53,7 +56,7 @@ The reminder's phrases flag possible memory; the copied rule supplies the criter
 
 ## Verify the project wiring
 
-Confirm the copied rule is present, the root guide points to it, and no local memory files or skills were copied into a new Hindsight project. Check both hosts' hook configuration. Run the existing prompt reminder with a representative owner message and `--skill hindsight` and confirm it names the Hindsight rule. A message without a matching phrase must not request an automatic save. In a new session, confirm the agent reads the rule and the add-on reaches the recorded bank. Report any check that cannot run.
+Confirm the copied rule is present, the root guide's "Project memory" section holds the text above, and no local memory files or skills were copied into a new Hindsight project. Check both hosts' hook configuration. Run the existing prompt reminder with a representative owner message and `--skill hindsight` and confirm it names the Hindsight rule. A message without a matching phrase must not request an automatic save. In a new session, confirm the agent reads the rule and the add-on reaches the recorded bank. Report any check that cannot run.
 
 ## Root guide summary
 

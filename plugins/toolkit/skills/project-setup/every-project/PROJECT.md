@@ -11,7 +11,7 @@
 
 - In scope: `<Business capabilities or systems this project owns.>`
 - Outside scope: `<Important exclusions or adjacent owners.>`
-- Constraints: the approved rules that cover several areas of the system are in [wiki/product-wiki/constraints.md](wiki/product-wiki/constraints.md).
+- Constraints: the approved rules that cover several areas of the system are kept where [AGENTS.md](AGENTS.md), "Where information goes", says.
 
 ## Systems and environments
 
@@ -30,8 +30,7 @@ Write one row for each person or team, with what they do and what they may decid
 ## Work and project records
 
 - Work items, the project's phases, and the project's tasks: in the place that the "Tracker" line under "Toolkit settings" below names.
-- Decisions and open questions that more than one work item needs: [DECISIONS.md](DECISIONS.md).
-- The approved description of the system: [wiki/product-wiki/](wiki/product-wiki/).
+- Decisions and open questions that more than one work item needs, and the approved description of the system: where [AGENTS.md](AGENTS.md), "Where information goes", says.
 - Sources, which are the documents and messages the project received: [sources/](sources/).
 - Project memory: in the place that the "Memory" line under "Toolkit settings" below names.
 

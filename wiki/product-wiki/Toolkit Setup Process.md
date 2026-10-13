@@ -31,7 +31,7 @@ When the project had work before setup, the agent also asks whether it may read 
 
 The agent copies one folder, `every-project/`, into the project. That folder holds everything that every project gets, whatever the owner answers later:
 
-- the project's folders and starting files, such as `SOUL.md`, `AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/`;
+- the project's folders and starting files, such as `SOUL.md`, `AGENTS.md`, `PROJECT.md`, `sources/`, `delivery/`, and `wiki/reference/`. `DECISIONS.md` and `wiki/product-wiki/` come with local or Hindsight memory;
 - the rules every project follows;
 - the skills every project has;
 - the settings files, with every setting that is the same in every project;

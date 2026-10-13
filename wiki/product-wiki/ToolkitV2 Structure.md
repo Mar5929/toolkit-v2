@@ -12,12 +12,12 @@ Every project gets the same layout, whatever the owner answers in the interview.
 ├── CLAUDE.md              one line that makes Claude Code read AGENTS.md
 ├── PROJECT.md             the stable facts about the project
 ├── SOUL.md                how the agent works with the owner
-├── DECISIONS.md           decisions and open questions
+├── DECISIONS.md           decisions and open questions (local or Hindsight memory)
 ├── README.md              the project's one README
 ├── .gitignore, .ignore    what Git and the search tools skip
 │
 ├── wiki/                  maintained product documentation and reference
-│   ├── product-wiki/      what the system is and how it works (living SOT)
+│   ├── product-wiki/      what the system is and how it works (local or Hindsight memory)
 │   └── reference/         material to look things up in
 ├── sources/               what the project received from someone
 ├── delivery/              what the project hands over or ships
@@ -43,7 +43,7 @@ Every project gets the same layout, whatever the owner answers in the interview.
 | `CLAUDE.md` | The one line `@AGENTS.md`. Claude Code reads `AGENTS.md` through it. Each folder below that has its own `AGENTS.md` has this file beside it. |
 | `PROJECT.md` | The facts that stay true: what the project is for, what is in and out of scope, the systems and environments, the people and what each may decide, where the records are, the project's paths, and the "Toolkit settings" section, which records the owner's answers from setup. |
 | `SOUL.md` | How the owner wants the agent to work with the owner and the team. It starts as the toolkit's default, and the interview fits it to the project. |
-| `DECISIONS.md` | Each decision that more than one piece of work needs, with an ID, and each open question. |
+| `DECISIONS.md` | Each decision that more than one piece of work needs, with an ID, and each open question. Only a project with local or Hindsight memory has it; a Notion-memory project keeps these in its Project Wiki. |
 | `README.md` | The project's one README. It is at the root, and no other folder has one. |
 | `.gitignore`, `.ignore` | `.gitignore` keeps `work-items/` and `memory/` out of Git. `.ignore` lets the search tools read those two folders all the same. |
 
@@ -51,13 +51,13 @@ Every project gets the same layout, whatever the owner answers in the interview.
 
 | Folder       | What it holds                                                                                                                                                                                                                                         |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `wiki/product-wiki/`    | The description of the system the project builds or changes: `architecture.md`, `data-model.md`, `automation.md`, `security-model.md`, `constraints.md`, `glossary.md`, `integrations/` (one file per integration, from a template, listed in its `INDEX.md`), and `diagrams/`. |
+| `wiki/product-wiki/`    | Only with local or Hindsight memory; a Notion-memory project keeps this in its Project Wiki. The description of the system the project builds or changes: `architecture.md`, `data-model.md`, `automation.md`, `security-model.md`, `constraints.md`, `glossary.md`, `integrations/` (one file per integration, from a template, listed in its `INDEX.md`), and `diagrams/`. |
 | `sources/`   | Every document or message the project receives from someone, kept unchanged. `INDEX.md` lists them, one row per source.                                                                                                                                              |
 | `delivery/`  | What the project hands over or ships: `releases/`, `deployments/`, `migrations/`, and `client-handoffs/`.                                                                                                                                             |
 | `wiki/reference/` | Material to look things up in: `current-system/` for the system as it is before the project changes it, and `ai-external-knowledge/` for knowledge captured from outside the project, such as vendor documentation or architecture best practices, which the agent reads to ground itself in a topic, listed in its `INDEX.md`.                                                                       |
 | `tests/`     | The test plan template.                                                                                                                                                                                                                               |
 
-Each of `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/` has its own `AGENTS.md`, which says what belongs in that folder and how a record there is written.
+Each of `sources/`, `delivery/`, `wiki/reference/`, and, when the project has it, `wiki/product-wiki/` has its own `AGENTS.md`, which says what belongs in that folder and how a record there is written.
 
 ### The rules every project gets
 

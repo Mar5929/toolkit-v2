@@ -134,7 +134,7 @@ Never overwrite the rest of `PROJECT.md`, `README.md`, `SOUL.md`, `PROJECT-ROADM
 
 ### Rules and other toolkit files
 
-For rules in `.claude/rules/`, show what differs. For each folder's `AGENTS.md`, the templates, and the output style, describe the change and whether it includes an owner's edit. The folder guides are `wiki/product-wiki/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `wiki/reference/AGENTS.md`, `work-items/AGENTS.md`, and `memory/AGENTS.md`.
+For rules in `.claude/rules/`, show what differs. For each folder's `AGENTS.md`, the templates, and the output style, describe the change and whether it includes an owner's edit. The folder guides are `wiki/product-wiki/AGENTS.md` (local or Hindsight memory), `sources/AGENTS.md`, `delivery/AGENTS.md`, `wiki/reference/AGENTS.md`, `work-items/AGENTS.md`, and `memory/AGENTS.md`.
 
 Use "Whether a difference is the owner's edit" below to check ownership. Recommend the toolkit's version when there is no owner's edit. Keep an owner's edit unless the owner approves replacing it. Take a changed toolkit file only after the owner's yes.
 
@@ -169,7 +169,7 @@ git status --short -- <file>
 
 ### Updating AGENTS.md
 
-The root `AGENTS.md` reads the same in every project, except for the outcome sentence, the work tracking and memory summary, the "Project memory" section, the "Build, test, or deploy" row, and the lines that the setup files of the project's choices add. The owner may also have added lines. List the `## ` headings of both files:
+The root `AGENTS.md` reads the same in every project, except for the outcome sentence, the work tracking and memory summary, the "Build, test, or deploy" row, and the text that the setup files of the project's choices add, such as the "Project memory" section and rows in the tables. Compare that choice text with the text the project's choices give in the setup copy, and treat a difference as a toolkit change unless the owner wrote the line. The owner may also have added lines. List the `## ` headings of both files:
 
 ```text
 grep -n '^## ' AGENTS.md
@@ -201,6 +201,7 @@ A project may hold something that an earlier setup put there and that the new se
 - Earlier versions put Git commands in `.claude/settings.json`, under `permissions.deny` and `permissions.ask`, such as `Bash(git add -A)`, `Bash(git push --force *)`, and `Bash(git reset --hard *)`. The toolkit no longer ships them. List them as one row, and remove them after the owner's yes. The entries for a production Salesforce org stay. Remove `permissions` only when it is left empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
 - Renamed record folders follow [local wiki layout guidance](local-wiki-layout.md), not obsolete-file removal. This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
+- A Notion-memory project no longer gets `DECISIONS.md` or `wiki/product-wiki/`. In a project that has them, they stay, with their folder guide, until the reviewed move to Project Wiki is verified and the owner approves their removal. Until then, keep the project's existing record rows in the root `AGENTS.md`.
 
 ## 5. Services
 

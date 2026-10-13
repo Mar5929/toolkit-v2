@@ -49,7 +49,7 @@ cp -R <skill folder>/<folder>/. <copy>/
 
 Copy `every-project` first, then each chosen folder. A chosen folder adds files inside skill folders that an earlier folder supplied, so copy it into the existing paths.
 
-When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once. Local memory copies `choices/memory/shared-by-local-and-notion/files-to-add`; Notion memory copies only `choices/memory/notion/files-to-add` and the shared Notion tools. Apply the chosen module's guide and documentation changes in the setup copy too.
+When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once. Local memory copies `choices/memory/shared-by-local-and-notion/files-to-add`; Notion memory copies only `choices/memory/notion/files-to-add` and the shared Notion tools. Local and Hindsight memory also copy `choices/memory/repository-records/files-to-add`, which holds `DECISIONS.md` and `wiki/product-wiki/`. Apply the chosen module's guide and documentation changes in the setup copy too.
 
 Every file is copied whole. Change in the copy only what the setup files of the project's choices and the sections after "Never copied" name, plus the project paths adapted to verified retained record homes under [local wiki layout guidance](local-wiki-layout.md). Keep the procedures and owner facts unchanged; every other line stays as it was copied.
 
@@ -109,4 +109,4 @@ Run each check below. Each of these commands only reads.
 - `command grep -c -E '^- (Tracker|Memory):' <copy>/PROJECT.md` prints 2, and the section holds the lines of each of the project's choices. `command grep` runs the system grep. In Claude Code, plain grep skips the folders that the copied `.gitignore` names.
 - `jq empty <copy>/.claude/settings.json` prints nothing, which means that the JSON is valid.
 - Run `ls -A <skill folder>/every-project`, the same command for each folder you copied, and `ls -A <copy>`. The last list holds every name of the other lists except `.agents`, and no other name.
-- `find <copy> -name AGENTS.md -not -path '*/.claude/*'` lists the root file and one file in each of `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/`. With local work items it also lists one in `work-items/`, and with local memory it also lists one in `memory/`. Each of these files has a `CLAUDE.md` beside it that holds only the line `@AGENTS.md`.
+- `find <copy> -name AGENTS.md -not -path '*/.claude/*'` lists the root file and one file in each of `sources/`, `delivery/`, and `wiki/reference/`. With local or Hindsight memory it also lists one in `wiki/product-wiki/`. With local work items it also lists one in `work-items/`, and with local memory it also lists one in `memory/`. Each of these files has a `CLAUDE.md` beside it that holds only the line `@AGENTS.md`.
