@@ -1,22 +1,22 @@
 ---
 name: sf-data-change
-description: 'Prepares the owner''s handoff for a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs the change.'
+description: 'Prepares a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs the change unless the project''s Salesforce permissions allow the agent to.'
 ---
 
 # Salesforce data change handoff
 
-No agent writes data to production. The owner runs the change. This skill produces everything the owner needs to run the change without asking follow-up questions.
+By default no agent writes data to production: the owner runs the change, and this skill produces everything the owner needs to run it without asking follow-up questions. When `.claude/rules/salesforce-agent-permissions.md` allows a production data change, prepare the same files, then run the change as that file says.
 
 ## Limits
 
 | Operation | Production | Sandbox |
 |---|---|---|
 | Read (SOQL, export, describe) | Allowed | Allowed |
-| Create, update, upsert, delete data | Never | As `.claude/rules/salesforce-agent-permissions.md` says |
-| Anonymous Apex | Never | As `.claude/rules/salesforce-agent-permissions.md` says |
+| Create, update, upsert, delete data | As `.claude/rules/salesforce-agent-permissions.md` says; Never by default | As `.claude/rules/salesforce-agent-permissions.md` says |
+| Anonymous Apex | As `.claude/rules/salesforce-agent-permissions.md` says; Never by default | As `.claude/rules/salesforce-agent-permissions.md` says |
 
 - `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for this project, and says how long a yes holds. A line there may differ from this table, and then that line wins.
-- No agent writes production data by CLI, API, anonymous Apex, or any tool that wraps them.
+- The owner's file covers every route to production data: the command line, an API, anonymous Apex, or a tool that wraps them.
 
 ## Step 1: build the handoff
 

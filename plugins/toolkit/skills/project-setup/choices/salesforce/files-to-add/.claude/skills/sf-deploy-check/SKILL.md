@@ -14,7 +14,7 @@ A change outside the intended scope, or a feature that is not ready for the targ
 ## When to run
 
 - Before any deploy to a shared org (for example UAT, full copy, staging, or production), whatever starts it (for example `sf project deploy start` with `-x`, `-m`, or `-d`).
-- Before you give the owner any production deploy command.
+- Before any production deploy, whether you run it or give the owner the command.
 
 ## The check
 
@@ -48,4 +48,4 @@ A tracker can be wrong both ways: it can show a component as missing from an org
 ## Related
 
 - `salesforce-agent-permissions.md`: the read-only verify in step 4 is allowed there.
-- An agent never deploys to production: `salesforce-org-safety.md` forbids it. This check runs before the owner gets the command.
+- `salesforce-agent-permissions.md` says whether an agent may deploy to production. By default it may not, and this check runs before the owner gets the command.

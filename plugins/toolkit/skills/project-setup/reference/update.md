@@ -114,7 +114,7 @@ List missing toolkit files, then copy them in two parts. An owner's record is ne
 - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Use `-rlt` rather than `-a`, because `-a` would give the project folder the temporary folder's private permissions.
 - After the branch is merged (section 6, step 4), copy each ignored folder that the setup copy holds into the main checkout. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
 
-A missing `owner-preferences.md`, or `salesforce-agent-permissions.md` in a Salesforce project, gets its setup copy once. An existing one is the owner's record and is never compared or replaced.
+A missing `owner-preferences.md`, or `salesforce-agent-permissions.md` in a Salesforce project, gets its setup copy once. An existing one is the owner's record and is never compared or replaced. One exception: earlier versions marked the production cells of `salesforce-agent-permissions.md` "Never (fixed)", and the owner can now change them. When a production cell says "Never (fixed)", tell the owner, and after the owner's yes change it to "Never".
 
 ### Ignore files
 

@@ -6,13 +6,11 @@ Applies to every agent and subagent.
 
 - This rule holds the limits that are the same in every project. No line of another file changes them.
 - `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for this project. For each kind of action and each kind of org, it says Allowed, Ask first, or Never. Read it before any command that changes an org.
-- The refuse list, `permissions.deny` in `.claude/settings.json`, makes Claude Code refuse a command that changes an org and names a production org or a read-only org, whatever the owner's file says. The owner's file decides what this rule does not forbid.
+- The refuse list, `permissions.deny` in `.claude/settings.json`, makes Claude Code refuse a command that changes a read-only org, or that makes a kind of change to production that the owner's file says Never, when the command names that org. The owner's file decides what this rule does not forbid.
 
 ## Limits in every project
 
-- Never deploy or validate against production, even if asked. Hand the owner the command instead.
-- Never write data or run anonymous Apex in production: `sf data create / update / delete / import / upsert` (record, bulk, or tree), `sf apex run`, `sfdx force:apex:execute`, or any tool that wraps them. For a data change, prepare the handoff with the `sf-data-change` skill. The one kind of production data that a project can open to the agent is DevOps Center records, in the owner's file.
-- Never run Apex or Flow tests in production: `sf apex run test`, `sf flow run test`, `sf logic run test`, `sfdx force:apex:test:run`. Hand the owner the command instead.
+- Change production only as `.claude/rules/salesforce-agent-permissions.md` allows. Its defaults say Never for every change to production, and the owner may change them for this project. Where it says Never, hand the owner the command, or for a data change the handoff that the `sf-data-change` skill prepares.
 - Never change an org that `PROJECT.md` marks read-only. Read it only.
 - Never delete metadata with `sf project delete source` or `force:source:delete`, on any org.
 - Never delete an org or sandbox.
@@ -40,7 +38,7 @@ These are the commands for each kind of action. The owner's file says whether yo
 
 ## Enforcement
 
-- In Claude Code, the project's `.claude/settings.json` refuses a command that names a production org or a read-only org and is a deploy, a deploy validation, a data change, anonymous Apex, or an Apex or Flow test run. It refuses `sf project delete source` and `sf org delete` on every org. Setup writes the entries for the production orgs and read-only orgs that the owner names.
+- In Claude Code, the project's `.claude/settings.json` refuses a command that names a read-only org, or a production org for a kind of change the owner's file says Never, and is a deploy, a deploy validation, a data change, anonymous Apex, or an Apex or Flow test run. It refuses `sf project delete source` and `sf org delete` on every org. Setup writes the entries for the production orgs and read-only orgs that the owner names.
 - The refuse list matches the text of a command. It does not stop a command that reaches production without naming it, a command that names no org, or a script. This rule forbids all three.
 - Codex has no refuse list. There, this rule and the owner's file are the only protection for production and read-only orgs.
 - Follow this rule and the owner's file whether or not a command is refused.

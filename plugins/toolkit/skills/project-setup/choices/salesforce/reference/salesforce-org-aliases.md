@@ -7,7 +7,7 @@ This file holds the three questions about the project's Salesforce orgs, the for
 Ask the owner for the org aliases, one question per message. Before the first of these questions, show the aliases on this computer with `sf org list`, which only reads.
 
 1. Ask for the sandbox that the agents may deploy to for testing. Recommend an alias only when its name matches this project or the owner said it is this project's. When none of the listed orgs is for this project, recommend "none yet".
-2. Ask for production. Agents never deploy to production or change its data. The rule `salesforce-org-safety.md` forbids both, and Claude Code refuses a command that changes the production org and names it, as [salesforce-refuse-list.md](salesforce-refuse-list.md), "The entries for each production or read-only org", says.
+2. Ask for production. By default agents never deploy to production or change it: every production cell of `.claude/rules/salesforce-agent-permissions.md` says Never, and Claude Code refuses those commands when they name the production org, as [salesforce-refuse-list.md](salesforce-refuse-list.md), "The entries for each production or read-only org", says. The owner may change those cells for this project.
 3. Ask whether the project has orgs that agents may only read, such as an org whose data or metadata is being moved into the new one. Agents read them and never change them, and Claude Code refuses a command that changes one and names it.
 
 ## The aliases line in PROJECT.md

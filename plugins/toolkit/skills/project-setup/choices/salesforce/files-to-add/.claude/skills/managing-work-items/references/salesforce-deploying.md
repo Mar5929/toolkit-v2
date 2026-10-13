@@ -19,7 +19,7 @@ One thing applies to the whole file: `.claude/rules/salesforce-agent-permissions
 2. Then deploy to the sandbox, when the work item needs a sandbox deploy. The command is `sf project deploy start`, with the same `-x` and `-o`.
    - `.claude/rules/salesforce-agent-permissions.md` says whether you ask first. When it says Allowed, run the command without a question, and add the Recent History row "Deployed to `<sandbox alias>`: allowed by salesforce-agent-permissions.md." When it says Ask first, ask "Deploy WI-031 to `<sandbox alias>`?" as a Questions and Answers row, and run the command after the owner's yes.
    - Give the manual steps to the owner in order, with what to check after each step.
-3. For production, the owner runs the deploy and tells you the result. Give the owner all of these:
+3. For production, follow `.claude/rules/salesforce-agent-permissions.md` as in step 2. When it says Never, which is the default, the owner runs the deploy and tells you the result. Give the owner all of these:
    - the exact command, with `-o <production alias>`;
    - what the command deploys;
    - the `sf-deploy-check` result;
