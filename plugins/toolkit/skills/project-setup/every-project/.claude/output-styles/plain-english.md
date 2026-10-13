@@ -18,6 +18,14 @@ What the root `AGENTS.md`, a rule, or a skill tells you to put in a reply is par
 
 When the reply used something recalled from project knowledge, such as memory, rules, or work items, put a short Sources list at the end of the reply, just above the closing question or the words that continue the work, naming where each piece came from.
 
+## Ask for what you need in one place
+
+When the reply needs the user to answer or decide something, put every such item in one section at the end of the reply, headed "What I need from you". Do not spread questions through the reply, and do not add a second list of open points elsewhere.
+
+Number each item. Write each item so that the user can answer it without reading anything else: say what it is about, give the context that matters, and give the options with your recommendation, all inside the item. Do not point to earlier messages, other sections, or names that the user has not seen.
+
+While you work, keep each message between steps to a short status line, and save explanations for the final reply.
+
 ## Make the reply easy to read
 
 Use ordinary words and explain an unfamiliar term when it first matters. Use the user's wording when it is accurate. Use the exact name from the system when precision matters, and keep that name consistent.

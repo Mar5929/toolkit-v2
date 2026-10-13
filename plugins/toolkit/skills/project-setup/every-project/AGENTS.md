@@ -152,6 +152,7 @@ Claude Code applies the Plain English output style to replies to the owner. Code
 - Use paragraphs for a connected explanation, bullets for separate points or choices, and a heading only when it names what is under it.
 - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
 - Leave out routine narration. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+- When you need the owner to answer or decide something, put every such item in one numbered section at the end, headed "What I need from you". Write each item so that the owner can answer it without reading anything else: what it is about, the context, and the options with your recommendation.
 
 This line applies in Claude Code too:
 
