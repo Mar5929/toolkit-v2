@@ -32,7 +32,7 @@ work_item: WI-001
 
 | Type | Constraint or assumption | Source and status | Effect on the design |
 | --- | --- | --- | --- |
-| <Constraint / Assumption> | <Specific statement> | <CON-##, DEC-###, SRC-###, a link, or a person and date; confirmed or open> | <What it limits or changes> |
+| <Constraint / Assumption> | <Specific statement> | <the ID or link of a decision or a rule, SRC-###, a link, or a person and date; confirmed or open> | <What it limits or changes> |
 
 ## Design options
 
@@ -156,7 +156,7 @@ flowchart TD
 
 | Claim or decision | Source | Date | Evidence type | Checked how |
 | --- | --- | --- | --- | --- |
-| <Fact or choice that changes the design> | <DEC-###, a rule ID in `wiki/product-wiki/`, SRC-###, an exact link, or the Q-ID of the owner's answer> | <YYYY-MM-DD> | <Official documentation / Project evidence / Owner decision / Community claim> | <Verification or Pending> |
+| <Fact or choice that changes the design> | <the ID or link of a decision or a rule, SRC-###, an exact link, or the Q-ID of the owner's answer> | <YYYY-MM-DD> | <Official documentation / Project evidence / Owner decision / Community claim> | <Verification or Pending> |
 
 <Do not treat an unchecked community claim or an assistant proposal as a verified fact or owner decision.>
 

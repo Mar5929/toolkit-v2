@@ -5,7 +5,7 @@ Use this file to merge a work item's approved work, and to deploy it where it mu
 Before you start:
 
 - Read `.claude/rules/owner-preferences.md` for a standing merge instruction. A standing merge instruction is an instruction of the owner that allows merges without a question for each one.
-- Read `PROJECT.md` for the owner's name and, in a Salesforce project, for the org aliases.
+- Read `PROJECT.md` for the owner's name and for the environments or org aliases that "Toolkit settings" records.
 - Ask every question as a Questions and Answers row, with `waiting_on` set to the owner.
 - In Codex, every Git write and every call that needs the network follows `building.md`, section "Git writes in Codex".
 
@@ -20,7 +20,7 @@ Open a pull request only when the work item changed files and the project has a 
 - Push the branch, and never push with force. Set the pull request's base to the parent's branch for a sub-item, or the default branch for a top-level item. Open the pull request with its body in a file.
   - Write the title and the description in plain words, with no AI credit. Say what changed, why, how it was checked, and the work item's ID.
   - Run the title and the description through `humanizer`, as the root `AGENTS.md`, "Text that goes to another person", says.
-- The merge must never close the work item, because only the owner marks it Done. In a project that keeps its work items in GitHub Issues, `references/work-tracker.md` says how to write the work item's ID in the pull request.
+- The merge must never close the work item, because only the owner marks it Done. `references/work-tracker.md` says whether and how to write the work item's ID in the pull request.
 - Record the pull request on the work item with `references/work-tracker.md`. It goes under the work item's Related items, unless that skill names another place. Add the Recent History row "Pull request #14 opened."
 
 ## The merge
@@ -64,17 +64,17 @@ A project has no remote when `git remote` prints nothing. Such a project has no 
 
 ## A deployment
 
-Deploy only when the result must go beyond the default branch. In a Salesforce project, also follow `salesforce-deploying.md`, which gives the Salesforce detail for a deployment.
+Deploy only when the result must go beyond the default branch. Also follow each project rule in `.claude/rules/` that covers deployments.
 
-- Before each deploy, read the applicable deployment instructions in `.claude/rules/owner-preferences.md`, decisions in the configured project record homes, and earlier deployment lessons and runs. Read the memory choice in `PROJECT.md`: local and Notion use `managing-project-memory`; Hindsight uses `.claude/rules/hindsight-memory.md`. For Notion, check relevant wiki records, pending captures and current work records. Apply the supported current guidance and name it in the deployment record.
+- Before each deploy, read the applicable deployment instructions in `.claude/rules/owner-preferences.md`, the shared decisions where the root `AGENTS.md`, section "Where information goes", says they are kept, current work records, and earlier deployment lessons and runs. Find the lessons and runs in memory, as "Project memory" in the root `AGENTS.md` says, including records that are captured but not yet filed. Apply the supported current guidance and name it in the deployment record.
 - Use only the deploy command in `AGENTS.md`, section "Commands", or in `PROJECT.md`. When neither gives one, ask the owner how this project deploys.
 - Get the owner's yes before a deploy when `references/lifecycle-rules.md`, section "When to stop for the owner's yes", stop 5, asks for it.
-- Never run a production deploy or data load unless a project rule, such as `.claude/rules/salesforce-agent-permissions.md`, allows it. Otherwise give the owner the exact command, what it deploys, and what to check afterwards. Record the owner's report in the owner's words.
+- Never run a production deploy or data load unless a project rule allows it. Otherwise give the owner the exact command, what it deploys, and what to check afterwards. Record the owner's report in the owner's words.
 - Write the work item's deployment record in `delivery/deployments/`, with the date and time the deploy ran, and each manual step with who did it.
   - A release of several work items together also gets a release plan and release notes in `delivery/releases/`.
   - `delivery/AGENTS.md` gives the folder name of each record, its fields, and its Status values.
   - Add a Recent History row with the result.
-- A deploy that runs on a schedule, such as a monthly release, is also a recurring job. Give its run to `managing-project-memory`, which records the run of a recurring job.
+- A deploy that runs on a schedule, such as a monthly release, is also a recurring job. Write its run to memory, as "Project memory" in the root `AGENTS.md` says.
 - When a deploy or a data load fails, fill Blockers with the error and tell the owner.
   - When the fix changes the result, move the work item back to the Testing Loop.
   - Write what caused the failure under Notes, "Lessons not proven yet", with the date.

@@ -134,7 +134,7 @@ Never overwrite the rest of `PROJECT.md`, `README.md`, `SOUL.md`, `PROJECT-ROADM
 
 ### Rules and other toolkit files
 
-For rules in `.claude/rules/`, show what differs. For each folder's `AGENTS.md`, the templates, and the output style, describe the change and whether it includes an owner's edit. The folder guides are `wiki/product-wiki/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `wiki/reference/AGENTS.md`, `work-items/AGENTS.md`, and `memory/AGENTS.md`.
+For rules in `.claude/rules/`, show what differs. For each folder's `AGENTS.md`, the templates, and the output style, describe the change and whether it includes an owner's edit. The folder guides are `wiki/product-wiki/AGENTS.md` (local or Hindsight memory), `sources/AGENTS.md`, `delivery/AGENTS.md`, `wiki/reference/AGENTS.md`, `work-items/AGENTS.md`, and `memory/AGENTS.md`.
 
 Use "Whether a difference is the owner's edit" below to check ownership. Recommend the toolkit's version when there is no owner's edit. Keep an owner's edit unless the owner approves replacing it. Take a changed toolkit file only after the owner's yes.
 
@@ -169,7 +169,7 @@ git status --short -- <file>
 
 ### Updating AGENTS.md
 
-The root `AGENTS.md` reads the same in every project, except for the outcome sentence, the work tracking and memory summary, and the "Build, test, or deploy" row, and the lines that the setup files of the project's choices add. The owner may also have added lines. List the `## ` headings of both files:
+The root `AGENTS.md` reads the same in every project, except for the outcome sentence, the work tracking and memory summary, the "Build, test, or deploy" row, and the text that the setup files of the project's choices add, such as the "Project memory" section and rows in the tables. Compare that choice text with the text the project's choices give in the setup copy, and treat a difference as a toolkit change unless the owner wrote the line. The owner may also have added lines. List the `## ` headings of both files:
 
 ```text
 grep -n '^## ' AGENTS.md
@@ -181,9 +181,10 @@ Then compare the two lists. One of two cases applies.
 - **Every heading of the setup copy's file is in the project's file, in the same order.** Sections that the owner added do not matter for this comparison. Name each toolkit change in plain words (for example "a changed row in the Project map"). After the owner's yes, add, change, or remove only those lines, and keep the owner's lines.
 - **A heading of the setup copy's file is missing from the project's file, or the order differs.** This is the case when the toolkit moved, renamed, or added a section. Changing named lines cannot give the project the new layout, so build a new file:
   1. Start from `<copy>/AGENTS.md`, which already has the project's name.
-  2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones. Fill its work tracking and memory summary using [project-store-summary.md](project-store-summary.md) and the confirmed current record homes. Delete its fill-in guide comment only when its prompts are filled.
+  2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones. Fill its work tracking and memory summary using [project-store-summary.md](project-store-summary.md) and the confirmed current record homes. Fill its "Project memory" section with the text that the project's memory choice supplies. Delete its fill-in guide comment only when its prompts are filled.
   3. Find the lines that the owner added or changed with `diff -u AGENTS.md <copy>/AGENTS.md`. Then decide for each of those lines:
-     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice).
+     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice). Lines about one memory choice that sat outside "Project memory", and an older "Hindsight memory" section, are of this kind.
+     - Drop the "Ask the owner first" section of an older file; the toolkit no longer ships it. When the owner added a line to that section, carry it over and mark it in the list in step 5.
      - Carry over a line that holds a fact, a command, or an instruction of the owner's own, into the section where it fits. A whole section that the owner added goes in right after "Commands".
      - When you cannot tell whether to drop a line or carry it over, carry the line over and mark it in the list in step 5.
   4. Check that `AGENTS.md` holds only what every session needs and fits within the host's instruction budget, including other loaded instruction files. For Codex, check the configured `project_doc_max_bytes` (32 KiB by default). When instructions risk being cut off, say so in step 5 and recommend what to move and where. Cut no line of the owner's without the owner's yes.
@@ -200,6 +201,8 @@ A project may hold something that an earlier setup put there and that the new se
 - Earlier versions put Git commands in `.claude/settings.json`, under `permissions.deny` and `permissions.ask`, such as `Bash(git add -A)`, `Bash(git push --force *)`, and `Bash(git reset --hard *)`. The toolkit no longer ships them. List them as one row, and remove them after the owner's yes. The entries for a production Salesforce org stay. Remove `permissions` only when it is left empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
 - Renamed record folders follow [local wiki layout guidance](local-wiki-layout.md), not obsolete-file removal. This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
+- Earlier versions put `/work-items/` and `/memory/` in every project's `.gitignore`, with matching lines in `.ignore`. Decide each folder by itself: list `/work-items/` and `!/work-items/` unless work items are local, `/memory/` and `!/memory/` unless memory is local, and the old `.ignore` comment about "these two folders". Show them as one row, and remove them after the owner's yes.
+- A Notion-memory project no longer gets `DECISIONS.md` or `wiki/product-wiki/`. In a project that has them, they stay, with their folder guide, until the reviewed move to Project Wiki is verified and the owner approves their removal. Until then, keep the project's existing record rows in the root `AGENTS.md`, and its installed `filing-project-records` references for `DECISIONS.md` and `wiki/product-wiki/`, and its installed `publish-docs/references/shared-record-paths.md` that lists them.
 
 ## 5. Services
 
@@ -235,7 +238,7 @@ A changed choice does four things: it adds the files of the new choice's setup f
    - Change the Tracker or Memory line.
    - Remove each line that only the old choice used.
    - Write the new choice's lines as the setup file of the new choice says, and as [SKILL.md](../SKILL.md), "The lines of "Toolkit settings"", says for every line.
-   - Take out the lines that the old choice's setup file adds to a file the project already has, such as rows in `AGENTS.md`, entries in the settings files, and lines in `.gitignore`. Put in the lines that the new choice's setup file adds. Refresh the root summary using [project-store-summary.md](project-store-summary.md) after the new destinations are verified.
+   - Take out the lines that the old choice's setup file adds to a file the project already has, such as rows in `AGENTS.md`, entries in the settings files, and lines in `.gitignore` and `.ignore`. Put in the lines that the new choice's setup file adds. Refresh the root summary using [project-store-summary.md](project-store-summary.md) after the new destinations are verified.
 3. Build and compare the setup copy for the agreed choices using sections 1 and 2, including the planned settings and routing changes from step 2. Keep the installed configuration unchanged until step 6.
    - Add unrelated missing files as "Missing files" says. Keep affected operational files, including new skills, in the setup copy until the records have moved in step 5. Install them in step 6.
    - Keep the old choice's installed instructions until the records move in step 5. Read the old tracker reference or memory skill and its installed store instructions before the change. Read the new choice’s entry skill and applicable references in the setup copy to learn how to create and read back its records. Do not install the new instructions over the old ones yet.

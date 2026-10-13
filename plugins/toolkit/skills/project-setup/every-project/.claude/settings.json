@@ -19,7 +19,7 @@
               "local"
             ],
             "timeout": 30,
-            "statusMessage": "Loading Current State"
+            "statusMessage": "Loading project memory"
           }
         ]
       }

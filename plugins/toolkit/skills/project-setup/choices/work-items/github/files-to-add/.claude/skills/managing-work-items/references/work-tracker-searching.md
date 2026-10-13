@@ -87,7 +87,7 @@ gh issue list -R <repo> --state all --limit 200 --search 'bank file in:title,bod
 
 ## Recently finished, and changes since a date
 
-`<date>` is the date that the owner names. When the owner names no date, use the date on which the project's Current State was last changed. In a Hindsight project, which has no Current State, use a recorded handoff or progress date in the work tracker that defines the period being reviewed. State that date in the answer. When no record establishes the period, ask the owner which dates to cover.
+`<date>` is the date that the owner names. When the owner names no date, use the date on which the project's current state was last changed, as "Project memory" in the root `AGENTS.md` says. When the project keeps no current state record, use a recorded handoff or progress date in the work tracker that defines the period being reviewed. State that date in the answer. When no record establishes the period, ask the owner which dates to cover.
 
 ```text
 gh issue list -R <repo> --state closed --limit 200 --search 'closed:>=<date>' --json number,title,stateReason,closedAt

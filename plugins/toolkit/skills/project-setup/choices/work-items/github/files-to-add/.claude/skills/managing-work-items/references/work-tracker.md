@@ -43,6 +43,18 @@ Read the change back, and check that it says what you wrote. When a write failed
 - Remove a sub-issue link only to move a work item.
 - GitHub Issues has no archive. A closed issue is already left out of the lists of open issues. When the owner asks to archive an open work item, tell the owner that GitHub Issues has no archive and that a closed issue is already left out of the lists of open issues, and ask whether to cancel the work item.
 
+## Writing a record's ID in a work item
+
+Write the ID of a record that `filing-project-records` saved once the save is on the default branch. Work items are not kept in the main checkout, so no wait is recorded for the main checkout. A source's line under Notes, Sources may also hold the web address of the file on the default branch.
+
+## The templates for a work item and its design
+
+Use `assets/work-item-template.md` for the issue body's fields and sections, and `assets/design-template.md` for the design. A work item's design is the `## Solution design` comment.
+
+## How a helper opens a work item by ID
+
+Run `gh issue view <number> -R <account/repository> --json title,body,labels,state`, and `gh issue view <number> -R <account/repository> --comments` for its design comment. The list of inputs names the repository. Pass `-R` on every `gh` command.
+
 ## Related work
 
 | For | Use |

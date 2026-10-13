@@ -2,6 +2,10 @@
 
 `delivery/AGENTS.md` gives the folders of `delivery/`, the form of each record, and the Status values. This rule adds what only a Salesforce project has: when to update the component tracker, when to record a manual deployment step, when to check what a deployment includes, and how a record in `delivery/` is started.
 
+## Deploying a work item
+
+When a work item is in Deploying, also follow `.claude/skills/managing-work-items/references/salesforce-deploying.md`, which gives the Salesforce detail for a deployment.
+
 ## Keep the component tracker current
 
 - When you author, modify, rename, or delete metadata under `force-app/`, open the `sf-component-tracker` skill (`.claude/skills/sf-component-tracker/SKILL.md`). In the same response, update `delivery/deployments/component-tracker.csv`, `delivery/deployments/full-project-deployment-template/package.xml`, and the work item's deployment folder.

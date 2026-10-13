@@ -57,7 +57,8 @@ Search memory at the moments that the root `AGENTS.md`, section "Where informati
 Save, correct, and retire without a question. Ask the owner only when one of these is true:
 
 - An unresolved uncertainty blocks the work and you cannot resolve it from the available sources. For example, a memory record and a document that the owner shared give different dates for one deadline, and nothing shows which one is right.
-- The step is on the list in the root `AGENTS.md`, section "Ask the owner first". For example, a delete of a memory record cannot be undone in some memory stores, and an instruction that you inferred would add a line to a rule file, which the Project map marks "Only with the owner's yes".
+- The Project map in the root `AGENTS.md` says that the change needs the owner's yes. For example, an instruction that you inferred would add a line to a rule file, which the Project map marks "Only with the owner's yes".
+- You would delete a memory record that the store cannot restore, and the owner did not ask for the delete.
 - You clean up all of memory, or you propose removing a true line from the project's Current State. `references/tidying.md` and `references/current-state.md` say to show the owner the plan first, because a clean-up changes many records at once, and a cut removes a line that is still true.
 
 The owner's own request to keep, change, or forget something is the owner's yes. Act on it at once. When the owner told you to forget something or not to keep it, keep it nowhere else: not in the project's Current State and not in another memory record.

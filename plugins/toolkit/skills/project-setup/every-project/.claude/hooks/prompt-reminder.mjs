@@ -41,7 +41,7 @@ const PHRASES = {
 };
 const HOME = 'is filed where the root AGENTS.md says, under "Where information goes"';
 const DECIDES = 'Use managing-project-memory for the configured memory procedure: what is kept'
-  + ` ${HOME}. For Notion memory, capture and retrieval use the Project Wiki process.`;
+  + ` ${HOME}.`;
 const HINDSIGHT = `What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight`
   + ' memory is for.';
 const DECISION = ' For a decision, the configured filing procedure says whether it belongs in'

@@ -22,7 +22,7 @@ Paths start from the folder that holds this `SKILL.md`. Both hosts show that pat
 
 - `every-project/` holds the files every project gets, at their project paths.
 - Each folder in `choices/` has a setup file for an owner's choice, `reference/` for setup detail, and `files-to-add/` when that choice adds project files.
-- `choices/notion-shared/` supplies the shared Notion setup. Local memory also copies `choices/memory/shared-by-local-and-notion/`; Notion memory supplies its own coding-agent and librarian skills. Copy each chosen part once.
+- `choices/notion-shared/` supplies the shared Notion setup. Local memory also copies `choices/memory/shared-by-local-and-notion/`; Notion memory supplies its own coding-agent and librarian skills. Local and Hindsight memory also copy `choices/memory/repository-records/`, which holds `DECISIONS.md` and `wiki/product-wiki/`. Copy each chosen part once.
 - This skill's `reference/` holds the copy, interview, finishing, update, and diagnostic procedures. Read them at the steps that name them; copy only the project files.
 
 ## Rules for every step
@@ -126,7 +126,7 @@ The steps of a setup file are done at three moments. Most steps are done right a
 
 1. **Right after the answer, before the next question,** ask the choice's own questions, and add what the setup file says the choice adds to the project:
    - the files. Copy each `files-to-add/` folder that the setup file names into the project, the way Step 3 copies the full layout;
-   - the lines that it adds to a file the project already has: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, and `.gitignore`. A line whose value is not known yet, such as the id of a Notion page, is added when the value is known.
+   - the lines that it adds to a file the project already has: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, `.gitignore`, and `.ignore`. A line whose value is not known yet, such as the id of a Notion page, is added when the value is known.
 
    When a choice needs a sign-in, ask for it at this moment too, so that the owner can sign in while the interview goes on. The step for the sign-in says how to check it.
 2. **When the choice's sign-in is done and the owner has given the answers that the setup file needs,** set up what the choice needs outside the project folder, after the owner's yes. The Notion steps, for example, need the answers to questions 5, 6, and 7.

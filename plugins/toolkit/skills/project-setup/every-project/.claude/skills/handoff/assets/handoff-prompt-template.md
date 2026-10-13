@@ -2,7 +2,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Goal
 
-<What the whole piece of work is trying to achieve, in concise plain sentences, and why it matters.> Written down in <the work item ID and section, for example WI-014, Overview, Goal; a rule ID in `wiki/product-wiki/`; a DEC ID in `DECISIONS.md`; or an issue or pull request number>.
+<What the whole piece of work is trying to achieve, in concise plain sentences, and why it matters.> Written down in <the work item ID and section, for example WI-014, Overview, Goal; the ID or link of a decision or a rule; or an issue or pull request number>.
 
 ## Your task
 
@@ -20,7 +20,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Open questions
 
-- <A question nobody has settled, its ID when it has one (for example Q-03 in WI-014, or DEC-007 for an Open entry in `DECISIONS.md`), and who answers it.>
+- <A question nobody has settled, its ID when it has one (for example Q-03 in WI-014, or the ID or link of a shared open question), and who answers it.>
 
 ## First action
 

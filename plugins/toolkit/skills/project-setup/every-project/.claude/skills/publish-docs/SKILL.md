@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in DECISIONS.md, sources/, or wiki/product-wiki/, use filing-project-records. For code, rules, skills, or work items, use managing-work-items.'
+description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in sources/ or in the project's records of shared decisions and system rules, use filing-project-records. For code, rules, skills, or work items, use managing-work-items.'
 ---
 
 # Commit project documents to the default branch
@@ -19,14 +19,13 @@ Run each Git command on its own, with `git -C <folder>`, which names the folder 
 
 A project document is a file under one of these paths.
 
-- `wiki/product-wiki/**`
 - `PROJECT*.md`
-- `DECISIONS.md`
 - `sources/**`
 - `wiki/reference/**`
 - `delivery/**`
 - `tools/**/*.md`
 - `**/README.md`
+- Each path that `references/shared-record-paths.md` lists. The project's memory choice supplies that file, because it decides whether shared decisions and system rules are kept in the repository.
 
 ## Names used in the commands
 
@@ -151,7 +150,7 @@ When to remove the copy depends on the remote:
 
 ## The main checkout
 
-The third thing that step 8 notes is whether the main checkout holds the save. The reason is that local work items are kept in the main checkout, and a work item must not name a record that the main checkout does not hold.
+The third thing that step 8 notes is whether the main checkout holds the save. The reason is that a work item kept in the main checkout must not name a record that the main checkout does not hold. `managing-work-items/references/work-tracker.md` says whether this project's work items are kept there.
 
 ### With no remote
 
@@ -192,4 +191,5 @@ The save is still finished. Say so in the reply in one line: "The main checkout 
 
 | File | Open it when |
 | --- | --- |
+| [references/shared-record-paths.md](references/shared-record-paths.md) | You check whether a file is a project document. The memory choice supplies this file. |
 | [references/recovery.md](references/recovery.md) | The push or the fast-forward is refused, the default branch got new commits, the repository has no `origin`, or the save cannot finish now. |

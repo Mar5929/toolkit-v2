@@ -2,8 +2,6 @@
 
 A sourced answer counts as decided only when its speaker, documented authority, date and unambiguous decision are verified. Retain the source passage or timestamp; a tentative statement or interpretation remains unresolved.
 
-When the project uses Notion memory, use `managing-project-memory` to capture the decision, finalized documentation or term with its source and existing approval evidence. The librarian updates the configured wiki destination. Return verified capture links to the calling skill; the local publication procedure below does not apply.
-
 Use this file to record a decision or an open question that more than one work item needs, so that later work on any work item finds it. Each one is an entry in `DECISIONS.md`, with an ID in the form DEC-###.
 
 The comment at the top of `DECISIONS.md` gives the form of an entry, its four statuses, who may decide, and what must never change. Read it before you write.
@@ -46,7 +44,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 7. Write the IDs in each work item under Affects, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write them. Wait until then. On the work item's Related items line, write the DEC ID and the ID of each rule that step 5 added or changed.
    - When a Questions and Answers row in a work item raised the decision, add "Filed as DEC-###." at the end of that row's Answer cell, after the original answer. The row keeps the answer and its source evidence.
    - When a work item cannot continue without the answer to an Open entry, that work item waits on the owner. Continue with `managing-work-items` for that work item.
-   - When no work item waits on an Open entry, keep its DEC ID and who must answer in `DECISIONS.md`. With local or Notion memory, also give `managing-project-memory` a "Waiting on" line in Current State. With Hindsight, use the tracker for any follow-up task and the Hindsight rule for qualifying lasting knowledge.
+   - When no work item waits on an Open entry, keep its DEC ID and who must answer in `DECISIONS.md`. Also record the wait as `managing-work-items/references/project-memory-steps.md`, section "Recording a wait for a record or a decision", says.
 8. Tell the owner the DEC ID, its Status, and the work items that now name it.
 
 ## Answering an open question
@@ -59,7 +57,7 @@ The Status of an entry is one of four words: Open (a question that waits for an 
 4. Save as step 6 of "A new entry" says.
 5. Leave the DEC ID in each work item under Affects as it is. The work item holds only the ID, so nothing there changes.
    - When a work item waited on this entry, it continues now. Continue with `managing-work-items` for that work item.
-   - When a line under "Waiting on" in the project's Current State names this entry, ask `managing-project-memory` to remove it.
+   - When a recorded wait names this entry, remove it as `managing-work-items/references/project-memory-steps.md`, section "Recording a wait for a record or a decision", says.
 
 ## Replacing a decision
 

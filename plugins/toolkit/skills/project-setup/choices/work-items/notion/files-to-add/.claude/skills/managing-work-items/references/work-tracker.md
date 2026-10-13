@@ -53,6 +53,18 @@ Two rules apply to every read and every save:
 | [work-tracker-commands.md](work-tracker-commands.md) | You need the API call for creation, updates, queries, or comments. |
 | [work-tracker-known-problems.md](work-tracker-known-problems.md) | A call fails, a record is missing or malformed, or the owner changed the record by hand. |
 
+## Writing a record's ID in a work item
+
+Write the ID of a record that `filing-project-records` saved once the save is on the default branch. Work items are not kept in the main checkout, so no wait is recorded for the main checkout. A source's line under Notes, Sources may also hold the web address of the file on the default branch.
+
+## The templates for a work item and its design
+
+Notion makes a work item from the database's default template, with its Solution Design page, so `assets/work-item-template.md` is not used. `assets/design-template.md` is used only to make a missing Solution Design page. A work item's design is its Solution Design page. When the page is missing, [work-tracker-page-updates.md](work-tracker-page-updates.md), section "The Solution Design page", says what to do.
+
+## How a helper opens a work item by ID
+
+Read the configured record, following the installed Notion access procedure, or check freshly supplied text and properties. State which evidence was used.
+
 ## Related work
 
 | For | Use |

@@ -4,8 +4,6 @@ Use this file to save a source and give it an ID, so that other records can name
 
 `sources/AGENTS.md` gives the form of a row in the list of sources, the file name, what must stay true, and which sources need the owner's answer before they are filed. Read it before you write.
 
-The steps are the same whether the project keeps its work items in local files, in Notion, or in GitHub, because a source is never saved where the work items are kept.
-
 ## Steps
 
 1. Search `sources/INDEX.md`, the list of sources, for this source. Search by its date, who it came from, and its subject.
@@ -17,11 +15,11 @@ The steps are the same whether the project keeps its work items in local files, 
    - Save a file as a copy with its own extension. An email with attachments is one folder.
    - For a source kept outside Git, save no file.
 5. Add the source's row to `sources/INDEX.md`. In its "Used by" cell, name each work item that uses the source now.
-6. Save with `publish-docs` now, before you use the source. The save is what makes the number yours, and a link from Notion or GitHub works only once the file is on the default branch.
+6. Save with `publish-docs` now, before you use the source. The save is what makes the number yours, and a link to the file works only once the file is on the default branch.
 7. Write the source's line in each work item that uses it, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write it. Wait until then.
    - The line goes under Notes, Sources.
    - The line holds the SRC ID, what the source is, and the IDs taken from it. Those are the IDs of the requirements, questions, and tasks in that work item that came from the source.
-   - In Notion and GitHub, the line may add the web address of the file on the default branch.
+   - `managing-work-items/references/work-tracker.md`, section "Writing a record's ID in a work item", says whether the line also holds the web address of the file.
 8. Tell the owner the SRC ID, and give it to the skill that asked for this step.
 
 ## What to do with what the source says
@@ -31,12 +29,12 @@ Filing a source decides nothing and approves nothing. Read the source, and do wh
 | The source holds | Do |
 | --- | --- |
 | A request, an idea, or a bug | Make a new work item, or add a requirement to an open one, in the source's words. Use `managing-work-items`. |
-| A decision somebody states, or a question | With Notion memory, capture lasting supported decisions through `managing-project-memory` and keep active questions in affected work items. For other stores, when more than one work item needs it, record it with `record-decision.md`. Use that reference's authority and evidence checks to choose Decided or Open. When one work item needs it, use `managing-work-items`. |
+| A decision somebody states, or a question | When more than one work item needs it, record it with `record-decision.md`. Use that reference's authority and evidence checks to tell a decision from an open question. When one work item needs it, use `managing-work-items`. |
 | A fact about how the system works today | Write it in `wiki/reference/current-system/`, as `wiki/reference/AGENTS.md` says. |
-| A term and its meaning | Follow `update-system-doc.md`, section "A glossary term". |
+| A term and its meaning | Follow `update-system-doc.md`, which says where this project keeps project terms. |
 | An action item: something a named person agreed to do | Save it at once, without asking. It is a task in the work item it belongs to, or a project task with that person as Who does it. A project task is a task that belongs to no work item. Use `managing-work-items`. |
-| A date or a deadline for current work | Use `managing-work-items` to record it in its work item or project task. With local memory, also update the installed Current State when the date belongs there. With Notion memory, capture relevant coordination context through `managing-project-memory`; the librarian updates Current state. With Hindsight, keep active dates in the tracker. |
-| A lasting fact about a person or the client that fits no row above; a claim nobody checked | With local or Notion memory, use `managing-project-memory`. With Hindsight, follow `.claude/rules/hindsight-memory.md` for qualifying lasting knowledge, preserving the source and whether the claim was checked. |
+| A date or a deadline for current work | Use `managing-work-items` to record it in its work item or project task. When the date belongs in the project's current state, also record it there, as "Project memory" in the root `AGENTS.md` says. |
+| A lasting fact about a person or the client that fits no row above; a claim nobody checked | Keep it in memory, as "Project memory" in the root `AGENTS.md` says, with the SRC ID and whether the claim was checked. |
 
 ## When no work item is open for the source
 

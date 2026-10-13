@@ -22,8 +22,8 @@ Read what the project holds before you ask the question, so that you can tell th
 
 - Make the branch before the first change. Change the files that Git tracks only on that branch.
 - In a repository with no commit yet, a branch can undo nothing. Offer to commit what is there first.
-- Git ignores `work-items/` and `memory/`, so they are on no branch. They belong in the main checkout, where every later session finds them. When you work in a worktree, copy those two folders into the main checkout, not into the worktree.
-- Until the branch is merged, the main checkout has no `.gitignore` lines for those two folders, so `git status` there lists them as untracked. That is expected. Stage nothing from them.
+- With local work items or local memory, Git ignores `work-items/` or `memory/`, so they are on no branch. They belong in the main checkout, where every later session finds them. When you work in a worktree, copy each of those folders that the project has into the main checkout, not into the worktree.
+- Until the branch is merged, the main checkout has no `.gitignore` lines for those folders, so `git status` there lists them as untracked. That is expected. Stage nothing from them.
 - A work item or a memory record must never name a record that is not on the default branch yet. Write such a line after the branch is merged.
 
 ## Known problems

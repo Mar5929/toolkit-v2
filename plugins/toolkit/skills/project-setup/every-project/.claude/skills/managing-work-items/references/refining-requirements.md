@@ -25,7 +25,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 1. Start the work item, or continue it.
    - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
    - For an existing work item with open questions, say in one line what is settled, and then ask the first open question again. Never start the interview over.
-2. Read existing decisions and documentation for the affected area. With Notion memory, use `managing-project-memory` for wiki retrieval and relevant pending captures. Other choices use `DECISIONS.md`, the area document in `wiki/product-wiki/` and `wiki/product-wiki/constraints.md`. Read related work items with `references/work-tracker.md`. File each new source before you use it, as "Sources" below says.
+2. Read existing decisions and documentation for the affected area. Read the shared decisions, system rules, and project terms for the affected area where the root `AGENTS.md`, section "Where information goes", says they are kept, together with records that are captured but not yet filed there. Read relevant memory as "Project memory" in the root `AGENTS.md` says. Read related work items with `references/work-tracker.md`. File each new source before you use it, as "Sources" below says.
 3. Agree the goal first. Ask the owner to confirm the goal in one clear sentence. After the owner's yes, write that sentence as the goal in the work item's Overview.
 4. Offer a team of helper agents once. Ask after the goal is agreed, and only when both of these are true: the work item is clearly large, and `delivery` is `not-offered`. A work item is clearly large when a part of it meets one of the conditions for a split in "Roadmap, tasks, and sub-items" below.
    - Ask once whether the owner wants a team of helper agents to build the work item, and record the answer in `delivery`.
@@ -55,8 +55,8 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 
    Third, check whether more than one work item needs the answer. The root `AGENTS.md`, section "Where information goes", gives the test: would an agent that works on a different work item need the answer?
    - When the answer passes that test, give it to `filing-project-records`. Use step "record a decision" for a decision or an open question, and step "update a system document" for a rule that several work items rely on.
-   - With Notion memory, record verified capture or destination links and their processing state. Other choices add "Filed as DEC-014.", with the real ID, to the end of the row. The row keeps the original answer and its source evidence.
-   - A requirement based on an existing rule names its authoritative ID or wiki link rather than copying the rule. Working designs stay with the work item.
+   - Add "Filed as <the record's ID or link>." to the end of the row, with the ID or link that `filing-project-records` gave. When that step says the record still waits to be filed in its final place, say so in the row. The row keeps the original answer and its source evidence.
+   - A requirement based on an existing rule names the rule's ID or link rather than copying the rule. Working designs stay with the work item.
 7. Handle a change to an earlier answer or to an approved requirement.
    - Never rewrite the old row. Add a row "Change to Q-03: <the question now>", with the new answer, its speaker, date and source evidence, and set the old row to "Superseded by Q-09". Use the real Q-IDs.
    - Change the lines of each `R-xx` that the change affects, and keep the old wording in the Recent History row, in the form "R-02 was: ...; changed by Q-12".

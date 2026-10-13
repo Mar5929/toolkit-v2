@@ -1,5 +1,5 @@
 {
-  "description": "Toolkit V2 hooks for this project in Codex: Current State at session start; on every message, a line that says to check the project's skills and, when the owner uses a keep or decision phrase, a hint on where a fact is filed; a work item reminder after each commit; and a work item reminder when a helper agent starts or reports back.",
+  "description": "Toolkit V2 hooks for this project in Codex: project memory at session start; on every message, a line that says to check the project's skills and, when the owner uses a keep or decision phrase, a hint on where a fact is filed; a work item reminder after each commit; and a work item reminder when a helper agent starts or reports back.",
   "hooks": {
     "SessionStart": [
       {
@@ -9,7 +9,7 @@
             "type": "command",
             "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/session-start.mjs\" --memory local",
             "timeout": 30,
-            "statusMessage": "Loading Current State",
+            "statusMessage": "Loading project memory",
             "additionalContextLimit": 4000
           }
         ]

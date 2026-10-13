@@ -10,7 +10,7 @@ Start the analyst from Refining Requirements, as `refining-requirements.md`, ste
 - when the owner asks for a spec check, which is a check of the requirements;
 - after a change to an approved requirement.
 
-The analyst needs no permission from the owner. Start one analyst for each check. Retrieve the relevant project context through the configured tracker and memory skill or rule before preparing the brief. Give the helper readable evidence or fresh retrieved text, rather than inaccessible links alone.
+The analyst needs no permission from the owner. Start one analyst for each check. Before preparing the brief, retrieve the relevant project context through the work tracker, and from memory as "Project memory" in the root `AGENTS.md` says. Give the helper readable evidence or fresh retrieved text, rather than inaccessible links alone.
 
 Handle the analyst's findings as `refining-requirements.md`, step 10, says.
 
@@ -25,9 +25,9 @@ Open questions: <the open Questions and Answers rows>
 Verified project decisions: <answered Questions and Answers rows marked Decision? yes,
   with speaker, authority and source evidence when applicable>
 Project context: <relevant current documentation, constraints, decisions and related
-  work records from the project's configured record homes; with Notion memory,
-  include applicable wiki records and pending captures, distinguishing finalized
-  guidance from proposals or implementation claims>
+  work records from the places the root AGENTS.md names in "Where information
+  goes" and "Project memory", including relevant memory records not yet filed,
+  distinguishing finalized guidance from proposals or implementation claims>
 Evidence access: <paths or record links the helper can read, including sources by
   SRC-### and existing build files; supply freshly retrieved text with its source,
   status and retrieval date when the helper cannot access a record; or "none">

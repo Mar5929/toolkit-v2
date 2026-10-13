@@ -12,12 +12,12 @@ Every project gets the same layout, whatever the owner answers in the interview.
 ├── CLAUDE.md              one line that makes Claude Code read AGENTS.md
 ├── PROJECT.md             the stable facts about the project
 ├── SOUL.md                how the agent works with the owner
-├── DECISIONS.md           decisions and open questions
+├── DECISIONS.md           decisions and open questions (local or Hindsight memory)
 ├── README.md              the project's one README
 ├── .gitignore, .ignore    what Git and the search tools skip
 │
 ├── wiki/                  maintained product documentation and reference
-│   ├── product-wiki/      what the system is and how it works (living SOT)
+│   ├── product-wiki/      what the system is and how it works (local or Hindsight memory)
 │   └── reference/         material to look things up in
 ├── sources/               what the project received from someone
 ├── delivery/              what the project hands over or ships
@@ -39,25 +39,25 @@ Every project gets the same layout, whatever the owner answers in the interview.
 
 | File | What it holds |
 | --- | --- |
-| `AGENTS.md` | The instructions every session reads first. Setup fills a short paragraph naming this repository’s chosen work tracker and memory store, including its Notion project link when either choice uses Notion. Its sections: the agent's job, what to do in every session, the map of the project, where each kind of information goes, what to ask the owner first, how to write a question to the owner, which skill does which job, the project's commands, and how to write replies. |
+| `AGENTS.md` | The instructions every session reads first. Setup fills a short paragraph naming this repository’s chosen work tracker and memory store, including its Notion project link when either choice uses Notion. Its sections: the agent's job (running the project's work, and keeping the records, memory, and context organized), what to do in every session, the project's memory, the map of the project, where each kind of information goes, how to write a question to the owner, which skill does which job, the project's commands, and how to write replies. |
 | `CLAUDE.md` | The one line `@AGENTS.md`. Claude Code reads `AGENTS.md` through it. Each folder below that has its own `AGENTS.md` has this file beside it. |
 | `PROJECT.md` | The facts that stay true: what the project is for, what is in and out of scope, the systems and environments, the people and what each may decide, where the records are, the project's paths, and the "Toolkit settings" section, which records the owner's answers from setup. |
 | `SOUL.md` | How the owner wants the agent to work with the owner and the team. It starts as the toolkit's default, and the interview fits it to the project. |
-| `DECISIONS.md` | Each decision that more than one piece of work needs, with an ID, and each open question. |
+| `DECISIONS.md` | Each decision that more than one piece of work needs, with an ID, and each open question. Only a project with local or Hindsight memory has it; a Notion-memory project keeps these in its Project Wiki. |
 | `README.md` | The project's one README. It is at the root, and no other folder has one. |
-| `.gitignore`, `.ignore` | `.gitignore` keeps `work-items/` and `memory/` out of Git. `.ignore` lets the search tools read those two folders all the same. |
+| `.gitignore`, `.ignore` | `.gitignore` keeps `working-files/` out of Git; local work items and local memory add their folders. `.ignore` lets the search tools read those folders all the same. |
 
 ### The folders for the project's records
 
 | Folder       | What it holds                                                                                                                                                                                                                                         |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `wiki/product-wiki/`    | The description of the system the project builds or changes: `architecture.md`, `data-model.md`, `automation.md`, `security-model.md`, `constraints.md`, `glossary.md`, `integrations/` (one file per integration, from a template, listed in its `INDEX.md`), and `diagrams/`. |
+| `wiki/product-wiki/`    | Only with local or Hindsight memory; a Notion-memory project keeps this in its Project Wiki. The description of the system the project builds or changes: `architecture.md`, `data-model.md`, `automation.md`, `security-model.md`, `constraints.md`, `glossary.md`, `integrations/` (one file per integration, from a template, listed in its `INDEX.md`), and `diagrams/`. |
 | `sources/`   | Every document or message the project receives from someone, kept unchanged. `INDEX.md` lists them, one row per source.                                                                                                                                              |
 | `delivery/`  | What the project hands over or ships: `releases/`, `deployments/`, `migrations/`, and `client-handoffs/`.                                                                                                                                             |
 | `wiki/reference/` | Material to look things up in: `current-system/` for the system as it is before the project changes it, and `ai-external-knowledge/` for knowledge captured from outside the project, such as vendor documentation or architecture best practices, which the agent reads to ground itself in a topic, listed in its `INDEX.md`.                                                                       |
 | `tests/`     | The test plan template.                                                                                                                                                                                                                               |
 
-Each of `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/` has its own `AGENTS.md`, which says what belongs in that folder and how a record there is written.
+Each of `sources/`, `delivery/`, `wiki/reference/`, and, when the project has it, `wiki/product-wiki/` has its own `AGENTS.md`, which says what belongs in that folder and how a record there is written.
 
 ### The rules every project gets
 
@@ -122,7 +122,7 @@ A module holds only the parts its choice needs. These are the kinds of thing a m
 | A skill, or files inside a skill the project already has | The Notion module adds its files inside `managing-work-items`. |
 | A rule | The Salesforce module adds `salesforce-org-safety.md`. |
 | Files, folders, and templates | Local work items add the folder `work-items/`. |
-| Text in `AGENTS.md` | The Hindsight module adds its text at the top. |
+| Text in `AGENTS.md` | Each memory module fills the "Project memory" section with its own text. The shared text of `AGENTS.md` names no memory choice. |
 | Lines in the settings | The Salesforce module adds six forbidden commands. |
 | Lines in `PROJECT.md`, "Toolkit settings" | The GitHub module writes the repository's name. |
 | Something outside the project folder, after the owner's yes | The Notion module makes the project's pages in Notion. |
@@ -205,7 +205,7 @@ For any existing project, propose a review and migration batch.
 | Kind | What it adds |
 | --- | --- |
 | Questions | Confirm the bank's stable identity and who shares its memory. Offer one bank for the project and the deliberate-save default package, then ask what the owner wants different. Explain service readiness, recommended model and capacity settings with their evidence limits, and the checks that must pass. Broader sharing and changes affecting the shared service are explicit owner choices. |
-| Text in `AGENTS.md` | At the top: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
+| Text in `AGENTS.md` | In the "Project memory" section: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
 | Files and folders | The rule `.claude/rules/hindsight-memory.md`. A Hindsight project has no `memory/` folder and no Current State. |
 | Settings | The word `hindsight` on the session-start line, and one more word on the every-message line. |
 | `PROJECT.md` | Memory: `hindsight`, the stable bank ID and sharing scope, the server's address, the dashboard link, the package, the template, the owner's changes, service operator and verified profile, and open setup steps. |

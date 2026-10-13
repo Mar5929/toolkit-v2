@@ -31,7 +31,7 @@ When the project had work before setup, the agent also asks whether it may read 
 
 The agent copies one folder, `every-project/`, into the project. That folder holds everything that every project gets, whatever the owner answers later:
 
-- the project's folders and starting files, such as `SOUL.md`, `AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, `wiki/product-wiki/`, `sources/`, `delivery/`, and `wiki/reference/`;
+- the project's folders and starting files, such as `SOUL.md`, `AGENTS.md`, `PROJECT.md`, `sources/`, `delivery/`, and `wiki/reference/`. `DECISIONS.md` and `wiki/product-wiki/` come with local or Hindsight memory;
 - the rules every project follows;
 - the skills every project has;
 - the settings files, with every setting that is the same in every project;
@@ -105,7 +105,7 @@ Nothing is made outside the project folder without the owner's yes. Examples are
 1. The agent asks where memory is kept, and the owner answers "Hindsight".
 2. The agent opens the folder `choices/memory/hindsight/`. Its interview says how the toolkit offers Hindsight by default, what to ask, and what to be aware of. For example: whether this project gets its own memory bank, which settings the bank gets, that the owner enters the API key in the owner's own terminal and the agent never sees it, and that Hindsight's add-on cannot delete a memory.
 3. The agent tells the owner the default in a few plain lines and asks: "This is how the toolkit sets up Hindsight by default. Is this what you want?" The owner says yes or no. On a no, the agent asks what should be different. Then it asks the other questions, one at a time.
-4. The agent adds the Hindsight text to the top of the project's `AGENTS.md`, as the setup file in that folder says. The text is Mike's, with the bank's name filled in:
+4. The agent adds the Hindsight text to the "Project memory" section of the project's `AGENTS.md`, as the setup file in that folder says. The text is Mike's, with the bank's name filled in:
 
    > You (the agent) use hindsight for memory recall, storage, and insights in this project. You (the agent) are responsible for saving this type of information to the `<bank>` hindsight memory bank:
    >
