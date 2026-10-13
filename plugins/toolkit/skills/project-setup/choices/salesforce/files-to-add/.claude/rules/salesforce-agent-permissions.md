@@ -19,16 +19,16 @@ This file holds the owner's choices for this project. It starts with the toolkit
 | Action | Sandbox or scratch org | Production | Read-only org |
 | --- | --- | --- | --- |
 | Read data or metadata | Allowed | Allowed | Allowed |
-| Validate a deploy | Allowed | Never (fixed) | Never |
-| Deploy metadata | Allowed | Never (fixed) | Never |
-| Deploy with a destructive changes file | Ask first | Never (fixed) | Never |
-| Deploy a profile | Never | Never (fixed) | Never |
-| Run Apex or Flow tests | Allowed | Never (fixed) | Never |
-| Change data | Ask first | Never (fixed) | Never |
-| Run anonymous Apex | Ask first | Never (fixed) | Never |
-| Create or change DevOps Center records | Ask first | Never | Never |
-| Promote through a DevOps Center pipeline | Never | Never (fixed) | Never |
-| Any other change to an org | Ask first | Never | Never |
+| Validate a deploy | Allowed | Never (fixed) | Never (fixed) |
+| Deploy metadata | Allowed | Never (fixed) | Never (fixed) |
+| Deploy with a destructive changes file | Ask first | Never (fixed) | Never (fixed) |
+| Deploy a profile | Never | Never (fixed) | Never (fixed) |
+| Run Apex or Flow tests | Allowed | Never (fixed) | Never (fixed) |
+| Change data | Ask first | Never (fixed) | Never (fixed) |
+| Run anonymous Apex | Ask first | Never (fixed) | Never (fixed) |
+| Create or change DevOps Center records | Ask first | Never | Never (fixed) |
+| Promote through a DevOps Center pipeline | Never | Never (fixed) | Never (fixed) |
+| Any other change to an org | Ask first | Never | Never (fixed) |
 
 A row covers its action whatever tool carries it out: the command line, an API, anonymous Apex, or a tool that wraps one of them. When two rows fit one action, the narrower row decides.
 

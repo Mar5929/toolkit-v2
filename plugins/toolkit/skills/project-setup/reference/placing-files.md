@@ -67,9 +67,17 @@ diff -r .agents/skills .claude/skills
 - When the command prints no difference, or only lines that start with "Only in .claude/skills", every file in `.agents/skills` is also in `.claude/skills`. Tell the owner, and after the owner's yes remove the folder and make the link.
 - When the command prints anything else, ask the owner. The folder may hold the owner's own Codex skills. After the owner's yes, move each of those skills into `.claude/skills/` first.
 
-Git stores the link as a link. On Windows, Git makes it only when symbolic links are allowed (Developer Mode on, and the Git setting `core.symlinks` set to `true`). Otherwise the link arrives as a short text file that holds its target. Tell the owner, and after the owner's yes allow symbolic links and make the link again, for example with PowerShell's `New-Item -ItemType SymbolicLink -Path .agents\skills -Target ..\.claude\skills`. When the link cannot be made, tell the owner. Never put copied folders in its place.
+Git stores the link as a link, with a target relative to the link, so that it works on every computer. When the link cannot be made, tell the owner. Never put copied folders in its place.
+
+On Windows, a symbolic link needs Developer Mode on, and Git makes one only when the Git setting `core.symlinks` is `true`. Otherwise the link arrives as a short text file that holds its target. Tell the owner, and after the owner's yes allow symbolic links and make the link again from the project folder:
+
+```text
+cmd /c mklink /D .agents\skills ..\.claude\skills
+```
+
+In Git Bash, `ln -s` copies the folder instead of linking it unless `MSYS=winsymlinks:nativestrict` is set, so use the command above.
 
 ## Checks after the copy
 
-- `ls -la .agents` shows `skills -> ../.claude/skills`, and `ls .agents/skills` shows the skills.
+- `ls -la .agents` shows `skills -> ../.claude/skills`, and `ls .agents/skills` shows the skills. Once the link is staged, `git ls-files -s .agents/skills` shows the mode `120000`, which is how Git stores a link.
 - `git status --short` lists the new files. `git ls-files -- work-items/ memory/` prints nothing, confirming that Git tracks neither private folder. When the chosen local folder is present, also run `git check-ignore work-items/PROJECT-TASKS.md` or `git check-ignore memory/CURRENT_STATE.md`; each must print its path.

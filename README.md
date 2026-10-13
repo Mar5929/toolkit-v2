@@ -36,7 +36,7 @@ This repository also has a local [writing-harness-files](.claude/skills/writing-
 
 ## Set up a project
 
-Open Claude Code or Codex in the project's main folder and say **“set up this project.”** The agent examines what is already there and asks the interview questions in order, one question at a time.
+Open Claude Code or Codex in the project's main folder and say **“set up this project.”** The agent examines what is already there and asks the interview questions in order, one question at a time. Answers the folder already shows are confirmed together.
 
 The interview records the project name, purpose, people and authority, systems and production environments, work tracker, memory system, Salesforce needs, outside tools, working relationship, source material, and roadmap. For each selected module, the agent shows its defaults and records any changes the owner wants.
 

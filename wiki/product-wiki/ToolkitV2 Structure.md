@@ -219,13 +219,13 @@ The owner answers yes to "Is this a Salesforce project?". The module adds what t
 
 | Kind | What it adds |
 | --- | --- |
-| Questions | Which sandbox the agents may deploy to. Which org is production. Whether the toolkit's defaults for what an agent may do in each kind of org are what the owner wants. The API version, when it cannot be read. Which of Salesforce's own skills to have on. |
-| Rules | Three. `salesforce-org-safety.md`: the limits that are the same in every project, such as no deploy and no data change in production. `salesforce-agent-permissions.md`: the owner's choices for this project, starting from the toolkit's defaults. `salesforce-deployments.md`: when to update the list of changed components, when to write down a manual deployment step, when to check what a deploy includes, and how the Salesforce templates in `delivery/` are used. |
+| Questions | Which sandbox the agents may deploy to. Which org is production. Which orgs agents may only read. Whether the toolkit's defaults for what an agent may do in each kind of org are what the owner wants. The API version, when it cannot be read. Which of Salesforce's own skills to have on. |
+| Rules | Three. `salesforce-org-safety.md`: the limits that are the same in every project, such as no deploy and no data change in production, and no change to an org marked read-only. `salesforce-agent-permissions.md`: the owner's choices for this project, starting from the toolkit's defaults. `salesforce-deployments.md`: when to update the list of changed components, when to write down a manual deployment step, when to check what a deploy includes, and how the Salesforce templates in `delivery/` are used. |
 | Text in `AGENTS.md` | Two lines: use Salesforce's own skills for Salesforce work, and this project's rules and its three `sf-*` skills win over them. The "Which skill" and "Commands" tables get their Salesforce rows. |
 | Skills | `sf-component-tracker`: keeps the list of changed components and the deployment files in step with the metadata. `sf-deploy-check`: checks that a deploy holds only the intended change. `sf-data-change`: prepares the owner's handoff for a change to production data. |
 | Files and templates | `sfdx-project.json` and `.forceignore` at the root. In `delivery/deployments/`: `component-tracker.csv`, a template for a deployment of the full project, and a template for the deployment of one work item. In `delivery/migrations/`: a template for one area of data (the area, the field mapping, the transformation rules), and the folders `data-loads/` and `production-backups/`. In `delivery/releases/`: a template with a cutover plan and release notes. |
-| Settings | Six forbidden commands that delete source or an org, and one entry for each production org the owner names, so that Claude Code refuses a command that changes it. |
-| `PROJECT.md` | The org aliases: one line per org, with what the org is for, and production marked. |
+| Settings | Six forbidden commands that delete source or an org, and entries for each production org and read-only org the owner names, so that Claude Code refuses a command that changes it. |
+| `PROJECT.md` | The org aliases: one line per org, with what the org is for, and production and read-only orgs marked. |
 | Outside the project folder | Nothing is made. The agent checks that Salesforce's own skills are installed, and tells the owner when they are not. |
 | The owner's own steps | Install Salesforce's own skills, and connect the project's orgs. |
 
