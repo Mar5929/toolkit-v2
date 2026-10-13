@@ -10,7 +10,12 @@ After the brief from `references/handoff-verifier.md`, word for word:
 ```text
 Draft prompt: <the whole draft below>
 Main checkout: /Users/owner/Projects/acme-billing
-Tracker: local (work-items/ in the main checkout)
+Tracker: local work items. How a helper opens a work item by ID: Find the
+  file under `work-items/` in the main checkout whose front matter says
+  `id: WI-014` (for example `grep -rlE '^id: *"?WI-014"? *$' <main
+  checkout>/work-items`; the value may be in quotes). The front matter is the
+  block of fields at the top of the file. The design of the work item is
+  `DESIGN.md` in the same folder.
 Memory and shared records: the places that the root AGENTS.md in the main
   checkout names, in "Project memory" and "Where information goes"
 Sources for claims:
