@@ -88,7 +88,7 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 7 | Is this a Salesforce project? | Yes when the folder holds `sfdx-project.json`, otherwise no | Step 5 |
 | 8 | Which outside tools and services does this project use? | The ones that the folder and the earlier answers show | One line for each under "Resources and project paths" in `PROJECT.md` |
 | 9 | How should the agent work with the owner on this project? | The `SOUL.md` that the full layout brought | `SOUL.md` |
-| 10 | Is there material to start from? | None | `sources/` |
+| 10 | Is there material to start from? In a project that had work before setup: may the agent read its past Claude Code and Codex sessions, and is there anywhere else to look? | None. For past sessions, what you found on this computer | `sources/`, and each fact from past work in the place the project's `AGENTS.md` gives for it |
 | 11 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
 
 The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one. A Hindsight project has none: where the work stands is in the place where work items are kept.
