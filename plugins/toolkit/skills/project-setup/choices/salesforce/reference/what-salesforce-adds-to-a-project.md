@@ -38,7 +38,7 @@ In the "Project map" table, add this row after the row for `working-files/`:
 In the same table, add one sentence to each of two rows:
 
 - to the row for `delivery/deployments/`, in "What it holds": "Also the component tracker and the package files."
-- to the row for `.claude/hooks/`, `.claude/settings.json`, in "What it holds": "In Claude Code, the settings file also refuses a command that changes a production org or a read-only org and names it."
+- to the row for `.claude/hooks/`, `.claude/settings.json`, in "What it holds": "In Claude Code, the settings file also refuses a command that names a read-only org and changes it, or names a production org and makes a change that `.claude/rules/salesforce-agent-permissions.md` says Never for production."
 
 In the "Which skill" table, add this row:
 

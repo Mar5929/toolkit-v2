@@ -114,7 +114,7 @@ List missing toolkit files, then copy them in two parts. An owner's record is ne
 - Copy into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`. Use `-rlt` rather than `-a`, because `-a` would give the project folder the temporary folder's private permissions.
 - After the branch is merged (section 6, step 4), copy each ignored folder that the setup copy holds into the main checkout. The commands are `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`.
 
-A missing `owner-preferences.md`, or `salesforce-agent-permissions.md` in a Salesforce project, gets its setup copy once. An existing one is the owner's record and is never compared or replaced. One exception: earlier versions marked the production cells of `salesforce-agent-permissions.md` "Never (fixed)", and the owner can now change them. When a production cell says "Never (fixed)", tell the owner, and after the owner's yes change it to "Never".
+A missing `owner-preferences.md`, or `salesforce-agent-permissions.md` in a Salesforce project, gets its setup copy once. An existing one is the owner's record and is never compared or replaced.
 
 ### Ignore files
 
@@ -145,7 +145,7 @@ Never compare or change the following during an update, except the owner-approve
 - work items and `work-items/PROJECT-TASKS.md`;
 - entries of `DECISIONS.md`, rules and terms in `wiki/product-wiki/`, sources in `sources/`, and records in `delivery/` and `wiki/reference/`;
 - `memory/CURRENT_STATE.md` and every memory record whose name starts `user_`, `project_`, `reference_`, or `event_`;
-- `.claude/rules/owner-preferences.md` and `.claude/rules/salesforce-agent-permissions.md`;
+- `.claude/rules/owner-preferences.md` and `.claude/rules/salesforce-agent-permissions.md`, except one relabel: earlier versions marked its production cells "Never (fixed)", and the owner can now change them. When a production cell says "Never (fixed)", tell the owner, and after the owner's yes change it to "Never". The value stays the same, so the cell needs no date or name;
 - the owner's own skills and rules.
 
 `memory/project_topic_template.md` is a template, so "Rules and other toolkit files" covers it. `memory/MEMORY.md` is a generated index that the session-start hook rebuilds; do not compare it either.

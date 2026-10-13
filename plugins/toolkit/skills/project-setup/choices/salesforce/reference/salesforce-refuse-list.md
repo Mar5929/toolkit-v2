@@ -26,7 +26,7 @@ For each production org that the owner names, add entries to the refuse list, so
 - Write no entry for a command that only reads, such as `sf data query` or `sf project retrieve`.
 - When the owner gives the production username as well as the alias, write the same entries for the username.
 - Write each entry a second time with `PowerShell(` in place of `Bash(`, for a session that runs on Windows.
-- For a production org, leave out the entries for each kind of change that the owner's `.claude/rules/salesforce-agent-permissions.md` allows. When the owner later changes a production cell there, change the entries in the same edit.
+- For a production org, follow the production cells of the owner's `.claude/rules/salesforce-agent-permissions.md`. Keep an entry while any row it covers says Never; leave it out only when every row it covers says Allowed or Ask first. The project's `.claude/rules/salesforce-org-safety.md`, "Keeping the refuse list in step", says how the entries map to the rows and how they stay in step later.
 - Write all of the entries for each read-only org that the owner names.
 - When no production org is known yet, write no entry. [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "How setup records what is still open", says how the project's Current State records that the entries are still to be written.
 
