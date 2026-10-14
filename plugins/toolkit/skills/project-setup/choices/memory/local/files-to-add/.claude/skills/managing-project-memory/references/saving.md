@@ -38,12 +38,12 @@ Search before every save. Search for the fact's words and their synonyms, and re
 
 ## Write the change
 
-- **A section in a memory record that exists.** Add the fact as its own section, above the record's lessons. Then do three things:
+- **A section in a memory record that exists.** Add the fact as its own section, above the record's lessons. Then update these fields:
   - Update `description` when the record now covers more.
   - Set `updated` to today and maintain the other metadata as `record-format.md` says.
   - Add each related work item to `work_items`, and keep every entry already there.
 - **A new memory record.** Name it for the subject, and not for one fact. Use the type that fits: user, project, reference, or event. Give it a first section and an empty lessons section. Set `created` and `updated` to today, and fill the header as `record-format.md` says.
-- Each section says four things: what to remember, why it matters, how to apply it, and where it came from, with its date and what is uncertain.
+- Each section says: what to remember, why it matters, how to apply it, and where it came from, with its date and what is uncertain.
 - The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary concise and informative.
 - A fact that is true only for a while gets a "check or remove by" date. `references/memory-criteria.md`, section "A fact that is true only for a while", says which date.
 - Record what allowed the save. Write "Approved by <owner> on <date>" when the owner asked for the save or said yes to it. Write "Logged by the agent on <date>" for every other save.
@@ -51,7 +51,7 @@ Search before every save. Search for the fact's words and their synonyms, and re
 
 ## An unchecked claim
 
-An unchecked claim is a statement that nobody has confirmed. It is something a person said that nobody checked, such as "another developer says the API allows 100 calls a minute", or something that you concluded and that no source states. It goes in the memory record of the type project for the subject it is about, as its own section. The section holds three things:
+An unchecked claim is a statement that nobody has confirmed. It is something a person said that nobody checked, such as "another developer says the API allows 100 calls a minute", or something that you concluded and that no source states. It goes in the memory record of the type project for the subject it is about, as its own section. The section holds the following:
 
 - what was claimed, the date, and who said it and to whom, or what you concluded it from;
 - the words "Not checked." and what would check the claim;

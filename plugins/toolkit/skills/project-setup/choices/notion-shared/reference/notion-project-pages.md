@@ -50,7 +50,7 @@ Never add real work to a template, because a copy takes everything on the templa
 Before the first step, two things must be true. The owner has signed in with `ntn login`. The owner has also shared the top-level Notion page that the owner's projects go under with the "Notion CLI" connection. `ntn-commands.md`, "Access and sign-in", says how the owner does both, and what an error means when a page is not shared.
 
 1. **Take the template's id.** Take the id of "Project" from the templates list, and check that the template is not in the trash. "Where the templates are kept" gives the list command and the trash check.
-2. **Pick the ID prefix.** Do this step when work items are in Notion. Propose a prefix from the project name, and ask the owner. A prefix is two to four capital letters, for example "MOB" for "Mobile app". Notion allows each prefix in only one database of the workspace. When setting the prefix fails with a conflict, propose another prefix.
+2. **Pick the ID prefix.** Do this step when work items are in Notion. Propose a prefix from the project name, and ask the owner. Choose a recognizable prefix for the project, for example "MOB" for "Mobile app", and verify that Notion accepts it. Notion allows each prefix in only one database of the workspace. When setting the prefix fails with a conflict, propose another prefix.
 3. **Make the project page from the template**, as a row of the owner's Projects database. The title property of that database is "Project".
 
    ```bash
