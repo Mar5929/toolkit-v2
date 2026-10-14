@@ -50,7 +50,7 @@ Use this section when `managing-work-items` closes a work item and names a rule 
 
 The glossary is `wiki/product-wiki/glossary.md`.
 
-- Ask the owner first about a meaning that the owner did not give and no decision gives, such as one a source gives or one you worked out. Ask: "Add to the glossary: <term> means <meaning>?"
+- Ask the owner first about a meaning that the owner did not give and no decision gives, such as one a source gives or one you worked out.
 - A term the owner defined in the session needs no entry in `DECISIONS.md`. The row's Source is the owner's words with the date, and the Changelog row's DEC cell says "none".
 - Search the table before you add a term. When the term is there, change its row.
 - Add the Changelog row, set the Status again, and save with `publish-docs`.

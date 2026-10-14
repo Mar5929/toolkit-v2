@@ -16,4 +16,4 @@ Inspect live property types and options before querying or writing. Confirm that
 
 Preserve page/database IDs, child references, unsupported blocks, views and unrelated content. For a targeted content update, derive the matching text from a fresh read. Read and merge JSON metadata objects; preserve unknown keys and resolve unparseable legacy values before replacing them. A relation or multi-value property write replaces its list, so merge existing values first.
 
-Use the live schema to construct the supported API payload. For a create, confirm the returned ID and read it back before another create; if the outcome is uncertain, search for the record before retrying. For an update, read the latest properties and body immediately before writing, then read both back and verify the intended result. A successful call alone does not complete a save.
+Use the live schema to construct the supported API payload. For a create with an uncertain outcome, search for the returned ID or matching record before retrying, so a partial run does not create duplicates. For updates, use the latest properties and body to preserve concurrent owner or librarian edits.

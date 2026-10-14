@@ -18,7 +18,7 @@ Keep this project's lasting memory in the Hindsight bank recorded in `PROJECT.md
 - Before saving, search Hindsight and read relevant records. Save qualifying new knowledge, or an addition or correction that identifies the existing subject. Include the source, date, useful context, and a pointer to its project record when one exists.
 - Preserve creation and revision dates, who made the revision, provenance, source, type, tags, useful context, and supersession relationships using supported Hindsight fields or clearly labeled document text. Distinguish the source speaker from the agent that translated or saved it. When correcting a record, identify both the earlier record and its replacement; report metadata the available tools cannot maintain rather than inventing fields or claiming they were updated.
 - With the default package, no session is saved automatically. Save deliberately with `hindsight_ingest_document`; a statement that the conversation will save itself does not apply here. Follow the recorded package when the owner approved a different capture setting.
-- Tell the owner what was saved or corrected. When the criteria yield nothing, save nothing.
+- When the criteria yield nothing, save nothing.
 
 ## Find and use memory
 

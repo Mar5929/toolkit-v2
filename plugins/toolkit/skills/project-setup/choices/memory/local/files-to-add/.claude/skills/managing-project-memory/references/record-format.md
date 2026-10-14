@@ -71,7 +71,7 @@ Find the case in the first column. The other three columns give what to write in
 | The file is no longer used for answers, and nothing replaces it | `retired` | `Retired <date>:` | First line under the title: `**Retired:** <date>. <reason, in the owner's words when the owner gave one>` |
 
 - A file with the status `superseded` or `retired` keeps its body as history.
-- In the replacement, set `supersedes` to the earlier file and link it in the body. In the earlier file, set `superseded_by` to the replacement. Preserve prior links, update both files' metadata, and read both back to verify the chain.
+- In the replacement, set `supersedes` to the earlier file and link it in the body. In the earlier file, set `superseded_by` to the replacement. Preserve prior links, update both files' metadata.
 
 ## Body layout
 

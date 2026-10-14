@@ -2,9 +2,7 @@
 
 Use this when the installed coding-agent add-on still treats a populated bank as new with `gitIngest: "none"`. The defect was verified in add-on 0.8.0 on 2026-10-10. Check current behavior before patching: a later release may already fix it. This is a temporary change to the add-on's runtime, not a toolkit hook or setup script.
 
-## Explain it after the interview
-
-When the chosen settings and installed code are affected, tell the owner: "This add-on version checks imported Git documents to decide whether a bank is new. With Git imports off, it can repeat the code survey and postpone the startup summary. A local patch can correct that detection while keeping your settings. It affects the installed add-on on this computer and must be checked after updates."
+## Approval and project record
 
 Show the proposed changes and apply them with the owner's approval. An approval already given for this patch does not need to be requested again. If the installed version has the fix, explain that no patch is needed. Record the outcome under Hindsight setup in `PROJECT.md`.
 

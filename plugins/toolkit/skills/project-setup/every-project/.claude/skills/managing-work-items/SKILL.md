@@ -21,7 +21,6 @@ Use `filing-project-records` for sources and for shared decisions and system rul
 | [references/work-levels.md](references/work-levels.md) | You create, organize, move, or report work items, phases, or tasks; it defines the hierarchy and stable IDs. |
 | [references/small-work-item.md](references/small-work-item.md) | A work item may take the short path; it defines eligibility and the combined approvals. |
 | [references/starting-a-helper.md](references/starting-a-helper.md) | A procedure calls for a helper; it gives the host tools and how to supply a standalone brief. |
-| [references/reporting-a-save.md](references/reporting-a-save.md) | A save fails or read-back does not verify it; it gives the exact reply words. |
 | [references/editing-a-work-item.md](references/editing-a-work-item.md) | You create or change requirements or Questions and Answers; the tracker supplies its storage and formatting. |
 | [references/work-tracker.md](references/work-tracker.md) | Every read or save of a work item, project phase, or project task. It gives the selected store's steps and links to its detailed instructions. |
 | [references/refining-requirements.md](references/refining-requirements.md) | The item is in Refining Requirements, or a requirement changes in any State. |

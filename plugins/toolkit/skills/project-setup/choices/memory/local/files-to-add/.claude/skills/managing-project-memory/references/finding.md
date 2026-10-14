@@ -41,7 +41,3 @@ Read each relevant record whole, in this turn, and check its source, evidence, u
 An unchecked claim and an entry under "Gotchas and lessons" are not facts, whatever the status of their memory record. When you mention one, say what it is.
 
 Some remembered claims are about something that changes, such as a vendor, a process, or a person's role. Before you act on such a claim, check its date and its source. Use the review and verification policy in `references/tidying.md`, section "Stale records", and disclose uncertainty that matters to the answer or action.
-
-## Answering
-
-- When nothing covers the question, say "I don't know; nothing recorded covers that." Never guess.

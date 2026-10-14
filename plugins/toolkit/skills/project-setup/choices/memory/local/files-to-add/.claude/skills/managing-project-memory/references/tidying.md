@@ -18,7 +18,6 @@ Work in this order: the project's Current State first, then duplicates, links, s
 - Lessons that should become rules or skills
 - Writing a project skill
 - The owner's rules
-- The report
 
 ## A helper reads memory in the background
 
@@ -35,7 +34,7 @@ A clean-up reads every memory record whole, which takes time. So a helper does t
 - Write the plan as one numbered list. Each line holds one change, the memory records it changes, and a reason.
   - A contradiction between two memory records is a question on the list. Never settle a contradiction by date alone.
   - A delete is its own numbered line, and the line names the memory record. In every other case, retire the memory record or mark it as replaced, as `references/memory-process.md`, section "A memory record that is out of date or no longer needed", says.
-- Change nothing until the owner says yes. The owner's answer often comes in the next turn. Open this file again in that turn, because Codex does not keep a skill across turns.
+- Change nothing until the owner says yes. The owner's answer often comes in the next turn. Resume from the approved plan.
 - These changes do not go on the plan: removing lines of the project's Current State that are no longer true, removing secrets or information whose storage could compromise system, product, or project security at once, and retiring a memory record or removing a section whose "check or remove by" date has passed and that is no longer true, as "Stale records" below says.
 
 ## The project's Current State
@@ -131,20 +130,3 @@ Read `.claude/rules/owner-preferences.md` and the other files in `.claude/rules/
 - a hook or a setting already enforces the bullet.
 
 Change or remove a bullet only after the owner's yes. A contradiction is a question for the owner. Never remove a bullet only because it is old.
-
-## The report
-
-Report the changes. Each line names the memory record by its title and says where it is kept. `references/memory-store.md` gives the path or the link. For example:
-
-```text
-Memory tidied:
-- Current State: removed "WI-002 export fields" (Done) and "2026-09-28: kickoff call" (the date passed).
-- Merged "Export" into "Exports". "Export" is marked replaced.
-- Retired "Old dashboard": the dashboard was shut down on 2026-09-20.
-- Promoted the lesson "The deploy check needs the VPN" to the project rules (Testing).
-- Not changed: the currency-check rule (you said not yet).
-```
-
-When the owner asks how to undo a change, give the owner the words to say, for example "bring back Old dashboard".
-
-Report any questions that remain open and what they affect. Continue the authorized work when no owner decision is needed.

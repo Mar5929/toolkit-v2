@@ -98,8 +98,6 @@ The one exception is a State and a Status that no longer match the table in "Sta
 
 Save after each step, and not at the end.
 
-When a save fails or cannot be verified, follow [reporting a save](reporting-a-save.md).
-
 ### Keep the whole work item true
 
 While you work on a work item, keep the whole work item true, and not only its Current state. Keep these true as well: the status of each task and who does it, the status of each of the work item's phases, and every field you have information for.
