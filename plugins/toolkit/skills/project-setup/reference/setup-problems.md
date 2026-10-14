@@ -13,7 +13,6 @@ Open this reference when Step 2 finds a folder problem, setup is incomplete, or 
 
 - **A question tool shows no question.** In `codex exec` the question box is never shown, and the turn ends with no answer. Ask each question in the reply text.
 - **Something fails.** Report the failed step and fix it within the approved setup when you can. When repair needs an owner decision, approval, or action, say what is needed and wait before doing dependent work. Never change an answer of the owner's, or set the project up in another folder and copy it over, to get past a failure.
-- **The owner asks for Jira.** Jira is not offered yet. Say so, and recommend one of the three choices.
 
 ## Host permissions
 

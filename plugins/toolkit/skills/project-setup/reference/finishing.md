@@ -57,7 +57,7 @@ Go through these parts:
 
 ## Instructions the owner gives during setup
 
-When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Examples are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as the step on the org aliases in the Salesforce setup file, [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md), says.
+When the owner gives an instruction for how the agent works, add the instruction to `.claude/rules/owner-preferences.md`. Examples are "don't touch my real Notion pages" and "ask me before you push". In a Salesforce project, an instruction about what an agent may do in an org goes in `.claude/rules/salesforce-agent-permissions.md`, as step 8 in the Salesforce setup file, [choices/salesforce/salesforce-setup.md](../choices/salesforce/salesforce-setup.md), says.
 
 - Write the instruction as one list line in the owner's words.
 - Put the line under an area that the file's layout comment names. Use General when no area fits.
