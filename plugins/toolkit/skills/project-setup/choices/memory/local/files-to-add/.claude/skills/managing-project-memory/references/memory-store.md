@@ -19,7 +19,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 
 ## Where memory is kept
 
-- Memory is Markdown files in `memory/` in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints. Never commit these files. `references/folders-and-files.md` starts with a picture of the whole folder.
+- Memory is Markdown files in `memory/` in the main checkout. Never commit these files. `references/folders-and-files.md` starts with a picture of the whole folder.
 - The project folder is an Obsidian vault, which is a folder that the note app Obsidian opens. So the owner can read and edit these files too.
 - One file holds one subject or area, with a `##` section for each sub-topic. Each file has three parts:
   - a header, which is the block of fields between the two `---` lines at the top of the file. `references/record-format.md` lists its fields and its statuses;
@@ -43,7 +43,7 @@ These storage instructions cover how to store memory. Open `references/memory-pr
    MAIN="$(git worktree list --porcelain | sed -n '1s/^worktree //p')"
    ```
 
-   `memory/` is kept only in the main checkout, even when this session runs in a worktree. A worktree is a separate folder with its own branch.
+   `memory/` is kept only in the main checkout, even when this session runs in a worktree.
    - Each shell command starts with no values from the command before it. So begin every command that uses `$MAIN` with that line and a `;`, in the same command.
    - When the project is not a Git repository, that line prints nothing. Then set `MAIN` to the project folder, which is the folder that holds `AGENTS.md`.
    - Never run a command with an empty `MAIN`.

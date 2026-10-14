@@ -2,7 +2,7 @@
 
 This folder is the project's local memory. It holds the project's Current State, and one memory record per subject for what no other project file holds. A memory record is one file in this folder. This guide says what each file here is, what never goes in memory, and which skill makes each change.
 
-The folder is opened in Obsidian with the rest of the project. Git ignores the folder, so it exists only in the main checkout on this computer. The main checkout is the project's main folder: the first path that `git worktree list` prints.
+The folder is opened in Obsidian with the rest of the project. Git ignores the folder, so it exists only in the main checkout on this computer.
 
 ## Files
 

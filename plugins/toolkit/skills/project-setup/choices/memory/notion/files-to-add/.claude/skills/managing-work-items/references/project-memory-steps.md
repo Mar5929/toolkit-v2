@@ -5,7 +5,7 @@ This file holds the steps of `managing-work-items` that depend on where this pro
 ## Filling the Moved up line
 
 - Review the work item's decisions, finalized design, verified implementation evidence, changed terms and useful lessons. Use `managing-project-memory` to check existing records and capture supported reusable outcomes with their sources and approval evidence.
-- Read back each capture. Capture and filing need no separate promotion approval. New decisions, changed requirements and harness instructions still require their applicable approvals.
+- Read back each capture. Follow `managing-project-memory` for capture authorization.
 - Fill Moved up with the verified capture links and their actual processing state, or write "Nothing: <the reason>." Name filed destinations only when filing has been verified. Add a Recent History row recording the capture check.
 - Continue closure after verified capture; routine librarian filing may finish later. Use an on-demand pass when subsequent work needs reconciled information.
 - On the short path for a small work item, verify the captures before you ask the closing question.
