@@ -64,31 +64,7 @@ Write each with its symbol in front and the word in bold.
 - ⛔ **Dropped**: the owner changed direction or withdrew it.
 - 💬 **Answered**: it was a question, not a build.
 
-## Example
-
-````markdown
-| # | What you asked | Status | Result |
-| --- | --- | --- | --- |
-| 1 | Check the rules against the toolkit | ✅ **Done** | The toolkit had already made every one of these merges. This project was behind on all of them. |
-| 2 | Consolidate the two rules folders | ✅ **Done** | 34 rule files down to 27, merged into main. One rule was nearly lost in the deletion and had to be put back in its own file. |
-| 3 | Port `small-deployable-changes.md` to the toolkit | ⛔ **Dropped** | You said no. |
-| 4 | Fix the broken link in the decision document | ✅ **Done** | Fixed twice. The first fix pointed at the wrong file and the check caught it. |
-| 5 | Why run the checker before proposing? | 💬 **Answered** | So you never get asked to approve a claim nobody checked. |
-| 6 | Merge it | ✅ **Done** | Pull request 29 is in main. Two other pull requests were merged first, so the branch had to be updated with main. |
-
----
-
-### 🔴 Still open, and it needs you
-
-**Another session has a half-finished merge in the main project folder.**
-Two work item files there have conflicting changes. I did not touch it.
-
-1. The main project folder will not show these rule changes until that
-   session finishes its merge and gets the latest changes.
-2. My worktree (a separate project copy) at
-   `.claude/worktrees/rule-consolidation` and its branch are still there.
-   Tell me once that merge is done, and I will remove both.
-````
+For a finished example, open [examples/session-summary-example.md](examples/session-summary-example.md).
 
 ## Work that another skill does
 

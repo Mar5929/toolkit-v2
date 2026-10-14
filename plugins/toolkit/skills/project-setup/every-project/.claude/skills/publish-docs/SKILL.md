@@ -76,7 +76,7 @@ A project document is a file under one of these paths.
      ```
 
    - With no remote, skip the fetch, and use `<default>` in place of `origin/<default>`.
-4. **Make the edit in the save worktree, and stage each file by name:** `git -C <save> add -- <file>`. When this session already made the edit in its working checkout, carry the edit across as "Carrying an edit across" below says.
+4. **Make the edit in the save worktree, and stage each file by name:** `git -C <save> add -- <file>`. When this session already made the edit in its working checkout, carry the edit across as [references/carrying-an-edit.md](references/carrying-an-edit.md) says.
 5. **Check the staged save** in the save worktree:
 
    ```text
@@ -101,7 +101,7 @@ A project document is a file under one of these paths.
    - Verify that the commit is on the default branch.
      - With a remote, run `git -C <save> fetch origin <default>`. Then `git -C <save> branch -r --contains <commit id>` must list `origin/<default>`.
      - With no remote, `git -C <main> branch --contains <commit id>` must list the default branch.
-   - Find out whether the main checkout holds the save. With a remote, also bring the main checkout up to date. "The main checkout" below gives the steps.
+   - Find out whether the main checkout holds the save. With a remote, also bring the main checkout up to date. [references/updating-main-checkout.md](references/updating-main-checkout.md) gives the steps.
    - When no other save of the same files is pending in this session, remove the save worktree: `git -C <main> worktree remove .claude/worktrees/docsave-<short-slug>`.
    - Note three things for the step that started this save:
      - the commit id;
@@ -124,53 +124,6 @@ A refused file stays refused even under a path that the rule accepts.
 
 Rules, skills, prompts, hooks, settings, and code use a pull request. A document edit that would be wrong on the default branch without the code change it describes goes in the pull request of that code change.
 
-## Carrying an edit across
-
-Use this section when this session already edited a document in its working checkout. The edit must get into the save worktree without removing anything that the default branch has.
-
-Check each edited file before you copy it:
-
-```text
-git -C <working checkout> diff --quiet HEAD <save commit> -- <file>
-```
-
-`<save commit>` is what `git -C <save> rev-parse HEAD` prints before step 6.
-
-- Exit code 0 means that the working checkout started from the version that the save worktree has. Copy the edited file to the same path in the save worktree.
-- Exit code 1 means that the two versions differ. Never copy the file, because the copy would remove what the default branch has and the working checkout lacks. Make the same change by hand in the save worktree's file. `git -C <working checkout> diff HEAD -- <file>` shows the change.
-
-Then stage each file, and run the checks of step 5.
-
-Last, remove this session's own copy from the working checkout. Remove only files that this session edited or created: run `git -C <working checkout> restore -- <file>` for a changed file, and `rm` for a new file. Never discard another session's changes.
-
-When to remove the copy depends on the remote:
-
-- With a remote, remove the copy after step 8 verifies the save, and before the main checkout is brought up to date. The saved version comes back with that update. When the working checkout is another worktree, the saved version comes back with the next `pull-latest`.
-- With no remote, remove the copy before step 7, once the file is staged. Git refuses the fast-forward while the main checkout holds a changed copy of a saved file, or an untracked copy of a new file.
-
-## The main checkout
-
-The third thing that step 8 notes is whether the main checkout holds the save. The reason is that a work item kept in the main checkout must not name a record that the main checkout does not hold. `managing-work-items/references/work-tracker.md` says whether this project's work items are kept there.
-
-### With no remote
-
-- When step 7 ran the fast-forward in the main checkout, the main checkout holds the save.
-- When step 7 ran the fast-forward in another checkout, or ran `git push . HEAD:<default>`, the main checkout is on another branch and does not hold the save. Change nothing in the main checkout.
-
-### With a remote
-
-A pushed save is not in the main checkout yet. After step 8 verifies the save, move the main checkout's default branch forward. Use a fast-forward only: never merge, rebase, reset, or switch branches in the main checkout.
-
-1. Run `git -C <main> branch --show-current`. It must print `<default>`. When it prints another branch, change nothing.
-2. Do the merge-safety check. `git -C <main> diff --name-only HEAD origin/<default>` lists the files that the update changes, and `git -C <main> status --porcelain` lists the files with uncommitted changes. A file in both lists blocks the update.
-   - When the file is this session's own copy of a saved file, remove the copy as "Carrying an edit across" says.
-   - When the file is any other file, change nothing.
-3. When no file blocks the update, run `git -C <main> merge --ff-only origin/<default>`. When Git refuses, change nothing.
-
-### When the main checkout does not hold the save
-
-The save is still finished. Say so in the reply briefly: "The main checkout does not hold this save yet", and then what blocks the update. What blocks the update is the branch that the main checkout is on, the files that block the update, or Git's message. Tell the skill that started the save.
-
 ## Mistakes to avoid
 
 - Never make, stage, or commit this save's edit in the main checkout.
@@ -191,4 +144,6 @@ The save is still finished. Say so in the reply briefly: "The main checkout does
 | File | Open it when |
 | --- | --- |
 | [references/shared-record-paths.md](references/shared-record-paths.md) | You check whether a file is a project document. The memory choice supplies this file. |
+| [references/carrying-an-edit.md](references/carrying-an-edit.md) | Step 4: carry an existing edit to the save worktree without overwriting newer records. |
+| [references/updating-main-checkout.md](references/updating-main-checkout.md) | Step 8: check and update the main checkout after the save is verified. |
 | [references/recovery.md](references/recovery.md) | The push or the fast-forward is refused, the default branch got new commits, the repository has no `origin`, or the save cannot finish now. |
