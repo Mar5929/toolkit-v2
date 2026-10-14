@@ -12,7 +12,7 @@ Search and read relevant memory with `managing-project-memory`.
 
 ## Keeping a closing lesson
 
-For an approved standing instruction, give the lesson to `managing-project-memory`, which writes it in `owner-preferences.md`. For a lesson kept as not proven, give that skill its unproven status, work item ID, and dates seen.
+For an approved standing instruction, give the lesson to `managing-project-memory`, which writes it in `.claude/rules/owner-preferences.md`. For a lesson kept as not proven, give that skill its unproven status, work item ID, and dates seen.
 
 ## When a work item closes
 

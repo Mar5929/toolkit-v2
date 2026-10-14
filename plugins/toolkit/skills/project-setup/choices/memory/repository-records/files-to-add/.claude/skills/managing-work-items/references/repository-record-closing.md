@@ -32,7 +32,7 @@ These steps record changes to `wiki/product-wiki/` and `DECISIONS.md`. On the sh
    | A lesson that is kept as not proven | Follow `project-memory-steps.md`, "Keeping a closing lesson", with its unproven status, work item's ID, and dates. |
 
 4. Check that each record's ID may be written in the work item now. `references/work-tracker.md`, section "Writing a record's ID in a work item", says when it may. With each ID, `filing-project-records` reports whether the main checkout holds the save of that record. Steps 5 and 6 write those IDs into the work item.
-   - When an ID may not be written yet, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records the wait as "Recording a wait for a record or a decision" below says.
+   - When an ID may not be written yet, stop here, and tell the owner what `filing-project-records` reported. `filing-project-records` records the wait as `project-memory-steps.md`, "Recording a wait for a record or a decision", says.
    - When every ID may be written, continue from this step.
 5. Write each lesson's outcome at the end of its line. Choose the outcome that describes what was saved, with the real ID in place of the example:
    - "Moved up: DEC-021."
@@ -46,4 +46,3 @@ These steps record changes to `wiki/product-wiki/` and `DECISIONS.md`. On the sh
    - Include the entries and rules that were filed before this step. The Questions and Answers rows of those entries end "Filed as DEC-###".
    - When there are none, write "Nothing: <the reason>."
    - Add a Recent History row that names the Q-ID of the question from step 2, or says that no question was needed.
-
