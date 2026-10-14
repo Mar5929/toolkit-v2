@@ -36,7 +36,7 @@ A hook command is a command that Claude Code or Codex runs by itself at a fixed 
 
 | File | Who reads it | What it holds |
 | --- | --- | --- |
-| `.claude/settings.json` | Claude Code | No AI credit on a commit or a pull request. Claude Code's own memory off. The Plain English output style. The Git commands that are refused or asked about. The hooks: session start, every message, after a commit, and after a helper agent returned. More room for the list of skills. |
+| `.claude/settings.json` | Claude Code | No AI credit on a commit or a pull request. Claude Code's own memory off. The Plain English output style. The hooks: session start, every message, after a commit, and after a helper agent returned. More room for the list of skills. |
 | `.codex/hooks.json` | Codex | The same hooks, written the way Codex reads them: session start, every message, after a commit, and when a helper agent started or returned. |
 | `.codex/config.toml` | Codex | `max_context_tokens = 10000` under `[skills]`. |
 
@@ -74,7 +74,7 @@ These rules apply every time the toolkit's settings meet a settings file that al
 - Every hook command that the settings name is in `.claude/hooks/`.
 - Each of the toolkit's own hook handlers is in each settings file once, apart from a handler that the setup file of one of the owner's choices takes out.
 - The session-start line, where the project has one, names the owner's memory choice in both files.
-- `.claude/settings.json` has no `Stop` hook of type `prompt`, and the Codex helper reminder has only the matcher `^(collaboration)?(spawn_agent|wait_agent)$`.
+- The Codex helper reminder has only the matcher `^(collaboration)?(spawn_agent|wait_agent)$`.
 - `.codex/config.toml` has each table once, and `[skills]` holds `max_context_tokens = 10000`.
 - The `description` in `.codex/hooks.json` contains the description text of the toolkit's file.
 

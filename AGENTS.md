@@ -62,6 +62,7 @@ Follow `.claude/rules/evaluate-the-owners-request.md` on every request, also whe
 - A helper agent may not load the rule, so put its path in every brief.
 - In this repository, "the whole project" in the rule means the whole toolkit: the filing system, memory, the work tracker, the project's records, the hook commands, setup and "update the toolkit", both hosts, and the projects that already use the toolkit.
 - The file is a copy of the starter rule, `<setup>every-project/.claude/rules/evaluate-the-owners-request.md`. Edit the starter rule, then copy it over the copy. Never edit the copy.
+- `.claude/output-styles/plain-english.md` is a copy of the starter output style, `<setup>every-project/.claude/output-styles/plain-english.md`, kept the same way.
 
 Follow `.claude/rules/document-clarity-standard.md` when writing or changing documents and artifact text.
 
@@ -95,10 +96,10 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 | `<setup>SKILL.md`, `<setup>reference/` | Setup, "check the setup", and "update the toolkit". |
 | `<setup>every-project/` | Everything every project gets, at the paths a project has: project files, rules, shared skills, settings, and three hook commands. |
 | `<setup>choices/work-items/` | The local, Notion, and GitHub work-tracker modules. |
-| `<setup>choices/memory/` | The local, Notion, and Hindsight memory modules, the process shared by local and Notion memory, and `repository-records/` (`DECISIONS.md` and `wiki/product-wiki/`) shared by local and Hindsight memory. |
+| `<setup>choices/memory/` | The local, Notion, and Hindsight memory modules, and `repository-records/` (`DECISIONS.md` and `wiki/product-wiki/`) shared by local and Hindsight memory. |
 | `<setup>choices/notion-shared/`, `<setup>choices/salesforce/` | The shared Notion tools and Salesforce module. |
 | `.claude/skills/writing-harness-files/` | This repository's harness-writing procedure and official guidance checklist. |
-| `.claude/settings.json`, `.codex/hooks.json`, `.claude/rules/` | The host settings, prompt reminder, and rules for sessions that work on this repository. |
+| `.claude/settings.json`, `.codex/hooks.json`, `.claude/rules/`, `.claude/output-styles/` | The host settings, prompt reminder, rules, and output style for sessions that work on this repository. |
 | `wiki/reference/ai-external-knowledge/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
 | `wiki/reference/` | Records of how Mike works in his real projects. |
 | `archive/` | Earlier setup material and Salesforce tools. Not shipped. |

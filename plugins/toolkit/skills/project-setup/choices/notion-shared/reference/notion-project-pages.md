@@ -50,7 +50,7 @@ Never add real work to a template, because a copy takes everything on the templa
 Before the first step, two things must be true. The owner has signed in with `ntn login`. The owner has also shared the top-level Notion page that the owner's projects go under with the "Notion CLI" connection. `ntn-commands.md`, "Access and sign-in", says how the owner does both, and what an error means when a page is not shared.
 
 1. **Take the template's id.** Take the id of "Project" from the templates list, and check that the template is not in the trash. "Where the templates are kept" gives the list command and the trash check.
-2. **Pick the ID prefix.** Do this step when work items are in Notion. Propose a prefix from the project name, and ask the owner. A prefix is two to four capital letters, for example "IML" for "iOS money log". Notion allows each prefix in only one database of the workspace. When setting the prefix fails with a conflict, propose another prefix.
+2. **Pick the ID prefix.** Do this step when work items are in Notion. Propose a prefix from the project name, and ask the owner. A prefix is two to four capital letters, for example "MOB" for "Mobile app". Notion allows each prefix in only one database of the workspace. When setting the prefix fails with a conflict, propose another prefix.
 3. **Make the project page from the template**, as a row of the owner's Projects database. The title property of that database is "Project".
 
    ```bash
@@ -78,7 +78,7 @@ Before the first step, two things must be true. The owner has signed in with `nt
    ```
 8. When memory is in Notion, run [notion-memory-pages.md](notion-memory-pages.md), "A new project". That procedure verifies the copied wiki, connects its Lore project row and records how Current state is initialized at the finish of setup.
 9. **Fill the project row.** In Notion, fill every field of the project's row that the setup answers cover, such as Tracker, Memory system, Local path, Repository, Salesforce, and Set up on. Ask the owner, in one question, only for the fields that only the owner knows, such as Priority and Target Date.
-   - "Key" holds the project's work item ID prefix, wherever the project's work items are kept, for example IML, or WI for local work items.
+   - "Key" holds the project's work item ID prefix, wherever the project's work items are kept, for example MOB, or WI for local work items.
    - "Work items data source" holds this project's Work Items data source ID. "Memory data source" holds its Wiki Inbox data source ID, because Wiki Inbox is the capture destination. Verify the project row's live property types before filling them.
    - Desired Outcome is filled at the end of setup, with the sentence the owner gives for the project's outcome. The step for the project's outcome in [choices/work-items/notion/notion-work-items-setup.md](../../work-items/notion/notion-work-items-setup.md) and in [choices/memory/notion/notion-memory-setup.md](../../memory/notion/notion-memory-setup.md) fills it, and [reference/finishing.md](../../../reference/finishing.md), "Fill the prompts", gives the rules for the sentence.
 10. **Record the links** in `PROJECT.md` and read them back. "Recording the links in PROJECT.md" below gives the lines for work items, and [notion-memory-pages.md](notion-memory-pages.md) gives the memory lines.
