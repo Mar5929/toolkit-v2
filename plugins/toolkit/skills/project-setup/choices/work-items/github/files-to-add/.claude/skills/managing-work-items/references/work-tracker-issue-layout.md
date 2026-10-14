@@ -28,6 +28,35 @@ This file says how one work item is laid out in its issue, and how to write each
     ## Tasks                                one "### P1 — <name>" heading per phase, a checkbox per task; without phases, one plain list and a Sub-items line
     ## Recent History
     ## Requirements
+    ## Questions and Answers
+    ## Notes                                Context, Sources, Lessons not proven yet, Solution options and considerations
+  Comments, oldest first:
+    ## Solution design                      the design: one comment, edited in place
+    Agent: a helper started on P1-T02.
+```
+
+A project that is set up for GitHub keeps no work item files in its folders. It has the repository that `PROJECT.md` names, with Issues turned on, and every label in the full list in `work-tracker-labels.md`.
+
+## Creating an issue
+
+1. Make the body in a temporary folder. Take the work item template text that `managing-work-items` opened from its `assets/`, from the line `## Overview` to the end.
+   - Leave out the front matter, the `# WI-001: ...` title line, and the fill-in guide above `## Overview`.
+   - Fill the body as the template's guide says, and leave no angle-bracket prompt in the body. A prompt is text in angle brackets that says what to write there. `references/lifecycle-rules.md`, section "Rules that apply in every State", gives the rule about prompts.
+   - Write one block for each requirement that `managing-work-items` gave you, in place of the template's example requirement block. "Requirements" below gives the form.
+   - Delete the example phase rows, the example phase headings and tasks, the example question rows, and the prompt lines under Context and under "Solution options and considerations".
+   - Write "None." under Sources and under "Lessons not proven yet".
+   - Leave the **Moved up** line under `## Overview` empty after its label. `managing-work-items` fills it when it closes the work item, with a change to the body, before the issue is closed.
+   - Keep every heading, table header, label, and `<!-- ... -->` guide comment.
+2. Write IDs as `#12` wherever the template says a work item ID. Keep the form of the plan that the template's guide gives for its level and plan: a top-level item keeps the Roadmap when it uses phases; an item without phases keeps the plain-list form under Tasks. Write the Related items line for the work item's level:
+   - For a level-2 sub-item, Related items says "Parent #12, phase P2." when its parent uses phases, or "Parent #12." otherwise.
+   - For a level-3 sub-item, Related items says "Parent #14."
+   - For a top-level item, Related items says "Project phase P01." once the work item has a project phase. Before that, `references/work-levels.md`, says what to do.
+3. Create the issue with its labels: the State that `managing-work-items` gives it, the type, and the priority. Use `priority:medium` when no priority is named. Add no other label. `work-tracker-gh-commands.md`, section "Creating an issue", gives the command.
+4. Link the issue to what it belongs to:
+   - For a sub-item, count its levels, and then link it to its parent, as "Phases, tasks, and sub-items" below says.
+   - For a top-level item, put it in the milestone of its project phase once the owner has named a project phase. `work-tracker-project-roadmap-and-tasks.md` gives the command.
+
+## Requirements
 
 Follow [the common editing rules](editing-a-work-item.md), section "Requirements". Never write `#1` for a requirement, because GitHub reads it as an issue number.
 
