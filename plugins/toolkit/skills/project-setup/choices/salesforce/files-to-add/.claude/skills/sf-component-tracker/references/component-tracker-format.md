@@ -58,4 +58,3 @@ Track only the components that this project created or changed.
 - Inside Notes, prefer `;` or `/` to `,`.
 - The header and the order of the columns are fixed.
 - Group the rows by Component Type.
-

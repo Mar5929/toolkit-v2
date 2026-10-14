@@ -24,5 +24,4 @@ A manifest cannot deploy these types safely today: profiles, duplicate rules, ma
 - Keep them out of the master manifest, and name them in the header comment of the master manifest as left out.
 - Add their deploy as a step in the `manual-steps.md` that it belongs to. The step says which change set to build, which assignment to make, and in what order.
 
-Permission sets are not one of these types. A permission set gets a normal tracker row and a normal manifest member. It deploys only after you have confirmed that the deploy removes no grant, as the rule `salesforce-org-safety.md` says. Set its org flags like any other component's, as "Org flags" below says.
-
+Permission sets are not one of these types. A permission set gets a normal tracker row and a normal manifest member. It deploys only after you have confirmed that the deploy removes no grant, as the rule `salesforce-org-safety.md` says. Set its org flags like any other component's, as [component-tracker-format.md](component-tracker-format.md), "Org flags", says.

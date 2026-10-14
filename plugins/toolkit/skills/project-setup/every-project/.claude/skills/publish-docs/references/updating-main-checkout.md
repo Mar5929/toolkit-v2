@@ -24,4 +24,3 @@ A pushed save is not in the main checkout yet. After step 8 verifies the save, m
 ### When the main checkout does not hold the save
 
 The save is still finished. Say so in the reply briefly: "The main checkout does not hold this save yet", and then what blocks the update. What blocks the update is the branch that the main checkout is on, the files that block the update, or Git's message. Tell the skill that started the save.
-
