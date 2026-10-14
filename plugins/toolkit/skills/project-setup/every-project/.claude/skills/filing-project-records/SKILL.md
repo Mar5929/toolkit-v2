@@ -72,7 +72,6 @@ The record can be a rule, a decision, or a source. Make no new record. Do these 
 ## Check what you wrote, and report
 
 - Read back each file you changed and each ID you wrote in a work item.
-- Follow `managing-work-items/references/reporting-a-save.md` to report a failed or unverified save.
 - When another skill asked for the step, give that skill each new ID when the save is done, and tell it what `publish-docs` reported about the main checkout.
 
 ## Work that another skill does

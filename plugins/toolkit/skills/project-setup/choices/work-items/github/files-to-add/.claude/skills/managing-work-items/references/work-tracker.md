@@ -24,10 +24,6 @@ This reference says where each part of a work item is kept in GitHub Issues, and
 - A work item's design is one comment whose first line is `## Solution design`. The agent's notes are comments too.
 - The repository is named on the "GitHub repository" line in `PROJECT.md`, under "Toolkit settings". Every command in this skill writes the repository as `<repo>`.
 
-## After every write
-
-Read the change back, and check that it says what you wrote. When a write failed, or reads back differently, report it as `references/lifecycle-rules.md`, section "Rules that apply in every State", says. That section gives the words your reply must start with.
-
 ## Mistakes to avoid
 
 - Always pass `-R <repo>`. In a `gh api` path, write `repos/<repo>/...`, never `{owner}/{repo}`. `gh` fills `{owner}/{repo}` from the Git remote of the folder, which can be a different repository.

@@ -13,7 +13,7 @@ When you create or update a memory file, maintain the metadata fields defined in
 
 ## Choose the procedure
 
-Choose the procedure below for the current job. Before accessing local records, read [memory-store.md](references/memory-store.md), "Steps for every read and every save". Before deciding what to retain, asking for approval, or changing memory, read [memory-process.md](references/memory-process.md). Finding recorded context uses the finding procedure without loading the retention and cleanup procedure. Read each changed record back before reporting it as saved.
+Choose the procedure below for the current job. Before accessing local records, read [memory-store.md](references/memory-store.md), "Steps for every read and every save". Before deciding what to retain, asking for approval, or changing memory, read [memory-process.md](references/memory-process.md). Finding recorded context uses the finding procedure without loading the retention and cleanup procedure.
 
 | File | Open it when |
 | --- | --- |

@@ -13,7 +13,6 @@ Git tracks `PROJECT-ROADMAP.md`, so read the copy on the default branch.
 - When the project has a remote, run `git -C "$MAIN" fetch origin`, and then read `git -C "$MAIN" show origin/<default>:PROJECT-ROADMAP.md`. Find `<default>` the way `publish-docs` finds it.
 - When the project has no remote, read `"$MAIN/PROJECT-ROADMAP.md"`.
 - Change the file only with `publish-docs`. That skill saves the file to the default branch from the save worktree, which is the folder that `publish-docs` makes from the default branch. Make the edits below in the save worktree.
-- After the save, read the file back the same way.
 
 ### What a project phase looks like
 

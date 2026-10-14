@@ -50,7 +50,7 @@ Run each `gh` command on its own. Never join it to another command with `&&`, `;
 - `<id>` is the issue's numeric id from the REST API, for example `5638907867`. Only the sub-issue calls need it.
 - `<dir>` is a temporary folder outside the repository, for body files and comment files. Make it with `mktemp -d`. In Claude Code, use a folder inside the session scratchpad when the system prompt names one.
   - Send every body from a file, and send any comment that is longer than one line from a file.
-  - Remove the folder after you read the result back.
+  - Remove the folder when the operation is complete.
 
 ## Reading an issue
 
@@ -91,8 +91,6 @@ The body is one piece of text. To change one part, write the whole body back wit
    ```text
    gh issue edit <number> -R <repo> --body-file <dir>/body.md
    ```
-
-4. Read the changed section back, and check that it says what you wrote.
 
 The owner may edit the issue in the browser. Reading the body right before the edit keeps the owner's change. When the owner says that text of the owner's is gone, put that text back. GitHub keeps every earlier version of the body, and the "edited" menu at the top of the issue shows them.
 
@@ -137,7 +135,7 @@ gh issue close <number> -R <repo> --reason 'not planned'
 gh issue reopen <number> -R <repo>
 ```
 
-The state label stays as it was. Read back `state` and `stateReason`.
+The state label stays as it was. Closure status uses `state` and `stateReason`.
 
 ## Sub-issues
 

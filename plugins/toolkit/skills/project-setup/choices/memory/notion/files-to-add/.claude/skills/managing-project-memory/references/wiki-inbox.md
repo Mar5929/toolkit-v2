@@ -6,7 +6,7 @@ Wiki Inbox contains submissions for the librarian, not finalized knowledge. Read
 
 Search matching captures and destination records before creating a submission. Add evidence in place only to an unclaimed New or Needs review capture about the same change; preserve its contributor and sources. When a matching row is Processing or Filed, create a linked follow-up instead. The librarian owns processing notes, outcomes and filing links. For a new capture, create a row with Name, Capture, Source and Contributor, and set Processing status to New. Include source links or IDs, relevant dates, work-item links, uncertainty, correction targets and existing approval evidence in Capture or Source. Destination areas may suggest Current state, Long-term memory, Terminology glossary or Product wiki; the librarian confirms placement.
 
-Read the row and its fields back. Preserve originals and retry an uncertain create only after searching for the returned ID or matching capture. Do not claim the capture is filed merely because it was saved.
+Preserve originals and retry an uncertain create only after searching for the returned ID or matching capture. Do not claim the capture is filed merely because it was saved.
 
 ## Read recent information
 

@@ -143,7 +143,7 @@ Comments are below the body.
 
 An issue that the owner opened in the browser has the owner's text and no layout: it has no `## Overview` in the body, or no state label.
 
-1. Ask the owner: "#15 was made by hand in GitHub, so it does not have the usual work item sections and labels. Should I add them?"
+1. Get the owner's approval before adding the toolkit's sections and labels to the issue.
 2. After the owner's yes, make a new body from the template, as step 1 of "Creating an issue" says. Put the owner's text in it, word for word, as the Original verbatim requirement of Requirement 1. Write the body with `gh issue edit`.
 3. Add `state:backlog` and `priority:medium`. Ask the owner the type, unless the owner's text makes the type plain. For example, a report of something broken is `type:bug`.
 4. Record who made the issue by hand and that you added the work item layout in Recent History.

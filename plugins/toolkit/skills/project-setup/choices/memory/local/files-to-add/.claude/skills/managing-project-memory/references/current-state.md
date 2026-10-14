@@ -91,7 +91,7 @@ Before you remove a line for something that happened and that a later session mu
 Use these steps when the project's Current State contains stale, repeated, or unnecessary detail.
 
 1. Read the project's Current State. Read the status of every work item that it names, with `managing-work-items`. Read each project task that it names.
-2. Remove every line that is no longer true. These removals do not go on the plan that `references/tidying.md` describes. Tell the owner what you removed, in the one line that `references/saving.md`, section "Reply lines", gives for the project's Current State. Remove each of these:
+2. Remove every line that is no longer true. These removals do not go on the plan that `references/tidying.md` describes. Remove each of these:
    - under "Now", a finished or cancelled work item, or a piece of work that ended;
    - a line under "Coming up" whose event ended or whose deadline was met, cancelled, or moved;
    - a line under "Waiting on" that was answered or delivered, or whose project task is done, or whose decision is no longer Open;

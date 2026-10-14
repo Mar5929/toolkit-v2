@@ -33,7 +33,7 @@ Replace the prompt under the heading "Project memory" with this section's text, 
 This project keeps its memory in local files in `memory/`, with the skill `managing-project-memory`.
 
 - The project's current state, a short page of what is true now, is `memory/CURRENT_STATE.md`. The session-start command prints it. When it is not in the session's context, read it with `managing-project-memory`.
-- Use `managing-project-memory` to find, save, correct, and tidy memory. Save each new fact and correct each record it affects in the same turn, and report the save as that skill says.
+- Use `managing-project-memory` to find, save, correct, and tidy memory. Save each new fact and correct each record it affects in the same turn.
 ```
 
 ## Root guide summary

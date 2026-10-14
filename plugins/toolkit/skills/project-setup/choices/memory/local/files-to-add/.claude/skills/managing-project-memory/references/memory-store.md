@@ -1,13 +1,13 @@
 # Memory storage (local files)
 
-Use these storage instructions to read, save, find, and change a memory record or the project's Current State. This project keeps both as Markdown files in the `memory/` folder. The goal is that every skill reads and writes memory the same way. A save is done only when you have read the file back and the change is there.
+Use these storage instructions to read, save, find, and change a memory record or the project's Current State. This project keeps both as Markdown files in the `memory/` folder. The goal is that every skill reads and writes memory the same way.
 
 Two names are used in every file of these storage instructions:
 
 - A memory record is what memory holds about one subject, such as the client's plans or one meeting. Here it is one file in `memory/`.
 - The project's Current State is the project's one short page of what is true now. Here it is the file `memory/CURRENT_STATE.md`.
 
-These storage instructions cover how to store memory. Open `references/memory-process.md` to decide what to keep, when to ask the owner, and what to tell the owner.
+These storage instructions cover how to store memory. Open `references/memory-process.md` to decide what to keep and when the owner decides.
 
 ## Contents
 
@@ -52,10 +52,6 @@ These storage instructions cover how to store memory. Open `references/memory-pr
    - Change only the lines that change. Keep every other line, heading, and body label. A body label is one of the bold labels of a section, such as `**Remember:**`.
    - Maintain the header metadata as `references/record-format.md` says.
    - Never rewrite the whole file.
-4. Read the file back.
-   - Check that what you wrote is there, and that the file passes the list in `references/record-format.md`, section "A file is right when".
-   - After a delete, check that the file is gone.
-   - When the save failed, or what you read back differs from what you wrote, the change is not saved. Report it as not saved to the procedure that asked for it.
 
 ## Mistakes to avoid
 

@@ -28,7 +28,6 @@ The root `AGENTS.md`, section "Your job as the agent", states the goal for all o
 - Save in the turn in which the change happens. A turn is one message from the owner, with your work on it and your reply. A later session never sees your reply, so a fact or a result that is only in your reply is lost. Save before the turn ends, even when the turn ends with a question to the owner.
 - Correct each memory record and each line of the project's Current State that the change made wrong. `references/saving.md`, section "Correcting a fact", gives the steps. When the turn ends, every line of the project's Current State is true.
 - Name the source of every fact that you save, and mark a fact that nobody has confirmed. `references/saving.md`, section "An unchecked claim", gives the mark.
-- Tell the owner what you saved. `references/saving.md`, section "Reply lines", gives the line for each kind of save.
 
 The session that the owner writes to decides what is saved. A reminder that a hook prints is not a decision to save. Do not save on every hook reminder or on every turn. A turn can end with nothing saved.
 
@@ -78,4 +77,4 @@ Clean up all of memory when the owner asks for it, and start at once. Start a cl
 
 ## Every time you change a memory record
 
-Follow `references/memory-store.md`, "Steps for every read and every save", for the fresh read, targeted edit, metadata maintenance, and read-back. Keep writes to one record sequential.
+Follow `references/memory-store.md`, "Steps for every read and every save", for local storage and metadata maintenance.

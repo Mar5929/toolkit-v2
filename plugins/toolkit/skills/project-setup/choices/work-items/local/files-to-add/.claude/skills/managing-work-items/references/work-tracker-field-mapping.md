@@ -84,7 +84,7 @@ A top-level item (`parent: none`) uses a Roadmap when phases help plan or track 
 - **Merge two phases.** Move the second phase's tasks and sub-items to the first phase. Set the second row's Status to Cancelled and its Exit result to "Merged into P1". The second phase's heading stays, with the line "Merged into P1." under it.
 - **Drop a phase.** First move or cancel each of its tasks and sub-items. Then set its Status to Cancelled and its Exit result to "Dropped: <reason>".
 - Delete only the template's example rows, example headings, and example tasks. A real row, heading, or task that is cancelled stays, with its history. The one exception is "A work item that changes level or plan grouping", below.
-- Read the plan back after a change. The rows and the headings must list the same IDs in the same order:
+- The plan rows and headings must list the same IDs in the same order:
 
   ```bash
   grep -nE '^\| *P[0-9]+ —|^### P[0-9]+ —' "<item file>"

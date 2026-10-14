@@ -1,6 +1,6 @@
 # Saving to memory
 
-Use this file when you keep something in memory, correct it, or forget it. It gives the steps for each kind of save, and the line to give the owner after each save.
+Use this file when you keep something in memory, correct it, or forget it. It gives the steps for each kind of save.
 
 `references/memory-process.md`, section "When to ask the owner", says when to ask the owner before a save. Its section "A memory record that is out of date or no longer needed" says when a memory record is retired or deleted.
 
@@ -17,20 +17,19 @@ Use this file when you keep something in memory, correct it, or forget it. It gi
 - Correcting a fact
 - "Forget that", retiring, and deleting
 - The owner's instructions
-- Reply lines
 
 ## Decide where the fact is kept
 
 Before you save, test whether memory is the place for the fact. Use `references/memory-criteria.md`, section "First find the place where the fact is kept", and the table in the root `AGENTS.md`, section "Where information goes".
 
-- When the fact is kept in a place outside memory, save it in that place, with the skill that the root `AGENTS.md` names for that place. Then tell the owner where the fact is.
+- When the fact is kept in a place outside memory, save it in that place, with the skill that the root `AGENTS.md` names for that place.
 - When nothing qualifies for a save, save nothing. A reminder that a hook prints is only a hint. A hook is a small command that Claude Code or Codex runs by itself at set moments.
 
 ## Find the subject's memory record first
 
 Search before every save. Search for the fact's words and their synonyms, and read each likely memory record whole. Then do the one of these that fits:
 
-- When the same fact is already there, save nothing, and tell the owner where it is.
+- When the same fact is already there, save nothing.
 - When a section says something different, the save is a correction. "Correcting a fact" below gives the steps.
 - When a memory record of the right type covers the subject, add a section to it.
 - When no memory record covers the subject, make a new memory record.
@@ -47,7 +46,7 @@ Search before every save. Search for the fact's words and their synonyms, and re
 - The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary concise and informative.
 - A fact that is true only for a while gets a "check or remove by" date. `references/memory-criteria.md`, section "A fact that is true only for a while", says which date.
 - Record what allowed the save. Write "Approved by <owner> on <date>" when the owner asked for the save or said yes to it. Write "Logged by the agent on <date>" for every other save.
-- Read the memory record back. When the save changes the project's Current State, update the project's Current State as `references/current-state.md` says.
+- When the save changes the project's Current State, update the project's Current State as `references/current-state.md` says.
 
 ## An unchecked claim
 
@@ -59,7 +58,7 @@ An unchecked claim is a statement that nobody has confirmed. It is something a p
 
 Never state an unchecked claim as a fact. Never act on it without saying that it is unchecked.
 
-When the claim is checked, do one of these, and tell the owner which:
+When the claim is checked:
 
 - When the claim is true, save it in the place where it is kept, which is often `wiki/product-wiki/` or `wiki/reference/current-system/`, and remove the section.
 - When the claim is false, remove the section.
@@ -94,16 +93,15 @@ Use [events-and-recurring-jobs.md](events-and-recurring-jobs.md), section "A sha
 
 - For an ordinary correction or added detail, update the existing record with the new evidence and date. Update its metadata, and set the last-verified date only when you checked the fact against its source.
   - Do not leave the old wording beside the new text.
-  - Put the old text in your reply, so that the owner can say "undo that" and you can put it back.
 - Search the other memory records and the project's Current State for the old value. Correct current claims and guidance that need the change; preserve dated evidence and superseded history.
-- When a decision or fact is replaced, retain the earlier content as history and link the old and new records in both directions. Make a separate replacement record and use the store's replacement procedure. When the earlier record also holds still-current material, mark and link the replaced section while leaving the record current. Update both records' metadata and read both back. Route links used for current guidance to the replacement, and preserve links that document history.
+- When a decision or fact is replaced, retain the earlier content as history and link the old and new records in both directions. Make a separate replacement record and use the store's replacement procedure. When the earlier record also holds still-current material, mark and link the replaced section while leaving the record current. Update both records' metadata. Route links used for current guidance to the replacement, and preserve links that document history.
 
 ## "Forget that", retiring, and deleting
 
 | "Forget that" is about | Do this |
 | --- | --- |
 | A save you just made | Undo the save: remove the section you added, put back the old wording of a section you changed, or delete the memory record you made. |
-| One older section | Remove the section. Quote the removed text in your reply, so that the owner can say "undo that". |
+| One older section | Remove the section. |
 | A whole subject | Retire its memory record, with the owner's words as the reason. Add " (retired)" after each link to it in other memory records. When the owner says "bring it back", reverse all of these changes. |
 | A fact that is kept in a place outside memory | Say where the fact is, and change it there with the skill that the root `AGENTS.md` names. A decision is never deleted: `filing-project-records` supersedes it or withdraws it. |
 
@@ -114,28 +112,8 @@ Delete a memory record in these cases:
 
 In your reply, say whether the deleted memory record can be brought back. Check whether the file can be recovered from the actual filesystem or backup before reporting that it can.
 
-When you find secrets or information whose storage could compromise system, product, or project security in memory, remove that text at once and tell the owner. Describe the removal without repeating the excluded text or offering to restore it; this overrides the old-text and undo wording elsewhere in this file.
+When you find secrets or information whose storage could compromise system, product, or project security in memory, remove that text at once and tell the owner. Describe the removal without repeating the excluded text or offering to restore it.
 
 ## The owner's instructions
 
 Use [owner-instructions.md](owner-instructions.md) to record the owner's standing instructions, preferences, and corrections in the applicable rule file. That reference preserves the distinction between an instruction the owner gave and one the agent inferred.
-
-## Reply lines
-
-Report each record you changed, in the form below, and include the verification result. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link. The line for a change that removes or replaces text in a memory record or in the project rules also gives what the section for that change asks for: the old text, and the words that undo or restore it. A correction, a removed section, and a retire are such changes. No other line gives undo words.
-
-After reporting the saves, continue the authorized work. When progress needs an owner decision, name the pending question and what it affects.
-
-The line for each kind of save:
-
-- A new memory record: "Saved to memory: <title>."
-- A new section: "Saved to memory: <section heading> (in <title>)."
-- A correction: "Updated in memory: <title>. It said: "<old text>". Say 'undo that' to put it back."
-- A fact saved in a place outside memory: "Recorded in <file or record, with its ID>."
-- A lesson: "Noted a lesson in memory: <heading> (in <title>)."
-- An event or a run: "Logged in memory: <title>, <date>."
-- A change to the project's Current State: "Updated the project's Current State: <what changed, in a few words>."
-- A rule: "Added to the project rules (<area>): <instruction>."
-- A retire: "Retired from memory: <title>. Say 'bring it back' to restore it."
-- A delete: "Deleted from memory, as you said: '<the owner's words>'." Then say whether the memory record can be brought back.
-- A failed save: "Not saved: <reason>." Keep the text that you tried to save, tell the owner the fix, and try the save again in this session as soon as the fix is made.

@@ -50,7 +50,7 @@ Replace the prompt under the heading "Project memory" in the root `AGENTS.md` wi
 This project keeps its memory in the Notion Project Wiki, with the skill `managing-project-memory`. The librarian is the skill `maintaining-notion-wiki`, which runs on a schedule or on demand. It files captured changes into the wiki.
 
 - The project's current state, a short page of what is true now, is the Current state page in Project Wiki. The session-start command prints it. When it is not in the session's context, read it with `managing-project-memory`.
-- Use `managing-project-memory` to find memory and to capture new facts, corrections, and reusable outcomes in Wiki Inbox. Verify each capture in the same turn. The librarian reconciles the affected wiki records afterward, and routine reconciliation needs no report to the owner. Report a capture that failed.
+- Use `managing-project-memory` to find memory and to capture new facts, corrections, and reusable outcomes in Wiki Inbox. The librarian reconciles the affected wiki records afterward, and routine reconciliation needs no report to the owner.
 - Capture supported reusable outcomes without being asked. A capture does not approve its content: active questions and approvals stay in work items, and draft designs stay with their work item.
 - When later work needs records that are not filed yet, run the librarian on demand.
 - When the owner asks where the project stands, also read the relevant pending captures in Wiki Inbox.

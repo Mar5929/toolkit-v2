@@ -89,7 +89,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    4. The prompt in one fenced block, with the fixed first line on top.
    5. Instructions for starting the next session with the prompt.
 
-   Follow `managing-work-items/references/reporting-a-save.md` when reporting a failed or unverified save. Put the unsaved content in the prompt.
+   Put the unsaved content in the prompt.
 
 ## Checking a prompt the owner gives you
 
