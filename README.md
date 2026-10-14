@@ -13,6 +13,8 @@ Mike defines the intended behavior in [Product Wiki](wiki/product-wiki/). The pl
 - [Project structure](wiki/product-wiki/ToolkitV2%20Structure.md) describes the project files and what each choice adds.
 - [Persistent memory](wiki/product-wiki/Toolkit%27s%20Definition%20of%20Persistent%20Memory.md) defines what belongs in memory and its metadata.
 
+The [Toolkit wiki index](wiki/README.md) also links the [Davis and Dragonfly request inventory](wiki/reference/how-the-owner-works-with-agents.md), including real request examples and the Davis vendor-call walkthrough.
+
 Toolkit work is tracked in the [Toolkit V2 Notion project](https://app.notion.com/3edb381da17681eeb7ddd0a6d662f9b2). Work items hold the request, questions, decisions, progress, and approval. When the wiki and implementation differ, the agent checks the relevant owner decisions before changing behavior.
 
 ## What the plugin supplies
