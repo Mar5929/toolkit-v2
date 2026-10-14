@@ -1,6 +1,5 @@
 # Current state
 
-<!-- Fill-in guide: replace each prompt in angle brackets with what is true now, and write "None." in a part that has nothing to hold. A line names a record by its ID and never copies a work item's own Current state. Keep each part concise and retain what a later session needs. Remove a line the moment it stops being true. For local memory, `managing-project-memory` explains each part and makes every change. Remove this guide when the prompts are filled. -->
 
 Last updated: `<YYYY-MM-DD, source, and person or agent>`
 

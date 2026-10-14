@@ -16,12 +16,6 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 | `reference_<name>.md` | Where to find one thing that is hard to find again, such as a shared spreadsheet, and why to open it. |
 | `event_<name>.md` | One thing that happened, or one recurring job with a row per run. |
 
-## What never goes in memory
-
-- A fact that the root `AGENTS.md`, section "Where information goes", keeps in a place outside memory never goes in this folder. `managing-project-memory` sends such a fact to that place.
-- A memory record may name a record outside memory by its ID. The memory record never repeats what that record says.
-- Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
-
 ## What must stay true
 
 - `managing-project-memory` says when memory is saved, what never goes in memory, and what the owner's yes covers, in its `references/memory-process.md`.

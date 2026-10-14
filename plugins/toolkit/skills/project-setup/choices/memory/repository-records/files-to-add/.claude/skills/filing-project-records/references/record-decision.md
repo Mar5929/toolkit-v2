@@ -6,8 +6,6 @@ Use this file to record a decision or an open question that more than one work i
 
 The comment at the top of `DECISIONS.md` gives the form of an entry, its four statuses, who may decide, and what must never change. Read it before you write.
 
-The Status of an entry is one of four words: Open (a question that waits for an answer), Decided, Superseded (a later decision replaced it), or Withdrawn (dropped, with nothing in its place).
-
 ## Which section of this file to use
 
 | What happened | Section |

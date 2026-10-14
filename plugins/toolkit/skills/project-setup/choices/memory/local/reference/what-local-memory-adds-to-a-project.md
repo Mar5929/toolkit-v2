@@ -14,19 +14,17 @@ This file lists what setup adds to a project that keeps its memory in local file
 | Lines in `.gitignore` and `.ignore` | Add `/memory/` to `.gitignore`, so Git does not track the folder, and `!/memory/` to `.ignore`, so the search tools still read it. Add each line only when the file lacks it. |
 | Settings | Nothing. The settings in the full layout already name `local`. |
 | `PROJECT.md`, "Toolkit settings" | Write `local` on the Memory line. |
-| Text in `AGENTS.md` | Three rows in the "Project map" table, and the "Project memory" section. "The text in AGENTS.md" below gives them. |
+| Text in `AGENTS.md` | One row in the "Project map" table, and the "Project memory" section. "The text in AGENTS.md" below gives them. |
 | Outside the project folder | Nothing. |
 
 Step 2 of the setup file copies the folder of the first four rows. Step 3 copies the folder of the fifth row. Step 4 writes the line in `PROJECT.md`, and the rows and the section in `AGENTS.md`.
 
 ## The text in AGENTS.md
 
-In the project's root `AGENTS.md`, in the "Project map" table, add these rows after the row for `.gitignore`, `.ignore`, and after the rows for `work-items/` when the project has them:
+In the project's root `AGENTS.md`, in the "Project map" table, add this row after the row for `.gitignore`, `.ignore`, and after the rows for `work-items/` when the project has them:
 
 ```markdown
-| `memory/` | What a later session needs and no other file holds: the project's Current State, and one file per subject. Git does not track this folder. | `managing-project-memory`. |
-| `memory/CURRENT_STATE.md` | The project's Current State, in five parts. | `managing-project-memory` writes it. |
-| `memory/MEMORY.md` | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
+| `memory/` | The project's Current State in `CURRENT_STATE.md`, one file per subject, and the generated `MEMORY.md` index. Git does not track this folder. | `managing-project-memory`; the session-start hook maintains the index. |
 ```
 
 Replace the prompt under the heading "Project memory" with this section's text, below the heading:

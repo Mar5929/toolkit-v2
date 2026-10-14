@@ -6,9 +6,7 @@ This file holds the step of `handoff` that depends on where this project keeps i
 
 Update the project's Current State. The project's Current State is the project's one short page of what is true now. Read and write it with `managing-project-memory`.
 
-- Write the part "Next session starts with". It has one line for each piece of work that this session worked on.
-  - For a work item, the line holds the work item's ID and the words "read its Current state".
-  - For a piece of work that is not a work item, the line says what the work is and its next step.
+- Write "Next session starts with" as `managing-project-memory/references/current-state.md` describes.
 - Check the line under "Now" for each of this session's work items. When that line is missing or no longer true, add or correct it as `managing-work-items` says.
 - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, an event that ended, a resolved or cancelled deadline, or a thing owed that was delivered. `managing-project-memory/references/current-state.md`, "Removing what is no longer true", says how.
 - Set the "Last updated" line to the date, `handoff`, and `agent`.
