@@ -85,7 +85,6 @@ now.
   result is not clear, stage each resolved file by name, and commit with a
   message you write, with no AI credit line. Never `git commit --no-edit`
   after a conflict.
-- Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
 
 ## Work that another skill does
 

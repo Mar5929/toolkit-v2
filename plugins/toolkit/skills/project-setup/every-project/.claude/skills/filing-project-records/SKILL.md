@@ -5,15 +5,7 @@ description: 'Files received sources and records shared decisions and system rul
 
 # Filing project records
 
-Use this skill to file records that later work may need:
-
-1. Save every source the project receives from someone else in `sources/`, unchanged, with an ID like SRC-001. Sources include meeting transcripts, emails, client documents, and screenshots. File a source even when only one work item uses it, or none does yet.
-2. Record decisions and open questions that more than one work item needs. `references/record-decision.md` says where this project keeps them.
-3. Record rules about how the system must work that more than one work item needs. `references/update-system-doc.md` says where this project keeps them.
-
-If only one work item needs a decision or a requirement, do not save it here. It stays in that work item: use `managing-work-items`.
-
-Before you save a decision, an open question, or a rule, check that more than one work item needs it. The root `AGENTS.md`, section "Where information goes", gives the test for that, and lists where every kind of information is kept.
+File received sources and the project's shared decisions and system rules. The root `AGENTS.md`, "Where information goes", defines each record's scope and location. Use the table below to choose the filing step.
 
 In this skill, a record is one saved source, or one decision or rule that this skill keeps. A record in the repository is saved when its change is committed to the default branch with `publish-docs`. The rest of this file applies to records in the repository; a reference that keeps its records elsewhere says how it saves them.
 
@@ -40,8 +32,6 @@ The rest of this file applies to all three steps.
 
 ## When this session works in its own worktree
 
-A worktree is a separate folder with its own branch. The main checkout is the project's main folder: the first path that `git worktree list` prints.
-
 When this session's folder is not the main checkout, read and write the project's records in the repository only in the save worktree. The save worktree is the folder that `publish-docs` makes from the default branch. Never read or write them in the session's own worktree, because its branch can lack records that the default branch holds.
 
 - When no save worktree exists yet, do steps 1 to 3 of `publish-docs` before you read or write a record.
@@ -49,7 +39,7 @@ When this session's folder is not the main checkout, read and write the project'
 
 ## Saving a record
 
-- Save right after you write the record. The record's ID is yours only when its save is on the default branch.
+- Save right after you write the record. The record's ID is reserved only when its save is on the default branch.
 - When `publish-docs` finds that another session's save took the same ID, take the next ID. Change the ID in your record, and in the file name when the record is a source. Then save again.
 
 ## Writing a record's ID in a work item
@@ -82,7 +72,7 @@ The record can be a rule, a decision, or a source. Make no new record. Do these 
 ## Check what you wrote, and report
 
 - Read back each file you changed and each ID you wrote in a work item.
-- When a save fails, start your reply with "Not saved", and name the write that failed.
+- Follow `managing-work-items/references/reporting-a-save.md` to report a failed or unverified save.
 - When another skill asked for the step, give that skill each new ID when the save is done, and tell it what `publish-docs` reported about the main checkout.
 
 ## Work that another skill does

@@ -7,17 +7,6 @@ description: 'Prepares a Salesforce production data change: the load file, backu
 
 By default no agent writes data to production: the owner runs the change, and this skill produces everything the owner needs to run it without asking follow-up questions. When `.claude/rules/salesforce-agent-permissions.md` allows a production data change, prepare the same files, then run the change as that file says.
 
-## Limits
-
-| Operation | Production | Sandbox |
-|---|---|---|
-| Read (SOQL, export, describe) | Allowed | Allowed |
-| Create, update, upsert, delete data | As `.claude/rules/salesforce-agent-permissions.md` says; Never by default | As `.claude/rules/salesforce-agent-permissions.md` says |
-| Anonymous Apex | As `.claude/rules/salesforce-agent-permissions.md` says; Never by default | As `.claude/rules/salesforce-agent-permissions.md` says |
-
-- `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for this project, and says how long a yes holds. A line there may differ from this table, and then that line wins.
-- The owner's file covers every route to production data: the command line, an API, anonymous Apex, or a tool that wraps them.
-
 ## Step 1: build the handoff
 
 1. Prepare the complete load CSV, with one row per record and the fields and matching key that the chosen operation and tool require. Confirm the matching field for an upsert; new records do not require an existing Salesforce `Id`. Never hand over a fragment, a sample, or a description instead of the load file.
