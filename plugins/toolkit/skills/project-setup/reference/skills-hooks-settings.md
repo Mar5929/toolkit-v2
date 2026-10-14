@@ -42,13 +42,13 @@ A hook command is a command that Claude Code or Codex runs by itself at a fixed 
 
 A helper agent is a separate agent that a session starts for one job.
 
-As the files are copied, memory is set to local: the session-start line ends with the word `local`. The next section says what another choice changes.
+The selected memory choice supplies `.claude/hooks/session-start-choice.mjs` and `.claude/hooks/prompt-memory-reminder.md`. The shared commands load these files without selecting a memory backend. Each choice's setup reference gives its configuration and checks.
 
 Never change the command or the text of one of the toolkit's hooks, because they are written to match the three hook commands.
 
 ## What a choice changes in the settings
 
-The setup file of each choice gives, in a step or in the file that a step names, the lines that the choice changes in `.claude/settings.json` and `.codex/hooks.json`. Work items in local files, Notion, or GitHub Issues, and memory in local files, change nothing.
+The setup file of each choice gives, in a step or in the file that a step names, the lines that the choice changes in `.claude/settings.json` and `.codex/hooks.json`. A choice may supply resources beside the shared commands. Apply its exact configuration steps in the setup copy.
 
 The owner's answer about Claude Code's own memory is one line in `.claude/settings.json`: `"autoMemoryEnabled"` is `false` when the owner wants it off, which is the default, and `true` when the owner wants it on.
 
@@ -64,7 +64,7 @@ These rules apply every time the toolkit's settings meet a settings file that al
   - the `echo` handler in the `PostToolUse` group whose matcher is `Agent`;
   - the `echo` handler in the `.codex/hooks.json` `PostToolUse` group whose matcher is `^(collaboration)?(spawn_agent|wait_agent)$`.
 - **Show the owner a handler before you replace it.** When the file already has the toolkit's own hook handlers, as in an update or after a changed memory choice, show the owner the old and the new handlers. Then remove the old ones, and any group or event they leave empty, and put in the new ones.
-- **Leave a handler that is already right.** When the file's handler and the toolkit's handler are the same, apart from a page id that was written in place of `{{CURRENT_STATE_PAGE_ID}}`, change nothing and ask nothing. The handler keeps its page id.
+- **Leave a handler that is already right.** When the file's handler and the toolkit's handler are the same, apart from configured project identifiers, change nothing and ask nothing. Preserve those identifiers in the installed choice resources.
 - **When you cannot tell whether an entry is the toolkit's, ask the owner.**
 
 ## What must be true when the settings are done
@@ -73,7 +73,7 @@ These rules apply every time the toolkit's settings meet a settings file that al
 - `.claude/settings.json` and `.codex/hooks.json` are valid JSON.
 - Every hook command that the settings name is in `.claude/hooks/`.
 - Each of the toolkit's own hook handlers is in each settings file once, apart from a handler that the setup file of one of the owner's choices takes out.
-- The session-start line, where the project has one, names the owner's memory choice in both files.
+- The shared startup and prompt handlers have no memory-selection arguments. The selected choice's startup module and reminder text are present, and its setup checks pass.
 - The Codex helper reminder has only the matcher `^(collaboration)?(spawn_agent|wait_agent)$`.
 - `.codex/config.toml` has each table once, and `[skills]` holds `max_context_tokens = 10000`.
 - The `description` in `.codex/hooks.json` contains the description text of the toolkit's file.

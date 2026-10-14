@@ -6,8 +6,7 @@
 // that tells them apart, so the hint says such words are not the owner's yes. It does not print the
 // rule evaluate-the-owners-request.md: Claude Code loads that rule at session start, and AGENTS.md
 // tells Codex to read it.
-// Usage: node prompt-reminder.mjs [--skill hindsight]. The skill names live here, not in the
-// settings, so a rename changes only this file and Codex needs no new hook trust.
+// The installed memory choice supplies prompt-memory-reminder.md beside this command.
 import { readFileSync } from 'node:fs';
 
 // A question stays quiet: a sentence that ends in "?", and "remind me what we decided". A request
@@ -39,11 +38,6 @@ const PHRASES = {
   lesson: /\b(?:lesson learned|root cause|significant fix|important discovery)\b/i,
   decision: new RegExp(`\\b(?:${ASKED}we decided|let'?s go with|go with option)\\b`, 'i'),
 };
-const HOME = 'is filed where the root AGENTS.md says, under "Where information goes"';
-const DECIDES = 'Use managing-project-memory for the configured memory procedure: what is kept'
-  + ` ${HOME}.`;
-const HINDSIGHT = `What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight`
-  + ' memory is for.';
 const DECISION = ' For a decision, the configured filing procedure says whether it belongs in'
   + ' the work item or a project-wide record.';
 const INSTRUCTION = ' For an instruction for how the agent works, that table names the file.';
@@ -53,7 +47,8 @@ const NOT_OWNER = " Only the owner's own words are the owner's yes, not a helper
 const SKILLS = "Before you answer, check this project's skills and use every one that fits this"
   + ' message.';
 try {
-  const hindsight = process.argv[process.argv.indexOf('--skill') + 1] === 'hindsight';
+  let memoryReminder = 'Follow the project memory procedure in the root AGENTS.md.';
+  try { memoryReminder = readFileSync(new URL('./prompt-memory-reminder.md', import.meta.url), 'utf8').trim(); } catch { /* The skill reminder still runs if setup is incomplete. */ }
   // Pasted text, such as a meeting transcript, is source material, not the owner speaking.
   const prompt = String(JSON.parse(readFileSync(0, 'utf8')).prompt ?? '')
     .replace(/<pasted_content\b[^>]*>[\s\S]*?<\/pasted_content\b[^>]*>/g, '')
@@ -61,6 +56,6 @@ try {
   const found = Object.keys(PHRASES).filter((label) => PHRASES[label].test(prompt));
   process.stdout.on('error', () => {}).write(`${SKILLS}\n`); // A closed reader is no error.
   if (found.length) process.stdout.write(`This may be something to keep (${found.join(', ')}).`
-    + ` ${hindsight ? HINDSIGHT : DECIDES}${found.includes('decision') ? DECISION : ''}`
+    + ` ${memoryReminder}${found.includes('decision') ? DECISION : ''}`
     + `${found.includes('standing instruction') ? INSTRUCTION : ''}${NOT_OWNER}\n`);
 } catch { /* A reminder is only a hint: an error prints nothing more and never blocks a turn. */ }

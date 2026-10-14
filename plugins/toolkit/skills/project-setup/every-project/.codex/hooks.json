@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/session-start.mjs\" --memory local",
+            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/session-start.mjs\"",
             "timeout": 30,
             "statusMessage": "Loading project memory",
             "additionalContextLimit": 4000

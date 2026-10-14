@@ -19,7 +19,7 @@ After setup or the reviewed migration is verified, update `PROJECT.md`'s record-
 
 ## Session-start settings
 
-In `.claude/settings.json`, replace the session-start argument `local` with `notion`, `--page` and the configured Current state page ID. In `.codex/hooks.json`, replace `--memory local` with `--memory notion --page <Current state page ID>`. Fill actual identifiers before the owner trusts changed hooks.
+Copy this choice's `.claude/hooks/session-start-choice.mjs` and `prompt-memory-reminder.md`. Replace `{{CURRENT_STATE_PAGE_ID}}` in the copied module with the verified Current state page ID. Keep the shared SessionStart and UserPromptSubmit handlers without memory-selection arguments. When updating old handlers, follow [the settings merge rules](../../../../reference/skills-hooks-settings.md); show their changes and have the owner trust changed Codex entries.
 
 The startup snapshot is derived context. The coding-agent skill checks pending inbox captures and authoritative work records when freshness matters; startup output does not establish current work status.
 
