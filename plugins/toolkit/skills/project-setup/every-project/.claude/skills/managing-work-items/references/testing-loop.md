@@ -18,8 +18,8 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - Commit every build change first, with no AI credit, because the checker checks a commit.
    - Run the project's tests, which `AGENTS.md`, section "Commands", names. Also run every check of the Acceptance Criteria that you can run. Keep each command and its exact result line.
    - A check that needs something you lack, such as a real device, a sign-in, or the owner looking at a screen, is "not run". Say what would run it. Never report such a check as passed.
-3. Write a test plan when a check has more than one scenario, a manual step, test data, an org or another shared environment, or a release across environments.
-   - Copy the project's `tests/TEST-PLAN-TEMPLATE.md` to `tests/<ID>-test-plan.md`. When the ID starts with `#`, leave the `#` out, as in `tests/12-test-plan.md`.
+3. Write a test plan when a check has more than one scenario, a manual step, test data, a shared environment, or a release across environments.
+   - Copy the project's `tests/TEST-PLAN-TEMPLATE.md` to `tests/<ID>-test-plan.md`. Use the installed `work-tracker.md` for a tracker-specific ID in the file name.
    - Fill the plan as its guide says.
    - Commit the plan on the work item's branch, staged by name, before the checker starts.
    - Never save the test plan where the work items are kept.

@@ -50,7 +50,7 @@ When you were given the full path of a file and its SHA-256 hash, and no commit,
 
 ### Boundaries
 
-Run only tests and read-only commands. Never edit, stage, commit, push, merge, deploy, install, or delete anything. Never run a command against a shared or production org or service, or against its data. Do not start other helpers, and do not ask the owner anything. Put your questions in your report.
+Run only tests and read-only commands. Never edit, stage, commit, push, merge, deploy, install, or delete anything. Never run a command against a shared or production environment or service, or against its data. Do not start other helpers, and do not ask the owner anything. Put your questions in your report.
 
 ### Return
 

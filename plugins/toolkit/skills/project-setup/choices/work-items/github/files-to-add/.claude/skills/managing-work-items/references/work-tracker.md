@@ -10,7 +10,8 @@ This reference says where each part of a work item is kept in GitHub Issues, and
 
 - Each work item is one issue. The work item's ID is the issue number, written `#12`.
   - Find a work item by its number, never by a link or a title.
-  - In a file name or a folder name, write the number without `#`, for example `12-test-plan.md`.
+  - In a file name or a folder name, write the number without `#`, for example `tests/12-test-plan.md`.
+  - An ID with no prefix, such as `#12`, uses `issue` in a branch name: `claude/issue-12-csv-export`.
 - The body of the issue is the work item template, from the line `## Overview` to the end.
 - The header fields of the work item template are labels on the issue: State, type, priority, who the work item waits on, who builds it, and the approvals. Status has no label.
 - A work item that is Done is an issue closed as completed. A work item that is Cancelled is an issue closed as not planned.
