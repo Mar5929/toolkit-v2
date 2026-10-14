@@ -19,7 +19,7 @@ This reference gives the State map, owner approvals, and rules for every work-it
 
 Every work item has a Status and a State. The State says where the work is. The Status follows from the State, so set the State and set the Status with it.
 
-| Status | State | Open this file | Move on when |
+| Status | State | Open this file | Expected outcome |
 | --- | --- | --- | --- |
 | Not Started | Backlog | none (see "Backlog" below) | the owner asks to start it |
 | Preparing | Refining Requirements | `references/refining-requirements.md` | the owner approves the requirements |
@@ -32,7 +32,7 @@ Every work item has a Status and a State. The State says where the work is. The 
 | Done | Done | none | |
 | Cancelled | Cancelled | none | |
 
-A work item moves to the next State only when "Move on when" is true for the State it is in. After Deploying, continue with `references/closing.md`, section "Marking Done".
+The table describes the normal process. State and Status record where the work actually stands; they are not mechanical prerequisites for saving, organizing or correcting a record. Keep owner approval attached to the action it governs, as "When to stop for the owner's yes" describes. A missing approval field does not erase an authorization already given, and changing a State does not grant approval. After Deploying, continue with `references/closing.md`, section "Marking Done".
 
 The checker in the Testing Loop row is the separate agent that tests the finished result.
 
@@ -53,7 +53,7 @@ Any work item can go through Designing, even a bug. When you ask the owner to ap
 
 ### A work item that has sub-items
 
-A sub-item is a work item inside another work item, which is its parent. A parent work item stays in Building until every one of its sub-items is Done or Cancelled. Then the parent goes through the Testing Loop as a whole.
+A sub-item belongs to a parent work item. The parent records the combined progress and remaining work of its sub-items. Its Testing Loop checks the integrated result; its completion includes the agreed sub-item scope.
 
 ### Blocked
 
@@ -92,7 +92,7 @@ These rules apply every time you work on a work item, in every State.
 
 Read the work item again with `references/work-tracker.md` before you act. When the owner changed the work item by hand, keep the owner's change.
 
-The one exception is a State and a Status that no longer match the table in "Status and State". Tell the owner, ask which State the work item is in, with your recommendation, and then set both.
+When State and Status disagree, reconcile them from the owner's latest direction and the recorded work. Ask the owner only when the actual stage remains uncertain.
 
 ### Save after each step
 
@@ -104,7 +104,7 @@ While you work on a work item, keep the whole work item true, and not only its C
 
 - Save the owner's requirements and corrections before you go on. Save them in the work item, or in the work item's design when they change the design.
 - When the work item waits on the owner, write Next action in the form that the work item template, `assets/work-item-template.md`, gives for a work item that waits, with the first open question.
-- When Next action disagrees with the work item's fields, the fields are right. Rewrite Next action to match the work item's status, its State, its `waiting_on`, its approvals, and its ticked tasks.
+- Keep Next action and the work item's fields consistent with the recorded work and the owner's latest direction. Field values do not override that evidence.
 - A work item keeps its requirements approval when it moves to a later State.
 - Before you end work that is not finished, rewrite the work item's Current state so that its Next action names the exact next step.
 

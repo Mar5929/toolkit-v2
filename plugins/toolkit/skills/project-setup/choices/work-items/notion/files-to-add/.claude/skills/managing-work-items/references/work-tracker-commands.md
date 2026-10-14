@@ -1,6 +1,6 @@
 # Notion work-tracker API calls
 
-Use these calls for the action selected in `work-tracker.md` and `work-tracker-page-updates.md`. Read `using-notion-cli` before the first call in a session. Take IDs from `PROJECT.md`, inspect the live schema, and verify each write. [work-tracker-known-problems.md](work-tracker-known-problems.md) covers recovery.
+Use these calls for the action selected in `work-tracker.md` and `work-tracker-page-updates.md`. Read `using-notion-cli` before the first call in a session. Take IDs from `PROJECT.md`, inspect the live schema. [work-tracker-known-problems.md](work-tracker-known-problems.md) covers recovery.
 
 ## Commands
 
@@ -88,7 +88,7 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"<tasks
 
 To start a task, set its Status to In Progress. To finish it, set its Status to Done. `managing-work-items` calls this ticking the task.
 
-**Find one work item by its number.** Find a work item by its number, never by its title. For `WI-31`, the number is 31.
+**Find one work item by its number.** A complete work-item ID identifies a record in this project. A supplied page link or title may locate it; confirm the project and ID. For `WI-31`, the numeric part queried below is 31.
 
 ```bash
 ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":31}},{"property":"Work item","title":{"is_not_empty":true}}]}}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.url)"'

@@ -24,15 +24,8 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
    - When the project is not a Git repository, the line prints nothing, and `MAIN` is empty. Then set `MAIN` to the project folder, which is the folder that holds `AGENTS.md`.
    - Never run a command while `MAIN` is empty.
    - When the main checkout has no `work-items/` folder, stop and tell the owner that the setup is incomplete.
-2. Find the work item's file by its `id:` line. `references/work-tracker-searching.md` gives the command. Read the whole file in this turn, and read it again right before you change it, because the owner edits and moves work items by hand.
-3. Check for changes that the owner made by hand. `references/work-tracker-folders-and-files.md`, section "The check for changes made by hand", says how to run the check and how to record each finding. Run the check at each of these times:
-   - at the first lookup of a session;
-   - before you move a work item, and before you make a new sub-item;
-   - when a work item is not where you read it before;
-   - when an ID has two files, or none;
-   - when a work item's folder, its `parent:` line, and its parent's list of sub-items disagree.
-
-   Tell the owner each finding, record the finding, and continue.
+2. Locate the work item using its ID or the request's context. `references/work-tracker-searching.md` describes the record structure. Use the current file when editing, because the owner edits and moves work items by hand.
+3. When an item has moved, its identity is ambiguous, or its hierarchy disagrees with its fields, use `work-tracker-folders-and-files.md`, "The check for changes made by hand", to reconcile the affected records with the owner's changes.
 4. Make the change with the file that the References table below names for it.
    - Change only the lines that change. Keep every other line, heading, and bold label as the work item template has it. Never rewrite the whole file.
    - Set `updated:` to today.
@@ -41,8 +34,7 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
 ## Mistakes to avoid
 
 - When the active session blocks a write to the main checkout, use its supported approval mechanism only when approval is required and permitted. When no permitted route is available, tell the owner which save is blocked and what action is needed. Keep the work item in the main checkout.
-- Every lookup command except the search by words skips `DESIGN.md` files and `work-item-template/`. Never remove the flags that make a command skip them. The commands are in `references/work-tracker-searching.md`.
-- Leave out `archive/` unless the owner asks for archived work items.
+- Active-work views omit `archive/`. Identity, history and ID-allocation lookups include relevant archived records.
 - These rules apply inside a table:
   - A `|` inside a table cell ends the cell. Write `\|` in its place.
   - A table cell holds one line. Join several lines with `<br>`.
@@ -63,7 +55,7 @@ A new work item and its design are copied from `work-items/work-item-template/`,
 
 ## How a helper opens a work item by ID
 
-Find the file under `work-items/` in the main checkout whose front matter says `id: WI-014` (for example `grep -rlE '^id: *"?WI-014"? *$' <main checkout>/work-items`; the value may be in quotes). The front matter is the block of fields at the top of the file. The design of the work item is `DESIGN.md` in the same folder.
+Use the local record identity and locations in `references/work-tracker-searching.md`. The design is `DESIGN.md` in the work item's folder.
 
 ## Related work
 
@@ -80,5 +72,5 @@ Find the file under `work-items/` in the main checkout whose front matter says `
 | --- | --- |
 | [references/work-tracker-field-mapping.md](work-tracker-field-mapping.md) | You create or change anything inside a work item: a front matter field (a field in the block at the top of the file), a section, a top-level item's phase, a task, a Questions and Answers row, a Recent History row, a link to a sub-item, or the design file, `DESIGN.md`. |
 | [references/work-tracker-folders-and-files.md](work-tracker-folders-and-files.md) | You make a work item's folder and ID; you run the check for changes made by hand; you move, nest, group, archive, or rename work items; the owner made a work item by hand; two work items have one ID; or you need to know how Obsidian links work. |
-| [references/work-tracker-searching.md](work-tracker-searching.md) | You find or read work items: one work item, the board (the list of the open work items), the open questions, a parent's full tree, a search by words or by a field, and the three commands of the check for changes made by hand. |
+| [references/work-tracker-searching.md](work-tracker-searching.md) | You find or read work items: record identity, active work, open questions, parent trees and topic searches. |
 | [references/work-tracker-project-roadmap-and-tasks.md](work-tracker-project-roadmap-and-tasks.md) | You read or change the project's phases, put a top-level item in a project phase, or read or change a project task. |

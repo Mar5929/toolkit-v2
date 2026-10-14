@@ -9,7 +9,7 @@ This reference says where each part of a work item is kept in GitHub Issues, and
 ## Where the work items are kept
 
 - Each work item is one issue. The work item's ID is the issue number, written `#12`.
-  - Find a work item by its number, never by a link or a title.
+  - Confirm its issue number and repository when locating it by number, link or title.
   - In a file name or a folder name, write the number without `#`, for example `tests/12-test-plan.md`.
   - An ID with no prefix, such as `#12`, uses `issue` in a branch name: `claude/issue-12-csv-export`.
 - The body of the issue is the work item template, from the line `## Overview` to the end.
