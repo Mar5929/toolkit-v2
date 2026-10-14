@@ -38,7 +38,7 @@ Each work item has one Solution Design page. The work item template holds the pa
 - When you create a work item, put its ID in the page's title in place of the prompt, for example "Solution Design - WI-31". [work-tracker-commands.md](work-tracker-commands.md) gives the call. The `<page …>` line in the work item's page text holds the page's address, and the last 32 characters of the address are its id.
 - When `references/designing.md` says to create the design, write the design on this page. Never make a second design page.
 - Fill this page as you fill a work item's page: the lifecycle decides what is saved, and the page decides where it goes and what form it takes. The note at its top says when its prompts are removed.
-- A work item has no Solution Design page when the project's work item template is older and has none. Then do these three things:
+- A work item has no Solution Design page when the project's work item template is older and has none. Then do each of these:
   1. Make the page as a child page of the work item's page, with the text of `assets/design-template.md` written as Notion markdown. Leave out the template's front matter and its `<!-- … -->` guide comments. [work-tracker-commands.md](work-tracker-commands.md) gives the call.
   2. Read the page back, and check its title and its text.
   3. Tell the owner that the project's work item template has no Solution Design page, so that the owner can add one in the Notion app.

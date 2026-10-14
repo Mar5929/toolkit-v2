@@ -49,7 +49,7 @@ It never holds any of these:
 
 ### project
 
-A memory record of the type project holds three things:
+A memory record of the type project holds the following:
 
 - a lasting fact about the project or the client that fits no other file;
 - a claim that is not checked yet, with who said it or what you concluded it from;

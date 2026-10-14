@@ -9,11 +9,11 @@ An event is one of two things:
 - work done for the owner that no work item, project task, commit, or filed record shows;
 - anything else that happened and that a later session must know, such as a meeting, a call, or an outage.
 
-Make one event record for it. The event record holds four things:
+Make one event record for it. The event record holds the following:
 
 - the date, and who took part;
 - what was done or what happened;
-- the result, in a few lines;
+- the result;
 - where the output is: an SRC ID, a file path, a work item or project task ID, or "said in chat only".
 
 Name the event record for what happened and its date.
@@ -22,12 +22,12 @@ One kind of result gets no event record. When the root `AGENTS.md`, section "Whe
 
 ## A recurring job and its runs
 
-A recurring job is a job that the team runs again and again, such as a weekly data load, a monthly release, or the update of a shared sheet after each meeting. A recurring job has one event record. That event record holds two things:
+A recurring job is a job that the team runs again and again, such as a weekly data load, a monthly release, or the update of a shared sheet after each meeting. A recurring job has one event record. That event record holds the following:
 
 - a first section that says what the job is, when it runs, who runs it, and the exact steps or the file that holds the steps;
 - a section "Runs" with one row per run. `references/memory-store.md` gives the form of the table.
 
-Add a row for each run. The owner may report a run in words such as "the weekly load ran fine" or "the nightly job broke again".
+Add a row for each run. Use the owner’s report as the source for a reported run.
 
 - A failed run gets a row too, with the error and the fix.
 - When the owner reports a run without its detail, write the row with the date and the owner's words, and write "not known yet" in each cell that the owner did not give. Complete the row when the detail is known.

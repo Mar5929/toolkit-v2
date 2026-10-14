@@ -2,7 +2,7 @@
 
 Use this file when you review or clean up all of memory. The goal is that memory stays small and true.
 
-Work in this order: the project's Current State first, then duplicates, links, stale records, memory records in the wrong place, lessons that should become rules, and the owner's rules. Make a plan first, ask the owner, and only then change anything.
+Work in this order: the project's Current State first, then duplicates, links, stale records, memory records in the wrong place, lessons that should become rules, and the owner's rules. Apply the approval and immediate-maintenance rules under "Plan first, then ask".
 
 ## Contents
 
@@ -32,7 +32,7 @@ A clean-up reads every memory record whole, which takes time. So a helper does t
 ## Plan first, then ask
 
 - Read every memory record whole. `references/memory-store.md` says what in its layout is not a memory record (an index, a template), and what else to check there.
-- Write the plan as one numbered list. Each line holds one change, the memory records it changes, and a one-line reason.
+- Write the plan as one numbered list. Each line holds one change, the memory records it changes, and a reason.
   - A contradiction between two memory records is a question on the list. Never settle a contradiction by date alone.
   - A delete is its own numbered line, and the line names the memory record. In every other case, retire the memory record or mark it as replaced, as `references/memory-process.md`, section "A memory record that is out of date or no longer needed", says.
 - Change nothing until the owner says yes. The owner's answer often comes in the next turn. Open this file again in that turn, because Codex does not keep a skill across turns.
@@ -51,7 +51,7 @@ When two memory records are about the same subject, merge them into the broader 
 3. Mark the other memory record as replaced by the kept one, and link them in both directions with the store's replacement procedure. Preserve both records' provenance and useful tags. Update their metadata and the kept record's summary.
 4. Route links used for current guidance to the kept record, and preserve links that document history.
 
-Three more rules apply to merges:
+These rules also apply to merges:
 
 - When two sections in one memory record say the same thing, merge them into one section.
 - Never merge an event record into a memory record of the type user, project, or reference.
@@ -64,7 +64,7 @@ When a memory record covers distinct subjects that a later session would need se
 - Each work item that a memory record names must exist. Check with `managing-work-items`.
   - When a work item cannot be found, tell the owner.
   - Put this change on the plan: take the work item out of the memory record's work item links, and keep its ID under the memory record's "Authoritative records" with "(not found, <date>)".
-- When a link is in the wrong form for the place where this project keeps its work items, correct the link. `references/memory-store.md` gives the form.
+- Correct work-item links using `references/record-format.md`, "Links to work items".
 - When a memory record is clearly about a work item but is not linked to it, propose the link.
 
 ## Links between memory records
@@ -96,7 +96,7 @@ When verification is unavailable, keep the uncertainty visible and preserve usef
 
 ## Too many memory records
 
-The text that is shown at the start of a session can end with "Cut short to fit the hook limit". When it does, put two kinds of change on the plan, until the list of memory records is shown whole:
+The text that is shown at the start of a session can end with "Cut short to fit the hook limit". When it does, put two kinds of change on the plan, so that useful memory fits in startup context:
 
 - merges of memory records about one subject;
 - retirements of event records that no open work, job, or person still needs.
@@ -125,7 +125,7 @@ A fact that is really an instruction, such as "always check X before Y", is prop
 
 ## The owner's rules
 
-Read `.claude/rules/owner-preferences.md` and the other files in `.claude/rules/`. Put a bullet on the plan, with a one-line reason, in each of these cases:
+Read `.claude/rules/owner-preferences.md` and the other files in `.claude/rules/`. Put a bullet on the plan, with a reason, in each of these cases:
 
 - the bullet repeats or contradicts another bullet, another rule file, or a line of the root `AGENTS.md`;
 - a hook or a setting already enforces the bullet.
@@ -134,7 +134,7 @@ Change or remove a bullet only after the owner's yes. A contradiction is a quest
 
 ## The report
 
-Give the owner one short list. Each line names the memory record by its title and says where it is kept. `references/memory-store.md` gives the path or the link. For example:
+Report the changes. Each line names the memory record by its title and says where it is kept. `references/memory-store.md` gives the path or the link. For example:
 
 ```text
 Memory tidied:

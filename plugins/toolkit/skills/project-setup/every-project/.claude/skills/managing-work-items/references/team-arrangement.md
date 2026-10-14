@@ -21,7 +21,7 @@ The Main Orchestrator is the session that coordinates the other sessions.
 
 - Rename this session "Main Orchestrator" with the tool that sets a session's title. When you cannot, ask the owner to rename it.
 - Run one session for each sub-item. Each of those sessions has its own main agent and its own helpers.
-- The Main Orchestrator is the only session that does these three things:
+- The Main Orchestrator is the only session that does each of these:
   - It changes the goal's work items.
   - It writes a file that more than one session changes, such as a file that holds a version number, or an index file.
   - It merges.

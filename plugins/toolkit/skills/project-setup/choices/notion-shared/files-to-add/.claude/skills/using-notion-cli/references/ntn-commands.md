@@ -111,7 +111,7 @@ ntn api v1/pages/<page-id>/markdown -X PATCH -d @edit.json < /dev/null
 
 ## Waiting for a template
 
-A page that is made or changed with `"template"` is filled in the background: the answer comes back before the content is on the page. Check every 5 seconds until the content is there.
+A page that is made or changed with `"template"` is filled in the background: the answer comes back before the content is on the page. Check again while the template is progressing, allowing time for its asynchronous work.
 
 - A work item's page is filled when two reads of its text in a row are the same, and the text is longer than before the call. For a page that the call made, the text must not be empty. "Reading and changing page text" gives the call that reads the text. The text depends on the owner's template, so never wait for a fixed number of blocks.
 - A project page that is made from a project template shows its databases as `child_database` blocks. This call prints the type of each block of a page:
@@ -120,7 +120,7 @@ A page that is made or changed with `"template"` is filled in the background: th
   ntn api v1/blocks/<page-id>/children page_size==100 < /dev/null | jq -r '.results[].type'
   ```
 
-- Stop checking after two minutes, and tell the owner that the template did not finish.
+- When further checks show no useful progress, report that template completion remains unverified and record where to resume.
 
 ## Database templates
 
@@ -146,7 +146,7 @@ ntn api v1/databases/<database-id> < /dev/null | jq -r '.data_sources[0].id'
 
 ## When a call fails
 
-`ntn api` prints the error and exits with a non-zero code. A failed write may have succeeded. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work. Follow the service’s retry guidance and backoff. Continue recovery while a correction or retry can make progress; report unresolved blockers when it cannot.
+`ntn api` prints the error and exits with a non-zero code. A failed write may have succeeded. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work. Follow the service’s retry guidance and backoff.
 
 | Error | Meaning | What to do |
 | --- | --- | --- |

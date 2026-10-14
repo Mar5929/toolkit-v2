@@ -53,11 +53,11 @@ Give one line for each requirement, with one of these three verdicts:
 
 ### Boundaries
 
-Use only reading, searching, and web research, and edit nothing. Do not approve anything, do not start other helpers, and do not ask the owner anything. Put each question whose answer would change a finding in your report, in one line each.
+Use only reading, searching, and web research, and edit nothing. Do not approve anything, do not start other helpers, and do not ask the owner anything. Put each question whose answer would change a finding in your report,.
 
 ### Return
 
-1. **Verdict per requirement:** a table with one row for each requirement, with the verdict and the evidence or the gap in one line.
-2. **Findings:** in order of how much each one affects the goal. Each finding names the requirement or the section, quotes the draft, says what would go wrong, and gives the fix in one line.
-3. **Disagreements:** anything that the architect answered in an earlier round and that you still find wrong, with both positions in one line each.
-4. **Clean:** every requirement is satisfied, and no Goal, Approach, Existing build, Sources, Completeness, or Misreading finding remains. Say so in one line, and name what you checked. Do not invent findings to fill the report.
+1. **Verdict per requirement:** a table with one row for each requirement, with the verdict and the evidence or the gap.
+2. **Findings:** in order of how much each one affects the goal. Each finding names the requirement or the section, quotes the draft, says what would go wrong, and gives the fix.
+3. **Disagreements:** anything that the architect answered in an earlier round and that you still find wrong, with both positions.
+4. **Clean:** every requirement is satisfied, and no Goal, Approach, Existing build, Sources, Completeness, or Misreading finding remains. Say so, and name what you checked. Do not invent findings to fill the report.

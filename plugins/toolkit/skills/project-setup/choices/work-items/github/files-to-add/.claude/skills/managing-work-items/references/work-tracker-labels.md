@@ -31,7 +31,7 @@ The owner may close an issue in the browser. That counts as the owner's word.
 
 ## The full list
 
-A project needs 30 labels. Colors are six-digit hex codes without `#`.
+A project needs every label in the full list. Colors are six-digit hex codes without `#`.
 
 | Label | Color | Description |
 | --- | --- | --- |
@@ -86,7 +86,7 @@ Create the labels at setup, and when a project that was set up earlier lacks a l
 
 5. List the labels again, and check that every label in the full list exists.
 
-Three more rules about labels:
+These rules also apply to labels:
 
 - Never use `--force`, because it overwrites a label that the owner already has.
 - A label that exists with another color or description stays as it is.
@@ -96,8 +96,4 @@ Three more rules about labels:
 
 The owner may add or remove a label in the browser. The owner's change is the one to keep. Continue from what the labels say now.
 
-- **Two labels of one group**, for example two states or two priorities. Ask the owner which one is right, and then remove the other.
-- **A state label was removed from an open work item.** Take the last State that the work item's Recent History names. Ask the owner whether that State still holds before you add its label.
-- **A priority label is missing.** Add `priority:medium`, and say so in one line.
-- **A type label is missing.** Ask the owner the type.
-- **An issue that the owner made by hand has no labels.** Follow `work-tracker-issue-layout.md`, section "An issue made by hand".
+When labels are missing or conflict, preserve the owner's edits and ask for the unresolved State or type rather than guessing. For a removed State label, recommend the last State in Recent History. Ask which value to keep when one group has multiple labels. Restore a missing priority as `priority:medium` and tell the owner. An issue made by hand with no labels follows `work-tracker-issue-layout.md`, section "An issue made by hand".

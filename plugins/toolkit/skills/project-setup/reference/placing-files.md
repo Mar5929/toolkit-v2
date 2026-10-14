@@ -43,7 +43,7 @@ diff -u <file> <source>/<file>
 | `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge the toolkit's entries into the project's file. [reference/skills-hooks-settings.md](skills-hooks-settings.md), "Merge rules", gives the rules for the merge. Ask the owner before you change any value that the project already has. |
 | `CLAUDE.md` with more than the line `@AGENTS.md` | Keep the project's file. Ask the owner whether to add the line `@AGENTS.md` at its top, because while a `CLAUDE.md` exists, Claude Code reads `AGENTS.md` only through that line. |
 | `AGENTS.md` (a project that had its own) | Keep the project's file. Show the owner what the toolkit's version adds. After the owner's yes, add the sections of the toolkit's version, and keep the owner's text. |
-| Every other file, such as `README.md`, a rule, or a template | Say in one line what differs, and recommend one of three choices: keep the owner's file, take the toolkit's file, or merge the two. The owner's file stays until the owner chooses. |
+| Every other file, such as `README.md`, a rule, or a template | Say what differs, and recommend one of three choices: keep the owner's file, take the toolkit's file, or merge the two. The owner's file stays until the owner chooses. |
 
 The file `.ignore`, in the first row, makes the search tools that skip what `.gitignore` names read a folder that a local choice adds, such as `work-items/` or `memory/`; each local choice adds its own `!/<folder>/` line. Those tools are ripgrep and the search tools of Claude Code.
 

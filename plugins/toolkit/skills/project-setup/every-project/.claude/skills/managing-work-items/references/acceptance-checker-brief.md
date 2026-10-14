@@ -54,8 +54,8 @@ Run only tests and read-only commands. Never edit, stage, commit, push, merge, d
 
 ### Return
 
-1. **Verdict:** ready for the owner, or not ready, in one line, with the commit you checked.
-2. **Per requirement:** a table with the requirement ID, the verdict, and the evidence or the gap in one line.
+1. **Verdict:** ready for the owner, or not ready, with the commit you checked.
+2. **Per requirement:** a table with the requirement ID, the verdict, and the evidence or the gap.
 3. **Tests run:** each command and its exact result line.
-4. **Defects in the diff:** each defect with the file and the line, what is wrong, and the fix in one line. Write "None found" when there are none.
+4. **Defects in the diff:** each defect with the file and the line, what is wrong, and the fix. Write "None found" when there are none.
 5. **Not run:** each check that could not run, and why.

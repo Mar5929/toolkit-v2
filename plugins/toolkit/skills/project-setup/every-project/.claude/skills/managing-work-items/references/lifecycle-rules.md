@@ -179,7 +179,7 @@ When the owner changes or adds a requirement and the work item is still small, r
 
 A work item on the short path stops being small when the work turns out to need what the short path leaves out: an interview to settle the requirements, Designing, or sub-items. Then move it to the full path:
 
-- Tell the owner in one line.
+- Tell the owner.
 - Add the Recent History row "Short path ended: full path from <State>.", with the State that the work item is in when it leaves the short path.
 - Set `delivery` to `not-offered`, unless a Questions and Answers row whose Affects column says `delivery` holds the owner's answer.
 - Continue with the file for that State. A work item that needs a design moves to Designing, also from Building. The owner's approval of the requirements still counts.
@@ -192,7 +192,7 @@ These rules apply every time you work on a work item, in every State.
 
 Read the work item again with `references/work-tracker.md` before you act. When the owner changed the work item by hand, keep the owner's change.
 
-The one exception is a State and a Status that no longer match the table in "Status and State". Tell the owner in one line, ask which State the work item is in, with your recommendation, and then set both.
+The one exception is a State and a Status that no longer match the table in "Status and State". Tell the owner, ask which State the work item is in, with your recommendation, and then set both.
 
 ### Save after each step
 

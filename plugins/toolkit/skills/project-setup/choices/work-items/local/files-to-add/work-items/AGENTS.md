@@ -10,7 +10,7 @@ A work item stays in this folder after it is closed. Keep knowledge that later w
 
 | File or folder | What it is |
 | --- | --- |
-| `<ID>-<short-slug>/` | The folder of one work item. `<short-slug>` is two to four lowercase words from the title, joined by hyphens. A sub-item is a work item inside another work item, and its folder is inside its parent's folder. |
+| `<ID>-<short-slug>/` | The folder of one work item. `<short-slug>` is lowercase words from the title, joined by hyphens. A sub-item is a work item inside another work item, and its folder is inside its parent's folder. |
 | `<ID>-<short-slug>/<ID>.md` | The work item's main file. It holds the header fields, which are the lines between the two `---` lines at the top of the file. Below them it holds the Overview with the work item's Current state, the Roadmap, Tasks, Recent History, Requirements, Questions and Answers, and Notes. |
 | `<ID>-<short-slug>/DESIGN.md` | The work item's design. It is made when a design starts, and it stays with the work item after delivery. |
 | `PROJECT-TASKS.md` | The project's own tasks, which belong to no work item. This file is not a work item. |

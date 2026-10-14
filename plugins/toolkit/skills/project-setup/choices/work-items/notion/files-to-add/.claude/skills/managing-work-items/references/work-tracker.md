@@ -40,7 +40,7 @@ Follow the generated template's prompts and retain its guide lines. Use relevant
 3. Open [work-tracker-page-updates.md](work-tracker-page-updates.md) for creation, page updates, designs, phases, tasks, and sub-items. Use [work-tracker-commands.md](work-tracker-commands.md) for the matching API call.
 4. Read the changed page or row back, and check that it says what you wrote. When a save failed, or reads back differently, report it as `references/lifecycle-rules.md`, section "Rules that apply in every State", says. That section gives the words your reply must start with.
 
-Two rules apply to every read and every save:
+These rules apply to every read and every save:
 
 - Never delete a page, a row, a phase, or a task. Take it out of view instead: set a phase or a task to Cancelled, or tick a work item's Archived box. When the owner wants it deleted, ask the owner to delete it in Notion.
 - Leave out archived work items unless the owner asks for them.

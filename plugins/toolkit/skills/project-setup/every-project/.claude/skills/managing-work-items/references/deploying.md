@@ -37,7 +37,7 @@ A merge into the default branch needs one of these two:
   2. Every check passes on that head.
   3. The work item does not say that its merge needs the owner's yes.
 
-  When all three are true, merge. Add the Recent History row "Merged under the standing merge instruction; checker passed `<commit>`", and tell the owner in one line, naming the rule. When any one of the three is not true, ask the owner.
+  When all three are true, merge. Add the Recent History row "Merged under the standing merge instruction; checker passed `<commit>`", and tell the owner, naming the rule. When any one of the three is not true, ask the owner.
 
   When the head moved after the checker passed it, start the checker on the new head. A pass there is enough. A head moves when a new commit is added, or when the default branch is merged into the work item's branch.
 

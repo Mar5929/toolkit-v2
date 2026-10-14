@@ -149,7 +149,7 @@ Give the owner a short, plain report. It has these parts, in this order:
 
 The setup files are not committed yet, and the first merge of a work item needs them committed. So the reply ends with an offer to commit them.
 
-Say in one line why the commit matters now. The reason is this: sessions that start in their own worktree (the Claude desktop app, the Codex app) see only committed files. Until this commit, those sessions get no `AGENTS.md`, skills, or hooks. When the app starts worktrees from the remote, they get none until this commit is also pushed.
+Explain why the commit matters now. The reason is this: sessions that start in their own worktree (the Claude desktop app, the Codex app) see only committed files. Until this commit, those sessions get no `AGENTS.md`, skills, or hooks. When the app starts worktrees from the remote, they get none until this commit is also pushed.
 
 The reply's last line is:
 

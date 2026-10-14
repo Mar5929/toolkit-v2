@@ -7,8 +7,7 @@ description: 'Plays back the owner''s loose ideas in simple words and waits for 
 
 The owner pasted or spoke a loose dump of what the owner wants. Say back what
 you understood, in very simple words, and wait for a yes. The dump is what the
-owner pasted or spoke in this message or just before it. With none, say so in one
-line and ask for it.
+owner pasted or spoke in this message or just before it. With none, say so briefly and ask for it.
 
 1. **No work until the owner confirms.** Read no files beyond what the dump
    names, write no files, run no commands. The playback and the questions

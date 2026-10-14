@@ -69,7 +69,7 @@ The two kinds of file are these:
 
 ## The project name and "Toolkit settings"
 
-Make these four changes in the copied files. Take each value from the project's own `PROJECT.md`.
+Make these changes in the copied files. Take each value from the project's own `PROJECT.md`.
 
 - Replace `<Project name>` with the project's name in `AGENTS.md`, `README.md`, and `PROJECT.md`, on heading lines only. A heading line starts with one to six `#` and a space. The fill-in guide comments that name `<Project name>` stay as they are until finishing. [reference/finishing.md](finishing.md), "Fill the prompts", says when a fill-in guide comment is deleted.
 - In `PROJECT.md`, "People and ownership", replace the example row with the owner's row below. The example row is the line that starts with ``| `<role>` |``. Keep the header row and the separator row.

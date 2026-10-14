@@ -34,25 +34,24 @@ Search before every save. Search for the fact's words and their synonyms, and re
 - When a section says something different, the save is a correction. "Correcting a fact" below gives the steps.
 - When a memory record of the right type covers the subject, add a section to it.
 - When no memory record covers the subject, make a new memory record.
-- When two memory records fit, pick the one that a future session would open first, and link the other one under the label "Related memories" in that memory record.
+- When several memory records fit, use the record that best covers the subject and link the others under `**Related memories:**`.
 
 ## Write the change
 
-- **A section in a memory record that exists.** Add the fact as its own section, above the record's lessons. Then do three things:
+- **A section in a memory record that exists.** Add the fact as its own section, above the record's lessons. Then update these fields:
   - Update `description` when the record now covers more.
   - Set `updated` to today and maintain the other metadata as `record-format.md` says.
   - Add each related work item to `work_items`, and keep every entry already there.
 - **A new memory record.** Name it for the subject, and not for one fact. Use the type that fits: user, project, reference, or event. Give it a first section and an empty lessons section. Set `created` and `updated` to today, and fill the header as `record-format.md` says.
-- Each section says four things: what to remember, why it matters, how to apply it, and where it came from, with its date and what is uncertain.
+- Each section says: what to remember, why it matters, how to apply it, and where it came from, with its date and what is uncertain.
 - The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary concise and informative.
 - A fact that is true only for a while gets a "check or remove by" date. `references/memory-criteria.md`, section "A fact that is true only for a while", says which date.
 - Record what allowed the save. Write "Approved by <owner> on <date>" when the owner asked for the save or said yes to it. Write "Logged by the agent on <date>" for every other save.
-- When several independent things call for a save, group them into one save.
 - Read the memory record back. When the save changes the project's Current State, update the project's Current State as `references/current-state.md` says.
 
 ## An unchecked claim
 
-An unchecked claim is a statement that nobody has confirmed. It is something a person said that nobody checked, such as "another developer says the API allows 100 calls a minute", or something that you concluded and that no source states. It goes in the memory record of the type project for the subject it is about, as its own section. The section holds three things:
+An unchecked claim is a statement that nobody has confirmed. It is something a person said that nobody checked, such as "another developer says the API allows 100 calls a minute", or something that you concluded and that no source states. It goes in the memory record of the type project for the subject it is about, as its own section. The section holds the following:
 
 - what was claimed, the date, and who said it and to whom, or what you concluded it from;
 - the words "Not checked." and what would check the claim;
@@ -123,7 +122,7 @@ Use [owner-instructions.md](owner-instructions.md) to record the owner's standin
 
 ## Reply lines
 
-Give the owner one short line for each record you changed, in the form below, and add nothing else about the save. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link. The line for a change that removes or replaces text in a memory record or in the project rules also gives what the section for that change asks for: the old text, and the words that undo or restore it. A correction, a removed section, and a retire are such changes. No other line gives undo words.
+Report each record you changed, in the form below, and include the verification result. The line names the record by its title and says where the record is kept. `references/memory-store.md` gives the path or the link. The line for a change that removes or replaces text in a memory record or in the project rules also gives what the section for that change asks for: the old text, and the words that undo or restore it. A correction, a removed section, and a retire are such changes. No other line gives undo words.
 
 After reporting the saves, continue the authorized work. When progress needs an owner decision, name the pending question and what it affects.
 

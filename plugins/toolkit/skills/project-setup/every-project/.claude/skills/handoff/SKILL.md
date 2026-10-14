@@ -32,7 +32,7 @@ This skill calls it the fixed first line.
 
 Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 to 7 write the prompt, check it, and show it. The saves come before the prompt, because once the prompt is on screen the owner treats the session as over, and the saves get skipped.
 
-1. **Find this session's work items.** Choose only the work items that belong to this session. A work item belongs to this session in three cases:
+1. **Find this session's work items.** Choose only the work items that belong to this session. A work item belongs to this session when any of these is true:
    - The owner and the agent worked on the work item in this session. A work item that was only mentioned or listed does not count.
    - The branch of this session's worktree names the work item. For example, the branch `claude/wi-007-<slug>` belongs to `WI-007`.
    - This session changed the work item.
@@ -60,7 +60,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    - **What this session learned or did that no record holds.** This kind covers a fact about a person, the client, or the project; a claim nobody checked; a lesson with no work item; a meeting or other event; and a run of a recurring job. Save each one in memory, as "Project memory" in the root `AGENTS.md` says.
    - **A shared open question.** Read the open questions in the project's shared records that this session raised or that name this session's work items. Put each one under "Open questions" in the prompt, with its ID or link.
 
-   When there is nothing to file, say so in one line.
+   When there is nothing to file, say so briefly.
 4. **Save the context for the next session.** Follow `references/project-memory-steps.md`, section "Saving the context for the next session". The project's memory choice supplies that file.
 5. **Draft the prompt. Do not show it yet.**
    - Start from the template `assets/handoff-prompt-template.md`. It holds the fixed first line and the headings.
@@ -79,7 +79,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
    | Skipped | Name the check in the check results that step 7 shows. |
 
    Three cases change this step:
-   - When the verifier fails to start or returns no report, say so in one line, and write the prompt anyway. Say inside the prompt that it was not checked.
+   - When the verifier fails to start or returns no report, say so briefly, and write the prompt anyway. Say inside the prompt that it was not checked.
    - When no tool can start a helper, check the draft yourself with the brief, and say inside the prompt that no independent check ran.
    - Recheck changes that affect the goal or supported claims. Give the verifier the Goal section and changed sections under "Draft prompt". Continue until the claims are supported or clearly marked “not confirmed”; report checks that could not run.
 7. **Show the result**, with its parts in this order:
