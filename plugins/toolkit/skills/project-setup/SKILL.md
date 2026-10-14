@@ -122,15 +122,7 @@ Each answer to questions 5, 6, and 7 has a folder under `choices/`, and that fol
 | Memory: Hindsight | [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) |
 | Salesforce: yes | [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) |
 
-The steps of a setup file are done at three moments. Most steps are done right after the answer. A step that waits for a later moment says which one.
-
-1. **Right after the answer, before the next question,** ask the choice's own questions, and add what the setup file says the choice adds to the project:
-   - the files. Copy each `files-to-add/` folder that the setup file names into the project, the way Step 3 copies the full layout;
-   - the lines that it adds to a file the project already has: the settings files, "Toolkit settings" in `PROJECT.md`, `AGENTS.md`, `.gitignore`, and `.ignore`. A line whose value is not known yet, such as the id of a Notion page, is added when the value is known.
-
-   When a choice needs a sign-in, ask for it at this moment too, so that the owner can sign in while the interview goes on. The step for the sign-in says how to check it.
-2. **When the choice's sign-in is done and the owner has given the answers that the setup file needs,** set up what the choice needs outside the project folder, after the owner's yes. The Notion steps, for example, need the answers to questions 5, 6, and 7.
-3. **When setup finishes, in Step 6,** do what the choice needs at the finish, such as its part of the roadmap, of the project's Current State, of the final checks, and of the owner's steps.
+Follow each choice's setup file for the timing of its questions, file copying, settings, external setup, and finishing checks. Add its files and lines as it directs, using Step 3's copy procedure. Write a configured identifier when its verified value is known. Begin any required sign-in during the interview; wait for that access and the owner's required answers and authorization before dependent external steps.
 
 When a sign-in is still not done when setup finishes, the steps that wait for it stay open. Name each one in the report, with the owner's step that it waits for.
 
@@ -204,6 +196,7 @@ The table lists the files of `reference/`, the setup file of each answer, and th
 | [reference/setup-problems.md](reference/setup-problems.md) | Step 2 or a failed operation: you need folder checks, recovery, or the host permission process. |
 | [reference/placing-files.md](reference/placing-files.md) | Steps 3 and 5: you copy `every-project/` or a `files-to-add/` folder into the project, the project already has one of the files, or you make the `.agents/skills` link. |
 | [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Whenever a settings file changes: you need the skills and the three hook commands every project has, the settings every project gets, and the rules for a settings file that already exists. |
+| [reference/project-store-summary.md](reference/project-store-summary.md) | Setup completion or a verified store migration: write the root guide summary from this project's actual record destinations. |
 | [reference/finishing.md](reference/finishing.md) | Step 6: you need the places an answer is written, the form of a line in `owner-preferences.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
 | [reference/context-from-past-work.md](reference/context-from-past-work.md) | Step 2 and question 10: the project had work before setup, and you read its past sessions or other material to offer answers and fill the project's files. |
 | [reference/existing-project.md](reference/existing-project.md) | The folder already has agent files that the toolkit did not put there: you need what to look for, how the branch works with the folders that Git ignores, and the known problems. |

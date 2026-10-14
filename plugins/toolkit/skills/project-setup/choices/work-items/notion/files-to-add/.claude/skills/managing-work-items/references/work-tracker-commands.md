@@ -51,7 +51,7 @@ ntn api v1/pages/<design-page-id> -X PATCH -d '{"properties":{"title":{"title":[
 
 **Make a Solution Design page for a work item that has none.** Send `ntn api v1/pages -d @design.json < /dev/null`. The body `design.json` has three parts: `"parent": {"type": "page_id", "page_id": "<item-page-id>"}`, the title in `"properties"` as in the call above, and the text in `"markdown"`.
 
-**Give the default template to a work item's page that has no sections.** `using-notion-cli`, section "Database templates", gives the call that prints the id of the default template.
+**Give the default template to a work item's page that has no sections.** `using-notion-cli/references/ntn-commands.md`, section "Database templates", gives the call that prints the id of the default template.
 
 ```bash
 ntn api v1/pages/<page-id> -X PATCH -d '{"template":{"type":"template_id","template_id":"<default-template-id>"}}' < /dev/null

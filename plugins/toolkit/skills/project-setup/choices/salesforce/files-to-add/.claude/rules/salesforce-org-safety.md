@@ -14,7 +14,7 @@ Applies to every agent and subagent.
 - Never change an org that `PROJECT.md` marks read-only. Read it only.
 - Never delete metadata with `sf project delete source` or `force:source:delete`, on any org.
 - Never delete an org or sandbox.
-- Never use `force:mdapi:deploy`, `force:source:push`, or `force:source:deploy` without a manifest. Use `sf project deploy start`.
+- Use `sf project deploy start` with the manifest or source path described under "The commands". Never use `force:mdapi:deploy`, `force:source:push`, or `force:source:deploy`.
 - Never deploy, validate, write data, run Apex, or run Apex or Flow tests without naming the target org explicitly (`-o <org>` for `sf`). Never trust the default org.
 - Never write or run a script, or any other file, that deploys, validates, writes data, runs Apex, or runs Apex or Flow tests. Run each `sf` command directly, so that the refuse list can match it.
 - Never deploy a permission set before you have compared the file with the org's copy and confirmed that the deploy removes no grant. A deploy replaces the whole permission set, so a grant that the file lacks is switched off. `sf project deploy validate` and `preview` do not detect removed grants.
@@ -31,7 +31,7 @@ These are the commands for each kind of action. The owner's file says whether yo
 - Validate or preview a deploy: `sf project deploy validate -x <manifest> -o <org>`, `sf project deploy preview`, `sf project deploy report`.
 - Deploy metadata: `sf project deploy start -x delivery/deployments/<chosen-folder>/package.xml -o <org>` or `sf project deploy start -d <path> -o <org>`. Use the work item's package for ordinary changes.
 - Delete metadata: a deploy that holds a destructive changes file (`--pre-destructive-changes` or `--post-destructive-changes`).
-- Run Apex or Flow tests: `sf apex run test -o <org>`, `sf flow run test -o <org>`.
+- Run Apex or Flow tests: `sf apex run test -o <org>`, `sf flow run test -o <org>`, or `sf logic run test -o <org>` for combined Apex and Flow tests.
 - Change data: `sf data create / update / delete / import / upsert` (record, bulk, or tree).
 - Run anonymous Apex: `sf apex run -o <org>`.
 - Promote through a DevOps Center pipeline: `sf project deploy pipeline start`, `quick`, `resume`, or `validate`.

@@ -14,11 +14,11 @@ Use this during Hindsight setup to install its memory rule, connect the shared r
 | Toolkit hook entries | Keep the shared SessionStart and UserPromptSubmit handlers without memory-selection arguments. Preserve unrelated entries and the Hindsight add-on's hooks. |
 | Add-on settings and bank | Apply the owner's choices through the onboarding steps. Keep keys outside the project. |
 
-Do not copy local memory files for this choice. In a setup copy, this choice's instructions take precedence over older guidance that copies a local Current State file. In an existing project, preserve memory records until the owner approves their migration; do not delete them as part of wiring the hook.
+Do not copy local memory files for this choice. In an existing project, preserve memory records until the owner approves their migration; do not delete them as part of wiring the hook.
 
 ## Root `AGENTS.md`
 
-Replace the prompt under the heading "Project memory" with this text, below the heading. In a project set up before this section existed, this text replaces an older "Hindsight memory" section; keep one version only. Preserve unrelated owner instructions.
+Replace the prompt under the heading "Project memory" with this text, below the heading. Preserve unrelated owner instructions.
 
 ```markdown
 This project keeps its memory in the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings".

@@ -23,7 +23,7 @@ The header is the block of fields between the two `---` lines at the top of the 
 | Field | Holds |
 | --- | --- |
 | `name` | The file name without `.md`. |
-| `description` | One line that states what the file holds, with its dates. It states the fact itself, not only the subject of the fact. `managing-project-memory` gives the length of the line. The index prints the whole line. |
+| `description` | One line that states what the file holds, with its dates. It states the fact itself, not only the subject of the fact. Keep the line concise and informative, as `saving.md`, "Write the change", describes. The index prints the whole line. |
 | `created` | The date the file was made, as `YYYY-MM-DD`. Never change it. |
 | `updated` | The date of the last change, as `YYYY-MM-DD`. Set it to today on every change. |
 | `check_by` | The date on which to check or remove the file, as `YYYY-MM-DD`, when the fact is true only for a while. Otherwise `none`. |

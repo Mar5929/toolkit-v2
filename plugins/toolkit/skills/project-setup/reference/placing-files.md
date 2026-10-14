@@ -81,3 +81,5 @@ In Git Bash, `ln -s` copies the folder instead of linking it unless `MSYS=winsym
 
 - `ls -la .agents` shows `skills -> ../.claude/skills`, and `ls .agents/skills` shows the skills. Once the link is staged, `git ls-files -s .agents/skills` shows the mode `120000`, which is how Git stores a link.
 - `git status --short` lists the new files. `git ls-files -- work-items/ memory/` prints nothing, confirming that Git tracks neither private folder. When the chosen local folder is present, also run `git check-ignore work-items/PROJECT-TASKS.md` or `git check-ignore memory/CURRENT_STATE.md`; each must print its path.
+
+When a command named in setup is unavailable on the owner's computer, use another available tool that preserves the same copying, comparison, and verification behavior. Report a check that cannot run.

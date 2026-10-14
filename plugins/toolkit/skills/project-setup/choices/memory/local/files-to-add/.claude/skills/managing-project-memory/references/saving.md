@@ -39,10 +39,10 @@ Search before every save. Search for the fact's words and their synonyms, and re
 ## Write the change
 
 - **A section in a memory record that exists.** Add the fact as its own section, above the record's lessons. Then do three things:
-  - Update the record's one-line summary when the record now covers more.
-  - Set the record's last-changed date.
-  - Add each related work item, and keep every work item that is already there.
-- **A new memory record.** Name it for the subject, and not for one fact. Use the type that fits: user, project, reference, or event. Give it a first section and an empty lessons section. Set its created date and its last-changed date to today.
+  - Update `description` when the record now covers more.
+  - Set `updated` to today and maintain the other metadata as `record-format.md` says.
+  - Add each related work item to `work_items`, and keep every entry already there.
+- **A new memory record.** Name it for the subject, and not for one fact. Use the type that fits: user, project, reference, or event. Give it a first section and an empty lessons section. Set `created` and `updated` to today, and fill the header as `record-format.md` says.
 - Each section says four things: what to remember, why it matters, how to apply it, and where it came from, with its date and what is uncertain.
 - The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary concise and informative.
 - A fact that is true only for a while gets a "check or remove by" date. `references/memory-criteria.md`, section "A fact that is true only for a while", says which date.
@@ -113,7 +113,7 @@ Delete a memory record in these cases:
 - the owner says to delete it;
 - removing the security-compromising text would leave no useful memory. In this case, ask the owner before deleting the whole record.
 
-In your reply, say whether the deleted memory record can be brought back. `references/memory-store.md` says whether it can.
+In your reply, say whether the deleted memory record can be brought back. Check whether the file can be recovered from the actual filesystem or backup before reporting that it can.
 
 When you find secrets or information whose storage could compromise system, product, or project security in memory, remove that text at once and tell the owner. Describe the removal without repeating the excluded text or offering to restore it; this overrides the old-text and undo wording elsewhere in this file.
 

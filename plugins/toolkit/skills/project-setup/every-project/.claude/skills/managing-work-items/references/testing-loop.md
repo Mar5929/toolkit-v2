@@ -78,9 +78,9 @@ Keep the reply short, and give its parts in this order:
 
 ## Mistakes to avoid
 
-- The checker runs before every result approval, whoever built the change. The owner decided this rule on 2026-09-28. On 2026-10-07 the owner made one exception: a small work item that takes the short path, as "A small work item" above says.
+- The checker runs before every result approval, whoever built the change. The exception is a small work item that takes the short path, as "A small work item" above says.
   - When the owner asks to skip the checker where this file says that it runs, say that it runs, as the owner decided, and ask whether the owner wants to change that decision.
   - When the owner does change the decision, record the owner's words in `.claude/rules/owner-preferences.md`, with the steps that "Project memory" in the root `AGENTS.md` names.
 - A commit after the check needs a new checker. A change to a result that Git does not track needs a new check too.
 - A change after the owner's yes to the result needs a new check, and a new yes from the owner to what changed.
-- In Codex, each Git write, such as the test plan commit, follows `building.md`, section "Git writes in Codex".
+- In Codex, each Git write, such as the test plan commit, follows the active host's permission instructions.

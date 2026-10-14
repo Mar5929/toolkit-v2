@@ -36,7 +36,7 @@ work_item: WI-001
 
 ## Design options
 
-<!-- Include the number of options chosen for this design (the owner's number when he gave one). Keep each option in this file with the same subsections. Remove unused option headings. Describe options as proposals until the owner chooses one. -->
+<!-- Include the number of options chosen for this design (the owner's number when the owner gave one). Keep each option in this file with the same subsections. Remove unused option headings. Describe options as proposals until the owner chooses one. -->
 
 ### Option A — <Short name>
 

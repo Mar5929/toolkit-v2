@@ -41,7 +41,7 @@ ntn api v1/pages -d @body.json < /dev/null                    # POST: create (a 
 
 - The path starts with `v1/`.
 - `-X` sets the method. With a body and no `-X`, the method is POST. A body is the JSON text that a call sends.
-- `ntn` prints the JSON answer. Pipe the answer to `jq` to pick what you need. `jq` is on every Mac, at `/usr/bin/jq`.
+- `ntn` prints the JSON answer. Pipe the answer to `jq` to pick what you need. When `jq` is not installed, use an available JSON tool, such as Python, to extract the same values.
 
 ## Sending a body
 

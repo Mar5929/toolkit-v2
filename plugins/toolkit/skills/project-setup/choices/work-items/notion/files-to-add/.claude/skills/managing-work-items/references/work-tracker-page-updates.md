@@ -6,7 +6,7 @@ Use this reference to create or update a work item, its Solution Design page, ph
 
 1. Count the levels by following "Parent item" up from the parent. When the parent is already at the third level, stop. The work becomes a task, as `managing-work-items` says.
 2. Create the row using its database's default template and fill the applicable properties from the live schema and `managing-work-items`. [work-tracker-commands.md](work-tracker-commands.md) gives the call. Notion builds the page from the work item template as part of creation; do not apply it again or reconstruct its sections.
-3. Wait until the template's content is on the page. `using-notion-cli`, section "Waiting for a template", says how to check.
+3. Wait until the template's content is on the page. `using-notion-cli/references/ntn-commands.md`, section "Waiting for a template", says how to check.
 4. Put the work item's ID in the title of its Solution Design page, as "The Solution Design page" says.
 5. Fill the page, as the next section says.
 6. When the work item has a parent, add a Recent History row on the parent's page: "Sub-item WI-32 created: <title>."
@@ -22,7 +22,7 @@ The lifecycle decides what is saved. The page decides where it goes and what for
 - **The owner's guide lines.** A line under a heading that says how the section is kept, such as the order of its rows, is the owner's guide for that section. Follow it, and keep it on the page.
 - **Lines that are not text.** A `<database …>` line is a view, which shows the rows of a database. To change what a view shows, change the rows. A `<page …>` line is a child page. An `<unknown …>` line is a block that only the Notion app can change. Never change or remove one of these lines.
 - **A line that the page does not have.** When a step of the lifecycle needs a line or a heading that the page does not have, add it where the lifecycle says, in the form of the lines around it. For example, `references/closing.md` fills a "Moved up" line in the Overview. Match a heading by its words, at the level the page uses.
-- **Small, exact changes.** Change the text with exact replacements, built from a read that you just made. `using-notion-cli`, section "Reading and changing page text", gives the calls. Never replace the whole text of a page. A new row, a new requirement, or a new line takes the form of the ones already in its section.
+- **Small, exact changes.** Change the text with exact replacements, built from a read that you just made. `using-notion-cli/references/ntn-commands.md`, section "Reading and changing page text", gives the calls. Never replace the whole text of a page. A new row, a new requirement, or a new line takes the form of the ones already in its section.
 - **The work item's Current state.** Rewrite its five lines in place, with one replacement of the whole block as you read it.
 - **Lines that also have a property.** Next action and Summary each have a property with the same name, which a view of Work Items shows on the card. When you write one of these lines, write the same text in its property.
 - **Questions.** A new question gets the highest Q-ID on the page plus one. Set the Waiting on property to who the open questions wait on.
