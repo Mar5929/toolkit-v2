@@ -18,7 +18,7 @@ A change outside the intended scope, or a feature that is not ready for the targ
 
 ## The check
 
-1. List the exact deploy set: every `<members>` in the `-x` manifest, every member in the `-m` list, every file or folder under `-d`. An `-x` deploy of a full-cutover manifest is the highest risk. Check the whole member list.
+1. List the exact deploy set: every `<members>` in the `-x` manifest, every member in the `-m` list, every file or folder under `-d`. Check the whole member list.
 2. For each named component, the whole current `force-app/` definition ships: label, inline help text, formula, rollup and summary filters, picklist values, all field metadata, and the component itself if the target lacks it.
 3. For each component, decide whether its feature is already live in the target. Check for these signs of a change outside the intended scope or a feature that is not ready:
    - The component tracker (if the project keeps one) marks it as not in the target org.
@@ -31,7 +31,7 @@ A change outside the intended scope, or a feature that is not ready for the targ
 ## Narrow the deploy set
 
 - Name only the components the change needs. For a help-text change on three fields, name those three fields, not a broad manifest.
-- Naming a component still ships its whole file. Run the per-file diff in step 3 on a narrow deploy too.
+- Run the per-file diff in step 3 on a narrow deploy too.
 - Prefer the work item's `package.xml` over `delivery/deployments/full-project-deployment-template/package.xml` unless the goal is a full cutover.
 
 ## Hand-offs

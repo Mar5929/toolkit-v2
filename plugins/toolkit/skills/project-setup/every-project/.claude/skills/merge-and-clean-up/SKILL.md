@@ -193,7 +193,7 @@ Verify each of these:
   - whether the base worktree is up to date;
   - any uncommitted files left in the base worktree;
   - the cleanup result;
-  - whether the Recent History row was saved. When that save failed, start that line with "Not saved".
+  - whether the Recent History row was saved. Follow `managing-work-items/references/reporting-a-save.md` for a failed or unverified save.
 
   State any decision the owner must make or the next available action.
 
