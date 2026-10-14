@@ -44,7 +44,7 @@ A later session starts with only what the records hold, so it must find every fa
 - A helper agent (a separate agent started for one job) follows its brief. The bullets below are for the session the owner writes to.
 - On every turn, decide what the owner's message concerns and whether the owner asks for an answer or a change. It can concern a work item, a source, a project record that several work items need, project memory, more than one of these, or none. Choose the work from "Where information goes" and "Which skill" below.
 - When a turn concerns a work item, find it, read its Current state (the five lines at its top), and use `managing-work-items`. To find it, check in this order and stop at the first check that finds one: the work item the owner names, the one this branch or session is working on, the one the work tracker or the project's current state shows in progress. Ask the owner only when a check finds two.
-- When the owner asks for work and no work item covers it, ask in one short line whether to make a work item, before you start. Name the work and say whether you recommend a work item. After a yes, use `managing-work-items`. After a no, do the work without one; `.claude/rules/shared-repository-work.md` still applies, including where to make the change and that a merge into the default branch needs the owner's yes.
+- When the owner asks for work and no work item covers it, ask in one short line whether to make a work item, before you start. Name the work and say whether you recommend a work item. After a yes, use `managing-work-items`. After a no, do the work without one; `.claude/rules/shared-repository-work.md` still applies, including where to make the change.
   - Do not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in your reply, when the request is only to save or correct a fact or a project task in the project's records, or when one skill in "Which skill" other than `managing-work-items` does the whole request.
 
 ## Project memory
@@ -55,7 +55,7 @@ Keep memory only in the place that this section names.
 
 ## Project map
 
-- Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout, the first path `git worktree list` prints. Every worktree, a separate folder with its own branch, shares them.
+- Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout. Every worktree, a separate folder with its own branch, shares them.
 - Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. Name a work item by its ID, never by a folder path.
 
 | Location | What it holds | When you change it |

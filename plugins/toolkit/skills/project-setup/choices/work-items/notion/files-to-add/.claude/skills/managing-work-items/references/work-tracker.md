@@ -2,7 +2,7 @@
 
 Use this reference to read, create, change, and find work items in a project that keeps its work items in Notion. The goal is to read and write each work item consistently with the lifecycle rules.
 
-This reference says where a work item is kept in Notion and how to save to it. The lifecycle rules decide what happens next: what to save and when, a work item's State, and each approval. A work item's State is the step the work is in, and its Status is the short summary of the State. `using-notion-cli` says how to run each Notion call.
+This reference says where a work item is kept in Notion and how to save to it. The lifecycle rules decide what happens next: what to save and when, a work item's State, and each approval. `using-notion-cli` says how to run each Notion call.
 
 ## Where work belongs
 
@@ -63,7 +63,20 @@ Notion makes a work item from the database's default template, with its Solution
 
 ## How a helper opens a work item by ID
 
-Read the configured record, following the installed Notion access procedure, or check freshly supplied text and properties. State which evidence was used.
+Read `PROJECT.md` for the Work Items data source ID and the installed `using-notion-cli` access procedure. Query the numeric part of the work-item ID, using the confirmed prefix:
+
+```bash
+ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":31}},{"property":"Work item","title":{"is_not_empty":true}},{"property":"Archived","checkbox":{"equals":false}}]}}' < /dev/null
+```
+
+Use the matched page ID to read its properties and text:
+
+```bash
+ntn api v1/pages/<page-id> < /dev/null
+ntn api v1/pages/<page-id>/markdown < /dev/null
+```
+
+Read the Solution Design child page named in that text in the same way. When the helper lacks access, give it freshly read text and properties and have it name that evidence in its report.
 
 ## Related work
 
@@ -71,5 +84,4 @@ Read the configured record, following the installed Notion access procedure, or 
 | --- | --- |
 | Deciding what happens next: what to save and when, a State, or an approval | Follow `references/lifecycle-rules.md` in this skill. |
 | Every Notion read or write: sign-in, Codex, the form of each call, and errors | `using-notion-cli` |
-| A source that the work item was given. A source is anything the project was given by someone else, such as a transcript or a client document. | `filing-project-records`, step "file a source" |
 | Moving the work items to another place where work items can be kept, such as local files or GitHub Issues | `project-setup` |

@@ -16,7 +16,7 @@ A routine update that keeps local work is the job of `pull-latest`.
 
 ## Where the reset runs
 
-The reset happens in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints. Run every Git command below as `git -C <main checkout> ...`, because from another worktree Git refuses to check out or reset a branch that the main checkout holds. A worktree is a separate folder with its own branch.
+The reset happens in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints. Run every Git command below as `git -C <main checkout> ...`, because from another worktree Git refuses to check out or reset a branch that the main checkout holds.
 
 Every other worktree is one of the "other worktrees" in step 2. This session's own worktree is one of them too, when it is not the main checkout.
 
@@ -88,7 +88,6 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
 - The reset leaves the project's Git-ignored folders as they are, such as folders of local records that the project keeps out of Git. Never run `git clean` with `-x` or `-X`, because it deletes them and Git cannot bring them back.
 - Never run `git pull`, never use `--force` on `git fetch`, and never push.
 - In Claude Code, the project's settings ask the owner before every `git reset --hard` and every `git clean`. That prompt is expected.
-- Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
 
 ## Work that another skill does
 

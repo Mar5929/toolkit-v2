@@ -79,9 +79,7 @@ Clean up all of memory when the owner asks for it, and start at once. Start a cl
 
 ## Every time you change a memory record
 
-- Read the memory record again right before you change it, and read it back after the change.
-- Never run two writes to the same memory record at the same time.
-- Keep the owner's own edits. In a memory record that the owner changed by hand, change only the text that your change is about.
+Follow `references/memory-store.md`, "Steps for every read and every save", for the fresh read, targeted edit, metadata maintenance, and read-back. Keep writes to one record sequential.
 
 ## Work that another skill or reference does
 

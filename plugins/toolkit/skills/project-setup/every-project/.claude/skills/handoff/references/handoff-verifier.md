@@ -1,5 +1,3 @@
-<!-- Shared text from the Toolkit V2 repository, where it is edited. In a project, never edit this copy: "update the toolkit" replaces it. -->
-
 # Handoff verifier: helper brief
 
 This file is for the handoff verifier, the helper that `handoff` starts at its step 6. A helper is a separate agent that sees only the instructions it is given. The verifier checks a drafted handoff prompt and changes nothing. Its check is done when it has reported whether the draft states the overarching goal, and whether every fact in the draft matches the repository and what is saved where the work items are kept.
@@ -21,10 +19,8 @@ The file has two parts. "For the main agent" says how to start the verifier. "Br
 
 Start the verifier from `handoff`, after you draft the prompt and before the owner sees the prompt. Act on every verdict as step 6 of `handoff` says.
 
-Start the verifier as a new helper that does not see this session. Honor the project’s model preference; otherwise choose a suitable available model for the task.
+Follow `managing-work-items/references/starting-a-helper.md` to start a helper with no session history and wait for its report.
 
-- In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose`. Never use a fork, because the verifier must not share this session.
-- In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`. Wait for its report with `wait_agent`.
 - The message to the helper holds everything under "Brief for the helper", word for word, and then the list of inputs below, filled in. The helper sees nothing else.
 - Give the verifier the configured record links and available read access. For records it cannot read, supply freshly read text with source links, dates and relevant properties. Include each work item, shared record, memory record, or record captured but not yet filed that the draft relies on. The project's current state alone does not verify a claim about another record.
 

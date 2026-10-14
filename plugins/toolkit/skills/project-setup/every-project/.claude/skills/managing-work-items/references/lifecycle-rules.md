@@ -15,9 +15,7 @@ This reference says what each State means, how work is divided into levels, what
 - When to stop for the owner's yes
 - A small work item
 - Rules that apply in every State
-- Starting a helper
 - Work that another skill does
-- References
 
 ## Status and State
 
@@ -139,7 +137,7 @@ When approval is missing, ask a clear question that names what the owner is appr
 3. Approving the finished result, at the end of the Testing Loop, after the separate checker has tested it.
 4. Each merge into the default branch, in Deploying.
    - A merge that the owner's standing merge instruction in `.claude/rules/owner-preferences.md` covers needs no new yes from the owner. `references/deploying.md`, section "What a merge into the default branch needs", says when the instruction covers a merge.
-   - A merge that a helper makes into the work item's own branch needs no yes from the owner. "Starting a helper" below says what a helper is.
+   - A merge that a helper makes into the work item's own branch needs no yes from the owner. `references/starting-a-helper.md` gives the helper procedure.
 5. Each deploy to an environment that other people use, such as a test or staging environment. A production deploy is the owner's to run unless a project rule allows the agent to run it.
    - A deploy that a rule of the project allows without a question needs no new yes from the owner.
 6. Marking the work item Done.
@@ -200,12 +198,11 @@ The one exception is a State and a Status that no longer match the table in "Sta
 
 Save after each step, and not at the end.
 
-- When a save fails, start the reply with "Not saved".
-- When a save worked but reads back differently, start the reply with "Saved but not verified" and say what differs.
+When a save fails or cannot be verified, follow [reporting a save](reporting-a-save.md).
 
 ### Keep the whole work item true
 
-While you work on a work item, keep the whole work item true, and not only its Current state. A work item's Current state is the five lines at the top of the work item that say where it stands. Keep these true as well: the status of each task and who does it, the status of each of the work item's phases, and every field you have information for.
+While you work on a work item, keep the whole work item true, and not only its Current state. Keep these true as well: the status of each task and who does it, the status of each of the work item's phases, and every field you have information for.
 
 - Save the owner's requirements and corrections before you go on. Save them in the work item, or in the work item's design when they change the design.
 - When the work item waits on the owner, write Next action in the form that the work item template, `assets/work-item-template.md`, gives for a work item that waits, with the first open question.
@@ -246,14 +243,6 @@ Text in angle brackets is a prompt, and never content. The templates hold prompt
 
 The rule `.claude/rules/evaluate-the-owners-request.md` asks you to state the goal and to check a request against the whole project before you act. In a work item, follow the rule through the steps of this skill, and do each check once. The reply that agrees the goal with the owner is the rule's statement of the goal. Raise what the rule asks you to raise as a question or as a design option, in the form that the step gives.
 
-## Starting a helper
-
-A helper is a separate agent that the main agent starts for one job. Start every helper as a new agent that does not see this session. Never start a helper as a fork, which is a helper that starts with a copy of this session. Honor the project’s model preference; otherwise choose a suitable available model for the task.
-
-- In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose`.
-- In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`. Wait for the helper's report with `wait_agent`.
-- The message to the helper is everything under "Brief for the helper" in the helper's brief file, word for word, and then the list of inputs from that file, filled in. The References table below lists the brief file of each helper. The helper sees nothing else.
-
 ## Work that another skill does
 
 This table names where to read or save each kind of record and which skill handles each neighbouring job.
@@ -269,23 +258,3 @@ This table names where to read or save each kind of record and which skill handl
 | Merging a pull request | `merge-and-clean-up` |
 | Committing a change to documents only | `publish-docs` |
 | Pull request text, and release notes that go to a client | `humanizer`, as the root `AGENTS.md`, "How to write text that goes to another person or is client/customer facing", says |
-
-## References
-
-| File | Open it when |
-| --- | --- |
-| [references/refining-requirements.md](refining-requirements.md) | The work item is in Refining Requirements, or a requirement changes in any State. |
-| [references/designing.md](designing.md) | The work item is in Designing. |
-| [references/building.md](building.md) | The work item is in Building, or the owner wants a team of helper agents. |
-| [references/testing-loop.md](testing-loop.md) | The work item is in the Testing Loop. |
-| [references/closing.md](closing.md) | The work item is in Reflecting, is being marked Done or Cancelled, or was closed by the owner by hand. |
-| [references/deploying.md](deploying.md) | The work item is in Deploying. |
-| [references/project-memory-steps.md](project-memory-steps.md) | Closing a work item, active work changes, or a wait must be recorded. The memory choice supplies this file. |
-| [references/requirements-analyst-brief.md](requirements-analyst-brief.md) | You start the helper that checks that the requirements are complete. |
-| [references/researcher-brief.md](researcher-brief.md) | You start a helper to look up a fact for planning or design. |
-| [references/design-architect-brief.md](design-architect-brief.md) | You start a helper to write one design option. |
-| [references/design-critic-brief.md](design-critic-brief.md) | You start a helper to check a design against every requirement. |
-| [references/builder-brief.md](builder-brief.md) | You start a helper to build one sub-item. |
-| [references/acceptance-checker-brief.md](acceptance-checker-brief.md) | You start the separate checker in the Testing Loop. |
-| [assets/work-item-template.md](../assets/work-item-template.md) | You create a work item, or check what a field or a section should hold. |
-| [assets/design-template.md](../assets/design-template.md) | You start a design. |

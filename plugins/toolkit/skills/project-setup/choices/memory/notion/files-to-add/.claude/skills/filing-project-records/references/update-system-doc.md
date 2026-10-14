@@ -6,4 +6,4 @@ Use this file when an approved fact about the system changes: a rule, a term, an
 2. Capture the change in Wiki Inbox with `managing-project-memory`. Include what changes, its source, the approval evidence, and the work items it affects. A working design stays in its work item until the owner approves it.
 3. Read the capture back, and give the verified capture link to the skill that asked for this step. That skill writes the link in each work item that needs it.
 
-Filing a capture needs no approval from the owner, because a capture does not approve its content.
+Use `managing-project-memory` for capture authorization and verification.

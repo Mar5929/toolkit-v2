@@ -43,13 +43,6 @@ Follow the active session's network, credential access, and approval settings. S
 - Never apply a template twice to the same page.
 - Never apply a template to a template page. Applying one turns the template into a row that shows on the owner's boards.
 
-## Work that another skill does
-
-| For | Use |
-| --- | --- |
-| What to read and save for a work item | `managing-work-items` |
-| What to read and save for project memory | `managing-project-memory` |
-
 ## References
 
 | File | Open it when |

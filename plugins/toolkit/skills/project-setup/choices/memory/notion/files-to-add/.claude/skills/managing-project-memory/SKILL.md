@@ -17,7 +17,7 @@ Keep useful project knowledge discoverable. Coding agents read the Project Wiki 
 ## Capture changes
 
 1. Keep the work item and its evidence current. Capture useful new context, corrections and reusable outcomes during work, closure and handoff, using [Wiki Inbox](references/wiki-inbox.md).
-2. Link existing documentation or captures instead of repeating them. Include sources, dates, uncertainty and existing approval evidence. Capture does not establish truth or approve a change.
+2. Link existing documentation or captures instead of repeating them. Include sources, dates, uncertainty and existing approval evidence. Capture and filing need no separate approval. A capture does not establish truth or approve its content; new decisions, requirements, and harness changes retain their applicable approval rules.
 3. Read the capture back. Work may close after capture is verified; mark publication complete only after the librarian verifies filing.
 4. For an explicit correction or forgetting request, run `maintaining-notion-wiki` on demand and verify the requested result before reporting completion.
 

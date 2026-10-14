@@ -164,7 +164,7 @@ Move a work item only when the owner asks.
 - A copy of the template with a real title is a work item that the owner made by hand. A title is real when `title:` is not `<Work item title>`. Do these things:
   - Give it the next ID, with steps 2 and 3 of "Creating a work item's folder and ID".
   - Set `id:` and the heading, and rename its file to `<ID>.md`.
-  - Fill any empty field with the value that a new work item gets, and delete every template prompt that the owner left unfilled. A prompt is text in angle brackets that says what to write there. `work-tracker-field-mapping.md`, section "A new work item's starting values", gives the values. Keep everything that the owner wrote.
+  - Fill any empty field with the value that a new work item gets, and delete every template prompt that the owner left unfilled. `work-tracker-field-mapping.md`, section "A new work item's starting values", gives the values. Keep everything that the owner wrote.
   - Add a Recent History row: "Made by hand by the owner; given the ID WI-034."
   - Keep the owner's folder name.
   - Tell the owner in one line.

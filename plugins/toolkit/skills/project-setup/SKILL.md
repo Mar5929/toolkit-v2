@@ -93,7 +93,7 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 10 | Is there material to start from? | None. When Step 2 read past work, the facts that no answer has used yet | `sources/`, and each confirmed fact from past work in the place the project's `AGENTS.md` gives for it |
 | 11 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
 
-The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one. A Hindsight project has none: where the work stands is in the place where work items are kept.
+The selected memory choice gives the startup records to initialize from question 11.
 
 Read [reference/setup-interview.md](reference/setup-interview.md) before asking the questions. It gives the exact owner row, the work tracker and memory choices, and what to do with each answer.
 
@@ -130,7 +130,7 @@ Add the files of one work items choice and of one memory choice only. Each of th
 
 ### The lines of "Toolkit settings"
 
-"Toolkit settings" is the section of `PROJECT.md` that records the owner's setup choices. The project's skills read its lines.
+The project's skills read the exact labels in "Toolkit settings".
 
 - The full layout brings two lines, which every project has: Tracker and Memory.
 - Each choice adds its own lines. Its setup file gives them, in a step or in the file that a step names. A project has no line for a choice that the owner did not make.
@@ -143,7 +143,7 @@ Add the files of one work items choice and of one memory choice only. Each of th
 
 1. Check that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
 2. Write the roadmap from question 11 in the place where work items are kept.
-3. With local or Notion memory, write the first lines of the project's Current State. They say where the project stands, from question 11. A Hindsight project has no Current State: where the work stands is in the place where work items are kept.
+3. Finish the selected memory choice using its setup reference, including startup context and open owner steps from question 11.
 4. Check that the setup works: the settings files are valid, the session-start command prints the project's Current State when the project has one, and each service that the owner chose answers.
 5. Tell the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
 6. Report what was set up, what was made outside the project folder, and what is still open.

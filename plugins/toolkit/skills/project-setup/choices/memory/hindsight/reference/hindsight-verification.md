@@ -18,7 +18,7 @@ Check the Codex Hindsight handler's native `additionalContextLimit: 5000` starti
 
 Use representative prompts and check behavior while expected background work is active. Inspect complete answers as well as timing; source dates and approval status can be wrong even when the response is useful. A direct provider test, isolated engine, or manually invoked hook bundle is a narrower check and does not prove interactive host scheduling or trust.
 
-Keep `reflectTimeoutMs: 90000`, `injectTimeoutMs: 15000`, and the 120-second first-message hook unless the owner approves different behavior. The fallback budget is shared by page search and recall after a reflection failure. These are deadline allowances, not expected response times or a latency fix. Recheck host entries after installing the add-on.
+Verify the approved startup deadlines and shared fallback budget against [the default package](hindsight-package-default.md), "Add-on settings for this bank", after installation.
 
 ## Check surveys and knowledge pages
 

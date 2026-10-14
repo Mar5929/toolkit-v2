@@ -8,6 +8,6 @@ Run `gh auth status`.
 - When no one is signed in, ask the owner to run `gh auth login` in the owner's own terminal.
 - When the `repo` scope is missing, ask the owner to run `gh auth refresh -s repo`.
 
-Then wait for the owner. The interview goes on while the owner signs in, and steps 6 to 10 of the setup file wait until `gh auth status` shows the owner's account with the `repo` scope.
+Then wait for the owner. The interview goes on while the owner signs in, and steps 6 to 9 of the setup file wait until `gh auth status` shows the owner's account with the `repo` scope.
 
 [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md), "The tool and the sign-in", says what `gh auth status` prints and what you never ask the owner for.

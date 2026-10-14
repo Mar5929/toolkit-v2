@@ -69,15 +69,9 @@ Notion holds the full list of properties, with their types and options. This tab
 
 | Field in the lifecycle | Property in Work Items | Type and values |
 | --- | --- | --- |
-| `title` | Work item | `title` |
 | `id` | ID | Notion sets it. It shows the prefix and the number without padding: `WI-31`, not `WI-031`. |
-| `state` | State | `select`: Backlog, Refining Requirements, Designing, Building, Testing Loop, Reflecting, Deploying, Blocked, Done, Cancelled |
-| `status` | Status | `status`: Not Started, Preparing, In Progress, Blocked, Done, Cancelled |
 | `waiting_on` | Waiting on | `select`: owner, agent, external, none. For `external`, the "Waiting on" line of the work item's Current state says who. |
-| `type`, `priority`, `delivery`, `design` | Type, Priority, Delivery, Design | `select`, with the values that `assets/work-item-template.md` lists for the field |
 | `requirements_approved`, the design approval, `result_approved` | Requirements approved, Design approved, Result approved | `rich_text`: `YYYY-MM-DD by <name>`, or `no` |
-| `parent` | Parent item | `relation`, to one work item |
-| The work item's phase | Phase | `relation`, to one row of Phases |
 | The Next action line of the work item's Current state | Next action | `rich_text`, a copy of the line |
 | The Summary line of the Overview | Summary | `rich_text`, a copy of the line |
 | `updated` | none | The "Last updated" line of the work item's Current state holds it. |

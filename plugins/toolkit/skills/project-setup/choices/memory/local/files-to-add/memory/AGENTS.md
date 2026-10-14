@@ -2,7 +2,7 @@
 
 This folder is the project's local memory. It holds the project's Current State, and one memory record per subject for what no other project file holds. A memory record is one file in this folder. This guide says what each file here is, what never goes in memory, and which skill makes each change.
 
-The folder is opened in Obsidian with the rest of the project. Git ignores the folder, so it exists only in the main checkout on this computer. The main checkout is the project's main folder: the first path that `git worktree list` prints.
+The folder is opened in Obsidian with the rest of the project. Git ignores the folder, so it exists only in the main checkout on this computer.
 
 ## Files
 
@@ -15,12 +15,6 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 | `project_<name>.md` | One subject or area of the project or the client that fits no other file. Also a claim that nobody checked yet, and a lesson that is not proven yet. |
 | `reference_<name>.md` | Where to find one thing that is hard to find again, such as a shared spreadsheet, and why to open it. |
 | `event_<name>.md` | One thing that happened, or one recurring job with a row per run. |
-
-## What never goes in memory
-
-- A fact that the root `AGENTS.md`, section "Where information goes", keeps in a place outside memory never goes in this folder. `managing-project-memory` sends such a fact to that place.
-- A memory record may name a record outside memory by its ID. The memory record never repeats what that record says.
-- Exclude secrets and information whose storage could compromise system, product, or project security. Ordinary contact details may be saved when they meet the memory criteria.
 
 ## What must stay true
 

@@ -29,7 +29,7 @@ A project document is a file under one of these paths.
 
 ## Names used in the commands
 
-- `<main>` is the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints.
+- `<main>` is the main checkout.
 - `<session folder>` is the folder this session works in.
 - `<default>` is the name of the default branch. Step 2 finds it.
 - `<save>` is the save worktree that step 3 makes.
@@ -176,7 +176,6 @@ The save is still finished. Say so in the reply in one line: "The main checkout 
 - Never make, stage, or commit this save's edit in the main checkout.
 - Never start a save from inside another save worktree.
 - Other `docsave-` worktrees in `git worktree list` belong to other sessions. Do not change or remove them.
-- Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
 
 ## Work that another skill does
 

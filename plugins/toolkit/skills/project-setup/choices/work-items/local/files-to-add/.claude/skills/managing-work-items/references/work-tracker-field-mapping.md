@@ -26,15 +26,10 @@ The front matter is the block between the two `---` lines at the top of `<ID>.md
 | --- | --- |
 | `id` | The ID, `WI-031`, with three digits. It never changes. |
 | `title` | The title in the owner's words. Put the title in double quotes when it holds a colon or a `#`, or when it starts with a quote or a bracket: `title: "Login: single sign-on"`. |
-| `type` | One value from the template's list. |
-| `state` | The State, spelled as `managing-work-items` spells it, for example `Refining Requirements` or `Testing Loop`. |
 | `status` | The Status that goes with that State. The table in `managing-work-items` gives it. Set `state`, `status`, and `updated` in one edit. |
 | `parent` | The parent's ID as plain text, or `none`. Never write a link here, because the searches must be able to read the ID. |
 | `waiting_on` | Always in double quotes: `"owner"`, `"agent"`, `"external: bank API team"`, `"none"`. |
-| `priority` | `urgent`, `high`, `medium`, or `low`. |
-| `delivery` | `agent-led`, `owner-led`, or `not-offered`. |
 | `requirements_approved`, `result_approved` | `YYYY-MM-DD by <name>`, or `no`. The name is the owner's name as `PROJECT.md` gives it. |
-| `design` | `proposed`, `approved`, `superseded`, or `none`. The design file holds no status of its own. |
 | `updated` | Today's date, as `YYYY-MM-DD`, in every edit. |
 
 ## Overview
@@ -124,17 +119,11 @@ Insert a new row right after the table's separator line, so that the newest row 
 
 ## Requirements
 
-Each requirement is one block under `## Requirements`, in the order of its number. The block has the form of the requirement block in `work-items/work-item-template/WORK-ITEM.md`.
-
-- **A new requirement.** Add its block after the last block, with the next unused number. Take the form from the template, never from a prompt that was left in a work item. A prompt is text in angle brackets that says what to write there, such as `<Work item title>`.
-- **A new line.** Add the line at the end of its numbered list.
-- **A part with nothing to write yet.** Keep the part's label, and write nothing after the label.
+Follow [the common editing rules](editing-a-work-item.md), section "Requirements", using `work-items/work-item-template/WORK-ITEM.md`.
 
 ## Questions and Answers
 
-- **A new row.** Its ID is the highest Q-ID in this work item plus one. Insert the row after the last open row. When no row is open, insert it right after the separator line. Open rows then stay on top, oldest first.
-- **An answer.** Put the answer in the speaker's words in quotation marks under Answer, name its speaker and source evidence when applicable, and write the decision date as `YYYY-MM-DD`. Use the authority checks in `filing-project-records/references/record-decision.md` for a sourced decision. Then move the row to just below the last open row, so that answered rows are newest first.
-- **A superseded row.** Change only the row's Status cell, to `Superseded by Q-09`.
+Follow [the common editing rules](editing-a-work-item.md), section "Questions and Answers".
 
 ## Notes
 

@@ -34,16 +34,7 @@ An ID is never reused. That rule covers every ID in this section.
 
 ## Header fields that say where a work item stands
 
-Six header fields say where a work item stands. `work-item-template/WORK-ITEM.md` lists every header field and its allowed values, and it calls the header the front matter.
-
-| Field | Meaning |
-| --- | --- |
-| `state` | The step the work is in: one of the ten States. |
-| `status` | The summary of the State. The Status follows from the State, so the two change together. |
-| `waiting_on` | Who the work item waits on: `owner`, `agent`, `external: <who>`, or `none`. |
-| `requirements_approved` | The date and the name of the person who approved the requirements, or `no`. |
-| `design` | `proposed`, `approved`, `superseded`, or `none`. |
-| `result_approved` | The date and the name of the person who approved the result, or `no`. |
+`work-item-template/WORK-ITEM.md` lists the header fields and their allowed values. Follow `managing-work-items/references/work-tracker-field-mapping.md` when editing them.
 
 Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status and State", for the ten States, the Status that each State gives, what Blocked means, and when a work item moves to the next State. Its "Levels" section says how deep sub-items go.
 
@@ -54,7 +45,7 @@ Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status
 - The owner may move, rename, nest, or group the folders of work items by hand. When the owner has done so, find each work item again by its `id:` line, tell the owner what moved, and continue.
 - Never move, group, archive, or rename a work item unless the owner asks.
 - When two work items have one ID, renumber only a work item that you created in this session, and tell the owner.
-- When this session works in a worktree, read and change work items in the main checkout. A worktree is a separate folder with its own branch. The main checkout is the project's main folder: the first path that `git worktree list` prints.
+- When this session works in a worktree, read and change work items in the main checkout.
 - Never copy a work item into the worktree.
 - Never `git add` a file from this folder.
 - A work item's folder holds no sources. A source is anything the project was given by someone else, such as a transcript or a client document. A source goes in `sources/`, and the work item holds the source's ID, in the form SRC-###.

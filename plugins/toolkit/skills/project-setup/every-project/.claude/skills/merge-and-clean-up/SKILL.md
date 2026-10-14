@@ -21,8 +21,7 @@ Four rules apply to every step:
 - The head branch is the branch that holds the pull request's commits. The head commit is the commit that GitHub reports as `headRefOid` for the pull request.
 - The base branch is the branch that the pull request merges into.
 - A fork is a copy of the repository under another account.
-- A worktree is a separate folder with its own branch. `<head-worktree>` is the worktree that holds the head branch, and `<base-worktree>` is the worktree that holds the base branch.
-- The main checkout is the project's main folder: the first path that `git worktree list` prints.
+- `<head-worktree>` is the worktree that holds the head branch, and `<base-worktree>` is the worktree that holds the base branch.
 
 ## Step 1: resolve the exact pull request
 
@@ -211,7 +210,6 @@ Verify four things:
 
 ## Mistakes to avoid
 
-- Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
 - When the repository has no remote (`git remote` prints nothing), there is no pull request, so this skill does not apply. Never fetch. Tell the owner in one line.
 
 ## Work that another skill does
