@@ -4,9 +4,6 @@ This file holds how to check that the Notion command-line tool, `ntn`, is signed
 
 Ask the owner for the sign-in as soon as the owner picks Notion, so that the owner can sign in while the interview goes on.
 
-1. Check the sign-in with `ntn whoami`. It prints the "Notion CLI" connection, the owner's email, and the workspace.
-2. When `ntn whoami` says there is no sign-in or token, the owner runs `ntn login` in a terminal. That command opens a browser, where the owner signs in and picks the pages the "Notion CLI" connection may use.
-   - Tell the owner so, wait until the owner says it is done, and then run `ntn whoami` again.
-   - Never run `ntn login` for the owner, and never ask the owner for a token, a code, or a password.
-3. When `ntn` is not installed (`command not found`), ask the owner before you install it, because installing it changes the owner's computer. After the owner's yes, run `npm install -g ntn`.
-4. When a call returns 404, the owner shares the owner's Notion root page with "Notion CLI", because the agent can reach only shared pages.
+Follow [ntn-commands.md](../files-to-add/.claude/skills/using-notion-cli/references/ntn-commands.md), "Access and sign-in", for `ntn whoami`, owner login, connection sharing, and inaccessible pages. In Codex, diagnose session access through the CLI skill before asking the owner to sign in again.
+
+When `ntn` is not installed, ask the owner before installing it because installation changes the owner's computer. After the owner's yes, use Notion's current installation instructions for this computer, then verify `ntn whoami`.
