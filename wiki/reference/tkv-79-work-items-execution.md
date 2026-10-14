@@ -18,6 +18,7 @@ The changes follow the three current official skill pages read on 2026-10-13: [C
 | 3 | D1, D2, D3, D6, D7, D22, D25, D27, D33 | Changed. Repeated definitions and the host permissions paragraph removed; conflicts route to pull-latest; local template route uses the actual local template. Helper briefs keep standalone context. |
 | 3 | D16, D17, D19 | Changed with approved alternatives. Save-result words, helper start procedure, and common requirement/question edits have on-demand references linked directly from SKILL.md. Backend format, relations, and API calls stay in choices. |
 | 3 | D5, D8, D29, D42 | Changed within scope. Repeated source routing and prompt explanations removed; shared requirement and question procedures extracted. Backend-specific protections remain. |
+| 3 | D10, D26 | Changed. Incidental staging words and repeated default-question lead-ins removed; commands and setup approval remain. |
 | 3 | D21, D28, D34 | Retained where local storage descriptions or standalone briefs require the detail. State-transition, hierarchy, and helper authorization protections remain explicit. |
 | 3 | D20 | Retained. The exact MAIN command remains in the local tracker because its choice needs it independently of local memory. |
 | 3 | D46, D47 | Changed. Header/schema tables retain field rules rather than enum restatements; templates and live schemas remain authoritative. |
@@ -40,4 +41,29 @@ The rewrite preserves owner approvals, exact tracker commands and values, stable
 
 ## Verification
 
-Each phase runs `git diff --check`. Structural and link checks run on the finished work-tracking scope. The parent supplies independent review, scratch host checks, version changes, cross-domain callers, and ticket updates.
+- `git diff --check` passed for each phase and the final change.
+- The managing-work-items skill front matter passed name/description checks.
+- Scratch assemblies of every-project plus each local, GitHub and Notion tracker passed all Markdown links within the assembled managing-work-items skill. The local memory reference was supplied to resolve the configured memory entry.
+- Both work-item and design template copy pairs matched byte for byte.
+- All six helper briefs retain their standalone brief and input sections. An initial assertion looked for capitalized "Inputs" rather than the existing "The list of inputs"; the corrected assertion passed.
+- The parent supplies independent review, actual scratch host loading, version changes, cross-domain callers, and ticket updates. No live tracker data or host configuration was changed.
+
+## Requirement-preservation inventory
+
+| Requirement | Location after changes |
+| --- | --- |
+| State/Status map, closure authorization and save-after-step rule | lifecycle-rules.md |
+| Existing authorization counts only within its scope; default-branch merge and shared deployment approval | lifecycle-rules.md; deploying.md |
+| Stable IDs, depth, parent ownership, project/work-item phases and project task handling | work-levels.md; installed tracker formats and relation procedures |
+| Short-path eligibility, combined approval, independent-check exceptions and return to full path | small-work-item.md; testing-loop.md; closing.md |
+| Fresh owner edits and save read-back | installed work-tracker.md; reporting-a-save.md |
+| Requirement blocks, speaker words/source/date, unanswered-first order and supersession | editing-a-work-item.md; lifecycle-rules.md; installed tracker |
+| Independent check of the exact commit/file hash and a new check after change | testing-loop.md; acceptance-checker-brief.md |
+| Helper isolation, complete brief, assigned files, no-commit mode and integration review | starting-a-helper.md; building.md; each helper brief |
+| Local main-checkout storage, exact MAIN command, immutable identity, non-Git work records and table escaping | local tracker and work-items folder guide |
+| GitHub auto-close protection, numeric sub-issue IDs, repository scoping, no destructive record deletion and body/comment limits | GitHub tracker and command/layout references |
+| Notion default-template creation, live schema authority, protected blocks/child pages, relation ownership and ID prefix validation | Notion tracker and page/API references |
+
+## Integration dependencies
+
+External callers of lifecycle-rules.md's moved "Levels", "A small work item" and "Starting a helper" sections must point to work-levels.md, small-work-item.md and starting-a-helper.md. Other skills can use reporting-a-save.md for the exact save-result words. No delivered file was removed; existing-project updates copy the added references through the normal update procedure. The shared platform-skill step, interview question policy, template comments, Recent History wording and humanizer setup preference remain owner decisions.

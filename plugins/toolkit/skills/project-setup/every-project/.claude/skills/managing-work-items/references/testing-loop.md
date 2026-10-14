@@ -21,7 +21,7 @@ Use this file to test a finished build against the Acceptance Criteria of every 
 3. Write a test plan when a check has more than one scenario, a manual step, test data, a shared environment, or a release across environments.
    - Copy the project's `tests/TEST-PLAN-TEMPLATE.md` to `tests/<ID>-test-plan.md`. Use the installed `work-tracker.md` for a tracker-specific ID in the file name.
    - Fill the plan as its guide says.
-   - Commit the plan on the work item's branch, staged by name, before the checker starts.
+   - Commit the plan on the work item's branch, before the checker starts.
    - Never save the test plan where the work items are kept.
    - When there is no test plan, the checker gets "Test plan: none".
 4. Start the checker, every time, as `acceptance-checker-brief.md` says. Start it on the exact head commit after the test plan commit. Give it every requirement that is not dropped, whole, with its Acceptance Criteria. Read its report yourself.

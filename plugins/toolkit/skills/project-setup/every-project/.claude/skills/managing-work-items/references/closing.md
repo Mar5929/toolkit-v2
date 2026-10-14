@@ -70,7 +70,7 @@ On the short path, one closing question takes the place of three questions of th
 
 1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then do what `references/project-memory-steps.md`, section "Filling the Moved up line", says to do on the short path.
 2. Ask the closing question. Add a Questions and Answers row asking the owner to approve the result and mark the work item Done, with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
-   - When "Filling the Moved up line" would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a one-line reason.
+   - When "Filling the Moved up line" would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a reason.
    - When a merge, a deploy, or a data load is still to come, say what it is and who runs it, and say that the owner's yes to the closing question does not cover it.
    - Ask one clear question covering approval of the result, the listed outcomes to keep for the whole project, and marking the work item Done.
 3. After the owner's yes, do these four things in order:
@@ -111,7 +111,7 @@ After a work item is Done or Cancelled, look for the branches and worktrees that
 
 Then do both of these:
 
-- Offer to remove each branch or worktree that is merged and has no uncommitted changes, with a one-line reason.
+- Offer to remove each branch or worktree that is merged and has no uncommitted changes, with a reason.
   - Remove it only after the owner's yes: run `git -C <main checkout> worktree remove <folder>`, then `git branch -d <branch>`.
   - Never use `--force`.
   - Name each other branch or worktree to the owner, and leave it as it is.
