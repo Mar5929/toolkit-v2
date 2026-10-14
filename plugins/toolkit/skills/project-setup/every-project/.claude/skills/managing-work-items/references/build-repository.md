@@ -15,7 +15,7 @@ This section gives the commands and the names for a work item's worktree and its
 
 - The branch is `claude/<prefix>-<number>-<slug>`, and the folder is `.claude/worktrees/<prefix>-<number>-<slug>`.
   - The prefix is the prefix of the work item's ID, in lower case: `wi` for `WI-007`.
-  - An ID with no prefix, such as `#12`, uses `issue`: `claude/issue-12-csv-export`.
+  - Use the installed `work-tracker.md` for a tracker-specific ID in a branch name.
   - `merge-and-clean-up` finds the work item from the ID in the branch name.
 - Name `<main checkout>` with `-C` in every command. Each command starts in the session's own folder, which may be another worktree. A worktree that is made inside that folder is deleted when that folder is removed.
 - Make a builder's worktree and branch from the work item's branch. Name them with the work item's prefix and number, and then the task ID in lower case:

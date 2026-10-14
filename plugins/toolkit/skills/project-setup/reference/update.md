@@ -60,7 +60,7 @@ While you build the setup copy, do the following:
 
 - Review [local wiki layout guidance](local-wiki-layout.md) before installing path-bearing files. Adapt the copy's skills, guides, templates, checks and maps to verified retained record homes when the owner keeps another layout. Preserve installed operational files affected by an unresolved migration until its destinations and links are verified.
 - Fill the project name and "Toolkit settings" from the project's own `PROJECT.md`.
-- With memory in Notion, also replace `{{CURRENT_STATE_PAGE_ID}}` in the copy's `.claude/settings.json` and `.codex/hooks.json` with the id on the "Current state page" bullet under "Notion memory" in `PROJECT.md`. The "Current state page" is the Notion page that holds the project's Current State, which is the project's one short page of what is true now.
+- Configure the copied startup resources as the selected memory choice's setup reference says, using the verified identifiers in the project's `PROJECT.md`.
 
 ## 2. See what differs
 
@@ -95,7 +95,7 @@ Before running the command, list each file in the project's skill folder that th
 
 ### Hook commands
 
-For `session-start.mjs`, `prompt-reminder.mjs`, and `codex-after-commit.mjs`, put each changed command in the numbered table with a plain description of its diff. Copy it only after the owner's yes:
+For the shared hook commands and the resources supplied by the selected choice in `.claude/hooks/`, put each changed file in the numbered table with a plain description of its diff. Treat the startup module and reminder text as part of the hook change. Copy it only after the owner's yes:
 
 ```text
 cp <copy>/.claude/hooks/<file> .claude/hooks/<file>

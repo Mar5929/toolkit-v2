@@ -7,7 +7,7 @@ description: 'Keeps project memory and Current State useful across sessions. Use
 
 Keep lasting context available to later sessions and keep the project's Current State accurate. A memory record covers one subject. Current State is a short view of current priorities, commitments, and where the next session should begin.
 
-This skill serves projects that chose local memory. Setup installs its storage instructions in [references/memory-store.md](references/memory-store.md). Hindsight projects use their Hindsight rule and tools instead.
+This skill manages local memory files in `memory/`. [references/memory-store.md](references/memory-store.md) gives their storage instructions.
 
 Make sure that you apply those metadata tags and keep them up to date on the memory files.
 
@@ -26,15 +26,15 @@ Read [the memory process](references/memory-process.md) for retention, authoriza
 | [references/tidying.md](references/tidying.md) | You review or clean up memory as a whole. |
 | [references/memory-store.md](references/memory-store.md) | You access local records; it routes to storage formats, search, and write procedures. |
 
-## Storage detail for the chosen memory system
+## Local file details
 
-Setup installs only the files for the chosen store. Read the relevant file below when the storage instructions call for its detail.
+Read the relevant file below when the storage instructions call for its detail.
 
-| File | Store and when to open it |
+| File | Open it when |
 | --- | --- |
-| [references/searching.md](references/searching.md) | Local: you need the search procedure. |
-| [references/folders-and-files.md](references/folders-and-files.md) | Local: you locate records or maintain their folders and index. |
-| [references/record-format.md](references/record-format.md) | Local: you create or update a memory file. |
+| [references/searching.md](references/searching.md) | You need the search procedure. |
+| [references/folders-and-files.md](references/folders-and-files.md) | You locate records or maintain their folders and index. |
+| [references/record-format.md](references/record-format.md) | You create or update a memory file. |
 
 ## Route other project records
 

@@ -5,7 +5,7 @@ Use this file to merge a work item's approved work, and to deploy it where it mu
 Before you start:
 
 - Read `.claude/rules/owner-preferences.md` for a standing merge instruction. A standing merge instruction is an instruction of the owner that allows merges without a question for each one.
-- Read `PROJECT.md` for the owner's name and for the environments or org aliases that "Toolkit settings" records.
+- Read `PROJECT.md` for the owner's name and for the environments or environment aliases that "Toolkit settings" records.
 - Ask every question as a Questions and Answers row, with `waiting_on` set to the owner.
 - In Codex, every Git write and every call that needs the network follows `building.md`, section "Git writes in Codex".
 

@@ -53,7 +53,7 @@ Work only in the worktree folder you were given. If none was given, stop and rep
 
 - Never change a work item or project memory.
 - In Codex, a hook may remind you after a commit to update the work item or the project's current state. Ignore that reminder, because the main agent records your work from your report.
-- Never deploy. Never change anything in a shared or production org or service, by any tool. Never write production data.
+- Never deploy. Never change anything in a shared or production environment or service, by any tool. Never write production data.
 - Do not start other helpers. Do not ask the owner anything. Put your questions in your report.
 
 ### Return

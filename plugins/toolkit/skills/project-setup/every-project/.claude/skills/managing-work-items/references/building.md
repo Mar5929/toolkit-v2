@@ -73,7 +73,7 @@ Plan which helper builds which task before you start a builder.
 - Make what is missing with `references/work-tracker.md`:
   - A sub-item gets `parent` set to the parent, its phase only when its parent uses phases, as `references/lifecycle-rules.md`, section "Levels", says, and `delivery` set to the parent's value. It gets `requirements_approved` copied from the parent when it covers the parent's requirements.
   - A new task is `P1-T01 — <name>` under a phase, or `T01 — <name>` in a plain list. Existing tasks keep their IDs. It has Work, Deliverable, Done when, Who does it, and Depends on. It goes on the lowest-level work item it belongs to.
-- Allow one writer for each file at a time. Tasks that need the same file run one after another, in the order that their Depends on lines give. The same holds for tasks that need the same shared environment, such as a sandbox org, a database, or a test service.
+- Allow one writer for each file at a time. Tasks that need the same file run one after another, in the order that their Depends on lines give. The same holds for tasks that need the same shared environment, such as a sandbox environment, a database, or a test service.
 - Start only as many builders as you can check and merge as they return.
 - Tell the owner the team in one line, such as "Team for P2: three builders, one per sub-item." The owner's answer about the arrangement already allows the team. Do not ask again.
 - Keep one team list in the parent's Notes, "Context". It has one line for each running helper, or for each session under a Main Orchestrator. Add the line when the helper starts, and remove it when its work is merged or dropped. Write "None running." when the list is empty.

@@ -190,7 +190,7 @@ Read [reference/setup-problems.md](reference/setup-problems.md) when the project
 ## What setup never does
 
 - **It never changes this skill's own folders.** `every-project/` and `choices/` are the source for every project.
-- **It never writes a script into a project.** The only code that a project gets from the toolkit is the three hook commands.
+- **It never writes a script into a project.** The only code that a project gets from the toolkit is the three hook commands and their choice-owned startup resources.
 - **It never becomes a work item.** No work item is made for setup or for a step of it.
 - **It never leaves temporary files.** When you need a temporary folder, remove it once its step is done. Save no path, file list, or diff in a file of the project.
 

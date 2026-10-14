@@ -1,13 +1,13 @@
 # Managing project memory
 
-Use this reference to decide what goes into project memory, when to ask the owner, and when something in memory is corrected, retired, or deleted. The goal is that later sessions can retrieve useful context, understand its evidence, and check what remains true. A session is one chat with the agent.
+Use this reference to decide what goes into project memory, when to ask the owner, and when something in memory is corrected, retired, or deleted. The goal is that later sessions can retrieve useful context, understand its evidence, and check what remains true.
 
 Project memory has two parts:
 
 - **Memory records.** A memory record is one saved subject in memory, such as the client's team or the weekly data load.
 - **The project's Current State.** The project's Current State is the project's one short page of what is true now. It has five parts: Now, Coming up, Waiting on, Standing jobs and shared files, and Next session starts with.
 
-For every read and every write of memory, use `references/memory-store.md`. That reference gives the instructions for the memory store chosen during project setup.
+For every read and every write of memory, use `references/memory-store.md`. That reference gives the instructions for local memory files.
 
 Use the entry skill's routing for authoritative records and work items. Memory supports those records rather than replacing them.
 
@@ -50,7 +50,7 @@ The session that the owner writes to decides what is saved. A reminder that a ho
 
 ## When to search memory
 
-Search memory at the moments that the root `AGENTS.md`, section "Your job as the agent", lists. `references/finding.md` says how to search. In a project that does not show its memory records at the start of a session, this search is the only way that you see a memory record.
+Search memory at the moments that the root `AGENTS.md`, section "Your job as the agent", lists. `references/finding.md` says how to search. The startup index lists records; read the relevant files to use their content.
 
 ## When to ask the owner
 

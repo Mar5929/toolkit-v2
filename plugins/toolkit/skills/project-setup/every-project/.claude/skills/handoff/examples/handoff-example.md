@@ -1,6 +1,6 @@
 # Example: one handoff, end to end
 
-A project with local work items. This session worked on
+A project with its configured work tracker. This session worked on
 WI-007 in its own worktree. Another session works in the main checkout.
 
 ## The list of inputs given to the verifier (step 6)
@@ -10,23 +10,18 @@ After the brief from `references/handoff-verifier.md`, word for word:
 ```text
 Draft prompt: <the whole draft below>
 Main checkout: /Users/owner/Projects/acme-billing
-Tracker: local work items. How a helper opens a work item by ID: Find the
-  file under `work-items/` in the main checkout whose front matter says
-  `id: WI-014` (for example `grep -rlE '^id: *"?WI-014"? *$' <main
-  checkout>/work-items`; the value may be in quotes). The front matter is the
-  block of fields at the top of the file. The design of the work item is
-  `DESIGN.md` in the same folder.
+Tracker: <the configured tracker and its "How a helper opens a work item by ID" instructions, copied from managing-work-items/references/work-tracker.md>
 Memory and shared records: the places that the root AGENTS.md in the main
   checkout names, in "Project memory" and "Where information goes"
 Sources for claims:
-- "WI-007 is in the Building State": file, WI-007 front matter
-- "Option A is approved": file, WI-007 front matter, `design: approved`
+- "WI-007 is in the Building State": tracker, WI-007 properties
+- "Option A is approved": tracker, WI-007 properties, `design: approved`
 - "SRC-014 is filed": file, sources/INDEX.md
-- "Q-06 is open": file, WI-007 Questions and Answers
+- "Q-06 is open": tracker, WI-007 Questions and Answers
 - "branch claude/wi-007-csv-export": repository, git worktree list
 - "credit notes show negative amounts": owner, the owner's words "just make them negative"
 - "the bank rejects files over 5 MB": worked out
-Record access and supplied text: local files; no supplied text
+Record access and supplied text: <configured record access and freshly read text for any record the verifier cannot open>
 ```
 
 ## What the owner sees (step 7)
@@ -66,7 +61,7 @@ credit note exports with the same columns as an invoice and the tests in
 
 1. WI-007, opened with `managing-work-items`: its Current state, and Q-06.
    Q-06 cites SRC-014, the bank's CSV specification.
-2. `DESIGN.md` in WI-007's folder: Option A is approved.
+2. The design linked from WI-007: Option A is approved.
 3. `src/export.js`, from line 40.
 
 ## Decisions not yet saved
