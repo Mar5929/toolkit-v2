@@ -21,7 +21,7 @@ For the owner's subscription-backed service, offer `gpt-6-luna` for Reflect and 
 | `HINDSIGHT_API_REFLECT_LLM_MODEL` | `gpt-6-luna` | Current working Toolkit profile; complete normal startup checks passed. |
 | `HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_MODEL` | `gpt-5.6-terra` | Preserve Terra explicitly; page refresh otherwise inherits the Reflect model. |
 
-Before selecting a different model, verify support through the actual subscription connection and compare complete operation results. Judge retained facts, provenance, uncertainty, and preserved owner decisions as well as elapsed time. Successful requests and a final `done` call do not establish answer completeness. Review the returned text and its actual delivery to the host. Changing a global or role model affects other banks; plan its verification and rollback accordingly.
+Before selecting a different model, verify support through the actual subscription connection and compare complete operation results. Judge retained facts, source history, uncertainty, and preserved owner decisions as well as elapsed time. Successful requests and a final `done` call do not establish answer completeness. Review the returned text and its actual delivery to the host. Changing a global or role model affects other banks; plan its verification and rollback accordingly.
 
 ## Provisional capacity and local retrieval recommendation
 

@@ -8,7 +8,7 @@ Read back the effective connection, bank identity, missions, extraction strategi
 
 Check representative extraction with a non-storing preview. Compare extracted and consolidated claims with their source for uncertainty and approval status, not only whether the right subjects were selected. Retrieved observations can preserve obsolete proposals. Preserve the setup's security checks on the whole submitted document for every writer; an extraction preview does not prove that a stored document is scrubbed. Keep a new writer disabled until its protection is verified.
 
-When storage is needed for a check, agree on the sample with the owner. Verify successful processing and retrieval of the intended evidence. Check a deliberate Reflect answer for completeness, provenance, uncertainty, and consistency with confirmed owner choices. Recall and health alone do not prove that provider-authenticated extraction and synthesis work.
+When storage is needed for a check, agree on the sample with the owner. Verify successful processing and retrieval of the intended evidence. Check a deliberate Reflect answer for completeness, source history, uncertainty, and consistency with confirmed owner choices. Recall and health alone do not prove that provider-authenticated extraction and synthesis work.
 
 ## Check the actual hosts
 
