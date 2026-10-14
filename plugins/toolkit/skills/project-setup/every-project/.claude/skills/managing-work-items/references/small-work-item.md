@@ -10,7 +10,7 @@ A small work item takes the short path, unless the owner asks for the full proce
 
 The goal of the short path is to take a small work item to Done with fewer stops for the owner's yes. It asks one question before the work starts, in place of the interview. It asks one question when the result is ready, where the full path asks three.
 
-Every rule of this skill that the six steps do not change applies to a small work item as it is written. Stops 4 and 5 of "When to stop for the owner's yes" stay: each merge into the default branch, and each deploy to an environment that other people use.
+Every rule of this skill that the six steps do not change applies to a small work item as it is written. Stops 4 and 5 of `lifecycle-rules.md`, section "When to stop for the owner's yes", stay: each merge into the default branch, and each deploy to an environment that other people use.
 
 Use your judgment to decide from the owner's request whether the work item is small, before you create it. `lifecycle-rules.md`, section "Designing or Building after the requirements" says when a work item needs Designing. The owner's words win over your decision.
 

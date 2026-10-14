@@ -6,16 +6,16 @@ This reference says where a work item is kept in Notion and how to save to it. T
 
 ## Where work belongs
 
-Each project has its own Work Items, Phases and Tasks databases. Read their configured page and data source IDs from `PROJECT.md`, under Notion work items; use this project's copies rather than workspace-wide or template databases.
+Each project has its own Work Items, Phases and Tasks databases. Read their configured page and data source IDs from `PROJECT.md`, under Notion work items. Use this project's copies rather than workspace-wide or template databases.
 
 - A work item tracks a change or outcome through its requirements, design, approvals and delivery. Create it in Work Items with the database's default template. Notion supplies its page and Solution Design child page.
-- A project phase organizes the project's roadmap. Its Work item relation is empty; top-level work items link to it through Phase.
+- A project phase organizes the project's roadmap. Leave its Work item relation empty. Link top-level work items to it through Phase.
 - A work-item phase organizes that item's roadmap and links to the owning work item. Use phases when they help organize the work; otherwise keep a plain task and sub-item plan. Follow `references/work-levels.md`.
 - A work-item task is a step toward one item's goal when a separate sub-work item is unnecessary. Link it to that work item and, when applicable, its phase.
 - A project task tracks operational or administrative work outside a work item. Leave Work item and Phase empty. Product or architecture changes use work items rather than bypassing their lifecycle as administrative tasks.
 - A sub-work item links to its parent through Parent item. Preserve the three-level work-item limit and the lifecycle's phase and task ID rules.
 
-The project's board is its Work Items views. The project page shows its roadmap, top-level work items and project tasks; an item's views show its own plan. Set the owning relations explicitly and verify their targets, because creating a row through a view does not establish ownership.
+The project's board is its Work Items views. The project page shows its roadmap, top-level work items and project tasks. A work item's views show its own plan. Set the owning relations explicitly and verify their targets, because creating a row through a view does not establish ownership.
 
 ## The owner's Notion describes a work item
 
@@ -29,7 +29,9 @@ The owner built the databases, their views, the work item template, and the Solu
 
 ## Properties and record content
 
-Read the live database schema and the generated page before filling a record. Fill and keep current every applicable editable property supported by the request, evidence or lifecycle defaults, including ownership relations, State, Status, Summary, Next action and Waiting on. Preserve system-managed properties and unrelated owner values. Record unknown owner decisions as open questions; never invent approvals, dates or assignees to fill a field.
+Read the live database schema and the generated page before filling a record. Fill and keep current every applicable editable property supported by the request, evidence or lifecycle defaults. These include ownership relations, State, Status, Summary, Next action and Waiting on.
+
+Preserve system-managed properties and unrelated owner values. Record unknown owner decisions as open questions. Never invent approvals, dates or assignees to fill a field.
 
 Follow the generated template's prompts and retain its guide lines. Use relevant sections and preserve its child pages and views. The template owns the page structure; the skill owns the operational procedure.
 
@@ -63,13 +65,13 @@ Notion makes a work item from the database's default template, with its Solution
 
 ## How a helper opens a work item by ID
 
-Read `PROJECT.md` for the Work Items data source ID and the installed `using-notion-cli` access procedure. Query the numeric part of the work-item ID, using the confirmed prefix:
+Read `PROJECT.md` for the Work Items data source ID and the installed `using-notion-cli` access procedure. Query the numeric part of the work-item ID, using its number without the prefix, for example `31` for `WI-31`:
 
 ```bash
-ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":31}},{"property":"Work item","title":{"is_not_empty":true}},{"property":"Archived","checkbox":{"equals":false}}]}}' < /dev/null
+ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":<number>}},{"property":"Work item","title":{"is_not_empty":true}},{"property":"Archived","checkbox":{"equals":false}}]}}' < /dev/null
 ```
 
-Use the matched page ID to read its properties and text:
+Check that the returned ID has the requested prefix and number. Use the matched page ID to read its properties and text:
 
 ```bash
 ntn api v1/pages/<page-id> < /dev/null

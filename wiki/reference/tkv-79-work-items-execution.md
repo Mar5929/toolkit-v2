@@ -31,6 +31,9 @@ The changes follow the three current official skill pages read on 2026-10-13: [C
 | 5 | G1, G8 | Changed. Levels/phases/tasks and the small-item short path moved to directly linked on-demand references. Duplicate repository headings became one direct route. All scoped section callers updated. |
 | 5 | G6 | Deferred. Template fill-in comments preserve field and authority rules pending Mike's preference; shared and local template copies remain identical. |
 
+| 6 | H2 | Changed. Dense Notion tracking paragraphs and plan conversion/move procedures split into steps with one subject. Live schemas, owner guide lines, protected block types, template/child-page protection and exact relation semantics stay. |
+| 6 | J5 | Deferred. Humanizer routing remains until Mike decides whether setup should check it. |
+
 ## Requirements preserved
 
 The rewrite preserves owner approvals, exact tracker commands and values, stable IDs, work-item State transitions, owner edits, read-back verification, hierarchy and phase rules, closure protections, standalone helper context, and the local MAIN command.
