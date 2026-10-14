@@ -58,7 +58,7 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Priority":{"select":{"na
 
 ## Reading properties
 
-`ntn api v1/pages/<page-id> < /dev/null` returns `.properties`, and the page's own id and link as `.id` and `.url`. Pipe the answer to `jq` to pick what you need. A relation comes back as page ids. To get the ID and the title of a related page, read that page.
+`ntn api v1/pages/<page-id> < /dev/null` returns `.properties`, and the page's own id and link as `.id` and `.url`. Use the JSON extraction guidance under "One call" to pick what you need. A relation comes back as page ids. To get the ID and the title of a related page, read that page.
 
 ## Finding rows
 
@@ -67,7 +67,7 @@ ntn api v1/data_sources/<data-source-id>/query -d '{"filter": …, "sorts": […
 ```
 
 - The answer's `.results` are the rows, and each row is a page.
-- More than 100 rows come in pages, as `SKILL.md`, section "Any Notion write", says. When `has_more` is true, send the same query again with `"start_cursor": "<next_cursor>"`.
+- More than 100 rows come in pages, with `has_more` and `next_cursor`. When `has_more` is true, send the same query again with `"start_cursor": "<next_cursor>"`.
 - A filter names a property and a condition, for example `{"property":"ID","unique_id":{"equals":31}}`, `{"property":"Status","status":{"equals":"In Progress"}}`, `{"property":"Parent item","relation":{"contains":"<page-id>"}}`, or `{"property":"Archived","checkbox":{"equals":false}}`. Combine filters with `{"and":[…]}` or `{"or":[…]}`.
 
 ## Reading and changing page text

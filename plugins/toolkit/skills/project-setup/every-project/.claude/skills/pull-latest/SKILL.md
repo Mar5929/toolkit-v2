@@ -14,15 +14,13 @@ now.
 ## Steps
 
 1. **Look first.** Run each on its own: `git remote`, `git worktree list`,
-   `git status -sb`, and `git branch --show-current`. Stop, with one line
-   saying why, when:
+   `git status -sb`, and `git branch --show-current`. Stop and say why when:
    - there is no remote (`git remote` prints nothing): fetch nothing;
    - no branch is checked out (`git branch --show-current` prints nothing);
    - the working tree has uncommitted changes (untracked `??` files alone do
      not count): the changes may be another session's work, so never commit
      or discard them;
-   - this is the main checkout (the first path `git worktree list` prints)
-     on a branch other than the default branch. Your own worktree on your
+   - this is the main checkout on a branch other than the default branch. Your own worktree on your
      own branch is fine.
 
    In your own worktree, a stop for no checked-out branch or for uncommitted
@@ -37,7 +35,7 @@ now.
    The default branch: `git symbolic-ref --short refs/remotes/<remote>/HEAD`
    prints `<remote>/<default>`. If it fails, read the "HEAD branch" line of
    `git remote show <remote>`. Never assume `main`.
-2. **Fetch:** `git fetch --prune <remote>`. In your own worktree, update the
+2. **Fetch the remote.** Run `git fetch --prune <remote>`. In your own worktree, update the
    main checkout next: run `git -C <main checkout> status -sb`. When it
    shows the default branch and no uncommitted changes, as step 1 counts
    them, run `git -C <main checkout> pull --ff-only <remote> <default>`. On another branch,
@@ -56,7 +54,7 @@ now.
      unfinished work that does not belong on this branch, stop and report.
      Otherwise run `git pull --no-rebase --no-edit <remote> <branch>`.
    - Any other pull error: stop and report it.
-4. **The branch has no upstream:** run
+4. **When the branch has no upstream, check incoming commits.** Run
    `git log --oneline HEAD..<remote>/<default>`. Nothing listed: the branch
    already holds everything on the default branch. Otherwise tell the owner
    how many commits it lists and ask whether to merge that default branch into
