@@ -76,4 +76,8 @@ When preparation cannot finish, keep capture disabled for the new setup and reco
 
 ## Check, update, or connect a new computer
 
-Read the recorded choices first; do not repeat decisions the owner has already made. In a setup check, inspect and report without changing anything. In an update or on a new computer, compare the project's memory rule, add-on tool guidance, and effective retention instructions with the newer Toolkit guidance. Show relevant differences and apply the approved refinements, preserving owner customizations and unrelated settings; use [the template for the project](reference/hindsight-template-for-the-project.md) to update effective extraction strategies and verify readback. Apply and verify any missing approved configuration. Memory stays on the server. For the dashboard, open the recorded bank link; its access key is separate from the API key.
+Read the recorded choices first; reuse decisions the owner has already made.
+
+- For "check the setup", inspect and report without changing anything.
+- For "update the toolkit", compare the project's memory rule, add-on tool guidance, and effective retention instructions with newer Toolkit guidance. Show relevant differences and apply approved refinements, preserving owner customizations and unrelated settings. Follow [the template for the project](reference/hindsight-template-for-the-project.md) to update effective extraction strategies and verify readback.
+- For a new computer, apply and verify any missing approved configuration. Memory stays on the server. Open the recorded bank link for the dashboard; its access key is separate from the API key.
