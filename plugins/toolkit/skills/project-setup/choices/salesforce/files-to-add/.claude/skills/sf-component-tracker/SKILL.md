@@ -128,7 +128,7 @@ The tracker has these columns, in this fixed order.
 | Object/Parent | Parent object for fields, layouts, record types, quick actions, validation rules. Blank for objectless types (Flow, ApexClass, LWC, PermissionSet, CustomApplication, CustomTab). |
 | API Name | Full API name including any suffix. |
 | Label | Label shown in Setup, or the bundle masterLabel for LWC or Aura. |
-| Work Item | The primary work item's ID, for example `WI-031`, plus its link when the work tracker has one (its link when the work tracker has one). Never a folder path. |
+| Work Item | The primary work item's ID, for example `WI-031`, plus its link when the work tracker has one. Never a folder path. |
 | Change Type | `New`, `Modified`, or `Destructive`. |
 | Sandbox | `Yes` if deployed in the working sandbox, else `No`. A project with other orgs has one such column for each of them. |
 | Production | `Yes` if deployed in production, else `No`. |

@@ -24,7 +24,7 @@ A change outside the intended scope, or a feature that is not ready for the targ
    - The component tracker (if the project keeps one) marks it as not in the target org.
    - It belongs to a work item or feature the owner has not called ready for that org.
    - The file has edits beyond the intended one. Diff it against the commit last deployed to the target org (the "Source revision" line of that deploy's `DEPLOYMENT-RECORD.md`). When no record names it, run `git log -p` on the path and read each change.
-   - When `tools/kb/` exists, run `python tools/kb/query_graph.py <Object.Field>` to see what the component connects to. A connected component that is not in the target org may be outside the intended scope or not ready there.
+   - When the project has its own tool that shows what a component connects to, use it. A connected component that is not in the target org may be outside the intended scope or not ready there.
 4. Treat any tracker as a hint, not proof. Before you call a component missing, verify against the target org read-only: `sf sobject describe`, or a SOQL or Tooling query for the field, class, or flag. Do not block a deploy on a stale tracker alone. Do not tell the owner a component would ship to production until a read-only check confirms it is not already there.
 5. If you confirm that a component or edit outside the intended scope, or a feature not ready for the target org, would ship, stop. Do not deploy or hand over the command. Tell the owner which component or edit would ship and why it is outside the scope or not ready. The owner decides whether to narrow the deploy set or confirm that the change is wanted.
 

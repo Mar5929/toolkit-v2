@@ -20,7 +20,7 @@
 | Check | Result | Evidence and date |
 | --- | --- | --- |
 | Requirement and design readiness | <Pass / Open> | <Link> |
-| Hitchhiker review | <Pass / Open> | <Link to checked deploy set and target-org read> |
+| Deploy scope check (`sf-deploy-check`) | <Pass / Open> | <Link to checked deploy set and target-org read> |
 | Validation or dry run | <Pass / Open> | <Command result or job ID> |
 | Owner deploy decision | <Approved / Pending> | <Who, when, and the Q-ID of the work item's Questions and Answers row> |
 

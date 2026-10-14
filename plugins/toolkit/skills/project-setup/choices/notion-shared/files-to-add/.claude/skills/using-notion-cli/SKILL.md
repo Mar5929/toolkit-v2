@@ -23,7 +23,7 @@ This skill says how to run each call. It never says what to store. `managing-wor
 - When a call still hangs, stop only that call.
   - In Claude Code, use `TaskStop` with the call's task id.
   - In Codex, end that command.
-  - Never use `pkill` or `killall`, because other sessions on this Mac may run the same command.
+  - Never use `pkill` or `killall`, because other sessions on this computer may run the same command.
 
 ## In Codex
 

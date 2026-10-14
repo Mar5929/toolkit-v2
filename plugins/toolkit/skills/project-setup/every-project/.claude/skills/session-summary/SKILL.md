@@ -29,7 +29,7 @@ session is one chat with the agent.
    the open block with one offer that covers every such request: turn each
    into a work item or a project task, with the skill named in "Work that another
    skill does", below. Make the offer once.
-5. **Change nothing.** If the owner says yes to the offer, make each change
+5. **Save nothing while writing the recap.** If the owner says yes to the offer, make each change
    the owner chose with that skill.
 
 ## Mistakes to avoid
@@ -49,9 +49,7 @@ adjusting work under way, parts of one job, and work you suggested and then
 did all belong to the request that prompted them. If a cell turns into a list
 of pieces of work, replace it with one short statement of the result.
 
-Example: the owner says "update the toolkit", then picks four of the six gaps
-you found, then answers a question about one of them. That is one row: "Update
-the toolkit in this project."
+For example, the owner asks to fix an export, chooses the fields to include, and answers a question about the date format. That is one row: "Fix the export."
 
 ## Status words
 

@@ -85,7 +85,7 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
 
   State in the plan that the reset affects the shared main checkout, and whether no other worktree exists or the owner confirmed that no other session is working there.
 - Git refuses to delete a branch that another worktree has checked out. Tell the owner, and leave the branch and the worktree as they are. Never remove a worktree to get past the refusal.
-- The reset leaves the project's Git-ignored folders as they are, such as `.obsidian/` and any folder of local records that the project keeps out of Git. Never run `git clean` with `-x` or `-X`, because it deletes them and Git cannot bring them back.
+- The reset leaves the project's Git-ignored folders as they are, such as folders of local records that the project keeps out of Git. Never run `git clean` with `-x` or `-X`, because it deletes them and Git cannot bring them back.
 - Never run `git pull`, never use `--force` on `git fetch`, and never push.
 - In Claude Code, the project's settings ask the owner before every `git reset --hard` and every `git clean`. That prompt is expected.
 - Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
