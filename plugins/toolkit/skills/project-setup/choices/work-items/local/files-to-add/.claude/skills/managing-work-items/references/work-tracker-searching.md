@@ -1,76 +1,23 @@
 # Finding work in local files
 
-This file gives the exact commands that read work items from `work-items/`. The commands only read. Open it when you find or read work items.
+Use the local tracker structure to locate the records needed for the request. Choose the search tools and queries that fit the job.
 
-These rules apply to every command in this file:
+## Record identity and locations
 
-- Start each command with the `MAIN=` line from `references/work-tracker.md`, section "Steps for every read and every save", step 1.
-- Replace `WI` with the prefix from `PROJECT.md`, section "Toolkit settings", and replace `WI-031` with the ID, in three digits.
-- Keep the flags as they are written. The flags make a command skip the template and `DESIGN.md` files, except in the search by words.
+Work items live in `work-items/` in the main checkout. The `id:` field identifies an item; its folder can move or be renamed. IDs use the prefix recorded in `PROJECT.md`, and a reference such as `WI-31` identifies `WI-031`. Match the complete ID so `WI-031` does not select `WI-0310`.
 
-## One work item
+A main work-item file holds its fields, Current state, requirements, tasks, questions and history. `DESIGN.md` in the same folder holds its design. Neither `work-item-template/` nor `PROJECT-TASKS.md` is a work item. Archived items live in `archive/` and are omitted from ordinary active-work views; include them when the request or record history needs them.
 
-```bash
-grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^id: *"?WI-031"? *$' "$MAIN/work-items"
-```
+## Information for common requests
 
-- When the command prints one path, read the whole file, starting with the five lines under `### Current state`. The file's folder also holds `DESIGN.md` and the folders of the work item's sub-items.
-- When the command prints no path, run the check for changes made by hand, and then search by title. `work-tracker-folders-and-files.md`, section "The check for changes made by hand", gives the check. Never make a second work item for work that already has one.
-- When the command prints two paths, two work items share the ID. `work-tracker-folders-and-files.md`, section "Two work items with one ID", says what to do.
+| Request | Relevant records and fields |
+| --- | --- |
+| One work item | Its complete ID, title or supplied link/path; confirm the matched record's `id:`. |
+| Active work | Items outside the archive whose State is not Done or Cancelled, with their priority, waiting_on and Next action. |
+| Open questions | Questions and Answers rows with Status Open; template prompts are not questions. |
+| A parent's work | Its nested item folders, parent fields and sub-item lists, with phase membership when the parent uses phases. |
+| A subject or change | Titles, requirements, designs and history relevant to the requested topic or period. |
 
-## The board
+`work-tracker-folders-and-files.md` explains the hierarchy, owner edits and duplicate IDs. `work-tracker-project-roadmap-and-tasks.md` describes the project roadmap and administrative tasks.
 
-The board is the list of the open work items. This command prints it, with `archive/` left out:
-
-```bash
-grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude-dir=archive --exclude=DESIGN.md '^(id|title|type|state|status|parent|waiting_on|priority):|^\*\*Next action:\*\*' "$MAIN/work-items"
-```
-
-- The lines from one file are one work item. A file with no `id:` line is not a work item.
-- Leave out the work items that are Done or Cancelled unless the owner asks for them.
-
-## Open questions
-
-Open rows are at the top of each Questions and Answers table. This command prints them:
-
-```bash
-grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude-dir=archive --exclude=DESIGN.md '^\| *Q-[0-9]+ *\|.*\| *Open *\|' "$MAIN/work-items"
-```
-
-- Only a row with Status `Open` counts.
-- Leave out a row that is still the template's example. Its question is `<Specific unanswered question>`. A work item that the owner made by hand can hold such a row.
-- Report in this order: first what waits on the owner (the work item's ID, the Q-ID, and what the question blocks), then what is in progress, then your next step.
-
-## A parent's full tree
-
-The parent's folder is the folder of its file.
-
-```bash
-grep -rHE --include='*.md' --exclude=DESIGN.md '^(id|title|state|status|parent|waiting_on):' "<parent folder>"
-grep -nE '^\| *P[0-9]+ —|^\*\*Sub-items:\*\*|^- \[ \] \*\*(P[0-9]+-)?T[0-9]+' "<item file>"
-```
-
-- The second command shows a work item's list of sub-items and its open tasks. For an item with phases, it shows their Sub-items cells. For an item without phases, it shows the `**Sub-items:**` line.
-- Under a parent with phases, a sub-item that no Sub-items cell names goes last, under "No phase". Under a parent without phases, use its Sub-items line without phase grouping.
-
-## Search by words or by a field
-
-```bash
-grep -rliE --include='*.md' --exclude-dir=work-item-template 'login' "$MAIN/work-items"
-grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^type: *bug' "$MAIN/work-items"
-grep -rliE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^title:.*login' "$MAIN/work-items"
-```
-
-- The first command is the search by words. It also reads designs. A match in a design belongs to the work item whose file is in the same folder.
-- The second command searches one field. Use `^state: *Building`, `^status: *Blocked`, or `^waiting_on: *"?owner` the same way.
-- When a search has two or more matches, name each match, give your recommendation, and ask the owner which one is meant.
-
-## The commands of the check for changes made by hand
-
-These three commands only read. The first prints every work item's file, ID, and `parent:` line. The second prints each ID that two files share. The third prints the template copies that the owner made by hand. `work-tracker-folders-and-files.md`, section "The check for changes made by hand", explains how to read what they print.
-
-```bash
-grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^(id|parent):' "$MAIN/work-items"
-grep -rhE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^id:' "$MAIN/work-items" | sed -E 's/^id: *"?([^" ]*)"? *$/\1/' | sort | uniq -d
-grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^title: *"?<Work item title>' "$MAIN/work-items"; find "$MAIN/work-items" -name 'WORK-ITEM.md' -not -path '*/work-item-template/*'
-```
+A title, path or link can locate a record; the ID establishes its identity. Clarify only when the available context leaves more than one plausible work item. A failed lookup does not by itself justify creating a replacement item.

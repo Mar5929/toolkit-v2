@@ -40,10 +40,10 @@ Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status
 
 ## What must stay true
 
-- The `id:` line in the header is the work item's identity. Find a work item by its `id:` line, never by its path.
+- The `id:` line in the header is the work item's identity. A path, title or link can locate the file; confirm its ID because folders can move.
 - No file in the project other than a work item's main file is named `<ID>.md`.
 - The owner may move, rename, nest, or group the folders of work items by hand. When the owner has done so, find each work item again by its `id:` line, tell the owner what moved, and continue.
-- Never move, group, archive, or rename a work item unless the owner asks.
+- Routine moves, groups and folder renames preserve the owner's plan, item identity and approvals. A change to the agreed plan needs the owner's decision. Archive only when the owner asks.
 - When two work items have one ID, renumber only a work item that you created in this session, and tell the owner.
 - When this session works in a worktree, read and change work items in the main checkout.
 - Never copy a work item into the worktree.

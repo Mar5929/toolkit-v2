@@ -31,58 +31,19 @@ This file says how to make a work item's folder and ID, how to check for changes
 
 These steps make the folder and the file of a new work item. Afterwards, fill the work item's fields as `work-tracker-field-mapping.md`, section "A new work item's starting values", says.
 
-1. **Level check** (for a sub-item only). Read the parent's `parent:` line. Then read the `parent:` line of the work item that it names, which is the grandparent. When the grandparent has a parent, the parent is at level 3: make no sub-item.
-2. **The prefix.** Read it from `PROJECT.md`:
-
-   ```bash
-   sed -nE 's/^- Work item ID prefix: `([^`]*)`.*/\1/p' "$MAIN/PROJECT.md"
-   ```
-
-   When the command prints nothing, stop and tell the owner that the setup is incomplete.
-3. **The next ID.** In this command, replace `WI` with the prefix:
-
-   ```bash
-   grep -rhE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^id: *"?WI-[0-9]+"? *$' "$MAIN/work-items" | sed -E 's/.*-([0-9]+)"? *$/\1/' | sort -n | tail -1
-   ```
-
-   When the command prints `031`, the new ID is `WI-032` (`printf '%s-%03d\n' WI 32`). When the command prints nothing, the first ID is `WI-001`.
-4. **Make the folder first.** Use a plain `mkdir`, never with `-p`, so that the command fails when the folder already exists. The slug is the part of the folder name after the ID. It is lowercase words from the title, joined by hyphens.
-   - A top-level item goes in `"$MAIN/work-items/WI-032-transaction-entry"`.
-   - A work item in a group that the owner named goes in `"$MAIN/work-items/<group>/WI-032-transaction-entry"`.
-   - A sub-item goes inside the parent's folder.
-5. **Check for a duplicate** right after you make the folder:
-
-   ```bash
-   find "$MAIN/work-items" -type d -name 'WI-032-*' -not -path '*/work-item-template/*'
-   grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^id: *"?WI-032"? *$' "$MAIN/work-items"
-   ```
-
-   The first command must print only your folder, and the second command must print nothing. When either command prints anything else, another session took the number, so your work item is the later one. Take the next free number, rename your folder, which is still empty, with `mv`, and check again.
-6. **Copy the template** into the folder:
-
-   ```bash
-   cp "$MAIN/work-items/work-item-template/WORK-ITEM.md" "<item folder>/WI-032.md"
-   ```
-
-   When the project's template is missing, stop and tell the owner. `project-setup` restores the template.
-7. After the fields are filled, run the `grep` command from step 5 again. It must print exactly one file, your `WI-032.md`.
+1. **Level.** A new sub-item belongs inside its parent's folder and must fit the three-level hierarchy.
+2. **Prefix.** Use the work-item ID prefix recorded under Toolkit settings in `PROJECT.md`.
+3. **ID.** Use the highest existing numeric ID plus one, formatted with three digits. Include archived items and exclude templates. The first ID is `<prefix>-001`.
+4. **Folder.** Use `<ID>-<short-slug>`, with lowercase title words joined by hyphens. Top-level items belong directly in `work-items/` or an existing group; sub-items belong in the parent's folder.
+5. **Concurrent creation.** Another session may allocate the same number. If it does, give your new item the next free ID without changing the existing item.
+6. **Template.** Copy `work-items/work-item-template/WORK-ITEM.md` to `<ID>.md` inside the new folder, then fill it using `work-tracker-field-mapping.md`. Setup supplies a missing template; do not substitute a different record layout.
+7. **Identity.** Keep the item's ID, filename and links consistent. A routine folder rename does not change its ID.
 
 ## The check for changes made by hand
 
 The owner may move, rename, nest, copy, or delete work item folders and files in Finder or Obsidian, and may edit fields in Obsidian's Properties panel. The owner's change is the one to keep. Never undo it, and never move a folder back on your own.
 
-Run the three commands in `work-tracker-searching.md`, section "The commands of the check for changes made by hand":
-
-1. The first command lists every work item's file, ID, and `parent:` line. For each work item, compare these five things:
-   - its parent by folders. That parent is the nearest folder above the work item that holds a work item file. It is `none` for a work item at the top of `work-items/`, in a group, or at the top of `archive/`;
-   - its `parent:` line;
-   - the lists of sub-items of both parents, which this command prints: `grep -nE '^\| *P[0-9]+ —|^\*\*Sub-items:\*\*' "<parent file>"`;
-   - its file name, which is `<ID>.md`;
-   - its level. Three work item folders above a work item make it a fourth level.
-2. The second command prints each ID that two files share.
-3. The third command prints the template copies that the owner made by hand.
-
-Also check that each ID you are about to use exists. An ID that no file holds is missing.
+For affected items, compare the folder nesting, `parent:` fields, parent sub-item lists and IDs. The nearest enclosing work-item folder is the parent; ordinary group folders do not add a level. Identify duplicate IDs or unfilled template copies when they account for the inconsistency.
 
 When the folders and the `parent:` line disagree, use the folders. Tell the owner each finding, and then record the finding as this list says:
 
@@ -100,7 +61,7 @@ After a move, make two things true: `parent:` matches the folder that the work i
 
 ## Findings that need the owner
 
-Ask about one finding at a time, with your recommendation. Save the question and the owner's answer as a Questions and Answers row on the work item.
+Resolve inconsistencies from the owner's direction and the available records. When identity or the intended plan remains uncertain, record the question and the owner's answer in the work item.
 
 - **`parent:` changed but the folder did not, and the old parent's list of sub-items still names the work item.** Ask whether to move the folder under the new parent. Recommend yes.
 - **Two files have one ID.** Ask which file is the original. Then give the copy the next free ID, as "Two work items with one ID" says.
@@ -112,7 +73,7 @@ Ask about one finding at a time, with your recommendation. Save the question and
 
 ## Moving a work item under another parent, or to the top level
 
-Move a work item only when the owner asks.
+Organize work items to reflect the owner's current plan. Routine moves may preserve the agreed scope and approvals; a move that changes the plan needs the owner's decision.
 
 1. **Level check.** The deepest work item that moves, with its sub-items, must end at level 3 at most. Level 1 is the top. When a move would make a fourth level, say so, and recommend another parent, or recommend turning the deepest work items into tasks.
 2. **Move the folder** with `mv`, with its sub-items inside it. First check that the target has no folder of the same name.
@@ -123,16 +84,16 @@ Move a work item only when the owner asks.
    - When the work item moved to the top level, list it under a project phase, as `work-tracker-project-roadmap-and-tasks.md` says.
    - When the work item moved from the top level, remove it from its project phase.
    - When the work item's level changed, follow `work-tracker-field-mapping.md`, section "A work item that changes level or plan grouping".
-5. **Recent History.** Add a row on the work item, on the old parent, and on the new parent, that names the old and new parent and cites the owner's words or the Q-ID authorizing the move.
+5. **Recent History.** Add a row on the work item, on the old parent, and on the new parent, that names the old and new parent and records why the move was made and cites the owner's direction when applicable.
 6. **Read back.** The work item is found by its ID at the new path, and its sub-items are found under it.
 
 ## Groups
 
 - The owner may group work items in a plain folder. Make the folder, and `mv` the work items into it.
 - A group holds top-level items. It changes no parent and no field.
-- Record each work item's old and new group and the owner's authorization in its Recent History.
+- Record each work item's old and new group and the reason for the change in Recent History, including the owner's direction when applicable.
 - Never start a group's name with an ID.
-- Never make a group on your own.
+- Keep grouping consistent with the owner's plan; grouping does not change scope or approvals.
 
 ## Archive
 
@@ -147,7 +108,7 @@ Move a work item only when the owner asks.
 
 ## Renaming a folder or a file
 
-- The folder name may change, because nothing points at it. Rename a folder only when the owner asks, with `mv` inside the same parent folder.
+- The folder name may change, because nothing points at it. A routine folder rename stays inside the same parent and preserves the work item's identity.
 - The work item's file keeps the name `<ID>.md`, because `[[WI-031]]` finds the file by its name. Never rename a work item's file yourself. The one exception is to give the name `<ID>.md` to a work item that the owner made by hand, or to a renumbered copy.
 
 ## A work item that the owner made by hand
