@@ -8,7 +8,7 @@ Use this file when the owner says "update the toolkit" in a project that is alre
 
 A project that differs from the toolkit on purpose is not a fault. An update shows the owner what differs and changes only what the owner says yes to.
 
-This file uses four names:
+This file uses these names:
 
 - The **setup copy** is the project's finished files, built in a temporary folder before anything is put into the project. The commands write its path as `<copy>`.
 - A **setup folder** is a folder in this skill that holds project files at the paths a project has them: `every-project/`, and each `files-to-add/` folder under `choices/`.
@@ -228,7 +228,7 @@ Change a setup choice only when the owner asks, for example "move memory to Noti
 
 ### Where work items or memory are kept
 
-A changed choice does four things: it adds the files of the new choice's setup folders, it removes the files of the old choice's setup folders, it changes lines of "Toolkit settings", and it changes the lines that a choice adds to a file the project already has. No other line of `AGENTS.md`, `README.md`, `PROJECT.md`, or a rule changes.
+A changed choice updates these parts: it adds the files of the new choice's setup folders, it removes the files of the old choice's setup folders, it changes lines of "Toolkit settings", and it changes the lines that a choice adds to a file the project already has. No other line of `AGENTS.md`, `README.md`, `PROJECT.md`, or a rule changes.
 
 1. Tell the owner what changes and what cannot move (for example Notion page history and comments), and get the owner's yes.
 2. Make your own worktree and branch, as "Before you start" says. Plan these changes for the setup copy; apply them to the project only after verification in step 6:
