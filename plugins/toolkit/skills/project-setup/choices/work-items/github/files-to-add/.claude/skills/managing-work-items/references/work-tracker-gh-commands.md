@@ -41,11 +41,7 @@ This command prints the signed-in account and the scopes. A private repository n
 
 ## In Codex
 
-Follow the active session's filesystem, network, keychain, and approval settings. A `gh` call may be allowed, require approval, or be blocked. Use a supported approval mechanism only when those settings require and permit it. Never request escalation when the session forbids it, or loosen the sandbox for the whole session.
-
 Run each `gh` command on its own. Never join it to another command with `&&`, `;`, or a pipe. Writing its output to a file with `>` is fine.
-
-When a required call is blocked and no permitted route is available, show the owner the exact command to run in a terminal. Wait for the result before doing dependent work. Preserve the repository, sign-in, and write-verification rules in this reference.
 
 ## Names used in the commands
 
@@ -164,7 +160,7 @@ gh api repos/<repo>/issues/<number>/parent --jq .number
 
 ## When a call fails
 
-`gh` exits with 0 on success, with 1 on an error, and with 4 when no one is signed in. A failed mutation can leave its outcome uncertain. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work. Follow the service’s retry guidance and backoff. Continue recovery while a correction or retry can make progress; report unresolved blockers when it cannot.
+`gh` exits with 0 on success, with 1 on an error, and with 4 when no one is signed in. A failed mutation can leave its outcome uncertain. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work.
 
 | What you see | What it means and what to do |
 | --- | --- |

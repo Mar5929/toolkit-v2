@@ -32,7 +32,7 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
    - when an ID has two files, or none;
    - when a work item's folder, its `parent:` line, and its parent's list of sub-items disagree.
 
-   Tell the owner each finding in one line, record the finding, and continue.
+   Tell the owner each finding, record the finding, and continue.
 4. Make the change with the file that the References table below names for it.
    - Change only the lines that change. Keep every other line, heading, and bold label as the work item template has it. Never rewrite the whole file.
    - Set `updated:` to today.
@@ -44,15 +44,12 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
 - When the active session blocks a write to the main checkout, use its supported approval mechanism only when approval is required and permitted. When no permitted route is available, tell the owner which save is blocked and what action is needed. Keep the work item in the main checkout.
 - Every lookup command except the search by words skips `DESIGN.md` files and `work-item-template/`. Never remove the flags that make a command skip them. The commands are in `references/work-tracker-searching.md`.
 - Leave out `archive/` unless the owner asks for archived work items.
-- An edit must match the old text exactly, including the spacing of a table. When an edit fails, read the file again, because the owner may have changed the file.
-- Three rules apply inside a table:
+- These rules apply inside a table:
   - A `|` inside a table cell ends the cell. Write `\|` in its place.
   - A table cell holds one line. Join several lines with `<br>`.
   - Write `[[WI-031]]`, never `[[WI-031|a name]]`.
 - A value can lose its quotation marks when the owner edits it in Obsidian's Properties panel, for example `waiting_on: owner`. The commands in the reference files match a value with quotation marks and a value without them.
 - When the owner says "WI-31", the work item is `WI-031`.
-- A work item that the owner made by hand can still hold the template's example rows and example tasks. Never count an example row or an example task as real.
-- Use the `grep -r` commands as the reference files write them. In zsh, a `*` pattern that matches nothing stops the whole command.
 
 ## Writing a record's ID in a work item
 

@@ -6,7 +6,7 @@ This file is the brief for the design architect. The architect is a helper that 
 
 Start the architect from Designing, as `designing.md` says. Start one architect for each option, and start it again for a fix round, with the critic's findings.
 
-- The design team is the architects, at least one critic, and one researcher for each research question. The design team needs no permission from the owner. Name the team to the owner in one line.
+- The design team is the architects, at least one critic, and one researcher for each research question. The design team needs no permission from the owner. Name the team to the owner.
 - Start the architects for different options at the same time.
 - The architect returns its option in its reply. You save the design in the work item. The design stays proposed until the owner approves it.
 
@@ -52,7 +52,7 @@ Before you design, say plainly whether the requirements describe a complete resu
 
 ### Fix rounds
 
-Fix each finding of the critic, which is the helper that checked your draft, or say in one line why the part that the finding names should stay as it is. Return what changed, by requirement. Do not rewrite parts that the critic did not name, unless a fix needs it. When a fix does need it, say so.
+Fix each finding of the critic, which is the helper that checked your draft, or say why the part that the finding names should stay as it is. Return what changed, by requirement. Do not rewrite parts that the critic did not name, unless a fix needs it. When a fix does need it, say so.
 
 ### Boundaries
 
@@ -60,7 +60,7 @@ Use only reading, searching, and web research. Write no file, and run no command
 
 ### Return
 
-1. Ready or not ready, in one line.
+1. Ready or not ready.
 2. One sentence on the option, and then the whole option in one fence of four backticks (````markdown), so that the option's own code blocks do not end the fence early.
 3. Proposed open questions, each with the requirement and the assumption you would otherwise make.
 4. After a fix round: what changed, by requirement.

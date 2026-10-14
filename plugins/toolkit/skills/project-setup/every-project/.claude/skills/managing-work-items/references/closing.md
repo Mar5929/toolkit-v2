@@ -49,9 +49,9 @@ Use this section after Deploying, or after Reflecting when the work item has not
 
 For a small work item on the short path, read "Closing a small work item" below, step 3, first. That step says which questions the owner has already answered.
 
-1. Check three things: that every change is merged, or the owner said to leave it on its branch; that the result of each deploy is recorded; and that every Roadmap phase that the work item completed says Done.
+1. Check the following: that every change is merged, or the owner said to leave it on its branch; that the result of each deploy is recorded; and that every Roadmap phase that the work item completed says Done.
 2. Fill the Moved up line, as the section above says.
-3. Ask the owner. Add the Questions and Answers row for the question, with the Next action "Waiting on the owner: Q-12 (mark WI-031 Done). After the owner's answer: record Done." Put the evidence in one line first: the checker's verdict and commit, the merged pull request, the deploy result, and the Moved up line. Ask whether the owner agrees to mark the work item Done. Use the real Q-ID and work item ID in the record and question.
+3. Ask the owner. Add the Questions and Answers row for the question, with the Next action "Waiting on the owner: Q-12 (mark WI-031 Done). After the owner's answer: record Done." Put the evidence first: the checker's verdict and commit, the merged pull request, the deploy result, and the Moved up line. Ask whether the owner agrees to mark the work item Done. Use the real Q-ID and work item ID in the record and question.
 4. After the owner's yes, save the owner's words first. Then set the State to Done and `waiting_on` to `none`, and rewrite the work item's Current state. Write these four of its lines as follows:
    - Where it stands: "Done on `YYYY-MM-DD`: <evidence>."
    - Next action: "None. Finished."
@@ -98,7 +98,7 @@ Use this section when the owner cancels a work item.
 Use this section when the owner marked the work item Done or Cancelled without the agent. The owner's change counts. Never undo it.
 
 1. Add the Recent History row "Marked Done by the owner by hand on `YYYY-MM-DD`". For a cancelled work item, write "Cancelled" in place of "Done".
-2. Tell the owner in one line what had not happened yet: the result approval, the checker, the merge, or the filling of the Moved up line. Ask the owner what to do about it.
+2. Tell the owner what had not happened yet: the result approval, the checker, the merge, or the filling of the Moved up line. Ask the owner what to do about it.
 3. Fill the Moved up line, as "Filling the Moved up line" says. Fill the line whatever the owner says about the rest.
 4. Rewrite the work item's Current state with the lines that "Marking Done", step 4, gives for Done, or that "Cancelling a work item", step 4, gives for Cancelled. Then follow step 5 of "Marking Done".
 

@@ -35,7 +35,7 @@ Read the change back, and check that it says what you wrote. When a write failed
 - Never write `close`, `closes`, `closed`, `fix`, `fixes`, `fixed`, `resolve`, `resolves`, or `resolved` directly before `#12` in a pull request title, in a pull request body, or in a commit message. When the pull request or the commit is merged, GitHub closes the issue, which marks the work item Done without the owner's yes.
   - Write "Part of #12" in place of such a word.
   - Never link a pull request in the issue's "Development" panel. That link closes the issue on merge too.
-  - When an issue closed by itself anyway, reopen the issue, and tell the owner in one line.
+  - When an issue closed by itself anyway, reopen the issue, and tell the owner.
 - The body is one piece of text. Change the body only with the steps in `references/work-tracker-gh-commands.md`, section "Changing the body", because the owner may have edited the body in the browser.
 - Create nothing but issues and comments without the owner's yes.
   - Ask the owner about the labels once, at setup.

@@ -47,7 +47,7 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
 
 Use this section when the owner asks for a change after the design was approved, or when the build shows that the design does not work.
 
-1. Say in one line what changes.
+1. Say what changes.
 2. Move the work item back to Designing, and set `design` back to `proposed`.
 3. Record the reason in the design's Notes.
 4. Run a fix round for the parts the change affects, and ask the owner again with a new row.

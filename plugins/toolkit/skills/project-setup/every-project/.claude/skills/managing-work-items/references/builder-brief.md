@@ -58,7 +58,7 @@ Work only in the worktree folder you were given. If none was given, stop and rep
 
 ### Return
 
-1. **Result:** done, partly done, or not done, in one line.
+1. **Result:** done, partly done, or not done.
 2. **Changed:** each file, with one line on what changed.
 3. **Tests and checks:** each command you ran and its result line, copied exactly. Also the checks that did not run, and why.
 4. **Commit:** the branch name and the commit hash, or "not committed".

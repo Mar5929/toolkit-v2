@@ -60,7 +60,7 @@ Use only reading and file search, and edit nothing. Do not approve anything, do 
 
 ### Return
 
-1. **Verdict:** ready or not ready, in one line, with what you read.
-2. **Findings:** the most important first. Each finding names the requirement or the section, quotes the wording, says what would go wrong, and gives the fix in one line.
+1. **Verdict:** ready or not ready, with what you read.
+2. **Findings:** the most important first. Each finding names the requirement or the section, quotes the wording, says what would go wrong, and gives the fix.
 3. **Questions for the owner:** only the questions that the findings cannot settle, each with the answer you recommend.
-4. **Clean:** if nothing important remains, say so in one line.
+4. **Clean:** if nothing important remains, say so.

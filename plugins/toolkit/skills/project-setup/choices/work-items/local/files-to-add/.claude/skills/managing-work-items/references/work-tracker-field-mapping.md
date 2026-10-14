@@ -73,7 +73,7 @@ A top-level item (`parent: none`) uses a Roadmap when phases help plan or track 
 - **A new task under a phase.** Add the block under its phase heading, after that phase's last task. Its ID is the phase ID plus its number in that phase, for example `P2-T04`.
 - **A new task in a plain list.** Add the block at the end of the list. Its ID is `T` plus its number in the work item, for example `T05`.
 - In both kinds of task, "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
-- **A sub-item.** First make the sub-item. `work-tracker-folders-and-files.md`, section "Creating a work item's folder and ID", gives the steps. Then do these three things:
+- **A sub-item.** First make the sub-item. `work-tracker-folders-and-files.md`, section "Creating a work item's folder and ID", gives the steps. Then do each of these:
   - Add `[[WI-033]]` to the parent's list of sub-items. Replace "None." when it is there, and separate several IDs with commas.
   - Add a Recent History row on the parent: "Sub-item [[WI-033]] created: <title>."
   - Set the parent's `updated:`.

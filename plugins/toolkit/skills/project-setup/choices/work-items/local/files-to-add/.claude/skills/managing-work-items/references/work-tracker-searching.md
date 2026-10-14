@@ -2,7 +2,7 @@
 
 This file gives the exact commands that read work items from `work-items/`. The commands only read. Open it when you find or read work items.
 
-Three rules apply to every command in this file:
+These rules apply to every command in this file:
 
 - Start each command with the `MAIN=` line from `references/work-tracker.md`, section "Steps for every read and every save", step 1.
 - Replace `WI` with the prefix from `PROJECT.md`, section "Toolkit settings", and replace `WI-031` with the ID, in three digits.

@@ -35,7 +35,7 @@ The `delivery` field on the top-level work item says who builds. Read it before 
 
 The Questions and Answers rows whose Affects column says `delivery` hold the owner's answer. A sub-item takes its parent's answer.
 
-The offer is the question whether helper agents build the work item. It is first made in Refining Requirements, as `refining-requirements.md`, step 4, says. Handle these seven cases in Building:
+The offer is the question whether helper agents build the work item. It is first made in Refining Requirements, as `refining-requirements.md`, step 4, says. Handle these cases in Building:
 
 - **The owner gives the work item to the agent in the owner's own words,** for example "you drive". Those words are the owner's yes. Add an answered row for it, and do not ask the offer.
 - **`delivery` is `not-offered`, the owner has not given the work item to the agent, and the work item is not small.** Make the offer now.
@@ -46,13 +46,12 @@ The offer is the question whether helper agents build the work item. It is first
 - **The owner says yes.** Set `delivery: agent-led`.
   - A yes widens nothing. It allows no merge, deployment, spending, publishing, or sign-in beyond what the owner already allowed. Every point in `references/lifecycle-rules.md`, section "When to stop for the owner's yes", still applies.
   - The yes holds across sessions, for this goal only.
-- **The owner says no.** Set `delivery: owner-led`. Ask no question about a team, and build the tasks as the owner steers.
+- **The owner says no.** Set `delivery: owner-led`. Ask no question about a team, and build the tasks as the owner steers. Make no new offer unless the owner asks about agent delivery or the work grows a lot.
 - **The owner takes the work back.**
   - Add an answered row "Change to <old Q-ID>: ..." with the owner's words.
   - Mark the row that recorded the owner's yes "Superseded by <new Q-ID>".
   - Set `delivery: owner-led`, and start no new helper.
-  - Ask the owner whether the helpers that are still running finish or stop.
-- **The owner declined the offer, or took the work back.** Make no new offer, unless the owner asks about agent delivery or the work grows a lot.
+  - Ask the owner whether the helpers that are still running finish or stop. Make no new offer unless the owner asks about agent delivery or the work grows a lot.
 
 ## The team arrangement
 
@@ -73,7 +72,7 @@ Plan which helper builds which task before you start a builder.
   - A new task is `P1-T01 — <name>` under a phase, or `T01 — <name>` in a plain list. Existing tasks keep their IDs. It has Work, Deliverable, Done when, Who does it, and Depends on. It goes on the lowest-level work item it belongs to.
 - Allow one writer for each file at a time. Tasks that need the same file run one after another, in the order that their Depends on lines give. The same holds for tasks that need the same shared environment, such as a sandbox environment, a database, or a test service.
 - Start only as many builders as you can check and merge as they return.
-- Tell the owner the team in one line, such as "Team for P2: three builders, one per sub-item." The owner's answer about the arrangement already allows the team. Do not ask again.
+- Tell the owner the team, such as "Team for P2: three builders, one per sub-item." The owner's answer about the arrangement already allows the team. Do not ask again.
 - Keep one team list in the parent's Notes, "Context". It has one line for each running helper, or for each session under a Main Orchestrator. Add the line when the helper starts, and remove it when its work is merged or dropped. Write "None running." when the list is empty.
 
   ```markdown
@@ -107,7 +106,7 @@ Do these steps for each helper as soon as it returns, before you start another h
 3. Integrate the verified changes according to the helper's recorded mode.
    - When the helper returned committed work on its own branch, merge that branch into the work item's branch from the item worktree. Then remove only the helper's worktree and branch.
    - When the helper used "Commit: no" in the item worktree, the changes are already there. Review its diff against the starting state, and commit the verified paths only when the host permits it. Otherwise preserve the uncommitted changes and record what remains before the Testing Loop. Never merge or remove the item worktree as helper cleanup.
-4. Read the work item again, and then change these six things:
+4. Read the work item again, and then change each of these:
    - **The task.** Set it to Done, and tick it, only when its Done when check is met. When the task is partly done or not done, leave it open. Add a task for what is left, or add an open Questions and Answers row for a question that the owner must answer.
    - **The sub-item.** When every task is done, move it to the Testing Loop. When tasks are left, it stays in Building. Set `waiting_on` to the agent, or to the owner when the report raised a question for the owner.
    - **Recent History on the sub-item.** Record the task, result, check evidence, commit hash or uncommitted state, and remaining gaps.
@@ -140,10 +139,10 @@ Use this section when a new session continues a build that an earlier session st
 - In a new session, the builders from the old session are not running.
 - A session under a Main Orchestrator may still be running. Message it, and wait for its report before you start anything for its sub-item.
 - For a builder recorded as "Commit: no" in the item worktree, inspect the preserved changes against its recorded starting state and assigned paths. Follow "When a helper returns" for verification and integration; keep the item worktree.
-- For each builder with its own branch in the team list, look at the builder's branch with `git log --oneline <item branch>..<builder branch>`. Then do the one of these three that fits:
+- For each builder with its own branch in the team list, look at the builder's branch with `git log --oneline <item branch>..<builder branch>`. Then use the applicable case:
   - When the command lists commits, treat the commits as the helper's report, as "When a helper returns" says, and run the tests against the task's Done when. What is missing stays open.
   - When the command lists nothing, and `git -C <builder worktree> status --short` prints nothing, remove the builder's worktree and branch, and start a new builder.
-  - When the builder's worktree has uncommitted changes, keep them, tell the owner in one line, and ask whether to use them or to remove them.
+  - When the builder's worktree has uncommitted changes, keep them, tell the owner, and ask whether to use them or to remove them.
 - Ask the owner nothing that the owner's recorded answers already settle. The delivery answer and the team arrangement hold across sessions.
 
 ## While the owner decides something

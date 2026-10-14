@@ -24,7 +24,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 
 1. Start the work item, or continue it.
    - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
-   - For an existing work item with open questions, say in one line what is settled, and then ask the first open question again. Never start the interview over.
+   - For an existing work item with open questions, say what is settled, and then ask the first open question again. Never start the interview over.
 2. Read existing decisions and documentation for the affected area. Read the shared decisions, system rules, and project terms for the affected area where the root `AGENTS.md`, section "Where information goes", says they are kept, together with records that are captured but not yet filed there. Read relevant memory as "Project memory" in the root `AGENTS.md` says. Read related work items with `references/work-tracker.md`. File each new source before you use it, as "Sources" below says.
 3. Agree the goal first. Ask the owner to confirm the goal in one clear sentence. After the owner's yes, write that sentence as the goal in the work item's Overview.
 4. Offer a team of helper agents once. Ask after the goal is agreed, and only when both of these are true: the work item is clearly large, and `delivery` is `not-offered`. A work item is clearly large when a part of it meets one of the conditions for a split in "Roadmap, tasks, and sub-items" below.
@@ -34,7 +34,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
    - Ask first the questions that later questions depend on.
    - Ask about each vague word, such as "fast" or "all users", until a tester could check it.
    - Add the question's row before the reply ends, set `waiting_on` to the owner, and name the question's Q-ID in the work item's Current state.
-6. Save each answer when it is received or verified from a source. Do three things for each answer, in this order.
+6. Save each answer when it is received or verified from a source. For each answer, do the following, in this order.
 
    First, make one save that holds all of these:
    - in the question's row: the answer in the speaker's words, the date, and source evidence when applicable, Decision? `yes` or `no`, and Status Answered;
@@ -78,13 +78,13 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 
    Then ask once: "What have we not talked about yet that could change this?"
 10. Check that the requirements are ready. Do this check before you ask for approval, and after any change to an approved requirement. Start the requirements analyst helper, with `requirements-analyst-brief.md`. Then handle its findings:
-    - When a finding needs wording that changes nothing the owner asked for, fix the wording yourself, and say so in one line.
+    - When a finding needs wording that changes nothing the owner asked for, fix the wording yourself, and say so.
     - When a finding would change what the owner asked for, make it a question with your recommendation.
     - Present the findings in a form the owner can review clearly.
 11. Ask for the owner's yes on the requirements.
-    - Show the goal, each requirement in one line with its Acceptance Criteria, and the next State you recommend, with the reason. The next State is Designing or Building. `references/lifecycle-rules.md`, section "Status and State", says when to recommend each.
+    - Show the goal, each requirement with its Acceptance Criteria, and the next State you recommend, with the reason. The next State is Designing or Building. `references/lifecycle-rules.md`, section "Status and State", says when to recommend each.
     - Ask whether the owner approves the requirements you showed. Record the question in Questions and Answers, with every `R-xx` in its Affects column.
-    - After the owner's yes, first save the owner's words and the date in that row, with Decision? `yes`. Then do these three things:
+    - After the owner's yes, first save the owner's words and the date in that row, with Decision? `yes`. Then do each of these:
       - Set `requirements_approved` to `YYYY-MM-DD by <name>`.
       - Move the work item to the next State that the owner agreed to.
       - For each sub-item that these requirements cover, bring the lines it copied from the parent up to the approved wording. Give it the same approval, with "(from <parent ID>)". Add the Recent History row "Covers <parent ID> R-xx, approved there." Move it to the same next State. Such a sub-item skips its own interview.
