@@ -13,8 +13,6 @@ Keep the headings concise and retain what a later session needs. Write these val
 - Standing jobs and shared files: "None."
 - Next session starts with: the next roadmap step from question 11.
 
-Delete the file's fill-in guide as its comment directs.
-
 ## Check the local choice
 
 Run `node .claude/hooks/session-start.mjs </dev/null` and confirm that it prints Current State and the memory index. Verify the index excludes retired records. `git ls-files -- memory/` must print nothing, `git check-ignore memory/CURRENT_STATE.md` must print its path, and `.ignore` must hold `!/memory/`.

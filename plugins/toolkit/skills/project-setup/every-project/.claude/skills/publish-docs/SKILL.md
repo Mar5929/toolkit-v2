@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in sources/ or in the project's records of shared decisions and system rules, use filing-project-records. For code, rules, skills, or work items, use managing-work-items.'
+description: 'Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in sources/ or in the project''s records of shared decisions and system rules, use filing-project-records. For code, rules, skills, or work items, use managing-work-items.'
 ---
 
 # Commit project documents to the default branch

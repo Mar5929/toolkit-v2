@@ -41,4 +41,3 @@ A work item on the short path stops being small when the work turns out to need 
 - Add the Recent History row "Short path ended: full path from <State>.", with the State that the work item is in when it leaves the short path.
 - Set `delivery` to `not-offered`, unless a Questions and Answers row whose Affects column says `delivery` holds the owner's answer.
 - Continue with the file for that State. A work item that needs a design moves to Designing, also from Building. The owner's approval of the requirements still counts.
-

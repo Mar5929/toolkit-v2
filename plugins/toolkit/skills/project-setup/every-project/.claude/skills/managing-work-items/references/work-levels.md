@@ -59,4 +59,3 @@ Save a project task in the turn it comes up, with no question to the owner. Fill
 Work a project task the way you work a task in a work item: set it In Progress before you start it, and tick it only when its Done when check is met.
 
 Whenever you report what waits on the owner or what other people owe, name each open project task with who does it.
-
