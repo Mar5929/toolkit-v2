@@ -51,7 +51,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
 
    Then update each project task that this session worked on. Use the test of step 1 to decide whether this session worked on a project task. For each project task:
    - Read the project task with `managing-work-items`.
-   - Make its status and who does it true. `managing-work-items/references/lifecycle-rules.md`, "Levels", says what a project task is and when to tick it.
+   - Make its status and who does it true. `managing-work-items/references/work-levels.md`, "Levels", says what a project task is and when to tick it.
    - Read the project task back.
 3. **File what this session left unfiled.** Step 2 saved each decision that only one work item needs. Keep the source and approval evidence of each record you file.
    - **A decision or a question that more than one work item needs.** When one came from this session and the project's shared records do not hold it, record it with `filing-project-records`, step "record a decision". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs it, and says where those records are kept. When the owner has not confirmed it, record it as an open question. Do not wait for the owner's answer before you write the prompt.
