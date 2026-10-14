@@ -1,5 +1,6 @@
 {
   "autoMemoryEnabled": false,
+  "outputStyle": "Plain English",
   "claudeMdExcludes": [
     "**/plugins/toolkit/skills/project-setup/every-project/**",
     "**/plugins/toolkit/skills/project-setup/choices/**"

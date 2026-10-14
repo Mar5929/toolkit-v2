@@ -49,7 +49,7 @@ cp -R <skill folder>/<folder>/. <copy>/
 
 Copy `every-project` first, then each chosen folder. A chosen folder adds files inside skill folders that an earlier folder supplied, so copy it into the existing paths.
 
-When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once. Local memory copies `choices/memory/shared-by-local-and-notion/files-to-add`; Notion memory copies only `choices/memory/notion/files-to-add` and the shared Notion tools. Local and Hindsight memory also copy `choices/memory/repository-records/files-to-add`, which holds `DECISIONS.md` and `wiki/product-wiki/`. Apply the chosen module's guide and documentation changes in the setup copy too.
+When work items and memory are both in Notion, copy `choices/notion-shared/files-to-add` once. Notion memory copies only `choices/memory/notion/files-to-add` and the shared Notion tools. Local and Hindsight memory also copy `choices/memory/repository-records/files-to-add`, which holds `DECISIONS.md` and `wiki/product-wiki/`. Apply the chosen module's guide and documentation changes in the setup copy too.
 
 Every file is copied whole. Change in the copy only what the setup files of the project's choices and the sections after "Never copied" name, plus the project paths adapted to verified retained record homes under [local wiki layout guidance](local-wiki-layout.md). Keep the procedures and owner facts unchanged; every other line stays as it was copied.
 

@@ -14,7 +14,7 @@ Use this during Hindsight setup to install its memory rule, connect the shared r
 | Toolkit `SessionStart` entries | Remove the entries that run the local `session-start.mjs`; they read local Current State. Preserve unrelated entries and the Hindsight add-on's hooks. |
 | Add-on settings and bank | Apply the owner's choices through the onboarding steps. Keep keys outside the project. |
 
-Do not copy `shared-by-local-and-notion/files-to-add/` or local memory files for this choice. In a setup copy, this choice's instructions take precedence over older guidance that copies a local Current State file. In an existing project, preserve memory records until the owner approves their migration; do not delete them as part of wiring the hook.
+Do not copy local memory files for this choice. In a setup copy, this choice's instructions take precedence over older guidance that copies a local Current State file. In an existing project, preserve memory records until the owner approves their migration; do not delete them as part of wiring the hook.
 
 ## Root `AGENTS.md`
 

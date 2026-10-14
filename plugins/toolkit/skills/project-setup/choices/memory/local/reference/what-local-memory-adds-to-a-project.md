@@ -6,8 +6,8 @@ This file lists what setup adds to a project that keeps its memory in local file
 
 | Kind | What it adds |
 | --- | --- |
-| Skill | Copy `choices/memory/shared-by-local-and-notion/files-to-add/` into the project. It holds the skill `managing-project-memory`: what counts as memory, and how to save, find, and tidy it. |
-| Files inside that skill | Copy `choices/memory/local/files-to-add/` into the project after it. It adds four files on how memory is kept as local files. `references/memory-store.md` is the one that the skill opens first. |
+| Skill | Copy `choices/memory/local/files-to-add/` into the project. It holds the skill `managing-project-memory`: what counts as memory, and how to save, find, and tidy it. |
+| Files inside that skill | Four of the skill's reference files say how memory is kept as local files. `references/memory-store.md` is the one that the skill opens first. |
 | Steps inside other skills | The same folder adds `references/project-memory-steps.md` inside `managing-work-items` and inside `handoff`: the steps of those skills that depend on local memory. |
 | Files and folders | The same folder adds `memory/` with its guide, `CURRENT_STATE.md`, the index `MEMORY.md`, and the template for a memory file. |
 | Decision and system records | Copy `choices/memory/repository-records/files-to-add/` and write its rows in the root `AGENTS.md`, as [what-repository-records-add-to-a-project.md](../../repository-records/reference/what-repository-records-add-to-a-project.md) says. |
@@ -17,7 +17,7 @@ This file lists what setup adds to a project that keeps its memory in local file
 | Text in `AGENTS.md` | Three rows in the "Project map" table, and the "Project memory" section. "The text in AGENTS.md" below gives them. |
 | Outside the project folder | Nothing. |
 
-Step 2 of the setup file copies the folder of the first row. Step 3 copies the folder of the second and third rows. Step 4 writes the line in `PROJECT.md`, and the rows and the section in `AGENTS.md`.
+Step 2 of the setup file copies the folder of the first four rows. Step 3 copies the folder of the fifth row. Step 4 writes the line in `PROJECT.md`, and the rows and the section in `AGENTS.md`.
 
 ## The text in AGENTS.md
 

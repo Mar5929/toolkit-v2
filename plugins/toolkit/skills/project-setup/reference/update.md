@@ -145,7 +145,7 @@ Never compare or change the following during an update, except the owner-approve
 - work items and `work-items/PROJECT-TASKS.md`;
 - entries of `DECISIONS.md`, rules and terms in `wiki/product-wiki/`, sources in `sources/`, and records in `delivery/` and `wiki/reference/`;
 - `memory/CURRENT_STATE.md` and every memory record whose name starts `user_`, `project_`, `reference_`, or `event_`;
-- `.claude/rules/owner-preferences.md` and `.claude/rules/salesforce-agent-permissions.md`, except one relabel: earlier versions marked its production cells "Never (fixed)", and the owner can now change them. When a production cell says "Never (fixed)", tell the owner, and after the owner's yes change it to "Never". The value stays the same, so the cell needs no date or name;
+- `.claude/rules/owner-preferences.md` and `.claude/rules/salesforce-agent-permissions.md`;
 - the owner's own skills and rules.
 
 `memory/project_topic_template.md` is a template, so "Rules and other toolkit files" covers it. `memory/MEMORY.md` is a generated index that the session-start hook rebuilds; do not compare it either.
@@ -183,8 +183,7 @@ Then compare the two lists. One of two cases applies.
   1. Start from `<copy>/AGENTS.md`, which already has the project's name.
   2. Replace its outcome prompt and its "Build, test, or deploy" row with the project's current ones. Fill its work tracking and memory summary using [project-store-summary.md](project-store-summary.md) and the confirmed current record homes. Fill its "Project memory" section with the text that the project's memory choice supplies. Delete its fill-in guide comment only when its prompts are filled.
   3. Find the lines that the owner added or changed with `diff -u AGENTS.md <copy>/AGENTS.md`. Then decide for each of those lines:
-     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice). Lines about one memory choice that sat outside "Project memory", and an older "Hindsight memory" section, are of this kind.
-     - Drop the "Ask the owner first" section of an older file; the toolkit no longer ships it. When the owner added a line to that section, carry it over and mark it in the list in step 5.
+     - Drop a line that only repeats what the new file already says about the toolkit (a skill line, a line about a setup choice).
      - Carry over a line that holds a fact, a command, or an instruction of the owner's own, into the section where it fits. A whole section that the owner added goes in right after "Commands".
      - When you cannot tell whether to drop a line or carry it over, carry the line over and mark it in the list in step 5.
   4. Check that `AGENTS.md` holds only what every session needs and fits within the host's instruction budget, including other loaded instruction files. For Codex, check the configured `project_doc_max_bytes` (32 KiB by default). When instructions risk being cut off, say so in step 5 and recommend what to move and where. Cut no line of the owner's without the owner's yes.
@@ -198,10 +197,8 @@ A project may hold something that an earlier setup put there and that the new se
 - A skill, a rule, or a hook that the owner added is the owner's. When you cannot tell whether a thing came from the toolkit or from the owner, leave it and ask.
 - When the thing holds a choice or a line of the owner's, show it to the owner, and put it in the place that holds such a choice now before you remove the old one. For example, a choice about what an agent may do in a Salesforce org goes in `.claude/rules/salesforce-agent-permissions.md`, and an instruction for how the agent works goes in `.claude/rules/owner-preferences.md`.
 - Remove a hook command and its entry in the settings files in the same change, with any group or event that the entry leaves empty.
-- Earlier versions put Git commands in `.claude/settings.json`, under `permissions.deny` and `permissions.ask`, such as `Bash(git add -A)`, `Bash(git push --force *)`, and `Bash(git reset --hard *)`. The toolkit no longer ships them. List them as one row, and remove them after the owner's yes. The entries for a production Salesforce org stay. Remove `permissions` only when it is left empty.
 - When a rule or a skill of the owner's own names a file that is removed or renamed, list it, and change the name after the owner's yes.
 - Renamed record folders follow [local wiki layout guidance](local-wiki-layout.md), not obsolete-file removal. This section never removes a record. A work item, a memory record, a decision, a source, and any file in a folder of older records is the owner's, and it stays.
-- Earlier versions put `/work-items/` and `/memory/` in every project's `.gitignore`, with matching lines in `.ignore`. Decide each folder by itself: list `/work-items/` and `!/work-items/` unless work items are local, `/memory/` and `!/memory/` unless memory is local, and the old `.ignore` comment about "these two folders". Show them as one row, and remove them after the owner's yes.
 - A Notion-memory project no longer gets `DECISIONS.md` or `wiki/product-wiki/`. In a project that has them, they stay, with their folder guide, until the reviewed move to Project Wiki is verified and the owner approves their removal. Until then, keep the project's existing record rows in the root `AGENTS.md`, and its installed `filing-project-records` references for `DECISIONS.md` and `wiki/product-wiki/`, and its installed `publish-docs/references/shared-record-paths.md` that lists them.
 
 ## 5. Services
