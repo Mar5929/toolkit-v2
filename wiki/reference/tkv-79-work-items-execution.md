@@ -5,16 +5,13 @@ This record lists the work-tracking changes prepared for independent review. It 
 The changes follow the three current official skill pages read on 2026-10-13: [Claude Code skills](https://code.claude.com/docs/en/skills), [Codex skills](https://learn.chatgpt.com/docs/build-skills), and [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices). The repository harness-writing checklist and document clarity rule also apply.
 
 ## Proposal dispositions
-
 | Phase | IDs | Disposition and preservation |
 | --- | --- | --- |
 | 1 | A2, A3 | Changed. GitHub ID naming lives in its installed tracker; shared branch and test-plan procedures point there. |
 | 1 | A4 | Changed. Shared procedures and helper briefs use environment instead of org. |
 | 1 | A5 | Deferred. Keep the general platform-skill step until Mike settles whether it is Salesforce-only. |
-
 | 2 | B6, B9, B10, C9, C13, C15, C16 | Changed. Installation follows GitHub's OS-specific page; repository history dates removed; owner wording is neutral; Notion section pointers target the commands reference; host permission paragraph and misleading heading removed; label question names its missing count. |
 | 2 | C14 | Deferred. Preserve the requirements interview's one-question procedure pending Mike's preference against the output style. |
-
 | 3 | D1, D2, D3, D6, D7, D22, D25, D27, D33 | Changed. Repeated definitions and the host permissions paragraph removed; conflicts route to pull-latest; local template route uses the actual local template. Helper briefs keep standalone context. |
 | 3 | D16, D17, D19 | Changed with approved alternatives. Save-result words, helper start procedure, and common requirement/question edits have on-demand references linked directly from SKILL.md. Backend format, relations, and API calls stay in choices. |
 | 3 | D5, D8, D29, D42 | Changed within scope. Repeated source routing and prompt explanations removed; shared requirement and question procedures extracted. Backend-specific protections remain. |
@@ -24,14 +21,11 @@ The changes follow the three current official skill pages read on 2026-10-13: [C
 | 3 | D46, D47 | Changed. Header/schema tables retain field rules rather than enum restatements; templates and live schemas remain authoritative. |
 | 3 | I5, J3, J4 | Changed. Notion helpers get exact ID query and page reads; repeated setup explanation and inert file-link section removed. Setup step ranges adjusted. |
 | 3 | D15, J2 | Deferred. No new always-loaded instruction or changed Recent History policy without owner evidence. |
-
 | 4 | E2, E3, E4, E7, E14 | Changed after case review. Folder reconciliation becomes a general parent/list/history procedure. Label reconciliation preserves State/type questions, priority default and hand-made issue routing. Repeated Building offer case merged. Generic permission/retry coaching removed; uncertain-write read-before-retry stays. |
 | 4 | E15 | Retained where model preference is helper or other-chat launch context; no extra model policy introduced. |
 | 4 | F1, F2, F3, F5, F6 | Changed. Arbitrary reply, slug and prefix sizes removed; labels refer to the complete list; persistent failures use unresolved progress rather than a fix count. Exact IDs, technical service limits and interview sequencing remain. The current Notion property reference gives no two-to-four-letter prefix requirement. |
-
 | 5 | G1, G8 | Changed. Levels/phases/tasks and the small-item short path moved to directly linked on-demand references. Duplicate repository headings became one direct route. All scoped section callers updated. |
 | 5 | G6 | Deferred. Template fill-in comments preserve field and authority rules pending Mike's preference; shared and local template copies remain identical. |
-
 | 6 | H2 | Changed. Dense Notion tracking paragraphs and plan conversion/move procedures split into steps with one subject. Live schemas, owner guide lines, protected block types, template/child-page protection and exact relation semantics stay. |
 | 6 | J5 | Deferred. Humanizer routing remains until Mike decides whether setup should check it. |
 
@@ -49,7 +43,6 @@ The rewrite preserves owner approvals, exact tracker commands and values, stable
 - The parent supplies independent review, actual scratch host loading, version changes, cross-domain callers, and ticket updates. No live tracker data or host configuration was changed.
 
 ## Requirement-preservation inventory
-
 | Requirement | Location after changes |
 | --- | --- |
 | State/Status map, closure authorization and save-after-step rule | lifecycle-rules.md |

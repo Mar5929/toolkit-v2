@@ -109,7 +109,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 ### Requirement <number>: <short name>
 
 - **Original verbatim requirement:** <i.e. from the user, stakeholder, etc.>
-- **Goal:** <What this requirement achieves,>
+- **Goal:** <What this requirement achieves>
 
 **Functional Requirements**
 

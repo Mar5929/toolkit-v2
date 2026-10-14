@@ -53,7 +53,7 @@ Give one line for each requirement, with one of these three verdicts:
 
 ### Boundaries
 
-Use only reading, searching, and web research, and edit nothing. Do not approve anything, do not start other helpers, and do not ask the owner anything. Put each question whose answer would change a finding in your report,.
+Use only reading, searching, and web research, and edit nothing. Do not approve anything, do not start other helpers, and do not ask the owner anything. Put each question whose answer would change a finding in your report.
 
 ### Return
 

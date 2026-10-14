@@ -88,7 +88,7 @@ A skill is a folder of instructions that the agent opens when a job needs it.
 
 ### The hook commands every project gets
 
-A hook command runs by itself at a fixed moment. Claude Code and Codex both run the same three, from `.claude/hooks/`.
+A hook command runs by itself at a fixed moment. Claude Code and Codex both run the same three, from `.claude/hooks/`. The selected memory choice supplies `session-start-choice.mjs` and `prompt-memory-reminder.md` beside them. The shared commands load those resources without selecting a memory backend.
 
 | Command | When it runs | What it does |
 | --- | --- | --- |

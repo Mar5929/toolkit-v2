@@ -4,7 +4,15 @@ Use this reference before setup or an update compares or copies new wiki paths i
 
 ## Review the project and proposed mapping
 
-Read the project's actual record homes, guides and setup choices. The Toolkit layout maps local `system/` to `wiki/product-wiki/`, local `reference/` to `wiki/reference/`, and `wiki/reference/outside-docs/` to `wiki/reference/ai-external-knowledge/`. These are project record paths, not the `reference/` folders inside skills. The folder names change; the records' meanings, approvals, rule IDs, metadata and storage policies do not.
+Read the project's actual record homes, guides and setup choices. The Toolkit layout uses these record paths:
+
+| Existing local path | Toolkit record path |
+| --- | --- |
+| `system/` | `wiki/product-wiki/` |
+| `reference/` | `wiki/reference/` |
+| `wiki/reference/outside-docs/` | `wiki/reference/ai-external-knowledge/` |
+
+ These paths hold project records. The `reference/` folders inside skills keep their paths. The folder names change; the records' meanings, approvals, rule IDs, metadata and storage policies do not.
 
 Inspect the old and new paths in the main checkout, including untracked and ignored files. List the records, customized guides, links and destination conflicts affected by the move. Include links in project maps, instructions, source indexes, diagrams, work items and memory. Inspect both inbound and outbound relative links: adding a parent folder changes their targets even when their text does not name the old folder.
 
