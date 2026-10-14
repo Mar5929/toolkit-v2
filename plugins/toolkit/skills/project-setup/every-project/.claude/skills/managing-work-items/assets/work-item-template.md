@@ -30,7 +30,7 @@ updated: <YYYY-MM-DD>
 
 **Where it stands:** <What is done and where work stands now.>
 
-**Next action:** <One of three forms. Working: “<Who>: <the exact next step, one sentence>.” Example: “Agent: write two design options for the permission set groups.” Waiting: “Waiting on the owner: Q-07 (<the question in a few words>). After his answer: <step>.” Example: “Waiting on the owner: Q-07 (merge or move the 15 personas). After his answer: finish R-04.” Finished or cancelled: “None. Finished.” or, for a cancelled item, “None. Cancelled.”>
+**Next action:** <One of three forms. Working: “<Who>: <the exact next step, one sentence>.” Example: “Agent: write two design options for the permission set groups.” Waiting: “Waiting on the owner: Q-07 (<the question in a few words>). After the owner's answer: <step>.” Example: “Waiting on the owner: Q-07 (merge or move the 15 personas). After the owner's answer: finish R-04.” Finished or cancelled: “None. Finished.” or, for a cancelled item, “None. Cancelled.”>
 
 **Waiting on:** <Who the item waits on and for what, matching `waiting_on`, for example “The owner: Q-07.”; or “Nothing.”>
 
@@ -57,7 +57,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Tasks
 
-<!-- An item with phases: under each phase heading, add that phase's tasks only, and delete the plain-list form at the end of this section. An item without phases: delete the example phase headings and tasks, and keep the plain-list form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+<!-- An item with phases: under each phase heading, add that phase's tasks only, and delete the plain-list form at the end of this section. An item without phases: delete the example phase headings and tasks, and keep the plain-list form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check the owner must make), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
 
 ### P1 — <Phase 1 name>
 

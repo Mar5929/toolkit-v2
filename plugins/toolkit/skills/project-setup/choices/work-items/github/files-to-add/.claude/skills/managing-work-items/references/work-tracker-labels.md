@@ -77,7 +77,7 @@ Create the labels at setup, and when a project that was set up earlier lacks a l
    ```
 
 2. Compare that list with the full list. Names match without regard to capital letters.
-3. Tell the owner how many labels are missing, by group, and ask once: "Create these 30 labels in <repo>? Each work item uses them to show its State, type, priority, who it waits on, who builds it, and your approvals." When some labels exist already, name only the missing ones.
+3. Tell the owner how many labels are missing, by group, and ask once: "Create these <missing count> labels in <repo>? Each work item uses them to show its State, type, priority, who it waits on, who builds it, and your approvals." When some labels exist already, name only the missing ones.
 4. After the owner's yes, create each missing label, with one command for each label:
 
    ```text

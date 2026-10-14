@@ -7,7 +7,7 @@ Before you start:
 - Read `.claude/rules/owner-preferences.md` for a standing merge instruction. A standing merge instruction is an instruction of the owner that allows merges without a question for each one.
 - Read `PROJECT.md` for the owner's name and for the environments or environment aliases that "Toolkit settings" records.
 - Ask every question as a Questions and Answers row, with `waiting_on` set to the owner.
-- In Codex, every Git write and every call that needs the network follows `building.md`, section "Git writes in Codex".
+- In Codex, every Git write and every call that needs the network follows the active host's permission instructions.
 
 In this file, the head of a branch is the latest commit on that branch. The checker is the separate agent that tested the result in the Testing Loop.
 
@@ -21,7 +21,7 @@ Open a pull request only when the work item changed files and the project has a 
   - Write the title and the description in plain words, with no AI credit. Say what changed, why, how it was checked, and the work item's ID.
   - Run the title and the description through `humanizer`, as the root `AGENTS.md`, "How to write text that goes to another person or is client/customer facing", says.
 - The merge must never close the work item, because only the owner marks it Done. `references/work-tracker.md` says whether and how to write the work item's ID in the pull request.
-- Record the pull request on the work item with `references/work-tracker.md`. It goes under the work item's Related items, unless that skill names another place. Add the Recent History row "Pull request #14 opened."
+- Record the pull request on the work item with `references/work-tracker.md`. It goes under the work item's Related items, unless that file names another place. Add the Recent History row "Pull request #14 opened."
 
 ## The merge
 

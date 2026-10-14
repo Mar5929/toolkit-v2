@@ -12,6 +12,9 @@ The changes follow the three current official skill pages read on 2026-10-13: [C
 | 1 | A4 | Changed. Shared procedures and helper briefs use environment instead of org. |
 | 1 | A5 | Deferred. Keep the general platform-skill step until Mike settles whether it is Salesforce-only. |
 
+| 2 | B6, B9, B10, C9, C13, C15, C16 | Changed. Installation follows GitHub's OS-specific page; repository history dates removed; owner wording is neutral; Notion section pointers target the commands reference; host permission paragraph and misleading heading removed; label question names its missing count. |
+| 2 | C14 | Deferred. Preserve the requirements interview's one-question procedure pending Mike's preference against the output style. |
+
 ## Requirements preserved
 
 The rewrite preserves owner approvals, exact tracker commands and values, stable IDs, work-item State transitions, owner edits, read-back verification, hierarchy and phase rules, closure protections, standalone helper context, and the local MAIN command.

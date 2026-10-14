@@ -4,7 +4,7 @@ This file says how to check that the GitHub command-line tool, `gh`, is installe
 
 Run `gh auth status`.
 
-- When `gh` is not installed, ask the owner before you install it, because installing it changes the owner's computer. After the owner's yes, run `brew install gh`.
+- When `gh` is not installed, ask the owner before you install it, because installing it changes the owner's computer. After the owner's yes, follow [GitHub CLI installation](https://github.com/cli/cli#installation) for the owner's operating system.
 - When no one is signed in, ask the owner to run `gh auth login` in the owner's own terminal.
 - When the `repo` scope is missing, ask the owner to run `gh auth refresh -s repo`.
 

@@ -4,7 +4,7 @@ Use this reference when Building needs the procedures below. Follow the approved
 
 ## Git for a build
 
-This section gives the commands and the names for a work item's worktree and its branch. The main checkout is the project's main folder: the first path that `git worktree list` prints. In Codex, every Git command in this section also follows "Git writes in Codex" below.
+This section gives the commands and the names for a work item's worktree and its branch. The main checkout is the project's main folder: the first path that `git worktree list` prints.
 
 - Make a work item's changes to code, rules, skills, hooks, and settings in its own worktree, on its own branch, and never on the default branch.
 - Make the worktree and the branch before the first change. Make them in the main checkout, from the default branch, under its real name, for example `main`. For a sub-item, make them from its parent's branch.
@@ -30,7 +30,3 @@ This section gives the commands and the names for a work item's worktree and its
 - When a merge stops on a conflict, read both sides of each conflicting file, stage each resolved file by name, and commit with a message that you write.
   - Never run `git commit --no-edit` after a conflict, because it keeps Git's "# Conflicts:" lines in the message.
   - When the right result of a conflict is not clear from the two sides, ask the owner.
-
-## Git writes in Codex
-
-Follow the active host's filesystem, network, and approval settings for Git and service commands. Use the permission mechanism that the host supports when an operation requires it. If the host denies an operation, report the command and reason, and follow its approval process or ask the owner to run the command. Never bypass a denial or move the work onto the default branch to avoid it.
