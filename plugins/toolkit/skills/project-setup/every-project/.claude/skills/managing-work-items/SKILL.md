@@ -7,7 +7,7 @@ description: 'Finds and manages work items from idea to Done, keeping requiremen
 
 Use this skill when a turn concerns a work item, a project phase, or a project task. The goal is to keep the work record accurate and follow the required steps and approvals from the first idea through Done or Cancelled.
 
-Start with [the lifecycle rules](references/lifecycle-rules.md). They define the work item's State and Status, the four levels of work, the approval points, and the rules that apply in every State. Then open [the installed work tracker instructions](references/work-tracker.md) for every read and save. This project has only the version that setup selected. Read the relevant procedure below for the work item's current State or the change requested.
+Start with [the lifecycle rules](references/lifecycle-rules.md). They define the work item's State and Status, the approval points, and the rules that apply in every State. Then open [the installed work tracker instructions](references/work-tracker.md) for every read and save. This project has only the version that setup selected. Read the relevant procedure below for the work item's current State or the change requested.
 
 If the owner asks only a question about a work item, read the current record and answer it. Do not advance the work item merely because you read it. If the item is unclear, use the root `AGENTS.md` identification order and ask when more than one item remains plausible.
 
@@ -18,6 +18,8 @@ Use `filing-project-records` for sources and for shared decisions and system rul
 | File | Open it when |
 | --- | --- |
 | [references/lifecycle-rules.md](references/lifecycle-rules.md) | Every work-item turn. It gives the State map, approval points, and common safeguards. |
+| [references/work-levels.md](references/work-levels.md) | You create, organize, move, or report work items, phases, or tasks; it defines the hierarchy and stable IDs. |
+| [references/small-work-item.md](references/small-work-item.md) | A work item may take the short path; it defines eligibility and the combined approvals. |
 | [references/starting-a-helper.md](references/starting-a-helper.md) | A procedure calls for a helper; it gives the host tools and how to supply a standalone brief. |
 | [references/reporting-a-save.md](references/reporting-a-save.md) | A save fails or read-back does not verify it; it gives the exact reply words. |
 | [references/editing-a-work-item.md](references/editing-a-work-item.md) | You create or change requirements or Questions and Answers; the tracker supplies its storage and formatting. |

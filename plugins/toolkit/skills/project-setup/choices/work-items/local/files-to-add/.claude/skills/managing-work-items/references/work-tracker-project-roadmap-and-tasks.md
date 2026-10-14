@@ -1,6 +1,6 @@
 # The project's roadmap and project tasks (local files)
 
-This file says where the project's own phases and its project tasks are saved, and how to read and change them. `references/lifecycle-rules.md`, section "Levels", says what a project phase and a project task are.
+This file says where the project's own phases and its project tasks are saved, and how to read and change them. `references/work-levels.md`, says what a project phase and a project task are.
 
 ## The project's roadmap: PROJECT-ROADMAP.md
 

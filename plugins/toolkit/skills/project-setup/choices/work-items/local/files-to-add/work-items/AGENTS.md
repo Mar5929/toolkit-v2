@@ -25,7 +25,7 @@ A work item's ID is the prefix, a hyphen, and three digits, for example `WI-031`
 - The prefix is the value of "Work item ID prefix" under "Toolkit settings" in `PROJECT.md`.
 - The next ID is the highest `id:` anywhere in this folder plus one. Count the work items in `archive/`, and leave out `work-item-template/`.
 
-Other IDs are used inside a work item: the ID of one of the work item's phases, of a task, of a requirement, and of a question. Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Levels", and `work-item-template/WORK-ITEM.md` for the forms of those IDs and of a project task's ID.
+Other IDs are used inside a work item: the ID of one of the work item's phases, of a task, of a requirement, and of a question. Open `.claude/skills/managing-work-items/references/work-levels.md`, and `work-item-template/WORK-ITEM.md` for the forms of those IDs and of a project task's ID.
 
 - An ID inside a work item is unique within that work item.
 - A project task's ID is unique within `PROJECT-TASKS.md`.
@@ -36,7 +36,7 @@ An ID is never reused. That rule covers every ID in this section.
 
 `work-item-template/WORK-ITEM.md` lists the header fields and their allowed values. Follow `managing-work-items/references/work-tracker-field-mapping.md` when editing them.
 
-Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status and State", for the ten States, the Status that each State gives, what Blocked means, and when a work item moves to the next State. Its "Levels" section says how deep sub-items go.
+Open `.claude/skills/managing-work-items/references/lifecycle-rules.md`, "Status and State", for the ten States, the Status that each State gives, what Blocked means, and when a work item moves to the next State. `work-levels.md` says how deep sub-items go.
 
 ## What must stay true
 

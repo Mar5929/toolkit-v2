@@ -28,6 +28,9 @@ The changes follow the three current official skill pages read on 2026-10-13: [C
 | 4 | E15 | Retained where model preference is helper or other-chat launch context; no extra model policy introduced. |
 | 4 | F1, F2, F3, F5, F6 | Changed. Arbitrary reply, slug and prefix sizes removed; labels refer to the complete list; persistent failures use unresolved progress rather than a fix count. Exact IDs, technical service limits and interview sequencing remain. The current Notion property reference gives no two-to-four-letter prefix requirement. |
 
+| 5 | G1, G8 | Changed. Levels/phases/tasks and the small-item short path moved to directly linked on-demand references. Duplicate repository headings became one direct route. All scoped section callers updated. |
+| 5 | G6 | Deferred. Template fill-in comments preserve field and authority rules pending Mike's preference; shared and local template copies remain identical. |
+
 ## Requirements preserved
 
 The rewrite preserves owner approvals, exact tracker commands and values, stable IDs, work-item State transitions, owner edits, read-back verification, hierarchy and phase rules, closure protections, standalone helper context, and the local MAIN command.

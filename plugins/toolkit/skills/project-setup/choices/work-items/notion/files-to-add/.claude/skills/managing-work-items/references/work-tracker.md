@@ -10,7 +10,7 @@ Each project has its own Work Items, Phases and Tasks databases. Read their conf
 
 - A work item tracks a change or outcome through its requirements, design, approvals and delivery. Create it in Work Items with the database's default template. Notion supplies its page and Solution Design child page.
 - A project phase organizes the project's roadmap. Its Work item relation is empty; top-level work items link to it through Phase.
-- A work-item phase organizes that item's roadmap and links to the owning work item. Use phases when they help organize the work; otherwise keep a plain task and sub-item plan. Follow the lifecycle's Levels rules.
+- A work-item phase organizes that item's roadmap and links to the owning work item. Use phases when they help organize the work; otherwise keep a plain task and sub-item plan. Follow `references/work-levels.md`.
 - A work-item task is a step toward one item's goal when a separate sub-work item is unnecessary. Link it to that work item and, when applicable, its phase.
 - A project task tracks operational or administrative work outside a work item. Leave Work item and Phase empty. Product or architecture changes use work items rather than bypassing their lifecycle as administrative tasks.
 - A sub-work item links to its parent through Parent item. Preserve the three-level work-item limit and the lifecycle's phase and task ID rules.

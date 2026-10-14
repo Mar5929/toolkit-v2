@@ -2,7 +2,7 @@
 
 Use this reference to take one work item from an idea to Done. The goal is that the work item always says truly where the work stands, and that no step that needs the owner's yes happens without it.
 
-This reference says what each State means, how work is divided into levels, what to do in each State, and when to stop for the owner's yes. Two neighbouring jobs belong to other skills:
+This reference gives the State map, owner approvals, and rules for every work-item turn. Open `work-levels.md` when organizing work and `small-work-item.md` when using the short path. Two neighbouring jobs belong to other skills:
 
 - **Reading and saving a work item.** For every read and every save, use the installed `references/work-tracker.md`, which says where this project keeps its work items.
 - **Writing shared records.** `filing-project-records` writes sources, and the decisions, open questions, system rules, and project terms that more than one work item needs. Never write those records with this skill. Write the ID or link of one of those records into a work item only when `filing-project-records` has saved the record and given you the ID or link. When that step says the record still waits to be filed in its final place, say so beside the ID or link. The root `AGENTS.md`, section "Where information goes", gives the test for what belongs in a shared record, and says where this project keeps each kind. Active questions and designs for one work item stay in that work item.
@@ -11,9 +11,7 @@ This reference says what each State means, how work is divided into levels, what
 ## Contents
 
 - Status and State
-- Levels
 - When to stop for the owner's yes
-- A small work item
 - Rules that apply in every State
 - Work that another skill does
 
@@ -68,64 +66,6 @@ A sub-item is a work item inside another work item, which is its parent. A paren
 
 Set a work item to Done or Cancelled only when the owner says so, and only through `references/closing.md`, which gives the steps for closing a work item. A work item that the owner closed by hand goes through that file too.
 
-## Levels
-
-Every project divides its work into the same four levels, wherever it keeps its work items. A top-level work item is a work item with no parent, and a sub-item is a work item inside another work item. `references/work-tracker.md` says where each part is saved.
-
-| Level | Its phases | What it holds |
-| --- | --- | --- |
-| The project | Project phases `P01`, `P02`, and so on. They are the project's roadmap. | Its top-level work items, each under exactly one project phase. Its project tasks, in one plain list with no phases. |
-| Top-level work item (level 1) | Optional phases `P1`, `P2`, and so on, when grouping by outcomes helps plan or track the work. They are the work item's roadmap. | Its tasks and its level-2 sub-items, under phases when it uses them, or in a plain list. |
-| Level-2 sub-item | None | One plain task list, and its level-3 sub-items. |
-| Level-3 sub-item | None | One plain task list. |
-
-- Never add a fourth level. Make the work a task instead.
-- No ID is ever reused. This rule holds for the ID of a work item, a phase, a task, a requirement, and a question.
-- When it is unclear whether something is a project task, a new work item, a sub-item, or a task in a work item, ask the owner one short question with your recommendation. Save nothing until the owner answers.
-
-### Phases
-
-A project phase (`P01`) and a work item's phase (`P1`) are different things. A project phase groups top-level work items. A work item's phase groups that work item's tasks and its level-2 sub-items. A phase is never a work item.
-
-- During Refining Requirements, use work-item phases when they help plan or track distinct outcomes. Otherwise, use a plain task list. A level-2 sub-item of a top-level parent without phases has no phase.
-- A top-level work item goes under a project phase when the owner places it, and at the latest when it leaves Backlog. When the owner has named no project phase by then, ask which one, with your recommendation.
-- The project's phases change only with the owner's yes. Propose new project phases, or a change to them, as one question, with a one-line reason for each new phase and for each change.
-- When a project has no phases yet, propose them the first time a work item leaves Backlog.
-- When the first work item of a project phase leaves Backlog, set that project phase In Progress.
-- When the last open work item in a project phase becomes Done or Cancelled, ask the owner in your next reply whether the project phase is Done.
-- A project whose owner has no planned order of work has one project phase, `P01 — Ongoing support`. A project that handles a client's requests as they come in is an example.
-  - Propose that phase when the project has no phases yet.
-  - While it is the project's only phase, put every top-level work item under it without asking the owner which phase.
-  - Never ask whether it is Done. It stays In Progress until the owner says that the support has ended.
-
-### Tasks
-
-- Every task belongs to exactly one place: the project, or one work item.
-- A task in a work item is a step toward that work item's goal. Triage work outside the approved goal as a separate Backlog work item. When a defect prevents the approved user flow from working, record the defect and the fix needed to meet the approved requirements in this item. If the fix changes those requirements or an owner decision, get the required approval through Refining Requirements before building it.
-- A task ID has one of three forms:
-  - `P1-T01` for a new task under a work-item phase: the phase, then the task's number.
-  - `T01` for a new task in a plain list, in a top-level item or a sub-item.
-  - `PT-01` for a project task.
-- Existing task and phase IDs stay unchanged when plan grouping changes.
-
-### Project tasks
-
-A project task is an administrative task that belongs to no work item. These two things are also project tasks:
-
-- a to-do that the owner names or asks you to keep, such as "we need to prepare for Wednesday's call";
-- an action item from a meeting or a message that belongs to no work item.
-
-Save a project task in the turn it comes up, with no question to the owner. Fill its lines as follows:
-
-- Its Who does it is `owner`, `agent`, or the name of the other person who owes it, with the party, such as `Sarah Chen (client)` or `DataBridge (vendor)`.
-- Its Work line says what is owed and to whom.
-- Its Done when holds the date it is due, when a date was named.
-- When the project task comes from a source that the owner gave, such as a transcript, file that source first, with no question to the owner. Use `filing-project-records`, step "file a source". Then name the source's SRC ID in the Work line.
-
-Work a project task the way you work a task in a work item: set it In Progress before you start it, and tick it only when its Done when check is met.
-
-Whenever you report what waits on the owner or what other people owe, name each open project task with who does it.
-
 ## When to stop for the owner's yes
 
 Stop and ask the owner before each of these six steps. Record the owner's authorization and what it covers. An explicit instruction or an earlier approval for the same scope counts; ask only for an approval that is still missing. Authorization for one step does not authorize another step or a changed result.
@@ -142,47 +82,7 @@ When approval is missing, ask a clear question that names what the owner is appr
    - A deploy that a rule of the project allows without a question needs no new yes from the owner.
 6. Marking the work item Done.
 
-A small work item has fewer stops. "A small work item" below says which stops stay.
-
-## A small work item
-
-A small work item is a top-level work item whose whole job you can play back to the owner in one reply, and that you can build and check without an interview, without Designing, and without sub-items. Adding one line to an email template is an example of a small work item. Making one list of records for the owner to load is another.
-
-A small work item takes the short path, unless the owner asks for the full process. The short path is the six steps below. The full path is the process that this skill gives for every other work item.
-
-The goal of the short path is to take a small work item to Done with fewer stops for the owner's yes. It asks one question before the work starts, in place of the interview. It asks one question when the result is ready, where the full path asks three.
-
-Every rule of this skill that the six steps do not change applies to a small work item as it is written. Stops 4 and 5 of "When to stop for the owner's yes" stay: each merge into the default branch, and each deploy to an environment that other people use.
-
-Use your judgment to decide from the owner's request whether the work item is small, before you create it. "Designing or Building after the requirements" above says when a work item needs Designing. The owner's words win over your decision.
-
-1. Create the work item, as `references/refining-requirements.md`, steps 1 and 2, say. Then write what the interview would have written:
-   - the goal, in the Overview;
-   - for each requirement, its Goal, at least one line of Functional Requirements, and at least one line of Acceptance Criteria that a tester could check;
-   - a plain task list, with phases only when they help plan or track the work.
-2. Play the request back to the owner in one reply. This reply takes the place of steps 3 to 11 of `references/refining-requirements.md`.
-   - Say the goal in concise sentences, what you will hand over, and how you will check it.
-   - Name anything you are unsure of.
-   - Name the project phase that the work item goes under. When the project has no phases yet, name the phases that you propose, as "Phases" above says.
-   - Explain that this small work item takes the short path, skipping the interview and combining result approval and closure in one question at the end.
-   - Ask the owner to confirm the request as you described it.
-
-   Add that question as a Questions and Answers row, and set `waiting_on` to the owner, before the reply ends.
-3. Record the owner's answer in that row, with the owner's words and the date.
-   - After a yes, set `requirements_approved` to `YYYY-MM-DD by <name>`, add the Recent History row "Small item: short path.", and move the work item to Building. The yes approves the requirements and the project phase, as the reply gave them.
-   - After a correction, change the work item, and play the request back again in the same form.
-4. Build the tasks, as `references/building.md` says. When every task is done, move the work item to the Testing Loop.
-5. Check the result, as `references/testing-loop.md`, section "A small work item", says. That section says when the separate checker runs, and what takes its place when it does not run.
-6. Ask one closing question, and close the work item after the owner's yes, as `references/closing.md`, section "Closing a small work item", says. That section gives what the question must cover. The owner's yes approves the result, and it is also the yes to mark the work item Done.
-
-When the owner changes or adds a requirement and the work item is still small, record the change as `references/refining-requirements.md`, step 7, says. In place of the approval question of that step, and of the requirements analyst helper that the full path starts after such a change, play the change back in the form of step 2.
-
-A work item on the short path stops being small when the work turns out to need what the short path leaves out: an interview to settle the requirements, Designing, or sub-items. Then move it to the full path:
-
-- Tell the owner.
-- Add the Recent History row "Short path ended: full path from <State>.", with the State that the work item is in when it leaves the short path.
-- Set `delivery` to `not-offered`, unless a Questions and Answers row whose Affects column says `delivery` holds the owner's answer.
-- Continue with the file for that State. A work item that needs a design moves to Designing, also from Building. The owner's approval of the requirements still counts.
+A small work item has fewer stops. `small-work-item.md` says which stops stay.
 
 ## Rules that apply in every State
 

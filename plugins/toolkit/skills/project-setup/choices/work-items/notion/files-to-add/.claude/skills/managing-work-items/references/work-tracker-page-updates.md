@@ -47,7 +47,7 @@ Each work item has one Solution Design page. The work item template holds the pa
 
 ## Phases, tasks, and sub-items
 
-Phases and tasks are rows, so a change to the plan is a change to rows. The work item's page shows them in views, and nothing is copied into its text. `references/lifecycle-rules.md`, section "Levels", says which level has phases and what each ID looks like.
+Phases and tasks are rows, so a change to the plan is a change to rows. The work item's page shows them in views, and nothing is copied into its text. `references/work-levels.md`, says which level has phases and what each ID looks like.
 
 - **Order.** The Order property is a phase's place in the plan, or a task's place in its phase or its plain list. To reorder, change only Order.
 - **IDs.** A Phase ID or a Task ID never changes, also when the phase or the task moves. A new Phase ID is one more than the highest that the work item, or the project, ever used, cancelled ones included. A new Task ID takes the next unused number in its phase or its plain list.

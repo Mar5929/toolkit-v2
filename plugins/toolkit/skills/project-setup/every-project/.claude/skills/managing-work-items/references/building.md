@@ -10,8 +10,7 @@ The main agent is the agent of the session that leads the build. It either does 
 - Who builds
 - The team arrangement
 - Plan the team
-- Git for a build
-- Git writes in Codex
+- Repository steps
 - Start a builder
 - When a helper returns
 - When the plan changes
@@ -21,7 +20,7 @@ The main agent is the agent of the session that leads the build. It either does 
 ## Build, task by task
 
 1. Read the work item's tasks and its design. Take the first task whose Depends on line is met. Before you start the task, set it In Progress. When the task has a phase, also set that phase In Progress when it is Not Started.
-2. Work in the work item's own worktree, on its own branch, and never on the default branch. "Git for a build" below says how to make both. Build what the requirements ask, and no more. When the requirements need work that no task covers, add a task for that work first, and then do it.
+2. Work in the work item's own worktree, on its own branch, and never on the default branch. `build-repository.md` says how to make both. Build what the requirements ask, and no more. When the requirements need work that no task covers, add a task for that work first, and then do it.
 3. Tick the task only when its Done when proof is met. Save the proof in Recent History: the command and its exact result line, or what you saw. A task that is partly done stays open, and you add a task for what is left.
 4. When you cannot check a task in one go, split it into smaller tasks. When a part can be approved, built, or shipped on its own, propose a sub-item, as `refining-requirements.md`, section "Roadmap, tasks, and sub-items", says.
 
@@ -42,7 +41,7 @@ The offer is the question whether helper agents build the work item. It is first
   - Add the offer as an open row with your recommendation, and set `waiting_on` to the owner.
   - Ask whether agents should take responsibility for delivering the work, with the owner acting as product owner.
   - Build nothing until the owner answers.
-- **The work item is small.** `references/lifecycle-rules.md`, section "A small work item", gives the definition of a small work item. A small work item gets no offer. Set `delivery: owner-led`, and add a Recent History row: "Small item, so no delivery offer." The owner's own later "you drive" still counts.
+- **The work item is small.** `references/small-work-item.md`, gives the definition of a small work item. A small work item gets no offer. Set `delivery: owner-led`, and add a Recent History row: "Small item, so no delivery offer." The owner's own later "you drive" still counts.
 - **The owner says yes.** Set `delivery: agent-led`.
   - A yes widens nothing. It allows no merge, deployment, spending, publishing, or sign-in beyond what the owner already allowed. Every point in `references/lifecycle-rules.md`, section "When to stop for the owner's yes", still applies.
   - The yes holds across sessions, for this goal only.
@@ -62,13 +61,13 @@ Follow [choosing and coordinating the team](team-arrangement.md) for this part o
 Plan which helper builds which task before you start a builder.
 
 - Build only after the requirements are approved, and after the design is approved when the work item has one. A requirement with an open row that asks the owner to approve it is not approved. Build nothing from it.
-- Start from three things: the design's build order; the top-level work item's plan, which holds its tasks and level-2 sub-items under phases or in a plain list; and the task list of each sub-item. `references/lifecycle-rules.md`, section "Levels", describes these levels.
+- Start from three things: the design's build order; the top-level work item's plan, which holds its tasks and level-2 sub-items under phases or in a plain list; and the task list of each sub-item. `references/work-levels.md`, describes these levels.
 - Start one builder for each task that can run on its own. A builder is a helper that builds one task.
   - Tasks of one sub-item that depend on each other run one after another.
   - A sub-item that needs another sub-item's code starts after that code is merged into the branch of the sub-item that needs the code.
   - The main agent may build a small task itself.
 - Make what is missing with `references/work-tracker.md`:
-  - A sub-item gets `parent` set to the parent, its phase only when its parent uses phases, as `references/lifecycle-rules.md`, section "Levels", says, and `delivery` set to the parent's value. It gets `requirements_approved` copied from the parent when it covers the parent's requirements.
+  - A sub-item gets `parent` set to the parent, its phase only when its parent uses phases, as `references/work-levels.md`, says, and `delivery` set to the parent's value. It gets `requirements_approved` copied from the parent when it covers the parent's requirements.
   - A new task is `P1-T01 — <name>` under a phase, or `T01 — <name>` in a plain list. Existing tasks keep their IDs. It has Work, Deliverable, Done when, Who does it, and Depends on. It goes on the lowest-level work item it belongs to.
 - Allow one writer for each file at a time. Tasks that need the same file run one after another, in the order that their Depends on lines give. The same holds for tasks that need the same shared environment, such as a sandbox environment, a database, or a test service.
 - Start only as many builders as you can check and merge as they return.
@@ -81,19 +80,15 @@ Plan which helper builds which task before you start a builder.
   - builder: WI-042 P1-T01, branch `claude/wi-042-p1-t01`, started 2026-09-30
   ```
 
-## Git for a build
+## Repository steps
 
-Follow [repository and permission steps for a build](build-repository.md) for this part of Building.
-
-## Git writes in Codex
-
-Follow [repository and permission steps for a build](build-repository.md) for this part of Building.
+Follow [repository steps for a build](build-repository.md) when creating a worktree or branch or integrating changes.
 
 ## Start a builder
 
 For each builder:
 
-1. Choose the permitted builder mode with `builder-brief.md`. Normally make its worktree and branch as "Git for a build" says. When the builder cannot create a worktree or commit, run one builder at a time in the item worktree with "Commit: no". Record that mode, folder and starting state in the team list.
+1. Choose the permitted builder mode with `builder-brief.md`. Normally make its worktree and branch as `build-repository.md` says. When the builder cannot create a worktree or commit, run one builder at a time in the item worktree with "Commit: no". Record that mode, folder and starting state in the team list.
 2. Set its sub-item to State Building, and `waiting_on` to the agent. Set its task In Progress, and also the task's phase when the task has one. Add the builder's line to the parent's team list.
 3. Start the builder with the brief in `builder-brief.md` and that file's list of inputs, filled in. Start builders according to their dependencies and the recorded mode; shared-worktree builders run one at a time.
 
