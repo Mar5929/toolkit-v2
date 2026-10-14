@@ -1,8 +1,8 @@
 # TKV-79: plan for fixing the shipped skills
 
-This plan says how the toolkit's shipped skills will be brought in line with Mike's guiding design principles, using the review of work item TKV-79. The plan is done when Mike has approved or changed it. No step of the plan is carried out before Mike's yes for that step.
+This plan gives the sequence for bringing the shipped skills in line with Mike's guiding design principles. [TKV-79](https://app.notion.com/p/3f8b381da17681608378d84dc78b0393) records the owner's authorization, current work, decisions, and verification. The execution reports record each proposal's disposition.
 
-Written on 2026-10-13 against toolkit version 0.9.83. It is a proposal by the agent. Mike has approved only the parts marked "Done".
+The planning snapshot below was written on 2026-10-13 against toolkit version 0.9.83. Its proposal verdicts do not establish implementation approvals; use TKV-79 for those.
 
 ## 1. What Mike asked for
 
@@ -150,7 +150,7 @@ The agent will show Mike a short design before it writes any code. The design mu
 
 The agent proposes one sub-item of TKV-79 for each of phases 1 to 7, opened when Mike approves the plan. Each sub-item holds its own requirements, tasks, and history.
 
-## 5. Where the work stands
+## 5. Planning snapshot before execution authorization
 
 | Item | State |
 | --- | --- |

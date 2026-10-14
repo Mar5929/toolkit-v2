@@ -7,4 +7,3 @@ A helper is a separate agent that the main agent starts for one job. Start every
 - In Claude Code, use the Agent tool, with `subagent_type` set to `general-purpose`.
 - In Codex, use the `spawn_agent` tool with `fork_turns` set to `none`. Wait for the helper's report with `wait_agent`.
 - The message to the helper is everything under "Brief for the helper" in the helper's brief file, word for word, and then the list of inputs from that file, filled in. The skill entry lists each helper brief. The helper sees nothing else.
-
