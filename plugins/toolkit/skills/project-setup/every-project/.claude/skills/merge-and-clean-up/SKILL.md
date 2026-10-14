@@ -48,10 +48,7 @@ Record these facts:
 
 When the local head branch exists, it must be at `headRefOid`. When it is at another commit, the local branch may hold work that is not in the pull request. Stop before step 2, keep the branch, and tell the owner.
 
-Find the linked work item in one of two ways:
-
-- From the name of the head branch: `claude/wi-007-<slug>` is `WI-007`, and `claude/issue-12-<slug>` is GitHub issue `#12`.
-- From an ID in the pull request title, or from "Part of #12" in its body.
+Find the linked work item with `managing-work-items`, using the work item ID in the branch name or pull request and the project's configured tracker.
 
 When you find no linked work item, skip the note in step 7.
 
