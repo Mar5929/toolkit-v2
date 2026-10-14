@@ -34,10 +34,6 @@ A change outside the intended scope, or a feature that is not ready for the targ
 - Naming a component still ships its whole file. Run the per-file diff in step 3 on a narrow deploy too.
 - Prefer the work item's `package.xml` over `delivery/deployments/full-project-deployment-template/package.xml` unless the goal is a full cutover.
 
-## Why the check ends with an org read
-
-A tracker can be wrong both ways: it can show a component as missing from an org that already has it, or as deployed when it is not. Only a read-only check of the target org shows what it already has.
-
 ## Hand-offs
 
 | For | Use |

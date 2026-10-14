@@ -20,7 +20,7 @@ Use this section in two cases:
    - When both sides added a row to a list, such as `sources/INDEX.md` or `wiki/reference/ai-external-knowledge/INDEX.md`, or an entry to a file of decisions, keep every row and every entry.
    - When both sides took the same SRC ID, or the same ID for a decision or a rule, this save's record gets the next free ID, as `filing-project-records` says.
    - When the right result is not clear, run `git -C <save> rebase --abort` and ask the owner.
-   - Otherwise, stage each resolved file by name, and finish the rebase without an editor:
+   - Otherwise, stage the resolved files, and finish the rebase without an editor:
 
      ```text
      git -C <save> add -- <file>

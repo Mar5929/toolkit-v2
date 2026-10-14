@@ -48,16 +48,11 @@ Every other worktree is one of the "other worktrees" in step 2. This session's o
      - When that command prints nothing, write "nothing local is lost".
      - When `gh pr list --state merged --head <branch>` shows a squash merge, say that the listed commits are in that merge. Skip this check when `gh` is missing.
    - **Delete**: the track column says `[gone]`. Give the branch and its commits that are on no remote branch, marked "will be discarded".
-   - **Keep**: the branch has no upstream. Write one line for each such branch: "not linked to the remote; may hold work that is only on this computer; kept". Delete such a branch only on the owner's yes for that branch.
+   - **Keep**: the branch has no upstream. Write an entry for each such branch: "not linked to the remote; may hold work that is only on this computer; kept". Delete such a branch only on the owner's yes for that branch.
 
    Add one **Install** line to the plan. It names the install command that step 5 will run. The lockfile decides the command. A lockfile is the file that records the exact versions of the project's packages. Use the lockfile that `git ls-tree --name-only <remote>/<default-branch>` lists:
 
-   | Lockfile | Install command |
-   | --- | --- |
-   | `pnpm-lock.yaml` | `pnpm install` |
-   | `package-lock.json` | `npm install` |
-   | `yarn.lock` | `yarn install` |
-   | `bun.lockb` or `bun.lock` | `bun install` |
+   Use the package manager named by the lockfile to choose its install command.
 
    - When there is no lockfile, write "No lockfile, so no install."
    - When there are several lockfiles, ask which package manager to use before you show the plan.

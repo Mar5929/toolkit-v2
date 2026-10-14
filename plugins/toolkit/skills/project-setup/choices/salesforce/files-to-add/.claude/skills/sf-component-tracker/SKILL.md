@@ -124,7 +124,7 @@ The tracker has these columns, in this fixed order.
 
 | Column | Content |
 | --- | --- |
-| Component Type | Metadata type: `CustomField`, `CustomObject`, `Flow`, `ApexClass`, `ApexTrigger`, `LightningComponentBundle`, `Layout`, `FlexiPage`, `RecordType`, `QuickAction`, `PermissionSet`, `ValidationRule`, and so on. One value per row. |
+| Component Type | The Salesforce metadata type. One value per row. |
 | Object/Parent | Parent object for fields, layouts, record types, quick actions, validation rules. Blank for objectless types (Flow, ApexClass, LWC, PermissionSet, CustomApplication, CustomTab). |
 | API Name | Full API name including any suffix. |
 | Label | Label shown in Setup, or the bundle masterLabel for LWC or Aura. |
@@ -173,7 +173,6 @@ Track only the components that this project created or changed.
 
 ## Editing the CSV file
 
-- Use the quoting of RFC 4180. Put quotes around a cell that holds a comma, a line break, or a double quote, and write a double quote inside a cell as `""`.
 - Inside Notes, prefer `;` or `/` to `,`.
 - The header and the order of the columns are fixed.
 - Group the rows by Component Type.

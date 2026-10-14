@@ -5,7 +5,7 @@ description: 'Puts the owner''s requests, each result, and what still needs the 
 
 # Session summary
 
-Answer exactly two questions for the owner: what the owner asked for in this
+Answer the questions for the owner: what the owner asked for in this
 session and where each request stands, and what still needs the owner. A
 session is one chat with the agent.
 
@@ -13,7 +13,7 @@ session is one chat with the agent.
    an exported copy of a session, read that instead. List the owner's real requests, not
    the steps taken to do them (see "One row per request").
 2. **Write the table.** Columns `#`, `What you asked`, `Status`, `Result`.
-   One row per request, in the order asked. Use only the eight statuses
+   One row per request, in the order asked. Use only the statuses
    below. Write `What you asked` in the owner's own words, cut down to the
    part that says what the owner asked; the outcome goes in `Result`, where you name
    the place that holds the work: a work item id (`WI-014`), a source ID

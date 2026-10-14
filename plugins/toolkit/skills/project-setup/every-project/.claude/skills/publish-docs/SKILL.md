@@ -40,7 +40,7 @@ A project document is a file under one of these paths.
 
 ## Steps
 
-1. **Check the files.** Name every file in the save. Each file must be a project document, which means that all four of these are true:
+1. **Check the files.** Name every file in the save. Each file must be a project document, which means that each of these is true:
    - The file is under a path in "The paths of the project documents" above.
    - The file's type is `.md`, `.txt`, `.csv`, `.xml`, `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, or `.pdf`. A source under `sources/` may be any type, because the owner approved the source when `filing-project-records` filed it.
    - "Refused files" below does not refuse the file.
@@ -169,7 +169,7 @@ A pushed save is not in the main checkout yet. After step 8 verifies the save, m
 
 ### When the main checkout does not hold the save
 
-The save is still finished. Say so in the reply in one line: "The main checkout does not hold this save yet", and then what blocks the update. What blocks the update is the branch that the main checkout is on, the files that block the update, or Git's message. Tell the skill that started the save.
+The save is still finished. Say so in the reply briefly: "The main checkout does not hold this save yet", and then what blocks the update. What blocks the update is the branch that the main checkout is on, the files that block the update, or Git's message. Tell the skill that started the save.
 
 ## Mistakes to avoid
 

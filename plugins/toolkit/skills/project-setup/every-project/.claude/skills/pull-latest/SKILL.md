@@ -61,7 +61,7 @@ now.
    already holds everything on the default branch. Otherwise tell the owner
    how many commits it lists and ask whether to merge that default branch into
    this branch. After the owner's yes, run `git merge --no-edit <remote>/<default>`.
-5. **Report** the incoming commits (one line each, then one line on what they
+5. **Report** the incoming commits (an entry for each, then what they
    change together), the final state, and anything step 3 found: another
    session's commits, or content already on the remote under another commit
    id. The final state is one of:
@@ -82,7 +82,7 @@ now.
   conflict, run `git merge --abort` and report the conflicting files, unless
   the owner said in this session to resolve conflicts or finish this
   merge. Then read both sides of each file, stop and ask when the right
-  result is not clear, stage each resolved file by name, and commit with a
+  result is not clear, stage the resolved files, and commit with a
   message you write, with no AI credit line. Never `git commit --no-edit`
   after a conflict.
 

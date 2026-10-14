@@ -85,7 +85,7 @@ The first line of the prompt is a fixed notice, which says that the prompt is AI
 
 Check that the draft states three things: the overarching goal, why the goal matters, and where the goal is written down. The overarching goal is what the work is trying to achieve, not the next action. The goal's source may be a work item, an authoritative project or wiki record, or a pull request.
 
-Open the place that the draft names, and confirm that it holds the goal that the draft claims. Then give one verdict: Confirmed, or one of these three:
+Open the place that the draft names, and confirm that it holds the goal that the draft claims. Then give one verdict: Confirmed, or one of these:
 
 - Wrong: the place does not exist, or it says something else.
 - Unchecked: the draft names no place.

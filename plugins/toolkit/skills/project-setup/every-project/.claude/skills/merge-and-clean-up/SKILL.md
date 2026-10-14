@@ -153,7 +153,7 @@ List the update's affected files with `git -C <base-worktree> diff --name-only H
 
 ### Remove the worktree and the branches
 
-Remove nothing unless all five proofs hold:
+Remove nothing unless all the proofs hold:
 
 1. GitHub reports this exact pull request merged.
 2. The branch to remove is the pull request's head branch, not the base branch or the default branch.
@@ -171,7 +171,7 @@ git -C <base-worktree> branch -d <head-branch>
 git -C <base-worktree> worktree prune
 ```
 
-- After a squash merge, `git branch -d` can refuse. Use `git branch -D <head-branch>` only for this pull request's head branch, and only when all five proofs hold.
+- After a squash merge, `git branch -d` can refuse. Use `git branch -D <head-branch>` only for this pull request's head branch, and only when all the proofs hold.
 - When GitHub did not delete the remote branch, run `git -C <base-worktree> push <remote> --delete <head-branch>`, but only when the branch is in the same repository and belongs to this pull request. Then run `git -C <base-worktree> fetch --prune <remote>`.
 - Never delete a fork branch.
 
@@ -188,7 +188,7 @@ Never change the State, and never mark anything Done.
 
 ### Verify
 
-Verify four things:
+Verify each of these:
 
 - The pull request is merged.
 - The base worktree matches its upstream, which is the remote branch that its branch follows.
@@ -197,8 +197,8 @@ Verify four things:
 
 ### Report
 
-- When `managing-work-items` sent you here, say the pull request link, the merge commit, and the cleanup result in one line. Then go on with the rest of its Deploying steps.
-- When the owner asked you directly, report these six things:
+- When `managing-work-items` sent you here, say the pull request link, the merge commit, and the cleanup result briefly. Then go on with the rest of its Deploying steps.
+- When the owner asked you directly, report each of these:
   - the pull request link;
   - the merge commit;
   - whether the base worktree is up to date;
@@ -210,7 +210,7 @@ Verify four things:
 
 ## Mistakes to avoid
 
-- When the repository has no remote (`git remote` prints nothing), there is no pull request, so this skill does not apply. Never fetch. Tell the owner in one line.
+- When the repository has no remote (`git remote` prints nothing), there is no pull request, so this skill does not apply. Never fetch. Tell the owner briefly.
 
 ## Work that another skill does
 
