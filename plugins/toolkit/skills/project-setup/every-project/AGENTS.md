@@ -32,7 +32,6 @@ A later session starts with only what the records hold, so it must find every fa
 
 - Keep each fact in the one place that "Where information goes" gives for it, in the form that its skill sets.
 - When something changes what is true, update every record that it affects in the same turn, such as the work item, a project record, and memory. Where "Project memory" says how a record is updated, follow it. For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
-- In a record and in a reply, say where each fact came from, such as memory, a project record, or an outside source, and mark anything nobody has confirmed.
 - Report each save that failed, and each save the owner asked to see. "Project memory" says what else to report about memory.
 - Before you ask the owner to repeat information, make a decision that depends on earlier context, or say that nothing is recorded, search the project records, the work tracker, and memory.
 
