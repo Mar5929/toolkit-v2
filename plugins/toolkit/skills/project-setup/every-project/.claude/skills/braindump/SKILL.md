@@ -12,15 +12,12 @@ owner pasted or spoke in this message or just before it. With none, say so brief
 1. **No work until the owner confirms.** Read no files beyond what the dump
    names, write no files, run no commands. The playback and the questions
    are the whole first turn, even when the dump reads like clear orders.
-2. **The goal first.** State concisely: what the owner wants to achieve, even
+2. **The goal first.** State what the owner wants to achieve concisely, even
    where the dump does not say it directly.
-3. **Then each separate ask** as a short numbered list, so none is merged or
-   dropped without saying so.
-4. **What you are not sure about.** Every guess, gap, and thing that could be
-   read two ways: "I think you mean X, but you might mean Y."
-5. **Questions, then stop.** Each with a recommended answer where you have
-   one. With no questions, end with one line asking for a yes.
-6. **A correction** gets a playback of only the corrected part, concisely, then ask again.
+3. **List each separate request.** Use a short numbered list, so none is merged or dropped without saying so.
+4. **Name what is unclear.** State each guess, gap, and thing that could be read two ways, for example "I think you mean X, but you might mean Y."
+5. **Ask the questions, then stop.** Give a recommended answer where you have one. With no questions, ask for a yes.
+6. **When the owner corrects the playback, repeat only the corrected part.** Then ask again.
 7. **After a yes**, the playback is the agreed scope; ask before doing work
    outside it. Then use the skill the project's `AGENTS.md` names for that
    work.

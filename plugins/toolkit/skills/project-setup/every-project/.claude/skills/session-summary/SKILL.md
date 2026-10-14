@@ -6,8 +6,7 @@ description: 'Puts the owner''s requests, each result, and what still needs the 
 # Session summary
 
 Answer the questions for the owner: what the owner asked for in this
-session and where each request stands, and what still needs the owner. A
-session is one chat with the agent.
+session and where each request stands, and what still needs the owner.
 
 1. **Read this session only.** When the owner names a transcript, a log, or
    an exported copy of a session, read that instead. List the owner's real requests, not

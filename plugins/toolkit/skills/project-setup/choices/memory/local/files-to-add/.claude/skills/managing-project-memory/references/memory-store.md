@@ -14,7 +14,6 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 - Where memory is kept
 - Steps for every read and every save
 - Mistakes to avoid
-- Work that another skill does
 - References
 
 ## Where memory is kept
@@ -67,13 +66,6 @@ These storage instructions cover how to store memory. Open `references/memory-pr
 - Memory is kept only in the main checkout. When this session runs in a worktree, change memory in the main checkout. Never copy memory into the worktree.
   - When the active session blocks a write to the main checkout, use its supported approval mechanism only when approval is required and permitted. When no permitted route is available, tell the owner which save is blocked and what action is needed. Never write the memory record into the worktree instead.
 - In zsh, a `*` pattern that matches nothing stops the whole command. Use the commands in `references/searching.md` as written.
-
-## Work that another skill does
-
-| For | Use |
-| --- | --- |
-| Deciding what to save, when to save it, and when to ask the owner; what each part of the project's Current State holds | `managing-project-memory` |
-| What a work item's line says under Now, which is a part of the project's Current State | `managing-work-items` |
 
 ## References
 

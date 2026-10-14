@@ -13,9 +13,9 @@ Use this reference when copying the Notion memory choice and recording its setti
 | Root `AGENTS.md` | The "Project memory" section and the rows below, and the summary sentence. |
 | External structure | Project Wiki contains Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Setup reuses the owner’s structure or creates a project from the confirmed template after authorization. |
 
-## Project record homes
+## Project authoritative destinations
 
-After setup or the reviewed migration is verified, update `PROJECT.md`'s record-home links and related constraint and operating-convention pointers to the configured wiki destinations. Product Wiki owns finalized product documentation and decisions, Terminology Glossary owns finalized terms, and Long-Term Memory owns other lasting context and lessons. Active questions and approvals stay in work items. Use verified destination links and preserve unrelated project facts; existing records remain authoritative until verified cutover.
+After setup or the reviewed migration is verified, update `PROJECT.md`'s links to the authoritative records and related constraint and operating-convention pointers to the configured wiki destinations. Product Wiki owns finalized product documentation and decisions, Terminology Glossary owns finalized terms, and Long-Term Memory owns other lasting context and lessons. Active questions and approvals stay in work items. Use verified destination links and preserve unrelated project facts; existing records remain authoritative until the migration is verified.
 
 ## Session-start settings
 
@@ -25,7 +25,7 @@ The startup snapshot is derived context. The coding-agent skill checks pending i
 
 ## The text in the root AGENTS.md
 
-A Notion-memory project gets no `DECISIONS.md` or `wiki/product-wiki/`. Its root `AGENTS.md` gets the "Project memory" section and the rows below. In an existing project, write this text only after the reviewed move to Project Wiki is verified; until then the project keeps its earlier text and record homes, and the local records stay in place until the owner approves their removal.
+A Notion-memory project gets no `DECISIONS.md` or `wiki/product-wiki/`. Its root `AGENTS.md` gets the "Project memory" section and the rows below. In an existing project, write this text only after the reviewed move to Project Wiki is verified; until then the project keeps its earlier text and authoritative destinations, and the local records stay in place until the owner approves their removal.
 
 In a new project, write the section and the rows during setup.
 

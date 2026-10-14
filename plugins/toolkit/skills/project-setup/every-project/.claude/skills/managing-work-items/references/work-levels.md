@@ -23,7 +23,7 @@ A project phase (`P01`) and a work item's phase (`P1`) are different things. A p
 
 - During Refining Requirements, use work-item phases when they help plan or track distinct outcomes. Otherwise, use a plain task list. A level-2 sub-item of a top-level parent without phases has no phase.
 - A top-level work item goes under a project phase when the owner places it, and at the latest when it leaves Backlog. When the owner has named no project phase by then, ask which one, with your recommendation.
-- The project's phases change only with the owner's yes. Propose new project phases, or a change to them, as one question, with a one-line reason for each new phase and for each change.
+- The project's phases change only with the owner's yes. Propose new project phases, or a change to them, as one question, with a reason for each new phase and for each change.
 - When a project has no phases yet, propose them the first time a work item leaves Backlog.
 - When the first work item of a project phase leaves Backlog, set that project phase In Progress.
 - When the last open work item in a project phase becomes Done or Cancelled, ask the owner in your next reply whether the project phase is Done.

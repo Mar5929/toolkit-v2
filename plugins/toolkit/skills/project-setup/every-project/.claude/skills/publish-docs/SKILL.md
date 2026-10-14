@@ -7,7 +7,7 @@ description: 'Commits an approved edit to project documents directly to the defa
 
 Use this skill to commit a change to Git-tracked project documents directly to the default branch, with no pull request. "The paths of the project documents" below lists which files are project documents. The default branch is the repository's main branch, which is often `main`.
 
-In this skill, a save is one commit of an agreed document edit. The commit is made in a temporary Git worktree of its own, which this skill calls the save worktree. A worktree is a separate folder with its own checked-out commit.
+In this skill, a save is one commit of an agreed document edit. The commit is made in a temporary Git worktree of its own, which this skill calls the save worktree.
 
 Two things must be true when the save is done: only the agreed document edit reaches the default branch, and no other session's work changes. A save is finished only when step 8 finds its commit on the default branch.
 

@@ -1,8 +1,8 @@
 # Record a decision
 
-A sourced answer counts as decided only when its speaker, documented authority, date and unambiguous decision are verified. Retain the source passage or timestamp; a tentative statement or interpretation remains unresolved.
-
 Use this file to record a decision or an open question that more than one work item needs, so that later work on any work item finds it. Each one is an entry in `DECISIONS.md`, with an ID in the form DEC-###.
+
+A sourced answer counts as decided only when its speaker, documented authority, date and unambiguous decision are verified. Retain the source passage or timestamp; a tentative statement or interpretation remains unresolved.
 
 The comment at the top of `DECISIONS.md` gives the form of an entry, its four statuses, who may decide, and what must never change. Read it before you write.
 

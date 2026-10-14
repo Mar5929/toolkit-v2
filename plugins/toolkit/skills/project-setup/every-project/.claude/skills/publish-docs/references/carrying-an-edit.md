@@ -25,4 +25,3 @@ When to remove the copy depends on the remote:
 
 - With a remote, remove the copy after step 8 verifies the save, and before the main checkout is brought up to date. The saved version comes back with that update. When the working checkout is another worktree, the saved version comes back with the next `pull-latest`.
 - With no remote, remove the copy before step 7, once the file is staged. Git refuses the fast-forward while the main checkout holds a changed copy of a saved file, or an untracked copy of a new file.
-

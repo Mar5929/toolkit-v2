@@ -16,4 +16,3 @@ The merge must put no AI credit on the base branch: no `Co-Authored-By:` line th
 - On a base branch with a merge queue, it refuses `--delete-branch`. Without that flag, it only queues the pull request. Do not run it again unless the owner says to.
 
 In both cases the pull request is not merged yet. Remove nothing, and tell the owner the state of the pull request.
-

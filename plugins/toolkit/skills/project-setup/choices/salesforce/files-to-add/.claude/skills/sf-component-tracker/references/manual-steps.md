@@ -45,4 +45,3 @@ When unsure, add the step. A step closed as "skipped" costs less than a missed a
 - Documentation of the work item. It is kept with the work item.
 - A task of the build. It is kept in the work item's Tasks.
 - A deploy command that every Salesforce deploy uses.
-

@@ -30,4 +30,3 @@ delivery/releases/
 
 - Name each work item's deployment folder with the work item's ID and a short name from the project's work tracker, for example `WI-031-account-merge`. This folder is not the work item. Find the work item by its ID in the project's work tracker.
 - Keep the work items' deployment folders directly under `delivery/deployments/`. Do not sort them into folders by status. The work tracker holds each work item's status, and the tracker's org flags record what is deployed where.
-

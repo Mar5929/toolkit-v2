@@ -25,7 +25,7 @@ The templates are Notion database templates (https://www.notion.com/help/databas
 The owner's Projects database holds one template, named "Project", which is set as the default template of that database. Every project is made from "Project". After a project is made, the agent removes the part that the project keeps elsewhere. "Project" holds both parts:
 
 - The work items part is the Work Items, Phases, and Tasks databases.
-- The memory part is Project Wiki. It holds Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Long-Term Memory contains the Lore collections.
+- The memory part is Project Wiki. It holds Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Long-Term Memory contains the Lore collections: Memories, Facts, Entities, Projects, and Topics.
 
 Inside "Project", the Work Items database has one template, the work item template, which is set as the default template of that database. The title of the work item template is empty. So the title that the owner types on a card is kept, and the boards' empty-title filter hides the template. Every project made from "Project" has the work item template, still set as the default.
 

@@ -16,7 +16,7 @@ A routine update that keeps local work is the job of `pull-latest`.
 
 ## Where the reset runs
 
-The reset happens in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints. Run every Git command below as `git -C <main checkout> ...`, because from another worktree Git refuses to check out or reset a branch that the main checkout holds.
+The reset happens in the main checkout. Run every Git command below as `git -C <main checkout> ...`, because from another worktree Git refuses to check out or reset a branch that the main checkout holds.
 
 Every other worktree is one of the "other worktrees" in step 2. This session's own worktree is one of them too, when it is not the main checkout.
 

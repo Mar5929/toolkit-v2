@@ -118,7 +118,7 @@ A source is anything the project was given, such as a transcript, a document, a 
 
 `references/work-levels.md`, gives the levels and says which ones have phases.
 
-- When phases help plan or track a top-level work item, propose them as one question, with a one-line reason for each phase. Otherwise, use a plain task list. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
+- When phases help plan or track a top-level work item, propose them as one question, with a reason for each phase. Otherwise, use a plain task list. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
 - During Refining Requirements, add a task only for work that Refining Requirements itself needs, such as "P1-T01 — Get the current persona list from the client". In a plain task list, the task is "T01 — ...".
 - Propose a split into sub-items when a part of the work meets one of these four conditions:
   - It can be approved, built, or shipped on its own.
@@ -128,7 +128,7 @@ A source is anything the project was given, such as a transcript, a document, a 
 - Never split off a single step. A single step is a task.
 - Show the split in one message, and ask for approval, for example "Shall I split WI-012 into these 4 sub-items?", with the real ID and number. The owner's yes covers the split only. For each sub-item, the message gives:
   - its title;
-  - a one-line reason;
+  - a reason;
   - the parent's phase it goes under, when the parent uses phases;
   - the parent requirements it covers.
 - After the owner's yes, create each sub-item with the parent's ID, in State Refining Requirements. Give it one requirement for each parent requirement it covers:
@@ -142,4 +142,4 @@ A source is anything the project was given, such as a transcript, a document, a 
 - For a project decision, use the authority and evidence checks under "Sources" above. Other questions require the owner's answer. A tentative statement or your recommendation leaves the question open. Recording a sourced decision does not replace the owner approvals required by the work-item lifecycle.
 - Requirements say what and why. They never say how.
 - A sub-item has its own Questions and Answers. Save each answer in the work item that the answer is about.
-- Ask in the text of the reply, and never through a question tool. Ask one question in each reply. A list of recommendations that the owner can accept with one yes, each with a one-line reason, counts as one question.
+- Ask in the text of the reply, and never through a question tool. Ask one question in each reply. A list of recommendations that the owner can accept with one yes, each with a reason, counts as one question.
