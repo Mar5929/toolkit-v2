@@ -20,7 +20,6 @@ Use the entry skill's routing for authoritative records and work items. Memory s
 - When to clean up all of memory
 - A memory record that is out of date or no longer needed
 - Every time you change a memory record
-- Work that another skill or reference does
 
 ## The goal, and what it means for memory
 
@@ -80,13 +79,3 @@ Clean up all of memory when the owner asks for it, and start at once. Start a cl
 ## Every time you change a memory record
 
 Follow `references/memory-store.md`, "Steps for every read and every save", for the fresh read, targeted edit, metadata maintenance, and read-back. Keep writes to one record sequential.
-
-## Work that another skill or reference does
-
-| For | Use |
-| --- | --- |
-| The steps for every read and every write of memory | `references/memory-store.md` |
-| A decision or an open question that more than one work item needs, a source, a project term, or a fact about the system | `filing-project-records` |
-| Reading a work item: its status, decisions, and requirements | `managing-work-items` |
-| Anything that one work item needs; a to-do or an action item, as a project task; a work item's line under "Now" in the project's Current State | `managing-work-items` |
-| A handoff | `handoff` |

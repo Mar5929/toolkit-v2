@@ -27,7 +27,7 @@ The project's Current State holds one line for an active work item.
 
 - Decide the line in this skill, in the form that the project's memory gives for a line under Now. Now is one of the parts of the project's Current State.
 - Add, change, or remove the line with `managing-project-memory`.
-- In the same write, or in the turn in which the session starts work on a work item whose line is already there, make "Next session starts with" name the work item: its ID and "read its Current state". A work item's Current state is the five lines at the top of the work item that say where it stands.
+- In the same write, or in the turn in which the session starts work on a work item whose line is already there, make "Next session starts with" name the work item: its ID and "read its Current state".
 
 ## Recording a wait for a record or a decision
 

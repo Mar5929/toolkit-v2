@@ -34,7 +34,7 @@ Write each line in as few words as convey its meaning. Keep details in the linke
 ### A line under "Now"
 
 - For a work item, the line holds the work item's ID and a few words on what it is for, for example "WI-031: logging a transaction".
-  - Where the work item stands, its next action, and what it waits on stay in the work item's Current state. The work item's Current state is the five lines at the top of a work item.
+  - Where the work item stands, its next action, and what it waits on stay in the work item's Current state.
   - Never copy those three things into the project's Current State.
 - For a piece of work that is not a work item, the line holds a few words on what it is, with the ID of its project task or record when it has one. For example: "Preparing the 2026-10-07 client meeting (PT-04)".
 

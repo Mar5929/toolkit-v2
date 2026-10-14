@@ -4,8 +4,6 @@ Use this file to change a document in `wiki/product-wiki/`. That folder is the a
 
 `wiki/product-wiki/AGENTS.md` says which document holds what. It also gives the form of a document, the form of a rule and its four marks, a glossary term, an integration document, a diagram, and what must stay true. Read it before you write.
 
-Read `wiki/product-wiki/AGENTS.md`, "What each mark means", before setting a rule’s mark.
-
 Before you write a rule, name the DEC ID behind the change. When `DECISIONS.md` has no entry for the change, do `record-decision.md` first. It sends you back here before its save.
 
 ## Which section of this file to use
