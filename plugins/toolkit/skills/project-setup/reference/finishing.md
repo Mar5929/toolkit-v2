@@ -87,22 +87,7 @@ Write only what the owner confirmed. Show the owner the roadmap after you wrote 
 
 ## The project's Current State
 
-The project's Current State is the project's one short page of what is true now. A project with local or Notion memory has one, and setup writes its first lines. The setup file of the memory choice says where it is kept.
-
-A Hindsight project has no Current State and no `memory/` folder. Where the work stands is in the place where work items are kept, so the rest of this section does not apply to a Hindsight project. For a Hindsight project, write each of the owner's steps that is still open as a project task, with the project's `managing-work-items` skill, so that a later session finds it. Use the words that the "Waiting on" line below gives, and name each step in the report too.
-
-With Notion memory, verify the published librarian package and selected host access, then initialize the existing Current state sections through [choices/memory/notion/notion-memory-setup.md](../choices/memory/notion/notion-memory-setup.md). Record the current priorities, deadlines, open setup steps and next action from the interview. Keep the copied page's structure and verify the update.
-
-With local memory, keep the five headings concise and retain what a later session needs. The list below says what to write on the "Last updated" line and under each of the five headings:
-
-- Last updated: the date, "setup", and "agent".
-- Now: the work that is going on now, from question 11, or "None."
-- Coming up: each dated event or deadline that the owner named, or "None."
-- Waiting on: one line for each of the owner's steps that is still open. "The owner's steps" below lists the steps. Each line starts with "Owner:" and ends with "Setup step; remove this line when it is done."
-- Standing jobs and shared files: "None."
-- Next session starts with: the next step on the roadmap, from question 11.
-
-Then delete the file's fill-in guide comment, as the comment says.
+Finish memory initialization and open owner steps with the selected choice's `reference/finishing-memory-setup.md`. Its setup file routes to that reference and gives the exact startup records and checks. Keep the confirmed roadmap in the selected work tracker.
 
 ## Final checks
 
@@ -113,7 +98,7 @@ Run each check alone, from the project folder. The checks show that setup worked
 1. **The settings files are valid.** Run `jq empty .claude/settings.json`, and the same command for `.codex/hooks.json`, and for `.mcp.json` when present. The command prints nothing when a file is valid JSON.
 2. **The shared hook commands run.** Run `node .claude/hooks/session-start.mjs </dev/null`. Verify its output with the selected memory choice's startup check. Its setup file supplies the expected records and recovery steps. Run the prompt reminder with a representative message and confirm that it uses the installed reminder text.
 3. **Codex reads the same skills as Claude Code.** `ls -la .agents` must show `skills -> ../.claude/skills`.
-4. **"Toolkit settings" is complete.** The Tracker and the Memory line of `PROJECT.md`, "Toolkit settings", each name a choice, and the section holds the lines that the setup file of each of the owner's choices adds. A line may still lack its value only when the value waits on the owner. "People and ownership" in `PROJECT.md` must name the owner. Its record-home links and related pointers must agree with the verified memory choice; retain existing homes until a migration is verified. Check the root `AGENTS.md` paragraph with [project-store-summary.md](project-store-summary.md); it must name this project’s current tracker and memory destinations. The "Project memory" section of the root `AGENTS.md` must hold the text that the Memory line's choice supplies, with no prompt left. The root `AGENTS.md` must also hold the record rows that the memory choice supplies, and the project must hold that choice's record files: `DECISIONS.md` and `wiki/product-wiki/` with local or Hindsight memory, or the Notion `filing-project-records` references with Notion memory. The memory choice's `references/project-memory-steps.md` must be in `managing-work-items` and in `handoff`, and its `references/shared-record-paths.md` in `publish-docs`.
+4. **"Toolkit settings" is complete.** The Tracker and the Memory line of `PROJECT.md`, "Toolkit settings", each name a choice, and the section holds the lines that the setup file of each of the owner's choices adds. A line may still lack its value only when the value waits on the owner. "People and ownership" in `PROJECT.md` must name the owner. Its record-home links and related pointers must agree with the verified memory choice; retain existing homes until a migration is verified. Check the root `AGENTS.md` paragraph with [project-store-summary.md](project-store-summary.md); it must name this project’s current tracker and memory destinations. The "Project memory" section of the root `AGENTS.md` must hold the text that the Memory line's choice supplies, with no prompt left. Verify the record rows, files, and destinations that the selected memory choice's setup reference supplies. The memory choice's `references/project-memory-steps.md` must be in `managing-work-items` and in `handoff`, and its `references/shared-record-paths.md` in `publish-docs`.
 5. **Git does not track `work-items/` or `memory/`.** `git ls-files -- work-items/ memory/` must print nothing. For local work items, `git check-ignore work-items/PROJECT-TASKS.md` must print that path. For local memory, `git check-ignore memory/CURRENT_STATE.md` must print that path. `.ignore` must hold `!/work-items/` with local work items and `!/memory/` with local memory. These checks inspect existing paths and create no sample records.
 6. **Each choice.** For each choice of the owner, do the checks that its setup file gives.
 

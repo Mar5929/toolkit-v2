@@ -30,6 +30,7 @@ Use `filing-project-records` for sources and for shared decisions and system rul
 | [references/testing-loop.md](references/testing-loop.md) | The item is in the Testing Loop. |
 | [references/closing.md](references/closing.md) | The item is in Reflecting, is being marked Done or Cancelled, or was closed by hand. |
 | [references/deploying.md](references/deploying.md) | The item is in Deploying. |
+| `references/repository-record-closing.md` | The installed memory steps call for shared repository record closing; the selected choice supplies this reference. |
 | [references/project-memory-steps.md](references/project-memory-steps.md) | Closing a work item, or active work changes, names its steps. The memory choice supplies this file. |
 
 ## Templates and helper briefs
