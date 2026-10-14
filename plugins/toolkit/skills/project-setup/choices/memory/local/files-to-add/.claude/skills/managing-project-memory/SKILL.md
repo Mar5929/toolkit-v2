@@ -13,10 +13,11 @@ Make sure that you apply those metadata tags and keep them up to date on the mem
 
 ## Choose the procedure
 
-Read [the memory process](references/memory-process.md) for retention, authorization, and maintenance rules. Choose the procedure below for the current job. Read the installed storage instructions before accessing or changing records, and read each change back before reporting it as saved.
+Choose the procedure below for the current job. Before accessing local records, read [memory-store.md](references/memory-store.md), "Steps for every read and every save". Before deciding what to retain, asking for approval, or changing memory, read [memory-process.md](references/memory-process.md). Finding recorded context uses the finding procedure without loading the retention and cleanup procedure. Read each changed record back before reporting it as saved.
 
 | File | Open it when |
 | --- | --- |
+| [references/memory-process.md](references/memory-process.md) | You decide what to retain, ask for approval, change memory, or review its maintenance. |
 | [references/memory-criteria.md](references/memory-criteria.md) | You decide whether information qualifies for memory, which type it needs, or which project record owns it. |
 | [references/finding.md](references/finding.md) | You find remembered context or answer what was recorded. |
 | [references/saving.md](references/saving.md) | You save, correct, retire, or delete memory. |

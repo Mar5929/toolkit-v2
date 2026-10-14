@@ -20,7 +20,7 @@ The Requirements section of the work item template gives the form of a requireme
 
 ## Steps
 
-A small work item that takes the short path does steps 1 and 2 only. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is, and gives the steps that take the place of steps 3 to 11.
+A small work item that takes the short path does steps 1 and 2 only. `references/small-work-item.md`, says what a small work item is, and gives the steps that take the place of steps 3 to 11.
 
 1. Start the work item, or continue it.
    - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
@@ -116,7 +116,7 @@ A source is anything the project was given, such as a transcript, a document, a 
 
 ## Roadmap, tasks, and sub-items
 
-`references/lifecycle-rules.md`, section "Levels", gives the levels and says which ones have phases.
+`references/work-levels.md`, gives the levels and says which ones have phases.
 
 - When phases help plan or track a top-level work item, propose them as one question, with a one-line reason for each phase. Otherwise, use a plain task list. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
 - During Refining Requirements, add a task only for work that Refining Requirements itself needs, such as "P1-T01 — Get the current persona list from the client". In a plain task list, the task is "T01 — ...".

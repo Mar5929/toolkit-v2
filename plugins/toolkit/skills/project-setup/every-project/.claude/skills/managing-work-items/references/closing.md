@@ -58,13 +58,13 @@ For a small work item on the short path, read "Closing a small work item" below,
    - Waiting on: "Nothing."
    - Blockers: "None."
 5. Follow `references/project-memory-steps.md`, section "When a work item closes".
-   - For a top-level work item, check its project phase, as `references/lifecycle-rules.md`, section "Levels", says. That section says what to ask the owner when the last open work item in a project phase is closed.
+   - For a top-level work item, check its project phase, as `references/work-levels.md`, says. That section says what to ask the owner when the last open work item in a project phase is closed.
 6. After the owner's "no", record the owner's words, turn each problem into a task, and move the work item back to Building. After the fix, run the Testing Loop again and fill the Moved up line again, before you ask again.
 7. Report to the owner whether the work reached the default branch, what was deployed, and what was kept for the whole project: what the Moved up line says, and each lesson whose outcome starts "Moved up:". End the report with what the section "Leftover branches and worktrees" below asks the owner. When that section leaves nothing to ask, end with "Tell me the next thing to build."
 
 ## Closing a small work item
 
-Use this section for a small work item that takes the short path. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is and gives the steps of the short path.
+Use this section for a small work item that takes the short path. `references/small-work-item.md`, says what a small work item is and gives the steps of the short path.
 
 On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the question that "Filling the Moved up line" asks the owner, when it asks one, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
 
@@ -78,7 +78,7 @@ On the short path, one closing question takes the place of three questions of th
    - Add one answered Questions and Answers row for each line that you showed under "To keep for the whole project", because the yes also covers those lines. The row holds the line, your recommendation, and the owner's words.
    - When a merge, a deploy, or a data load is still to come, move the work item to Deploying, and follow `deploying.md`.
    - Follow "Marking Done". The owner's yes has already answered the question that "Filling the Moved up line" asks, when it asks one, for the lines that you showed, and the question in "Marking Done", step 3. Do not ask those questions again. Where those steps name their question's Q-ID, name the Q-ID of the closing question.
-4. After the owner's "no" or a change, record the owner's words in the row, add a task for each problem that the owner named, and move the work item back to Building. Continue with the short path from its step 4, in `references/lifecycle-rules.md`, section "A small work item", and ask the closing question in a new row. That section also says what to do when the work item stops being small.
+4. After the owner's "no" or a change, record the owner's words in the row, add a task for each problem that the owner named, and move the work item back to Building. Continue with the short path from its step 4, in `references/small-work-item.md`, and ask the closing question in a new row. That section also says what to do when the work item stops being small.
 
 ## Cancelling a work item
 

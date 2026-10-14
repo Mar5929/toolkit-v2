@@ -47,7 +47,7 @@ Use this file to test a finished build against the Acceptance Criteria of every 
 
 ## A small work item
 
-Check a small work item that takes the short path with steps 1 to 6 above. `references/lifecycle-rules.md`, section "A small work item", says what a small work item is and gives the steps of the short path. Two things differ on the short path.
+Check a small work item that takes the short path with steps 1 to 6 above. `references/small-work-item.md`, says what a small work item is and gives the steps of the short path. Two things differ on the short path.
 
 **When the checker runs.** In step 4, start the checker only when the result does one of the four things below. In each of them, a mistake would be costly to undo, or would reach a person outside the project.
 
