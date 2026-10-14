@@ -9,7 +9,7 @@ Use this reference to create or update a work item, its Solution Design page, ph
 3. Wait until the template's content is on the page. `using-notion-cli/references/ntn-commands.md`, section "Waiting for a template", says how to check.
 4. Put the work item's ID in the title of its Solution Design page, as "The Solution Design page" says.
 5. Fill the page, as the next section says.
-6. When the work item has a parent, add a Recent History row on the parent's page: "Sub-item WI-32 created: <title>."
+6. When the work item has a parent, record the new sub-item's ID, title, and creator in the parent's Recent History.
 
 ## Fill and change a work item's page
 

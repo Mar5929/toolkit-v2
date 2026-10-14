@@ -87,11 +87,11 @@ Also check that each ID you are about to use exists. An ID that no file holds is
 When the folders and the `parent:` line disagree, use the folders. Tell the owner each finding, and then record the finding as this list says:
 
 - When the folder's parent changed, update `parent:` and both parents' lists of sub-items to match the folders. Record "Moved by hand" on the item and each affected parent. When the level changed, follow `work-tracker-field-mapping.md`, section "A work item that changes level or plan grouping". A work item moved to the top level needs its owner's project phase.
-- **The work item is in `archive/`, and no Recent History row says so.** Add a row "Archived by hand". The `state` stays.
+- **The work item is in `archive/`, and no Recent History row says so.** Record the manual archive and who made it in Recent History. The `state` stays.
 - **The file name is not `<ID>.md`.** The file is still the work item. Tell the owner that `[[WI-031]]` links no longer reach it, and offer to rename it back.
 - **A template copy has a real title.** It is a work item that the owner made by hand. Follow "A work item that the owner made by hand", below.
 - **A template copy has the template's title.** It is an unused copy. Tell the owner, and ask whether to fill it in.
-- **`state`, `status`, `waiting_on`, an approval field, or `design` differs from the work item's Current state and from the latest Recent History row.** The owner's value is the one to keep. Add a row "Changed by hand: <field> <old> to <new>". When `state` and `status` no longer match each other, `managing-work-items` says what to do.
+- **`state`, `status`, `waiting_on`, an approval field, or `design` differs from the work item's Current state and from the latest Recent History row.** The owner's value is the one to keep. Record who changed the field by hand, its old and new values, and the reason when known. When `state` and `status` no longer match each other, `managing-work-items` says what to do.
 - **A task is ticked, or rows or tasks were moved between phases.** That is the owner's plan now. Add a Recent History row.
 
 When only the folder name changed, there is nothing to fix.
@@ -123,21 +123,21 @@ Move a work item only when the owner asks.
    - When the work item moved to the top level, list it under a project phase, as `work-tracker-project-roadmap-and-tasks.md` says.
    - When the work item moved from the top level, remove it from its project phase.
    - When the work item's level changed, follow `work-tracker-field-mapping.md`, section "A work item that changes level or plan grouping".
-5. **Recent History.** Add a row on the work item, on the old parent, and on the new parent, with the owner's words or the Q-ID: "Moved under [[WI-003]] at the owner's request (Q-05)."
+5. **Recent History.** Add a row on the work item, on the old parent, and on the new parent, that names the old and new parent and cites the owner's words or the Q-ID authorizing the move.
 6. **Read back.** The work item is found by its ID at the new path, and its sub-items are found under it.
 
 ## Groups
 
 - The owner may group work items in a plain folder. Make the folder, and `mv` the work items into it.
 - A group holds top-level items. It changes no parent and no field.
-- Add a Recent History row on each work item that moved: "Moved to the security group at the owner's request."
+- Record each work item's old and new group and the owner's authorization in its Recent History.
 - Never start a group's name with an ID.
 - Never make a group on your own.
 
 ## Archive
 
 - Archive a work item only when the owner asks. `mv` the work item's folder into `work-items/archive/`. When `archive/` is missing, make it with `mkdir -p`.
-- Archiving is not cancelling: the `state` stays. Add a Recent History row: "Archived at the owner's request."
+- Archiving is not cancelling: the `state` stays. Record the archive and the owner's authorization in Recent History.
 - A work item moves to the archive with its sub-items.
 - A sub-item that is archived on its own leaves its parent. Say so first. Then set `parent: none`, remove the sub-item from the parent's list of sub-items, and add a Recent History row on both.
 - The board, which is the list of open work items, leaves `archive/` out. Archived IDs still count for the next ID.
@@ -156,7 +156,7 @@ Move a work item only when the owner asks.
   - Give it the next ID, with steps 2 and 3 of "Creating a work item's folder and ID".
   - Set `id:` and the heading, and rename its file to `<ID>.md`.
   - Fill any empty field with the value that a new work item gets, and delete every template prompt that the owner left unfilled. `work-tracker-field-mapping.md`, section "A new work item's starting values", gives the values. Keep everything that the owner wrote.
-  - Add a Recent History row: "Made by hand by the owner; given the ID WI-034."
+  - Record that the owner made the item by hand and which ID you assigned in Recent History.
   - Keep the owner's folder name.
   - Tell the owner.
 - A file named `WORK-ITEM.md` outside the template is always a copy that the owner made by hand.

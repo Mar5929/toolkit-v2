@@ -104,7 +104,7 @@ The answers to questions 5, 6, and 7 pick a choice. The questions after that are
 The questions are steps of the choice's setup file. Open that file as soon as the owner gives the answer. The table in Step 5 names it, and Step 5 says how you go through its steps and when the choice is set up. For every choice, the steps have you do these things, in the order that the setup file gives:
 
 - Tell the owner, in a few plain lines, how the toolkit sets the choice up when the owner changes nothing.
-- Ask: "This is how the toolkit sets up `<choice>` by default. Is this what you want?"
+- Ask whether the owner wants those defaults or changes for this project.
 - After a no, ask what the owner wants to be different.
 - Ask the choice's other questions.
 
@@ -144,7 +144,7 @@ The project's skills read the exact labels in "Toolkit settings".
 1. Check that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
 2. Write the roadmap from question 11 in the place where work items are kept.
 3. Finish the selected memory choice using its setup reference, including startup context and open owner steps from question 11.
-4. Check that the setup works: the settings files are valid, the session-start command prints the project's Current State when the project has one, and each service that the owner chose answers.
+4. Check that the setup works: the settings files are valid, the session-start command prints the project's Current State when the project has one, each service that the owner chose answers, and the recorded humanizing skill or plugin is available in each host the project uses.
 5. Tell the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
 6. Report what was set up, what was made outside the project folder, and what is still open.
 7. Offer to commit the setup files.
@@ -153,9 +153,7 @@ The project's skills read the exact labels in "Toolkit settings".
 
 An existing project already has agent files of its own. Read what the project holds first. [reference/existing-project.md](reference/existing-project.md) says what to look for, how the branch works with the folders that Git ignores, and which problems are known.
 
-Then ask the owner one question:
-
-> Do you want everything moved to the toolkit's structure, or do you want to pick and choose?
+Ask whether the owner wants to adopt the full toolkit structure or choose which parts to adopt.
 
 - **Everything.** Continue at Step 3. Apply the full layout to what is there, and ask about each file of the owner's that the layout would change.
 - **Pick and choose.** Work out with the owner which parts of the toolkit this project takes. The toolkit gives no instruction for each possible case. Use your judgment, and ask the owner.
@@ -170,8 +168,8 @@ Three rules hold in both cases:
 
 What you do depends on what the owner asks for.
 
-- **Update the toolkit.** Follow [reference/update.md](reference/update.md). An update is also the job when the owner says only "toolkit v2".
-- **Check the setup.** Compare the project with the toolkit as [reference/update.md](reference/update.md), sections 1 and 2, say. Then run the checks in [reference/finishing.md](reference/finishing.md), "Final checks". Change nothing, with the two exceptions that section gives, and report each difference and each failed check with the fix that you recommend.
+- **Update the toolkit.** Scan for differences and updates, show the owner what they would change, and ask what to adopt in this project. Follow [reference/update.md](reference/update.md). An update is also the job when the owner says only "toolkit v2".
+- **Check the setup.** Compare the project with the toolkit using [reference/update.md](reference/update.md), "Read the project’s setup" and "Scan for toolkit differences and updates". Then run the checks in [reference/finishing.md](reference/finishing.md), "Final checks". Change nothing, with the two exceptions that section gives, and report each difference and each failed check with the fix that you recommend.
 - **Change where work items or memory are kept.** Follow [reference/update.md](reference/update.md), "Changing a setup choice".
 - **Hindsight: the dashboard, the bank's settings, or a new computer.** Follow the Hindsight setup file, [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md).
 

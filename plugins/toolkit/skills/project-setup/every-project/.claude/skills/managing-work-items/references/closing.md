@@ -35,7 +35,7 @@ Reflecting is the State after the owner approved the result and before anything 
 After the checklist, do one of these:
 
 - When the work item has something to merge or deploy, move it to Deploying.
-- When the work item has nothing to merge or deploy, for example research, a decision, or a document, add the Recent History row "Nothing to merge or deploy: Deploying skipped." Then go to "Marking Done".
+- When the work item has nothing to merge or deploy, for example research, a decision, or a document, record in Recent History why Deploying was skipped. Then go to "Marking Done".
 
 ## Filling the Moved up line
 
@@ -97,7 +97,7 @@ Use this section when the owner cancels a work item.
 
 Use this section when the owner marked the work item Done or Cancelled without the agent. The owner's change counts. Never undo it.
 
-1. Add the Recent History row "Marked Done by the owner by hand on `YYYY-MM-DD`". For a cancelled work item, write "Cancelled" in place of "Done".
+1. Record in Recent History that the owner marked the item Done or Cancelled by hand, with the date.
 2. Tell the owner what had not happened yet: the result approval, the checker, the merge, or the filling of the Moved up line. Ask the owner what to do about it.
 3. Fill the Moved up line, as "Filling the Moved up line" says. Fill the line whatever the owner says about the rest.
 4. Rewrite the work item's Current state with the lines that "Marking Done", step 4, gives for Done, or that "Cancelling a work item", step 4, gives for Cancelled. Then follow step 5 of "Marking Done".

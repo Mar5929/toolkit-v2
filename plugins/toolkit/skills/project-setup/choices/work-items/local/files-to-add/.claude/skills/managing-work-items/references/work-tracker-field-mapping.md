@@ -75,7 +75,7 @@ A top-level item (`parent: none`) uses a Roadmap when phases help plan or track 
 - In both kinds of task, "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
 - **A sub-item.** First make the sub-item. `work-tracker-folders-and-files.md`, section "Creating a work item's folder and ID", gives the steps. Then do each of these:
   - Add `[[WI-033]]` to the parent's list of sub-items. Replace "None." when it is there, and separate several IDs with commas.
-  - Add a Recent History row on the parent: "Sub-item [[WI-033]] created: <title>."
+  - Record the new sub-item's ID, title, and creator in the parent's Recent History.
   - Set the parent's `updated:`.
 - **The form of a new work item's plan.** Follow the template's guide comments under Roadmap and Tasks for the work item's level and whether it uses phases.
 
@@ -97,7 +97,7 @@ Use this part when a move puts a work item at another level or an approved plan 
 - **Phases to a plain list.** Do these four things:
   1. Under `## Tasks`, write the `**Sub-items:**` line with every ID from the work item's Sub-items cells, or "None.".
   2. After that line, write every task block in plan order. Each task block keeps its ID, its status, and its tick.
-  3. Add one Recent History row that keeps what was deleted: "Phases removed: <reason>; P1 — <name> (<status>; <outcome>; <exit result>; <sub-items>), P2 — ... Tasks kept with their IDs."
+  3. Preserve the removed phases' IDs, names, statuses, outcomes, exit results, and sub-items in Recent History. Record why the layout changed, who authorized it, and that the tasks retain their IDs.
   4. Remove phase references from each sub-item's Related items line. Delete the phase headings and the whole `## Roadmap` section.
 - **A plain list to phases** (a top-level item whose plan now benefits from phases). Do these four things:
   1. Add the template's `## Roadmap` section above `## Tasks`, with the approved phases, using the next unused phase IDs.
@@ -156,7 +156,7 @@ Fill these values after the folder and the file exist. `work-tracker-folders-and
   - Write Related items as the template's prompt says, with the parent as `[[WI-012]]`.
   - Moved up keeps its label and nothing after it.
 - **Requirements.** Write one block for each requirement that `managing-work-items` gave you, in place of the template's example requirement block.
-- **Recent History.** Write "Created from the owner's request." in place of the placeholder row.
+- **Recent History.** Replace the placeholder row with the creation date, the owner's request, and who created the item.
 - **Every other angle-bracket prompt is deleted.**
   - Delete the example phase rows, the example phase headings and tasks, and the example question rows.
   - In an item without phases, delete the example `## Roadmap` section, and write `**Sub-items:** None.`.

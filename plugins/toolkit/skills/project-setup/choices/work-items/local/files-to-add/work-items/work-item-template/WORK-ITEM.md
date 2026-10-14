@@ -16,17 +16,17 @@ updated: <YYYY-MM-DD>
 
 # WI-001: <Work item title>
 
-<!-- Fill-in guide for a new work item: create it with `managing-work-items`, which sets the real ID in the front matter and the heading. In the front matter, keep one value from each list; the status follows from the state, as `managing-work-items` says. A new item starts with `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, and `design: none`. A sub-item's `parent` names the item above it. Text in angle brackets tells you what to write in that same field, cell, or paragraph: replace it with real content, or delete it when there is nothing to write yet, so no angle-bracket prompt is left in the item. Keep the headings and field labels. Delete each example phase, task, question, and requirement the item does not have yet. Delete this guide when you create the item. -->
+<!-- Create the item with `managing-work-items`, which assigns its ID and state/status values. Start with `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, and `design: none`. Set a sub-item's `parent` to its parent ID. Replace prompts with real values, remove unused examples and comments, and keep the required headings and labels. -->
 
 ## Overview
 
-<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step; Moved up stays empty until the item is closed. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
+<!-- Write after each bold label. Update Goal and Related items when their contents change. Update Current state after each step. Fill Moved up during closure. Keep tasks, decisions, and history in their own sections. -->
 
 **Goal:** <The outcome this work item is meant to achieve.>
 
 ### Current state
 
-<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a state or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to concise sentences. -->
+<!-- Keep these fields concise and sufficient for the owner or a new session to resume. Rewrite them in place after each step and at handoff. Add history to Recent History, not here. -->
 
 **Where it stands:** <What is done and where work stands now.>
 
@@ -48,7 +48,7 @@ updated: <YYYY-MM-DD>
 
 A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
 
-<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+<!-- Use real phases and progress. Match phase IDs to the Tasks headings. List each phase's sub-item IDs, or write “None.”. -->
 
 | Phase | Outcome | Status | Exit result | Sub-items |
 |---|---|---|---|---|
@@ -57,7 +57,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Tasks
 
-<!-- An item with phases: under each phase heading, add that phase's tasks only, and delete the plain-list form at the end of this section. An item without phases: delete the example phase headings and tasks, and keep the plain-list form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check the owner must make), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+<!-- Group tasks under their phases, or use the plain list when there are no phases. Remove the unused form. Keep stable task IDs. Fill each task's action, output, completion proof, responsible party, and prerequisites. Set Who does it to `owner` for owner-only steps. Check a task only when its completion proof is met. -->
 
 ### P1 — <Phase 1 name>
 
@@ -96,7 +96,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Recent History
 
-<!-- Add one row, newest first, for each of these changes: a state, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
+<!-- Add dated rows, newest first, for state, waiting, blocker, or next-action changes whose reason is not otherwise clear; answers, approvals, rejections, decisions, checker reports, plan changes, owner edits, and finished results. Say what changed, who made or authorized it, why, and its effect or next action. Link decisions by Q-ID rather than repeating their answers. Remove the placeholder row when adding real history. -->
 
 | Date | Change or decision | Effect on the work |
 |---|---|---|
@@ -104,7 +104,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Requirements
 
-<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word, never reworded; when they are not the owner's words in this chat, name who said them and where (a source by its SRC-###). In each numbered list, write one line per thing that must be true, exact enough to check. Who or what a requirement applies to, and where it does not apply, are lines of its Functional Requirements. Each Acceptance Criteria line is one thing someone can observe. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
+<!-- Keep a block for each requirement, numbered in the order added, with IDs such as R-01 elsewhere. Preserve the requester's exact words and identify the speaker and source (SRC-### for filed sources). State scope and checkable behavior in Functional Requirements and observable checks in Acceptance Criteria. Keep dropped blocks marked “(dropped, Q-ID)” and never reuse IDs. Record approval in `requirements_approved` and Questions and Answers. Put solution proposals in Notes. -->
 
 ### Requirement <number>: <short name>
 
@@ -125,7 +125,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Questions and Answers
 
-<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, then “Recommended: <answer>, because <reason>.” when you recommend one; the requirement and task IDs it affects; and who can answer: `owner` for the project owner, or another person or role. When the owner answers, or a project decision passes the authority and evidence checks in `filing-project-records/references/record-decision.md`, put the speaker's words in Answer and the decision date in Date answered. For a sourced answer, name the speaker, SRC ID and supporting passage or timestamp. Then set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the speaker's words, date and source evidence; when an authorized speaker decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision more than one work item needs goes to `filing-project-records`, step “record a decision”; end the row “Filed as <the record's ID or link>.”, and say so when the record still waits to be filed in its final place. The row retains the original answer and source evidence. Recording a sourced decision does not replace lifecycle approvals that require the owner. Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
+<!-- Record each question with a stable Q-ID, its exact wording, affected requirement/task IDs, and who may answer. Include your recommendation and reason when offered. Save every decision here, including decisions made without a preceding question. Preserve the speaker's words and decision date; for sourced answers, include the speaker, SRC ID, and supporting passage or timestamp. Sourced decisions must pass `filing-project-records/references/record-decision.md` authority and evidence checks and do not replace owner lifecycle approvals. After an answer, mark the row Answered, set Decision? when applicable, and update the affected goal, requirement, or task. Record a bulk approval in a row for each matter covered, with the reason shown (“reason shown: none” when absent). File shared decisions through `filing-project-records` and append the record ID or link, identifying pending filing. Retain the original answer and evidence. Keep open questions first and replace the example rows. -->
 
 | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
 |---|---|---|---|---|---|---|---|
@@ -142,13 +142,13 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ### Sources
 
-<!-- One line per original this item used. The original is filed in `sources/` first; this line holds its SRC-### ID, never the original or a copy of its text. Wherever the item uses something drawn from a source, name its SRC-###. Write “None.” when the item has no sources. -->
+<!-- File originals in `sources/` first. List their SRC-### IDs here and cite those IDs wherever their content is used. Keep the originals in `sources/`. Write “None.” when there are no sources. -->
 
 - <SRC-###>: <What it is, for example “kickoff meeting transcript, YYYY-MM-DD.”> Taken from it: <The requirement, question, or task IDs it informed.>
 
 ### Lessons not proven yet
 
-<!-- One line per thing the work taught that a later work item may need and that is not proven yet, for example a platform limit met once or an approach that failed. The closing step asks the owner whether each one moves up or is dropped, and writes the outcome at the end of its line. Write “None.” when there are none. -->
+<!-- List useful lessons that are not proven yet, with where they were seen. At closure, ask the owner whether to move up or drop each lesson and record the outcome. Write “None.” when there are none. -->
 
 - <The lesson, and where it was seen: a task ID, a commit, or a date.>
 

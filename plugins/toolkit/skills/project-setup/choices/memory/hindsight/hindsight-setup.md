@@ -17,7 +17,7 @@ The first three parts below are the interview with the owner. The parts after th
 ### Offer the default settings
 
 6. Read [the default package](reference/hindsight-package-default.md). Explain what the package does and what it costs.
-7. Ask: "These are our normal Hindsight settings. Do you want them, or any changes?" Record the answer. The default is deliberate memory saves; automatic session saving is a change the owner may choose.
+7. Ask whether the owner wants the default Hindsight settings or changes for this project. Record the answer. The default is deliberate memory saves; automatic session saving is a change the owner may choose.
 
 ### Offer the memory instructions
 

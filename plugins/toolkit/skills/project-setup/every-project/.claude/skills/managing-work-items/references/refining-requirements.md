@@ -24,13 +24,13 @@ A small work item that takes the short path does steps 1 and 2 only. `references
 
 1. Start the work item, or continue it.
    - For new work, create the work item in State Refining Requirements, with a title in the owner's words. Give it one requirement for each separate thing the owner asked for. The owner's words for that thing are the requirement's Original verbatim requirement.
-   - For an existing work item with open questions, say what is settled, and then ask the first open question again. Never start the interview over.
+   - For an existing work item with open questions, say what is settled and continue from its unanswered questions. Never start the interview over.
 2. Read existing decisions and documentation for the affected area. Read the shared decisions, system rules, and project terms for the affected area where the root `AGENTS.md`, section "Where information goes", says they are kept, together with records that are captured but not yet filed there. Read relevant memory as "Project memory" in the root `AGENTS.md` says. Read related work items with `references/work-tracker.md`. File each new source before you use it, as "Sources" below says.
 3. Agree the goal first. Ask the owner to confirm the goal in one clear sentence. After the owner's yes, write that sentence as the goal in the work item's Overview.
 4. Offer a team of helper agents once. Ask after the goal is agreed, and only when both of these are true: the work item is clearly large, and `delivery` is `not-offered`. A work item is clearly large when a part of it meets one of the conditions for a split in "Roadmap, tasks, and sub-items" below.
    - Ask once whether the owner wants a team of helper agents to build the work item, and record the answer in `delivery`.
    - A sub-item takes its parent's answer.
-5. Interview the owner, one question at a time, in the form that "The question format" below gives.
+5. Interview the owner in the form that "The question format" below gives.
    - Ask first the questions that later questions depend on.
    - Ask about each vague word, such as "fast" or "all users", until a tester could check it.
    - Add the question's row before the reply ends, set `waiting_on` to the owner, and name the question's Q-ID in the work item's Current state.
@@ -59,7 +59,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
    - A requirement based on an existing rule names the rule's ID or link rather than copying the rule. Working designs stay with the work item.
 7. Handle a change to an earlier answer or to an approved requirement.
    - Never rewrite the old row. Add a row "Change to Q-03: <the question now>", with the new answer, its speaker, date and source evidence, and set the old row to "Superseded by Q-09". Use the real Q-IDs.
-   - Change the lines of each `R-xx` that the change affects, and keep the old wording in the Recent History row, in the form "R-02 was: ...; changed by Q-12".
+   - Change the lines of each `R-xx` that the change affects, and preserve the old wording in Recent History with its requirement ID and the Q-ID authorizing the change.
    - Never change an Original verbatim requirement. Add the owner's new words after it, with the date and the Q-ID.
    - When a shared record depends on the old answer, route its correction as step 6 says, preserving the original evidence and replacement link.
    - After the requirements were approved, a changed requirement and a new requirement each need the owner's yes for that requirement only.
@@ -87,7 +87,7 @@ A small work item that takes the short path does steps 1 and 2 only. `references
     - After the owner's yes, first save the owner's words and the date in that row, with Decision? `yes`. Then do each of these:
       - Set `requirements_approved` to `YYYY-MM-DD by <name>`.
       - Move the work item to the next State that the owner agreed to.
-      - For each sub-item that these requirements cover, bring the lines it copied from the parent up to the approved wording. Give it the same approval, with "(from <parent ID>)". Add the Recent History row "Covers <parent ID> R-xx, approved there." Move it to the same next State. Such a sub-item skips its own interview.
+      - For each sub-item that these requirements cover, bring the lines it copied from the parent up to the approved wording. Give it the same approval, with "(from <parent ID>)". Record the covered parent requirements and their approval source in Recent History. Move it to the same next State. Such a sub-item skips its own interview.
 
 ## The question format
 
@@ -112,13 +112,13 @@ A source is anything the project was given, such as a transcript, a document, a 
   - For a project decision, use the authority and evidence checks in `filing-project-records`, reference `record-decision.md`. A verified decision from a person who may decide answers the relevant question; otherwise, keep a question open for confirmation. Record the speaker, decision date, SRC ID and supporting passage or timestamp in the answer.
   - A gap becomes a question with your recommendation.
   - Other facts go under Notes, Context.
-- Tell the owner how many requirements and how many questions the source gave. Then ask the first question.
+- Tell the owner how many requirements and how many questions the source gave. Then ask the questions that need the owner's answer.
 
 ## Roadmap, tasks, and sub-items
 
 `references/work-levels.md`, gives the levels and says which ones have phases.
 
-- When phases help plan or track a top-level work item, propose them as one question, with a reason for each phase. Otherwise, use a plain task list. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
+- When phases help plan or track a top-level work item, propose them with a reason for each phase. Otherwise, use a plain task list. Name a phase by what it delivers, such as "P1 — Personas agreed", and not by the kind of work.
 - During Refining Requirements, add a task only for work that Refining Requirements itself needs, such as "P1-T01 — Get the current persona list from the client". In a plain task list, the task is "T01 — ...".
 - Propose a split into sub-items when a part of the work meets one of these four conditions:
   - It can be approved, built, or shipped on its own.
@@ -142,4 +142,4 @@ A source is anything the project was given, such as a transcript, a document, a 
 - For a project decision, use the authority and evidence checks under "Sources" above. Other questions require the owner's answer. A tentative statement or your recommendation leaves the question open. Recording a sourced decision does not replace the owner approvals required by the work-item lifecycle.
 - Requirements say what and why. They never say how.
 - A sub-item has its own Questions and Answers. Save each answer in the work item that the answer is about.
-- Ask in the text of the reply, and never through a question tool. Ask one question in each reply. A list of recommendations that the owner can accept with one yes, each with a reason, counts as one question.
+- Ask in the text of the reply, and never through a question tool.

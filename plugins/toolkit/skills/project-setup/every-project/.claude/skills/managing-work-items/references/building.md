@@ -41,7 +41,7 @@ The offer is the question whether helper agents build the work item. It is first
   - Add the offer as an open row with your recommendation, and set `waiting_on` to the owner.
   - Ask whether agents should take responsibility for delivering the work, with the owner acting as product owner.
   - Build nothing until the owner answers.
-- **The work item is small.** `references/small-work-item.md`, gives the definition of a small work item. A small work item gets no offer. Set `delivery: owner-led`, and add a Recent History row: "Small item, so no delivery offer." The owner's own later "you drive" still counts.
+- **The work item is small.** `references/small-work-item.md`, gives the definition of a small work item. A small work item gets no offer. Set `delivery: owner-led`, and record in Recent History that the small-item path omits the delivery offer. The owner's own later "you drive" still counts.
 - **The owner says yes.** Set `delivery: agent-led`.
   - A yes widens nothing. It allows no merge, deployment, spending, publishing, or sign-in beyond what the owner already allowed. Every point in `references/lifecycle-rules.md`, section "When to stop for the owner's yes", still applies.
   - The yes holds across sessions, for this goal only.

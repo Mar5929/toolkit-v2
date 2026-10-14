@@ -142,4 +142,4 @@ Claude Code applies the Plain English output style to replies to the owner by it
 
 ## How to write text that goes to another person or is client/customer facing
 
-Run text that leaves the project for someone other than the owner, such as an email, a message, a support case, a pull request description, or a client document, through the `humanizer` skill before the owner sees the final version. Keep every fact, name, ID, number, and date, and write in the owner's voice, first person, when the text goes out under the owner's name. This does not cover replies to the owner, work items, project records, code, or commit messages.
+Run text that leaves the project for someone other than the owner, such as an email, a message, a support case, a pull request description, or a client document, through the humanizing skill or plugin recorded in `PROJECT.md`, "Resources and project paths", before the owner sees the final version. Keep every fact, name, ID, number, and date, and write in the owner's voice, first person, when the text goes out under the owner's name. This does not cover replies to the owner, work items, project records, code, or commit messages.
