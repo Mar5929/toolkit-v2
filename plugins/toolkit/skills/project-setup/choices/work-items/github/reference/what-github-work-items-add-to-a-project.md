@@ -25,15 +25,6 @@ The repository name here is an example:
 
 Nothing else is recorded. The labels are the same in every project.
 
-## The project files that the setup instructions link to
-
-The setup file and the files of this folder link to four of the six files that this choice adds inside the project's `managing-work-items` skill. Their source is `choices/work-items/github/files-to-add/.claude/skills/managing-work-items/references/` in this skill, and each link opens the file there:
-
-- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md)
-- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md)
-- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-searching.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-searching.md)
-- [files-to-add/.claude/skills/managing-work-items/references/work-tracker-project-roadmap-and-tasks.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-project-roadmap-and-tasks.md)
-
 ## Root guide summary
 
 At setup completion, contribute this sentence to the root `AGENTS.md` summary. [Work tracking and memory summary](../../../../reference/project-store-summary.md) gives placement and verification.

@@ -17,7 +17,10 @@ Use `filing-project-records` for sources and for shared decisions and system rul
 
 | File | Open it when |
 | --- | --- |
-| [references/lifecycle-rules.md](references/lifecycle-rules.md) | Every work-item turn. It gives the State map, levels, approval points, common safeguards, and the full reference list. |
+| [references/lifecycle-rules.md](references/lifecycle-rules.md) | Every work-item turn. It gives the State map, approval points, and common safeguards. |
+| [references/starting-a-helper.md](references/starting-a-helper.md) | A procedure calls for a helper; it gives the host tools and how to supply a standalone brief. |
+| [references/reporting-a-save.md](references/reporting-a-save.md) | A save fails or read-back does not verify it; it gives the exact reply words. |
+| [references/editing-a-work-item.md](references/editing-a-work-item.md) | You create or change requirements or Questions and Answers; the tracker supplies its storage and formatting. |
 | [references/work-tracker.md](references/work-tracker.md) | Every read or save of a work item, project phase, or project task. It gives the selected store's steps and links to its detailed instructions. |
 | [references/refining-requirements.md](references/refining-requirements.md) | The item is in Refining Requirements, or a requirement changes in any State. |
 | [references/designing.md](references/designing.md) | The item is in Designing. |

@@ -28,54 +28,14 @@ This file says how one work item is laid out in its issue, and how to write each
     ## Tasks                                one "### P1 — <name>" heading per phase, a checkbox per task; without phases, one plain list and a Sub-items line
     ## Recent History
     ## Requirements
-    ## Questions and Answers
-    ## Notes                                Context, Sources, Lessons not proven yet, Solution options and considerations
-  Comments, oldest first:
-    ## Solution design                      the design: one comment, edited in place
-    Agent: a helper started on P1-T02.
-```
 
-A project that is set up for GitHub keeps no work item files in its folders. It has the repository that `PROJECT.md` names, with Issues turned on, and the 30 labels in `work-tracker-labels.md`.
-
-## Creating an issue
-
-1. Make the body in a temporary folder. Take the work item template text that `managing-work-items` opened from its `assets/`, from the line `## Overview` to the end.
-   - Leave out the front matter, the `# WI-001: ...` title line, and the fill-in guide above `## Overview`.
-   - Fill the body as the template's guide says, and leave no angle-bracket prompt in the body. A prompt is text in angle brackets that says what to write there. `references/lifecycle-rules.md`, section "Rules that apply in every State", gives the rule about prompts.
-   - Write one block for each requirement that `managing-work-items` gave you, in place of the template's example requirement block. "Requirements" below gives the form.
-   - Delete the example phase rows, the example phase headings and tasks, the example question rows, and the prompt lines under Context and under "Solution options and considerations".
-   - Write "None." under Sources and under "Lessons not proven yet".
-   - Leave the **Moved up** line under `## Overview` empty after its label. `managing-work-items` fills it when it closes the work item, with a change to the body, before the issue is closed.
-   - Keep every heading, table header, label, and `<!-- ... -->` guide comment.
-2. Write IDs as `#12` wherever the template says a work item ID. Keep the form of the plan that the template's guide gives for its level and plan: a top-level item keeps the Roadmap when it uses phases; an item without phases keeps the plain-list form under Tasks. Write the Related items line for the work item's level:
-   - For a level-2 sub-item, Related items says "Parent #12, phase P2." when its parent uses phases, or "Parent #12." otherwise.
-   - For a level-3 sub-item, Related items says "Parent #14."
-   - For a top-level item, Related items says "Project phase P01." once the work item has a project phase. Before that, `references/lifecycle-rules.md`, section "Levels", says what to do.
-3. Create the issue with its labels: the State that `managing-work-items` gives it, the type, and the priority. Use `priority:medium` when no priority is named. Add no other label. `work-tracker-gh-commands.md`, section "Creating an issue", gives the command.
-4. Link the issue to what it belongs to:
-   - For a sub-item, count its levels, and then link it to its parent, as "Phases, tasks, and sub-items" below says.
-   - For a top-level item, put it in the milestone of its project phase once the owner has named a project phase. `work-tracker-project-roadmap-and-tasks.md` gives the command.
-
-## Requirements
-
-Each requirement is one block in the body under `## Requirements`, in the order of its number. The block has the form of the requirement block in the work item template.
-
-- **A new requirement.** Add its block after the last block, with the next unused number. Take the form from the template, never from a prompt that was left in a body.
-- **A new line.** Add the line at the end of its numbered list.
-- **A part with nothing to write yet.** Keep the part's label, and write nothing after the label.
-- Never write `#1` for a requirement, because GitHub reads `#1` as an issue number.
+Follow [the common editing rules](editing-a-work-item.md), section "Requirements". Never write `#1` for a requirement, because GitHub reads it as an issue number.
 
 ## Questions and Answers
 
-The table is in the body under `## Questions and Answers`. In any table, write `|` in a cell as `\|`, and write a line break as `<br>`.
+Follow [the common editing rules](editing-a-work-item.md), section "Questions and Answers". In a table cell, write `|` as `\|` and a line break as `<br>`. Remove the template's example question rows when adding real questions.
 
-- **A new row.** Its ID is the highest Q-ID in this work item plus one. Insert the row after the last open row. When no row is open, insert it right after the separator line. Open rows then stay on top, oldest first.
-  - When the template's two example rows are still there, delete them in the same change to the body.
-  - When the owner must answer, add `waiting-on:owner`. When someone else must answer, add `waiting-on:external`.
-- **An answer.** Put the answer in the speaker's words in quotation marks under Answer, name its speaker and source evidence when applicable, and write the decision date as `YYYY-MM-DD`. Use the authority checks in `filing-project-records/references/record-decision.md` for a sourced decision. Then move the row to just below the last open row, so that answered rows are newest first.
-  - After the owner's last open question is answered, swap `waiting-on:owner` for `waiting-on:agent` when you continue the work, or remove `waiting-on:owner`.
-  - Keep `waiting-on:owner` while another question for the owner is open.
-- **A superseded row.** Change only the row's Status cell, to `Superseded by Q-09`.
+When a question waits on the owner, add `waiting-on:owner`; use `waiting-on:external` for another person. After the owner's last open question is answered, replace `waiting-on:owner` with `waiting-on:agent` when work continues, or remove it. Keep `waiting-on:owner` while another question for the owner is open.
 
 ## Recent History
 

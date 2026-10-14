@@ -2,11 +2,11 @@
 
 Use this reference to read, create, save, find, nest, and move work items in a project that keeps its work items as local files in the `work-items/` folder. The goal is to read and write each work item consistently with the lifecycle rules.
 
-This reference only gives the steps for reading and saving. The lifecycle rules decide what happens next: what to save or when, a work item's State, and each approval. A work item's State is the step the work is in, and its Status is the short summary of the State.
+This reference only gives the steps for reading and saving. The lifecycle rules decide what happens next: what to save or when, a work item's State, and each approval.
 
 ## Where the work items are kept
 
-- The `work-items/` folder holds one folder for each work item. It exists only in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints.
+- The `work-items/` folder holds one folder for each work item. It exists only in the main checkout.
 - `work-items/AGENTS.md`, in the main checkout, says what each file and folder is, the form of a work item's ID, and what must stay true in the folder. Read it before your first change.
 - Work items can be nested. A top-level item is a work item with no parent, at level 1. A sub-item is a work item inside another work item, at level 2 or level 3. `references/lifecycle-rules.md`, section "Levels", says what each level holds.
 - A top-level item may use phases to group its tasks and its level-2 sub-items. When it does, its phases and tasks are under Roadmap and Tasks. An item without phases has one plain task list and a Sub-items line. Sub-items have no phases. `references/work-tracker-field-mapping.md` says where each part of a work item goes in its file.
@@ -14,7 +14,7 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
 
 ## Steps for every read and every save
 
-1. Find the main checkout. `work-items/` is only there, even when this session runs in a worktree, which is a separate folder with its own branch. This line puts the path of the main checkout in `MAIN`:
+1. Find the main checkout. `work-items/` is only there, even when this session runs in a worktree. This line puts the path of the main checkout in `MAIN`:
 
    ```bash
    MAIN="$(git worktree list --porcelain | sed -n '1s/^worktree //p')"
@@ -56,14 +56,14 @@ This reference only gives the steps for reading and saving. The lifecycle rules 
 
 ## Writing a record's ID in a work item
 
-A local work item is kept in the main checkout, so a record that it names must be there. The main checkout is the project's main folder, the first path that `git worktree list` prints.
+A local work item is kept in the main checkout, so a record that it names must be there.
 
 - Write the ID of a record that `filing-project-records` saved only after `publish-docs` reports that the main checkout holds the save.
 - When `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item yet. `filing-project-records`, section "When to write the ID", says what to do in its place.
 
 ## The templates for a work item and its design
 
-A new work item and its design are copied from `work-items/work-item-template/`, as `references/work-tracker-folders-and-files.md` says. `assets/work-item-template.md` and `assets/design-template.md` hold the same forms; read them for a work item's fields and sections and for its design. A work item's design is the `DESIGN.md` in its folder.
+A new work item and its design are copied from `work-items/work-item-template/`, as `references/work-tracker-folders-and-files.md` says. A work item's design is the `DESIGN.md` in its folder.
 
 ## How a helper opens a work item by ID
 
@@ -75,7 +75,6 @@ Find the file under `work-items/` in the main checkout whose front matter says `
 | --- | --- |
 | Deciding what happens next: what to save and when, a State, or an approval | Follow `references/lifecycle-rules.md` in this skill. |
 | A State and a Status that no longer match | Follow `references/lifecycle-rules.md` in this skill. |
-| A source that the work item was given. A source is anything the project was given by someone else, such as a transcript or a client document. | `filing-project-records`, step "file a source" |
 | Moving the work items to another place where work items can be kept, such as Notion or GitHub Issues | `project-setup` |
 | An incomplete setup, or a missing template | `project-setup` ("check the setup") |
 

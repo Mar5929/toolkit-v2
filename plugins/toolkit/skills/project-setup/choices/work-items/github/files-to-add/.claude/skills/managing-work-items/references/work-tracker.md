@@ -2,7 +2,7 @@
 
 Use this reference to read, create, save, and find work items in a project that keeps its work items as GitHub issues. The goal is to read and write each work item consistently with the lifecycle rules.
 
-This reference only gives the steps for reading and saving. The lifecycle rules decide what happens next: what to save or when, a work item's State, and each approval. A work item's State is the step the work is in, and its Status is the short summary of the State.
+This reference only gives the steps for reading and saving. The lifecycle rules decide what happens next: what to save or when, a work item's State, and each approval.
 
 This reference says where each part of a work item is kept in GitHub Issues, and it gives the `gh` commands that read and change each part. `gh` is GitHub's command-line tool.
 
@@ -61,7 +61,6 @@ Run `gh issue view <number> -R <account/repository> --json title,body,labels,sta
 | For | Use |
 | --- | --- |
 | Deciding what happens next: what to save and when, a State, or an approval | Follow `references/lifecycle-rules.md` in this skill. |
-| A source that the work item was given. A source is anything the project was given by someone else, such as a transcript or a client document. | `filing-project-records`, step "file a source" |
 | Moving the work items to another place where work items can be kept, such as local files or Notion | `project-setup` |
 | Recording the GitHub repository when the "GitHub repository" line is empty | `project-setup` |
 

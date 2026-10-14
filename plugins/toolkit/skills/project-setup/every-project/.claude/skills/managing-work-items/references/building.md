@@ -4,8 +4,6 @@ Use this file to build a work item that has approved requirements, and an approv
 
 The main agent is the agent of the session that leads the build. It either does the tasks itself or runs a team of helper agents. In both cases it is the only one that changes the work item, and the only one that talks to the owner. The owner stays the product owner: the owner decides, approves, and marks work Done.
 
-A session is one chat with the agent. Use “chat” when explaining the arrangement to the owner.
-
 ## Contents
 
 - Build, task by task
@@ -23,7 +21,7 @@ A session is one chat with the agent. Use “chat” when explaining the arrange
 ## Build, task by task
 
 1. Read the work item's tasks and its design. Take the first task whose Depends on line is met. Before you start the task, set it In Progress. When the task has a phase, also set that phase In Progress when it is Not Started.
-2. Work in the work item's own worktree, on its own branch, and never on the default branch. A worktree is a separate folder with its own branch. "Git for a build" below says how to make both. Build what the requirements ask, and no more. When the requirements need work that no task covers, add a task for that work first, and then do it.
+2. Work in the work item's own worktree, on its own branch, and never on the default branch. "Git for a build" below says how to make both. Build what the requirements ask, and no more. When the requirements need work that no task covers, add a task for that work first, and then do it.
 3. Tick the task only when its Done when proof is met. Save the proof in Recent History: the command and its exact result line, or what you saw. A task that is partly done stays open, and you add a task for what is left.
 4. When you cannot check a task in one go, split it into smaller tasks. When a part can be approved, built, or shipped on its own, propose a sub-item, as `refining-requirements.md`, section "Roadmap, tasks, and sub-items", says.
 

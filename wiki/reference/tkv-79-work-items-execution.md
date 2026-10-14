@@ -15,6 +15,15 @@ The changes follow the three current official skill pages read on 2026-10-13: [C
 | 2 | B6, B9, B10, C9, C13, C15, C16 | Changed. Installation follows GitHub's OS-specific page; repository history dates removed; owner wording is neutral; Notion section pointers target the commands reference; host permission paragraph and misleading heading removed; label question names its missing count. |
 | 2 | C14 | Deferred. Preserve the requirements interview's one-question procedure pending Mike's preference against the output style. |
 
+| 3 | D1, D2, D3, D6, D7, D22, D25, D27, D33 | Changed. Repeated definitions and the host permissions paragraph removed; conflicts route to pull-latest; local template route uses the actual local template. Helper briefs keep standalone context. |
+| 3 | D16, D17, D19 | Changed with approved alternatives. Save-result words, helper start procedure, and common requirement/question edits have on-demand references linked directly from SKILL.md. Backend format, relations, and API calls stay in choices. |
+| 3 | D5, D8, D29, D42 | Changed within scope. Repeated source routing and prompt explanations removed; shared requirement and question procedures extracted. Backend-specific protections remain. |
+| 3 | D21, D28, D34 | Retained where local storage descriptions or standalone briefs require the detail. State-transition, hierarchy, and helper authorization protections remain explicit. |
+| 3 | D20 | Retained. The exact MAIN command remains in the local tracker because its choice needs it independently of local memory. |
+| 3 | D46, D47 | Changed. Header/schema tables retain field rules rather than enum restatements; templates and live schemas remain authoritative. |
+| 3 | I5, J3, J4 | Changed. Notion helpers get exact ID query and page reads; repeated setup explanation and inert file-link section removed. Setup step ranges adjusted. |
+| 3 | D15, J2 | Deferred. No new always-loaded instruction or changed Recent History policy without owner evidence. |
+
 ## Requirements preserved
 
 The rewrite preserves owner approvals, exact tracker commands and values, stable IDs, work-item State transitions, owner edits, read-back verification, hierarchy and phase rules, closure protections, standalone helper context, and the local MAIN command.
