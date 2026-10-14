@@ -36,6 +36,6 @@ Keep this project's lasting memory in the Hindsight bank recorded in `PROJECT.md
 ## One memory store
 
 - Use this rule for Hindsight memory where another toolkit file refers to `managing-project-memory`. Use `managing-work-items` for current work and `filing-project-records` for authoritative decisions and sources.
-- A Hindsight project uses no local `memory/` folder or Current State file. Wherever a toolkit guide or skill asks to read, update, report, or check that file, use the current work tracker and authoritative project records instead, and record handoff context there. Do not create a local state file or treat its absence as a setup failure. The add-on supplies memory context at session start.
+- A Hindsight project uses no local `memory/` folder or Current State file. Keep current work and handoff context in the work tracker and authoritative project records. The add-on supplies memory context at session start.
 - Keep standing instructions for agent behavior in `owner-preferences.md` or the applicable rule, as the root guide says. Hindsight may hold their history or a pointer, but never replaces the instructions.
 - Change the bank's configuration through `project-setup` when the owner requests it. Follow the add-on's guidance without exposing its API key.

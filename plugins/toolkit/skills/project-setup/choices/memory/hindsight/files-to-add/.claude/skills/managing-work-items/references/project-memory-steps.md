@@ -53,7 +53,7 @@ Keep the closed item and any remaining follow-up current in the tracker, and rev
 
 ## Keeping active work current
 
-Keep active work and next actions in the work tracker. Follow `.claude/rules/hindsight-memory.md` for lasting knowledge. This project has no Current State page; create none.
+Keep active work and next actions in the work tracker. Follow `.claude/rules/hindsight-memory.md` for lasting knowledge.
 
 ## Recording a wait for a record or a decision
 

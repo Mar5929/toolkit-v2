@@ -4,4 +4,4 @@ This file holds the step of `handoff` that depends on where this project keeps i
 
 ## Saving the context for the next session
 
-Keep this session's next actions and outstanding blockers in the work tracker and project records. Review lasting knowledge under `.claude/rules/hindsight-memory.md`. This project has no Current State page; create none.
+Keep this session's next actions and outstanding blockers in the work tracker and project records. Review lasting knowledge under `.claude/rules/hindsight-memory.md`.

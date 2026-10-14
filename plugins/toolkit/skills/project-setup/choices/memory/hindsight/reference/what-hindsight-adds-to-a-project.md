@@ -24,7 +24,7 @@ Replace the prompt under the heading "Project memory" with this text, below the 
 This project keeps its memory in the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings".
 
 - Read `.claude/rules/hindsight-memory.md` at session start and after compaction, and follow it for memory reads, reviews, saves, corrections, and what to report. It applies wherever a toolkit skill names `managing-project-memory`.
-- The project's current state is the current work in the work tracker and the project records. Read them at session start, and keep handoff context there. Wherever a toolkit skill names the local Current State file, use them instead; do not create that file or report its absence as a setup failure.
+- The project's current state is the current work in the work tracker and the project records. Read them at session start, and keep handoff context there.
 - The prompt reminder suggests when to review memory. Review lasting lessons at handoff even when no reminder fires.
 ```
 
