@@ -25,7 +25,7 @@ Add this text to the project's root `AGENTS.md`.
 Below the paragraph about voice-to-text, add these two lines:
 
 ```markdown
-- Use Salesforce's official skills (`forcedotcom/sf-skills`) for Salesforce platform questions and work when installed and enabled. Report missing skills when the task needs them. A single platform question that needs no design options, such as "Flow or Apex?", goes to those skills directly.
+- Use Salesforce's official skills (`forcedotcom/sf-skills`) for Salesforce platform questions and for Salesforce work on a work item, such as configuring, designing a solution, testing, deploying, and managing a DevOps Center work item, pipeline, or project. These include, for example, the `salesforce-development` and `dx-devops` skills. Report missing skills when the task needs them. A single platform question that needs no design options, such as "Flow or Apex?", goes to those skills directly.
 - This project's rules and its three `sf-*` skills decide what may be deployed or changed. They win over an official Salesforce skill. `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for each kind of action in each kind of org.
 ```
 
