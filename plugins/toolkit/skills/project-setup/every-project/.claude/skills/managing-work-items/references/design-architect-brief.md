@@ -22,7 +22,7 @@ Verified project decisions: <answered Questions and Answers rows marked Decision
 Design so far: <What this design solves, Requirements and design readiness,
   What exists today, Constraints and assumptions, Notes>
 Research findings: <the researcher's report, or "none">
-Platform findings: <from the official platform skills that the root AGENTS.md names, or "none">
+Platform findings: <from the applicable platform skills configured for the project, or "none">
 Where the existing build is: <folders and files to read>
 Fix round: <the critic's findings to fix, or "first draft">
 ```

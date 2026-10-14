@@ -33,7 +33,7 @@ Use this file to test a finished build against the Acceptance Criteria of every 
    - **A failure needs the owner's decision (a requirement that reads two ways, a fix that changes what the owner approved or spends money), or your fixes are not resolving the failure.** Add a Questions and Answers row with your recommendation, set `waiting_on` to the owner, and ask.
    - **A failure shows that a requirement is wrong or missing.** Handle it as a change to a requirement, as `refining-requirements.md`, step 7, says. Never change the build to avoid the failure.
 6. Record each check after the checker's report.
-   - Add a Recent History row in this form: "Independent check of commit `<short hash>`: <each requirement's verdict>. Evidence: <test plan path, test command and result line>. Gaps: <gaps, or none>." For a result that Git does not track, name the file's path and its SHA-256 hash in place of the commit.
+   - Record the independent checker's name, checked commit, each requirement's verdict, test plan path, test commands and results, and gaps in Recent History. For a result that Git does not track, name the file's path and its SHA-256 hash in place of the commit.
    - Set a phase to Done when its tasks and its sub-items are done and the check confirmed its exit result.
 7. Ask for the result approval.
    - Add a Questions and Answers row asking the owner to approve the result. Identify the work item, the checked commit or file hash, each requirement’s verdict and the gaps. Put the checked requirement IDs in its Affects column.
@@ -59,9 +59,9 @@ Check a small work item that takes the short path with steps 1 to 6 above. `refe
 For any other result, start no checker. Your own checks of step 2 take the checker's place.
 
 - Fix what fails and check again, as step 5 says, until every check passes or a failure needs the owner.
-- In step 6, in place of the row for the checker's report, add the Recent History row "Independent check: none, small item. Checked commit `<short hash>` myself. Evidence: <test command and result line, or what you saw>."
+- In step 6, in place of the row for the checker's report, record in Recent History that the small item had no independent check, who checked it, the checked commit, and the commands, results, or observations used as evidence.
 - Say on the first line of the reply that shows the result that no separate checker ran.
-- Wherever this skill names the checker's verdict, the commit that the checker passed, or a new run of the checker, use your own check in its place, and record each new check in a new "Independent check: none, small item" row.
+- Wherever this skill names the checker's verdict, the commit that the checker passed, or a new run of the checker, use your own check in its place, and record each new check in Recent History, identifying it as your own check of a small item.
   - One exception: the owner's standing merge instruction does not cover a merge that no checker passed. Ask the owner about each such merge into the default branch.
 
 **The approval.** Steps 7 and 8 do not apply. The one closing question in `closing.md`, section "Closing a small work item", takes their place.

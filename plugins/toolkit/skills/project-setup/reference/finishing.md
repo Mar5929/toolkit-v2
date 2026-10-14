@@ -101,12 +101,13 @@ Run each check alone, from the project folder. The checks show that setup worked
 4. **"Toolkit settings" is complete.** The Tracker and the Memory line of `PROJECT.md`, "Toolkit settings", each name a choice, and the section holds the lines that the setup file of each of the owner's choices adds. A line may still lack its value only when the value waits on the owner. "People and ownership" in `PROJECT.md` must name the owner. Its record-home links and related pointers must agree with the verified memory choice; retain existing homes until a migration is verified. Check the root `AGENTS.md` paragraph with [project-store-summary.md](project-store-summary.md); it must name this project’s current tracker and memory destinations. The "Project memory" section of the root `AGENTS.md` must hold the text that the Memory line's choice supplies, with no prompt left. Verify the record rows, files, and destinations that the selected memory choice's setup reference supplies. The memory choice's `references/project-memory-steps.md` must be in `managing-work-items` and in `handoff`, and its `references/shared-record-paths.md` in `publish-docs`.
 5. **Git does not track `work-items/` or `memory/`.** `git ls-files -- work-items/ memory/` must print nothing. For local work items, `git check-ignore work-items/PROJECT-TASKS.md` must print that path. For local memory, `git check-ignore memory/CURRENT_STATE.md` must print that path. `.ignore` must hold `!/work-items/` with local work items and `!/memory/` with local memory. These checks inspect existing paths and create no sample records.
 6. **Each choice.** For each choice of the owner, do the checks that its setup file gives.
+7. **The humanizing resource is available.** Verify that the skill or plugin recorded under "Resources and project paths" in `PROJECT.md` is installed and can be invoked in each host the project uses. Report any unavailable resource and the setup action still needed.
 
 ### After the checks
 
 - When a check fails, fix what the check found, then run the check again.
 - Report each check that you cannot make pass, with what it printed.
-- Keep the setup copy until the job that made it has finished using it. In "check the setup", remove it after the report and any missing-template restoration. In an update, [reference/update.md](update.md), "6. Checks and report", removes it after the merge and the changes to ignored folders. The removal command is `rm -rf <copy>`. The setup copy is the files the project would get today, built in a temporary folder, as [reference/setup-copy.md](setup-copy.md) says.
+- Keep the setup copy until the job that made it has finished using it. In "check the setup", remove it after the report and any missing-template restoration. In an update, [reference/update.md](update.md), "Verify and report the adopted update", removes it after the merge and the changes to ignored folders. The removal command is `rm -rf <copy>`. The setup copy is the files the project would get today, built in a temporary folder, as [reference/setup-copy.md](setup-copy.md) says.
 
 ### The final checks in "check the setup"
 
@@ -151,9 +152,7 @@ The setup files are not committed yet, and the first merge of a work item needs 
 
 Explain why the commit matters now. The reason is this: sessions that start in their own worktree (the Claude desktop app, the Codex app) see only committed files. Until this commit, those sessions get no `AGENTS.md`, skills, or hooks. When the app starts worktrees from the remote, they get none until this commit is also pushed.
 
-The reply's last line is:
-
-> Setup files are not committed. Commit them now?
+End the reply by asking whether the owner wants to commit the setup files.
 
 ### After the owner's yes
 
@@ -172,9 +171,7 @@ In a new project, the setup commit is made on the default branch, with no worktr
 
 ### After the commit
 
-In a new project, ask about a push next, as its own question, when both of these are true: the project has the remote `origin`, and `git ls-remote --heads origin <default>` prints nothing. An example is a repository that setup just created. `<default>` is the default branch, usually `main`. The question is:
-
-> Push <default> to <owner>/<repo>? The first pull request needs <default> on GitHub.
+In a new project, ask about a push next, as its own question, when both of these are true: the project has the remote `origin`, and `git ls-remote --heads origin <default>` prints nothing. An example is a repository that setup just created. `<default>` is the default branch, usually `main`. Explain that the first pull request needs the default branch on GitHub, and ask whether the owner wants to push it to the confirmed repository.
 
 After the owner's yes, run `git push -u origin <default>`.
 

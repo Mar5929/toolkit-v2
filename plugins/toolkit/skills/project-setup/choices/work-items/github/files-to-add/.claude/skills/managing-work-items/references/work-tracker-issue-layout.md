@@ -80,7 +80,7 @@ Insert a new row right after the table's `|---|---|---|` line, so that the newes
 
 How to change them:
 
-- **Link a sub-item.** Make it a sub-issue of its parent, with the calls in `work-tracker-gh-commands.md`, section "Sub-issues". Then put `#<number>` in the parent's list: the Sub-items cell of its phase's Roadmap row, or the `**Sub-items:**` line of a parent without phases. Replace "None." the first time. Add a Recent History row on the parent: "Sub-item #14 created: <title>."
+- **Link a sub-item.** Make it a sub-issue of its parent, with the calls in `work-tracker-gh-commands.md`, section "Sub-issues". Then put `#<number>` in the parent's list: the Sub-items cell of its phase's Roadmap row, or the `**Sub-items:**` line of a parent without phases. Replace "None." the first time. Record the new sub-item's ID, title, and creator in the parent's Recent History.
 - **Start a task.** Change the status after `·` to In Progress, in one change to the body.
 - **Tick a task.** Change `- [ ]` to `- [x]`, and change the status after `·` to Done, in one change to the body. The owner may tick a box in the browser, and that tick counts.
 - **Move a task or a sub-item to another phase** (in a top-level issue only). Move the task's lines, or move `#<number>` from one Sub-items cell to the other. For a sub-item, also update the sub-item's Related items line.
@@ -102,7 +102,7 @@ Use this part when a move puts a work item at another level or an approved plan 
 - **Phases to a plain list.** Do these four things:
   1. Under `## Tasks`, write the `**Sub-items:**` line with every number from the work item's Sub-items cells, or "None.".
   2. After that line, write every task in plan order. Each task keeps its ID, its status, and its tick.
-  3. Add one Recent History row that keeps what was deleted: "Phases removed: <reason>; P1 — <name> (<status>; <outcome>; <exit result>; <sub-items>), P2 — ... Tasks kept with their IDs."
+  3. Preserve the removed phases' IDs, names, statuses, outcomes, exit results, and sub-items in Recent History. Record why the layout changed, who authorized it, and that the tasks retain their IDs.
   4. Remove phase references from each sub-item's Related items line. Delete the phase headings and the whole `## Roadmap` section.
 - **A plain list to phases** (a top-level item whose plan now benefits from phases). Do these four things:
   1. Add the template's `## Roadmap` section above `## Tasks`, with the approved phases, using the next unused phase IDs.
@@ -146,7 +146,7 @@ An issue that the owner opened in the browser has the owner's text and no layout
 1. Ask the owner: "#15 was made by hand in GitHub, so it does not have the usual work item sections and labels. Should I add them?"
 2. After the owner's yes, make a new body from the template, as step 1 of "Creating an issue" says. Put the owner's text in it, word for word, as the Original verbatim requirement of Requirement 1. Write the body with `gh issue edit`.
 3. Add `state:backlog` and `priority:medium`. Ask the owner the type, unless the owner's text makes the type plain. For example, a report of something broken is `type:bug`.
-4. Add a Recent History row: "Made by hand in GitHub; the work item layout was added."
+4. Record who made the issue by hand and that you added the work item layout in Recent History.
 
 ## Body size
 

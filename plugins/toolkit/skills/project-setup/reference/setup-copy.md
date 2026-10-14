@@ -1,6 +1,6 @@
 # Building the setup copy
 
-This file builds the setup copy. The setup copy is the files that the project would get from the toolkit today, built in a temporary folder, so that they can be compared with the project's own files. Open this file in an update or a check of the setup, at [reference/update.md](update.md), "1. Build a new setup copy". The job is done when the temporary folder holds the setup folder every project gets and the setup folders for the project's choices, with the project's name and "Toolkit settings" filled in.
+This file builds the setup copy. The setup copy is the files that the project would get from the toolkit today, built in a temporary folder, so that they can be compared with the project's own files. Open this file in an update or a check of the setup, when [reference/update.md](update.md), "Scan for toolkit differences and updates", needs the assembled files. The job is done when the temporary folder holds the setup folder every project gets and the setup folders for the project's choices, with the project's name and "Toolkit settings" filled in.
 
 A new project normally copies the folders straight into the project, as [SKILL.md](../SKILL.md), Steps 3 and 5, say. An existing project does the same unless a reviewed migration requires a setup copy to stage new instructions before the records and destinations are verified.
 

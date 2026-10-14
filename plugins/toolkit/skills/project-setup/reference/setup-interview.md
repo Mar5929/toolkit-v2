@@ -39,11 +39,13 @@ The three choices:
 
 Any mix of the work items choice and the memory choice works, for example work items in Notion with local memory. With local or Hindsight memory, decisions, terms and system documentation remain repository records. With Notion memory, Product Wiki owns finalized product documentation and decisions, Terminology Glossary owns finalized terms, and Long-Term Memory holds other lasting decisions and lessons. Working designs stay with their work items. Sources remain in their configured homes.
 
-After the owner has said where memory is kept, ask about Claude Code's own memory. Claude Code can keep notes of its own in a folder on the owner's computer and load them into every session. The toolkit turns that off, so that the project's memory is kept in one place. Say so, and ask: "Do you want Claude Code's own memory on in this project?"
+After the owner has said where memory is kept, ask about Claude Code's own memory. Claude Code can keep notes of its own in a folder on the owner's computer and load them into every session. The toolkit turns that off, so that the project's memory is kept in one place. Explain that default and ask whether the owner wants Claude Code's own memory enabled for this project.
 
 ## Outside tools (question 8)
 
 After the owner's answer, check that each tool is installed and signed in on this computer, and tell the owner what is missing.
+
+Check that a skill or plugin for making outward-facing text sound natural is installed and available in each host the project uses. Reuse a suitable resource the owner already has. When none is available, propose one and install it after the owner approves the resource and installation scope. Record its name and how to invoke it under "Resources and project paths" in `PROJECT.md`, so later agents can use it. A resource named `humanizer` is one option; that name is not required. Setup remains open until the chosen resource is available; record any pending owner action as a setup task.
 
 ## Working with the owner (question 9)
 

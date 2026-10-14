@@ -11,7 +11,7 @@ The Notion steps make the project page as a row of the owner's Projects database
    ```
 
 2. Leave out every data source whose title column is `Name`. Such a data source is Lore's Projects database under another project's Long-Term Memory page. Lore is the name of the Notion memory layout. The owner's Projects database has the title column `Project`.
-3. Use an existing approval that names the exact database and listed writes. Otherwise, ask the owner to approve the destination, with a recommendation: "I'll add this project as a row of your Projects database (<link>). OK?"
+3. Use an existing approval that names the exact database and listed writes. Otherwise, show the destination and ask the owner to approve adding this project as a row of that Projects database.
    - When a question is needed, ask it before the ID prefix question. Make no project page until its listed writes and exact destination are approved.
    - Approval must cover the exact database. A generic yes to making pages does not choose a destination.
    - When the destination is not already confirmed and more than one data source is left, list each with its link and ask which one. Recommend the one that holds the owner's other projects.
@@ -20,5 +20,5 @@ The Notion steps make the project page as a row of the owner's Projects database
 
 When the owner names a page to put the project under, still run step 1, and keep the Projects data sources whose database is on that page. The last column that step 1 prints is the id of the page that holds the database. Compare the ids without their dashes.
 
-- When one of those data sources has the title column `Project`, confirm the destination using step 3. For a new approval, ask: "I'll add this project as a row of the Projects database on <page>. OK?"
+- When one of those data sources has the title column `Project`, confirm the destination using step 3. For a new approval, show the page and database and ask whether to add this project there.
 - When that page has no such database, stop. Tell the owner that the page has no Projects database, and ask the owner to make one on that page or to name another page.

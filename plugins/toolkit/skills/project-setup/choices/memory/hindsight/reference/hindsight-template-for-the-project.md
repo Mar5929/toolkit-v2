@@ -24,7 +24,7 @@ Missions guide model behavior. They do not guarantee a filter, and they do not e
 
 ## Recommended instructions, changes, or another template
 
-Read `hindsight-missions-recommended.md`. Offer its three missions together as "Toolkit coding-project instructions", with the project name filled in. Explain their purpose and origin. Ask: "These are our recommended memory instructions for coding projects. Do you want these, changes to them, or another template?"
+Read `hindsight-missions-recommended.md`. Offer its three missions together as "Toolkit coding-project instructions", with the project name filled in. Explain their purpose and origin. Ask whether the owner wants these memory instructions, changes to them, or another template.
 
 When accepted, use the supplied mission text. It adds no settings, labels, directives, or knowledge pages by itself; keep the approved operating package and separately agreed page choices. For a non-coding project, explain the coding focus and help the owner adapt it or choose a more suitable template.
 

@@ -1,6 +1,6 @@
 # Bringing a project with GitHub Issues work items up to date
 
-This file holds what "update the toolkit" does in GitHub for a project that keeps its work items in GitHub Issues. [reference/update.md](../../../../reference/update.md), "5. Services", sends you to the setup file, [github-work-items-setup.md](../github-work-items-setup.md), and its closing lines name this file.
+This file holds what "update the toolkit" does in GitHub for a project that keeps its work items in GitHub Issues. [reference/update.md](../../../../reference/update.md), "Apply the owner’s choices", sends you to the setup file, [github-work-items-setup.md](../github-work-items-setup.md), and its closing lines name this file.
 
 Do these steps when the owner says "update the toolkit", after the newer skill files are copied in:
 

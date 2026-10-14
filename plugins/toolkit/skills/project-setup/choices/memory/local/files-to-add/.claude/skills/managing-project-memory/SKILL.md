@@ -9,7 +9,7 @@ Keep lasting context available to later sessions and keep the project's Current 
 
 This skill manages local memory files in `memory/`. [references/memory-store.md](references/memory-store.md) gives their storage instructions.
 
-Make sure that you apply those metadata tags and keep them up to date on the memory files.
+When you create or update a memory file, maintain the metadata fields defined in [references/record-format.md](references/record-format.md).
 
 ## Choose the procedure
 

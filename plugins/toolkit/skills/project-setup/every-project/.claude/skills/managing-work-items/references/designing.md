@@ -12,7 +12,7 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
 
 1. Read the work item: the goal in its Overview, every requirement with its Acceptance Criteria, its Questions and Answers, its Notes with Sources, every field in the block at the top of the work item, including `design`, and the design itself when one exists.
    - When a design is in progress, continue from the work item's Current state and from the design's Notes, "Open design questions".
-   - When the work is a single platform question that needs no options, use the official platform skills that the root `AGENTS.md` names, and stop.
+   - When the work is a single platform question that needs no options, use the applicable platform skills configured for the project, and stop.
    - When the requirements are not approved yet, send a missing or changed requirement to `refining-requirements.md`. Continue with the design only when the owner asked for options first. In that case, keep the work item in Refining Requirements and the design `proposed`, and say that the owner's approval of the requirements is still needed. When the owner did not ask for options first, stop and tell the owner that the approval of the requirements comes first.
 2. Read existing decisions and documentation for the affected area. Read the shared decisions, system rules, and project terms for the affected area where the root `AGENTS.md`, section "Where information goes", says they are kept, together with records that are captured but not yet filed there. Read relevant memory as "Project memory" in the root `AGENTS.md` says. Read `.claude/rules/owner-preferences.md` and the existing build. List every source you use, so that you can cite it.
 3. Check that the requirements are ready. Nothing is missing, each requirement is explicit from start to finish, and no requirement is likely to be misread. Send each gap back to `refining-requirements.md`.
@@ -21,7 +21,7 @@ Three kinds of helper do part of the work: a researcher looks up a fact, an arch
    - Set `design: proposed`.
    - Continue an existing design, or prepare it in the tracker's form as described above. Keep its headings. Fill the header lines and opening sections.
 5. Settle how the design work will go. Ask questions when their answers change the design. Present meaningfully different options when the requirements leave a real choice, with built-in mechanisms first. A built-in mechanism is one that the platform or the tool already provides.
-6. Research. Start one researcher for each research question, with `researcher-brief.md`. Start at the same time the researchers whose questions do not depend on each other's answers. For platform facts, use the official platform skills that the root `AGENTS.md` names.
+6. Research. Start one researcher for each research question, with `researcher-brief.md`. Start at the same time the researchers whose questions do not depend on each other's answers. For platform facts, use the applicable platform skills configured for the project.
 7. Design and critique. Start one architect for each option, with `design-architect-brief.md`, and one critic for each draft, with `design-critic-brief.md`. Then run fix rounds. In a fix round, the architect corrects its option from the critic's findings, and the critic checks again the findings that remain.
    - Stop the fix rounds when the critic returns "Clean", or when the owner has decided every finding that remains.
    - When a dispute needs an owner decision or further fix rounds are not resolving it, present the unresolved issue, evidence and recommendation to the owner.
@@ -61,5 +61,5 @@ A new approach that replaces the approved one goes in the same design, as a new 
 - Every design gets at least one critic, and a small design does too. The `delivery` value `owner-led`, or the owner's "no agent team", decides who builds. It does not decide whether the critic runs.
   - The critic is skipped in two cases only: Claude Code or Codex cannot start a helper in this session, or the owner said no to helper agents altogether.
   - When the critic is skipped, say in the reply and in the design's Notes that no independent critique ran.
-- The main agent uses the official platform skills that the root `AGENTS.md` names. A helper does not. In Designing, those skills return their findings to this design, and they start no second interview.
+- The main agent uses the applicable platform skills configured for the project. A helper does not. In Designing, those skills return their findings to this design, and they start no second interview.
 - A sub-item that is built from its parent's approved design needs no design of its own. Say so, and move the sub-item to Building.

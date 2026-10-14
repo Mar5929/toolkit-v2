@@ -14,7 +14,7 @@ Offer this package after confirming the server and bank, before choosing a templ
 - Each project uses its own recorded bank on the owner's server. The project's Claude Code and Codex sessions share that bank. Broader sharing is an explicit owner choice, agreed during the connection interview.
 - The shared service uses its verified working models and a provisional capacity and local-retrieval profile. [Recommended service settings](hindsight-server-settings.md) explains the profile, measured limits, authentication, and backup checks. A project's acceptance does not authorize changes affecting other banks.
 
-Ask: "These are our normal Hindsight settings. Do you want them, or any changes?"
+Ask whether the owner wants these defaults or changes for this project.
 
 ## Costs and limits
 

@@ -62,7 +62,7 @@ The agent asks one question at a time, each with a recommendation and the reason
 **Each answer leads to more questions about that answer.** The first question only picks the choice. The questions that follow are about how the owner wants that choice set up in this project.
 
 - For each choice, the toolkit has a default: how the toolkit sets that choice up when the owner changes nothing. The default is written in the reference file of that choice.
-- The agent reads that reference file, tells the owner the default in a few plain lines, and asks: "This is how the toolkit sets up `<choice>` by default. Is this what you want?"
+- The agent reads that reference file, tells the owner the default in a few plain lines, and asks whether the owner wants those defaults or changes for this project.
 - When the owner says yes, the agent sets the choice up that way.
 - When the owner says no, the agent asks what the owner wants to be different, and sets it up that way for this project.
 
@@ -70,7 +70,9 @@ Two examples:
 
 - The owner answers "Notion" to where work items are kept. The agent then asks the questions about Notion, such as which Notion page the project's pages go under.
 - The owner answers "Hindsight" to where memory is kept. The agent then shows how the toolkit offers Hindsight by default, and asks whether that is what the owner wants for this project.
-- After the owner has said where memory is kept, the agent asks about Claude Code's own memory. Claude Code can keep notes of its own, in a folder on the owner's computer, and load them into every session. The toolkit turns that off by default, so that the project's memory is kept in one place. The agent says so and asks: "Do you want Claude Code's own memory on in this project?"
+- After the owner has said where memory is kept, the agent asks about Claude Code's own memory. Claude Code can keep notes of its own, in a folder on the owner's computer, and load them into every session. The toolkit turns that off by default, so that the project's memory is kept in one place. The agent explains that default and asks whether the owner wants Claude Code's own memory enabled for this project.
+
+The agent also checks that a humanizing skill or plugin is installed and available in each host the project uses. It reuses a suitable installed resource or agrees one with the owner, installs it within the approved scope, and records its name and invocation in `PROJECT.md`, "Resources and project paths". The resource does not have to be named `humanizer`.
 
 ### Step 5: Each answer adds its part
 
@@ -135,7 +137,9 @@ Three rules hold in both cases:
 
 ## A project that already has the toolkit
 
-**Not decided yet.** The owner says "update the toolkit" or "check the setup". The proposal is that the agent compares the project with the full layout and with the folders of the owner's choices, shows the owner what differs, and the two decide together. The three rules for an existing project apply.
+When the owner says "update the toolkit", the agent scans the project against the current toolkit for its recorded choices. The agent explains the differences and updates and asks what the owner wants to adopt. It applies only the selected changes, preserves project records and customizations, and checks the adopted setup. Files the toolkit no longer ships are included in the review; they are not removed automatically.
+
+When the owner says "check the setup", the agent checks and reports without adopting updates or moving records. A difference the owner chose to retain is not a setup failure.
 
 ## Rules that hold in every step
 
@@ -178,8 +182,7 @@ A folder for an answer has the shape that Step 5 gives:
 ## Not decided yet
 
 1. **One definition of memory.** Mike's three criteria say what counts as memory, whatever the place it is kept. The proposal is to put them in the `AGENTS.md` that every project gets, and to let the Hindsight choice add only the sentence that names Hindsight and the bank.
-2. **The update of a project that already has the toolkit.** See "A project that already has the toolkit" above.
-3. **The text of the default `SOUL.md`.** A default needs real text: how Mike wants an agent to work with him in any project. That text is Mike's to give or to approve.
+2. **The text of the default `SOUL.md`.** A default needs real text: how Mike wants an agent to work with him in any project. That text is Mike's to give or to approve.
 
 ## Root project guide
 

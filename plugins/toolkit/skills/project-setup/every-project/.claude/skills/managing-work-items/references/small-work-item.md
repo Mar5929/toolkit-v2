@@ -27,7 +27,7 @@ Use your judgment to decide from the owner's request whether the work item is sm
 
    Add that question as a Questions and Answers row, and set `waiting_on` to the owner, before the reply ends.
 3. Record the owner's answer in that row, with the owner's words and the date.
-   - After a yes, set `requirements_approved` to `YYYY-MM-DD by <name>`, add the Recent History row "Small item: short path.", and move the work item to Building. The yes approves the requirements and the project phase, as the reply gave them.
+   - After a yes, set `requirements_approved` to `YYYY-MM-DD by <name>`, record the owner-approved small-item path in Recent History, and move the work item to Building. The yes approves the requirements and the project phase, as the reply gave them.
    - After a correction, change the work item, and play the request back again in the same form.
 4. Build the tasks, as `references/building.md` says. When every task is done, move the work item to the Testing Loop.
 5. Check the result, as `references/testing-loop.md`, section "A small work item", says. That section says when the separate checker runs, and what takes its place when it does not run.
@@ -38,6 +38,6 @@ When the owner changes or adds a requirement and the work item is still small, r
 A work item on the short path stops being small when the work turns out to need what the short path leaves out: an interview to settle the requirements, Designing, or sub-items. Then move it to the full path:
 
 - Tell the owner.
-- Add the Recent History row "Short path ended: full path from <State>.", with the State that the work item is in when it leaves the short path.
+- Record in Recent History why the item left the short path and the State from which the full path resumes.
 - Set `delivery` to `not-offered`, unless a Questions and Answers row whose Affects column says `delivery` holds the owner's answer.
 - Continue with the file for that State. A work item that needs a design moves to Designing, also from Building. The owner's approval of the requirements still counts.
