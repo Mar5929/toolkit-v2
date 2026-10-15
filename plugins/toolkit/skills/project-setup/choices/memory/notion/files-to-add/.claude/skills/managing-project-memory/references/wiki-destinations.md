@@ -30,4 +30,4 @@ Query Term and its context fields for the words and their aliases. Current terms
 
 ## Product Wiki
 
-Query Name, Summary, System area, and Category, and read matching bodies, sources, and related docs. Documentation status and Implementation status are separate: approved documentation can describe planned work, and only Live means implemented. Draft, In review, and Needs review are not final. Check Approved by, Approved on, and Last reviewed before relying on a claim.
+Query Name, Summary, System area, and Category, and read matching bodies, sources, and related docs. Documentation status and Implementation status are separate: approved documentation can describe planned work, and only Live means implemented. Draft, In review, and Needs review are not final. Check Approved by, Approved on, and Last reviewed before relying on a claim. Code and tests show what was built; they never prove that the owner approved a design.
