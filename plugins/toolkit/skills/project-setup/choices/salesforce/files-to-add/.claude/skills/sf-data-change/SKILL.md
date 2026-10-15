@@ -1,65 +1,35 @@
 ---
 name: sf-data-change
-description: 'Prepares a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs the change unless the project''s Salesforce permissions allow the agent to.'
+description: 'Prepares a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs it unless the project''s Salesforce permissions allow the agent to.'
 ---
 
 # Salesforce production data change
 
-By default no agent writes data to production: the owner runs the change, and this skill produces everything the owner needs to run it without asking follow-up questions. When `.claude/rules/salesforce-agent-permissions.md` allows a production data change, prepare the same files, then run the change as that file says.
+By default no agent writes production data. The owner runs the change, and this skill gives them everything needed to do it without follow-up questions. If `salesforce-agent-permissions.md` allows it, prepare the same files and then run it as that file says.
 
-## Step 1: build the handoff
+## Prepare the handoff
 
-1. Prepare the complete load CSV, with one row per record and the fields and matching key that the chosen operation and tool require. Confirm the matching field for an upsert; new records do not require an existing Salesforce `Id`. Never hand over a fragment, a sample, or a description instead of the load file.
-2. Before existing records change, back up their `Id` and the values needed for recovery. For an upsert, also record the matching keys and which records already exist. Label the backup with the recovery operation it supports; a backup alone does not establish that a deletion can be undone.
-3. Write numbered load steps. Name the tool (Data Loader, Import Wizard, Workbench, or what the owner uses), the operation (Insert, Update, Upsert, Delete), the object, the matching field, each field mapping, the applicable null-value setting, and the file's full path. Use the real paths and values, and write the steps for someone who has not run the load before.
-4. Provide the expected row count, the success and error files the tool writes, and a query the owner runs afterwards to confirm the result. For an upsert, specify how to retain each successful record's `Id` and verify whether it was created or updated, so recovery can distinguish the two outcomes.
-5. Write exact undo steps for each successful change, including a partially successful load. Restore prior values for updated records and delete newly created records using verified result IDs; a mixed upsert needs both. For a deletion, verify the supported recovery method and its limits before handing over the load. Explain any outcome that cannot be undone.
+1. **The load file:** the complete CSV, one row per record, with the fields and matching key the operation and tool need. Confirm the matching field for an upsert. Never hand over a fragment, a sample, or a description.
+2. **The backup:** before existing records change, save their `Id` and the values needed to recover them (for an upsert, also the matching keys and which records exist). Label it with the recovery it supports; a backup alone doesn't prove a deletion can be undone.
+3. **The steps:** numbered, for someone who's never run this load. Name the tool, the operation, the object, the matching field, each mapping, the null-value setting, and the file's full path, with real values.
+4. **The check:** the expected row count, the success and error files the tool writes, and a query to confirm the result. For an upsert, say how to keep each record's `Id` and tell created from updated.
+5. **The undo:** exact steps for every successful change, including a partial load: restore prior values for updates and delete new records by their result IDs. For a deletion, verify the recovery method and its limits first. Say plainly what can't be undone.
 
-## Step 2: check the update fields
+On an update, fill every target cell, so a restore is complete and the load doesn't blank fields.
 
-Fill every target cell on an update, so a restore is complete and a load does not blank fields it should not.
-
-## Step 3: file it
-
-Use `delivery/migrations/`. Keep actual data files local and ignored by Git.
+## Filing
 
 ```
 delivery/migrations/
-  production-backups/
-    .gitignore
-    prod-backup-<MMDDYYYY>-<slug>/
-      <descriptive-name>.csv
-  data-loads/
-    .gitignore
-    <change-slug>-<MMDDYYYY>/
-      <load-file>.csv
+  production-backups/prod-backup-<MMDDYYYY>-<slug>/<name>.csv
+  data-loads/<change-slug>-<MMDDYYYY>/<load-file>.csv
 ```
 
-- One folder per backup or load event. A multi-object change may put several files in the same event folder.
-- The backup captures each existing record's `Id` and the values needed by the verified recovery method. Keep the input matching keys and result IDs with the load evidence so the owner can recover the records that actually changed.
-- Save the exact file that was loaded in the load event folder. Never leave the final copy loose in another folder.
-- Never commit data files containing record IDs or PII. Keep both `.gitignore` files.
-- Record the work item, date, org, objects and population, exact file paths and row counts, operation, mappings, settings, success check, and undo steps (or the backup file's path) in the work item for this change and in the step 4 handoff. Write no separate README or other record for the event.
+One folder per backup or load event; a multi-object change can share one. Keep the exact file that was loaded in its event folder. Never commit data files with record IDs or personal data; keep both `.gitignore` files. Record the work item, date, org, objects and population, file paths and row counts, operation, mappings, settings, check, and undo steps (or the backup path) in the work item, not a separate README.
 
-## Step 4: hand over, or run it when allowed
+## Hand over, or run it
 
-When `.claude/rules/salesforce-agent-permissions.md` says Never for a production data change, give the owner the handoff in the reply: both file paths, which file is which, the numbered steps, the success check, and the undo steps.
+- **Never (the default):** give the owner both file paths, which is which, the steps, the check, and the undo.
+- **Allowed, or Ask first and the owner said yes:** run the matching `sf data` command from `salesforce-org-safety.md` with `-o <production org>` on the exact file, keep the success and error files, run the check yourself, record the result and the permission that allowed it in the work item and Recent History, and tell the owner the result, the evidence paths, and the undo steps.
 
-When that file allows the change, or says Ask first and the owner said yes:
-
-1. Run the change with the matching `sf data` command from `.claude/rules/salesforce-org-safety.md`, "The commands", naming the production org with `-o`. Load the exact file from the load event folder.
-2. Keep the success and error files with the load evidence, and run the success check yourself.
-3. Record the result in the work item, with the details step 3 lists, and add a Recent History row that names the org, the file, the row counts, and the permission that allowed it.
-4. Tell the owner the result, the paths of the backup and the load evidence, and the undo steps.
-
-## Hand-offs
-
-| For | Use |
-| --- | --- |
-| A manual deploy step, such as a pre-deploy snapshot for rollback | `sf-component-tracker` |
-
-## Related rules
-
-- `salesforce-agent-permissions.md`: what an agent may do in each kind of org in this project.
-- `salesforce-org-safety.md`: the limits that are the same in every project, and the commands.
-- `salesforce-deployments.md`: record a manual step when a deploy needs an action the deploy cannot perform.
+A pre-deploy snapshot for rollback is a manual step, recorded through `sf-component-tracker`.

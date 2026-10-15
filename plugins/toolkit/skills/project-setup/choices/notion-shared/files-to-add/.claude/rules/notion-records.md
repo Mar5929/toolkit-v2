@@ -1,9 +1,6 @@
-# This Project's Records in Notion
+# This project's records in Notion
 
-This rule says which skills read and change the records that this project keeps in Notion. "Toolkit settings" in `PROJECT.md` says which of this project's records are in Notion: its work items, its memory, or both.
+`PROJECT.md`, "Toolkit settings", says which records are in Notion: work items, memory, or both.
 
-- Read and change work items that are kept in Notion only through `managing-work-items`.
-- Read and change memory that is kept in Notion only through `managing-project-memory`.
-- The rule for work items and the rule for memory apply whichever Notion tool is used: a `Notion:` plugin command, the Notion connector, or the browser. They also apply when a message holds a link to a Notion page, and when the owner says to search Notion.
-- Never run the `Notion:tasks:build` command on a work item of this project. That command can mark the work item Done without the owner's yes.
-- When you create or update a Notion record, keep its relevant fields accurate through the responsible skill.
+- Read and change Notion work items only through `managing-work-items`, and Notion memory only through `managing-project-memory`. This holds whatever tool you use (a `Notion:` plugin command, the connector, the browser), including when a message links a Notion page or the owner says to search Notion.
+- Never run `Notion:tasks:build` on this project's work items. It can mark an item Done without the owner's yes.

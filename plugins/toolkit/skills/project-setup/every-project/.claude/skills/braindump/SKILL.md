@@ -37,4 +37,4 @@ playback.
 | For | Use |
 | --- | --- |
 | A rough idea to plan, meeting notes, or a dump the owner asks only to plan | `managing-work-items` |
-| Something worth keeping, after the owner's yes | Project memory, as the root `AGENTS.md` says |
+| Something worth keeping, after the owner's yes | `managing-project-memory` |

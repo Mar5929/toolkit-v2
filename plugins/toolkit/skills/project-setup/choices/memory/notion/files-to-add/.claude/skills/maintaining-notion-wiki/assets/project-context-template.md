@@ -1,36 +1,34 @@
 # Project context and connections
 
-Setup fills this page with confirmed project facts and verified connections. The librarian reads it before processing and keeps changed connections and operating settings current after verification.
+Setup fills this page with confirmed facts and verified connections. The librarian reads it before every run and keeps it current.
 
-## Project and authoritative sources
+## Project and sources
 
-- Project name and owner: <confirmed identity and decision authority>.
-- Purpose and scope: <concise confirmed context, with the project brief link>.
-- Project instructions: <accessible owner procedures and approval boundaries>.
-- Current work and working designs: <tracker, project scope/filter and relevant design record links>.
-- Finalized documentation and terms: <Product Wiki and Terminology Glossary links>.
-- Lasting context and decisions: <Long-Term Memory link>.
-- Source access: <how this host reads work items, repository evidence and other sources; record inaccessible sources and the supported evidence route>.
+- Project name and owner: <confirmed identity and decision authority>
+- Purpose and scope: <short context, with the project brief link>
+- Project instructions: <owner procedures and approval boundaries>
+- Current work and designs: <tracker, project filter, and design record links>
+- Finalized documentation and terms: <Product Wiki and Terminology Glossary links>
+- Lasting context and decisions: <Long-Term Memory link>
+- Source access: <how this host reads work items and repository evidence; any unreachable sources and the route around them>
 
 ## Notion connections
 
-Record the project page, Project Wiki, Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Record Memories, Facts, Entities, Projects and Topics, including this project's Lore Projects row. Give each page's URL and ID and each database's URL, database ID and data source ID. Include the tracker connection and verified project filter when the tracker is shared.
-
-Link the project's Wiki schemas and Long-Term Memory schemas pages. Those pages record actual property names, types, options and relation targets, with the inspection date and configured differences.
+For each of the project page, Project Wiki, Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary, Product Wiki, Memories, Facts, Entities, Projects (with this project's row), and Topics: its URL and ID, and for databases the database ID and data source ID. Include the tracker connection and its project filter when the tracker is shared. Link the Wiki schemas page with its inspection date and any differences.
 
 ## Librarian operation
 
-- Skill entry and references: <published entry and reference links>.
-- Host and Notion access: <selected cloud or local host and connection; no credentials>.
-- Schedule: <confirmed scheduler, daily cadence, timezone and run reference; or pending setup>.
-- On-demand invocation: <filled invocation prompt link and how to start a pass from the skill entry>.
-- Writer coordination: <supported way to find and coordinate an active run across scheduled and on-demand hosts>.
-- Failure handling: <where recoverable work and access failures are recorded and when the owner needs to act>.
+- Skill entry and references: <published links>
+- Host and Notion access: <cloud or local host and connection; no credentials>
+- Schedule: <scheduler, daily cadence, timezone, run reference; or pending setup>
+- On-demand invocation: <invocation prompt link and how to start a run>
+- Writer coordination: <how to find and coordinate an active run>
+- Failure handling: <where recoverable failures are recorded and when the owner must act>
 
 ## Publication record
 
-- Toolkit source and version: <maintaining-notion-wiki and installed version>.
-- Last verified and modified by: <date, actual editor and verification scope>.
-- Provenance and project differences: <confirmed source links and retained customizations>.
+- Toolkit version: <maintaining-notion-wiki and installed version>
+- Last verified: <date, editor, and scope>
+- Project differences: <confirmed customizations>
 
-Replace template prompts with verified values or explicit open setup steps. A pending connection or unavailable capability is not evidence that setup works.
+Replace every prompt with a verified value or an explicit open setup step. A pending connection is not proof that setup works.

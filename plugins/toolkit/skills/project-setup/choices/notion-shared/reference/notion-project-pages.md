@@ -47,7 +47,7 @@ Never add real work to a template, because a copy takes everything on the templa
 
 ## A new project
 
-Before the first step, two things must be true. The owner has signed in with `ntn login`. The owner has also shared the top-level Notion page that the owner's projects go under with the "Notion CLI" connection. `ntn-commands.md`, "Access and sign-in", says how the owner does both, and what an error means when a page is not shared.
+Before the first step, two things must be true. The owner has signed in with `ntn login`. The owner has also shared the top-level Notion page that the owner's projects go under with the "Notion CLI" connection. `ntn-commands.md`, "Sign-in and access", says how the owner does both, and what an error means when a page is not shared.
 
 1. **Take the template's id.** Take the id of "Project" from the templates list, and check that the template is not in the trash. "Where the templates are kept" gives the list command and the trash check.
 2. **Pick the ID prefix.** Do this step when work items are in Notion. Propose a prefix from the project name, and ask the owner. Choose a recognizable prefix for the project, for example "MOB" for "Mobile app", and verify that Notion accepts it. Notion allows each prefix in only one database of the workspace. When setting the prefix fails with a conflict, propose another prefix.
@@ -60,7 +60,7 @@ Before the first step, two things must be true. The owner has signed in with `nt
    ```
 
    The template is kept in the Projects database, so every project is a row of that database. When the owner has no Projects database, stop, tell the owner that a Notion project needs a Projects database, and ask the owner to make one in Notion.
-4. **Wait** until the copy is filled. The copy is filled when the project page lists Project Wiki and the Work Items, Phases, and Tasks databases, and the required descendants of Project Wiki have appeared. [notion-memory-pages.md](notion-memory-pages.md), "A new project", names those descendants. `ntn-commands.md`, "Waiting for a template", says how often to check and when to stop waiting. This command lists what the page holds:
+4. **Wait** until the copy is filled. The copy is filled when the project page lists Project Wiki and the Work Items, Phases, and Tasks databases, and the required descendants of Project Wiki have appeared. [notion-memory-pages.md](notion-memory-pages.md), "A new project", names those descendants. `ntn-commands.md`, "Templates", says how to tell when a page is filled and what to do when it stalls. This command lists what the page holds:
 
    ```bash
    ntn api v1/blocks/<project-page-id>/children page_size==100 < /dev/null | jq -r '.results[] | select(.type=="child_database" or .type=="child_page") | [.type, .id, (.child_database.title // .child_page.title)] | @tsv'

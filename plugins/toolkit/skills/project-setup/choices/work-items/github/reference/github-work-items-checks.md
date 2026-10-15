@@ -6,5 +6,5 @@ Run these checks after the steps in GitHub, which are steps 6 to 8 of the setup 
 
 - `gh auth status` shows the owner's account with the `repo` scope.
 - `gh repo view <repo>` answers, and issues are on.
-- Every label in the full list in [files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-labels.md), "The full list", exists. To check, list the repository's labels with the command in the same file, "Creating the labels", step 1, and compare name by name.
+- Every label in the full list in [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md), "Labels the project needs", exists. To check, list the repository's labels with the command in that section, and compare name by name.
 - `PROJECT.md` names the repository under "Toolkit settings".

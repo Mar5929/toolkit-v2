@@ -4,6 +4,6 @@ This file holds how to check that the Notion command-line tool, `ntn`, is signed
 
 Ask the owner for the sign-in as soon as the owner picks Notion, so that the owner can sign in while the interview goes on.
 
-Follow [ntn-commands.md](../files-to-add/.claude/skills/using-notion-cli/references/ntn-commands.md), "Access and sign-in", for `ntn whoami`, owner login, connection sharing, and inaccessible pages. In Codex, diagnose session access through the CLI skill before asking the owner to sign in again.
+Follow [ntn-commands.md](../files-to-add/.claude/skills/using-notion-cli/references/ntn-commands.md), "Sign-in and access", for `ntn whoami`, owner login, connection sharing, and inaccessible pages. In Codex, diagnose session access through the CLI skill before asking the owner to sign in again.
 
 When `ntn` is not installed, ask the owner before installing it because installation changes the owner's computer. After the owner's yes, use Notion's current installation instructions for this computer, then verify `ntn whoami`.

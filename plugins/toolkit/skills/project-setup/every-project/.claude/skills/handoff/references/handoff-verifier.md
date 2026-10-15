@@ -19,7 +19,7 @@ The file has two parts. "For the main agent" says how to start the verifier. "Br
 
 Start the verifier from `handoff`, after you draft the prompt and before the owner sees the prompt. Act on every verdict as step 6 of `handoff` says.
 
-Follow `managing-work-items/references/starting-a-helper.md` to start a helper with no session history and wait for its report.
+Start the verifier as a fresh helper, as `managing-work-items` says, and wait for its report.
 
 - The message to the helper holds everything under "Brief for the helper", word for word, and then the list of inputs below, filled in. The helper sees nothing else.
 - Give the verifier the configured record links and available read access. For records it cannot read, supply freshly read text with source links, dates and relevant properties. Include each work item, shared record, memory record, or record captured but not yet filed that the draft relies on. The project's current state alone does not verify a claim about another record.
@@ -30,9 +30,8 @@ The list of inputs:
 Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
 Tracker: <the work tracker that PROJECT.md names, its repository when
-  PROJECT.md names one, and the lines of
-  managing-work-items/references/work-tracker.md, section "How a helper
-  opens a work item by ID", copied word for word>
+  PROJECT.md names one, and how to open a work item and its design by ID,
+  copied from managing-work-items/references/work-tracker.md>
 Memory and shared records: <where this project keeps its current state and
   memory ("Project memory" in the root AGENTS.md), and its shared decisions,
   system rules, and project terms ("Where information goes"); links or

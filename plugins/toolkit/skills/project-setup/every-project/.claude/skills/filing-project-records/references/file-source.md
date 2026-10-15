@@ -1,47 +1,36 @@
 # File a source
 
-Use this file to save a source and give it an ID, so that other records can name it by that ID. It can arrive as pasted text or as a file. File every source, whether one work item uses it, several do, or none does yet. The result of this step is the source's ID, in the form SRC-###.
-
-`sources/AGENTS.md` gives the form of a row in the list of sources, the file name, what must stay true, and which sources need the owner's answer before they are filed. Read it before you write.
+Save a source and give it an SRC-### ID so other records can name it. File every source, whether one work item uses it, several do, or none does yet. `sources/AGENTS.md` gives the row format, the file name, what must stay true, and which sources need the owner's answer before filing. Read it before you write.
 
 ## Steps
 
-1. Search `sources/INDEX.md`, the list of sources, for this source. Search by its date, who it came from, and its subject.
-   - When the source is filed already, use its ID, add the work item's ID to the row's "Used by" cell, and go to step 6.
-2. Decide where the source is kept: in `sources/`, or outside Git. `sources/AGENTS.md`, section "A source kept outside Git", says how to decide. When that section gives a question for this source, ask the owner that question.
+1. Search `sources/INDEX.md` by date, sender, and subject. If the source is already filed, use its ID, add the work item to the row's "Used by" cell, and go to step 6.
+2. Decide whether it's kept in `sources/` or outside Git, as `sources/AGENTS.md`, "A source kept outside Git", says. Ask the owner any question that section gives for this source.
 3. Take the next SRC number.
-4. Save the source under the name that `sources/AGENTS.md` gives. Write the short name in lowercase words joined by hyphens.
-   - Save pasted text as a `.md` file.
-   - Save a file as a copy with its own extension. An email with attachments is one folder.
-   - For a source kept outside Git, save no file.
-5. Add the source's row to `sources/INDEX.md`. In its "Used by" cell, name each work item that uses the source now.
-6. Save with `publish-docs` now, before you use the source. The save reserves the number, and a link to the file works only once the file is on the default branch.
-7. Write the source's line in each work item that uses it, with `managing-work-items`. `SKILL.md`, section "When to write the ID", says when you can write it. Wait until then.
-   - The line goes under Notes, Sources.
-   - The line holds the SRC ID, what the source is, and the IDs taken from it. Those are the IDs of the requirements, questions, and tasks in that work item that came from the source.
-   - `managing-work-items/references/work-tracker.md`, section "Writing a record's ID in a work item", says whether the line also holds the web address of the file.
-8. Tell the owner the SRC ID, and give it to the skill that asked for this step.
+4. Save it under the name `sources/AGENTS.md` gives: pasted text as `.md`, a file as a copy with its own extension, an email with attachments as one folder. A source kept outside Git gets no file.
+5. Add its row to `sources/INDEX.md`, naming each work item that uses it now under "Used by".
+6. Save with `publish-docs` before you use the source. The save reserves the number, and a link to the file works only once it's on the default branch.
+7. Write the source's line under Notes, Sources in each work item that uses it, with `managing-work-items`, once `SKILL.md`, "Writing a record's ID in a work item", allows it. The line holds the SRC ID, what the source is, and the IDs of the requirements, questions, and tasks taken from it; the work tracker says whether it also holds the file's web address.
+8. Tell the owner the SRC ID, and give it to the skill that asked.
 
 ## What to do with what the source says
 
-Filing a source decides nothing and approves nothing. Read the source, and do what the table says with each thing in it.
+Filing a source decides and approves nothing. Handle each thing in it:
 
 | The source holds | Do |
 | --- | --- |
-| A request, an idea, or a bug | Make a new work item, or add a requirement to an open one, in the source's words. Use `managing-work-items`. |
-| A decision somebody states, or a question | When more than one work item needs it, record it with `record-decision.md`. Use that reference's authority and evidence checks to tell a decision from an open question. When one work item needs it, use `managing-work-items`. |
-| A fact about how the system works today | Write it in `wiki/reference/current-system/`, as `wiki/reference/AGENTS.md` says. |
-| A term and its meaning | Follow `update-system-doc.md`, which says where this project keeps project terms. |
-| An action item: something a named person agreed to do | Save it at once, without asking. It is a task in the work item it belongs to, or a project task with that person as Who does it. Use `managing-work-items`. |
-| A date or a deadline for current work | Use `managing-work-items` to record it in its work item or project task. When the date belongs in the project's current state, also record it there, as "Project memory" in the root `AGENTS.md` says. |
-| A lasting fact about a person or the client that fits no row above; a claim nobody checked | Keep it in memory, as "Project memory" in the root `AGENTS.md` says, with the SRC ID and whether the claim was checked. |
+| A request, an idea, or a bug | A new work item, or a requirement on an open one, in the source's words, with `managing-work-items`. |
+| A stated decision, or a question | More than one work item needs it: `record-decision.md`, using its checks to tell a decision from an open question. One work item: `managing-work-items`. |
+| A fact about how the system works today | `wiki/reference/current-system/`, as `wiki/reference/AGENTS.md` says. |
+| A term and its meaning | `update-system-doc.md`. |
+| An action item a named person agreed to | Save it at once, without asking: a task in its work item, or a project task with that person as Who does it, with `managing-work-items`. |
+| A date or deadline for current work | Its work item or project task with `managing-work-items`; if it belongs in the project's current state, tell `managing-project-memory`. |
+| A lasting fact about a person or the client that fits no row above, or a claim nobody checked | `managing-project-memory`, with the SRC ID and whether the claim was checked. |
 
 ## When no work item is open for the source
 
-1. File the source with "none yet" under "Used by".
-2. Save its action items and its dates as the table above says.
-3. List for the owner the requests, decisions, and questions in the source that have no record yet. Do each one the owner chooses.
+File it with "none yet" under "Used by", and save its action items and dates as above. Then list for the owner its requests, decisions, and questions that have no record yet, and do each one the owner chooses.
 
 ## A corrected version
 
-File a corrected version of a source as a new source. `sources/AGENTS.md` says what its row holds. Then compare each record under the old row's "Used by" with the corrected version, and tell the owner what differs.
+File it as a new source; `sources/AGENTS.md` says what its row holds. Compare each record under the old row's "Used by" with the correction, and tell the owner what differs.

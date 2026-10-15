@@ -1,38 +1,45 @@
 ---
 name: sf-component-tracker
-description: 'Keeps the Salesforce component tracker CSV, master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync with metadata edits. Use before building when a component under force-app/ will change, when a deploy result arrives, or when a deploy needs manual steps. Update the records in the same response as the metadata change.'
+description: 'Keeps the Salesforce component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in step with metadata changes. Use before building when a component under force-app/ will change, when a deploy result arrives, or when a deploy needs manual steps. Update the records in the same response as the change.'
 ---
 
 # Salesforce component tracker
 
-This skill keeps a Salesforce project's deployment records true. The records say which components the project created or changed, which org each one is deployed to, which components a deploy includes, and which steps a person must do by hand. The skill's job is done when the records say what is true now, in the same response as the metadata change or the deploy result that changed it.
+The deployment records say which components the project created or changed, where each is deployed, what each deploy includes, and what a person must do by hand. Keep them true in the same response as the metadata change or deploy result. A project that keeps them elsewhere uses that folder.
 
-A project that keeps deployment records in another folder keeps these records in that folder.
+## The records
 
-## Before updating the records
+```
+delivery/deployments/
+  component-tracker.csv                one tracker for the whole project; never split it
+  full-project-deployment-template/
+      package.xml                      the master manifest: every deployable tracker row
+      manual-steps.md                  manual steps for a full cutover, if any
+  work-item-deployment-template/       copy it to start an item's folder
+  <ID>-<short-name>/                   e.g. WI-031-account-merge, one per item that ships metadata
+      DEPLOYMENT-RECORD.md             scope, evidence, outcome
+      package.xml                      that item's new and changed components
+      destructiveChanges.xml           only if it removes components
+      manual-steps.md                  only if it needs manual steps
+delivery/releases/<YYYY-MM-DD>-<name>/  CUTOVER-PLAN.md and RELEASE-NOTES.md for a multi-item release
+```
 
-Open the references for the records you will change:
+The deployment folder isn't the work item; find the item in the tracker by ID. Keep item folders directly under `delivery/deployments/`, never sorted by status. Fill in the verified API version in the master manifest before its first use.
 
-- [references/deployment-records.md](references/deployment-records.md) gives the paths and naming when locating or starting a record.
-- [references/component-tracker-format.md](references/component-tracker-format.md) gives the columns, org flags, Change Type, and row rules before editing the tracker.
-- [references/manifests.md](references/manifests.md) gives the membership and excluded-type rules before editing a manifest.
-- [references/manual-steps.md](references/manual-steps.md) gives the triggers and form when recording a manual action.
+## When to update
 
-## What to update when a component changes or a deploy result arrives
+1. **You create, change, or rename metadata under `force-app/`:** add or edit its one tracker row, add it to the master manifest (updating any member counts in its header), and add it to the item's manifest.
+2. **The owner reports a successful deploy:** set that org's flag to `Yes` for every component in it.
+3. **You stage a deletion:** set Change Type to `Destructive` and add it to the item's `destructiveChanges.xml`; leave the flags, which now mean "still present".
+4. **The owner reports a successful destructive deploy:** set that org's flag to `No`. Once it's gone from every org and from `force-app/`, delete its row and its master manifest member.
 
-Update the tracker, the master manifest, and the work item's manifest in the same response when one of these four things happens.
+When metadata needs an action outside the deploy, record the manual step in the same response.
 
-1. **You create, change, or rename metadata under `force-app/`.**
-   - Add a tracker row when the component has none, with the correct flags and Change Type. Otherwise edit the existing row. A change to an existing component edits its one row, and never creates a second row.
-   - Add the component as a member under the correct `<types>` block of the master manifest. When the header of the master manifest holds member counts, update them.
-   - Add the component as a member of the work item's manifest.
-2. **The owner reports a successful deploy.** Set that org's flag to `Yes` for every component in the deploy.
-3. **You stage a component for deletion.** Set its Change Type to `Destructive`, and add it to the work item's `destructiveChanges.xml`. Leave the flags as they are: they show where the component is still present.
-4. **The owner reports a successful destructive deploy.** Set the affected org's flag to `No`. When the component is gone from every org and from `force-app/`, delete its row and its member in the master manifest.
+## Where to look
 
-When metadata needs an action outside the deployment, record the manual step in the same response using `references/manual-steps.md`.
+| When you need to… | Read |
+| --- | --- |
+| Edit the tracker or a manifest | `references/tracker-and-manifests.md` |
+| Decide whether a deploy needs a manual step, or write one | `references/manual-steps.md` |
 
-## Related rules
-
-- `salesforce-deployments.md` reads this tracker as a hint before any deploy.
-- `salesforce-agent-permissions.md` and `salesforce-org-safety.md` say what an agent may do in an org.
+`salesforce-deployments.md` reads the tracker as a hint before any deploy; `salesforce-agent-permissions.md` and `salesforce-org-safety.md` say what an agent may do in an org.

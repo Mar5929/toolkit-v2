@@ -6,7 +6,7 @@ This file lists what setup adds to a project that keeps its work items in GitHub
 
 | Kind | What it adds |
 | --- | --- |
-| Files inside a skill | Copy `choices/work-items/github/files-to-add/` into the project. It adds six files on how a work item is kept as an issue inside `managing-work-items`, which every project has. `references/work-tracker.md` is the one that the skill opens first. |
+| Files inside a skill | Copy `choices/work-items/github/files-to-add/` into the project. It adds two files on how a work item is kept as an issue inside `managing-work-items`, which every project has: `references/work-tracker.md`, which the skill opens first, and `references/work-tracker-gh.md`, which holds the `gh` commands. |
 | Settings | Nothing. |
 | `PROJECT.md`, "Toolkit settings" | Write `github` on the Tracker line. Add the line `- GitHub repository:` below the Memory line, with the repository's name, as the example below shows. |
 

@@ -1,64 +1,24 @@
 # Running ntn
 
-This file says how to reach the owner's Notion with `ntn`, gives the form of every call, says how to read and change page text, and says what to do when a call fails. Open it when you write a call, when you need to know about signing in, when a page cannot be found, or when a call fails.
+## Sign-in and access
 
-## Contents
-
-- Access and sign-in
-- One call
-- Sending a body
-- Reading properties
-- Finding rows
-- Reading and changing page text
-- Waiting for a template
-- Database templates
-- Ids
-- When a call fails
-- Limits
-
-## Access and sign-in
-
-- `ntn whoami` prints the connection ("Notion CLI", a bot), the owner's email, and the workspace.
-- `ntn login` opens a browser, where the owner signs in and picks the pages that the "Notion CLI" connection may use.
-  - Only the owner can sign in. Ask the owner to run `ntn login` in a terminal, and then wait.
-  - Never ask the owner for a token, a code, or a password.
-  - Nothing in Notion can be read or created before the sign-in.
-- The connection sees only the pages that the owner shared with it at sign-in, and everything under those pages. A page that the connection cannot see returns 404 `object_not_found`, even when the page exists.
-  - Only the owner can fix that error. In the Notion app, the owner opens the page, chooses "…" → Connections, and adds "Notion CLI".
-  - Sharing the project's parent page once reaches every project under it.
-- `ntn` works in Claude Code, in a terminal, and in hooks. In Codex, follow the active session access and permission process in `SKILL.md`, section "In Codex".
-- The Notion connector, whose tools have names like `notion-fetch`, is for a session in which `ntn` cannot run and the connector is signed in.
-  - Every step is written for `ntn`. The data model is the same: `notion-fetch` reads, `notion-query-data-sources` finds rows, `notion-create-pages` creates, and `notion-update-page` changes.
-  - The connector is not tested in Codex.
+- `ntn whoami` prints the connection ("Notion CLI"), the owner's email, and the workspace.
+- Only the owner can sign in: ask them to run `ntn login` in a terminal, then wait. Never ask for a token, code, or password.
+- The connection sees only the pages the owner shared at sign-in, and everything under them. A page it can't see returns 404 `object_not_found` even though it exists. The owner fixes that in the Notion app: the page's "…" menu → Connections → add "Notion CLI". Sharing the projects' parent page once covers every project under it.
+- When `ntn` can't run in a session, the Notion connector (`notion-fetch`, `notion-query-data-sources`, `notion-create-pages`, `notion-update-page`) uses the same data model. It's untested in Codex.
 
 ## One call
 
 ```bash
-ntn api v1/pages/<page-id> < /dev/null                        # GET: read
+ntn api v1/pages/<page-id> < /dev/null                        # read
 ntn api v1/pages/<page-id> -X PATCH -d @body.json < /dev/null # change
-ntn api v1/pages -d @body.json < /dev/null                    # POST: create (a body makes it a POST)
+ntn api v1/pages -d @body.json < /dev/null                    # create (a body makes it a POST)
 ```
 
-- The path starts with `v1/`.
-- `-X` sets the method. With a body and no `-X`, the method is POST. A body is the JSON text that a call sends.
-- `ntn` prints the JSON answer. Pipe the answer to `jq` to pick what you need. When `jq` is not installed, use an available JSON tool, such as Python, to extract the same values.
-
-## Sending a body
-
-Write the body to a file in a temporary folder outside the project. Make the folder with `mktemp -d`. In Claude Code, use a folder inside the session scratchpad when your system prompt names one. Send the body with `-d @file`, and remove the folder after you read the result back.
-
-A body with no single quote (') in its text can be inline JSON in single quotes:
-
-```bash
-ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Priority":{"select":{"name":"high"}}}}' < /dev/null
-```
-
-- Property names in the body of a page call or a query may be the names that Notion shows, such as "Waiting on" and "Parent item".
-- In JSON text, `"` is written `\"`, and a backslash is written `\\`.
-
-## Reading properties
-
-`ntn api v1/pages/<page-id> < /dev/null` returns `.properties`, and the page's own id and link as `.id` and `.url`. Use the JSON extraction guidance under "One call" to pick what you need. A relation comes back as page ids. To get the ID and the title of a related page, read that page.
+- Paths start with `v1/`. Pipe the JSON answer to `jq` (or Python if `jq` is missing).
+- Write a body to a file in a temporary folder outside the project (`mktemp -d`, or the session scratchpad), send it with `-d @file`, and delete the folder after reading the result back. A body with no single quote can go inline in single quotes.
+- Property names can be the names Notion shows, such as "Waiting on".
+- A relation comes back as page IDs; read the related page for its title.
 
 ## Finding rows
 
@@ -66,30 +26,21 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Priority":{"select":{"na
 ntn api v1/data_sources/<data-source-id>/query -d '{"filter": …, "sorts": […], "page_size": 100}' < /dev/null
 ```
 
-- The answer's `.results` are the rows, and each row is a page.
-- More than 100 rows come in pages, with `has_more` and `next_cursor`. When `has_more` is true, send the same query again with `"start_cursor": "<next_cursor>"`.
-- A filter names a property and a condition, for example `{"property":"ID","unique_id":{"equals":31}}`, `{"property":"Status","status":{"equals":"In Progress"}}`, `{"property":"Parent item","relation":{"contains":"<page-id>"}}`, or `{"property":"Archived","checkbox":{"equals":false}}`. Combine filters with `{"and":[…]}` or `{"or":[…]}`.
+`.results` are the rows. When `has_more` is true, repeat with `"start_cursor": "<next_cursor>"`. Filters look like `{"property":"ID","unique_id":{"equals":31}}`, `{"property":"Status","status":{"equals":"In Progress"}}`, or `{"property":"Parent item","relation":{"contains":"<page-id>"}}`, combined with `{"and":[…]}` or `{"or":[…]}`. `v1/search` matches titles only.
 
-## Reading and changing page text
+## Page text
 
-This call reads the page as Notion markdown:
+Read it as Notion markdown:
 
 ```bash
 ntn api v1/pages/<page-id>/markdown < /dev/null | jq -r .markdown
 ```
 
-The text looks like this:
+- One block per line, no blank lines. Literal `<` `>` `|` `*` `$` are backslash-escaped: `\<Goal\>`. A line break inside a block or cell is `<br>`.
+- Tables are `<table header-row="true">` with one `<td>` per line. Toggle headings are `# Title {toggle="true"}` with contents indented one tab (table row lines excepted). Callouts and `<details>` toggles indent their contents one tab.
+- `<database …>` is an embedded view and `<page …>` a child page. Never remove either.
 
-- Each block is one line. There are no blank lines.
-- A literal `<` `>` `|` `*` `$` is written with a backslash: `\<Goal\>`.
-- A line break inside one block or one table cell is `<br>`.
-- A table is `<table header-row="true">`, with one `<td>` on each line.
-- A toggle heading is `# Questions and Answers {toggle="true"}`. Its contents are indented with one tab. The lines of a table's rows (`<tr>`, `<td>`, `</tr>`) are the exception: they have no tab.
-- A toggle is a `<details>` line, a `<summary>…</summary>` line with its title, its contents indented with one tab, and a `</details>` line.
-- A callout is a `<callout icon="…" color="…">` line, its text indented with one tab, and a `</callout>` line.
-- A view of a database inside the page is one line, `<database url="…" …>Title</database>`. A child page is `<page url="…">Title</page>`. Before you change a page that holds either line, read `SKILL.md`, section "Any Notion write", which says never to remove them.
-
-Change text with exact replacements, built from a read that you just made:
+Change text with exact replacements built from a read you just made:
 
 ```bash
 ntn api v1/pages/<page-id>/markdown -X PATCH -d @edit.json < /dev/null
@@ -98,65 +49,43 @@ ntn api v1/pages/<page-id>/markdown -X PATCH -d @edit.json < /dev/null
 ```json
 {"type": "update_content",
  "update_content": {"content_updates": [
-   {"old_str": "**Blockers:** \\<Blocking decision or dependency, or \"None.\"\\>",
+   {"old_str": "**Blockers:** \\<Blocking decision, or \"None.\"\\>",
     "new_str": "**Blockers:** None."}
  ]}}
 ```
 
-- `old_str` must match the page text exactly once, as you read it, backslashes included. In JSON, each `\` is written `\\`.
-- When `old_str` matches nothing, or matches more than once, Notion refuses the call and nothing changes. Read the page again. Then copy `old_str` again, or add nearby text to it, until it matches once.
-- Inside a table, end `old_str` and `new_str` the same way: when `old_str` ends with `\n`, `new_str` ends with `\n` too. Calls that did not end both the same way lost everything after the table, with no error from Notion. The cause is not confirmed.
-- Several replacements in one call are applied in order. Notion saves all of them or none of them.
-- After the call, read the page again, and check that the new text is there.
+- `old_str` must match exactly once, backslashes included (each `\` is `\\` in JSON). Zero or several matches: Notion refuses and nothing changes, so re-read and widen `old_str`.
+- Inside a table, end `old_str` and `new_str` the same way (both with `\n` or neither). Mismatched endings have silently lost everything after the table.
+- To delete lines, include one neighboring line that stays in `old_str` and send only that line as `new_str`.
+- Several replacements in one call apply in order, all or nothing. Re-read afterwards to confirm.
+- `truncated: true` caused only by an "Embed Github" block (named in `unknown_block_ids`) needs no action.
 
-## Waiting for a template
-
-A page that is made or changed with `"template"` is filled in the background: the answer comes back before the content is on the page. Check again while the template is progressing, allowing time for its asynchronous work.
-
-- A work item's page is filled when two reads of its text in a row are the same, and the text is longer than before the call. For a page that the call made, the text must not be empty. "Reading and changing page text" gives the call that reads the text. The text depends on the owner's template, so never wait for a fixed number of blocks.
-- A project page that is made from a project template shows its databases as `child_database` blocks. This call prints the type of each block of a page:
-
-  ```bash
-  ntn api v1/blocks/<page-id>/children page_size==100 < /dev/null | jq -r '.results[].type'
-  ```
-
-- When further checks show no useful progress, report that template completion remains unverified and record where to resume.
-
-## Database templates
-
-This call lists a database's templates, with the default one marked:
+## Templates
 
 ```bash
 ntn api v1/data_sources/<data-source-id>/templates < /dev/null | jq -r '.templates[] | "\(.id)\t\(.is_default)\t\(.name)"'
 ```
 
-- A page that is made with `"template":{"type":"default"}` gets the default template. Notion refuses the call when the database has no default template.
-- Only the Notion app can make a template or set the default template.
-- `template_id` applies a template. Before you send it, read `SKILL.md`, section "Any Notion write", which says when a template must not be applied.
+- Create with `"template":{"type":"default"}` to get the default template; leaving it out makes an empty page. Notion refuses when there's no default. `template_id` applies a specific one. Only the Notion app can make templates or set the default.
+- Templates fill in the background, after the call returns. A page is filled when two reads of its text in a row match and the text is longer than before (not empty, for a new page). For a project page, its databases show as `child_database` blocks: `ntn api v1/blocks/<page-id>/children page_size==100 < /dev/null | jq -r '.results[].type'`. If it stalls, report it unverified and note where to resume.
 
-## Ids
+## IDs
 
-- Notion accepts an id with or without dashes.
-- A page link (`https://app.notion.com/p/<title>-<32 hex characters>`) holds the id as its last 32 characters.
-- A database and its data source have different ids. This call prints the id of a database's data source:
-
-```bash
-ntn api v1/databases/<database-id> < /dev/null | jq -r '.data_sources[0].id'
-```
+- IDs work with or without dashes. A page link's last 32 characters are its ID.
+- A database and its data source have different IDs: `ntn api v1/databases/<database-id> < /dev/null | jq -r '.data_sources[0].id'`.
 
 ## When a call fails
 
-`ntn api` prints the error and exits with a non-zero code. A failed write may have succeeded. Before retrying an uncertain write, read the target or search for the attempted creation; resume only the unconfirmed work. Follow the service’s retry guidance and backoff.
+`ntn api` prints the error and exits non-zero. A failed write may still have succeeded, so read the target or search for the created page before retrying.
 
 | Error | Meaning | What to do |
 | --- | --- | --- |
-| 401 `unauthorized`, "no auth token", "ntn login" | `ntn` is not signed in, the sign-in expired, or this session cannot access the stored credential. | First check session network and keychain access under `SKILL.md`, "In Codex". Use a permitted access route when available, then check `ntn whoami`. If authentication still fails with access available, ask the owner to run `ntn login` and wait. Never ask for the credential itself. |
-| 404 `object_not_found` | The page is not shared with "Notion CLI", or the id is wrong. The error does not mean that the page is gone. | Check the id in `PROJECT.md`. When the id is right, ask the owner to share the page, as "Access and sign-in" says. |
-| 400 `validation_error` | The request body is wrong: a property name, an option, or an `old_str` that does not match the page text. | Read the page or data source again, correct the body from the error, and retry under the recovery guidance above. |
-| 409 `conflict_error` | The transaction could not complete, potentially because of a data collision or a temporary storage failure. | Recheck current parameters and target state, then retry under the recovery guidance above. |
+| 401 `unauthorized`, "no auth token" | Not signed in, expired, or this session can't reach the stored credential | Check session access first ("In Codex" in `SKILL.md`), then `ntn whoami`. If still failing, ask the owner to run `ntn login`. |
+| 404 `object_not_found` | Not shared with "Notion CLI", or a wrong ID | Check the ID in `PROJECT.md`, then ask the owner to share the page. |
+| 400 `validation_error` | Wrong property name, option, or `old_str` | Re-read the page or data source, fix the body, retry. |
+| 409 `conflict_error` | A collision or temporary failure | Re-check the target, then retry. |
 
 ## Limits
 
-- One text piece holds at most 2,000 characters. A long property value is split into pieces.
-- `ntn api <path> --docs < /dev/null` prints the official page for one endpoint.
-- `ntn api ls < /dev/null` lists every endpoint. The API reference is at https://developers.notion.com/reference/intro.
+- One text piece holds at most 2,000 characters; split longer values.
+- `ntn api <path> --docs < /dev/null` prints one endpoint's documentation. `ntn api ls < /dev/null` lists them all. The API reference is at https://developers.notion.com/reference/intro.
