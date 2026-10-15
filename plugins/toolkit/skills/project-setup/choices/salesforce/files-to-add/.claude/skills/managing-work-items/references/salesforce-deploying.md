@@ -1,39 +1,21 @@
 # Deploying in a Salesforce project
 
-Use this file when you deploy a work item in a Salesforce project. It gives the detail for the section "A deployment" in `deploying.md`. The job is done when each deploy has run, its record is filled, and the component tracker says what is deployed in which org.
-
-One thing applies to the whole file: `.claude/rules/salesforce-agent-permissions.md` and `.claude/rules/salesforce-org-safety.md` say who may run which command. When those rules and this file differ, follow the rules.
+The Salesforce detail for "Deploying" in `deploying.md`. Done when each deploy has run, its record is filled, and the tracker shows what's in which org. Where this file and `salesforce-agent-permissions.md` or `salesforce-org-safety.md` differ, the rules win.
 
 ## Before any deploy
 
-- The work item's deployment folder and the component tracker must be current. `sf-component-tracker` says what the folder holds, and it keeps both current.
-- Before a deploy to a shared org (UAT, full copy, staging, production), `sf-deploy-check` must find nothing that would be deployed too early. Run the check on the exact set of components that will be deployed. When it finds something, stop and tell the owner which component.
-- Before a deploy that holds a permission set, confirm that the deploy removes no grant, as `.claude/rules/salesforce-org-safety.md` says.
+- The item's deployment folder and the tracker are current (`sf-component-tracker`).
+- Before a shared org, `sf-deploy-check` on the exact deploy set finds nothing; if it does, stop and tell the owner which component.
+- Before deploying a permission set, confirm it removes no grant.
 
 ## Validate, then deploy
 
-1. Validate first, with the work item's own `package.xml`:
+1. Validate with the item's own manifest: `sf project deploy validate -x delivery/deployments/WI-031-account-merge/package.xml -o <sandbox alias>`.
+2. Deploy to the sandbox with `sf project deploy start` and the same `-x` and `-o`, when the item needs it. If the permissions say Allowed, run it and note "allowed by salesforce-agent-permissions.md" in Recent History; if Ask first, ask as a Q&A row and run after the yes. Give the owner the manual steps in order, with what to check after each.
+3. Production follows the same permissions. When it's Never (the default), the owner runs it; give them the exact command with `-o <production alias>`, what it deploys, the `sf-deploy-check` result, the manual steps, and what to check afterwards.
 
-   `sf project deploy validate -x delivery/deployments/WI-031-account-merge/package.xml -o <sandbox alias>`
-
-2. Then deploy to the sandbox, when the work item needs a sandbox deploy. The command is `sf project deploy start`, with the same `-x` and `-o`.
-   - `.claude/rules/salesforce-agent-permissions.md` says whether you ask first. When it says Allowed, run the command without a question, and add the Recent History row "Deployed to `<sandbox alias>`: allowed by salesforce-agent-permissions.md." When it says Ask first, ask "Deploy WI-031 to `<sandbox alias>`?" as a Questions and Answers row, and run the command after the owner's yes.
-   - Give the manual steps to the owner in order, with what to check after each step.
-3. For production, follow `.claude/rules/salesforce-agent-permissions.md` as in step 2. When it says Never, which is the default, the owner runs the deploy and tells you the result. Give the owner all of these:
-   - the exact command, with `-o <production alias>`;
-   - what the command deploys;
-   - the `sf-deploy-check` result;
-   - the manual steps;
-   - what to check afterwards.
-
-A change to production data goes through `sf-data-change`.
-
-## A release of several work items
-
-Start the release folder from `delivery/releases/release-cutover-template/`, as `delivery/AGENTS.md` says, with one row for each work item. Run release notes that go to a client through `humanizer`.
+Production data changes go through `sf-data-change`. A multi-item release starts from `delivery/releases/release-cutover-template/`, with client-facing notes run through `humanizer`.
 
 ## After each deploy
 
-- Fill "Execution and outcome" in the work item's `DEPLOYMENT-RECORD.md` with the job ID, the result, and the post-deploy checks.
-- After a successful deploy, whether you ran it or the owner did, update the org flags in the component tracker with `sf-component-tracker`. An org flag says whether a component is deployed in one org.
-- Add a Recent History row with the org, the result, and the job ID. For a deploy that the owner ran, quote the owner's report.
+Fill "Execution and outcome" in the item's `DEPLOYMENT-RECORD.md` (job ID, result, post-deploy checks), update the org flags through `sf-component-tracker` after any successful deploy, and add a Recent History row with the org, result, and job ID, quoting the owner's report if they ran it.

@@ -10,4 +10,4 @@ Run `gh auth status`.
 
 Then wait for the owner. The interview goes on while the owner signs in, and steps 6 to 9 of the setup file wait until `gh auth status` shows the owner's account with the `repo` scope.
 
-[files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh-commands.md), "The tool and the sign-in", says what `gh auth status` prints and what you never ask the owner for.
+[files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md](../files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md), "Sign-in and setup", says what `gh auth status` prints and what you never ask the owner for.

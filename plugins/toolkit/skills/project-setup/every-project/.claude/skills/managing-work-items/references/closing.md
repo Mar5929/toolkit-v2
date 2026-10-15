@@ -1,122 +1,68 @@
 # Closing
 
-Use this file to take a work item through Reflecting after the owner approved its result, and to close a work item as Done or Cancelled. The job is done when the work item is closed and its Moved up line accurately records reusable outcomes in the configured record homes.
-
-Fill the Moved up line at every close: when you mark a work item Done, when you cancel it, and when the owner closed it by hand. The section "Filling the Moved up line" gives the steps. Never set a work item to Done or Cancelled while its Moved up line is empty.
-
-Use `filing-project-records` for the decisions, open questions, system rules, and project terms that more than one work item needs. For memory and the project's current state, follow "Project memory" in the root `AGENTS.md`.
-
-## Contents
-
-- Reflecting
-- Filling the Moved up line
-- Marking Done
-- Closing a small work item
-- Cancelling a work item
-- Done or Cancelled by hand
-- Leftover branches and worktrees
-- When one message answers several questions
+The goal: the item is closed, and its Kept for the project line records what the whole project keeps from it.
 
 ## Reflecting
 
-Reflecting is the State after the owner approved the result and before anything is merged. Go through this checklist in order.
+Reflecting comes after the owner approves the result and before anything merges.
 
-1. Check that the work item is complete and up to date. All four of these must be true:
-   - Every task is ticked or cancelled, and every phase that the work item completed says Done.
-   - No Questions and Answers row is left Open.
-   - Every sub-item is Done or Cancelled, or was moved to another work item.
-   - The work item's Current state matches its State, its `waiting_on`, and its approvals.
-2. Check that the requirements match what was built. Compare each approved requirement with the checker's verdicts in Recent History. When the build changed a requirement, treat the changed requirement as a change to a requirement. `refining-requirements.md`, step 7, gives the steps for a change to a requirement.
-3. Write down the lessons. Under Notes, "Lessons not proven yet", add each thing that the build, the tests, or a deployment taught, and that a later work item would otherwise find out again. Write the date it was seen with each one.
-4. Check that `PROJECT.md` and the READMEs are still true. Change one of them only when the work item made what it says out of date.
-   - Commit the change with `publish-docs`, and name the file and the commit in a Recent History row.
-   - Save a change to the project's phases with `references/work-tracker.md`.
+1. Confirm the item is complete: every task ticked or cancelled, completed phases Done, no open Q&A rows, every sub-item Done, Cancelled, or moved, and Current state matching the fields.
+2. Confirm the requirements match what was built, using the checker's verdicts. Any drift is a requirement change.
+3. Write the lessons under Notes, "Lessons not proven yet", with the date each was seen.
+4. Fix `PROJECT.md` or a README only if this item made it untrue. Commit through `publish-docs` and note it in Recent History.
 
-After the checklist, do one of these:
+Then, if there's something to merge or deploy, go to Deploying. If not (research, a decision, a document), note why and go to Marking Done.
 
-- When the work item has something to merge or deploy, move it to Deploying.
-- When the work item has nothing to merge or deploy, for example research, a decision, or a document, record in Recent History why Deploying was skipped. Then go to "Marking Done".
+## Kept for the project
 
-## Filling the Moved up line
+Fill the Kept for the project line at every close, including cancellations and closes the owner made by hand. Never close an item with it empty. It lists what the whole project keeps from this item: the shared decisions, system rules, and terms it added or changed, filed through `filing-project-records` and named by ID, and the lessons that became a rule, a skill, or memory. "None: <reason>" is a valid value when nothing qualifies.
 
-The Moved up line is a line in the work item's Overview. It records what the whole project keeps from this work item: the shared decisions, system rules, and project terms that it added or changed, and the lessons that it moved up.
+Run these steps before the closing question. They are the same whatever the project's work tracker and memory choice; only where `filing-project-records` and `managing-project-memory` file each record differs. On a small item, show the list from step 1 in the one closing question instead of asking separately.
 
-Follow `references/project-memory-steps.md`, section "Filling the Moved up line". The project's memory choice supplies that file, because where these records are kept depends on it.
+1. **List what the project may need to keep.** Read the item's Q&A rows marked Decision? yes, its design, its Related items, and its lessons not proven yet. List:
+   - decisions more than one work item needs that are not recorded yet;
+   - rules several items rely on that this item added, changed, or retired, and that the project's system documents do not show yet;
+   - approved rules whose behavior this item's requirements built or changed (naming or documenting a rule does not count, and a cancelled item builds nothing);
+   - project terms the item added or changed that the project's record of terms does not show yet;
+   - lessons with no outcome, with every date each was seen. Check memory first with `managing-project-memory`.
+2. **Ask the owner once**, when the list holds anything other than possibly-built rules: one Q&A row that shows each line with a recommendation and a one-line reason. For a lesson, the choices are keep for the whole project, keep as not proven, or drop; recommend keeping a lesson that was seen before.
+3. **File what the owner agreed to.**
+   - Decisions, open questions, and lessons about the system or the project: record a decision with `filing-project-records`.
+   - Rules to add, change, or retire, possibly-built rules, and terms: update a system document with `filing-project-records`.
+   - Lessons about how to do a step or how the agent works, and lessons kept as not proven: `managing-project-memory`.
+4. **Write each ID only once its save is confirmed**, as `filing-project-records` reports it. When a save is not confirmed yet, stop, tell the owner what waits, and have `managing-project-memory` record the wait.
+5. **Mark each lesson's outcome** at the end of its line, for example "Kept: <record ID>.", "Kept: owner-preferences.md.", "Kept in memory.", "Kept in work item.", or "Dropped (Q-12)."
+6. **Fill the line** with every record this item added or changed, by ID and with what happened, every term it touched, and anything filed earlier in the item; or "None: <reason>". Add a Recent History row that names the Q-ID from step 2, or says no question was needed.
 
 ## Marking Done
 
-Use this section after Deploying, or after Reflecting when the work item has nothing to merge or deploy.
+1. Confirm everything is merged (or the owner said to leave it), each deploy is recorded, and completed phases are Done.
+2. Fill the Kept for the project line, as "Kept for the project" says.
+3. Ask as a Q&A row, evidence first: the checker's verdict and commit, the merged pull request, the deploy result, and the Kept for the project line.
+4. On yes: save the owner's words, set Done and `waiting_on: none`, and rewrite Current state as "Done on <date>: <evidence>.", "None. Finished.", "Nothing.", and "None."
+5. Tell `managing-project-memory` the item closed. For a top-level item, check whether its project phase is now finished.
+6. On no: record it, turn each problem into a task, and go back to Building. Re-test and refill the Kept for the project line before asking again.
+7. Report whether the work reached the default branch, what was deployed, and what the project kept. End with the leftover-branch question below, or "Tell me the next thing to build."
 
-For a small work item on the short path, read "Closing a small work item" below, step 3, first. That step says which questions the owner has already answered.
+## Small items
 
-1. Check the following: that every change is merged, or the owner said to leave it on its branch; that the result of each deploy is recorded; and that every Roadmap phase that the work item completed says Done.
-2. Fill the Moved up line, as the section above says.
-3. Ask the owner. Add the Questions and Answers row for the question, with the Next action "Waiting on the owner: Q-12 (mark WI-031 Done). After the owner's answer: record Done." Put the evidence first: the checker's verdict and commit, the merged pull request, the deploy result, and the Moved up line. Ask whether the owner agrees to mark the work item Done. Use the real Q-ID and work item ID in the record and question.
-4. After the owner's yes, save the owner's words first. Then set the State to Done and `waiting_on` to `none`, and rewrite the work item's Current state. Write these four of its lines as follows:
-   - Where it stands: "Done on `YYYY-MM-DD`: <evidence>."
-   - Next action: "None. Finished."
-   - Waiting on: "Nothing."
-   - Blockers: "None."
-5. Follow `references/project-memory-steps.md`, section "When a work item closes".
-   - For a top-level work item, check its project phase, as `references/work-levels.md`, says. That section says what to ask the owner when the last open work item in a project phase is closed.
-6. After the owner's "no", record the owner's words, turn each problem into a task, and move the work item back to Building. After the fix, run the Testing Loop again and fill the Moved up line again, before you ask again.
-7. Report to the owner whether the work reached the default branch, what was deployed, and what was kept for the whole project: what the Moved up line says, and each lesson whose outcome starts "Moved up:". End the report with what the section "Leftover branches and worktrees" below asks the owner. When that section leaves nothing to ask, end with "Tell me the next thing to build."
+One closing question replaces the result approval, the Kept for the project question, and the Done question. The item stays in the Testing Loop and skips Reflecting.
 
-## Closing a small work item
+- Run the Reflecting checklist first.
+- Show the result as `testing-loop.md` says, plus the list from "Kept for the project", step 1 (each line with a recommendation), and any merge, deploy, or data load still to come, with who runs it. Say the yes doesn't cover that.
+- On yes: save the words, set `result_approved`, add an answered row for each kept line, go through Deploying if needed, then do Marking Done without asking again.
+- On no: add tasks, go back to Building, and ask again in a new row.
 
-Use this section for a small work item that takes the short path. `references/small-work-item.md`, says what a small work item is and gives the steps of the short path.
+## Cancelling
 
-On the short path, one closing question takes the place of three questions of the full path: the result approval in `testing-loop.md`, step 7, the question that "Filling the Moved up line" asks the owner, when it asks one, and the question in "Marking Done", step 3. The work item stays in the Testing Loop until the owner answers the closing question, and it never enters Reflecting.
+Record the owner's reason. Ask what happens to each open sub-item: cancel it, move it to the top level, or move it under another item. Fill the Kept for the project line. Set Cancelled and `waiting_on: none`, and rewrite Current state as "Cancelled on <date>: <reason>." and "None. Cancelled." Tell `managing-project-memory`. Leave the pull request, branch, and worktree until the owner decides, and delete nothing.
 
-1. Before you ask, go through the checklist in "Reflecting", steps 1 to 4. Then do what `references/project-memory-steps.md`, section "Filling the Moved up line", says to do on the short path.
-2. Ask the closing question. Add a Questions and Answers row asking the owner to approve the result and mark the work item Done, with the real ID, and set `waiting_on` to the owner. Show the result, as `testing-loop.md`, section "Showing the result", says, with these three differences:
-   - When "Filling the Moved up line" would ask the owner a question, show the lines of that question under "To keep for the whole project", each with your recommendation and a reason.
-   - When a merge, a deploy, or a data load is still to come, say what it is and who runs it, and say that the owner's yes to the closing question does not cover it.
-   - Ask one clear question covering approval of the result, the listed outcomes to keep for the whole project, and marking the work item Done.
-3. After the owner's yes, do these four things in order:
-   - Save the owner's words and the date in the row, and set `result_approved` to `YYYY-MM-DD by <name>`.
-   - Add one answered Questions and Answers row for each line that you showed under "To keep for the whole project", because the yes also covers those lines. The row holds the line, your recommendation, and the owner's words.
-   - When a merge, a deploy, or a data load is still to come, move the work item to Deploying, and follow `deploying.md`.
-   - Follow "Marking Done". The owner's yes has already answered the question that "Filling the Moved up line" asks, when it asks one, for the lines that you showed, and the question in "Marking Done", step 3. Do not ask those questions again. Where those steps name their question's Q-ID, name the Q-ID of the closing question.
-4. After the owner's "no" or a change, record the owner's words in the row, add a task for each problem that the owner named, and move the work item back to Building. Continue with the short path from its step 4, in `references/small-work-item.md`, and ask the closing question in a new row. That section also says what to do when the work item stops being small.
+## Closed by hand
 
-## Cancelling a work item
-
-Use this section when the owner cancels a work item.
-
-1. Record the owner's reason, in the owner's words, as an answered Questions and Answers row.
-2. Ask the owner about each open sub-item. The choices are to cancel it, to move it to the top level, or to move it under another work item.
-3. Fill the Moved up line, as "Filling the Moved up line" says.
-4. Set the State to Cancelled and `waiting_on` to `none`. Rewrite the work item's Current state. Write these two of its lines as follows:
-   - Where it stands: "Cancelled on `YYYY-MM-DD`: <the owner's reason>."
-   - Next action: "None. Cancelled."
-5. Do step 5 of "Marking Done".
-6. Leave the work item's open pull request, its branch, and its worktree as they are until the owner says what to do with them. Delete nothing. The offer in "Leftover branches and worktrees" covers only a merged branch, so it does not cover the unmerged branch of a cancelled work item.
-
-## Done or Cancelled by hand
-
-Use this section when the owner marked the work item Done or Cancelled without the agent. The owner's change counts. Never undo it.
-
-1. Record in Recent History that the owner marked the item Done or Cancelled by hand, with the date.
-2. Tell the owner what had not happened yet: the result approval, the checker, the merge, or the filling of the Moved up line. Ask the owner what to do about it.
-3. Fill the Moved up line, as "Filling the Moved up line" says. Fill the line whatever the owner says about the rest.
-4. Rewrite the work item's Current state with the lines that "Marking Done", step 4, gives for Done, or that "Cancelling a work item", step 4, gives for Cancelled. Then follow step 5 of "Marking Done".
+The owner's change stands. Note it in Recent History, tell the owner what hadn't happened yet (approval, checker, merge), and ask what to do. Fill the Kept for the project line regardless, rewrite Current state, and tell `managing-project-memory`.
 
 ## Leftover branches and worktrees
 
-After a work item is Done or Cancelled, look for the branches and worktrees that are left from it. A worktree is a separate folder with its own branch.
+After closing, find the item's leftover branches and worktrees. Offer to remove each one that's merged and has no uncommitted changes, and remove it only after a yes, never with `--force`. Name the rest and leave them. If the main checkout shows any of the item's files uncommitted, name them and ask; never commit, stash, or remove them yourself.
 
-1. Run `git worktree list` and `git branch --list '*wi-007*'`, with the work item's ID in lower case in place of `wi-007`.
-2. For each branch or worktree that is left, check whether its commits reached the default branch, and whether its worktree has uncommitted changes.
-
-Then do both of these:
-
-- Offer to remove each branch or worktree that is merged and has no uncommitted changes, with a reason.
-  - Remove it only after the owner's yes: run `git -C <main checkout> worktree remove <folder>`, then `git branch -d <branch>`.
-  - Never use `--force`.
-  - Name each other branch or worktree to the owner, and leave it as it is.
-- Run `git -C <main checkout> status`. It must show none of the work item's files uncommitted. When it shows one, name the files to the owner and ask what to do. Never commit, stash, or remove those files yourself.
-
-## When one message answers several questions
-
-When the owner's words name each question, one message from the owner may answer several questions. For example, one message may answer both the merge question and the question about marking the work item Done. Add one Questions and Answers row for each question, each with the owner's words.
+One message can answer several questions if it names each one. Record one row per question.

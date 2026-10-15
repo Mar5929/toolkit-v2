@@ -137,7 +137,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 | Kind | What it adds |
 | --- | --- |
 | Questions | The prefix of a work item's ID, such as `WI`. |
-| Files and folders | `PROJECT-ROADMAP.md` at the root: the project's phases. `work-items/`: its `AGENTS.md`, `PROJECT-TASKS.md` for tasks that belong to no work item, and `work-item-template/` with `WORK-ITEM.md` and `DESIGN.md`. |
+| Files and folders | `PROJECT-ROADMAP.md` at the root: the project's phases. `work-items/`: its `AGENTS.md`, `PROJECT-TASKS.md` for tasks that belong to no work item, and `work-item-template/` with `work-item-template.md` and `design-template.md`, copied at setup from `managing-work-items/assets/` so the owner can edit them. |
 | Files inside `managing-work-items` | Five: how a work item is stored as a folder (`work-tracker.md`), the folders and files, how each field is written, the roadmap and the project's tasks, and how to search. |
 | `PROJECT.md` | Tracker: `local`, and the ID prefix. |
 | Outside the project folder | Nothing. Git ignores `work-items/`, so the work items are on this computer only. |

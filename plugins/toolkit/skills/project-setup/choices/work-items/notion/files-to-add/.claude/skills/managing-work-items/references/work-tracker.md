@@ -1,88 +1,74 @@
-# Work items kept in Notion
+# Work items in Notion
 
-Use this reference to read, create, change, and find work items in a project that keeps its work items in Notion. The goal is to read and write each work item consistently with the lifecycle rules.
+Work items live in this project's own Notion databases: Work Items, Phases, and Tasks. Their page and data source IDs are in `PROJECT.md`, under "Notion work items". Use this project's copies, never workspace-wide or template databases. Use `using-notion-cli` for how to run any call; the calls specific to work items are in `work-tracker-calls.md`.
 
-This reference says where a work item is kept in Notion and how to save to it. The lifecycle rules decide what happens next: what to save and when, a work item's State, and each approval. `using-notion-cli` says how to run each Notion call.
+## What lives where
 
-## Where work belongs
-
-Each project has its own Work Items, Phases and Tasks databases. Read their configured page and data source IDs from `PROJECT.md`, under Notion work items. Use this project's copies rather than workspace-wide or template databases.
-
-- A work item tracks a change or outcome through its requirements, design, approvals and delivery. Create it in Work Items with the database's default template. Notion supplies its page and Solution Design child page.
-- A project phase organizes the project's roadmap. Leave its Work item relation empty. Link top-level work items to it through Phase.
-- A work-item phase organizes that item's roadmap and links to the owning work item. Use phases when they help organize the work; otherwise keep a plain task and sub-item plan. Follow `references/work-levels.md`.
-- A work-item task is a step toward one item's goal when a separate sub-work item is unnecessary. Link it to that work item and, when applicable, its phase.
-- A project task tracks operational or administrative work outside a work item. Leave Work item and Phase empty. Product or architecture changes use work items rather than bypassing their lifecycle as administrative tasks.
-- A sub-work item links to its parent through Parent item. Preserve the three-level work-item limit and the lifecycle's phase and task ID rules.
-
-The project's board is its Work Items views. The project page shows its roadmap, top-level work items and project tasks. A work item's views show its own plan. Set the owning relations explicitly and verify their targets, because creating a row through a view does not establish ownership.
-
-## The owner's Notion describes a work item
-
-The owner built the databases, their views, the work item template, and the Solution Design page inside that template in the Notion app. The owner changes them there. This skill does not describe them, so read them from Notion.
-
-- To learn what a work item's page holds, read the page. A work item's page can have other sections than `assets/work-item-template.md`, and then the page is right.
-- To learn the properties of a database and their options, read the database. [work-tracker-commands.md](work-tracker-commands.md) gives the call.
-- Never build or rebuild a template, a database, a view, or a property through a Notion call. When one is missing, tell the owner. The owner makes it or restores it in the Notion app.
-- Never rename or remove a property, a view, or a section of a template.
-- Never add work to a template. The templates are the "Project" template in the owner's Projects database, and the work item template. Every copy that Notion makes from a template takes along what the template holds.
-
-## Properties and record content
-
-Read the live database schema and the generated page before filling a record. Fill and keep current every applicable editable property supported by the request, evidence or lifecycle defaults. These include ownership relations, State, Status, Summary, Next action and Waiting on.
-
-Preserve system-managed properties and unrelated owner values. Record unknown owner decisions as open questions. Never invent approvals, dates or assignees to fill a field.
-
-Follow the generated template's prompts and retain its guide lines. Use relevant sections and preserve its child pages and views. The template owns the page structure; the skill owns the operational procedure.
-
-## Steps for every read and every save
-
-1. Read the ids from `PROJECT.md`. Before your first Notion read or write in a session, open `using-notion-cli`, whatever tool you use. That skill says how to sign in, how to run a call, and what to do when a call fails.
-2. In this turn, read again what you will look at or change. Never answer from an earlier read, because the owner edits in Notion, and the owner's edit is the one to keep.
-3. Open [work-tracker-page-updates.md](work-tracker-page-updates.md) for creation, page updates, designs, phases, tasks, and sub-items. Use [work-tracker-commands.md](work-tracker-commands.md) for the matching API call.
-
-These rules apply to every read and every save:
-
-- Never delete a page, a row, a phase, or a task. Take it out of view instead: set a phase or a task to Cancelled, or tick a work item's Archived box. When the owner wants it deleted, ask the owner to delete it in Notion.
-- Leave out archived work items unless the owner asks for them.
-
-## Procedures and API calls
-
-| File | Open it when |
+| Thing | Where |
 | --- | --- |
-| [work-tracker-page-updates.md](work-tracker-page-updates.md) | You create or update work-item content, a design, phases, tasks, or sub-items; it gives their procedures and exact field values. |
-| [work-tracker-commands.md](work-tracker-commands.md) | You need the API call for creation, updates, queries, or comments. |
-| [work-tracker-known-problems.md](work-tracker-known-problems.md) | A call fails, a record is missing or malformed, or the owner changed the record by hand. |
+| Work item | A Work Items row created with the default template. Notion adds its page and Solution Design child page. |
+| Sub-item | A Work Items row linked through Parent item, at most three levels deep. |
+| Project phase | A Phases row with an empty Work item. Top-level items link to it through Phase. |
+| Item phase | A Phases row linked to its work item. |
+| Task | A Tasks row linked to its work item, and to its phase if it has one. |
+| Project task | A Tasks row with Work item and Phase both empty. |
+| Design | The item's Solution Design child page, titled "Solution Design - WI-31". |
 
-## Writing a record's ID in a work item
+Notion IDs are unpadded: `WI-31`, not `WI-031`. Creating a row through a view doesn't set its ownership, so set relations explicitly and check them.
 
-Write the ID of a record that `filing-project-records` saved once the save is on the default branch. Work items are not kept in the main checkout, so no wait is recorded for the main checkout. A source's line under Notes, Sources may also hold the web address of the file on the default branch.
+## The owner owns the structure
 
-## The templates for a work item and its design
+The owner built the databases, views, and templates in the Notion app. Read them from Notion: the live page and schema win over `assets/work-item-template.md`.
 
-Notion makes a work item from the database's default template, with its Solution Design page, so `assets/work-item-template.md` is not used. `assets/design-template.md` is used only to make a missing Solution Design page. A work item's design is its Solution Design page. When the page is missing, [work-tracker-page-updates.md](work-tracker-page-updates.md), section "The Solution Design page", says what to do.
+- Never create, rebuild, rename, or remove a database, view, property, template, or template section. If one is missing, tell the owner.
+- Never add work to a template.
+- Never delete a page or row. Cancel a phase or task instead (a cancelled task's title starts "Cancelled: "), or tick a work item's Archived box. Skip archived items unless the owner asks.
 
-## How a helper opens a work item by ID
+## Reading and writing
 
-Read `PROJECT.md` for the Work Items data source ID and the installed `using-notion-cli` access procedure. Query the numeric part of the work-item ID, using its number without the prefix, for example `31` for `WI-31`:
+- Re-read in this turn before acting or changing anything. The owner edits in Notion, and their edits win.
+- Change page text with small, exact replacements from a fresh read; never replace a whole page. New rows and lines follow the form of their neighbors.
+- Fill a new item's prompts in one change and delete the note at the top, then check no `\<` remains (real content like `Map\<Id, Account\>` is fine). A card the owner made by hand gets the same treatment the first time you touch it, keeping what they wrote.
+- Keep the owner's guide lines under headings. Never touch `<database>`, `<page>`, or `<unknown>` lines.
+- If the lifecycle needs a line the page lacks, such as Kept for the project, add it in the form of the lines around it.
+- Rewrite the Current state's five lines in one replacement. Next action and Summary also have properties of the same name; write both.
+- A new question gets the highest Q-ID on the page plus one. Keep the Waiting on property in step with the open questions.
+- Add Recent History rows first, under the header row.
+- Link another item by setting the relation and writing its ID in Related items. Never link an item to itself.
+- Record pull requests under "Linked Github PRs" as `[owner/repo#14: title](url)`, or under Related items if that heading is missing. The Embed Github block is the owner's.
+- Start comments with "Agent:". They show the owner's name, because the agent signs in as the owner.
+- Fill every applicable property from the live schema. Never invent approvals, dates, or assignees.
 
-```bash
-ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":<number>}},{"property":"Work item","title":{"is_not_empty":true}},{"property":"Archived","checkbox":{"equals":false}}]}}' < /dev/null
-```
+## Properties the lifecycle writes
 
-Check that the returned ID has the requested prefix and number. Use the matched page ID to read its properties and text:
+| Lifecycle field | Property | Type and values |
+| --- | --- | --- |
+| `id` | ID | Set by Notion. |
+| `waiting_on` | Waiting on | select: owner, agent, external, none |
+| The three approvals | Requirements approved, Design approved, Result approved | rich_text: `YYYY-MM-DD by <name>`, or `no` |
+| Next action line | Next action | rich_text, a copy of the line |
+| Summary line | Summary | rich_text, a copy of the line |
+| (none) | Archived | checkbox; hides the item from views |
+| (none) | Tags | multi_select; reuse existing spellings, no commas |
 
-```bash
-ntn api v1/pages/<page-id> < /dev/null
-ntn api v1/pages/<page-id>/markdown < /dev/null
-```
+- Set State and Status in one call.
+- Status is a `select` in Phases but a `status` in Work Items and Tasks. Phases and Tasks use Not Started, In Progress, Done, and Cancelled.
+- "Who does it" is `agent`, `owner`, or another person with their party ("Sarah Chen (client)").
+- "Blocked by" fills "Blocking" on the other item; "Related" is one-way. Files belong to the owner.
 
-Read the Solution Design child page named in that text in the same way. When the helper lacks access, give it freshly read text and properties and have it name that evidence in its report.
+## Plans
 
-## Related work
+- Phases and tasks are rows. Reorder by changing Order only. IDs never change. A new Phase ID is one more than the highest ever used, cancelled ones included; a new Task ID is the next unused in its phase or list.
+- A top-level item's Phase is its project phase, once the owner names it; also write it in Related items. A level-2 sub-item's Phase is one of its parent's phases (check that phase belongs to the parent), or empty if the parent has none. Level-3 sub-items and sub-item tasks have no Phase.
+- To move an item: check the depth below it, set Parent item, reset Phase for the new parent, and add Recent History on the item and both parents.
+- Switching between phases and a plain list keeps order and IDs. Removed phases become Cancelled, with the reason in Exit result.
+- After any plan change, list the phases and tasks and check their order and relations.
 
-| For | Use |
-| --- | --- |
-| Deciding what happens next: what to save and when, a State, or an approval | Follow `references/lifecycle-rules.md` in this skill. |
-| Every Notion read or write: sign-in, Codex, the form of each call, and errors | `using-notion-cli` |
-| Moving the work items to another place where work items can be kept, such as local files or GitHub Issues | `project-setup` |
+## Designs
+
+Write the design on the Solution Design page, and never make a second. If an older template left an item without one, create it as a child page from `assets/design-template.md` (without front matter or comments), check it, and tell the owner to add the page to their template. When the design is approved, also set Design approved.
+
+## Other notes
+
+- Write a record's ID into an item once `filing-project-records` reports the save is on the default branch.
+- A helper opens an item by querying its ID number (`work-tracker-calls.md`) and reading its page and Solution Design page. If it can't reach Notion, give it freshly read text.

@@ -1,51 +1,58 @@
-# Wiki database schemas
+# Wiki schemas
 
-These template fields were inspected on October 11, 2026. Before using them, inspect the installed project’s live data source, options and relation targets. Read identifiers from Project context and connections, or `PROJECT.md` when working locally; copied template IDs must not be used. Preserve system-managed fields.
+These are the owner's template fields as of 2026-10-11. Always inspect the installed project's live schema, options, and relation targets before using them. They're a reference, not permission to add fields or options. System-managed fields are never written.
 
 ## Wiki Inbox
 
-| Property | Type | Options or relationship |
+| Property | Type | Notes |
 | --- | --- | --- |
+| Name | title |  |
 | Capture | text |  |
-| Captured at | created_time | System managed |
+| Source | text |  |
 | Contributor | text |  |
 | Destination areas | multi_select | Current state, Long-term memory, Terminology glossary, Product wiki |
-| Filed links | text |  |
-| Last updated | last_edited_time | System managed |
-| Name | title |  |
-| Processed at | date |  |
-| Processing notes | text |  |
-| Processing status | status |  |
-| Source | text |  |
+| Processing status | status | New, Processing, Needs review, Filed, Dismissed |
+| Processing notes | text | Librarian only |
+| Filed links | text | Librarian only |
+| Processed at | date | Librarian only |
+| Captured at, Last updated | system | Never write |
 
 ## Terminology Glossary
 
-| Property | Type | Options or relationship |
+| Property | Type | Notes |
 | --- | --- | --- |
-| Distinction or alias | text |  |
-| Last checked | date |  |
+| Term | title |  |
 | Meaning here | text |  |
+| System or context | text |  |
+| Distinction or alias | text |  |
 | Naming changes and aliases | text |  |
 | Source | text |  |
 | Status | select | Current, Needs review, Retired |
-| System or context | text |  |
-| Term | title |  |
+| Last checked | date |  |
 
 ## Product Wiki
 
-| Property | Type | Options or relationship |
+| Property | Type | Notes |
 | --- | --- | --- |
-| Approved by | person |  |
-| Approved on | date |  |
-| Category | select | System architecture, Integration architecture, User personas, Security requirements, Functional requirements, User experience, Data model, Non-functional requirements, Operations, Product decisions |
-| Documentation status | status |  |
-| Implementation status | select | Not assessed, Planned, Partially implemented, Live, Retired, Not applicable |
-| Last reviewed | date |  |
-| Last updated | last_edited_time | System managed |
 | Name | title |  |
-| Owner | person |  |
-| Related documentation | relation | Related Product Wiki documentation; verify project scope |
-| Review due | date |  |
-| Source | url |  |
 | Summary | text |  |
 | System area | text |  |
+| Category | select | System architecture, Integration architecture, User personas, Security requirements, Functional requirements, User experience, Data model, Non-functional requirements, Operations, Product decisions |
+| Documentation status | status | Separate from Implementation status |
+| Implementation status | select | Not assessed, Planned, Partially implemented, Live, Retired, Not applicable |
+| Approved by, Owner | person |  |
+| Approved on, Last reviewed, Review due | date |  |
+| Source | url |  |
+| Related documentation | relation | Check project scope |
+| Last updated | system | Never write |
+
+## Long-Term Memory
+
+Five collections: Projects, Topics, Memories, Entities, and Facts. Their schemas are large and owner-defined, so read them live. The fields the procedures depend on:
+
+- **Memories:** Title, Synopsis, Keywords, Record Key, Kind, Status (informational, proposed, accepted, superseded, deprecated, rejected), Lifetime, Review By, Last verified, Saved, Source note, Other fields (JSON), Authorization, Tags, Supersedes, Superseded by, Project, Topic, Work items.
+- **Facts:** Subject, Predicate, Object, Confidence, Valid From, Valid Until, Invalidated At, Review By, Source, Project, Work items.
+- **Entities:** Name, Aliases, Kind, Project, Source, Work items.
+- **Topics** and **Projects:** Name, Description, and their links to each other.
+
+All Work items relations must point at this project's tracker; check before writing.

@@ -117,7 +117,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | --- | --- |
 | Anything about one work item, from finding or reading it to closing or cancelling it; the project's phases and project tasks | `managing-work-items` |
 | A decision or open question more than one work item needs; the project receives a source; an approved fact about the system changes | `filing-project-records` |
-| The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | The memory procedure that "Project memory" names |
+| The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
 | The owner ends the session or clears context, asks for a handoff, or pastes one to check. Offer one when this session's context was compacted or the owner says the work will continue in another session, never after a small edit or a quick lookup. | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
 | A brain dump the owner wants played back before any work starts | `braindump` |

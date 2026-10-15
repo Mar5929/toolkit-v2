@@ -6,15 +6,16 @@ This file lists what setup adds to a project that keeps its work items in local 
 
 | Kind | What it adds |
 | --- | --- |
-| Files and folders | Copy `choices/work-items/local/files-to-add/` into the project. It holds `PROJECT-ROADMAP.md`, and `work-items/` with its guide, `PROJECT-TASKS.md`, and the templates for a work item and its design. |
-| Files inside a skill | The same folder adds five files inside `managing-work-items`, which every project has. `references/work-tracker.md` is the one that the skill opens first. |
+| Files and folders | Copy `choices/work-items/local/files-to-add/` into the project. It holds `PROJECT-ROADMAP.md`, and `work-items/` with its guide and `PROJECT-TASKS.md`. |
+| Work item templates | Copy `.claude/skills/managing-work-items/assets/work-item-template.md` and `design-template.md` into `work-items/work-item-template/`, with the same names. The skill keeps the toolkit's copy; the owner can edit the project's copy. |
+| Files inside a skill | The same folder adds `references/work-tracker.md` inside `managing-work-items`, which every project has. It says where local work items live and how to read and write them. |
 | Lines in `.gitignore` and `.ignore` | Add `/work-items/` to `.gitignore`, so Git does not track the folder, and `!/work-items/` to `.ignore`, so the search tools still read it. Add each line only when the file lacks it. |
 | Settings | Nothing. |
 | `PROJECT.md`, "Toolkit settings" | Write `local` on the Tracker line. Add this line below the Memory line, with the prefix that the owner confirmed: ``- Work item ID prefix: `WI` `` |
 | Text in `AGENTS.md` | Six rows in the "Project map" table. "The text in AGENTS.md" below gives them. |
 | Outside the project folder | Nothing. |
 
-Step 3 of the setup file copies the files of the first two rows. Step 4 writes the line in `PROJECT.md` and the rows in `AGENTS.md`.
+Step 3 of the setup file copies the files of the first three rows. Step 4 writes the line in `PROJECT.md` and the rows in `AGENTS.md`.
 
 ## The text in AGENTS.md
 
@@ -26,7 +27,7 @@ In the project's root `AGENTS.md`, in the "Project map" table, add the first row
 | `work-items/<ID>-<short-slug>/<ID>.md` | One work item: its goal, requirements, questions and answers, tasks, Current state, and history. | `managing-work-items`. |
 | `work-items/<ID>-<short-slug>/DESIGN.md` | The solution design for that one work item: the options considered and the approach the owner approved. | `managing-work-items`. |
 | `work-items/PROJECT-TASKS.md` | The project tasks: administrative tasks that belong to no work item, such as giving a person access. | `managing-work-items`. |
-| `work-items/work-item-template/` | The templates that are copied to start a new work item and its design. | Never edit; they come from the toolkit. |
+| `work-items/work-item-template/` | `work-item-template.md` and `design-template.md`: the templates that are copied to start a new work item and its design. | The owner may edit them; `managing-work-items` copies from them. |
 ```
 
 ## Root guide summary

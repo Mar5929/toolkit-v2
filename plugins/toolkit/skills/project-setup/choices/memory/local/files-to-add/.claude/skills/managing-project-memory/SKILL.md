@@ -1,42 +1,29 @@
 ---
 name: managing-project-memory
-description: 'Keeps project memory and Current State useful across sessions. Use to find, save, correct, retire, or forget lasting project knowledge, record a recurring job, or update current priorities and commitments. Work-item records belong to managing-work-items; shared decisions and sources belong to filing-project-records.'
+description: 'Keeps the project''s memory and Current State true across sessions. Use to find, save, correct, retire, or forget lasting project knowledge; record an event, recurring job, or owner instruction; or update what''s happening now. Other skills call it when work starts, changes, or closes. Work items belong to managing-work-items; shared decisions and sources belong to filing-project-records.'
 ---
 
 # Managing project memory
 
-Keep lasting context available to later sessions and keep the project's Current State accurate. A memory record covers one subject. Current State is a short view of current priorities, commitments, and where the next session should begin.
+Memory holds what a later session needs and no other project file holds. Current State is the one short page of what's true now.
 
-This skill manages local memory files in `memory/`. [references/memory-store.md](references/memory-store.md) gives their storage instructions.
+## Always
 
-When you create or update a memory file, maintain the metadata fields defined in [references/record-format.md](references/record-format.md).
+- Save in the turn the change happens, even if the turn ends with a question. A fact that's only in your reply is lost.
+- Check where a fact belongs before saving it. Memory gets it only when no other file is its home.
+- One record per subject, never one per fact. Update an existing record before making a new one.
+- Name the source of every fact. Mark anything nobody confirmed as "Not checked."
+- Never answer from a replaced or retired record as if it were current.
+- When the owner says to forget something, keep it nowhere.
+- Read a file right before changing it. The owner edits memory by hand.
 
-## Choose the procedure
+## Where to look
 
-Choose the procedure below for the current job. Before accessing local records, read [memory-store.md](references/memory-store.md), "Steps for every read and every save". Before deciding what to retain, asking for approval, or changing memory, read [memory-process.md](references/memory-process.md). Finding recorded context uses the finding procedure without loading the retention and cleanup procedure.
-
-| File | Open it when |
+| When you need to… | Read |
 | --- | --- |
-| [references/memory-process.md](references/memory-process.md) | You decide what to retain, ask for approval, change memory, or review its maintenance. |
-| [references/memory-criteria.md](references/memory-criteria.md) | You decide whether information qualifies for memory, which type it needs, or which project record owns it. |
-| [references/finding.md](references/finding.md) | You find remembered context or answer what was recorded. |
-| [references/saving.md](references/saving.md) | You save, correct, retire, or delete memory. |
-| [references/events-and-recurring-jobs.md](references/events-and-recurring-jobs.md) | You record an event, recurring run, or shared file. |
-| [references/owner-instructions.md](references/owner-instructions.md) | The owner gives a standing instruction, or approves turning a lesson into a rule. |
-| [references/current-state.md](references/current-state.md) | You read or update priorities, commitments, or next-session context. |
-| [references/tidying.md](references/tidying.md) | You review or clean up memory as a whole. |
-| [references/memory-store.md](references/memory-store.md) | You access local records; it routes to storage formats, search, and write procedures. |
-
-## Local file details
-
-Read the relevant file below when the storage instructions call for its detail.
-
-| File | Open it when |
-| --- | --- |
-| [references/searching.md](references/searching.md) | You need the search procedure. |
-| [references/folders-and-files.md](references/folders-and-files.md) | You locate records or maintain their folders and index. |
-| [references/record-format.md](references/record-format.md) | You create or update a memory file. |
-
-## Route other project records
-
-Use `managing-work-items` for a work item or project task. Use `filing-project-records` for a shared decision or open question, a source, a project term, or an authoritative fact about the system. Memory can point to those records when the pointer helps retrieval; it does not duplicate their content or replace them.
+| Decide whether something belongs in memory, its type, or whether to ask | `references/memory-criteria.md` |
+| Save, correct, retire, or forget; record a lesson, event, recurring job, or owner instruction | `references/saving.md` |
+| Find what was recorded or what happened | `references/finding.md` |
+| Update Current State, including when another skill reports work started, changed, or closed | `references/current-state.md` |
+| Clean up memory as a whole | `references/tidying.md` |
+| Read or write the memory files themselves | `references/memory-store.md` |

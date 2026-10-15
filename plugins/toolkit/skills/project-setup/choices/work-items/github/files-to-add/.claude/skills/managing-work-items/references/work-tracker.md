@@ -1,71 +1,66 @@
-# Work items kept as GitHub issues
+# Work items as GitHub issues
 
-Use this reference to read, create, save, and find work items in a project that keeps its work items as GitHub issues. The goal is to read and write each work item consistently with the lifecycle rules.
+Each work item is one issue in the repository named on the "GitHub repository" line of `PROJECT.md` (written `<repo>` below). Use `gh` for everything, even when a GitHub connector is available. The exact commands are in `work-tracker-gh.md`.
 
-This reference only gives the steps for reading and saving. The lifecycle rules decide what happens next: what to save or when, a work item's State, and each approval.
+## Layout
 
-This reference says where each part of a work item is kept in GitHub Issues, and it gives the `gh` commands that read and change each part. `gh` is GitHub's command-line tool.
-
-## Where the work items are kept
-
-- Each work item is one issue. The work item's ID is the issue number, written `#12`.
-  - Find a work item by its number, never by a link or a title.
-  - In a file name or a folder name, write the number without `#`, for example `tests/12-test-plan.md`.
-  - An ID with no prefix, such as `#12`, uses `issue` in a branch name: `claude/issue-12-csv-export`.
-- The body of the issue is the work item template, from the line `## Overview` to the end.
-- The header fields of the work item template are labels on the issue: State, type, priority, who the work item waits on, who builds it, and the approvals. Status has no label.
-- A work item that is Done is an issue closed as completed. A work item that is Cancelled is an issue closed as not planned.
-- Work items can be nested, up to three levels. A top-level item is a work item with no parent, at level 1. A sub-item is a work item inside another work item, at level 2 or level 3. A sub-item is a GitHub sub-issue. `references/work-levels.md`, says what each level holds.
-- A top-level item may use phases to group its tasks and its level-2 sub-items. Each phase is a Roadmap row in the body, and its tasks are checkbox blocks under its heading. An item without phases has one plain task list and a Sub-items line. Sub-items have no phases.
-- The project has phases of its own too, called project phases, which group the top-level items. It also has project tasks, which are tasks that belong to no work item.
-  - The project's phases are milestones, one milestone for each project phase. Each top-level issue is in the milestone of its project phase.
-  - The project's tasks are checkboxes in one pinned issue, titled "Project tasks".
-  - `references/work-tracker-project-roadmap-and-tasks.md` says how to read and change both.
-- A work item's design is one comment whose first line is `## Solution design`. The agent's notes are comments too.
-- The repository is named on the "GitHub repository" line in `PROJECT.md`, under "Toolkit settings". Every command in this skill writes the repository as `<repo>`.
-
-## Mistakes to avoid
-
-- Always pass `-R <repo>`. In a `gh api` path, write `repos/<repo>/...`, never `{owner}/{repo}`. `gh` fills `{owner}/{repo}` from the Git remote of the folder, which can be a different repository.
-- The sub-issue calls take the issue's numeric id, which `gh api repos/<repo>/issues/<number> --jq .id` prints. Do not pass the issue number, and do not pass the `id` that `gh issue view --json id` prints.
-- Never write `close`, `closes`, `closed`, `fix`, `fixes`, `fixed`, `resolve`, `resolves`, or `resolved` directly before `#12` in a pull request title, in a pull request body, or in a commit message. When the pull request or the commit is merged, GitHub closes the issue, which marks the work item Done without the owner's yes.
-  - Write "Part of #12" in place of such a word.
-  - Never link a pull request in the issue's "Development" panel. That link closes the issue on merge too.
-  - When an issue closed by itself anyway, reopen the issue, and tell the owner.
-- The body is one piece of text. Change the body only with the steps in `references/work-tracker-gh-commands.md`, section "Changing the body", because the owner may have edited the body in the browser.
-- Create nothing but issues and comments without the owner's yes.
-  - Ask the owner about the labels once, at setup.
-  - Make a milestone only for a project phase that the owner approved.
-- Never delete an issue, a comment, or a label. Close or cancel the issue instead.
-- Remove a sub-issue link only to move a work item.
-- GitHub Issues has no archive. A closed issue is already left out of the lists of open issues. When the owner asks to archive an open work item, tell the owner that GitHub Issues has no archive and that a closed issue is already left out of the lists of open issues, and ask whether to cancel the work item.
-
-## Writing a record's ID in a work item
-
-Write the ID of a record that `filing-project-records` saved once the save is on the default branch. Work items are not kept in the main checkout, so no wait is recorded for the main checkout. A source's line under Notes, Sources may also hold the web address of the file on the default branch.
-
-## The templates for a work item and its design
-
-Use `assets/work-item-template.md` for the issue body's fields and sections, and `assets/design-template.md` for the design. A work item's design is the `## Solution design` comment.
-
-## How a helper opens a work item by ID
-
-Run `gh issue view <number> -R <account/repository> --json title,body,labels,state`, and `gh issue view <number> -R <account/repository> --comments` for its design comment. The list of inputs names the repository. Pass `-R` on every `gh` command.
-
-## Related work
-
-| For | Use |
+| Part | Where |
 | --- | --- |
-| Deciding what happens next: what to save and when, a State, or an approval | Follow `references/lifecycle-rules.md` in this skill. |
-| Moving the work items to another place where work items can be kept, such as local files or Notion | `project-setup` |
-| Recording the GitHub repository when the "GitHub repository" line is empty | `project-setup` |
+| ID | The issue number, `#12`. Find items by number, never by link or title. In file names drop the `#` (`tests/12-test-plan.md`); in branch names use `issue` (`claude/issue-12-csv-export`). |
+| Header fields | Labels (table below). Status has no label. |
+| Body | The work item template from `## Overview` to the end. |
+| Done / Cancelled | Closed as completed / closed as not planned. |
+| Sub-items | GitHub sub-issues, at most three levels deep. |
+| Item phases | Roadmap rows in the body, each with a `### P1 — <name>` heading over its task checkboxes. |
+| Project phases | Milestones, one per phase; each top-level issue sits in its phase's milestone. |
+| Project tasks | Checkboxes in one pinned issue titled "Project tasks". |
+| Design | One comment whose first line is exactly `## Solution design`. |
+| Agent notes | Comments starting with "Agent:". They show the owner's name, because `gh` signs in as the owner. |
 
-## References
+## Labels
 
-| File | Open it when |
+| Field | Label |
 | --- | --- |
-| [references/work-tracker-gh-commands.md](work-tracker-gh-commands.md) | Before your first `gh` call in a session. It covers the sign-in, the repository, Codex, and the commands for reading, creating, and closing an issue, and for labels, comments, and sub-issues. Open it also when a call fails. |
-| [references/work-tracker-labels.md](work-tracker-labels.md) | You change a header field, you create the labels, or the owner changed a label by hand. |
-| [references/work-tracker-issue-layout.md](work-tracker-issue-layout.md) | You create an issue; you write a section of the body; you add a question or a Recent History row; you add a top-level item's phase, a task, or a sub-item; you save the design or a note; or the owner made an issue by hand. The file starts with a picture of one issue. |
-| [references/work-tracker-searching.md](work-tracker-searching.md) | You find work items by state, read the board (the list of the open work items), find what waits on the owner, read a parent's full tree, search, or list the changes since a date. |
-| [references/work-tracker-project-roadmap-and-tasks.md](work-tracker-project-roadmap-and-tasks.md) | You read or change the project's phases, which are milestones; you put a top-level item in a project phase; or you read or change a project task. |
+| `state` | Exactly one `state:<state>`, lower case with hyphens (`state:refining-requirements`). Ignored once the issue is closed. |
+| `type`, `priority` | Exactly one `type:<type>` and one `priority:<priority>` |
+| `waiting_on` | At most one `waiting-on:owner`, `waiting-on:agent`, or `waiting-on:external`; none means `none` |
+| `delivery` | `delivery:agent-led` or `delivery:owner-led`; none means `not-offered` |
+| Approvals | `requirements-approved`, `result-approved`; the date and words are in the Q&A row |
+| `design` | `design-proposed` or `design-approved`, never both. None means no design, or superseded if a design comment exists. |
+
+Swap labels in one call so an issue never has two state labels or none. The owner's label changes in the browser win; if labels conflict or go missing, ask which State or type applies (recommending the last State in Recent History), and restore a missing priority as `priority:medium`.
+
+## Rules
+
+- Always pass `-R <repo>`, and write `repos/<repo>/...` in API paths, never `{owner}/{repo}`, which `gh` fills from the folder's remote.
+- **Never let GitHub close an issue.** Never put close, closes, closed, fix, fixes, fixed, resolve, resolves, or resolved right before `#12` in a pull request or commit; write "Part of #12". Never link a pull request in the issue's Development panel. If an issue closes itself anyway, reopen it and tell the owner.
+- The body is one piece of text. Re-read it right before changing it, change only your lines, and write the whole thing back, so the owner's browser edits survive.
+- Create nothing but issues and comments without the owner's yes. Labels are agreed once at setup; milestones only for approved project phases.
+- Never delete an issue, comment, or label. Close or cancel instead. Remove a sub-issue link only to move an item.
+- GitHub has no archive. If asked to archive an open item, say so, note that closed issues already drop out of lists, and ask whether to cancel it.
+- The owner closing an issue in the browser counts as their word. An answer or request in the owner's comment counts like one in the session; someone else's comment never does.
+- Never write `#1` for a requirement; GitHub reads it as an issue.
+- In table cells, escape `|` as `\|` and use `<br>` for line breaks. Recent History rows go right under the header separator.
+- Keep the body under 60,000 characters. Past that, tell the owner and propose sub-items; never cut the owner's words or history.
+
+## Creating an item
+
+Build the body from `assets/work-item-template.md`, from `## Overview` on, filled with no prompts left. Keep the headings, table headers, labels, and guide comments; write "None." under Sources and Lessons; leave Kept for the project empty. Write Related items as "Parent #12, phase P2.", "Parent #14.", or "Project phase P01." as fits. Create it with its State, type, and priority labels only, then link it to its parent or milestone.
+
+An issue the owner opened by hand (no `## Overview` or no state label) gets the layout only after the owner's yes: their text becomes Requirement 1's Original verbatim requirement, it gets `state:backlog` and `priority:medium`, and you ask the type unless it's obvious.
+
+## Plans
+
+- Phases live only in top-level issues. A task line ends each line with two spaces so GitHub keeps them apart. Starting a task changes its status after `·`; ticking it changes `- [ ]` to `- [x]` and the status to Done in one edit. The owner ticking a box counts.
+- Linking a sub-item: make it a sub-issue, then name `#14` in the parent's Sub-items cell (or Sub-items line) and record it in the parent's Recent History. Count levels before linking.
+- Moving an item: check levels, re-parent with `replace_parent=true` (or remove it to make it top-level), fix both parents' lists and its Related items, and add or remove its milestone. If the owner moved it in the browser, make the lists agree at your next change.
+- Switching between phases and a plain list keeps task IDs and ticks, moves sub-item numbers between Sub-items cells and the Sub-items line, and records the old phases in Recent History.
+
+## Design
+
+The design is the `## Solution design` comment: the design template from its first section to the end, with no front matter or title. Add `design-proposed` when you post it. Edit it in place; never post a second one. Past 60,000 characters, continue in a `## Solution design (part 2)` comment. Two design comments that aren't parts: ask the owner which is current.
+
+## Other notes
+
+- Write a record's ID into an item once `filing-project-records` reports the save is on the default branch.
+- A helper reads an item with `gh issue view <number> -R <repo> --json title,body,labels,state` and `--comments` for the design.

@@ -1,36 +1,43 @@
 ---
 name: managing-project-memory
-description: 'Finds Notion project knowledge and captures useful changes in Wiki Inbox. Use for remembered context, wiki updates, corrections, work-item outcomes or handoff. Librarian filing uses maintaining-notion-wiki; work tracking uses managing-work-items.'
+description: 'Finds project knowledge in the Notion Project Wiki and captures changes in Wiki Inbox. Use for remembered context, corrections, forgetting, work-item outcomes, and handoff checkpoints. Other skills call it when work starts, changes, or closes. Filing is done by maintaining-notion-wiki; work items belong to managing-work-items.'
 ---
 
-# Managing Notion project memory
+# Managing project memory (Notion)
 
-Keep useful project knowledge discoverable. Coding agents read the Project Wiki and capture changes in Wiki Inbox; `maintaining-notion-wiki` reconciles destinations. For on-demand filing, use the configured Librarian schedule invocation and published Librarian processing skill link; coordinate with any active run.
+Coding agents read the Project Wiki and capture changes in Wiki Inbox. The librarian (`maintaining-notion-wiki`) files captures into their destinations, so agents never edit the wiki pages directly. IDs are under "Notion memory" in `PROJECT.md`; use `using-notion-cli` for every call.
 
-## Read project knowledge
+## Always
 
-1. Read the Notion memory identifiers in `PROJECT.md`. Choose the destination below and open its reference.
-2. Search that destination within this project. Read matching records and relevant sources, including status, dates and replacement links.
-3. When recent work matters, read relevant pending inbox captures and current work items. Use `maintaining-notion-wiki` on demand when work needs reconciled information.
-4. Verify changeable claims against current evidence. Before saying nothing is recorded, search the other relevant destinations and linked work items.
+- Capture in the turn the change happens. A capture records what changed; it doesn't make it true or approve it, and existing approval rules still apply.
+- Search existing records and pending captures before capturing, and link rather than repeat.
+- Every capture carries its sources, dates, uncertainty, affected work items, and any approval evidence.
+- Never capture secrets or anything that could compromise security.
+- A saved capture is not filed. Say "captured, pending filing" until the librarian has filed it.
 
-## Capture changes
+## Reading
 
-1. Keep the work item and its evidence current. Capture useful new context, corrections and reusable outcomes during work, closure and handoff, using [Wiki Inbox](references/wiki-inbox.md).
-2. Link existing documentation or captures instead of repeating them. Include sources, dates, uncertainty and existing approval evidence. Capture and filing need no separate approval. A capture does not establish truth or approve its content; new decisions, requirements, and harness changes retain their applicable approval rules.
-3. Work may close after the capture exists in Wiki Inbox; publication remains pending until the librarian has filed it.
-4. For an explicit correction or forgetting request, run `maintaining-notion-wiki` on demand and verify the requested result before reporting completion.
+1. Pick the destination in `references/wiki-destinations.md` and search it within this project. Read whole matching records, with their status, dates, and replacement links.
+2. When recent work matters, also read pending captures and current work items.
+3. Verify changeable claims before relying on them. Before saying nothing is recorded, search the other destinations and linked work items.
+4. If work needs reconciled information now, run `maintaining-notion-wiki` on demand.
 
-Exclude secrets and information whose storage could compromise system, product or project security. Ordinary contact details may qualify. Existing approval rules govern new decisions and harness changes; wiki filing grants no new authority.
+## When another skill reports work
 
-## Destination references
+The librarian owns Current state, so every report becomes a capture:
 
-| Reference | Open it when |
+- **Work starts, or its next step or wait changes:** capture a checkpoint (the item, its focus, what it waits on, and where to resume) when it changes the project's focus.
+- **Something waits on a record or decision no item holds:** capture a "Waiting on" checkpoint naming what waits, the items affected, and on whom; capture again when it ends.
+- **An item closes:** capture a closure checkpoint only. The item's reusable outcomes are filed through `filing-project-records` while it closes, so do not capture them again.
+- **A handoff:** capture the session's focus and resume point, and list pending capture links in the handoff prompt as not yet filed. Ask for an on-demand librarian pass if the next task needs reconciled documentation, without waiting for it.
+
+## Corrections and forgetting
+
+Capture the correction, then run `maintaining-notion-wiki` on demand and verify the result before reporting it done. When forgetting, never copy the forgotten content into another record or note.
+
+## Where to look
+
+| When you need to… | Read |
 | --- | --- |
-| [Wiki Inbox](references/wiki-inbox.md) | You capture a change or check recent information not yet filed. |
-| [Current state](references/current-state.md) | You need priorities, blockers or resumption context. |
-| [Long-Term Memory](references/long-term-memory.md) | You need lasting context, non-product decisions or lessons. |
-| [Terminology Glossary](references/terminology-glossary.md) | You need established meanings, aliases or naming history. |
-| [Product Wiki](references/product-wiki.md) | You need finalized behavior, architecture or product decisions. |
-
-`managing-work-items` owns active requirements, working designs, tasks and approvals. `filing-project-records` owns source filing and routes finalized project records to their configured home.
+| Know which destination holds what, and how to read it | `references/wiki-destinations.md` |
+| Capture a change, or check what's captured but not yet filed | `references/wiki-inbox.md` |
