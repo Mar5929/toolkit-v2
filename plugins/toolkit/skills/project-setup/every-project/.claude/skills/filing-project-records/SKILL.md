@@ -1,6 +1,6 @@
 ---
 name: filing-project-records
-description: 'Files received sources and records shared decisions and system rules in the places this project keeps them. Use when the project receives a source, a shared decision needs recording, an approved fact about the system changes, or a closing work item needs its Moved up line. Work-item-only records belong to managing-work-items.'
+description: 'Files received sources and records shared decisions and system rules in the places this project keeps them. Use when the project receives a source, a shared decision needs recording, or an approved fact about the system changes, including what a closing work item keeps for the project. Work-item-only records belong to managing-work-items.'
 ---
 
 # Filing project records
@@ -16,7 +16,6 @@ Open only the file in the matching row. When one message needs several steps, do
 | The project was given a source: a transcript, meeting note, email, client document, screenshot, or export | `references/file-source.md` |
 | A decision was made or a question raised that more than one work item needs, or a recorded one changed status | `references/record-decision.md` |
 | An approved fact about the system changed: a rule, a term, an integration document, or a diagram | `references/update-system-doc.md` |
-| `managing-work-items` is closing a work item and needs its Moved up line | `references/closing-records.md`. Without it, file each lesson the owner agreed to keep for the whole project with `record-decision.md`, and each rule the item built with `update-system-doc.md`. |
 
 The memory choice supplies every file but `file-source.md`, because it decides where shared records live. When a row's file is missing, this project keeps no such record: follow the root `AGENTS.md`, "Where information goes".
 

@@ -38,7 +38,7 @@ updated: <YYYY-MM-DD>
 
 **Related items:** <Project phase (top-level) or parent ID (sub-item); related item IDs; shared decisions or rules this item must follow, by ID.>
 
-**Moved up:** <Filled at closing. Shared decisions, rules, and terms this item added or changed, by ID, and lessons moved up; or "None: <reason>".>
+**Kept for the project:** <Filled at closing. Shared decisions, rules, and terms this item added or changed, by ID, and lessons kept for the whole project; or "None: <reason>".>
 
 ## Roadmap
 

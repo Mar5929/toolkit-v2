@@ -28,7 +28,7 @@ The librarian owns Current state, so every report becomes a capture:
 
 - **Work starts, or its next step or wait changes:** capture a checkpoint (the item, its focus, what it waits on, and where to resume) when it changes the project's focus.
 - **Something waits on a record or decision no item holds:** capture a "Waiting on" checkpoint naming what waits, the items affected, and on whom; capture again when it ends.
-- **An item closes:** capture its reusable outcomes (decisions, finalized design, changed terms, lessons) with sources and approvals, plus a closure checkpoint. Return the capture links and their processing state for the Moved up line. Closing can continue once the captures exist.
+- **An item closes:** capture a closure checkpoint only. The item's reusable outcomes are filed through `filing-project-records` while it closes, so do not capture them again.
 - **A handoff:** capture the session's focus and resume point, and list pending capture links in the handoff prompt as not yet filed. Ask for an on-demand librarian pass if the next task needs reconciled documentation, without waiting for it.
 
 ## Corrections and forgetting

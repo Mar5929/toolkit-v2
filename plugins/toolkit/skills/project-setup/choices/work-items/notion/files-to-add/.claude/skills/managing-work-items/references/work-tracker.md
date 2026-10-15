@@ -30,7 +30,7 @@ The owner built the databases, views, and templates in the Notion app. Read them
 - Change page text with small, exact replacements from a fresh read; never replace a whole page. New rows and lines follow the form of their neighbors.
 - Fill a new item's prompts in one change and delete the note at the top, then check no `\<` remains (real content like `Map\<Id, Account\>` is fine). A card the owner made by hand gets the same treatment the first time you touch it, keeping what they wrote.
 - Keep the owner's guide lines under headings. Never touch `<database>`, `<page>`, or `<unknown>` lines.
-- If the lifecycle needs a line the page lacks, such as Moved up, add it in the form of the lines around it.
+- If the lifecycle needs a line the page lacks, such as Kept for the project, add it in the form of the lines around it.
 - Rewrite the Current state's five lines in one replacement. Next action and Summary also have properties of the same name; write both.
 - A new question gets the highest Q-ID on the page plus one. Keep the Waiting on property in step with the open questions.
 - Add Recent History rows first, under the header row.

@@ -7,7 +7,7 @@ Use this reference when the owner chooses local or Hindsight memory. Those proje
 | Kind | What it adds |
 | --- | --- |
 | Files and folders | Copy `choices/memory/repository-records/files-to-add/` into the project. It holds `DECISIONS.md` and `wiki/product-wiki/` with its guide and documents. |
-| Files inside a skill | The same folder adds `references/closing-records.md`, `references/record-decision.md`, and `references/update-system-doc.md` inside `filing-project-records`, and `references/shared-record-paths.md` inside `publish-docs`. Every project has these skills. |
+| Files inside a skill | The same folder adds `references/record-decision.md` and `references/update-system-doc.md` inside `filing-project-records`, and `references/shared-record-paths.md` inside `publish-docs`. Every project has these skills. |
 | Text in `AGENTS.md` | Rows in the "Project map" and "Where information goes" tables. "The text in AGENTS.md" below gives them. |
 | Settings and `PROJECT.md` | Nothing. |
 
