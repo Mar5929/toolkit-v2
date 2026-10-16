@@ -71,9 +71,10 @@ This file holds what an agent needs on every request in this repository, and not
 | `wiki/product-wiki/` | Mike's definition of intended Toolkit behavior. |
 | `wiki/reference/ai-external-knowledge/` | Official pages of Claude Code, Codex, and Hindsight, captured with Firecrawl. `INDEX.md` lists them. |
 | `wiki/archive/` | Earlier research and review records. Read one only when a task needs that history. |
+| `toolkit-v2-real-project-setups/` | One finished project per mix of setup choices, built by running `project-setup` with placeholder answers, so Mike can read and edit what a project gets. Carry his edits back to the source files, and rebuild a setup after the source changes. Sessions here do not load its guides. |
 | `archive/` | Earlier setup material and Salesforce tools. |
 
-Only `plugins/toolkit/` is shipped. Nothing shipped reads `wiki/` or `archive/`.
+Only `plugins/toolkit/` is shipped. Nothing shipped reads `wiki/`, `archive/`, or `toolkit-v2-real-project-setups/`.
 
 ## The starter project
 

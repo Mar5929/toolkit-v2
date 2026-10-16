@@ -1,0 +1,5 @@
+/working-files/
+.obsidian/
+.claude/worktrees/
+*.log
+/memory/

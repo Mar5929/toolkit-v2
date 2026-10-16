@@ -1,0 +1,3 @@
+# Search tools skip what .gitignore names. A setup choice adds here each folder that Git does not track but that holds project records, so the search tools read it.
+!/work-items/
+!/memory/
