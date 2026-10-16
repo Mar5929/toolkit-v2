@@ -88,7 +88,7 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 6 | Where is memory kept? Then: is Claude Code's own memory on in this project? | Local files, or Notion when work items are in Notion. Claude Code's own memory: off. | The "Memory" line of "Toolkit settings", `autoMemoryEnabled` in `.claude/settings.json`, and Step 5 |
 | 7 | Is this a Salesforce project? | Yes when the folder holds `sfdx-project.json`, otherwise no | Step 5 |
 | 8 | Which outside tools and services does this project use? | The ones that the folder and the earlier answers show | One line for each under "Resources and project paths" in `PROJECT.md` |
-| 9 | How should the agent work with the owner on this project? | The `SOUL.md` that the full layout brought | `SOUL.md` |
+| 9 | How should the agent work with the owner on this project? | Help the owner set up `SOUL.md` in the owner's own words | `SOUL.md` |
 | 10 | Is there material to start from? | None. When Step 2 read past work, the facts that no answer has used yet | `sources/`, and each confirmed fact from past work in the place the project's `AGENTS.md` gives for it |
 | 11 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
 
