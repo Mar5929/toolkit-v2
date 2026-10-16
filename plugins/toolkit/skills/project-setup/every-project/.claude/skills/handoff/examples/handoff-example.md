@@ -30,8 +30,8 @@ Record access and supplied text: <configured record access and freshly read text
 Not saved: nothing.
 Saved: the CSV export work item's Current state and one Recent History
 row; the answer that credit notes show negative amounts, added to its
-Questions and Answers. Project's current state: where the next session
-starts, rewritten.
+Questions and Answers. Project's current state: Where we stopped,
+rewritten.
 Filed: the bank's CSV specification, from the owner's email, linked from
 the CSV export work item.
 

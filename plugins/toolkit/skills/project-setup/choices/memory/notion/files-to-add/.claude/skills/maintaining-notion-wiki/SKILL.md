@@ -1,11 +1,11 @@
 ---
 name: maintaining-notion-wiki
-description: 'The librarian: files Wiki Inbox captures into Current state, Long-Term Memory, Terminology Glossary, and Product Wiki, and keeps existing wiki content current. Use for the daily run, an on-demand refresh, or an explicit correction or forgetting request. Coding agents capture through managing-project-memory instead.'
+description: 'The librarian: files Wiki Inbox captures into Long-Term Memory, Terminology Glossary, and Product Wiki, and keeps existing wiki content current. Use for the daily run, an on-demand refresh, or an explicit correction or forgetting request. Coding agents capture through managing-project-memory instead.'
 ---
 
 # Maintaining the Notion Project Wiki
 
-Keep the wiki current, sourced, and free of duplicate authority. The librarian is the only writer to the destinations, and routine runs stay quiet.
+Keep the wiki current, sourced, and free of duplicate authority. The librarian is the only writer to Long-Term Memory, Terminology Glossary, and Product Wiki, and routine runs stay quiet. It never edits the Current state page; coding agents keep it.
 
 ## Always
 

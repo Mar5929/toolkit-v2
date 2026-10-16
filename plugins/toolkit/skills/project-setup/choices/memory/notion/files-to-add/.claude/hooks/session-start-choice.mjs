@@ -9,8 +9,8 @@ export default function ({ cwd }) {
       { cwd, encoding: 'utf8', stdio: 'pipe', input: '', timeout: 15000 }));
     const state = String(page.markdown || '').trim();
     if (!state) throw new Error('Current state page is empty');
-    return { text: 'Use managing-project-memory to read relevant wiki records and pending Wiki Inbox captures.'
-      + ' Verify current work in the tracker; the librarian reconciles Current state.\n'
+    return { text: 'Use managing-project-memory to read relevant wiki records and to keep Current state current.'
+      + ' Verify current work in the tracker.\n'
       + "The project's Current State:\n" + state, readMore };
   } catch {
     return { text: 'The Notion Current state page could not be read here.'

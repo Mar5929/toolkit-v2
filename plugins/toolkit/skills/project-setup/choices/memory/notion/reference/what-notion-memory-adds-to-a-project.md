@@ -46,13 +46,12 @@ In the "Where information goes" table, add these rows after the row "A decision 
 Replace the prompt under the heading "Project memory" in the root `AGENTS.md` with this text, below the heading:
 
 ```markdown
-This project keeps its memory in the Notion Project Wiki, with the skill `managing-project-memory`. The librarian is the skill `maintaining-notion-wiki`, which runs on a schedule or on demand. It files captured changes into the wiki.
+This project keeps its memory in the Notion Project Wiki, with the skill `managing-project-memory`. The librarian is the skill `maintaining-notion-wiki`, which runs on a schedule or on demand. It files captured changes into Long-Term Memory, Terminology Glossary, and Product Wiki.
 
-- The project's current state, a short page of what is true now, is the Current state page in Project Wiki. The session-start command prints it. When it is not in the session's context, read it with `managing-project-memory`.
+- The project's current state, a short page of what is true now, is the Current state page in Project Wiki. The session-start command prints it. Keep it current with `managing-project-memory`, and read it with that skill when it is not in the session's context.
 - Use `managing-project-memory` to find memory and to capture new facts, corrections, and reusable outcomes in Wiki Inbox. The librarian reconciles the affected wiki records afterward, and routine reconciliation needs no report to the owner.
 - Capture supported reusable outcomes without being asked. A capture does not approve its content: active questions and approvals stay in work items, and draft designs stay with their work item.
 - When later work needs records that are not filed yet, start an on-demand librarian run as the project context page's "On-demand invocation" says.
-- When the owner asks where the project stands, also read the relevant pending captures in Wiki Inbox.
 ```
 
 ## Root guide summary

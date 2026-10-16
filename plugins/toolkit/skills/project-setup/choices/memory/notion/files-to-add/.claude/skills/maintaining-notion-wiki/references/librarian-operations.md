@@ -32,7 +32,6 @@
 - Merge JSON metadata, keeping unknown keys. Relation and multi-value writes replace the list, so merge first.
 - If a create's outcome is uncertain, search for it before retrying.
 - Update the existing subject or system-area record when one fits, and link the authoritative home instead of copying it. One capture can update several destinations.
-- For Current state, read the whole page and current tracker records, drop resolved context, keep what helps resume, and update its date, sources, and editor. It's a snapshot, not a log.
 - In Long-Term Memory, don't copy one claim into every collection just to fill them.
 
 ## Metadata

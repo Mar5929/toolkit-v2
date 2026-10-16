@@ -4,7 +4,14 @@ Use this reference at the finish of Notion memory setup. The job is done when th
 
 ## Initialize Current state
 
-Start an on-demand librarian run, the skill `maintaining-notion-wiki`, to initialize the existing Current state sections from the interview: the confirmed priorities, the deadlines, and the next action. Keep the copied page's structure, and read the update back.
+Fill in the Current state page from the interview with these values, then read the page back.
+
+- Last updated: the date, "setup", and "agent".
+- Active work: the current work from question 11, most important first, or "None."
+- Coming up: each dated event or deadline the owner named, or "None."
+- Waiting on: what the project's work waits on, or "None."
+- Standing jobs and shared files: "None."
+- Where we stopped: the next roadmap step from question 11.
 
 ## Set the page ID and check startup
 
