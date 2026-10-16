@@ -175,11 +175,11 @@ Local and Notion memory use the same Current State page. The agent reads it at t
 | Part | What it holds | Why it is there |
 | --- | --- | --- |
 | Last updated | The date, the source, and who updated it. | The agent can tell how old the page is. |
-| Active work | Each piece of work in progress, most important first, as its ID and a few words. | The order tells the agent which work matters most. |
+| Active work | Each piece of work in progress, most important first, as a link that shows its name. | The order tells the agent which work matters most. |
 | Coming up | Dated events and deadlines, with their date first. | A deadline is easy to miss when it sits only inside one work item. |
 | Waiting on | Who owes what, the item or decision it affects, when it was asked, and when to check again. | The agent can follow up on time. |
 | Standing jobs and shared files | Recurring jobs and files kept up to date, with where their record is. | A recurring job has no work item to remind the agent. |
-| Where we stopped | What the last session was working on. For a work item, its ID and a pointer to its own Current state; for other work, its next step. | The agent knows where to start when several pieces of work are active. |
+| Where we stopped | What the last session was working on. For a work item, a link to it and a pointer to its own Current state; for other work, its next step. | The agent knows where to start when several pieces of work are active. |
 
 The page leaves out recent decisions and a list of recent activity. Decision records and work items hold decisions, and Git and work-item history show recent activity; a copy on this page would drift from them. The template is `memory/CURRENT_STATE.md` for local memory and the Current state page in the owner's Project template for Notion memory. Mike Rihm confirmed it on 2026-10-16.
 

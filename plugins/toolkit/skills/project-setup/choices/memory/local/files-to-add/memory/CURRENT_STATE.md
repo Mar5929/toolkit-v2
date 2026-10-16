@@ -4,7 +4,7 @@ Last updated: `<YYYY-MM-DD, the source, and who updated it>`
 
 ## Active work
 
-- `<Most important first. One line per piece of work in progress: its ID and a few words, for example "WI-031: logging a transaction".>`
+- `<Most important first. One line per piece of work in progress: a link that shows its name, for example [[WI-031|<item name>]].>`
 
 ## Coming up
 
@@ -12,7 +12,7 @@ Last updated: `<YYYY-MM-DD, the source, and who updated it>`
 
 ## Waiting on
 
-- `<Who owes what, the ID of the item or decision it affects, the date it was asked, and when to check again.>`
+- `<Who owes what, the item or decision it affects, the date it was asked, and when to check again.>`
 
 ## Standing jobs and shared files
 
@@ -20,4 +20,4 @@ Last updated: `<YYYY-MM-DD, the source, and who updated it>`
 
 ## Where we stopped
 
-- `<What the last session was working on. A work item: its ID and "read its Current state". Other work: what it is and its next step.>`
+- `<What the last session was working on. A work item: its link and "read its Current state". Other work: what it is and its next step.>`
