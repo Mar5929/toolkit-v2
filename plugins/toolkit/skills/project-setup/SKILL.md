@@ -84,8 +84,8 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 2 | What is this project for, in one sentence? | A sentence from what the folder shows, as a suggestion | The outcome line at the top of `AGENTS.md`, the one-sentence line under the title of `README.md`, and "Intended outcome" in `PROJECT.md` |
 | 3 | Who else is involved, and who may decide what? | The people the folder names | One row for each person in "People and ownership" in `PROJECT.md` |
 | 4 | Which systems does the project touch, and which of them are production? | The systems the folder shows | One row for each system in "Systems and environments" in `PROJECT.md` |
-| 5 | Where are work items kept? | Local files | The "Tracker" line of "Toolkit settings", and Step 5 |
-| 6 | Where is memory kept? Then: is Claude Code's own memory on in this project? | Local files, or Notion when work items are in Notion. Claude Code's own memory: off. | The "Memory" line of "Toolkit settings", `autoMemoryEnabled` in `.claude/settings.json`, and Step 5 |
+| 5 | Where are work items kept? | The option that fits this project | The "Tracker" line of "Toolkit settings", and Step 5 |
+| 6 | Where is memory kept? Then: is Claude Code's own memory on in this project? | The option that fits this project. Claude Code's own memory: off. | The "Memory" line of "Toolkit settings", `autoMemoryEnabled` in `.claude/settings.json`, and Step 5 |
 | 7 | Is this a Salesforce project? | Yes when the folder holds `sfdx-project.json`, otherwise no | Step 5 |
 | 8 | Which outside tools and services does this project use? | The ones that the folder and the earlier answers show | One line for each under "Resources and project paths" in `PROJECT.md` |
 | 9 | How should the agent work with the owner on this project? | Help the owner set up `SOUL.md` in the owner's own words | `SOUL.md` |
