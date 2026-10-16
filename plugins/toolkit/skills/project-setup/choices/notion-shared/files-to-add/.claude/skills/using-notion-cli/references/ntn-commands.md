@@ -4,7 +4,7 @@
 
 - `ntn whoami` prints the connection ("Notion CLI"), the owner's email, and the workspace.
 - Only the owner can sign in: ask them to run `ntn login` in a terminal, then wait. Never ask for a token, code, or password.
-- The connection sees only the pages the owner shared at sign-in, and everything under them. A page it can't see returns 404 `object_not_found` even though it exists. The owner fixes that in the Notion app: the page's "…" menu → Connections → add "Notion CLI". Sharing the projects' parent page once covers every project under it.
+- The connection sees only the pages the owner shared at sign-in, and everything under them. A page it can't see returns 404 `object_not_found` even though it exists. The owner fixes that in the Notion app: the page's "…" menu → Connections → add "Notion CLI". Sharing the Projects database, or the page that holds it, once covers every project in it.
 - When `ntn` can't run in a session, the Notion connector (`notion-fetch`, `notion-query-data-sources`, `notion-create-pages`, `notion-update-page`) uses the same data model. It's untested in Codex.
 
 ## One call
