@@ -28,7 +28,7 @@ Take each value from the project's own `PROJECT.md`.
 
 - Replace `<Project name>` with the project's name in `AGENTS.md`, `README.md`, and `PROJECT.md`, on heading lines only. The fill-in guide comments that name `<Project name>` stay as they are.
 - In `PROJECT.md`, "People and ownership", put the owner's row from the project's own `PROJECT.md` in place of the example row. [setup-interview.md](setup-interview.md), "Project and owner (question 1)", gives the form of that row.
-- Leave every example ID in the copied files as it is, whatever prefix the owner chose. The example IDs are `WI-31`, `WI-031`, `[[WI-031]]`, `DEC-001`, `SRC-###`, and `SEC-04`. The skills read the real prefix from "Toolkit settings".
+- Leave every example ID in the copied files as it is, whatever prefix the project uses. The example IDs are `WI-31`, `WI-031`, `[[WI-031]]`, `[[WI-031|<item name>]]`, `DEC-001`, `SRC-###`, and `SEC-04`. The skills read the real prefix from "Toolkit settings".
 - Give `PROJECT.md`, "Toolkit settings", the Tracker and Memory values and the lines of each choice, each with the value that the project's own line holds.
 
 ## The owner's own files

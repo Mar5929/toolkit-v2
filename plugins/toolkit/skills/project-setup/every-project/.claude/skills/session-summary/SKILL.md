@@ -15,8 +15,8 @@ session and where each request stands, and what still needs the owner.
    One row per request, in the order asked. Use only the statuses
    below. Write `What you asked` in the owner's own words, cut down to the
    part that says what the owner asked; the outcome goes in `Result`, where you name
-   the place that holds the work: a work item id (`WI-014`), a source ID
-   (`SRC-012`), the ID or link of a decision, a pull request number, or a
+   the place that holds the work by its name: a work item's name, a
+   source's subject, a decision's title, a pull request with its link, or a
    file path.
    Apart from the status words, bold only the one phrase the owner most
    needs to see.

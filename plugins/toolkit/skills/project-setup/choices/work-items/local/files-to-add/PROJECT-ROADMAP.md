@@ -27,7 +27,7 @@ PROJECT-ROADMAP.md
 **Dependencies:** `<Real prerequisites, or none known.>`  
 **Work items:**
 
-- `<[[WI-031]] and the item's title, one line per top-level work item in this phase, or “None yet.”>`
+- `<[[WI-031|<item name>]], one line per top-level work item in this phase, or “None yet.”>`
 
 ## Open project-level planning questions
 

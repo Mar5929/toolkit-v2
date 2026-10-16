@@ -2,7 +2,7 @@
 work_item: WI-001
 ---
 
-# WI-001: <Work item title> — solution design
+# <Work item title>: solution design
 
 <!-- This file says how to meet the work item's requirements. The work item holds the goal, the requirements, the decisions, and whether this design is proposed or approved. Replace every <prompt>; remove unused rows and sections. -->
 

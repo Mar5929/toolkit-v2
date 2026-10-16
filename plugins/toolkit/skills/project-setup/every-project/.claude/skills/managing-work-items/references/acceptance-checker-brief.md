@@ -12,7 +12,7 @@ Goal: <the goal in the Overview>
 Requirements: <every live requirement block, whole, with Acceptance Criteria>
 Design acceptance checks: <the design's "Acceptance checks" table, and the
   "How to check it" column of the selected option's Requirement coverage>
-Test plan: <the text of tests/<ID>-test-plan.md, or "none">
+Test plan: <the text of tests/<short name>-test-plan.md, or "none">
 Test commands: <the project's commands>
 Working files: <paths of the production records the result was made from, or "none">
 ```

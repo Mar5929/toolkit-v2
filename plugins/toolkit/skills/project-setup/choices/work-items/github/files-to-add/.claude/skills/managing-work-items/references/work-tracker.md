@@ -6,7 +6,7 @@ Each work item is one issue in the repository named on the "GitHub repository" l
 
 | Part | Where |
 | --- | --- |
-| ID | The issue number, `#12`. Find items by number, never by link or title. In file names drop the `#` (`tests/12-test-plan.md`); in branch names use `issue` (`claude/issue-12-csv-export`). |
+| ID | The issue number, `#12`. Find items by number, never by link or title. In branch names use `issue` (`claude/issue-12-csv-export`). |
 | Header fields | Labels (table below). Status has no label. |
 | Body | The work item template from `## Overview` to the end. |
 | Done / Cancelled | Closed as completed / closed as not planned. |

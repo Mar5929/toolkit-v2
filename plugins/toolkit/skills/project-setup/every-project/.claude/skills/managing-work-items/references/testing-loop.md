@@ -11,13 +11,13 @@ The goal: the separate acceptance checker passes the result, then the owner appr
 
 - Commit every change first. Check the item's worktree at its head commit, never the default branch. For docs-only work committed with `publish-docs`, check the default branch at the commit it reported. For a result Git doesn't track, such as a load file, check the file itself and identify it by path and SHA-256 hash.
 - Run the project's tests (`AGENTS.md`, "Commands") and every acceptance check you can. Keep each command and its exact result line. A check you can't run (a real device, a sign-in, the owner looking at a screen) is "not run", with what would run it. Never report it as passed.
-- Write a test plan when the checks involve several scenarios, manual steps, test data, a shared environment, or a release across environments. Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<ID>-test-plan.md`, fill it in, and commit it before the checker starts.
+- Write a test plan when the checks involve several scenarios, manual steps, test data, a shared environment, or a release across environments. Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<short name>-test-plan.md`, fill it in, and commit it before the checker starts.
 - Start the checker every time, with `acceptance-checker-brief.md`, on the exact head commit and with every live requirement in full. Read its report yourself. If no helper can start, check it yourself and put "Independent check: none, <why>" on the first line of your reply.
 
 ## Fixing
 
 - **An unmet requirement, or a defect that breaks the user's flow:** add a fix task, fix it, and check again. The item stays in the Testing Loop.
-- **A defect outside the requirements that doesn't break the flow:** make it a new Backlog item, and show it as a gap with that item's ID.
+- **A defect outside the requirements that doesn't break the flow:** make it a new Backlog item, and show it as a gap by its name.
 - **A failure that needs the owner** (a requirement that reads two ways, a fix that changes what was approved or costs money), or fixes that aren't converging: ask, with a recommendation.
 - **A failure that shows a requirement is wrong:** change the requirement through `refining-requirements.md`. Never bend the build around it.
 - Record each check in Recent History: the checker, the commit, a verdict per requirement, the test plan, the commands and results, and the gaps. Close any phase whose work is done and checked.

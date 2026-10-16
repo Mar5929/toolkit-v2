@@ -138,7 +138,6 @@ Every project already has the skill `managing-work-items`, which holds the proce
 
 | Kind | What it adds |
 | --- | --- |
-| Questions | The prefix of a work item's ID, such as `WI`. |
 | Files and folders | `PROJECT-ROADMAP.md` at the root: the project's phases. `work-items/`: its `AGENTS.md`, `PROJECT-TASKS.md` for tasks that belong to no work item, and `work-item-template/` with `work-item-template.md` and `design-template.md`, copied at setup from `managing-work-items/assets/` so the owner can edit them. |
 | Files inside `managing-work-items` | One: `work-tracker.md`, which says where local work items live and how to read and write them. |
 | `PROJECT.md` | Tracker: `local`, and the ID prefix. |
@@ -148,7 +147,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 
 | Kind | What it adds |
 | --- | --- |
-| Questions | Where in Notion the project's page goes, and the prefix of a work item's ID. |
+| Questions | Where in Notion the project's page goes. Setup picks the prefix of a work item's ID from the project name. |
 | Files inside `managing-work-items` | Two: `work-tracker.md` for placement, properties, and record procedures, and `work-tracker-calls.md` for the Notion calls and known problems. Each project owns its Work Items, Phases and Tasks databases; phases organize project or work-item roadmaps, and tasks belong to a work item or project administration. The layout of a work item's page is the owner's template in Notion, and no file describes it. |
 | Skill and rule | `using-notion-cli`, which says how to run the Notion command-line tool, and the rule `notion-records.md`. The Notion memory module adds the same two, and a project gets them once. |
 | `PROJECT.md` | Tracker: `notion`, the ID prefix, and the links and IDs of the project's Notion page and its Work Items, Phases, and Tasks databases. |
