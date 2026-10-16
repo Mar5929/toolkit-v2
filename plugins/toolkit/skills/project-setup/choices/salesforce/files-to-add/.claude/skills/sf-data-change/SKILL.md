@@ -5,7 +5,7 @@ description: 'Prepares a Salesforce production data change: the load file, backu
 
 # Salesforce production data change
 
-By default no agent writes production data. The owner runs the change, and this skill gives them everything needed to do it without follow-up questions. If `salesforce-agent-permissions.md` allows it, prepare the same files and then run it as that file says.
+This skill prepares everything someone needs to run a production data change without follow-up questions. `salesforce-agent-permissions.md`, row "Change data", decides whether the owner runs it or the agent may.
 
 ## Prepare the handoff
 
@@ -21,15 +21,15 @@ On an update, fill every target cell, so a restore is complete and the load does
 
 ```
 delivery/migrations/
-  production-backups/prod-backup-<MMDDYYYY>-<slug>/<name>.csv
-  data-loads/<change-slug>-<MMDDYYYY>/<load-file>.csv
+  production-backups/<YYYY-MM-DD>-<short-name>/<name>.csv
+  data-loads/<YYYY-MM-DD>-<short-name>/<load-file>.csv
 ```
 
-One folder per backup or load event; a multi-object change can share one. Keep the exact file that was loaded in its event folder. Never commit data files with record IDs or personal data; keep both `.gitignore` files. Record the work item, date, org, objects and population, file paths and row counts, operation, mappings, settings, check, and undo steps (or the backup path) in the work item, not a separate README.
+One folder per backup or load event, named like the dated folders in `delivery/AGENTS.md`; a multi-object change can share one. Keep the exact file that was loaded in its event folder. Record the work item, date, org, objects and population, file paths and row counts, operation, mappings, settings, check, and undo steps (or the backup path) in the work item, not a separate README.
 
 ## Hand over, or run it
 
-- **Never (the default):** give the owner both file paths, which is which, the steps, the check, and the undo.
-- **Allowed, or Ask first and the owner said yes:** run the matching `sf data` command from `salesforce-org-safety.md` with `-o <production org>` on the exact file, keep the success and error files, run the check yourself, record the result and the permission that allowed it in the work item and Recent History, and tell the owner the result, the evidence paths, and the undo steps.
+- **When the owner runs it:** give the owner both file paths, which is which, the steps, the check, and the undo.
+- **When `salesforce-agent-permissions.md` lets the agent run it:** run the matching `sf data` command from `salesforce-org-safety.md` with `-o <production org>` on the exact file, keep the success and error files, run the check yourself, record the result and the permission that allowed it in the work item and Recent History, and tell the owner the result, the evidence paths, and the undo steps.
 
 A pre-deploy snapshot for rollback is a manual step, recorded through `sf-component-tracker`.

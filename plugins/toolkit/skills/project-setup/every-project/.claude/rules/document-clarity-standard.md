@@ -1,27 +1,8 @@
 ---
 paths:
-  - "AGENTS.md"
-  - "**/AGENTS.md"
-  - "PROJECT.md"
-  - "README.md"
-  - "SOUL.md"
-  - "DECISIONS.md"
-  - "PROJECT-ROADMAP.md"
-  - "sources/INDEX.md"
-  - "wiki/product-wiki/**"
-  - "wiki/reference/current-system/**"
-  - "wiki/reference/ai-external-knowledge/INDEX.md"
-  - "**/SOURCE-RECORD.md"
-  - "delivery/**/*.md"
+  - "**/*.md"
   - "delivery/**/*.html"
-  - "tests/**/*.md"
-  - "working-files/**/*.md"
   - "working-files/**/*.html"
-  - "work-items/**"
-  - "memory/**"
-  - ".claude/skills/**"
-  - ".claude/rules/**"
-  - ".claude/output-styles/**"
 ---
 
 # Document Clarity Standard

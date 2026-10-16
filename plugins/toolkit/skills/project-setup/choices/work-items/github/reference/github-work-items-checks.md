@@ -1,8 +1,6 @@
 # The checks for work items in GitHub Issues
 
-This file holds the checks that show that work items in GitHub Issues are set up. Steps 9 and 12 of [github-work-items-setup.md](../github-work-items-setup.md) use it.
-
-Run these checks after the steps in GitHub, which are steps 6 to 8 of the setup file, and after the steps in [updating-a-project-with-github-work-items.md](updating-a-project-with-github-work-items.md). `<repo>` is the name on the "GitHub repository" line of `PROJECT.md`.
+This file holds the checks that show that work items in GitHub Issues are set up. Run them after the steps in GitHub, at the finish of setup, and after the steps in [updating-a-project-with-github-work-items.md](updating-a-project-with-github-work-items.md). `<repo>` is the name on the "GitHub repository" line of `PROJECT.md`.
 
 - `gh auth status` shows the owner's account with the `repo` scope.
 - `gh repo view <repo>` answers, and issues are on.

@@ -9,7 +9,7 @@ Lasting memory lives in the Hindsight bank recorded in `PROJECT.md`, under "Tool
 
 ## What qualifies
 
-Save a lasting, project-specific fact, person, term, decision, lesson, event, or constraint when no other memory explains it, losing it would cost a later session real time, and it came from the owner or work with the owner. A significant failure the agent found and fixed can qualify, with its cause and fix.
+Save a lasting, project-specific fact, person, lesson, event, or constraint when no other memory explains it, losing it would cost a later session real time, and it came from the owner or work with the owner. A significant failure the agent found and fixed can qualify, with its cause and fix.
 
 - The authoritative record stays where `AGENTS.md`, "Where information goes", puts it. Memory can point to it and keep the lasting context, but is never a second source of current status.
 - Keep proposals, unchecked claims, and open questions marked as such. An agent's report is never an owner decision.
@@ -29,10 +29,10 @@ Search before asking the owner to repeat anything or acting on a past decision, 
 
 ## Correcting and forgetting
 
-Search and read first, then save a `Correction: <topic>` document stating the old claim, what's true now, the evidence, and what it supersedes. A correction doesn't delete the old document, so check what retrieval returns. To forget something, use the add-on's delete capability if it has one; otherwise tell the owner which record to remove in the bank dashboard. Never call a correction a deletion.
+Search and read first, then save a `Correction: <topic>` document stating the old claim, what's true now, the evidence, and what it supersedes. A correction doesn't delete the old document, so check what retrieval returns. The add-on's tools have no delete capability. To forget something, tell the owner which record to remove in the bank's dashboard page, `https://memory.mrihm-memory.com/banks/<bank ID>`, under the bank recorded in `PROJECT.md`. Never call a correction a deletion.
 
 ## When another skill reports work
 
-Active work, next steps, waits, and handoff context stay in the work tracker. When an item closes or is handed off, review its lessons against "What qualifies". An approved standing instruction goes to `owner-preferences.md` or its rule (Hindsight can keep its history). A lesson kept as not proven is saved with that status, its item, and the dates seen. Lessons that don't qualify stay in the work item.
+Active work, next steps, waits, and handoff context stay in the work tracker. A wait no work item holds becomes a project task through `managing-work-items`; close that task when the wait ends.
 
-Standing instructions for the agent live in `owner-preferences.md` or a rule, never only in Hindsight. Bank configuration changes go through `project-setup`.
+When an item closes or is handed off, save each lesson `closing.md` sends here, with its status, its item, and the dates it was seen. An approved standing instruction goes to `owner-preferences.md` or its rule, never only to Hindsight; Hindsight can keep its history. Bank configuration changes go through `project-setup`.

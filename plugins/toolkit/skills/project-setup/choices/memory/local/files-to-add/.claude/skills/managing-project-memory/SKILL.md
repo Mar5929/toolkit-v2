@@ -13,7 +13,7 @@ Memory holds what a later session needs and no other project file holds. Current
 - Check where a fact belongs before saving it. Memory gets it only when no other file is its home.
 - One record per subject, never one per fact. Update an existing record before making a new one.
 - Name the source of every fact. Mark anything nobody confirmed as "Not checked."
-- Never answer from a replaced or retired record as if it were current.
+- Never answer from a superseded or retired record as if it were current.
 - When the owner says to forget something, keep it nowhere.
 - Read a file right before changing it. The owner edits memory by hand.
 

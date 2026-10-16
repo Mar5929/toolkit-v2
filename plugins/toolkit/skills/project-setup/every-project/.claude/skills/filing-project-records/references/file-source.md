@@ -15,17 +15,11 @@ Save a source and give it an SRC-### ID so other records can name it. File every
 
 ## What to do with what the source says
 
-Filing a source decides and approves nothing. Handle each thing in it:
+Filing a source decides and approves nothing. Put each thing the source holds where the root `AGENTS.md`, "Where information goes", says, with the skill that its row or "Which skill" names. These rules also apply:
 
-| The source holds | Do |
-| --- | --- |
-| A request, an idea, or a bug | A new work item, or a requirement on an open one, in the source's words, with `managing-work-items`. |
-| A stated decision, or a question | More than one work item needs it: `record-decision.md`, using its checks to tell a decision from an open question. One work item: `managing-work-items`. |
-| A fact about how the system works today | `wiki/reference/current-system/`, as `wiki/reference/AGENTS.md` says. |
-| A term and its meaning | `update-system-doc.md`. |
-| An action item a named person agreed to | Save it at once, without asking: a task in its work item, or a project task with that person as Who does it, with `managing-work-items`. |
-| A date or deadline for current work | Its work item or project task with `managing-work-items`; if it belongs in the project's current state, tell `managing-project-memory`. |
-| A lasting fact about a person or the client that fits no row above, or a claim nobody checked | `managing-project-memory`, with the SRC ID and whether the claim was checked. |
+- For a stated decision or a question that more than one work item needs, use the checks in `record-decision.md` to tell a decision from an open question.
+- Save an action item a named person agreed to at once, without asking: a task in its work item, or a project task with that person as Who does it.
+- A fact or claim that goes to memory carries the SRC ID and whether the claim was checked.
 
 ## When no work item is open for the source
 

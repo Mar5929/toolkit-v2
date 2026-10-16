@@ -45,9 +45,7 @@ When the owner asks how a part of the existing system works today, or a work ite
 1. Before you reply, write what you found in that area's file in `current-system/`, in the form above. When the area already has a file, add to that file.
 2. Answer from the file, and name its path in the reply. A result given only in the reply is lost, because a later session never sees the reply.
 3. When the analysis was for a work item or a project task, write the file's path there with `managing-work-items`.
-4. Never commit the file without the owner's yes. After the yes, commit it with `publish-docs`.
-   - In a session in the main checkout, leave the file there, and say in the reply that it is not committed yet.
-   - In a session in its own worktree, say in the reply that the file is not committed yet, and ask the owner whether to commit it with `publish-docs`. A later session does not see a file that is only in that worktree.
+4. Never commit the file without the owner's yes. Until then, say in the reply that it is not committed yet, and ask whether to commit it, because a later session does not see a file that is only in a worktree. After the yes, commit it with `publish-docs`.
 
 ## What must stay true
 

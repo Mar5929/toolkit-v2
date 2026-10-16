@@ -12,7 +12,7 @@ Setup is done when all of these are true:
 - the project holds the full layout, which is everything every project gets;
 - each answer of the owner has added its part;
 - every answer is written in its place;
-- the checks of Step 6 have run, and the owner knows which steps are left for the owner.
+- the final checks have run, and the owner knows which steps are left for the owner.
 
 There is no setup program. You copy and edit the files yourself. This guide gives the owner's procedure, the questions, and what must be true at the end.
 
@@ -38,8 +38,7 @@ Paths start from the folder that holds this `SKILL.md`. Both hosts show that pat
 
 The owner said "set up this project" or named this skill.
 
-- Put Steps 2 to 6 in the plan tool. In Claude Code the plan tool is the task list, and in Codex it is `update_plan`. When the one you work in has no plan tool, continue without one.
-- Record each answer the owner gives as a checked line there, for example `- [x] Work items: local`, because a later turn may start without this skill loaded. The checked lines help a later turn; the files that each answer is written into are the lasting record.
+Put Steps 2 to 6 in your plan, and record each answer the owner gives there as a checked line, for example `- [x] Work items: local`, because a later turn may start without this skill loaded. The files that each answer is written into are the lasting record.
 
 ## Step 2: Look at the folder
 
@@ -69,15 +68,15 @@ Toolkit V2 is set up at the root of a Git repository, in its main checkout. [ref
 
 ## Step 3: Copy the full layout
 
-Copy `every-project/` into the project, hidden files included. Add each file that the project does not have. In a project that already has records, hold back the folders that moving those records would fill. Agree the move with the owner after question 6, because the memory choice decides where some records belong; [reference/local-wiki-layout.md](reference/local-wiki-layout.md) says how. Copy into those folders only after the move. For a file that the project already has with different content, show the owner the difference and ask.
+Copy `every-project/` into the project, hidden files included. Add each file that the project does not have. For a file that the project already has with different content, show the owner the difference and ask. Records that the project already has stay where they are unless the owner approves a move.
 
-[reference/placing-files.md](reference/placing-files.md) gives a copy command that never replaces a file, what to do with each kind of file the project already has, and the link `.agents/skills` that lets Codex read the same skills as Claude Code.
+[reference/placing-files.md](reference/placing-files.md) says how to copy without replacing a file, what to do with each kind of file the project already has, and how to make the link `.agents/skills` that lets Codex read the same skills as Claude Code. [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) lists the skills, hook commands, and settings every project has, and gives the merge rules for a settings file that already exists; open it whenever a settings file changes.
 
 ## Step 4: Ask the questions
 
 Ask one question per message, in the order of the table. Give each question a recommendation and the reason for it. When the folder or past work already shows the answers to several questions, show those answers together, and ask the owner to confirm or correct them in one reply. Ask each remaining question by itself.
 
-Write each answer in its place as soon as the owner gives it. During setup, write a record straight into the project folder, in the form that the guide of its folder gives. Make no worktree and no pull request for it, even where a project skill says to save a record that way: nothing is committed yet, and the setup commit in Step 6 saves every record.
+Write each answer in its place as soon as the owner gives it. During setup, write a record straight into the project folder, in the form that the guide of its folder gives. Make no worktree and no pull request for it, even where a project skill says to save a record that way: nothing is committed yet, and the setup commit saves every record.
 
 | Order | Question | What to offer or recommend | Where the answer goes |
 | --- | --- | --- | --- |
@@ -89,7 +88,7 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 6 | Where is memory kept? Then: is Claude Code's own memory on in this project? | Local files, or Notion when work items are in Notion. Claude Code's own memory: off. | The "Memory" line of "Toolkit settings", `autoMemoryEnabled` in `.claude/settings.json`, and Step 5 |
 | 7 | Is this a Salesforce project? | Yes when the folder holds `sfdx-project.json`, otherwise no | Step 5 |
 | 8 | Which outside tools and services does this project use? | The ones that the folder and the earlier answers show | One line for each under "Resources and project paths" in `PROJECT.md` |
-| 9 | How should the agent work with the owner on this project? | The `SOUL.md` that the full layout brought | `SOUL.md` |
+| 9 | How should the agent work with the owner on this project? | Help the owner set up `SOUL.md` in the owner's own words | `SOUL.md` |
 | 10 | Is there material to start from? | None. When Step 2 read past work, the facts that no answer has used yet | `sources/`, and each confirmed fact from past work in the place the project's `AGENTS.md` gives for it |
 | 11 | Where does the project stand? | None | The roadmap, in the place where work items are kept. With local or Notion memory, also the project's Current State |
 
@@ -101,9 +100,9 @@ Read [reference/setup-interview.md](reference/setup-interview.md) before asking 
 
 The answers to questions 5, 6, and 7 pick a choice. The questions after that are about how the owner wants that choice set up in this project.
 
-The questions are steps of the choice's setup file. Open that file as soon as the owner gives the answer. The table in Step 5 names it, and Step 5 says how you go through its steps and when the choice is set up. For every choice, the steps have you do these things, in the order that the setup file gives:
+The questions are steps of the choice's setup file. Open that file as soon as the owner gives the answer. The table in Step 5 names it. For every choice, the steps have you do these things, in the order that the setup file gives:
 
-- Tell the owner, in a few plain lines, how the toolkit sets the choice up when the owner changes nothing.
+- Tell the owner, in a few plain lines, how the toolkit sets the choice up when the owner changes nothing. The choice's default reference holds those lines.
 - Ask whether the owner wants those defaults or changes for this project.
 - After a no, ask what the owner wants to be different.
 - Ask the choice's other questions.
@@ -122,7 +121,14 @@ Each answer to questions 5, 6, and 7 has a folder under `choices/`, and that fol
 | Memory: Hindsight | [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) |
 | Salesforce: yes | [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) |
 
-Follow each choice's setup file for the timing of its questions, file copying, settings, external setup, and finishing checks. Add its files and lines as it directs, using Step 3's copy procedure. Write a configured identifier when its verified value is known. Begin any required sign-in during the interview; wait for that access and the owner's required answers and authorization before dependent external steps.
+Follow each choice's setup file for the timing of its questions, file copying, settings, external setup, and finishing checks. Write a configured identifier when its verified value is known. Begin any required sign-in during the interview; wait for that access and the owner's required answers and authorization before dependent external steps.
+
+These routes hold for every choice, so the setup files do not repeat them:
+
+- Copy a choice's `files-to-add/` folders as [reference/placing-files.md](reference/placing-files.md) says.
+- Run a choice's checks as [reference/finishing.md](reference/finishing.md), "Final checks", says, and fix what a failed check found.
+- Tell the owner each step that only the owner does as [reference/finishing.md](reference/finishing.md), "The owner's steps", says, and list what is left in the report that the same file gives.
+- In "check the setup", "update the toolkit", and a change of where work items or memory are kept, the choice's "what it adds" reference gives the folders, lines, and settings that the choice adds, and its setup file gives its checks. [reference/update.md](reference/update.md) says how each of those jobs works.
 
 When a sign-in is still not done when setup finishes, the steps that wait for it stay open. Name each one in the report, with the owner's step that it waits for.
 
@@ -139,15 +145,7 @@ The project's skills read the exact labels in "Toolkit settings".
 
 ## Step 6: Finish
 
-[reference/finishing.md](reference/finishing.md) gives the detail of each part.
-
-1. Check that every answer of the interview is written in its place. The table in Step 4 gives the place for each answer.
-2. Write the roadmap from question 11 in the place where work items are kept.
-3. Finish the selected memory choice using its setup reference, including startup context and open owner steps from question 11.
-4. Check that the setup works: the settings files are valid, the session-start command prints the project's Current State when the project has one, each service that the owner chose answers, and the recorded humanizing skill or plugin is available in each host the project uses.
-5. Tell the owner the steps that only the owner can do, such as signing in to a service or trusting the project folder in Codex.
-6. Report what was set up, what was made outside the project folder, and what is still open.
-7. Offer to commit the setup files.
+Follow [reference/finishing.md](reference/finishing.md). Setup is finished when every answer is written in the place the table in Step 4 gives, the roadmap is written, the memory choice's startup records and open owner steps are written, the final checks have run, the owner knows the steps that only the owner can do, and the reply ends with the report and the offer to commit the setup files.
 
 ## An existing project
 
@@ -180,34 +178,6 @@ Read [reference/setup-problems.md](reference/setup-problems.md) when the project
 ## What setup never does
 
 - **It never changes this skill's own folders.** `every-project/` and `choices/` are the source for every project.
-- **It never writes a script into a project.** The only code that a project gets from the toolkit is the three hook commands and their choice-owned startup resources.
+- **It writes no code of its own into a project.** The only code that a project gets is what the toolkit ships: the three hook commands and the memory choice's startup module.
 - **It never becomes a work item.** No work item is made for setup or for a step of it.
 - **It never leaves temporary files.** When you need a temporary folder, remove it once its step is done. Save no path, file list, or diff in a file of the project.
-
-## Files
-
-The table lists the files of `reference/`, the setup file of each answer, and the folders that are copied into a project. Each setup file names the files under its own `reference/` folder that hold the detail of its steps, so the table does not list them.
-
-| File | Open it when |
-| --- | --- |
-| [reference/setup-interview.md](reference/setup-interview.md) | Step 4: you need choice comparisons, the owner row, or the actions for an interview answer. |
-| [reference/setup-problems.md](reference/setup-problems.md) | Step 2 or a failed operation: you need folder checks, recovery, or the host permission process. |
-| [reference/placing-files.md](reference/placing-files.md) | Steps 3 and 5: you copy `every-project/` or a `files-to-add/` folder into the project, the project already has one of the files, or you make the `.agents/skills` link. |
-| [reference/skills-hooks-settings.md](reference/skills-hooks-settings.md) | Whenever a settings file changes: you need the skills and the three hook commands every project has, the settings every project gets, and the rules for a settings file that already exists. |
-| [reference/project-store-summary.md](reference/project-store-summary.md) | Setup completion or a verified store migration: write the root guide summary from this project's actual record destinations. |
-| [reference/finishing.md](reference/finishing.md) | Step 6: you need the places an answer is written, the form of a line in `owner-preferences.md`, the project's Current State, the final checks, the owner's steps, the report, and the commit offer. |
-| [reference/context-from-past-work.md](reference/context-from-past-work.md) | Step 2 and question 10: the project had work before setup, and you read its past sessions or other material to offer answers and fill the project's files. |
-| [reference/existing-project.md](reference/existing-project.md) | The folder already has agent files that the toolkit did not put there: you need what to look for, how the branch works with the folders that Git ignores, and the known problems. |
-| [reference/local-wiki-layout.md](reference/local-wiki-layout.md) | Before copying or comparing new wiki paths in an existing project: review and verify owner-approved record moves; a setup check reports only. |
-| [reference/update.md](reference/update.md) | The owner asks to update the toolkit, to check the setup, or to change a setup choice. |
-| [reference/setup-copy.md](reference/setup-copy.md) | An update or a check: you build the setup copy, which is the files the project would get today, in a temporary folder. |
-| [choices/work-items/local/local-work-items-setup.md](choices/work-items/local/local-work-items-setup.md) | The owner keeps work items in local files. |
-| [choices/work-items/notion/notion-work-items-setup.md](choices/work-items/notion/notion-work-items-setup.md) | The owner keeps work items in Notion. |
-| [choices/work-items/github/github-work-items-setup.md](choices/work-items/github/github-work-items-setup.md) | The owner keeps work items in GitHub Issues. |
-| [choices/memory/local/local-memory-setup.md](choices/memory/local/local-memory-setup.md) | The owner keeps memory in local files. |
-| [choices/memory/notion/notion-memory-setup.md](choices/memory/notion/notion-memory-setup.md) | The owner keeps memory in Notion. |
-| [choices/memory/hindsight/hindsight-setup.md](choices/memory/hindsight/hindsight-setup.md) | The owner keeps memory in Hindsight. |
-| [choices/salesforce/salesforce-setup.md](choices/salesforce/salesforce-setup.md) | The project is a Salesforce project. |
-| [choices/notion-shared/notion-setup.md](choices/notion-shared/notion-setup.md) | One of the two Notion setup files sends you here for the steps that the two Notion answers share. |
-| `every-project/` | Step 3: the full layout. |
-| The `files-to-add/` folders under `choices/` | Step 5: the files that an answer adds. Each setup file names its folders. |

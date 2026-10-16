@@ -26,7 +26,7 @@ ntn api v1/pages -d @body.json < /dev/null                    # create (a body m
 ntn api v1/data_sources/<data-source-id>/query -d '{"filter": …, "sorts": […], "page_size": 100}' < /dev/null
 ```
 
-`.results` are the rows. When `has_more` is true, repeat with `"start_cursor": "<next_cursor>"`. Filters look like `{"property":"ID","unique_id":{"equals":31}}`, `{"property":"Status","status":{"equals":"In Progress"}}`, or `{"property":"Parent item","relation":{"contains":"<page-id>"}}`, combined with `{"and":[…]}` or `{"or":[…]}`. `v1/search` matches titles only.
+`.results` are the rows, at most 100 per call. When `has_more` is true, repeat with `"start_cursor": "<next_cursor>"`, and read every page before acting. Filters look like `{"property":"ID","unique_id":{"equals":31}}`, `{"property":"Status","status":{"equals":"In Progress"}}`, or `{"property":"Parent item","relation":{"contains":"<page-id>"}}`, combined with `{"and":[…]}` or `{"or":[…]}`. `v1/search` matches titles only.
 
 ## Page text
 
@@ -38,7 +38,7 @@ ntn api v1/pages/<page-id>/markdown < /dev/null | jq -r .markdown
 
 - One block per line, no blank lines. Literal `<` `>` `|` `*` `$` are backslash-escaped: `\<Goal\>`. A line break inside a block or cell is `<br>`.
 - Tables are `<table header-row="true">` with one `<td>` per line. Toggle headings are `# Title {toggle="true"}` with contents indented one tab (table row lines excepted). Callouts and `<details>` toggles indent their contents one tab.
-- `<database …>` is an embedded view and `<page …>` a child page. Never remove either.
+- `<database …>` is an embedded database view and `<page …>` a child page.
 
 Change text with exact replacements built from a read you just made:
 

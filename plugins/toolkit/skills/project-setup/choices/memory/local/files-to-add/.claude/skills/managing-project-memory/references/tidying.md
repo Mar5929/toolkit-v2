@@ -10,8 +10,8 @@ The goal is memory that stays small and true. Tidy when the owner asks, or when 
 
 ## What the plan looks for
 
-- **Duplicates.** Merge into the broader record, or the older one if neither is broader. Move sections and lessons, join Seen lines and work item lists, then mark the other record replaced and link both ways. Never merge an event into another type. Two records for one recurring job become one, keeping every run. A record that covers separate subjects gets split.
-- **Broken links.** Work items that no longer exist (tell the owner), links to missing records, current guidance that links to a replaced record, and links to retired records, which get "(retired)".
+- **Duplicates.** Merge two records on one subject into the broader one, keeping every section, lesson date, work item, and run, and set the other to `superseded`. Never merge an event into another type. Split a record that covers separate subjects.
+- **Broken links.** Work items that no longer exist (tell the owner), links to missing records, current guidance that links to a superseded record, and links to retired records, which get "(retired)".
 - **Stale facts.** Past its check-by date: check it, then set a new date or retire it. A passed date doesn't prove an unchecked claim false.
 - **Wrong place.** Work item status or requirements go to the work item. Shared decisions, terms, and system facts go to `filing-project-records`. Instructions go to `owner-preferences.md`. Guesses and facts the owner rejected get retired. A record of the wrong type moves, and its links get fixed. Records the owner edited by hand stay as they are; list them, and fix one only with a yes.
 - **Too much.** If the startup index was cut short, propose merges and retiring events that nothing still needs.

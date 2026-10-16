@@ -6,7 +6,7 @@ Applies to every agent and subagent.
 
 - This rule holds the limits that are the same in every project. No line of another file changes them. For production, the limit is to follow the owner's file.
 - `.claude/rules/salesforce-agent-permissions.md` holds the owner's choices for this project. For each kind of action and each kind of org, it says Allowed, Ask first, or Never. Read it before any command that changes an org.
-- The refuse list, `permissions.deny` in `.claude/settings.json`, makes Claude Code refuse a command that names a read-only org and changes it. It also refuses a command that names a production org and makes a change that the owner's file says Never for production. The owner's file decides what this rule does not forbid.
+- The refuse list, `permissions.deny` in `.claude/settings.json`, makes Claude Code refuse a deploy, a deploy validation, a data change, anonymous Apex, or an Apex or Flow test run when the command names a read-only org. It refuses the same commands when the command names a production org and the owner's file says Never for that change in production. It refuses `sf project delete source` and `sf org delete` on every org. The owner's file decides what this rule does not forbid.
 
 ## Limits in every project
 
@@ -45,9 +45,8 @@ The production entries follow the production cells of the owner's file. Each ent
 - Tell the owner which actions the owner's file allows that Claude Code will still refuse.
 - Keep every entry for a read-only org.
 
-## Enforcement
+## What the refuse list does not stop
 
-- In Claude Code, the project's `.claude/settings.json` refuses a deploy, a deploy validation, a data change, anonymous Apex, or an Apex or Flow test run when the command names a read-only org. It refuses the same commands when the command names a production org and the owner's file says Never for that change in production. It refuses `sf project delete source` and `sf org delete` on every org. Setup writes the entries for the production orgs and read-only orgs that the owner names.
 - The refuse list matches the text of a command. It does not stop a command that reaches production without naming it, a command that names no org, or a script. This rule forbids all three.
 - Codex has no refuse list. There, this rule and the owner's file are the only protection for production and read-only orgs.
 - Follow this rule and the owner's file whether or not a command is refused.

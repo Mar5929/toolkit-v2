@@ -7,7 +7,7 @@ description: 'Merges one approved GitHub pull request only after its checks and 
 
 Use this skill to merge one exact GitHub pull request and to confirm that GitHub reports it merged. After that, the skill removes only that pull request's worktree and branches. The goal is that nothing unchecked is merged, and that no other session's work is removed.
 
-This skill merges one pull request. Taking an approved work item through merge and deployment is the job of `managing-work-items`, which uses this skill for the merge of a pull request.
+This skill merges one pull request. Taking an approved work item through merge and deployment is the job of `managing-work-items`, which uses this skill for the merge. When the repository has no remote (`git remote` prints nothing), there is no pull request: never fetch, and tell the owner that `managing-work-items` does the local merge.
 
 Four rules apply to every step:
 
@@ -16,18 +16,11 @@ Four rules apply to every step:
 - Run each command on its own.
 - When more than one pull request could match, ask the owner which pull request to merge.
 
-## Words used in this skill
-
-- The head branch is the branch that holds the pull request's commits. The head commit is the commit that GitHub reports as `headRefOid` for the pull request.
-- The base branch is the branch that the pull request merges into.
-- A fork is a copy of the repository under another account.
-- `<head-worktree>` is the worktree that holds the head branch, and `<base-worktree>` is the worktree that holds the base branch.
+When a step below stops, refuses, or finds the pull request in an unexpected state, follow [references/merge-failures.md](references/merge-failures.md).
 
 ## Step 1: resolve the exact pull request
 
 Use the number or URL the owner or `managing-work-items` supplied. Resolve its repository from that URL or the confirmed project repository. Only when no pull request was supplied, use the current branch to identify it with `gh pr view`. Confirm that the result matches the requested pull request before continuing.
-
-Read that exact pull request, the worktrees and the configured remotes:
 
 ```text
 gh pr view <number-or-url> --repo <owner/repo> --json number,url,state,headRefName,headRefOid,baseRefName,baseRefOid,isCrossRepository,title,body,commits
@@ -35,21 +28,11 @@ git worktree list --porcelain
 git remote -v
 ```
 
-Record these facts:
+`<remote>` is the local remote whose fetch and push URLs identify that repository. When no remote matches, skip the local update and cleanup in step 6. `<head-worktree>` holds the head branch, and `<base-worktree>` holds the base branch.
 
-- the repository, including its GitHub host;
-- the verified local remote whose fetch and push URLs identify that repository, as `<remote>`; when no matching remote exists, skip local update and cleanup;
-- the pull request number and URL;
-- the head branch and the head commit (`headRefOid`);
-- the base branch and its commit (`baseRefOid`);
-- the worktrees that hold the head branch and the base branch;
-- whether the head branch is in a fork.
+When the local head branch exists, it must be at `headRefOid`. When it is at another commit, the local branch may hold work that is not in the pull request. Stop, keep the branch, and tell the owner.
 
-When the local head branch exists, it must be at `headRefOid`. When it is at another commit, the local branch may hold work that is not in the pull request. Stop before step 2, keep the branch, and tell the owner.
-
-Find the linked work item with `managing-work-items`, using the work item ID in the branch name or pull request and the project's configured tracker.
-
-When you find no linked work item, skip the note in step 7.
+Find the linked work item with `managing-work-items`, from the work item ID in the branch name or the pull request.
 
 ## Step 2: check the merge is allowed
 
@@ -65,8 +48,6 @@ A standing merge instruction is a line in `.claude/rules/owner-preferences.md` i
 
 ## Step 3: check the pull request on GitHub
 
-Run these two commands:
-
 ```text
 gh pr view <number> --repo <owner/repo> --json state,isDraft,mergeable,mergeStateStatus,reviewDecision,statusCheckRollup,headRefOid,baseRefName,baseRefOid
 gh pr checks <number> --repo <owner/repo>
@@ -78,36 +59,23 @@ Merge only when all of these are true:
 - The pull request is mergeable.
 - The required reviews are satisfied.
 - The required checks passed.
-- The head commit, base branch and base commit still match what step 1 recorded.
+- The head commit, base branch, and base commit still match step 1.
+- A worktree that holds the head branch is clean: `git -C <head-worktree> status --porcelain` prints nothing. Never stash or discard its changes.
 
-These cases change the step:
+## Step 4: check the merge target and file overlap
 
-- When the pull request is already merged, skip the merge. Record its merge commit, and check again that the head branch and the head commit match what you plan to remove.
-- When the pull request was closed without merging, or a check failed, stop and report.
-- When no checks exist, `gh pr checks` exits nonzero. That exit code is not a failure. Run the checks that the project's `AGENTS.md` names under "Commands", and say plainly when no automated check exists.
-- When checks are pending and the owner asked you to finish the merge, wait with `gh pr checks <number> --repo <owner/repo> --watch`, and then run step 3 again. When the owner did not ask you to finish the merge, stop and tell the owner which checks are running.
-- A worktree that holds the head branch must be clean, which means that `git -C <head-worktree> status --porcelain` prints nothing. When it is not clean, stop the merge and the cleanup. Never stash or discard its changes.
+Other sessions may have uncommitted work in the checkouts the merge changes. This check is the one every merge in the project uses, including a local merge with no remote.
 
-## Step 4: merge-safety check
+1. Resolve the target: a sub-item's branch targets its parent's branch, and a top-level item targets the default branch, found as `pull-latest`, "Find the remote and the default branch", says. For a pull request, the target is its base branch.
+2. List the files the merge changes: `gh pr diff <number> --repo <owner/repo> --name-only` for a pull request, including one from a fork or into a non-default branch, or `git diff --name-only <target-branch>...<branch>` for a local merge.
+3. List the uncommitted files with `git -C <main-checkout> status --porcelain`, and with `git -C <base-worktree> status --porcelain` when the target's worktree differs from the main checkout.
+4. When a file is in both lists, stop, name exactly those files, and let the owner decide whether to commit, stash, or wait. Never change, stage, stash, or discard those changes.
 
-Other sessions may have uncommitted work in the main checkout. Read the files changed by this exact pull request against its actual base, then check the main checkout:
-
-```text
-gh pr diff <number> --repo <owner/repo> --name-only
-git -C <main-checkout> status --porcelain
-```
-
-The first command lists the files that the pull request changes, including a pull request from a fork or into a non-default branch. The second lists the files with uncommitted changes in the main checkout. When the base worktree exists and differs from the main checkout, also run `git -C <base-worktree> status --porcelain`. Compare the pull request's changed files with uncommitted paths in both worktrees. Re-read the pull request's head and base as in step 3 after the diff. If either commit or the base branch changed, repeat the checks for the newly resolved pull request. Apply step 2 to the checked head; do not merge a new head under the earlier head's approval.
-
-When a file is in both lists, stop, name exactly those files, and let the owner decide whether to commit, stash, or wait. Never change, stage, stash, or discard the main checkout's changes.
+For a pull request, re-read its head and base as in step 3 after the diff. If either commit or the base branch changed, repeat the checks for the newly resolved pull request, and apply step 2 to the new head; never merge a new head under the earlier head's approval.
 
 ## Step 5: merge
 
-Use `--squash` unless the owner or the project's rules name another method (`--merge` or `--rebase`).
-
-Before merging, follow [references/special-merge-cases.md](references/special-merge-cases.md) to keep AI credit off the base branch.
-
-### Run the merge
+Use `--squash` unless the owner or the project's rules name another method (`--merge` or `--rebase`). Before merging, write the merge message as [references/special-merge-cases.md](references/special-merge-cases.md) says.
 
 ```text
 gh pr merge <number> --repo <owner/repo> --squash --delete-branch --match-head-commit <headRefOid>
@@ -117,32 +85,13 @@ gh pr merge <number> --repo <owner/repo> --squash --delete-branch --match-head-c
 - Never add an admin flag or a flag that bypasses branch protection.
 - Never leave out `--match-head-commit`, and never fill it with a newer commit.
 
-When GitHub refuses the merge:
-
-- When the merge is refused because the head no longer matches, a new commit arrived. Stop, report the new commit, and run steps 1 to 4 again on the new head. The owner's yes covers only the head that the owner was shown, so ask the owner again. When `managing-work-items` sent you here, go back to its merge step with the new head.
-- For any other refusal, stop and tell the owner the error.
-
-### Confirm the merge
-
 Then run `gh pr view <number> --repo <owner/repo> --json state,mergeCommit,url`. Clean up only when `state` is `MERGED`.
-
-When GitHub queues the pull request or turns on auto-merge, follow [references/special-merge-cases.md](references/special-merge-cases.md). Remove nothing until GitHub reports `MERGED`.
 
 ## Step 6: update the base worktree, then remove only the merged worktree and branches
 
-### Update the base worktree
+When the base worktree exists, its upstream is the pull request's base branch in the same repository, and `<remote>` matched in step 1, run `git -C <base-worktree> fetch --prune <remote>`. Then update it to `@{u}` as `pull-latest`, "Update the main checkout safely", says, with the base worktree and the base branch in place of the main checkout and the default branch. When any of these is missing, or the update is blocked, change nothing there, skip the local cleanup, and report why.
 
-When no base worktree or matching remote exists, skip the checkout update and local cleanup, and report what remains. Verify that the base branch's upstream is the pull request's base branch in that same repository. When it is not, skip local update and cleanup; do not retarget it. Otherwise run `git -C <base-worktree> fetch --prune <remote>` and `git -C <base-worktree> status --porcelain`.
-
-List the update's affected files with `git -C <base-worktree> diff --name-only HEAD..@{u}`. Compare that list with the base worktree's uncommitted paths separately from the pull request overlap check. A blocking file is in both lists. Leave every unrelated uncommitted file as it is.
-
-- When there is no blocking file and the base worktree is on the base branch, run `git -C <base-worktree> pull --ff-only`.
-- When there is a blocking file, or the base worktree is on another branch, or the pull fails, change nothing in the base worktree and skip the local cleanup. Report which of the three it was.
-- Never reset, stash, switch, or rebase the base worktree.
-
-### Remove the worktree and the branches
-
-Remove nothing unless all the proofs hold:
+Remove nothing unless all these proofs hold:
 
 1. GitHub reports this exact pull request merged.
 2. The branch to remove is the pull request's head branch, not the base branch or the default branch.
@@ -150,9 +99,7 @@ Remove nothing unless all the proofs hold:
 4. The local branch is still at the recorded head commit.
 5. No other worktree uses that branch.
 
-When a proof is missing, tell the owner which proof failed and exactly what is still there.
-
-Run the cleanup from the base worktree, never from inside the worktree that is being removed:
+When a proof is missing, tell the owner which proof failed and exactly what is still there. Run the cleanup from the base worktree, never from inside the worktree that is being removed:
 
 ```text
 git -C <base-worktree> worktree remove <head-worktree>
@@ -166,47 +113,20 @@ git -C <base-worktree> worktree prune
 
 ## Step 7: work item note and report
 
-### The note on the work item
+When step 1 found a linked work item and the owner asked you directly, add one Recent History row with `managing-work-items`: "Merged pull request #<number> as <merge commit>." When `managing-work-items` sent you here, add nothing, because that skill adds the row. Never change the State, and never mark anything Done.
 
-When step 1 found a linked work item:
-
-- When `managing-work-items` sent you here, add nothing, because that skill adds the Recent History row.
-- When the owner asked you directly, add one Recent History row with `managing-work-items`: "Merged pull request #<number> as <merge commit>."
-
-Never change the State, and never mark anything Done.
-
-### Verify
-
-Verify each of these:
-
-- The pull request is merged.
-- The base worktree matches its upstream, which is the remote branch that its branch follows.
-- The head branch and its worktree are gone.
-- Every unrelated worktree remains.
-
-### Report
-
-- When `managing-work-items` sent you here, say the pull request link, the merge commit, and the cleanup result briefly. Then go on with the rest of its Deploying steps.
-- When the owner asked you directly, report each of these:
-  - the pull request link;
-  - the merge commit;
-  - whether the base worktree is up to date;
-  - any uncommitted files left in the base worktree;
-  - the cleanup result;
-  - whether the Recent History row was saved.
-
-  State any decision the owner must make or the next available action.
-
-## Mistakes to avoid
-
-- When the repository has no remote (`git remote` prints nothing), there is no pull request, so this skill does not apply. Never fetch. Tell the owner briefly.
+Report the pull request link, the merge commit, the base worktree's state, and the cleanup result. When `managing-work-items` sent you here, keep it brief and go on with the rest of its Deploying steps. Otherwise, state any decision the owner must make or the next available action.
 
 ## Work that another skill does
 
 | For | Use |
 | --- | --- |
-| The merge note on the work item, when the owner asked directly | `managing-work-items` |
+| Taking an approved work item through merge and deployment, a merge under the standing merge instruction, or a local merge with no remote | `managing-work-items` |
 | Changing the work item's State, or marking it Done | `managing-work-items` |
-| Taking an approved work item through merge and deployment | `managing-work-items` |
-| A merge under the standing merge instruction | `managing-work-items` |
-| No remote: the local merge | `managing-work-items` |
+
+## References
+
+| File | Open it when |
+| --- | --- |
+| [references/special-merge-cases.md](references/special-merge-cases.md) | Step 5: keep AI credit out of the merge commit. |
+| [references/merge-failures.md](references/merge-failures.md) | A check fails or is pending, the pull request is already merged or closed, GitHub refuses or queues the merge, or a new head commit arrives. |

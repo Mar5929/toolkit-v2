@@ -2,7 +2,7 @@
 
 ## For the main agent
 
-Start one critic per draft once the architects return, and again after each fix round for the findings that remain or inputs that changed. The critic is never the helper that wrote the draft. You decide which findings go back to the architect.
+Start the critic once the architects return, as `designing.md` says, and again after each fix round for the findings that remain or inputs that changed. The critic is never the helper that wrote the draft. You decide which findings go back to the architect.
 
 ```text
 Work item: <ID and title>

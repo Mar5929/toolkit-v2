@@ -33,15 +33,11 @@ Stop for the owner's yes before each of these. Record the question, the answer, 
 - **Blocked** means stuck on something outside the work (access, another team, a prerequisite). Waiting on the owner is not Blocked. Set `waiting_on` to whoever can clear it, and return to the State named in Blockers.
 - **A shared open question** that holds up the item means it waits on the owner. Link the shared record in Next action; don't copy the question.
 
-## The short path
+## The short path for a small item
 
-A small item is a top-level item you can play back in one reply and build without an interview, a design, or sub-items. It skips the interview and asks two questions instead of four:
+A small item is a top-level item you can play back in one reply and build without an interview, a design, or sub-items. The owner's words win over your judgment of "small". A small item skips the interview and asks two questions instead of four:
 
 - **Before work:** play back the goal, what you'll hand over, how you'll check it, and the project phase. The yes approves the requirements.
-- **When done:** check the result as `testing-loop.md` says for a small item, then ask one question that approves the result and marks it Done.
+- **When done:** one closing question approves the result and marks the item Done, as `closing.md`, "Small items", says.
 
-Approvals 4 and 5 still apply. The owner's words win over your judgment of "small". If the work turns out to need an interview, a design, or sub-items, tell the owner and move it to the full path, keeping the approvals already given. Record in Recent History whenever an item takes or leaves the short path.
-
-## Templates
-
-Text in angle brackets is a prompt, never content. Replace or delete every prompt in an item you touch; a design keeps its prompts until approved. An item from an older template keeps its layout until the owner asks to migrate it.
+Approvals 4 and 5 still apply. If the work turns out to need an interview, a design, or sub-items, tell the owner and move it to the full path, keeping the approvals already given. Record in Recent History whenever an item takes or leaves the short path.

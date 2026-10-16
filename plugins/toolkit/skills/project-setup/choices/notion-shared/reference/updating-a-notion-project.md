@@ -1,9 +1,5 @@
 # Updating a Notion project
 
-Use this file during "update the toolkit" for a project with Notion work items or memory. The update preserves the owner's records, schemas and templates.
+Use this file during "update the toolkit" for a project with Notion work items or memory. The update keeps the owner's records, schemas and templates.
 
-For any existing project, propose a review and migration batch.
-
-Use [reference/update.md](../../../reference/update.md), "Changing a setup choice", for approval, preservation and verification. When a newer skill expects missing properties or sections, name the differences in the proposed batch. Change Notion only within the owner's agreed scope. Reuse existing approvals that cover the same records and destination.
-
-With Notion memory, after the wiki setup or migration is verified, align `PROJECT.md`'s links to the authoritative records and related pointers as [What the memory choice adds](../../memory/notion/reference/what-notion-memory-adds-to-a-project.md) describes. Until the migration is verified, retain the current authoritative destinations.
+When a newer skill expects properties or sections that the project's Notion lacks, name each difference to the owner as one batch, and change Notion only within the owner's approved batch. [reference/update.md](../../../reference/update.md), "Changing a setup choice", gives the approval, preservation and read-back rules that such a batch follows. With Notion memory, also update the published librarian package as [librarian-package.md](../../memory/notion/reference/librarian-package.md), "Update an existing package", says.

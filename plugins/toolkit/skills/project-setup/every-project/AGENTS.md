@@ -42,9 +42,8 @@ A later session starts with only what the records hold, so it must find every fa
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 - A helper agent (a separate agent started for one job) follows its brief. The bullets below are for the session the owner writes to.
 - On every turn, decide what the owner's message concerns and whether the owner asks for an answer or a change. It can concern a work item, a source, a project record that several work items need, project memory, more than one of these, or none. Choose the work from "Where information goes" and "Which skill" below.
-- When a turn concerns a work item, find it, read its Current state (the five lines at its top), and use `managing-work-items`. To find it, check in this order and stop at the first check that finds one: the work item the owner names, the one this branch or session is working on, the one the work tracker or the project's current state shows in progress. Ask the owner only when a check finds two.
-- When the owner asks for work and no work item covers it, ask in one short line whether to make a work item, before you start. Name the work and say whether you recommend a work item. After a yes, use `managing-work-items`. After a no, do the work without one; `.claude/rules/shared-repository-work.md` still applies, including where to make the change.
-  - Do not ask when the owner has already said whether to make one, when the turn only answers a question, when the whole result of the work is text in your reply, when the request is only to save or correct a fact or a project task in the project's records, or when one skill in "Which skill" other than `managing-work-items` does the whole request.
+- When a turn concerns a work item, find it, read its Current state, and use `managing-work-items`.
+- When the owner asks for work that would change project files, no work item covers it, and the owner has not said whether to make one, ask in one short line whether to make a work item before you start. Name the work and say whether you recommend a work item. After a yes, use `managing-work-items`. After a no, do the work without one; `.claude/rules/shared-repository-work.md` still applies, including where to make the change.
 
 ## Project memory
 
@@ -55,7 +54,7 @@ Keep memory only in the place that this section names.
 ## Project map
 
 - Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout. Every worktree, a separate folder with its own branch, shares them.
-- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. Name a work item by its ID, never by a folder path. When you name a work item in the chat with the owner, give its name with its ID, never the ID alone.
+- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. Name a work item by its ID, never by a folder path.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
@@ -66,16 +65,12 @@ Keep memory only in the place that this section names.
 | `.gitignore`, `.ignore` | The files and folders Git does not track.`.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
 | `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
 | `sources/INDEX.md` | The list of all sources, one row each.`sources/AGENTS.md` gives the columns. | As for`sources/`. |
-| `delivery/` | The records of putting the work into use, in the four folders below. It does not hold the work itself, or its requirements and tasks: those are in the work item. | Read`delivery/AGENTS.md`, which also says how a record is committed. |
-| `delivery/releases/` | One folder per release: its release notes and the plan for the release. | As for`delivery/`. |
-| `delivery/deployments/` | One folder per deployment of a work item to an environment.`delivery/AGENTS.md` gives the fields of its record. | As for`delivery/`. |
-| `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk. Data files and backups are never committed. | As for`delivery/`. |
-| `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for`delivery/`. |
+| `delivery/` | The records of putting the work into use: releases, deployments, data migrations, and client handoffs. It does not hold the work itself, or its requirements and tasks: those are in the work item. `delivery/AGENTS.md` gives its folders and record forms. | Read`delivery/AGENTS.md`, which also says how a record is committed. |
 | `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with`publish-docs`. |
 | `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem.`INDEX.md` lists the topics. | As for`wiki/reference/`. |
 | `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for`wiki/reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release:`<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
-| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named with its ID and a short form of its title:`working-files/<ID>-<short-slug>/`, with no leading `#`. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
+| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named as `managing-work-items`, `references/building.md`, says. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files.`owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
 | `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
 | `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. | Only with the owner's yes. |
@@ -126,7 +121,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | Merging a pull request and removing its branch and worktree | `merge-and-clean-up` |
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
-| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | Use`managing-work-items` for open work items and project tasks. Read the project's current state as "Project memory" says. Read outstanding shared questions where "Where information goes" keeps them. Report applicable dated commitments from those records, and say when a date has passed. Report each open project task with who owes it, and unsaved work in the worktree of each work item in progress. Ask one decision at a time, with your recommendation. Name the next work item to start: started work first, then the earliest project phase that is not Done, then the highest-priority work item in Backlog. |
+| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | `managing-work-items`, `references/project-status.md` |
 
 ## Commands
 

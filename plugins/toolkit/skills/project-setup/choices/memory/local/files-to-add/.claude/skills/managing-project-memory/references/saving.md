@@ -26,9 +26,8 @@ While its work item is open, a lesson lives in the work item. Otherwise it goes 
 
 ## Owner instructions
 
-An instruction, preference, or correction from the owner is a rule. Write it to `.claude/rules/owner-preferences.md` in the owner's words, under the matching `##` area, ending with `(<date>, <owner>, in chat)`.
+An instruction, preference, or correction from the owner is a rule. Write it to `.claude/rules/owner-preferences.md` in the form that file's layout comment gives.
 
-- Skip it if a bullet already says the same; replace a bullet that says the opposite.
 - "Don't let that happen again" becomes the check that prevents it, naming the record that explains why.
 - An instruction you inferred needs the owner's yes first.
 - If the owner says it's for every project, write it to the global file the root `AGENTS.md` names.
@@ -41,7 +40,7 @@ An instruction, preference, or correction from the owner is a rule. Write it to 
 
 ## Correcting
 
-Update the record in place with the new evidence and date; don't leave the old wording beside the new. Search other records and Current State for the old value and fix current guidance, keeping dated history. When a fact is replaced rather than refined, make a new record, mark the old one replaced, and link them both ways.
+Update the record in place with the new evidence and date; don't leave the old wording beside the new. Search other records and Current State for the old value and fix current guidance, keeping dated history. When a fact is replaced rather than refined, make a new record, set the old one's status to `superseded`, and link them both ways.
 
 ## Forgetting and deleting
 

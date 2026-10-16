@@ -19,7 +19,7 @@ In the project's root `AGENTS.md`, in the "Project map" table, add this row afte
 | `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
 ```
 
-Add these rows directly before the row for `sources/`:
+Add this row directly before the row for `sources/`:
 
 ```markdown
 | `wiki/product-wiki/` | The approved description of the system, its terms, rules, and diagrams. Its `AGENTS.md` explains each document and the rule IDs and marks. | `filing-project-records`, step "update a system document". |

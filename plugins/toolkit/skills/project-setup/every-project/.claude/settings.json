@@ -5,6 +5,20 @@
     "sessionUrl": false
   },
   "autoMemoryEnabled": false,
+  "permissions": {
+    "ask": [
+      "Bash(git reset --hard *)",
+      "Bash(git -C * reset --hard)",
+      "Bash(git -C * reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(git -C * clean *)",
+      "PowerShell(git reset --hard *)",
+      "PowerShell(git -C * reset --hard)",
+      "PowerShell(git -C * reset --hard *)",
+      "PowerShell(git clean *)",
+      "PowerShell(git -C * clean *)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {

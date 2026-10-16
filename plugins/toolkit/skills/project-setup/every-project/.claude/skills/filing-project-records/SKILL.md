@@ -29,11 +29,11 @@ The memory choice supplies every file but `file-source.md`, because it decides w
 
 ## Writing a record's ID in a work item
 
-A work item holds the record's ID, never a copy of its text: a decision or rule goes on Related items, an SRC ID under Notes, Sources. Write it only after the record, or the work item's ID on an existing record, is saved. Each step says whether it writes the ID itself with `managing-work-items` or hands it back to the `managing-work-items` step that asked.
+A work item holds the record's ID, never a copy of its text: a decision or rule goes on Related items, an SRC ID under Notes, Sources. Write an ID once the step's reference reports the save is confirmed. Each step says whether it writes the ID itself with `managing-work-items` or hands it back to the `managing-work-items` step that asked.
 
-`managing-work-items/references/work-tracker.md` says when an ID may be written. While it must wait: write no ID, tell the owner what waits and what `publish-docs` named as blocking, and have `managing-project-memory` record the wait with the record's ID and each work item that needs it. When the wait ends, write the IDs and have `managing-project-memory` remove the wait.
+If the save is blocked, tell the owner what waits, and have `managing-project-memory` record the wait with the record's ID and each work item that needs it. When the wait ends, write the IDs and have `managing-project-memory` remove the wait.
 
-For a work item that must follow a record that already exists, make no new record: add the work item's ID to the record's Affects line or "Used by" cell, save, then write the record's ID in the work item.
+For a work item that must follow a record that already exists, make no new record: add the work item's ID to the record, as the step's reference says, save, then write the record's ID in the work item.
 
 ## Finish
 

@@ -1,22 +1,14 @@
 # Current State
 
-One short page of what's true now, shown at the start of every session. It holds no history. It starts with "Last updated: <date, source, who>", and an empty part says "None."
-
-| Part | Holds | Example line |
-| --- | --- | --- |
-| Now | One line per active piece of work | WI-031: logging a transaction |
-| Coming up | Dated events and deadlines | 2026-10-20: steering meeting with the client, prepared in PT-07 |
-| Waiting on | Who owes what the work waits on | Client: the feed's field list (PT-06), asked 2026-10-10, check 2026-10-17 |
-| Standing jobs and shared files | Recurring jobs and maintained shared files | Weekly data load, Mondays; runs in event_weekly-data-load |
-| Next session starts with | Where to pick up | WI-031: read its Current state |
+Current State is `memory/CURRENT_STATE.md`: one short page of what's true now, shown at the start of every session. It holds no history. Its parts and what each line holds are in the file itself; an empty part says "None."
 
 ## Rules
 
 - Change it in the same turn the truth changes. Replace a changed line; never add a new one beside it.
 - Never copy a work item's status, next action, or wait here. Give its ID and a few words; the work item holds the rest.
 - A to-do is never kept only here. It becomes a project task or a work item task, and a dated one also gets a Coming up line naming its ID. For a to-do at a set time, tell the owner and offer a scheduled reminder if one is available.
+- A passed deadline may still mean unfinished work. Check before removing its line.
 - Before removing a line about something a later session must know, make sure a record holds it: a work item, project task, source, or event record.
-- A passed deadline may still mean unfinished work. Check before removing it.
 - Remove lines that are no longer true without asking. Cutting a line that's still true needs the owner's yes.
 
 ## When another skill reports work

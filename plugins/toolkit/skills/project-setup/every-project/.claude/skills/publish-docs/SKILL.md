@@ -5,15 +5,17 @@ description: 'Commits an approved edit to project documents directly to the defa
 
 # Commit project documents to the default branch
 
-Use this skill to commit a change to Git-tracked project documents directly to the default branch, with no pull request. "The paths of the project documents" below lists which files are project documents. The default branch is the repository's main branch, which is often `main`.
+Use this skill to commit a change to Git-tracked project documents directly to the default branch, with no pull request. "The paths of the project documents" below lists which files are project documents.
 
-In this skill, a save is one commit of an agreed document edit. The commit is made in a temporary Git worktree of its own, which this skill calls the save worktree.
+In this skill, a save is one commit of an agreed document edit. The commit is made in a temporary Git worktree of its own, the save worktree (`<save>`), inside the main checkout (`<main>`).
 
 Two things must be true when the save is done: only the agreed document edit reaches the default branch, and no other session's work changes. A save is finished only when step 8 finds its commit on the default branch.
 
 This skill decides nothing about what a document says. The skill that asked for the save decides what the document says. Committing a document does not approve its requirements or its build.
 
-Run each Git command on its own, with `git -C <folder>`, which names the folder that the command works in. The command then never depends on the current folder.
+Run each Git command with `git -C <folder>`, so that it never depends on the current folder.
+
+When the repository has no remote (`git remote` prints nothing), follow [references/no-remote.md](references/no-remote.md) in place of the remote parts of steps 2, 3, 7, and 8.
 
 ## The paths of the project documents
 
@@ -27,56 +29,32 @@ A project document is a file under one of these paths.
 - `**/README.md`
 - Each path that `references/shared-record-paths.md` lists. The project's memory choice supplies that file, because it decides whether shared decisions and system rules are kept in the repository.
 
-## Names used in the commands
+## Refused files
 
-- `<main>` is the main checkout.
-- `<session folder>` is the folder this session works in.
-- `<default>` is the name of the default branch. Step 2 finds it.
-- `<save>` is the save worktree that step 3 makes.
-- `<working checkout>` is the checkout where this session edited the document, normally `<session folder>`.
-- `<short-slug>` is a short name for the save, such as `roadmap-phase-2`.
-- `<file>` is one file of the save.
-- `<commit id>` is the ID of the save's commit: the commit that step 6 makes, or the commit that a rebase in `references/recovery.md` makes in its place.
+This skill commits only documents, images, and PDFs (`.md`, `.txt`, `.csv`, `.xml`, `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, `.pdf`). A source under `sources/` may be any type, because the owner approved the source when `filing-project-records` filed it. Even under an accepted path, this skill never commits:
+
+- every file under `delivery/migrations/`, except `.md` notes and `.gitignore`, because load files and backups there can hold production records and personal data;
+- code files of any language, settings, `.json`, or spreadsheets such as `.xlsx`, except a source under `sources/`;
+- hidden files and folders, such as `.env` or `.github/`, except a `.gitignore` under `delivery/`;
+- instruction files (`AGENTS.md`, `CLAUDE.md`, `CLAUDE.local.md`, `SKILL.md`), anywhere and in any letter case;
+- any path that Git ignores (`git -C <main> check-ignore <file>` prints it).
+
+A document edit that would be wrong on the default branch without the code change it describes goes in the pull request of that code change.
 
 ## Steps
 
-1. **Check the files.** Name every file in the save. Each file must be a project document, which means that each of these is true:
-   - The file is under a path in "The paths of the project documents" above.
-   - The file's type is `.md`, `.txt`, `.csv`, `.xml`, `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, or `.pdf`. A source under `sources/` may be any type, because the owner approved the source when `filing-project-records` filed it.
-   - "Refused files" below does not refuse the file.
-   - Git does not ignore the file. Run `git -C <main> check-ignore <file>`. When the command prints the path, Git ignores the file.
+1. **Check the files.** Name every file in the save. Each must be under a path in "The paths of the project documents" and not refused by "Refused files".
 
    Save only an edit that the owner asked for or said yes to, an edit that the root `AGENTS.md` tells you to make without asking, or an edit that another skill tells you to save with this skill, for example `filing-project-records`. That request, yes, or instruction also covers the push in step 7.
-2. **Look first.** Run these three commands, each on its own:
+2. **Look first.** Run `git -C <session folder> worktree list`, `git -C <session folder> status`, and `git -C <session folder> remote`. Find `<remote>` and `<default>` as `pull-latest`, "Find the remote and the default branch", says.
+3. **Start the save worktree** in the main checkout, named `.claude/worktrees/docsave-<short-slug>`, where the slug names the save, for example `docsave-roadmap-phase-2`:
 
    ```text
-   git -C <session folder> worktree list
-   git -C <session folder> status
-   git -C <session folder> remote
+   git -C <main> fetch <remote> <default>
+   git -C <main> worktree add --detach .claude/worktrees/docsave-roadmap-phase-2 <remote>/<default>
    ```
 
-   What `remote` prints decides how the save goes:
-   - When the repository has remotes, but none is named `origin`, stop and ask the owner which remote holds the default branch. `references/recovery.md`, section "The repository has remotes, but none named `origin`", says how to name the remotes and when to rename one.
-   - When the repository has no remote, the save is committed on the local default branch. Never fetch, and never push to a remote. The local `git push . HEAD:<default>` in step 7 is allowed, because it moves only a local branch.
-
-   Then find the default branch:
-   - With a remote, `git -C <main> symbolic-ref --short refs/remotes/origin/HEAD` prints `origin/<default>`.
-     - When that command fails, run `git -C <main> fetch origin` and try the command again.
-     - When it still fails, read the "HEAD branch" line of `git -C <main> remote show origin`.
-     - When that line says "(unknown)", the remote has no branches. Ask the owner whether to push the default branch first.
-   - With no remote, the default branch is the branch that the main checkout has: `git -C <main> branch --show-current`.
-3. **Start the save worktree** inside the main checkout. Name it `.claude/worktrees/docsave-<short-slug>`, for example `docsave-roadmap-phase-2`.
-   - First check that Git ignores that folder: `git -C <main> check-ignore .claude/worktrees/docsave-<short-slug>` must print the path.
-   - When the command prints nothing, stop. Tell the owner that the project's `.gitignore` lacks the `.claude/worktrees/` line that every project gets. Adding the line is a settings change, not a document save.
-   - Then run these two commands:
-
-     ```text
-     git -C <main> fetch origin <default>
-     git -C <main> worktree add --detach .claude/worktrees/docsave-roadmap-phase-2 origin/<default>
-     ```
-
-   - With no remote, skip the fetch, and use `<default>` in place of `origin/<default>`.
-4. **Make the edit in the save worktree, and stage each file by name:** `git -C <save> add -- <file>`. When this session already made the edit in its working checkout, carry the edit across as [references/carrying-an-edit.md](references/carrying-an-edit.md) says.
+4. **Make the edit in the save worktree**, and stage each file: `git -C <save> add -- <file>`. When this session already made the edit in its working checkout, carry it across as [references/carrying-an-edit.md](references/carrying-an-edit.md) says.
 5. **Check the staged save** in the save worktree:
 
    ```text
@@ -86,43 +64,17 @@ A project document is a file under one of these paths.
    git -C <save> -c core.whitespace=-blank-at-eol diff --cached --check
    ```
 
-   - `status --porcelain` must list only this save's files, each one staged. Before you go on, fix an unstaged change, an untracked file (`??`), or any other path.
-   - Read the full staged diff.
+   - `status --porcelain` must list only this save's files, each one staged. Fix an unstaged change, an untracked file (`??`), or any other path before you go on.
    - `diff --cached --check` must print nothing. The `-c` setting allows two trailing spaces, which make a line break in Markdown.
-6. **Commit.** Run `git -C <save> commit -m '<plain message>'`. Write the message in plain words, with no AI credit line.
-7. **Put the commit on the default branch.**
-   - With a remote, run `git -C <save> push origin HEAD:<default>`. Never force the push. When the push is refused because the default branch has commits that the save does not have, open `references/recovery.md`, section "The default branch advanced", which says how to bring the save up to date and try again.
-   - With no remote, do these in order:
-     1. Run `git -C <main> status --porcelain`. When it lists a file of this save that is not this session's own copy, that file is another session's work. Stop, name the file, and ask the owner.
-     2. Move the local default branch forward in the checkout that has the default branch, which is normally the main checkout: `git -C <main> merge --ff-only <commit id>`. This command is a fast-forward: it moves the branch forward to the commit and makes no merge commit.
-     3. When no checkout has the default branch, run `git -C <save> push . HEAD:<default>` in place of the fast-forward.
-     4. When Git refuses the command, open `references/recovery.md`. It says what to do when the default branch has commits that the save does not have, and when a changed file blocks the fast-forward.
+6. **Commit.** Run `git -C <save> commit -m '<plain message>'`. `<commit id>` is this commit, or the commit that a rebase in [references/recovery.md](references/recovery.md) makes in its place.
+7. **Put the commit on the default branch.** Run `git -C <save> push <remote> HEAD:<default>`. Never force the push. When the push is refused because the default branch has commits that the save does not have, follow [references/recovery.md](references/recovery.md), "The default branch advanced".
 8. **Verify, update the main checkout, clean up, and report.**
-   - Verify that the commit is on the default branch.
-     - With a remote, run `git -C <save> fetch origin <default>`. Then `git -C <save> branch -r --contains <commit id>` must list `origin/<default>`.
-     - With no remote, `git -C <main> branch --contains <commit id>` must list the default branch.
-   - Find out whether the main checkout holds the save. With a remote, also bring the main checkout up to date. [references/updating-main-checkout.md](references/updating-main-checkout.md) gives the steps.
+   - Run `git -C <save> fetch <remote> <default>`. Then `git -C <save> branch -r --contains <commit id>` must list `<remote>/<default>`.
+   - Update the main checkout to `<remote>/<default>` as `pull-latest`, "Update the main checkout safely", says. When the only blocking file is this session's own copy of a saved file, remove that copy as [references/carrying-an-edit.md](references/carrying-an-edit.md) says, then update. A work item kept in the main checkout must not name a record that the main checkout does not hold.
    - When no other save of the same files is pending in this session, remove the save worktree: `git -C <main> worktree remove .claude/worktrees/docsave-<short-slug>`.
-   - Note three things for the step that started this save:
-     - the commit id;
-     - where the commit is, in one of these two sentences: "Saved to main and pushed to the remote." or "No remote: saved to main on this computer only.";
-     - whether the main checkout holds the save.
-   - Put these three things in the reply to the owner only when the owner asked to publish or commit the documents, or when the main checkout does not hold the save. In every other case the save is finished and the main checkout holds it, so say nothing about the commit or the remote in the reply.
-   - When another skill started this save, go back to that skill and continue from the step that started this save. Otherwise, end with the one question for the owner, or with the exact words that continue.
-
-## Refused files
-
-This skill never commits these files:
-
-- Every file under `delivery/migrations/`, except `.md` notes and `.gitignore`. Load files and backups in that folder can hold production records and personal data.
-- Code (`.js`, `.mjs`, `.py`, `.sh`, `.cls`, `.trigger`), settings, `.json`, and spreadsheets such as `.xlsx`. The one exception is a source under `sources/`.
-- Hidden files and folders, such as `.env` or `.github/`. The one exception is a `.gitignore` under `delivery/`.
-- Instruction files (`AGENTS.md`, `CLAUDE.md`, `CLAUDE.local.md`, `SKILL.md`), anywhere and in any letter case.
-- Any path that Git ignores.
-
-A refused file stays refused even under a path that the rule accepts.
-
-Rules, skills, prompts, hooks, settings, and code use a pull request. A document edit that would be wrong on the default branch without the code change it describes goes in the pull request of that code change.
+   - Note three things for the step that started this save: the commit id; where the commit is, in one of these two sentences: "Saved to main and pushed to the remote." or "No remote: saved to main on this computer only."; and whether the main checkout holds the save.
+   - Put these three things in the reply only when the owner asked to publish or commit the documents, or when the main checkout does not hold the save. When it does not, say "The main checkout does not hold this save yet" and what blocks the update; the save is still finished. Otherwise say nothing about the commit or the remote.
+   - When another skill started this save, go back to that skill and continue from the step that started it. Otherwise, end with the one question for the owner, or with the exact words that continue.
 
 ## Mistakes to avoid
 
@@ -144,6 +96,6 @@ Rules, skills, prompts, hooks, settings, and code use a pull request. A document
 | File | Open it when |
 | --- | --- |
 | [references/shared-record-paths.md](references/shared-record-paths.md) | You check whether a file is a project document. The memory choice supplies this file. |
-| [references/carrying-an-edit.md](references/carrying-an-edit.md) | Step 4: carry an existing edit to the save worktree without overwriting newer records. |
-| [references/updating-main-checkout.md](references/updating-main-checkout.md) | Step 8: check and update the main checkout after the save is verified. |
-| [references/recovery.md](references/recovery.md) | The push or the fast-forward is refused, the default branch got new commits, the repository has no `origin`, or the save cannot finish now. |
+| [references/carrying-an-edit.md](references/carrying-an-edit.md) | Step 4: carry an existing edit to the save worktree without overwriting newer records, and when to remove this session's own copy. |
+| [references/recovery.md](references/recovery.md) | The push is refused, the default branch got new commits, or the save cannot finish now. |
+| [references/no-remote.md](references/no-remote.md) | The repository has no remote: how the save is committed, verified, and recovered on this computer. |

@@ -11,7 +11,7 @@
 
 ## Header fields
 
-Every memory file carries exactly these ten fields:
+Every memory file carries these fields:
 
 - `name`: the file name without `.md`.
 - `description`: the fact itself with its dates, as the index shows it.

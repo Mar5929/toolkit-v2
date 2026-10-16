@@ -1,6 +1,6 @@
 # What the Salesforce choice adds to a project
 
-This file lists what setup adds to a Salesforce project: the files, the text in `AGENTS.md`, the entries in the settings, the line in `PROJECT.md`, and the lines in `.gitignore`. Steps 6, 7, and 9 of [salesforce-setup.md](../salesforce-setup.md) use it.
+This file lists what setup adds to a Salesforce project: the files, the text in `AGENTS.md`, the entries in the settings, the line in `PROJECT.md`, and the lines in `.gitignore`.
 
 ## Everything the choice adds, by kind
 
@@ -15,8 +15,6 @@ This file lists what setup adds to a Salesforce project: the files, the text in 
 | Outside the project folder | Nothing is made. |
 
 `.claude/rules/salesforce-agent-permissions.md` is the owner's own file from the first day. "Update the toolkit" never compares or replaces it.
-
-Step 6 of the setup file copies the files of the rows "Rules, skills, files, and templates" and "Files inside a skill". Step 7 writes the text in `AGENTS.md`, the line in `PROJECT.md`, and the lines in `.gitignore`. Step 9 writes the entries in the settings.
 
 ## The text in AGENTS.md
 

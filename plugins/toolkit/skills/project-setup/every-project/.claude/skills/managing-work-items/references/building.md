@@ -14,8 +14,7 @@ The main agent is the only one that changes the work item or talks to the owner.
 ## Git
 
 - Make every change in the item's own worktree and branch, never on the default branch. Create them before the first change, from the main checkout, off the default branch (or off the parent's branch for a sub-item). Always pass `-C <main checkout>`.
-- Names: branch `claude/<prefix>-<number>-<slug>` and folder `.claude/worktrees/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`. `merge-and-clean-up` finds the item from that ID. A builder's branch adds the task: `claude/wi-007-p1-t01`, off the item's branch.
-- No AI credit in commits or pull requests: no `Co-Authored-By` naming an AI and no "Generated with" line. If a hook refuses a commit over this, reword it; never bypass the hook.
+- Names: branch `claude/<prefix>-<number>-<slug>` and folder `.claude/worktrees/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`. Working files go in `working-files/<ID>-<short-slug>/` (no leading `#`), or `working-files/no-work-item/` for work with no item. `merge-and-clean-up` finds the item from that ID. A builder's branch adds the task: `claude/wi-007-p1-t01`, off the item's branch.
 - Merge conflicts: follow `pull-latest`.
 
 ## Who builds
@@ -37,7 +36,7 @@ For one team in this chat versus a Main Orchestrator across chats, see `team-arr
 - One writer at a time per file or shared environment (a sandbox, a database, a test service).
 - Start only as many builders as you can check and merge as they return. Tell the owner the team; don't ask again.
 - Create missing sub-items and tasks through `work-tracker.md`. A sub-item inherits its parent, phase, `delivery`, and the requirements approval it covers.
-- For each builder, choose its mode with `builder-brief.md`: normally its own worktree and branch; if it can't commit, "Commit: no" in the item worktree, one at a time. Set its sub-item to Building with `waiting_on: agent`, set its task In Progress, and start it with the brief in `builder-brief.md`.
+- For each builder, choose its mode as `builder-brief.md` says. Set its sub-item to Building with `waiting_on: agent`, set its task In Progress, and start it with that brief.
 - Keep a team list in the parent's Notes, under Context: one line per running helper (role, item and task, branch, start date), or "None running."
 
 ## When a builder returns

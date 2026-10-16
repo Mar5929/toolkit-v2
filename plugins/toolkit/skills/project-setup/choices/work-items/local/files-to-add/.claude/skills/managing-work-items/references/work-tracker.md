@@ -14,10 +14,11 @@ Work items live in `work-items/` as one folder per item. The lifecycle decides w
 
 - `work-items/` exists only in the main checkout. From a worktree, read and write there; never copy items into the worktree and never `git add` them. If it's missing, tell the owner the setup is incomplete.
 - The `id:` line is the item's identity, never its path. The owner moves, renames, and nests folders by hand: find items by ID, tell the owner what moved, and carry on.
-- Re-read an item right before changing it. Change only the lines that change, and set `updated:` to today.
+- Change only the lines that change, and set `updated:` to today.
 - Never move, group, archive, or rename an item unless the owner asks.
 - Link other items as `[[WI-031]]`; `parent:` stays a plain ID.
 - In tables, escape `|` as `\|` and join lines with `<br>`.
 - `PROJECT-ROADMAP.md` is tracked in Git: read it from the default branch and change it only through `publish-docs`.
-- Write a record's ID into an item only after `publish-docs` confirms the main checkout has it.
 - If an ID has two files, or none, tell the owner before creating anything.
+- Record a pull request by naming it in the item's Related items and in Recent History.
+- A helper opens an item by ID: find the folder whose `<ID>.md` has that `id:` line, and read it and its `DESIGN.md`. If the helper can't reach the main checkout, give it freshly read text.

@@ -1,25 +1,23 @@
 # Work items in GitHub Issues
 
-Follow these steps when the owner answers "GitHub Issues" to question 5 of the guide, [SKILL.md](../../../SKILL.md). The job is done when every check in [reference/github-work-items-checks.md](reference/github-work-items-checks.md) passes.
+Follow these steps when the owner chooses to keep work items in GitHub Issues. The job is done when every check in [reference/github-work-items-checks.md](reference/github-work-items-checks.md) passes.
 
 ## Steps
 
-Do steps 1 to 5 right after the answer, before the next question of the guide. Do steps 6 to 9 when the choice's sign-in is done and the owner has named the repository. Do steps 10 to 13 when setup finishes, in Step 6 of the guide.
+Do steps 1 to 5 right after the answer, before the next interview question. Do steps 6 to 9 when the sign-in is done and the owner has named the repository. Do steps 10 to 13 when setup finishes.
 
-1. **Tell the owner how the toolkit sets up work items in GitHub Issues by default, and ask whether that is what the owner wants.** [reference/github-work-items-default.md](reference/github-work-items-default.md) holds the default. [SKILL.md](../../../SKILL.md), "Each choice has questions of its own", gives what to explain and what to ask after a no.
+1. **Tell the owner how the toolkit sets up work items in GitHub Issues by default, and ask whether that is what the owner wants.** [reference/github-work-items-default.md](reference/github-work-items-default.md) holds the default.
 2. **Check the sign-in of `gh`, the GitHub command-line tool.** Ask the owner for the sign-in as soon as the owner picks GitHub Issues, so that the owner can run `gh auth login` while the interview goes on. Never ask the owner for a token. [reference/github-sign-in.md](reference/github-sign-in.md) gives the check and what to ask the owner for.
-3. **Ask the owner which repository holds the work items.** Recommend the project's own repository, which `git remote get-url origin` shows. Use only the name the owner confirms.
-4. **Copy the choice's files into the project.** The folder `choices/work-items/github/files-to-add/` holds them at the paths a project has them. [reference/what-github-work-items-add-to-a-project.md](reference/what-github-work-items-add-to-a-project.md) lists them, and [reference/placing-files.md](../../../reference/placing-files.md) gives the copy command and what to do with a file that the project already has.
+3. **Ask the owner which repository holds the work items.** Recommend the project's own repository, which the project's verified remote shows. Use only the name the owner confirms.
+4. **Copy the choice's files into the project.** [reference/what-github-work-items-add-to-a-project.md](reference/what-github-work-items-add-to-a-project.md) lists them.
 5. **Write `github` on the Tracker line of `PROJECT.md`.** [reference/what-github-work-items-add-to-a-project.md](reference/what-github-work-items-add-to-a-project.md) gives the line.
 6. **Check the repository, and create one only after the owner's yes.** [reference/github-repository-for-work-items.md](reference/github-repository-for-work-items.md) gives the yes that everything made in GitHub needs, the command for the check, and what to ask the owner when the repository does not exist or has issues turned off.
 7. **Record the repository in `PROJECT.md`.** [reference/what-github-work-items-add-to-a-project.md](reference/what-github-work-items-add-to-a-project.md) gives the line and the place where it goes.
 8. **Create the labels that the repository does not have yet, after the owner's yes.** [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md](files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md), "Labels the project needs", gives the full list, the commands, and when to ask the owner.
 9. **Run this choice's checks.** [reference/github-work-items-checks.md](reference/github-work-items-checks.md) gives them.
-10. **After the owner's yes, write the project's phases from question 11 as milestones of the repository.** Tell the owner which milestones will be made, because the yes for the labels and the repository does not cover them. The project's `managing-work-items` skill says how, in [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md](files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md), "Project phases (milestones)". [reference/finishing.md](../../../reference/finishing.md), "The roadmap", gives the rules for the roadmap.
-11. **Run this choice's checks again.** [reference/github-work-items-checks.md](reference/github-work-items-checks.md) gives them. [reference/finishing.md](../../../reference/finishing.md), "Final checks", says how to run a check and what to do when one fails.
-12. **Tell the owner the step that only the owner does.** The owner runs `gh auth login` in a terminal, when `gh auth status` shows no sign-in. [reference/finishing.md](../../../reference/finishing.md), "The owner's steps", says how to tell the owner a step.
-13. **After the setup commit, ask the push question.** [reference/finishing.md](../../../reference/finishing.md), "The commit offer", gives the question and says when to ask it.
+10. **After the owner's yes, write the project's phases from question 11 as milestones of the repository.** Tell the owner which milestones will be made, because the yes for the labels and the repository does not cover them. [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md](files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md), "Project phases (milestones)", says how.
+11. **Run this choice's checks again.**
+12. **Tell the owner the step that only the owner does.** The owner runs `gh auth login` in a terminal, when `gh auth status` shows no sign-in.
+13. **After the setup commit, ask the push question** that [reference/finishing.md](../../../reference/finishing.md), "After the commit", gives.
 
-When a `gh` call fails, open [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md](files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md), "When a call fails".
-
-For "update the toolkit", follow [reference/updating-a-project-with-github-work-items.md](reference/updating-a-project-with-github-work-items.md). "Check the setup" and a change of where work items are kept use the steps above: steps 4, 5, and 7 give the folder and the lines that this choice adds, steps 6 and 8 give what it makes in GitHub, and step 9 gives its checks. [reference/update.md](../../../reference/update.md) says how each of those jobs works.
+When a `gh` call fails, open [files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md](files-to-add/.claude/skills/managing-work-items/references/work-tracker-gh.md), "When a call fails". For "update the toolkit", follow [reference/updating-a-project-with-github-work-items.md](reference/updating-a-project-with-github-work-items.md).

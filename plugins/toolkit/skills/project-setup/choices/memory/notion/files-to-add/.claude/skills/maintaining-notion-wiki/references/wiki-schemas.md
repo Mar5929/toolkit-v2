@@ -1,6 +1,6 @@
 # Wiki schemas
 
-These are the owner's template fields as of 2026-10-11. Always inspect the installed project's live schema, options, and relation targets before using them. They're a reference, not permission to add fields or options. System-managed fields are never written.
+These are the fields of the owner's wiki template as of 2026-10-11. Before querying or writing a wiki database, read the installed project's live schema, options, and relation targets, because a project may differ from this list. This list is a reference: never add or change a database's fields or options without the owner's approval. System-managed fields are never written.
 
 ## Wiki Inbox
 
@@ -38,7 +38,7 @@ These are the owner's template fields as of 2026-10-11. Always inspect the insta
 | Summary | text |  |
 | System area | text |  |
 | Category | select | System architecture, Integration architecture, User personas, Security requirements, Functional requirements, User experience, Data model, Non-functional requirements, Operations, Product decisions |
-| Documentation status | status | Separate from Implementation status |
+| Documentation status | status | Approved, Deprecated, In review, Needs review, Draft. Separate from Implementation status |
 | Implementation status | select | Not assessed, Planned, Partially implemented, Live, Retired, Not applicable |
 | Approved by, Owner | person |  |
 | Approved on, Last reviewed, Review due | date |  |
@@ -48,11 +48,13 @@ These are the owner's template fields as of 2026-10-11. Always inspect the insta
 
 ## Long-Term Memory
 
-Five collections: Projects, Topics, Memories, Entities, and Facts. Their schemas are large and owner-defined, so read them live. The fields the procedures depend on:
+Long-Term Memory has five collections: Projects (this project's row), Topics (groups of subjects), Memories (durable subject records), Entities (named things), and Facts (dated statements with validity and sources). Their schemas are large and owner-defined. The fields the procedures depend on:
 
-- **Memories:** Title, Synopsis, Keywords, Record Key, Kind, Status (informational, proposed, accepted, superseded, deprecated, rejected), Lifetime, Review By, Last verified, Saved, Source note, Other fields (JSON), Authorization, Tags, Supersedes, Superseded by, Project, Topic, Work items.
+- **Memories:** Title, Synopsis, Keywords, Record Key, Kind, Status (informational, proposed, accepted, superseded, deprecated, rejected), Lifetime, Review By, Last verified, Saved, Source note, Source, Author, Agent, Other fields (JSON), Authorization, Tags, Supersedes, Superseded by, Project, Topic, Work items.
 - **Facts:** Subject, Predicate, Object, Confidence, Valid From, Valid Until, Invalidated At, Review By, Source, Project, Work items.
 - **Entities:** Name, Aliases, Kind, Project, Source, Work items.
 - **Topics** and **Projects:** Name, Description, and their links to each other.
 
-All Work items relations must point at this project's tracker; check before writing.
+## Relations to check before writing
+
+Project, Source, and Work items relations must point at this project's collections, and every Work items relation must point at this project's work tracker. A relation copied from the template is not proof. When a relation points elsewhere, fix it through setup before writing.

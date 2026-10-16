@@ -78,7 +78,8 @@ They apply to every skill, rule, guide, hook text, and brief. Put all three in t
 
 - The corresponding Notion work item: Mike's request, decisions, current work, and next step. Update it before you stop. Mike's words take priority over agent proposals.
 - `wiki/product-wiki/Toolkit Guiding Design Principles.md`: how Toolkit changes are designed.
-- `wiki/product-wiki/Toolkit Setup Process.md`: the intended setup process.
+- `wiki/product-wiki/Toolkit Setup Process.md`: an overview of setup and the reasons it works this way. The steps are in `plugins/toolkit/skills/project-setup/SKILL.md`.
+- `wiki/product-wiki/Hindsight Decisions and Evidence.md`: the test evidence and reasoning behind the Hindsight settings and add-on patches. Setup does not load it.
 - `wiki/product-wiki/ToolkitV2 Structure.md`: what each choice gives a project.
 - `wiki/product-wiki/Toolkit's Definition of Persistent Memory.md`: what counts as memory and how it is represented. Read it before changing memory guidance.
 - The relevant earlier work items and Git history: how the project got here. Read them before proposing a wider change.

@@ -9,9 +9,9 @@ The goal: the separate acceptance checker passes the result, then the owner appr
 
 ## Checking
 
-- Commit every change first, with no AI credit. Check the item's worktree at its head commit, never the default branch. For docs-only work committed with `publish-docs`, check the default branch at the commit it reported. For a result Git doesn't track, such as a load file, check the file itself and identify it by path and SHA-256 hash.
+- Commit every change first. Check the item's worktree at its head commit, never the default branch. For docs-only work committed with `publish-docs`, check the default branch at the commit it reported. For a result Git doesn't track, such as a load file, check the file itself and identify it by path and SHA-256 hash.
 - Run the project's tests (`AGENTS.md`, "Commands") and every acceptance check you can. Keep each command and its exact result line. A check you can't run (a real device, a sign-in, the owner looking at a screen) is "not run", with what would run it. Never report it as passed.
-- Write a test plan when the checks involve several scenarios, manual steps, test data, a shared environment, or a release across environments. Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<ID>-test-plan.md`, fill it in, and commit it before the checker starts. Never store it with the work items.
+- Write a test plan when the checks involve several scenarios, manual steps, test data, a shared environment, or a release across environments. Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<ID>-test-plan.md`, fill it in, and commit it before the checker starts.
 - Start the checker every time, with `acceptance-checker-brief.md`, on the exact head commit and with every live requirement in full. Read its report yourself. If no helper can start, check it yourself and put "Independent check: none, <why>" on the first line of your reply.
 
 ## Fixing
@@ -39,4 +39,4 @@ If the owner asks to skip the checker, say it runs because they decided it shoul
 
 ## Small items
 
-The checker runs only if the result changes production, changes a shared environment, gives numbers, records, or findings to someone outside the project, or builds a shared system rule. Otherwise your own checks stand in: record in Recent History that no independent check ran and what you checked, and say so on the first line of the reply. The standing merge instruction doesn't cover a merge no checker passed. Approval comes from the single closing question in `closing.md`.
+The checker runs only if the result changes production, changes a shared environment, gives numbers, records, or findings to someone outside the project, or builds a shared system rule. Otherwise your own checks stand in: record in Recent History that no independent check ran and what you checked, and say so on the first line of the reply. The standing merge instruction doesn't cover a merge no checker passed.

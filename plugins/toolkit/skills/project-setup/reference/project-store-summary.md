@@ -7,4 +7,4 @@ Setup finishes with a short paragraph in root `AGENTS.md` naming this repository
 3. Replace `<Work tracking and memory summary for this project.>` below the outcome in root `AGENTS.md` with the two sentences in one paragraph. Keep the summary brief and omit schemas, property lists and processing procedures.
 4. Check that the summary agrees with `PROJECT.md` and that each named skill or rule is installed. If a destination is not ready, state what is pending rather than claiming setup succeeded.
 
-“Check the setup” checks this paragraph against the configured stores. “Update the toolkit” refreshes it when setup or a verified migration changes those stores, while preserving unrelated owner instructions and the current authoritative homes until cutover.
+“Check the setup” checks this paragraph against the configured stores. “Update the toolkit” refreshes it when a changed setup choice changes those stores, and keeps unrelated owner instructions.

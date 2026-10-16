@@ -1,6 +1,6 @@
 # The API version of a Salesforce project
 
-This file holds how to find the project's API version and where to write it. Step 5 of [salesforce-setup.md](../salesforce-setup.md) uses "Find the version", and step 10 uses "Write the version".
+This file holds how to find the project's API version and where to write it.
 
 The files that this choice copies into the project hold the API version as `XX.0`. Fill it in two files.
 

@@ -1,6 +1,6 @@
 # How the toolkit sets up Notion work items by default
 
-This file holds how the toolkit sets up work items in Notion when the owner changes nothing. Step 1 of [notion-work-items-setup.md](../notion-work-items-setup.md) uses it.
+This file holds how the toolkit sets up work items in Notion when the owner changes nothing.
 
 - The project gets one page in the owner's Notion. The page is a row of the owner's Projects database, made as a copy of the owner's "Project" template.
 - Each project page holds its own Work Items, Phases and Tasks databases. New work items use the owner's default template; the agent fills their applicable properties and generated page content.

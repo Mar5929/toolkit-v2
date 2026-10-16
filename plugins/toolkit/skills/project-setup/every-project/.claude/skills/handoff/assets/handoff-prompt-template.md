@@ -16,7 +16,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Decisions not yet saved
 
-- <A decision that a failed save left unsaved, with its source ("owner, this session" or "worked out, this session") and "saved nowhere; not confirmed". Use your judgment: give the reason for a decision when, without it, the next session could reverse or redo the decision. Write "None." when nothing is left unsaved.>
+- <A decision that a failed save left unsaved, with its source ("owner, this session" or "worked out, this session") and "saved nowhere; not confirmed". Give the reason for a decision when, without it, the next session could reverse or redo the decision. Write "None." when nothing is left unsaved.>
 
 ## Open questions
 

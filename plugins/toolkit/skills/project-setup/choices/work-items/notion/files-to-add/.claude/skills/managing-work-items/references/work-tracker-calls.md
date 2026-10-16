@@ -47,7 +47,7 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"State":{"select":{"name"
 ntn api v1/pages/<design-page-id> -X PATCH -d '{"properties":{"title":{"title":[{"text":{"content":"Solution Design - WI-31"}}]}}}' < /dev/null
 ```
 
-The `<page …>` line in the item's text holds the design page's address; its last 32 characters are the ID. To create a missing one, POST to `v1/pages` with `"parent": {"type": "page_id", "page_id": "<item-page-id>"}`, the title as above, and the text in `"markdown"`.
+The `<page …>` line in the item's text holds the design page's address; its last 32 characters are the ID.
 
 **Give the default template to a page with no sections** (get its ID from the templates call in `using-notion-cli`):
 
@@ -90,7 +90,7 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"<tasks
 ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":31}},{"property":"Work item","title":{"is_not_empty":true}}]}}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.url)"'
 ```
 
-**The board:** open items sorted by Priority, then ID. Report each one's Status, State, Waiting on, and Next action, then any untitled cards (below).
+**Open items:** sorted by Priority, then ID. Also look for untitled cards (below).
 
 ```json
 {"filter": {"and": [
@@ -102,7 +102,7 @@ ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[
  "page_size": 100}
 ```
 
-**What waits on the owner:** read the text of each open item and collect open Q&A rows whose "Decision needed from" is the owner. Report those first, then what's in progress, then your next step.
+**What waits on the owner:** read the text of each open item and collect open Q&A rows whose "Decision needed from" is the owner.
 
 **An item's sub-items, phases, and open tasks** (one filter each, on Work Items, Phases, and Tasks; sort sub-items by Phase order then ID, the rest by Order; repeat the first for each sub-item to reach level 3):
 

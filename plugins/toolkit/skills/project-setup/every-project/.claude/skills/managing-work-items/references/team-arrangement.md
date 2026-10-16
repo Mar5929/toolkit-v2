@@ -2,7 +2,7 @@
 
 After the owner authorizes agent delivery, settle once per goal: one team inside this chat, or a Main Orchestrator that coordinates other chats, each with its own team. Record each answer as a Q&A row, and supersede it if the owner changes their mind.
 
-- Offer the Main Orchestrator only if this session actually has tools to list, message, and start other sessions. Check; never assume.
+- Offer the Main Orchestrator only if this session has tools to list, message, and start other sessions.
 - If the owner picks it, also ask whether to archive chats once their work is finished.
 
 ## Main Orchestrator
@@ -14,5 +14,4 @@ After the owner authorizes agent delivery, settle once per goal: one team inside
 - A new session's starting prompt holds: the sub-item ID and what it delivers; the requirements and design, pasted in; its branch (and worktree, if the tool doesn't make one); the files it may write; the owner's applicable instructions, verbatim; only permissions already granted; "build what the requirements ask and no more"; and that it reports by message and never edits work items, merges, or asks the owner directly.
 - Record each session's ID in the team list. A recorded ID doesn't prove it's still running.
 - Archive a session, never delete it, and only after the owner said yes to archiving and its task is complete, merged and deployed, its report recorded, and its result approved.
-
-Honor the project's model preference, and check which model a new session inherits.
+- Check which model a new session inherits.
