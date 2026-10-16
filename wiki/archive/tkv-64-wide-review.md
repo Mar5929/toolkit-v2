@@ -30,9 +30,9 @@ Chosen-memory guards already cover several remaining local examples. Those examp
 
 ## Coverage and evidence
 
-- [Shared skills, rules, guides, hooks and settings](tkv-64-wide-review/shared-review.md)
-- [Setup and all choice modules](tkv-64-wide-review/choices-review.md)
-- [Local/GitHub trackers with local/Hindsight memory](tkv-64-wide-review/workflow-review.md)
+- [Shared skills, rules, guides, hooks and settings](wiki/archive/tkv-64-wide-review/shared-review.md)
+- [Setup and all choice modules](choices-review.md)
+- [Local/GitHub trackers with local/Hindsight memory](wiki/archive/tkv-64-wide-review/workflow-review.md)
 
 The reviewers used the repository principles, owner-workflow records, clarity standard and harness-writing guidance. They reviewed every shipped category and replayed representative processes; this does not claim every line or command was executed. The choices report identifies truncated reads and focused follow-ups. Local/GitHub integration used four scratch assemblies; the earlier Notion rerun used two independent assemblies.
 

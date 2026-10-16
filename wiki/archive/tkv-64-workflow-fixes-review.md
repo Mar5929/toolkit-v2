@@ -24,9 +24,9 @@ The changes preserve approval scope, exact record/tool fields, independent verif
 
 Writers reviewed each other's work; a separate reviewer checked the setup/choice changes. One PR-cleanup remote mismatch was found, fixed and rereviewed. No remaining blocker was found in the approved scenarios.
 
-- [Lifecycle fixtures and independent Git review](tkv-64-workflow-fixes-review/lifecycle-and-git-review.md)
-- [Independent lifecycle review](tkv-64-workflow-fixes-review/independent-lifecycle-review.md)
-- [Choice/setup review and recovery replay](tkv-64-workflow-fixes-review/choice-review.md)
+- [Lifecycle fixtures and independent Git review](lifecycle-and-git-review.md)
+- [Independent lifecycle review](independent-lifecycle-review.md)
+- [Choice/setup review and recovery replay](choice-review.md)
 
 Disposable Git fixtures verified non-origin fetch/pull, remote default lookup, reset-plan lockfile lookup, actual-base comparisons and child-to-parent merging without advancing main. Procedure replays covered interrupted builders, inaccessible wiki evidence, explicit PR identity, moving heads/bases, dirty worktrees, ambiguous remote writes, missing Salesforce skills and partial migration.
 
