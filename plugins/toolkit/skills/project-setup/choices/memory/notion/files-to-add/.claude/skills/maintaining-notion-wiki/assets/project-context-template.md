@@ -14,7 +14,7 @@ Setup fills this page with confirmed facts and verified connections. The librari
 
 ## Notion connections
 
-For each of the project page, Project Wiki, Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary, Product Wiki, Memories, Facts, Entities, Projects (with this project's row), and Topics: its URL and ID, and for databases the database ID and data source ID. Include the tracker connection and its project filter when the tracker is shared. Link the Wiki schemas page with its inspection date and any differences.
+For each of the project page, Project Wiki, Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary, Product Wiki, Memories, Facts, Entities, Projects (with this project's row), and Topics: its URL and ID, and for databases the database ID and data source ID. Include the tracker connection and its project filter when the tracker is shared. Record any difference between the project's live schemas and the Wiki schemas page.
 
 ## Librarian operation
 
