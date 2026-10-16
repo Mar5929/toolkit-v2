@@ -25,6 +25,8 @@ Follow Mike's guiding design principles on every request. They say how every age
 
 This project's memory is the Hindsight bank recorded in `PROJECT.md`, under "Toolkit settings". Follow `.claude/rules/hindsight-memory.md` for memory; in Codex, read it at session start and after compaction. It applies wherever this guide or a toolkit skill names `managing-project-memory`.
 
+When Hindsight is not connected, add the memory to `memory.md` at the root instead. When Hindsight is connected and `memory.md` has entries, save each one to Hindsight and remove it from the file.
+
 ## Where information goes
 
 | Information | Where the agent keeps it |
