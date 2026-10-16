@@ -54,7 +54,7 @@ Keep memory only in the place that this section names.
 ## Project map
 
 - Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout. Every worktree, a separate folder with its own branch, shares them.
-- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. In records, refer to a work item by its ID, never by a folder path. In text for the owner, name records by their names.
+- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. In records, refer to a work item by its ID, never by a folder path.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
