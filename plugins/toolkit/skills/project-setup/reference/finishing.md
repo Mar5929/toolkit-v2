@@ -98,7 +98,7 @@ Give the owner a short, plain report. It has these parts, in this order:
 3. **What was skipped**, and why.
 4. **What the owner must do**, each step with the reason for it.
 5. **The final checks.** Say that all passed, or name each check that did not pass, with its fix.
-6. **The prompts that are left**, grouped by file, each with the fact it needs in a few words. Search `AGENTS.md`, `README.md`, `PROJECT.md`, and each further file that a choice's setup file names. Angle brackets that are part of a file name or a path pattern are not prompts, such as `<ID>.md`, `<ID>-<short-slug>/`, `<ID>-test-plan.md`, and `<release>-test-plan.md`.
+6. **The prompts that are left**, grouped by file, each with the fact it needs in a few words. Search `AGENTS.md`, `README.md`, `PROJECT.md`, and each further file that a choice's setup file names. Angle brackets that are part of a file name or a path pattern are not prompts, such as `<ID>.md`, `<short name>/`, `<short name>-test-plan.md`, and `<release>-test-plan.md`.
 7. **The last line** is the commit offer, which the next section gives.
 
 ## The commit offer

@@ -12,7 +12,7 @@ The Notion steps make the project page as a row of the owner's Projects database
 
 2. Leave out every data source whose title column is `Name`. Such a data source is the Projects database under another project's Long-Term Memory page. The owner's Projects database has the title column `Project`.
 3. Use an existing approval that names the exact database and listed writes. Otherwise, show the destination and ask the owner to approve adding this project as a row of that Projects database.
-   - When a question is needed, ask it before the ID prefix question. Make no project page until its listed writes and exact destination are approved.
+   - Make no project page until its listed writes and exact destination are approved.
    - Approval must cover the exact database. A generic yes to making pages does not choose a destination.
    - When the destination is not already confirmed and more than one data source is left, list each with its link and ask which one. Recommend the one that holds the owner's other projects.
    - When the owner has no Projects database, stop. Tell the owner that a Notion project needs a Projects database because the template is kept in one, and ask the owner to make one in Notion.

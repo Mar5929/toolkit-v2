@@ -21,7 +21,7 @@ Response section headers must be simple and clear. Say what the section is in a 
 
 Use a paragraph for a connected explanation. Use bullets when separate items, steps, or choices are easier to compare that way. Use a header only when it describes the content below it and is meaningful on its own.
 
-When you name a work item, give its name with its ID, never the ID alone.
+When you name a work item, a decision, or another project record, use its name. Leave out the ID the agent uses to find it. Add a number only when the user works with that number in another tool, such as a work item number in Salesforce DevOps Center.
 
 Leave out routine process narration, helper activity, unchanged details, and problems caught and fixed before the user lost anything. Mention methods or implementation detail only when the user asks.
 

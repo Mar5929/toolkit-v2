@@ -20,7 +20,7 @@ When the choice modules add text or settings to shared files, build the setup co
 
 Preserve the project’s facts and records during the scan. Existing `owner-preferences.md` and `salesforce-agent-permissions.md` are the owner’s files; never compare or replace them as toolkit updates. An intentionally deleted `SOUL.md` stays deleted. Generated indexes are maintained by their existing procedures, not treated as source-file differences.
 
-The owner's records stay where they are unless the owner approves a move.
+The owner's records stay where they are unless the owner approves a move. When the project has folders or test plans named by work item ID, offer to rename them to each item's short name, and record that short name in the item, as `managing-work-items`, `references/building.md`, says.
 
 ## Show the owner the differences
 

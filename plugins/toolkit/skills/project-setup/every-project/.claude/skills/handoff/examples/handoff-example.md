@@ -28,11 +28,12 @@ Record access and supplied text: <configured record access and freshly read text
 
 ```markdown
 Not saved: nothing.
-Saved: WI-007 Current state and one Recent History row; Q-05
-(negative amounts) added to Questions and Answers. Project's current
-state: where the next session starts, rewritten.
-Filed: SRC-014 (the bank's CSV specification, from the owner's email),
-with its ID in WI-007.
+Saved: the CSV export work item's Current state and one Recent History
+row; the answer that credit notes show negative amounts, added to its
+Questions and Answers. Project's current state: where the next session
+starts, rewritten.
+Filed: the bank's CSV specification, from the owner's email, linked from
+the CSV export work item.
 
 Checked the handoff prompt: 1 fixed, 1 not confirmed.
 

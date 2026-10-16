@@ -14,7 +14,7 @@ result_approved: no
 updated: <YYYY-MM-DD>
 ---
 
-# WI-001: <Work item title>
+# <Work item title>
 
 <!-- Replace every <prompt> with real content or delete it. Keep the headings and bold labels. -->
 
@@ -36,7 +36,7 @@ updated: <YYYY-MM-DD>
 
 **Last updated:** <YYYY-MM-DD, and who.>
 
-**Related items:** <Project phase (top-level) or parent ID (sub-item); related item IDs; shared decisions or rules this item must follow, by ID.>
+**Related items:** <Project phase (top-level) or parent ID (sub-item); related item IDs; shared decisions or rules this item must follow, by ID; `Short name: <short name>` once a branch or folder is named for the item.>
 
 **Kept for the project:** <Filled at closing. Shared decisions, rules, and terms this item added or changed, by ID, and lessons kept for the whole project; or "None: <reason>".>
 

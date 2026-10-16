@@ -13,7 +13,7 @@
 
 ## Mark a rule Built
 
-At closing, a rule becomes Built only if all three hold: it's Approved; the item's change is on the default branch (and deployed, if it has a deployment); and the owner approved the result with the checker marking Met a requirement that builds or changes the rule's behavior. If any fails, change nothing and say which. If the item built something shared that no rule covers, record the decision first. Then set Built with the item's ID, reset the Status, add a "<rule ID> built" Changelog row, save, and report the rule IDs, the commit, and whether the main checkout has the save.
+At closing, a rule becomes Built only if all three hold: it's Approved; the item's change is on the default branch (and deployed, if it has a deployment); and the owner approved the result with the checker marking Met a requirement that builds or changes the rule's behavior. If any fails, change nothing and say which. If the item built something shared that no rule covers, record the decision first. Then set Built with the item's ID, reset the Status, add a "<rule ID> built" Changelog row, save, and report each rule by its heading, with its ID for the skill that asked, the commit, and whether the main checkout has the save.
 
 ## Glossary terms
 

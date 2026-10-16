@@ -13,7 +13,7 @@ A sourced answer counts as decided only when its speaker, their authority, the d
 5. A Decided entry that says how the system must work is also a rule: write it with `update-system-doc.md` before saving. An Open entry gets a Draft rule only if work is being designed or built to its proposed wording now.
 6. Save everything in one `publish-docs` save.
 7. Once the save is in the main checkout, write the DEC and rule IDs into each affected item's Related items, and add "Filed as DEC-###." to the Q&A row that raised it. An item that can't continue without an Open answer waits on the owner. When no work item holds the wait, have `managing-project-memory` record it.
-8. Tell the owner the DEC ID, its status, and which items now name it.
+8. Tell the owner the decision's title, its status, and the names of the work items it affects.
 
 ## Answering an open question
 
