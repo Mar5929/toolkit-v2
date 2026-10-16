@@ -1,6 +1,6 @@
 # Wiki schemas
 
-These are the fields of the owner's wiki template as of 2026-10-11. Before querying or writing a wiki database, read the installed project's live schema, options, and relation targets, because a project may differ from this list. This list is a reference: never add or change a database's fields or options without the owner's approval. System-managed fields are never written.
+These are the fields of the owner's wiki template as of 2026-10-16. Before querying or writing a wiki database, read the installed project's live schema, options, and relation targets, because a project may differ from this list. This list is a reference: never add or change a database's fields or options without the owner's approval. System-managed fields are never written.
 
 ## Wiki Inbox
 
@@ -10,7 +10,7 @@ These are the fields of the owner's wiki template as of 2026-10-11. Before query
 | Capture | text |  |
 | Source | text |  |
 | Contributor | text |  |
-| Destination areas | multi_select | Current state, Long-term memory, Terminology glossary, Product wiki |
+| Destination areas | multi_select | Long-term memory, Terminology glossary, Product wiki |
 | Processing status | status | New, Processing, Needs review, Filed, Dismissed |
 | Processing notes | text | Librarian only |
 | Filed links | text | Librarian only |

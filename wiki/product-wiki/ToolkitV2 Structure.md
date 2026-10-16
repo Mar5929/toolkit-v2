@@ -184,6 +184,8 @@ Local and Notion memory use the same Current State page. The agent reads it at t
 
 The page leaves out recent decisions and a list of recent activity. Decision records and work items hold decisions, and Git and work-item history show recent activity; a copy on this page would drift from them. The template is `memory/CURRENT_STATE.md` for local memory and the Current state page in the owner's Project template for Notion memory. Mike Rihm confirmed it on 2026-10-16.
 
+Coding agents update the page directly, in the same turn the work changes, with both local and Notion memory. The page must be current at the start of every session, and the Notion librarian runs only daily or on demand, so the librarian never edits it. The Wiki Inbox and the librarian handle long-term knowledge only. Mike Rihm decided this on 2026-10-16.
+
 With each of the three, the agent also asks whether the owner wants Claude Code's own memory on in the project. Claude Code's own memory is a folder of notes on the owner's computer that Claude Code loads into every session. The toolkit's default is off, so that the project's memory is kept in one place. The answer is one line in `.claude/settings.json`.
 
 ### Local files
@@ -198,20 +200,20 @@ With each of the three, the agent also asks whether the owner wants Claude Code'
 
 ### Notion
 
-The Project Wiki in the owner's Project template supplies one Wiki Inbox and four curated destinations. Coding agents read relevant wiki records and capture useful information; the librarian reconciles and files it.
+The Project Wiki in the owner's Project template supplies one Wiki Inbox and four curated destinations. Coding agents read relevant wiki records, keep Current state current, and capture other useful information; the librarian reconciles and files it into the long-term destinations.
 
 | Kind | What it adds |
 | --- | --- |
 | Questions | Confirm the Project template and project placement, then choose a supported daily scheduler with the owner. |
-| Skills | `managing-project-memory`: short retrieval and capture steps with focused destination references. `maintaining-notion-wiki`: librarian steps with references for schemas, filing, metadata and recovery. |
+| Skills | `managing-project-memory`: short retrieval and capture steps, keeping Current state current, with focused destination references. `maintaining-notion-wiki`: librarian steps with references for schemas, filing, metadata and recovery. |
 | Skill and rule | `using-notion-cli` and `notion-records.md`, once, as for Notion work items. |
-| Session-start resources | `.claude/hooks/session-start-choice.mjs`, which prints the Current state page at session start, and `.claude/hooks/prompt-memory-reminder.md`, the memory reminder text. The Current state page ID lives only in that module. Startup directs the agent to check relevant pending captures for freshness. |
+| Session-start resources | `.claude/hooks/session-start-choice.mjs`, which prints the Current state page at session start, and `.claude/hooks/prompt-memory-reminder.md`, the memory reminder text. The Current state page ID lives only in that module. |
 | Published librarian skill | Every Project Wiki holds a short Librarian processing skill entry, linked procedure and schema references, and verified project context and connections. The selected cloud or local librarian starts from its entry link. |
 | `PROJECT.md` | Memory: `notion`; configured Project Wiki, published librarian and context links, inbox, destination and data-source identifiers; librarian schedule and open setup steps. |
 | Outside the project folder | The owner's existing Project Wiki model, copied with the Project template: Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. |
 | The owner's own steps | Sign in, grant the selected tools access and confirm the scheduler during setup. |
 
-Current state is short-term working context derived from current work records. Long-Term Memory holds qualifying lasting context and non-product decisions or lessons. Terminology Glossary owns finalized terms. Product Wiki owns finalized living product documentation, architecture and product decisions; documentation approval and implementation status remain separate.
+Current state is short-term working context that coding agents keep current from their work. Long-Term Memory holds qualifying lasting context and non-product decisions or lessons. Terminology Glossary owns finalized terms. Product Wiki owns finalized living product documentation, architecture and product decisions; documentation approval and implementation status remain separate.
 
 Working designs stay in the work item's Solution Design. Finalized outcomes are captured automatically and filed under existing approval evidence. Later changes use another work item and update existing wiki records. Work items can close after verified capture; pending filing is recorded honestly. This Notion model replaces equivalent local system documents, glossary and decision ledger rather than maintaining duplicate authoritative bodies.
 

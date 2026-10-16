@@ -4,7 +4,7 @@ The Project Wiki is the parent page. Current state and Long-Term Memory are page
 
 | Destination | Holds | Doesn't hold |
 | --- | --- | --- |
-| Current state | A derived snapshot of active work, coming dates, waits, standing jobs and shared files, and where we stopped | Work status, approvals, or next actions (the tracker owns those) |
+| Current state | A snapshot, kept current by agents, of active work, coming dates, waits, standing jobs and shared files, and where we stopped | Work status, approvals, or next actions (the tracker owns those) |
 | Long-Term Memory | Lasting project context, non-product decisions, and lessons that no other record owns | Product docs or terms |
 | Terminology Glossary | Established meanings, aliases, and naming history | Tentative meanings (those stay in working records) |
 | Product Wiki | Finalized behavior, architecture, and product decisions with rationale | Working designs (those stay in the item's Solution Design) |
@@ -13,7 +13,7 @@ There's no local `DECISIONS.md`, specification, or glossary in a Notion-memory p
 
 ## Current state
 
-Read the whole page and its links. It's a snapshot, so check its date and any pending captures against current work before relying on it.
+Read the whole page and its links. Agents update it as `current-state.md` says. Check changeable lines against current work items before relying on them.
 
 ## Long-Term Memory
 

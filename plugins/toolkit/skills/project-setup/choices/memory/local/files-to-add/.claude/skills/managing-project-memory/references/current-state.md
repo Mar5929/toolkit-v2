@@ -5,6 +5,7 @@ Current State is `memory/CURRENT_STATE.md`: one short page of what's true now, s
 ## Rules
 
 - Change it in the same turn the truth changes. Replace a changed line; never add a new one beside it.
+- Re-read it right before each change, and change only the lines your work affects, so that a change another session made is kept.
 - Keep Active work in priority order, most important first.
 - Never copy a work item's status, next action, or wait here. Give its ID and a few words; the work item holds the rest.
 - A to-do is never kept only here. It becomes a project task or a work item task, and a dated one also gets a Coming up line naming its ID. For a to-do at a set time, tell the owner and offer a scheduled reminder if one is available.

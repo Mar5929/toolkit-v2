@@ -15,4 +15,4 @@ A sourced answer counts as a decision only when its speaker, their authority, th
 
 ## A shared open question
 
-A question more than one work item needs stays in each affected work item, linked to the others, until it's decided. Have `managing-project-memory` record it as a "Waiting on" checkpoint naming the question, the affected items, and who must answer. When the question is decided, record the decision as above; the checkpoint then ends.
+A question more than one work item needs stays in each affected work item, linked to the others, until it's decided. Have `managing-project-memory` add a Waiting on line to Current state naming the question, the affected items, and who must answer. When the question is decided, record the decision as above and remove the line.

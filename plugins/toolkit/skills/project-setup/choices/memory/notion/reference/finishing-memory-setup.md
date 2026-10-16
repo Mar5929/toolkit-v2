@@ -4,7 +4,7 @@ Use this reference at the finish of Notion memory setup. The job is done when th
 
 ## Initialize Current state
 
-Start an on-demand librarian run, the skill `maintaining-notion-wiki`, to fill in the Current state page from the interview with these values, then read the page back.
+Fill in the Current state page from the interview with these values, then read the page back.
 
 - Last updated: the date, "setup", and "agent".
 - Active work: the current work from question 11, most important first, or "None."
