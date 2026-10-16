@@ -1,0 +1,9 @@
+# What a Toolkit V2 project sets in Codex: it raises the limit for the list of skills. Codex reads
+# this file once the project is trusted.
+
+# Codex shortens every skill description when the list is longer than 2% of the model's context
+# window. This sets that limit to 10000 tokens, the largest value Codex accepts here, which is
+# more than the 2% default for any model with a context window under 500,000 tokens. A short list
+# still uses only the room it needs.
+[skills]
+max_context_tokens = 10000
