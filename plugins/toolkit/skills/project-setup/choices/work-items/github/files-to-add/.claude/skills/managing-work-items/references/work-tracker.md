@@ -6,7 +6,7 @@ Each work item is one issue in the repository named on the "GitHub repository" l
 
 | Part | Where |
 | --- | --- |
-| ID | The issue number, `#12`. Find items by number, never by link or title. In branch names use `issue` (`claude/issue-12-csv-export`). Folders and files named for the item use its short name, as `building.md` says. |
+| ID | The issue number, `#12`. Find items by number, never by link or title. In branch names use `issue` (`claude/issue-12-csv-export`). Folders and files named for the item use its short name (`building.md`). |
 | Header fields | Labels (table below). Status has no label. |
 | Body | The work item template from `## Overview` to the end. |
 | Done / Cancelled | Closed as completed / closed as not planned. |
@@ -45,7 +45,7 @@ Swap labels in one call so an issue never has two state labels or none. If label
 
 ## Creating an item
 
-Build the body from `assets/work-item-template.md`, from `## Overview` on, filled with no prompts left. Keep the headings, table headers, labels, and guide comments; write "None." under Sources and Lessons; leave Kept for the project empty. Write Related items as "Parent #12, phase P2.", "Parent #14.", or "Project phase P01." as fits, and add `Short name: <short name>` once one is chosen, as `building.md` says. Create it with its State, type, and priority labels only, then link it to its parent or milestone.
+Build the body from `assets/work-item-template.md`, from `## Overview` on, filled with no prompts left. Keep the headings, table headers, labels, and guide comments; write "None." under Sources and Lessons; leave Kept for the project empty. Write Related items as "Parent #12, phase P2.", "Parent #14.", or "Project phase P01." as fits, plus `Short name: <short name>`. Create it with its State, type, and priority labels only, then link it to its parent or milestone.
 
 An issue the owner opened by hand (no `## Overview` or no state label) gets the layout only after the owner's yes: their text becomes Requirement 1's Original verbatim requirement, it gets `state:backlog` and `priority:medium`, and you ask the type unless it's obvious.
 

@@ -12,7 +12,7 @@ This folder holds the records of putting the work into use: each release, each d
 | `client-handoffs/` | One folder per handoff to the client or the next team. | `<YYYY-MM-DD>-<short-name>/` |
 
 - Write each name in lowercase words joined by hyphens, after the date when there is one.
-- A work item's short name is the one its work item records, as `managing-work-items`, `references/building.md`, says.
+- A work item's short name is the one its work item records.
 - A work item deployed to a second environment gets a second folder, with the environment added to the name: `<short name>-<environment>/`.
 - Where one of these folders holds a template folder, start a record by copying it, and leave the template unchanged.
 

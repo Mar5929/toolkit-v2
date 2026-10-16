@@ -11,7 +11,7 @@ Save a source and give it an SRC-### ID so other records can name it. File every
 5. Add its row to `sources/INDEX.md`, naming each work item that uses it now under "Used by".
 6. Save with `publish-docs` before you use the source. The save reserves the number, and a link to the file works only once it's on the default branch.
 7. Write the source's line under Notes, Sources in each work item that uses it, with `managing-work-items`, once `SKILL.md`, "Writing a record's ID in a work item", allows it. The line holds the SRC ID, what the source is, and the IDs of the requirements, questions, and tasks taken from it; the work tracker says whether it also holds the file's web address.
-8. Tell the owner what was filed, by the source's subject, and give its SRC ID to the skill that asked.
+8. Tell the owner what was filed, and give its SRC ID to the skill that asked.
 
 ## What to do with what the source says
 

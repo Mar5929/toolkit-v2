@@ -10,7 +10,7 @@ Open one only when the item changed files and the project has a remote.
 
 - The item's files must all be committed, and the head must be the commit the checker passed. If it isn't, re-run the checker on the new head.
 - Push without force. The base is the parent's branch for a sub-item, or the default branch for a top-level item.
-- Write the title and description in plain words: what changed, why, how it was checked, and the item's name. Put the item's ID on its own line at the end of the description.
+- Write the title and description in plain words: what changed, why, how it was checked, and the item's name, with its ID at the end.
 - The merge must never close the work item. Record the pull request on the item as `work-tracker.md` says, and in Recent History.
 
 ## Merging

@@ -4,7 +4,7 @@ Work items live in `work-items/` as one folder per item. The lifecycle decides w
 
 ## Layout
 
-- `work-items/<short name>/<ID>.md` is the item. The folder takes the item's short name, as `building.md` says, so the owner sees the subject; the file keeps the ID, so links find it. Choose the short name when the item is created, and record it as `building.md` says. When the owner renames the folder, keep the recorded short name for branches and other folders. `DESIGN.md` in the same folder is its design. Sub-items are folders inside their parent's folder.
+- `work-items/<short name>/<ID>.md` is the item. The folder takes the item's short name (`building.md`). `DESIGN.md` in the same folder is its design. Sub-items are folders inside their parent's folder.
 - New items and designs are copied from `work-items/work-item-template/`. The template shows every field and section; keep its headings and bold labels.
 - The ID prefix is in `PROJECT.md`, "Toolkit settings". IDs are three digits: "WI-31" means `WI-031`.
 - Project phases are in `PROJECT-ROADMAP.md`; project tasks are in `work-items/PROJECT-TASKS.md`.
@@ -16,7 +16,7 @@ Work items live in `work-items/` as one folder per item. The lifecycle decides w
 - The `id:` line is the item's identity, never its path. The owner moves, renames, and nests folders by hand: find items by ID, tell the owner what moved, and carry on.
 - Change only the lines that change, and set `updated:` to today.
 - Never move, group, archive, or rename an item unless the owner asks.
-- Link other items as `[[WI-031|<item name>]]`, so the link finds the item by ID and shows its name; `parent:` stays a plain ID.
+- Link other items as `[[WI-031|<item name>]]`; `parent:` stays a plain ID.
 - In tables, escape `|` as `\|` and join lines with `<br>`.
 - `PROJECT-ROADMAP.md` is tracked in Git: read it from the default branch and change it only through `publish-docs`.
 - If an ID has two files, or none, tell the owner before creating anything.
