@@ -16,7 +16,7 @@ The templates are Notion database templates (https://www.notion.com/help/databas
 The owner's Projects database holds one template, named "Project", which is set as the default template of that database. Every project is made from "Project". After a project is made, the agent removes the part that the project keeps elsewhere. "Project" holds both parts:
 
 - The work items part is the Work Items, Phases, and Tasks databases.
-- The memory part is Project Wiki. It holds Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Long-Term Memory contains the Lore collections: Memories, Facts, Entities, Projects, and Topics.
+- The memory part is Project Wiki. It holds Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Long-Term Memory contains the collections Memories, Facts, Entities, Projects, and Topics.
 
 Inside "Project", the Work Items database has one template, the work item template, which is set as the default template of that database. The title of the work item template is empty. So the title that the owner types on a card is kept, and the boards' empty-title filter hides the template. Every project made from "Project" has the work item template, still set as the default.
 
@@ -67,7 +67,7 @@ Before the first step, two things must be true. The owner has signed in with `nt
    ```bash
    ntn api v1/data_sources/<work-items-data-source-id> -X PATCH -d '{"properties":{"ID":{"unique_id":{"prefix":"<PREFIX>"}}}}' < /dev/null | jq -c '.properties.ID.unique_id'
    ```
-8. When memory is in Notion, run [notion-memory-pages.md](notion-memory-pages.md), "A new project". That procedure verifies the copied wiki, connects its Lore project row, and records the wiki's links.
+8. When memory is in Notion, run [notion-memory-pages.md](notion-memory-pages.md), "A new project". That procedure verifies the copied wiki, connects its Long-Term Memory project row, and records the wiki's links.
 9. **Fill the project row.** In Notion, fill every field of the project's row that the setup answers cover, such as Tracker, Memory system, Local path, Repository, Salesforce, and Set up on. Ask the owner, in one question, only for the fields that only the owner knows, such as Priority and Target Date.
    - "Key" holds the project's work item ID prefix, wherever the project's work items are kept, for example MOB, or WI for local work items.
    - "Work items data source" holds this project's Work Items data source ID. "Memory data source" holds its Wiki Inbox data source ID, because Wiki Inbox is the capture destination. Verify the project row's live property types before filling them.

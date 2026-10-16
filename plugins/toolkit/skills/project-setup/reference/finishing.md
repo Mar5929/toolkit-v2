@@ -51,9 +51,9 @@ A setup answer is not an instruction. These answers never go in `owner-preferenc
 
 The roadmap is the project's phases: what each phase is for, which phases are done, which phase the project is in now, and what comes next. Write it from the owner's answers to question 11, straight into the place where the work items choice keeps it; its setup file names that place. Write only what the owner confirmed, and show the owner the roadmap after you wrote it.
 
-## The memory choice's startup records and open steps
+## The memory choice's startup records
 
-The memory choice's `reference/finishing-memory-setup.md` says how to write its startup records from the interview, where the open owner steps are recorded, and how to check them. Every choice that leaves an owner step open, such as Salesforce, records that step in the place that file gives. Keep the confirmed roadmap in the selected work tracker.
+The memory choice's `reference/finishing-memory-setup.md` says how to write its startup records from the interview and how to check them. The steps left for the owner go only in the report. Keep the confirmed roadmap in the selected work tracker.
 
 ## Final checks
 

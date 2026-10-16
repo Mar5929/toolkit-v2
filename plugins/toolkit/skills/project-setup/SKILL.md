@@ -145,7 +145,7 @@ The project's skills read the exact labels in "Toolkit settings".
 
 ## Step 6: Finish
 
-Follow [reference/finishing.md](reference/finishing.md). Setup is finished when every answer is written in the place the table in Step 4 gives, the roadmap is written, the memory choice's startup records and open owner steps are written, the final checks have run, the owner knows the steps that only the owner can do, and the reply ends with the report and the offer to commit the setup files.
+Follow [reference/finishing.md](reference/finishing.md). Setup is finished when every answer is written in the place the table in Step 4 gives, the roadmap is written, the memory choice's startup records are written, the final checks have run, the owner knows the steps that only the owner can do, and the reply ends with the report and the offer to commit the setup files.
 
 ## An existing project
 

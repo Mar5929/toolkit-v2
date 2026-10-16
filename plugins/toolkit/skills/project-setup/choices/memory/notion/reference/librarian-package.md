@@ -14,7 +14,7 @@ Each Notion Project Wiki holds a librarian processing skill that a cloud or loca
 
 Give the selected librarian the filled invocation prompt. Verify its project identity and entry link, then use the same prompt for the configured scheduled and on-demand operations. Verify that it can read project context, every procedure reference, the project's live schemas and the required sources, and perform the permitted capture and filing checks in Notion memory setup. Test a missing-source case: unresolved evidence remains Needs review with a recovery note. Check an empty-inbox maintenance scenario for duplicate records and broken pointers, preserving distinct context, history and approval evidence.
 
-Check writer coordination across scheduled and on-demand runs. Record access or scheduling gaps as open setup steps. Publishing the skill does not activate a schedule or broaden permissions.
+Check writer coordination across scheduled and on-demand runs. Publishing the skill does not activate a schedule or broaden permissions.
 
 ## Update an existing package
 
