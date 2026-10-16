@@ -7,8 +7,8 @@ Current State is the Current state page in Project Wiki, whose ID is under "Noti
 - Change it in the same turn the truth changes. Replace a changed line; never add a new one beside it.
 - Re-read it right before each change, and change only the lines your work affects, so that a change another session made is kept.
 - Keep Active work in priority order, most important first.
-- Never copy a work item's status, next action, or wait here. Give its ID and a few words; the work item holds the rest.
-- A to-do is never kept only here. It becomes a project task or a work item task, and a dated one also gets a Coming up line naming its ID. For a to-do at a set time, tell the owner and offer a scheduled reminder if one is available.
+- Never copy a work item's status, next action, or wait here. Give a link that shows its name; the work item holds the rest.
+- A to-do is never kept only here. It becomes a project task or a work item task, and a dated one also gets a Coming up line that names the task and where it is kept. For a to-do at a set time, tell the owner and offer a scheduled reminder if one is available.
 - A passed deadline may still mean unfinished work. Check before removing its line.
 - Before removing a line about something a later session must know, make sure a record holds it: a work item, project task, source, or event record.
 - Remove lines that are no longer true without asking. Cutting a line that's still true needs the owner's yes.
