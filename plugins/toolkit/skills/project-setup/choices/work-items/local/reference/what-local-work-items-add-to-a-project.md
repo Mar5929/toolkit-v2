@@ -11,7 +11,7 @@ This file lists what setup adds to a project that keeps its work items in local 
 | Files inside a skill | The same folder adds `references/work-tracker.md` inside `managing-work-items`, which every project has. It says where local work items live and how to read and write them. |
 | Lines in `.gitignore` and `.ignore` | Add `/work-items/` to `.gitignore`, so Git does not track the folder, and `!/work-items/` to `.ignore`, so the search tools still read it. Add each line only when the file lacks it. |
 | Settings | Nothing. |
-| `PROJECT.md`, "Toolkit settings" | Write `local` on the Tracker line. Add this line below the Memory line, with the prefix that the owner confirmed: ``- Work item ID prefix: `WI` `` |
+| `PROJECT.md`, "Toolkit settings" | Write `local` on the Tracker line. Add this line below the Memory line: ``- Work item ID prefix: `WI` ``. |
 | Text in `AGENTS.md` | Six rows in the "Project map" table. "The text in AGENTS.md" below gives them. |
 | Outside the project folder | Nothing. |
 
@@ -22,8 +22,8 @@ In the project's root `AGENTS.md`, in the "Project map" table, add the first row
 ```markdown
 | `PROJECT-ROADMAP.md` | The plan at project level: the project's phases in order, and the top-level work items (with no parent) that belong to each phase. | `managing-work-items` decides the change. |
 | `work-items/` | The work items: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. Git does not track this folder. | `managing-work-items` for every read and save. |
-| `work-items/<ID>-<short-slug>/<ID>.md` | One work item: its goal, requirements, questions and answers, tasks, Current state, and history. | `managing-work-items`. |
-| `work-items/<ID>-<short-slug>/DESIGN.md` | The solution design for that one work item: the options considered and the approach the owner approved. | `managing-work-items`. |
+| `work-items/<short name>/<ID>.md` | One work item: its goal, requirements, questions and answers, tasks, Current state, and history. | `managing-work-items`. |
+| `work-items/<short name>/DESIGN.md` | The solution design for that one work item: the options considered and the approach the owner approved. | `managing-work-items`. |
 | `work-items/PROJECT-TASKS.md` | The project tasks: administrative tasks that belong to no work item, such as giving a person access. | `managing-work-items`. |
 | `work-items/work-item-template/` | `work-item-template.md` and `design-template.md`: the templates that are copied to start a new work item and its design. | The owner may edit them; `managing-work-items` copies from them. |
 ```

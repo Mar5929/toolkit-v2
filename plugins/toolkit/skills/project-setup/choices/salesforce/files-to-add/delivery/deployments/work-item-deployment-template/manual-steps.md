@@ -1,6 +1,6 @@
-# <Work item ID>: manual deployment steps
+# <Work item name>: manual deployment steps
 
-<!-- Fill-in guide: replace the work-item ID and each angle-bracket prompt below with the exact operator action, owner, order, status, purpose, and verification. Repeat the step block under the correct phase for each action, remove unused example blocks, and delete this guide. Remove this file entirely if the package needs no ordered manual action. -->
+<!-- Fill-in guide: replace the work item name and each angle-bracket prompt below with the exact operator action, owner, order, status, purpose, and verification. Repeat the step block under the correct phase for each action, remove unused example blocks, and delete this guide. Remove this file entirely if the package needs no ordered manual action. -->
 
 ## Pre-deploy
 

@@ -16,7 +16,7 @@ delivery/deployments/
       package.xml                      the master manifest: every deployable tracker row
       manual-steps.md                  manual steps for a full cutover, if any
   work-item-deployment-template/       the template for a work item's folder
-  <ID>-<short-name>/                   one per work item that ships metadata
+  <short name>/                        one per work item that ships metadata
       DEPLOYMENT-RECORD.md             scope, evidence, outcome
       package.xml                      that item's new and changed components
       destructiveChanges.xml           only if it removes components

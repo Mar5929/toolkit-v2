@@ -7,12 +7,13 @@ This folder holds the records of putting the work into use: each release, each d
 | Folder | What goes in it | Name of one record |
 | --- | --- | --- |
 | `releases/` | One folder per release: several work items put into use together. | `<YYYY-MM-DD>-<release-name>/` |
-| `deployments/` | One folder per deployment of a work item to an environment. | `<work item ID>-<short-name>/` |
+| `deployments/` | One folder per deployment of a work item to an environment. | `<short name>/` |
 | `migrations/` | One folder per area of data that is moved, loaded, changed, or corrected in bulk. | `<data-area>/` |
 | `client-handoffs/` | One folder per handoff to the client or the next team. | `<YYYY-MM-DD>-<short-name>/` |
 
-- Write each name in lowercase words joined by hyphens, after the date or the ID.
-- A work item deployed to a second environment gets a second folder, with the environment added to the name: `<work item ID>-<short-name>-<environment>/`.
+- Write each name in lowercase words joined by hyphens, after the date when there is one.
+- A work item's short name is the one its work item records.
+- A work item deployed to a second environment gets a second folder, with the environment added to the name: `<short name>-<environment>/`.
 - Where one of these folders holds a template folder, start a record by copying it, and leave the template unchanged.
 
 ## The form of a record
@@ -23,7 +24,7 @@ With no template, a record is the file or files below, in its own folder, holdin
 | --- | --- | --- |
 | Deployment | `DEPLOYMENT-RECORD.md` | The work item's ID; the target environment; Status; the date and time it ran; who ran it and who is responsible; exactly what was deployed (a commit, a version, or a package); the checks before it; the owner's decision, with the date and where it is recorded; each manual step, in order, with who did it; the result; the checks after it. |
 | Release plan | `CUTOVER-PLAN.md` | The owner of the release; the target environment; the time window; Status; the work items in it, each with its deployment record; what must be true before it starts; the steps in order; each point where the owner decides to go on or stop; how to undo it. |
-| Release notes | `RELEASE-NOTES.md` | The release date; the environment; Status; one row per work item: its ID, what changed for the user, and the evidence. |
+| Release notes | `RELEASE-NOTES.md` | The release date; the environment; Status; one row per work item: its name, what changed for the user, and the evidence. |
 | Migration area | An area file, a field mapping, and the rules for changing values, each named for the area | In the area file: the objects and the source systems; the work items it serves; Mapping status; the date and environment it was last checked. |
 | Client handoff | `HANDOFF.md`, beside the files handed over | The date; who received it; how it was sent; the files, each with its purpose; the work items or the release it belongs to. |
 

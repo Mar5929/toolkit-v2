@@ -14,7 +14,7 @@ The main agent is the only one that changes the work item or talks to the owner.
 ## Git
 
 - Make every change in the item's own worktree and branch, never on the default branch. Create them before the first change, from the main checkout, off the default branch (or off the parent's branch for a sub-item). Always pass `-C <main checkout>`.
-- Names: branch `claude/<prefix>-<number>-<slug>` and folder `.claude/worktrees/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`. Working files go in `working-files/<ID>-<short-slug>/` (no leading `#`), or `working-files/no-work-item/` for work with no item. `merge-and-clean-up` finds the item from that ID. A builder's branch adds the task: `claude/wi-007-p1-t01`, off the item's branch.
+- Names: branch `claude/<prefix>-<number>-<short name>` and folder `.claude/worktrees/<prefix>-<number>-<short name>`, for example `claude/wi-007-csv-export`. `merge-and-clean-up` finds the item from the ID in the branch name. The short name is a few lowercase words that say the item's subject, such as `csv-export`, and that no other item uses. Record it on the item's Related items line and reuse it for every branch and folder. Working files go in `working-files/<short name>/`, or `working-files/no-work-item/` for work with no item. A builder's branch adds the task: `claude/wi-007-p1-t01`, off the item's branch.
 - Merge conflicts: follow `pull-latest`.
 
 ## Who builds

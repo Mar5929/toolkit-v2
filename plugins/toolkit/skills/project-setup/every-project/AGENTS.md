@@ -54,7 +54,7 @@ Keep memory only in the place that this section names.
 ## Project map
 
 - Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout. Every worktree, a separate folder with its own branch, shares them.
-- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. Name a work item by its ID, never by a folder path.
+- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. In records, refer to a work item by its ID, never by a folder path.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
@@ -69,7 +69,7 @@ Keep memory only in the place that this section names.
 | `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with `publish-docs`. |
 | `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
 | `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
-| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
+| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<short name>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
 | `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named as `managing-work-items`, `references/building.md`, says. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
 | `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
