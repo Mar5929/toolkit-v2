@@ -7,11 +7,11 @@ Use this reference at the finish of local memory setup. The job is done when the
 Keep the headings concise and keep what a later session needs. Write these values in `memory/CURRENT_STATE.md` from the interview:
 
 - Last updated: the date, "setup", and "agent".
-- Now: the current work from question 11, or "None."
+- Active work: the current work from question 11, most important first, or "None."
 - Coming up: each dated event or deadline the owner named, or "None."
 - Waiting on: what the project's work waits on, or "None."
 - Standing jobs and shared files: "None."
-- Next session starts with: the next roadmap step from question 11.
+- Where we stopped: the next roadmap step from question 11.
 
 ## Check the local choice
 

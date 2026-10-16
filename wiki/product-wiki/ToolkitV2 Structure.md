@@ -169,6 +169,21 @@ Every project already has the skill `managing-work-items`, which holds the proce
 
 Memory preserves useful context without duplicating records owned elsewhere. The owner picks one of three; the Notion choice also provides the project’s curated wiki documentation. With local files or Notion, the project has a Current State, the project's one short page of what is true now. A Hindsight project has none: where the work stands is in the place where work items are kept.
 
+### The Current State page
+
+Local and Notion memory use the same Current State page. The agent reads it at the start of every session, so it holds only what a new session needs before it does anything: what is in progress, what is due, what is owed, and where to pick up. Each line points to the record that holds the detail.
+
+| Part | What it holds | Why it is there |
+| --- | --- | --- |
+| Last updated | The date, the source, and who updated it. | The agent can tell how old the page is. |
+| Active work | Each piece of work in progress, most important first, as its ID and a few words. | The order tells the agent which work matters most. |
+| Coming up | Dated events and deadlines, with their date first. | A deadline is easy to miss when it sits only inside one work item. |
+| Waiting on | Who owes what, the item or decision it affects, when it was asked, and when to check again. | The agent can follow up on time. |
+| Standing jobs and shared files | Recurring jobs and files kept up to date, with where their record is. | A recurring job has no work item to remind the agent. |
+| Where we stopped | What the last session was working on. For a work item, its ID and a pointer to its own Current state; for other work, its next step. | The agent knows where to start when several pieces of work are active. |
+
+The page leaves out recent decisions and a list of recent activity. Decision records and work items hold decisions, and Git and work-item history show recent activity; a copy on this page would drift from them. The template is `memory/CURRENT_STATE.md` for local memory and the Current state page in the owner's Project template for Notion memory. Mike Rihm confirmed it on 2026-10-16.
+
 With each of the three, the agent also asks whether the owner wants Claude Code's own memory on in the project. Claude Code's own memory is a folder of notes on the owner's computer that Claude Code loads into every session. The toolkit's default is off, so that the project's memory is kept in one place. The answer is one line in `.claude/settings.json`.
 
 ### Local files
