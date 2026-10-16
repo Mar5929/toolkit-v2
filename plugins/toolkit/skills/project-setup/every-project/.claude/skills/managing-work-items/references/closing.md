@@ -25,7 +25,7 @@ Run these steps before the closing question. `filing-project-records` and `manag
    - possibly-built rules: approved rules whose behavior this item's requirements built or changed. Naming or documenting a rule does not count, and a cancelled item builds nothing;
    - project terms the item added or changed that the project's record of terms does not show yet;
    - lessons with no outcome, with every date each was seen. Check memory first with `managing-project-memory`.
-2. **Ask the owner once**, when the list holds anything other than possibly-built rules: one Q&A row that shows each line with a recommendation and a one-line reason. For a lesson, the choices are keep for the whole project, keep as not proven, or drop; recommend keeping a lesson that was seen before.
+2. **Ask the owner once**, when the list holds anything other than possibly-built rules. On a small item, this is the one closing question in "Small items". Otherwise it is one Q&A row that shows each line with a recommendation and a one-line reason. For a lesson, the choices are keep for the whole project, keep as not proven, or drop; recommend keeping a lesson that was seen before.
 3. **File what the owner agreed to.**
    - Decisions, open questions, and lessons about the system or the project: record a decision with `filing-project-records`.
    - Rules to add, change, or retire, possibly-built rules, and terms: update a system document with `filing-project-records`.

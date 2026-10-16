@@ -6,7 +6,8 @@ Current State is `memory/CURRENT_STATE.md`: one short page of what's true now, s
 
 - Change it in the same turn the truth changes. Replace a changed line; never add a new one beside it.
 - Never copy a work item's status, next action, or wait here. Give its ID and a few words; the work item holds the rest.
-- A to-do is never kept only here. It becomes a project task or a work item task, and a dated one also gets a Coming up line naming its ID.
+- A to-do is never kept only here. It becomes a project task or a work item task, and a dated one also gets a Coming up line naming its ID. For a to-do at a set time, tell the owner and offer a scheduled reminder if one is available.
+- A passed deadline may still mean unfinished work. Check before removing its line.
 - Before removing a line about something a later session must know, make sure a record holds it: a work item, project task, source, or event record.
 - Remove lines that are no longer true without asking. Cutting a line that's still true needs the owner's yes.
 

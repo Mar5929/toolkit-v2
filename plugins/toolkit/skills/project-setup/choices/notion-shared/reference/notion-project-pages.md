@@ -20,7 +20,7 @@ The owner's Projects database holds one template, named "Project", which is set 
 
 Inside "Project", the Work Items database has one template, the work item template, which is set as the default template of that database. The title of the work item template is empty. So the title that the owner types on a card is kept, and the boards' empty-title filter hides the template. Every project made from "Project" has the work item template, still set as the default.
 
-To list the templates of a database, run the command below. `ntn-commands.md`, "Database templates", explains this call and the default template.
+To list the templates of a database, run the command below. `ntn-commands.md`, "Templates", explains this call and the default template.
 
 ```bash
 ntn api v1/data_sources/<projects-data-source-id>/templates < /dev/null | jq -r '.templates[] | "\(.id)\t\(.is_default)\t\(.name)"'

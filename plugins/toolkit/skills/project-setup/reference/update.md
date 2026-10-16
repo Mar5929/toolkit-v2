@@ -47,7 +47,7 @@ Run the applicable final checks in [finishing.md](finishing.md) against the adop
 
 Report what was adopted, what stayed, and anything still unresolved. Name any service affected and the owner’s remaining host steps. A changed Codex hook entry or description needs the owner’s trust in `/hooks`; the owner starts a new session to load the updated instructions.
 
-Use the commit offer in [finishing.md](finishing.md). Merge only with the owner’s authorization, through the project's `merge-and-clean-up` skill. After the branch is merged, apply approved changes to ignored folders in the main checkout and verify their links. Preserve original records recoverably when an approved move changes them. Remove only your update worktree, branch, and temporary comparison files after the work is complete.
+Use the commit offer in [finishing.md](finishing.md). Merge only with the owner’s authorization, as the project's `.claude/rules/shared-repository-work.md`, "Merging", says. After the branch is merged, apply approved changes to ignored folders in the main checkout and verify their links. Preserve original records recoverably when an approved move changes them. Remove only your update worktree, branch, and temporary comparison files after the work is complete.
 
 ## Changing a setup choice
 
