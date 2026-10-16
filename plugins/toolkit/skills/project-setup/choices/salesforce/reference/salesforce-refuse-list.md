@@ -1,6 +1,6 @@
 # The refuse list of a Salesforce project
 
-This file holds the entries that a Salesforce project adds to the refuse list, and what to tell the owner about them. Step 9 of [salesforce-setup.md](../salesforce-setup.md) writes the entries, and step 12 checks them.
+This file holds the entries that a Salesforce project adds to the refuse list, and what to tell the owner about them. A settings file that the project already had is merged as [skills-hooks-settings.md](../../../reference/skills-hooks-settings.md), "Merge rules", says.
 
 The refuse list is `permissions.deny` in `.claude/settings.json`: Claude Code refuses a command that matches one of its entries. The settings that every project gets hold no Salesforce entry. A Salesforce project adds two kinds.
 
@@ -28,6 +28,6 @@ For each production org that the owner names, add entries to the refuse list, so
 - Write each entry a second time with `PowerShell(` in place of `Bash(`, for a session that runs on Windows.
 - For a production org, follow the production cells of the owner's `.claude/rules/salesforce-agent-permissions.md`. Keep an entry while any row it covers says Never; leave it out only when every row it covers says Allowed or Ask first. The project's `.claude/rules/salesforce-org-safety.md`, "Keeping the refuse list in step", says how the entries map to the rows and how they stay in step later.
 - Write all of the entries for each read-only org that the owner names.
-- When no production org is known yet, write no entry. [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "How setup records what is still open", says how the project's Current State records that the entries are still to be written.
+- When no production org is known yet, write no entry. [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "What setup records as still open", says how setup records that the entries are still to be written.
 
 Tell the owner in one line for which org Claude Code now refuses changes. The list stops a command that names the org as a word of its own, as in `-o acme-prod` or `--target-org acme-prod`. It is not a full check: a command that writes the name another way, such as `--target-org=acme-prod`, is not refused. Codex has no such list. In both, the owner's `.claude/rules/salesforce-agent-permissions.md` and `.claude/rules/salesforce-org-safety.md` decide what an agent may change.

@@ -62,8 +62,8 @@ gh issue list -R <repo> --state closed --limit 200 --search 'closed:>=<date>' --
 gh issue list -R <repo> --state all --limit 200 --search 'updated:>=<date>' --json number,title,state,updatedAt
 ```
 
-- For the board, sort open issues by priority then number, and show each one's state label, waiting-on label, title, and the body's Next action line. Skip the "Project tasks" issue (its body starts `## Project tasks`).
-- An open issue with no `## Overview` or not exactly one state label lacks the layout; tell the owner.
+- To list open items, sort open issues by priority then number, and skip the "Project tasks" issue (its body starts `## Project tasks`).
+- An open issue with no `## Overview` lacks the layout; handle it as `work-tracker.md`, "Creating an item", says. One without exactly one state label is handled as `work-tracker.md`, "Labels", says.
 - An issue updated since a date with no matching Recent History row was probably changed by the owner; say so.
 
 ## Project phases (milestones)

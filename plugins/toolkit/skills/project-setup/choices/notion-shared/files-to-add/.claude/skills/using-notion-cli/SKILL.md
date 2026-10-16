@@ -1,6 +1,6 @@
 ---
 name: using-notion-cli
-description: 'How to run ntn, Notion''s command-line tool, for this project''s Notion records: sign-in, call form, page text edits, templates, and failed calls. Use before any Notion read or write through ntn, or when a call fails. Applies only when the project keeps work items or memory in Notion.'
+description: 'How to run ntn, Notion''s command-line tool, for this project''s Notion records: sign-in, call form, page text edits, templates, and failed calls. Use before any Notion read or write through ntn, or when a call fails.'
 ---
 
 # Using the Notion command line
@@ -19,7 +19,6 @@ Run `ntn whoami`. If it fails, see `references/ntn-commands.md`, "When a call fa
 ## Every write
 
 - A relation, Files, or Tags value replaces the whole list. Read the current list and send it back with your change.
-- Query results come 100 at a time. Read every page before acting.
 - Never remove a database view line or a child page line from a page's text.
 - Never apply a template twice to a page, and never to a template page; that turns the template into a row on the owner's boards.
 

@@ -1,6 +1,6 @@
 # Where the project's page goes in Notion
 
-This file holds how to find the owner's Projects database, the question to ask the owner about it, and what to do when the owner names a page or has no Projects database. Step 3 of [notion-setup.md](../notion-setup.md) uses it.
+This file holds how to find the owner's Projects database, the question to ask the owner about it, and what to do when the owner names a page or has no Projects database.
 
 The Notion steps make the project page as a row of the owner's Projects database (`<projects-data-source-id>`), from a template that is kept in that database. Nothing records that database's id yet, so find the id before you follow [notion-project-pages.md](notion-project-pages.md):
 

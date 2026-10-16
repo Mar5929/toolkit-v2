@@ -1,6 +1,6 @@
 # What the local work items choice adds to a project
 
-This file lists what setup adds to a project that keeps its work items in local files: the files, the lines in `PROJECT.md`, and the rows in `AGENTS.md`. Steps 3 and 4 of [local-work-items-setup.md](../local-work-items-setup.md) use it.
+This file lists what setup adds to a project that keeps its work items in local files: the files, the lines in `PROJECT.md`, and the rows in `AGENTS.md`.
 
 ## Everything the choice adds, by kind
 
@@ -14,8 +14,6 @@ This file lists what setup adds to a project that keeps its work items in local 
 | `PROJECT.md`, "Toolkit settings" | Write `local` on the Tracker line. Add this line below the Memory line, with the prefix that the owner confirmed: ``- Work item ID prefix: `WI` `` |
 | Text in `AGENTS.md` | Six rows in the "Project map" table. "The text in AGENTS.md" below gives them. |
 | Outside the project folder | Nothing. |
-
-Step 3 of the setup file copies the files of the first three rows. Step 4 writes the line in `PROJECT.md` and the rows in `AGENTS.md`.
 
 ## The text in AGENTS.md
 

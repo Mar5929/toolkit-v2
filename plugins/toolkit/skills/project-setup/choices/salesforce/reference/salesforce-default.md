@@ -1,8 +1,6 @@
 # How the toolkit sets up a Salesforce project by default
 
-This file holds how the toolkit sets up a Salesforce project when the owner changes nothing. Step 1 of [salesforce-setup.md](../salesforce-setup.md) uses it.
-
-Tell the owner this in a few plain lines, and ask whether it is what the owner wants.
+This file holds how the toolkit sets up a Salesforce project when the owner changes nothing.
 
 - The project gets the toolkit's rules for Salesforce work, three skills, and templates for deployments, data migrations, and releases in `delivery/`.
 - By default an agent never deploys to production and never changes it, and Claude Code refuses such a command when it names the production org. The owner may allow any of these for this project.

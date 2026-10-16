@@ -1,6 +1,6 @@
 # Default Notion Project Wiki
 
-The owner’s revised Project template supplies Project Wiki. Setup connects that existing structure, confirms project-specific changes and copies it only when a new project needs it.
+The owner’s Project template supplies Project Wiki. Setup connects that structure, confirms project-specific changes and copies it only when a new project needs it.
 
 - Coding agents read wiki knowledge and submit useful changes to Wiki Inbox. They keep work items current and capture reusable results at closure and handoff.
 - The librarian, the skill `maintaining-notion-wiki`, maintains existing wiki records and navigation even when no new captures arrive, using authoritative links instead of duplicate content. It files supported information into Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Current state is a working snapshot; Long-Term Memory contains the existing Projects, Topics, Memories, Entities and Facts collections.

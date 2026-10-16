@@ -1,6 +1,6 @@
 # What the GitHub Issues work items choice adds to a project
 
-This file lists what setup adds to a project that keeps its work items in GitHub Issues: the files inside a skill, and the lines in `PROJECT.md`. Steps 4, 5, and 7 of [github-work-items-setup.md](../github-work-items-setup.md) use it.
+This file lists what setup adds to a project that keeps its work items in GitHub Issues: the files inside a skill, and the lines in `PROJECT.md`.
 
 ## Everything the choice adds, by kind
 
@@ -10,7 +10,7 @@ This file lists what setup adds to a project that keeps its work items in GitHub
 | Settings | Nothing. |
 | `PROJECT.md`, "Toolkit settings" | Write `github` on the Tracker line. Add the line `- GitHub repository:` below the Memory line, with the repository's name, as the example below shows. |
 
-Step 4 of the setup file copies the files of the first row. Step 5 writes the Tracker line. Step 7 adds the repository line, after step 6 has checked the repository.
+Add the repository line after the repository has been checked.
 
 What the choice makes outside the project folder is in [github-repository-for-work-items.md](github-repository-for-work-items.md).
 

@@ -39,10 +39,10 @@ Every project gets the same layout, whatever the owner answers in the interview.
 
 | File | What it holds |
 | --- | --- |
-| `AGENTS.md` | The instructions every session reads first. Setup fills a short paragraph naming this repository’s chosen work tracker and memory store, including its Notion project link when either choice uses Notion. Its sections: the agent's job (running the project's work, and keeping the records, memory, and context organized), what to do in every session, the project's memory, the map of the project, where each kind of information goes, how to write a question to the owner, which skill does which job, the project's commands, and how to write replies. |
+| `AGENTS.md` | The instructions every session reads first. Setup fills a short paragraph naming this repository’s chosen work tracker and memory store, including its Notion project link when either choice uses Notion. Its sections: the agent's job (how the agent does the work, and how it keeps the records, memory, and context), what to do in every session, the project's memory, the map of the project, where each kind of information goes, which skill does which job, the project's commands, how to write replies, and how to write text that goes to another person or is client facing. |
 | `CLAUDE.md` | The one line `@AGENTS.md`. Claude Code reads `AGENTS.md` through it. Each folder below that has its own `AGENTS.md` has this file beside it. |
-| `PROJECT.md` | The facts that stay true: what the project is for, what is in and out of scope, the systems and environments, the people and what each may decide, where the records are, the project's paths, and the "Toolkit settings" section, which records the owner's answers from setup. |
-| `SOUL.md` | How the owner wants the agent to work with the owner and the team. It starts as the toolkit's default, and the interview fits it to the project. |
+| `PROJECT.md` | The facts that stay true: what the project is for, what is in and out of scope, the systems and environments, the people and what each may decide, the project's resources and paths, its operating conventions, and the "Toolkit settings" section, which records the owner's answers from setup. |
+| `SOUL.md` | How the owner wants the agent to work with the owner and the team. It starts as a fill-in template, and the interview fills it with the owner's own words. |
 | `DECISIONS.md` | Each decision that more than one piece of work needs, with an ID, and each open question. Only a project with local or Hindsight memory has it; a Notion-memory project keeps these in its Project Wiki. |
 | `README.md` | The project's one README. It is at the root, and no other folder has one. |
 | `.gitignore`, `.ignore` | `.gitignore` keeps `working-files/` out of Git; local work items and local memory add their folders. `.ignore` lets the search tools read those folders all the same. |
@@ -76,10 +76,11 @@ A skill is a folder of instructions that the agent opens when a job needs it.
 
 | Skill                    | What it is for                                                                                                     |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `managing-work-items`    | The whole life of a work item, from idea to Done: requirements, design, building, testing, deploying, and closing. |
+| `managing-work-items`    | The whole life of a work item, from idea to Done: requirements, design, building, testing, deploying, and closing. Its `references/project-status.md` reports where the project stands and what comes next. |
 | `filing-project-records` | Filing a source, a decision, or a change to a system document in its place, with an ID.                            |
 | `handoff`                | Ending a session: update the records and write a prompt for the next session.                                      |
 | `braindump`              | Play back the owner's loose ideas and wait for a yes before starting.                                              |
+| `shaping-a-prompt`       | Turn an idea into an agreed prompt with the owner before work starts.                                              |
 | `session-summary`        | A table of what the owner asked in this session and what came of it.                                               |
 | `publish-docs`           | Save an approved edit to project documents on the default branch.                                                  |
 | `pull-latest`            | Bring in new commits from the remote and keep local work.                                                          |
@@ -92,7 +93,7 @@ A hook command runs by itself at a fixed moment. Claude Code and Codex both run 
 
 | Command | When it runs | What it does |
 | --- | --- | --- |
-| `session-start.mjs` | A session starts | Prints the project's Current State, when the project has one. |
+| `session-start.mjs` | A session starts | Prints what the memory choice's `session-start-choice.mjs` supplies, such as the project's Current State, and after compaction a reminder to re-read the active work item. |
 | `prompt-reminder.mjs` | Every message | Reminds the agent to check the project's skills, and points to where something worth keeping is filed. |
 | `codex-after-commit.mjs` | After a `git commit` | Reminds the agent to update the work item. |
 
@@ -110,6 +111,7 @@ A fourth hook has no file of its own: after a helper agent runs, a reminder to u
 - Claude Code's own memory off, unless the owner turns it on in the interview;
 - the Plain English output style;
 - the four hooks above;
+- a request for the owner's approval before `git reset --hard` or `git clean` runs;
 - more room for the list of skills.
 
 ## What a module can add
@@ -138,7 +140,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 | --- | --- |
 | Questions | The prefix of a work item's ID, such as `WI`. |
 | Files and folders | `PROJECT-ROADMAP.md` at the root: the project's phases. `work-items/`: its `AGENTS.md`, `PROJECT-TASKS.md` for tasks that belong to no work item, and `work-item-template/` with `work-item-template.md` and `design-template.md`, copied at setup from `managing-work-items/assets/` so the owner can edit them. |
-| Files inside `managing-work-items` | Five: how a work item is stored as a folder (`work-tracker.md`), the folders and files, how each field is written, the roadmap and the project's tasks, and how to search. |
+| Files inside `managing-work-items` | One: `work-tracker.md`, which says where local work items live and how to read and write them. |
 | `PROJECT.md` | Tracker: `local`, and the ID prefix. |
 | Outside the project folder | Nothing. Git ignores `work-items/`, so the work items are on this computer only. |
 
@@ -147,7 +149,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 | Kind | What it adds |
 | --- | --- |
 | Questions | Where in Notion the project's page goes, and the prefix of a work item's ID. |
-| Files inside `managing-work-items` | Four references: work placement and properties, record updates, API calls, and recovery. Each project owns its Work Items, Phases and Tasks databases; phases organize project or work-item roadmaps, and tasks belong to a work item or project administration. The layout of a work item's page is the owner's template in Notion, and no file describes it. |
+| Files inside `managing-work-items` | Two: `work-tracker.md` for placement, properties, and record procedures, and `work-tracker-calls.md` for the Notion calls and known problems. Each project owns its Work Items, Phases and Tasks databases; phases organize project or work-item roadmaps, and tasks belong to a work item or project administration. The layout of a work item's page is the owner's template in Notion, and no file describes it. |
 | Skill and rule | `using-notion-cli`, which says how to run the Notion command-line tool, and the rule `notion-records.md`. The Notion memory module adds the same two, and a project gets them once. |
 | `PROJECT.md` | Tracker: `notion`, the ID prefix, and the links and IDs of the project's Notion page and its Work Items, Phases, and Tasks databases. |
 | Outside the project folder | The project's pages in Notion, made as a copy of the owner's "Project" template. The project's phases are kept in the Phases database. |
@@ -158,7 +160,7 @@ Every project already has the skill `managing-work-items`, which holds the proce
 | Kind | What it adds |
 | --- | --- |
 | Questions | Which repository holds the issues, and whether to create it when there is none. |
-| Files inside `managing-work-items` | Six: how a work item is stored as an issue (`work-tracker.md`), the layout of an issue, the labels, the commands, the roadmap and the project's tasks, and how to search. |
+| Files inside `managing-work-items` | Two: `work-tracker.md`, which says how a work item is kept as an issue and which the skill opens first, and `work-tracker-gh.md`, which holds the `gh` commands. |
 | `PROJECT.md` | Tracker: `github`, and the repository. |
 | Outside the project folder | The labels in the repository, and the repository itself when the owner asks for one. The project's phases are kept as milestones in the repository. |
 | The owner's own steps | Sign the GitHub command-line tool in. |
@@ -173,9 +175,9 @@ With each of the three, the agent also asks whether the owner wants Claude Code'
 
 | Kind | What it adds |
 | --- | --- |
-| Skill | `managing-project-memory`: the process (what counts as memory, saving, finding, tidying, the Current State), and four files on how memory is stored as local files. |
-| Files and folders | `memory/`: its `AGENTS.md`, `CURRENT_STATE.md`, `MEMORY.md` (an index that the session-start hook rebuilds), and a template for one memory file. |
-| Settings | The word `local` on the session-start line. |
+| Skill | `managing-project-memory`: the process (what counts as memory, saving, finding, tidying, the Current State), with reference files on how memory is stored as local files. |
+| Files and folders | `memory/`: its `AGENTS.md`, `CURRENT_STATE.md`, `MEMORY.md` (an index that the session-start hook rebuilds), and a template for one memory file. `DECISIONS.md` and `wiki/product-wiki/`, from the repository records. |
+| Session-start resources | `.claude/hooks/session-start-choice.mjs`, which prints Current State and the memory index at session start, and `.claude/hooks/prompt-memory-reminder.md`, the memory reminder text. |
 | `PROJECT.md` | Memory: `local`. |
 | Outside the project folder | Nothing. Git ignores `memory/`, so memory is on this computer only. |
 
@@ -188,7 +190,7 @@ The Project Wiki in the owner's Project template supplies one Wiki Inbox and fou
 | Questions | Confirm the Project template and project placement, then choose a supported daily scheduler with the owner. |
 | Skills | `managing-project-memory`: short retrieval and capture steps with focused destination references. `maintaining-notion-wiki`: librarian steps with references for schemas, filing, metadata and recovery. |
 | Skill and rule | `using-notion-cli` and `notion-records.md`, once, as for Notion work items. |
-| Settings | The word `notion` on the session-start line and the Current state page ID. Startup directs the agent to check relevant pending captures for freshness. |
+| Session-start resources | `.claude/hooks/session-start-choice.mjs`, which prints the Current state page at session start, and `.claude/hooks/prompt-memory-reminder.md`, the memory reminder text. The Current state page ID lives only in that module. Startup directs the agent to check relevant pending captures for freshness. |
 | Published librarian skill | Every Project Wiki holds a short Librarian processing skill entry, linked procedure and schema references, and verified project context and connections. The selected cloud or local librarian starts from its entry link. |
 | `PROJECT.md` | Memory: `notion`; configured Project Wiki, published librarian and context links, inbox, destination and data-source identifiers; librarian schedule and open setup steps. |
 | Outside the project folder | The owner's existing Project Wiki model, copied with the Project template: Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. |
@@ -205,11 +207,12 @@ For any existing project, propose a review and migration batch.
 | Kind | What it adds |
 | --- | --- |
 | Questions | Confirm the bank's stable identity and who shares its memory. Offer one bank for the project and the deliberate-save default package, then ask what the owner wants different. Explain service readiness, recommended model and capacity settings with their evidence limits, and the checks that must pass. Broader sharing and changes affecting the shared service are explicit owner choices. |
-| Text in `AGENTS.md` | In the "Project memory" section: that the agent uses Hindsight for this project's memory, the bank's name, and the three criteria for what the agent saves. With the package where the agent saves on purpose, also the lines on how the agent writes a record. |
-| Files and folders | The rule `.claude/rules/hindsight-memory.md`. A Hindsight project has no `memory/` folder and no Current State. |
-| Settings | The word `hindsight` on the session-start line, and one more word on the every-message line. |
+| Text in `AGENTS.md` | In the "Project memory" section: that the project keeps its memory in the Hindsight bank recorded in `PROJECT.md`, that the agent uses `managing-project-memory` for all memory work and reads the rule at session start and after compaction, and that the current state is the current work in the work tracker and the project records. The rows of the repository records. |
+| Skill and rule | `managing-project-memory`: what qualifies as memory, and how to save, find, and correct it in the bank. The rule `.claude/rules/hindsight-memory.md`, which loads in every session. |
+| Files and folders | `DECISIONS.md` and `wiki/product-wiki/`, from the repository records. A Hindsight project has no `memory/` folder and no Current State. |
+| Session-start resources | `.claude/hooks/session-start-choice.mjs`, which adds nothing at session start because the add-on supplies the startup memory, and `.claude/hooks/prompt-memory-reminder.md`, which names `managing-project-memory`. |
 | `PROJECT.md` | Memory: `hindsight`, the stable bank ID and sharing scope, the server's address, the dashboard link, the package, the template, the owner's changes, service operator and verified profile, and open setup steps. |
-| Outside the project folder | The memory bank on the owner's Hindsight server, and Hindsight's own add-on for Claude Code and Codex on this computer. The add-on brings its own skill and tools, so the toolkit adds no memory skill. |
+| Outside the project folder | The memory bank on the owner's Hindsight server, and Hindsight's own add-on for Claude Code and Codex on this computer. The add-on brings its own skill and tools, which `managing-project-memory` uses. |
 | What the agent must be aware of | The owner enters the API key in the owner's own terminal, and the agent never sees it. The add-on cannot delete a memory. |
 | The owner's own steps | Enter the API key, sign in to the dashboard, and trust the add-on's hooks in Codex. |
 
@@ -234,13 +237,14 @@ The owner answers yes to "Is this a Salesforce project?". The module adds what t
 | Part | Which modules bring it |
 | --- | --- |
 | `using-notion-cli` and the rule `notion-records.md` | Notion work items and Notion memory |
+| The repository records: `DECISIONS.md`, `wiki/product-wiki/`, and their files inside `filing-project-records` and `publish-docs` | Local memory and Hindsight memory |
 
 
 A project that picks both modules of a row gets the part once.
 
 ## Interview answers that add no module
 
-These answers are written into a file that every project already has. [[Toolkit Setup Process]], Step 4, gives the file for each.
+These answers are written into a file that every project already has. The `project-setup` skill, `SKILL.md`, Step 4, gives the file for each.
 
 - The project's name and the owner
 - What the project is for
@@ -254,5 +258,4 @@ These answers are written into a file that every project already has. [[Toolkit 
 ## Not decided yet
 
 1. **One definition of memory.** Mike's three criteria say what counts as memory, whatever the place it is kept. The proposal is to put them in the `AGENTS.md` that every project gets, and to let the Hindsight module add only the sentence that names Hindsight and the bank.
-2. **A rule file in a Hindsight project.** The proposal is that the Hindsight module adds only its text in `AGENTS.md` and the few facts the agent must be aware of, and no rule file of its own.
-3. **Other modules.** Mike has named ClickUp and Jira as possible places to keep work items. Neither is a module.
+2. **Other modules.** Mike has named ClickUp and Jira as possible places to keep work items. Neither is a module.

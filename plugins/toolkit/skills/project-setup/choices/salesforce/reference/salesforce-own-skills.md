@@ -1,6 +1,6 @@
 # Salesforce's own skills
 
-This file holds what setup does about the skills that Salesforce publishes: the check that they are installed, and the question about what to have on or off. Step 4 of [salesforce-setup.md](../salesforce-setup.md) uses it.
+This file holds what setup does about the skills that Salesforce publishes: the check that they are installed, and the question about what to have on or off.
 
 Salesforce publishes its own skills in the GitHub repository `forcedotcom/sf-skills`. A Salesforce project relies on them for platform questions and Salesforce work. They come from Salesforce. Setup installs none of them, and it changes one of their settings only when the owner says so.
 
@@ -10,4 +10,4 @@ Salesforce publishes its own skills in the GitHub repository `forcedotcom/sf-ski
   - the automatic deploy of `salesforce-development` (`SFDX_AUTO_DEPLOY`). It deploys each saved file to an org, and nothing in the project checks that deploy;
   - the usage data that the same plugin sends (`SF_DISABLE_TELEMETRY`).
 
-When Salesforce's skills are still missing at the end of setup, [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "How setup records what is still open", says how setup records it.
+When Salesforce's skills are still missing at the end of setup, [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "What setup records as still open", says how setup records it.

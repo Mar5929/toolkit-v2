@@ -22,13 +22,11 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 Save before you show the prompt: once it's on screen, the owner treats the session as over and the saves get skipped.
 
-1. **Find this session's work items.** One belongs to this session if the owner and agent worked on it here (a mention or listing doesn't count), this worktree's branch names it (`claude/wi-007-<slug>` is `WI-007`), or this session changed it. Never pick one only because it's open; another session may own it. If none qualifies, ask the owner which one this session worked on; if "None", only project tasks get updated in step 2.
+1. **Find this session's work items.** One belongs to this session if the owner and agent worked on it here (a mention or listing doesn't count), this worktree's branch carries its ID, or this session changed it. Never pick one only because it's open; another session may own it. If none qualifies, ask the owner which one this session worked on; if "None", only project tasks get updated in step 2.
 2. **Update each work item** with `managing-work-items`: make every part of it true, add a Questions and Answers row for each answer or decision not there yet, rewrite Current state so a new session can resume from it alone, change State and `waiting_on` only if they changed here, and add the Recent History row "Handoff: <where work stopped>". Then make each project task this session worked on true. Read each back.
-3. **File what's still unfiled**, keeping each record's source and approval evidence. Say so briefly if there's nothing.
-   - A decision or question more than one work item needs, not yet in the shared records: `filing-project-records`, record a decision. Unconfirmed by the owner, it's an open question; don't wait for an answer.
-   - A source with no SRC ID: `filing-project-records`, file a source.
-   - An unwritten instruction for how the agent works, and anything learned or done that no record holds (a fact, an unchecked claim, a lesson with no work item, an event, a recurring job's run): `managing-project-memory`.
-   - Shared open questions this session raised or that name its work items: list each under "Open questions" in the prompt, with its ID or link.
+3. **File what's still unfiled**, keeping each record's source and approval evidence. Put each decision, question, source, instruction, fact, lesson, or event this session produced that no record holds yet where the root `AGENTS.md`, "Where information goes", says, with the skill it names. Say so briefly if there's nothing.
+   - A shared decision the owner has not confirmed is recorded as an open question; don't wait for an answer.
+   - List each shared open question this session raised or that names its work items under "Open questions" in the prompt, with its ID or link.
 4. **Tell `managing-project-memory` this session is handing off**, so it saves the context for the next session.
 5. **Draft the prompt; don't show it yet.** Start from `assets/handoff-prompt-template.md`. Write for an agent that knows nothing of this session. Note each claim's source (a file, the repository, the owner with their words, or worked out) for the verifier, and mark "not confirmed" any claim no file, work item, or repository fact confirms.
 6. **Check it with the handoff verifier**, a helper that compares the draft with the repository and work items and changes nothing. `references/handoff-verifier.md` holds how to start it, its brief, and the inputs to fill in. Act on every verdict:

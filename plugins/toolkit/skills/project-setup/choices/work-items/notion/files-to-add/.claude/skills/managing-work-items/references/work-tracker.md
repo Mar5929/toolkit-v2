@@ -7,7 +7,7 @@ Work items live in this project's own Notion databases: Work Items, Phases, and 
 | Thing | Where |
 | --- | --- |
 | Work item | A Work Items row created with the default template. Notion adds its page and Solution Design child page. |
-| Sub-item | A Work Items row linked through Parent item, at most three levels deep. |
+| Sub-item | A Work Items row linked through Parent item. |
 | Project phase | A Phases row with an empty Work item. Top-level items link to it through Phase. |
 | Item phase | A Phases row linked to its work item. |
 | Task | A Tasks row linked to its work item, and to its phase if it has one. |
@@ -26,10 +26,9 @@ The owner built the databases, views, and templates in the Notion app. Read them
 
 ## Reading and writing
 
-- Re-read in this turn before acting or changing anything. The owner edits in Notion, and their edits win.
 - Change page text with small, exact replacements from a fresh read; never replace a whole page. New rows and lines follow the form of their neighbors.
 - Fill a new item's prompts in one change and delete the note at the top, then check no `\<` remains (real content like `Map\<Id, Account\>` is fine). A card the owner made by hand gets the same treatment the first time you touch it, keeping what they wrote.
-- Keep the owner's guide lines under headings. Never touch `<database>`, `<page>`, or `<unknown>` lines.
+- Keep the owner's guide lines under headings. Never touch `<unknown>` lines.
 - If the lifecycle needs a line the page lacks, such as Kept for the project, add it in the form of the lines around it.
 - Rewrite the Current state's five lines in one replacement. Next action and Summary also have properties of the same name; write both.
 - A new question gets the highest Q-ID on the page plus one. Keep the Waiting on property in step with the open questions.
@@ -37,7 +36,7 @@ The owner built the databases, views, and templates in the Notion app. Read them
 - Link another item by setting the relation and writing its ID in Related items. Never link an item to itself.
 - Record pull requests under "Linked Github PRs" as `[owner/repo#14: title](url)`, or under Related items if that heading is missing. The Embed Github block is the owner's.
 - Start comments with "Agent:". They show the owner's name, because the agent signs in as the owner.
-- Fill every applicable property from the live schema. Never invent approvals, dates, or assignees.
+- Fill every applicable property from the live schema.
 
 ## Properties the lifecycle writes
 
@@ -66,9 +65,8 @@ The owner built the databases, views, and templates in the Notion app. Read them
 
 ## Designs
 
-Write the design on the Solution Design page, and never make a second. If an older template left an item without one, create it as a child page from `assets/design-template.md` (without front matter or comments), check it, and tell the owner to add the page to their template. When the design is approved, also set Design approved.
+Write the design on the Solution Design page, and never make a second. If the Solution Design page is missing, tell the owner. When the design is approved, also set Design approved.
 
 ## Other notes
 
-- Write a record's ID into an item once `filing-project-records` reports the save is on the default branch.
-- A helper opens an item by querying its ID number (`work-tracker-calls.md`) and reading its page and Solution Design page. If it can't reach Notion, give it freshly read text.
+- A helper opens an item by ID: query its ID number (`work-tracker-calls.md`), then read its page and Solution Design page. If it can't reach Notion, give it freshly read text.

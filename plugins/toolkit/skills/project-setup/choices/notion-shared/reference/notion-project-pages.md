@@ -1,22 +1,13 @@
 # Making a project's pages in Notion
 
-This file gives the Notion steps for a project that keeps its work items or its memory in Notion. Open it for one of two jobs: setting up a new Notion project, or adding work items or memory to a Notion project later. A job is done when its steps are finished and the checks in "Checks after any of these" pass. Step 4 of [notion-setup.md](../notion-setup.md) uses "A new project", and the closing lines of that file name "Adding work items or memory later" and "Checks after any of these".
+This file gives the Notion steps for a project that keeps its work items or its memory in Notion. Open it for one of two jobs: setting up a new Notion project, or adding work items or memory to a Notion project later. A job is done when its steps are finished and the checks in "Checks after any of these" pass.
 
 Every Notion project is a copy of the owner's "Project" template. The template is the owner's. Setup copies it and never changes it, and the toolkit does not build it.
 
 This file names files that are kept in two places:
 
 - `ntn-commands.md` is in the `using-notion-cli` skill. Its source in this skill is [choices/notion-shared/files-to-add/.claude/skills/using-notion-cli/references/ntn-commands.md](../files-to-add/.claude/skills/using-notion-cli/references/ntn-commands.md). That skill's `SKILL.md` says how to run `ntn` in Codex.
-- The other reference files named here are in this folder ([notion-memory-pages.md](notion-memory-pages.md)) or in this skill's `reference/` folder ([reference/update.md](../../../reference/update.md) and [reference/finishing.md](../../../reference/finishing.md)).
-
-## Contents
-
-- Where the templates are kept
-- A new project
-- Removing the part a project keeps elsewhere
-- Recording the links in PROJECT.md
-- Adding work items or memory later
-- Checks after any of these
+- The other reference files named here are in this folder, such as [notion-memory-pages.md](notion-memory-pages.md), or in this skill's `reference/` folder.
 
 ## Where the templates are kept
 
@@ -41,7 +32,7 @@ Never restore a template through the API (`in_trash` false). Notion's documentat
 
 When a template is in the trash, ask the owner to restore it from Trash in the Notion app, then run "Checks after any of these".
 
-When the Projects database has no "Project", not even in the trash, do what [what-setup-may-do-in-the-owners-notion.md](what-setup-may-do-in-the-owners-notion.md), "The owner's yes before anything is made", says.
+When the Projects database has no "Project", not even in the trash, do what [what-setup-may-do-in-the-owners-notion.md](what-setup-may-do-in-the-owners-notion.md) says.
 
 Never add real work to a template, because a copy takes everything on the template with it.
 
@@ -76,11 +67,11 @@ Before the first step, two things must be true. The owner has signed in with `nt
    ```bash
    ntn api v1/data_sources/<work-items-data-source-id> -X PATCH -d '{"properties":{"ID":{"unique_id":{"prefix":"<PREFIX>"}}}}' < /dev/null | jq -c '.properties.ID.unique_id'
    ```
-8. When memory is in Notion, run [notion-memory-pages.md](notion-memory-pages.md), "A new project". That procedure verifies the copied wiki, connects its Lore project row and records how Current state is initialized at the finish of setup.
+8. When memory is in Notion, run [notion-memory-pages.md](notion-memory-pages.md), "A new project". That procedure verifies the copied wiki, connects its Lore project row, and records the wiki's links.
 9. **Fill the project row.** In Notion, fill every field of the project's row that the setup answers cover, such as Tracker, Memory system, Local path, Repository, Salesforce, and Set up on. Ask the owner, in one question, only for the fields that only the owner knows, such as Priority and Target Date.
    - "Key" holds the project's work item ID prefix, wherever the project's work items are kept, for example MOB, or WI for local work items.
    - "Work items data source" holds this project's Work Items data source ID. "Memory data source" holds its Wiki Inbox data source ID, because Wiki Inbox is the capture destination. Verify the project row's live property types before filling them.
-   - Desired Outcome is filled at the end of setup, with the sentence the owner gives for the project's outcome. The step for the project's outcome in [choices/work-items/notion/notion-work-items-setup.md](../../work-items/notion/notion-work-items-setup.md) and in [choices/memory/notion/notion-memory-setup.md](../../memory/notion/notion-memory-setup.md) fills it, and [reference/finishing.md](../../../reference/finishing.md), "Fill the prompts", gives the rules for the sentence.
+   - Desired Outcome is filled at the finish of setup, with the owner's sentence for the project's outcome, as the Notion setup file of the work items or memory choice says.
 10. **Record the links** in `PROJECT.md` and read them back. "Recording the links in PROJECT.md" below gives the lines for work items, and [notion-memory-pages.md](notion-memory-pages.md) gives the memory lines.
 
 ## Removing the part a project keeps elsewhere
@@ -121,11 +112,14 @@ When work items are in Notion, add these lines below the Memory line:
 
 ## Adding work items or memory later
 
-[reference/update.md](../../../reference/update.md), "Changing a setup choice", runs this section when a project has work items or memory in Notion and adds the other one.
+Follow these steps when a project already has work items or memory in Notion and the owner moves the other one to Notion. The project keeps its one project page; never make a second row in the Projects database for it. [reference/update.md](../../../reference/update.md), "Changing a setup choice", holds the approval, record move, and cutover around these steps.
 
-For any existing project, propose a review and migration batch.
-
-Use [reference/update.md](../../../reference/update.md), "Changing a setup choice", for the batch approval and preservation procedure. Inspect the existing project and current template before proposing the changes. Reuse the project's working destinations where possible, and verify any new copies and relation targets before recording their IDs. Preserve original records and the current routing until the agreed destinations have been verified.
+1. **Read what the project page holds and what the owner's "Project" template holds.** Find the part that the project page lacks: Work Items, Phases and Tasks, or Project Wiki with its destinations. When the project page already holds that part, because an earlier setup kept it, reuse it after the checks in step 4 pass.
+2. **Tell the owner what will be added to the project page, and get the owner's yes**, as [what-setup-may-do-in-the-owners-notion.md](what-setup-may-do-in-the-owners-notion.md) says.
+3. **Add the missing part to the project page from the template.** Check that the template is not in the trash first, as "Where the templates are kept" says. Copy the part with the Notion tools available, and never change the template. When the available tools cannot copy that part under the existing page, ask the owner to duplicate it from the template into the project page in the Notion app, and wait.
+4. **Connect the new part as a new project would.** For work items, read the data source IDs, pick and set the ID prefix, and fill "Key" and "Work items data source" on the project's row, as steps 2, 5, 7, and 9 of "A new project" say. For memory, run [notion-memory-pages.md](notion-memory-pages.md), "A new project", and fill "Memory data source" on the project's row. Point the relations between the two parts at this project's databases, and remove any relation that still targets the template.
+5. **Record the new links in `PROJECT.md`**, as "Recording the links in PROJECT.md" says, and read them back.
+6. **Run "Checks after any of these".**
 
 ## Checks after any of these
 
@@ -133,7 +127,7 @@ Use [reference/update.md](../../../reference/update.md), "Changing a setup choic
   - List the rows with `ntn api v1/data_sources/<projects-data-source-id>/query -d '{"page_size":100}' < /dev/null | jq -r '.results[].id'`. `ntn-commands.md`, "Finding rows", says how to read the rest when one answer does not hold every row.
   - List the templates with `ntn api v1/data_sources/<projects-data-source-id>/templates < /dev/null | jq -r '.templates[].id'`.
   - No row may have a template's id, because a template that comes back as a row shows as a card on the owner's board.
-- For a new project, the project page lists only the parts the project keeps in Notion: Work Items, Phases and Tasks; Project Wiki and its required destinations. When the project keeps work items in Notion, its Work Items templates list shows one template with `is_default` true, the ID property shows the project's prefix, and the relations check below passes.
+- The project page lists only the parts the project keeps in Notion: Work Items, Phases and Tasks; Project Wiki and its required destinations. When the project keeps work items in Notion, its Work Items templates list shows one template with `is_default` true, the ID property shows the project's prefix, and the relations check below passes.
 - When memory is in Notion, every configured wiki destination is readable, Wiki Inbox is writable, and its processing statuses are available. Current state can be read by the session-start hook. The librarian schedule is confirmed or explicitly recorded as pending.
 - Each database's relations point at the same project's databases. Check with `ntn api v1/data_sources/<id> < /dev/null | jq '.properties | map_values(select(.type=="relation") | .relation.data_source_id)'`.
 - Recorded descendant IDs belong to the copied project, not the owner's template. Read `PROJECT.md` back and compare each recorded ID with the destination inspected.

@@ -10,7 +10,7 @@ Each work item is one issue in the repository named on the "GitHub repository" l
 | Header fields | Labels (table below). Status has no label. |
 | Body | The work item template from `## Overview` to the end. |
 | Done / Cancelled | Closed as completed / closed as not planned. |
-| Sub-items | GitHub sub-issues, at most three levels deep. |
+| Sub-items | GitHub sub-issues. |
 | Item phases | Roadmap rows in the body, each with a `### P1 — <name>` heading over its task checkboxes. |
 | Project phases | Milestones, one per phase; each top-level issue sits in its phase's milestone. |
 | Project tasks | Checkboxes in one pinned issue titled "Project tasks". |
@@ -28,13 +28,13 @@ Each work item is one issue in the repository named on the "GitHub repository" l
 | Approvals | `requirements-approved`, `result-approved`; the date and words are in the Q&A row |
 | `design` | `design-proposed` or `design-approved`, never both. None means no design, or superseded if a design comment exists. |
 
-Swap labels in one call so an issue never has two state labels or none. The owner's label changes in the browser win; if labels conflict or go missing, ask which State or type applies (recommending the last State in Recent History), and restore a missing priority as `priority:medium`.
+Swap labels in one call so an issue never has two state labels or none. If labels conflict or go missing, ask which State or type applies (recommending the last State in Recent History), and restore a missing priority as `priority:medium`.
 
 ## Rules
 
 - Always pass `-R <repo>`, and write `repos/<repo>/...` in API paths, never `{owner}/{repo}`, which `gh` fills from the folder's remote.
 - **Never let GitHub close an issue.** Never put close, closes, closed, fix, fixes, fixed, resolve, resolves, or resolved right before `#12` in a pull request or commit; write "Part of #12". Never link a pull request in the issue's Development panel. If an issue closes itself anyway, reopen it and tell the owner.
-- The body is one piece of text. Re-read it right before changing it, change only your lines, and write the whole thing back, so the owner's browser edits survive.
+- The body is one piece of text. Read it right before changing it, change only your lines, and write the whole thing back, so the owner's browser edits survive.
 - Create nothing but issues and comments without the owner's yes. Labels are agreed once at setup; milestones only for approved project phases.
 - Never delete an issue, comment, or label. Close or cancel instead. Remove a sub-issue link only to move an item.
 - GitHub has no archive. If asked to archive an open item, say so, note that closed issues already drop out of lists, and ask whether to cancel it.
@@ -62,5 +62,5 @@ The design is the `## Solution design` comment: the design template from its fir
 
 ## Other notes
 
-- Write a record's ID into an item once `filing-project-records` reports the save is on the default branch.
-- A helper reads an item with `gh issue view <number> -R <repo> --json title,body,labels,state` and `--comments` for the design.
+- Record a pull request by naming it in the item's Related items and in Recent History. In the pull request, write "Part of #12".
+- A helper opens an item by ID: `gh issue view <number> -R <repo> --json title,body,labels,state`, and `--comments` for the design.

@@ -6,7 +6,6 @@ Use this reference when Notion memory setup or an operation fails. Preserve owne
 - When copied relations still target the template, resolve and verify their project-specific targets before filing linked records.
 - When fields differ from the template, inspect the live schema and preserve existing values. Confirm a needed schema change with the owner rather than adding fields silently.
 - When Current state cannot be read at startup, check access and host permissions, then read it through `managing-project-memory`. [Setup problems](../../../../reference/setup-problems.md) describes host access failures.
-- When a page ID placeholder remains, fill the confirmed identifier in both hosts’ settings and rerun the startup check. Tell the owner when changed Codex hooks need trusting again.
+- When `{{CURRENT_STATE_PAGE_ID}}` remains in `.claude/hooks/session-start-choice.mjs`, set the verified Current state page ID there, as [what-notion-memory-adds-to-a-project.md](what-notion-memory-adds-to-a-project.md), "Session-start settings", says, and rerun the startup check.
 - When daily processing cannot be configured, record an open setup step and retain on-demand operation. Do not claim the schedule is active.
-- When processing is partial or stale, use `maintaining-notion-wiki` to inspect completed links and the run record before retrying writes. Processing status alone does not prevent overlapping writers.
-- When an existing project still has the former Memory layout, propose a reviewed migration batch using [update guidance](../../../../reference/update.md). Preserve its records and identifiers until the batch is authorized and verified.
+- When processing is partial or stale, start an on-demand librarian run, which inspects completed links and the run record before it retries writes. Processing status alone does not prevent overlapping writers.

@@ -1,6 +1,6 @@
 # Publish the project's librarian processing skill
 
-Each Notion Project Wiki holds a librarian processing skill that a cloud or local agent can follow without the local repository. Publish it within the authorized project setup or reviewed update batch.
+Each Notion Project Wiki holds a librarian processing skill that a cloud or local agent can follow without the local repository. This file is the one place that says how to publish it, verify it, and update it. Publish it only within the owner's approved setup or update batch.
 
 ## Publish the project pages
 
@@ -18,4 +18,4 @@ Check writer coordination across scheduled and on-demand runs. Record access or 
 
 ## Update an existing package
 
-For any existing project, propose a review and migration batch. Compare the published source mapping and version with the delivered skill, integrate approved updates and preserve owner customizations and unrelated wiki content. Reinspect changed connections or schemas, read changed pages back and verify their links before recording the new version. Treat a changed project binding as setup work, not a new filing rule.
+In "update the toolkit", name the changes as one batch for the owner's approval. Compare the published source mapping and version with the delivered skill, integrate approved updates and preserve owner customizations and unrelated wiki content. Reinspect changed connections or schemas, read changed pages back and verify their links before recording the new version. Treat a changed project binding as setup work, not a new filing rule.

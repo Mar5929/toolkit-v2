@@ -6,7 +6,7 @@ This file holds the owner's choices for this project. It starts with the toolkit
 - Change this file only when the owner told you to in this session. A choice for every sandbox or scratch org, or for production, is a cell of the table: change the cell, and add the date and the owner's name in it. A narrower choice, such as one org, is a line under "Only in this project". A newer choice replaces the older one that says the opposite.
 - When you change a production cell, change the refuse list in `.claude/settings.json` in the same edit, as `.claude/rules/salesforce-org-safety.md`, "Keeping the refuse list in step", says.
 - Keep the choice only in this file. Write nothing about it in `owner-preferences.md` or in memory.
-- `.claude/rules/salesforce-org-safety.md` holds the limits that are the same in every project. No line here changes them. That rule also says how this file and the refuse list in `.claude/settings.json` fit together.
+- `.claude/rules/salesforce-org-safety.md` holds the limits that are the same in every project. No line here changes them.
 
 ## What each value means
 

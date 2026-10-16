@@ -4,17 +4,6 @@ This file is for the handoff verifier, the helper that `handoff` starts at its s
 
 The file has two parts. "For the main agent" says how to start the verifier. "Brief for the helper" is the text that the verifier receives.
 
-## Contents
-
-- For the main agent
-- Brief for the helper
-  - Your job
-  - Read-only means read-only
-  - What you receive
-  - Job one: is the goal there
-  - Job two: check every checkable claim
-  - Your report
-
 ## For the main agent
 
 Start the verifier from `handoff`, after you draft the prompt and before the owner sees the prompt. Act on every verdict as step 6 of `handoff` says.
@@ -30,8 +19,8 @@ The list of inputs:
 Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
 Tracker: <the work tracker that PROJECT.md names, its repository when
-  PROJECT.md names one, and how to open a work item and its design by ID,
-  copied from managing-work-items/references/work-tracker.md>
+  PROJECT.md names one, and the line in managing-work-items/references/
+  work-tracker.md that starts "A helper opens an item by ID", copied>
 Memory and shared records: <where this project keeps its current state and
   memory ("Project memory" in the root AGENTS.md), and its shared decisions,
   system rules, and project terms ("Where information goes"); links or

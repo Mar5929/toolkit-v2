@@ -10,7 +10,7 @@ After the brief from `references/handoff-verifier.md`, word for word:
 ```text
 Draft prompt: <the whole draft below>
 Main checkout: /Users/owner/Projects/acme-billing
-Tracker: <the configured tracker and its "How a helper opens a work item by ID" instructions, copied from managing-work-items/references/work-tracker.md>
+Tracker: <the configured tracker and the line in managing-work-items/references/work-tracker.md that starts "A helper opens an item by ID", copied>
 Memory and shared records: the places that the root AGENTS.md in the main
   checkout names, in "Project memory" and "Where information goes"
 Sources for claims:

@@ -30,4 +30,4 @@ Fixed header and order; ask the owner before adding or renaming a column. Group 
 - An item's manifest names only its new and changed components, each also in the master manifest. Deploy the item's manifest unless the goal is a full cutover.
 - Removals go only in an item's `destructiveChanges.xml`, never in any `package.xml`.
 - Profiles, duplicate rules, matching rules, and compact-layout assignments can't deploy safely by manifest. They get tracker rows, stay out of the master manifest (listed as excluded in its header comment), and deploy as steps in the right `manual-steps.md`.
-- Permission sets are normal members, but deploy only after confirming the deploy removes no grant (`salesforce-org-safety.md`).
+- Permission sets are normal members.

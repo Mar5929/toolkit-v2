@@ -2,7 +2,7 @@
 
 <!-- Fill-in guide: create one deployment folder named for the real work-item ID and short name. Replace every angle-bracket prompt in each labeled field, row, and paragraph with that deploy's verified information. Keep the package link; replace optional Removals and Manual steps values with links only when those files exist. Record checks before the deploy and actual results afterward. Delete this guide and example check rows once populated. -->
 
-**Work item:** <The work item's ID, for example `WI-031`, plus its link when the tracker has one (a Notion page, GitHub issue, or Jira ticket); never a folder path.>  
+**Work item:** <The work item's ID, for example `WI-031`, plus its link when the work tracker has one; never a folder path.>  
 **Folder name:** `<work-item-id>-<short-name>`  
 **Target org:** <Verified alias and environment.>  
 **Status:** <Preparing | Validated | Deployed | Failed | Rolled back>  

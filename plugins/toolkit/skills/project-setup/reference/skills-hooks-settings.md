@@ -1,20 +1,10 @@
 # Skills, hook commands, and settings
 
-This file says which skills, hook commands, and settings every project has, and how a settings file that already exists is merged. Open it whenever a settings file changes, and whenever another file sends you to "Merge rules". The setup file of a choice gives, in a step or in the file that a step names, the lines that the choice changes in the settings.
+This file says which skills, hook commands, and settings every project has, and how a settings file that already exists is merged. Open it whenever a settings file changes. Each choice's "what it adds" reference gives the lines that the choice changes in the settings.
 
 The job is done when the settings files hold what the owner's choices need, every entry that the owner had is still there, and everything under "What must be true when the settings are done" holds.
 
-In a setup, change the project's own settings files. In an update or a check of the setup, the files are built in a temporary folder first, and [reference/setup-copy.md](setup-copy.md) says how that folder is made.
-
-## Contents
-
-- Skills
-- Hook commands
-- The settings every project gets
-- What a choice changes in the settings
-- Merge rules
-- What must be true when the settings are done
-- Known problems
+In a setup, change the project's own settings files. In an update or a check of the setup, build them first in the setup copy, which [setup-copy.md](setup-copy.md) describes.
 
 ## Skills
 
@@ -36,7 +26,7 @@ A hook command is a command that Claude Code or Codex runs by itself at a fixed 
 
 | File | Who reads it | What it holds |
 | --- | --- | --- |
-| `.claude/settings.json` | Claude Code | No AI credit on a commit or a pull request. Claude Code's own memory off. The Plain English output style. The hooks: session start, every message, after a commit, and after a helper agent returned. More room for the list of skills. |
+| `.claude/settings.json` | Claude Code | No AI credit on a commit or a pull request. Claude Code's own memory off. A question before `git reset --hard` and `git clean`. The Plain English output style. The hooks: session start, every message, after a commit, and after a helper agent returned. More room for the list of skills. |
 | `.codex/hooks.json` | Codex | The same hooks, written the way Codex reads them: session start, every message, after a commit, and when a helper agent started or returned. |
 | `.codex/config.toml` | Codex | `max_context_tokens = 10000` under `[skills]`. |
 
@@ -48,7 +38,7 @@ Never change the command or the text of one of the toolkit's hooks, because they
 
 ## What a choice changes in the settings
 
-The setup file of each choice gives, in a step or in the file that a step names, the lines that the choice changes in `.claude/settings.json` and `.codex/hooks.json`. A choice may supply resources beside the shared commands. Apply its exact configuration steps in the setup copy.
+Each choice's "what it adds" reference gives the lines that the choice changes in `.claude/settings.json` and `.codex/hooks.json`, and the resources it supplies beside the shared commands.
 
 The owner's answer about Claude Code's own memory is one line in `.claude/settings.json`: `"autoMemoryEnabled"` is `false` when the owner wants it off, which is the default, and `true` when the owner wants it on.
 
@@ -80,11 +70,9 @@ These rules apply every time the toolkit's settings meet a settings file that al
 
 ## Known problems
 
-- **`.codex/hooks.json` accepts only `description` and `hooks` at the top level.** Put nothing else there.
-  - In a file that the project already had, a `description` that does not contain the toolkit's text keeps the text it has. Add the toolkit's text after it, with one space between them.
-  - One sentence is the exception. A sentence that starts "Toolkit V2 hooks for this project in Codex:" is the toolkit's own earlier text, so replace that sentence with the toolkit's text. Show that change to the owner before applying it. For setup, follow [reference/placing-files.md](placing-files.md), "Files the project already has". For an update, follow [reference/update.md](update.md), "Show the owner the differences".
+- **`.codex/hooks.json` accepts only `description` and `hooks` at the top level.** Put nothing else there. In a file that the project already had, a `description` that does not contain the toolkit's text keeps the text it has. Add the toolkit's text after it, with one space between them.
 - **A settings file writes a key another way than the toolkit does.** Another way is a dotted key such as `plugins."x@y".enabled = false`, or an inline table. Leave the file as it is and ask the owner.
-- **A settings file holds an entry of the toolkit's that the toolkit no longer ships.** [reference/update.md](update.md), "Apply the owner’s choices", says what to do with it.
+- **A settings file holds an entry of the toolkit's that the toolkit no longer ships.** [update.md](update.md), "Apply the owner’s choices", says what to do with it.
 - **Codex cuts every skill description short.** Codex does this when the list of skills passes its limit, which is 2% of the model's context window by default. The Toolkit skills then lose their "Use when" and "Not for" parts. `max_context_tokens = 10000` under `[skills]` prevents this. That value is the largest that Codex accepts there, and it is more than the 2% default for a model with a context window under 500,000 tokens.
 - **A changed Codex hook entry does not run.** Codex skips a hook until the owner trusts it in `/hooks`, and again after any change to its entry in `.codex/hooks.json`. Tell the owner.
-- **Codex refuses to create `.codex/`.** [reference/setup-problems.md](setup-problems.md), "Host permissions", explains how to handle a blocked command under the active session settings.
+- **Codex refuses to create `.codex/`.** [setup-problems.md](setup-problems.md), "Host permissions", explains how to handle a blocked command under the active session settings.

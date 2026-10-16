@@ -1,5 +1,5 @@
 ---
-name: topic-template
+name: project_topic_template
 description: The fact itself in a few words, with its dates
 type: project
 status: template

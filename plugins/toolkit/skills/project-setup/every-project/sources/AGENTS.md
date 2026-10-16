@@ -26,9 +26,7 @@ A source has no status. A row is never removed.
 ## A source kept outside Git
 
 - Text the owner pasted, and a Markdown or plain text file, is kept in this folder.
-- Ask the owner before you file any of these three: a file of another type, a file over 10 MB, or a file that holds personal data beyond people's names and work roles.
-  - Ask one question: "Commit <file name> (<type>, <size>) to the repository, or keep it outside Git?"
-  - When the owner chooses to keep it outside Git, ask where the source is kept permanently.
+- Ask the owner whether to commit the source or keep it outside Git before you file a file of another type, a file over 10 MB, or a file that holds personal data beyond people's names and work roles. When the owner chooses to keep it outside Git, ask where the source is kept permanently.
 - A source kept outside Git still gets its SRC-### and its row. "Where kept" names the place and how to reach it.
 - Never write a download address that expires in "Where kept".
 

@@ -23,7 +23,7 @@
 - Read properties and page content separately. Follow child pages, child databases, and data sources; read nested blocks and whole bodies. A title or search excerpt is not the record.
 - A linked view may be filtered, so check its underlying source and project scope.
 - Search by subject words, aliases, source IDs, and related work items. Match work item IDs whole. Include records without a Record Key.
-- Confirm that Project, Source, and Work items relations point at this project's collections. A copied template relation is not proof; fix mismatches through setup before writing.
+- Before writing, check fields and relations as `wiki-schemas.md` says.
 - If a source isn't reachable from this host, use captured evidence with its origin, or leave the capture Needs review with what's missing.
 
 ## Writing records
@@ -37,7 +37,7 @@
 
 ## Metadata
 
-- Keep dates, the actual editor, provenance, type, and replacement links accurate, using native fields where they exist and a short labeled body section where they don't. Never change a database's fields without approval.
+- Keep dates, the actual editor, provenance, type, and replacement links accurate, using native fields where they exist and a short labeled body section where they don't.
 - Memories mapping: Saved is the last change; Source note is dated provenance; Other fields (JSON) holds modified_by, context, source_kind, and extra tags; Tags includes the record type; Authorization states the approval or filing authority. Keep the creation time, Source, Author, and Agent. Set Record Key and Keywords on keyed records. Use Supersedes and Superseded by for replacements, Last verified only after checking the source, and Review By for time-sensitive evidence.
 - Product Wiki: keep Approved by and Approved on, Source, Related documentation, and review dates. Set Documentation status separately from Implementation status.
 - Glossary: keep Source, Last checked, the contextual meaning, and naming history.

@@ -2,7 +2,7 @@
 
 ## For the main agent
 
-Start one researcher per bounded question: a fact the owner can't answer and the project files don't hold, such as a platform limit or what the existing system does. No owner permission is needed, but honor any limit the owner set on helpers. What it returns is evidence, not a decision; cite its sources when you use a finding.
+Give each researcher one bounded question: a fact the owner can't answer and the project files don't hold, such as a platform limit or what the existing system does. No owner permission is needed, but honor any limit the owner set on helpers. What it returns is evidence, not a decision; cite its sources when you use a finding.
 
 ```text
 Work item: <ID and title>

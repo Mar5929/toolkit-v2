@@ -7,27 +7,26 @@ Use this reference when copying the Notion memory choice and recording its setti
 | Coding-agent skill | `files-to-add/.claude/skills/managing-project-memory/` provides a short retrieval and capture procedure with focused destination references. The other skills call it by that name for every memory step. |
 | Steps inside other skills | `files-to-add/` also adds `references/record-decision.md` and `references/update-system-doc.md` inside `filing-project-records`, and `references/shared-record-paths.md` inside `publish-docs`: the steps of those skills that depend on Notion memory. |
 | Librarian skill | `files-to-add/.claude/skills/maintaining-notion-wiki/` provides reconciliation, schemas, verified writes, metadata and recovery. |
-| Published librarian package | Project Wiki holds a Librarian processing skill entry, focused references and filled Project context and connections. [Publication steps](librarian-package.md) verify cloud or local access. |
+| Published librarian package | Project Wiki holds a Librarian processing skill entry, focused references and filled Project context and connections. [librarian-package.md](librarian-package.md) gives the publication steps. |
 | Shared Notion access | `choices/notion-shared/files-to-add/` supplies `using-notion-cli` and `notion-records.md`, once even when the tracker also uses Notion. |
-| Project settings | Memory is `notion`. Notion memory records configured pages, databases, data sources, the local Lore project row, published librarian links and Librarian schedule. [Notion memory pages](../../../notion-shared/reference/notion-memory-pages.md) gives exact labels. |
+| Project settings | Memory is `notion`. The "Notion memory" line records configured pages, databases, data sources, the Lore project row, published librarian links and Librarian schedule. [notion-memory-pages.md](../../../notion-shared/reference/notion-memory-pages.md) gives the exact labels. |
+| Session-start resources | `files-to-add/.claude/hooks/session-start-choice.mjs` prints Current state at session start, and `prompt-memory-reminder.md` is the memory reminder text. "Session-start settings" below gives the one value to set. |
 | Root `AGENTS.md` | The "Project memory" section and the rows below, and the summary sentence. |
 | External structure | Project Wiki contains Wiki Inbox, Current state, Long-Term Memory, Terminology Glossary and Product Wiki. Setup reuses the owner’s structure or creates a project from the confirmed template after authorization. |
 
 ## Project authoritative destinations
 
-After setup or the reviewed migration is verified, update `PROJECT.md`'s links to the authoritative records and related constraint and operating-convention pointers to the configured wiki destinations. Product Wiki owns finalized product documentation and decisions, Terminology Glossary owns finalized terms, and Long-Term Memory owns other lasting context and lessons. Active questions and approvals stay in work items. Use verified destination links and preserve unrelated project facts; existing records remain authoritative until the migration is verified.
+Once the wiki's destinations are verified, point `PROJECT.md`'s links to the authoritative records, and its constraint and operating-convention pointers, at the configured wiki destinations. Product Wiki owns finalized product documentation and decisions, Terminology Glossary owns finalized terms, and Long-Term Memory owns other lasting context and lessons. Active questions and approvals stay in work items. Use verified destination links and keep unrelated project facts.
 
 ## Session-start settings
 
-Copy this choice's `.claude/hooks/session-start-choice.mjs` and `prompt-memory-reminder.md`. Replace `{{CURRENT_STATE_PAGE_ID}}` in the copied module with the verified Current state page ID. Keep the shared SessionStart and UserPromptSubmit handlers without memory-selection arguments. When updating old handlers, follow [the settings merge rules](../../../../reference/skills-hooks-settings.md); show their changes and have the owner trust changed Codex entries.
+The Current state page ID lives only in `.claude/hooks/session-start-choice.mjs`. Replace `{{CURRENT_STATE_PAGE_ID}}` there with the verified Current state page ID, and check that no `{{` placeholder is left in that file. The shared SessionStart and UserPromptSubmit handlers in the settings files stay as the toolkit ships them, with no memory-selection arguments.
 
 The startup snapshot is derived context. The coding-agent skill checks pending inbox captures and authoritative work records when freshness matters; startup output does not establish current work status.
 
 ## The text in the root AGENTS.md
 
-A Notion-memory project gets no `DECISIONS.md` or `wiki/product-wiki/`. Its root `AGENTS.md` gets the "Project memory" section and the rows below. In an existing project, write this text only after the reviewed move to Project Wiki is verified; until then the project keeps its earlier text and authoritative destinations, and the local records stay in place until the owner approves their removal.
-
-In a new project, write the section and the rows during setup.
+A Notion-memory project gets no `DECISIONS.md` or `wiki/product-wiki/`. Its root `AGENTS.md` gets the "Project memory" section and the rows below.
 
 In the "Project map" table, add this row after the row for `AGENTS.md`, `CLAUDE.md`:
 
@@ -52,7 +51,7 @@ This project keeps its memory in the Notion Project Wiki, with the skill `managi
 - The project's current state, a short page of what is true now, is the Current state page in Project Wiki. The session-start command prints it. When it is not in the session's context, read it with `managing-project-memory`.
 - Use `managing-project-memory` to find memory and to capture new facts, corrections, and reusable outcomes in Wiki Inbox. The librarian reconciles the affected wiki records afterward, and routine reconciliation needs no report to the owner.
 - Capture supported reusable outcomes without being asked. A capture does not approve its content: active questions and approvals stay in work items, and draft designs stay with their work item.
-- When later work needs records that are not filed yet, run the librarian on demand.
+- When later work needs records that are not filed yet, start an on-demand librarian run as the project context page's "On-demand invocation" says.
 - When the owner asks where the project stands, also read the relevant pending captures in Wiki Inbox.
 ```
 

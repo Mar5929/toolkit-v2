@@ -1,6 +1,6 @@
 # The org aliases of a Salesforce project
 
-This file holds the three questions about the project's Salesforce orgs, the form of the aliases line in `PROJECT.md`, and what to write when an org is not known yet. Steps 3 and 7 of [salesforce-setup.md](../salesforce-setup.md) use it.
+This file holds the three questions about the project's Salesforce orgs, the form of the aliases line in `PROJECT.md`, and what to write when an org is not known yet.
 
 ## The three questions
 
@@ -23,7 +23,7 @@ The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce o
 
 Use only the aliases the owner names for this project.
 
-- When none of this project's orgs is on this computer yet (the org does not exist or is not connected), never invent an alias, and never write an alias that the owner says belongs to another project into this project's files. Write ``- Salesforce org aliases: `none yet` ``. [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "How setup records what is still open", says how setup then records that the owner still has to connect the org.
+- When none of this project's orgs is on this computer yet (the org does not exist or is not connected), never invent an alias, and never write an alias that the owner says belongs to another project into this project's files. Write ``- Salesforce org aliases: `none yet` ``. [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "What setup records as still open", says how setup then records that the owner still has to connect the org.
 - When the owner gives an instruction about what an agent may do in an org (for example "don't use those" about the other orgs), write it into `.claude/rules/salesforce-agent-permissions.md`, in the place that the first bullets of that file give.
 
 `.claude/rules/salesforce-agent-permissions.md` says what an agent may do in each kind of org, in Claude Code and in Codex.

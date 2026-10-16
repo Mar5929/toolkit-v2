@@ -1,32 +1,17 @@
 # Manual deployment steps
 
-A manual step is something a person must do by hand for a deploy to work or be complete. It goes in the `manual-steps.md` beside the manifest it belongs to (the item's folder, or the full-project folder for a cutover). Add it in the same response that creates the metadata needing it.
+A manual step is something a person must do by hand for a deploy to work or be complete. It goes in the `manual-steps.md` beside the manifest it belongs to: the work item's folder, or `full-project-deployment-template/` for a full cutover.
 
 ## When a deploy needs one
 
-Whenever something outside the metadata must be set up, checked, or run. For example:
+A deploy needs a manual step whenever something outside the metadata must be set up, checked, or run. For example:
 
 - assigning a new permission set or permission set group to users;
-- mapping a new field in an external connector;
-- updating existing records for a new record type;
-- capturing a baseline before, and checking after, a new or changed rollup;
-- scheduling a new scheduled Apex job or flow;
-- ordered pre-deploy steps for a migration that clears a field before rewriting it;
-- verifying a managed-package version, remote site setting, custom setting, or org-wide setting the deploy depends on;
 - a one-time backfill (Batch Apex, anonymous Apex, or a data load), with its full script;
 - a pre-deploy snapshot when rollback would need old values Git doesn't hold.
 
-A deploy that's complete on its own needs none: a UI or LWC change that needs no permission, data, or configuration; an internal Apex change; a formula change on data already in scope; a label change. When unsure, add the step; a step closed as "skipped" costs less than a missed one.
+A deploy that is complete on its own needs none, such as an internal Apex change or a label change. When unsure, add the step; a step closed as "Skipped" costs less than a missed one.
 
-## The form
+## How to write one
 
-| Field | Content |
-| --- | --- |
-| Title | A short imperative name |
-| Phase | `Pre-deploy`, `Deploy`, or `Post-deploy` |
-| Order | Its place in the file, in gaps of 10 |
-| Owner | Who runs it (they also update its status) |
-| Status | Not started, in progress, done, or skipped |
-| Body | The purpose, numbered instructions, a verification (SOQL, screenshot, or UI check), and any script inline in a fenced block |
-
-Name the task and work item it comes from. Keep out routine steps that need no place in the order, item documentation, build tasks, and the standard deploy command.
+Write each step in the form that `manual-steps.md` in the work item's folder (copied from `work-item-deployment-template/`) or in `full-project-deployment-template/` gives. Put any script inline in a fenced block, and name the task and work item the step comes from. Keep out routine steps that need no place in the order, item documentation, build tasks, and the standard deploy command.

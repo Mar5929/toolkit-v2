@@ -1,13 +1,12 @@
 # Refining requirements
 
-The goal: requirements the owner approves, built from the owner's own words, with every question and answer saved in the work item as it happens.
+The goal: requirements the owner approves, built from the owner's own words.
 
 ## How to run it
 
 - Continue from open questions; never restart the interview.
 - Read related decisions, system rules, memory, and work items for the area first.
 - Agree the goal in one sentence before anything else, and write it in the Overview.
-- If the item is clearly large and `delivery` is `not-offered`, offer a team of helpers once and record the answer.
 - Ask one question at a time, the ones others depend on first. Push every vague word ("fast", "all users") until a tester could check it.
 - Split into sub-items when a part can ship on its own, serves another area, needs its own design, or the owner will want to track it alone. Get a yes for the split. Sub-items copy the parent's lines word for word. When those parent requirements are already approved, the sub-item inherits the approval as "(from WI-x)" and skips its own interview.
 - Before asking for approval, ask "What have we not talked about yet that could change this?", then run the requirements analyst helper and fix or raise its findings.
@@ -33,6 +32,6 @@ Not yet covered: <what this affects that the owner hasn't raised>.
 
 ## Sources
 
-File each source with `filing-project-records` before using it. A stated behavior becomes a requirement quoting the source; a gap becomes a question; a decision counts only from someone with authority to make it. Tell the owner how many requirements and questions the source produced.
+File each source with `filing-project-records` before using it. A stated behavior becomes a requirement quoting the source; a gap becomes a question; a decision counts only from someone with authority to make it.
 
 Requirements say what and why, never how.

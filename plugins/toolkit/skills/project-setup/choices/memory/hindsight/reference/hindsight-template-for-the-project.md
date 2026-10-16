@@ -24,7 +24,7 @@ Missions guide model behavior. They do not guarantee a filter, and they do not e
 
 ## Recommended instructions, changes, or another template
 
-Read `hindsight-missions-recommended.md`. Offer its three missions together as "Toolkit coding-project instructions", with the project name filled in. Explain their purpose and origin. Ask whether the owner wants these memory instructions, changes to them, or another template.
+Read [the recommended missions](hindsight-missions-recommended.md). Offer its three missions together as "Toolkit coding-project instructions", with the project name filled in. Explain their purpose. Ask whether the owner wants these memory instructions, changes to them, or another template.
 
 When accepted, use the supplied mission text. It adds no settings, labels, directives, or knowledge pages by itself; keep the approved operating package and separately agreed page choices. For a non-coding project, explain the coding focus and help the owner adapt it or choose a more suitable template.
 
@@ -32,7 +32,7 @@ When the owner wants changes or their own instructions, use the recommended miss
 
 With a published template, work on a copy of its current file. Inspect the three missions and any extraction settings, labels, pages, directives, and disposition values. Show how it changes the recommended missions, identify missing missions, and explain any overlap with the approved package. Fill a missing mission from the recommendation where suitable, or from the owner's own instructions, and show that addition for approval. Adapt its instructions to the project's subject and approved memory policy without silently changing the package.
 
-With the owner's own instructions, help the owner describe what to retain, what to synthesize, and how answers should use memory. Prepare all three missions and discuss other bank fields only where the project needs them. This choice does not mean accepting the add-on's missions without review.
+With the owner's own instructions, help the owner describe what to retain, what to synthesize, and how answers should use memory. Prepare all three missions and discuss other bank fields only where the project needs them. Do not accept the add-on's missions without review.
 
 For every choice, preserve the distinction between evidence and decisions. Keep proposed or unresolved claims marked as such. Keep live work status in the work tracker. Include code structure in the retain instructions when the survey is approved. Show the combined missions and other configuration, then get the owner's approval.
 

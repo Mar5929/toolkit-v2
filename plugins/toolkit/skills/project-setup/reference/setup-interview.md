@@ -1,7 +1,6 @@
 # Setup interview details
 
-Open this reference during Step 4 of [SKILL.md](../SKILL.md), before asking the question it explains. The interview table in the entry file gives the question order and where each answer goes. This reference supplies the owner row, choice comparisons, and question-specific actions.
-
+This file holds the owner row, the comparisons of the work tracker and memory choices, and what to do with particular answers of the setup interview. The interview table in [SKILL.md](../SKILL.md) gives the question order and where each answer goes.
 
 ## Project and owner (question 1)
 
@@ -49,14 +48,14 @@ Check that a skill or plugin for making outward-facing text sound natural is ins
 
 ## Working with the owner (question 9)
 
-Every project has `SOUL.md`. Fill it with the owner's own words, show the owner the text, and change it until the owner says yes.
+[finishing.md](finishing.md), "SOUL.md", says how `SOUL.md` is filled.
 
 ## Starting material (question 10)
 
 File each document, link, and note that the owner gives as a source, in the form that the project's `sources/AGENTS.md` gives. Read the material before you ask question 11.
 
-When Step 2 read past work, show the owner the facts that no answer has used yet, and write the ones the owner confirms, as [reference/context-from-past-work.md](context-from-past-work.md), "In Step 4: use what you found", says.
+When past work was read before the interview, show the owner the facts that no answer has used yet, and write the ones the owner confirms, as [reference/context-from-past-work.md](context-from-past-work.md), "In the interview: use what you found", says.
 
 ## Project roadmap (question 11)
 
-Work with the owner until you understand the whole roadmap: the phases of the project, what each phase is for, what is already done, which phase the project is in now, and what comes next. A project that is just starting has a roadmap too, even when it holds only the first phase or two. The work starts from the roadmap. Step 6 says where to write it.
+Work with the owner until you understand the whole roadmap: the phases of the project, what each phase is for, what is already done, which phase the project is in now, and what comes next. A project that is just starting has a roadmap too, even when it holds only the first phase or two. The work starts from the roadmap. [finishing.md](finishing.md), "The roadmap", says where to write it.

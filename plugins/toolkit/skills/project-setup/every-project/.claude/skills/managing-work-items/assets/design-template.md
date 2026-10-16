@@ -119,7 +119,7 @@ work_item: WI-001
 
 ### Technical sequence
 
-1. <Step, dependencies, artifact.>
+<The selected option's Build order, as approved. Its steps become the work item's tasks.>
 
 ### Acceptance checks
 

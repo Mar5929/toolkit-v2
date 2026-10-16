@@ -27,13 +27,6 @@
 
 Write one row for each person or team, with what they do and what they may decide. Write no biography and no contact details.
 
-## Work and project records
-
-- Work items, the project's phases, and the project's tasks: in the place that the "Tracker" line under "Toolkit settings" below names.
-- Decisions and open questions that more than one work item needs, and the approved description of the system: where [AGENTS.md](AGENTS.md), "Where information goes", says.
-- Sources, which are the documents and messages the project received: [sources/](sources/).
-- Project memory: in the place that the "Memory" line under "Toolkit settings" below names.
-
 ## Resources and project paths
 
 - Source code: `<actual source path>`

@@ -2,19 +2,7 @@
 
 ## Where a fact belongs
 
-Memory holds only what no other file holds. Check the root `AGENTS.md`, "Where information goes", before every save. These never go in memory:
-
-| Fact | Its home |
-| --- | --- |
-| A decision or open question more than one work item needs | `DECISIONS.md`, via `filing-project-records` |
-| A project term | `wiki/product-wiki/glossary.md`, via `filing-project-records` |
-| How the system works or must work | `wiki/product-wiki/` or `wiki/reference/current-system/` |
-| A person's lasting role; a stable fact about the client's business | `PROJECT.md` |
-| A to-do or action item | A project task or work item task, via `managing-work-items` |
-| A source (transcript, document, file) | `sources/`, via `filing-project-records` |
-| An owner instruction or preference | `.claude/rules/owner-preferences.md` (see `saving.md`) |
-
-A reference record may point to one of these when a later session would otherwise miss it. It never repeats the content.
+Memory holds only what no other file holds. Before every save, check the root `AGENTS.md`, "Where information goes". When it gives the fact another home, keep the fact there instead, with the skill "Which skill" names for it. A reference record may point to such a record when a later session would otherwise miss it, but it never repeats the content.
 
 ## The test
 

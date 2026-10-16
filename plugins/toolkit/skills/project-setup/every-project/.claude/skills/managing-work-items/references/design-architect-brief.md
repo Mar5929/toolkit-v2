@@ -2,7 +2,7 @@
 
 ## For the main agent
 
-Start one architect per option, all at once, and again for each fix round with the critic's findings. No owner permission is needed; tell the owner who's on the design team. You save what it returns; the design stays proposed until the owner approves it.
+Start the architects all at once, as `designing.md` says, and again for each fix round with the critic's findings. No owner permission is needed; tell the owner who's on the design team. You save what each returns.
 
 ```text
 Work item: <ID and title>

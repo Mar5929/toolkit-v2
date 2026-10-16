@@ -1,6 +1,6 @@
 # Wiki destinations
 
-The Project Wiki is the parent page. Current state and Long-Term Memory are pages; Wiki Inbox, Terminology Glossary, and Product Wiki are databases. Read the live schema before querying, and page through every result.
+The Project Wiki is the parent page. Current state and Long-Term Memory are pages; Wiki Inbox, Terminology Glossary, and Product Wiki are databases. Before querying, check field names and options as `maintaining-notion-wiki/references/wiki-schemas.md` says, and page through every result.
 
 | Destination | Holds | Doesn't hold |
 | --- | --- | --- |
@@ -17,7 +17,7 @@ Read the whole page and its links. It's a snapshot, so check its date and any pe
 
 ## Long-Term Memory
 
-Five collections: Projects (this project's row), Topics (groups of subjects), Memories (durable subject records), Entities (named things), and Facts (dated statements with validity and sources).
+Long-Term Memory is a set of collections; `maintaining-notion-wiki/references/wiki-schemas.md` says what each holds and lists its key fields.
 
 - Query by subject, aliases, Synopsis, Keywords, and linked project or work item, then follow relations and sources. Include owner-written records with no Record Key.
 - Trust accepted, current records; follow supersession links. Proposed, informational, and inferred content stays uncertain; deprecated, rejected, and superseded records are history.

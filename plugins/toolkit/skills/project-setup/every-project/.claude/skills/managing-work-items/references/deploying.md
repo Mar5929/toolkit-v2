@@ -10,7 +10,7 @@ Open one only when the item changed files and the project has a remote.
 
 - The item's files must all be committed, and the head must be the commit the checker passed. If it isn't, re-run the checker on the new head.
 - Push without force. The base is the parent's branch for a sub-item, or the default branch for a top-level item.
-- Write the title and description in plain words, with no AI credit: what changed, why, how it was checked, and the item's ID. Run them through the humanizing skill `AGENTS.md` names.
+- Write the title and description in plain words: what changed, why, how it was checked, and the item's ID.
 - The merge must never close the work item. Record the pull request on the item as `work-tracker.md` says, and in Recent History.
 
 ## Merging
@@ -24,9 +24,9 @@ A merge into the default branch needs one of these:
 
 Record what authorized the merge. If the head moved, the checker has to pass the new head. A builder's merge into the item branch needs no yes. Sub-items merge into their parent's branch; only the parent merges into the default branch.
 
-**No remote:** after the same approval and head checks, and the safety check in `.claude/rules/shared-repository-work.md`, run `git -C <target worktree> merge --ff-only <item branch>`. Never switch another session's branch. If the fast-forward fails, merge the target into the item branch and go back to the Testing Loop.
+**No remote:** after the same approval and head checks, and the target and file-overlap check in `merge-and-clean-up`, run `git -C <target worktree> merge --ff-only <item branch>`. Never switch another session's branch. If the fast-forward fails, merge the target into the item branch and go back to the Testing Loop.
 
-After any merge, confirm it reached the target and record the branch and commit. Conflicts: follow `pull-latest`.
+After any merge, confirm it reached the target and record the branch and commit.
 
 ## Deploying
 
@@ -36,5 +36,4 @@ Deploy only when the result must go beyond the default branch, and follow any de
 - Use only the deploy command in `AGENTS.md` or `PROJECT.md`. If there isn't one, ask how this project deploys.
 - Approval 5 in `lifecycle.md` applies. Never run a production deploy or data load unless a project rule allows it; otherwise give the owner the exact command, what it deploys, and what to check, and record their report in their words.
 - Record each deployment in `delivery/deployments/` (`delivery/AGENTS.md` gives the format). A release of several items also gets a release plan and notes in `delivery/releases/`. Add Recent History.
-- A scheduled deploy is a recurring job: tell `managing-project-memory` about each run.
 - On failure: fill Blockers and tell the owner. If the fix changes the result, go back to the Testing Loop. Note the cause as a lesson.

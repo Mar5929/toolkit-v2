@@ -1,8 +1,6 @@
 # How the toolkit sets up local memory by default
 
-This file holds how the toolkit sets up memory in local files when the owner changes nothing. Step 1 of [local-memory-setup.md](../local-memory-setup.md) uses it.
-
-Tell the owner this in a few plain lines, and ask whether it is what the owner wants.
+This file holds how the toolkit sets up memory in local files when the owner changes nothing.
 
 - Memory is Markdown files in `memory/`, at the root of the project: the project's Current State, and one file for each subject that no other project file holds.
 - At the start of each session, the agent is shown the Current State and one line for each memory file.

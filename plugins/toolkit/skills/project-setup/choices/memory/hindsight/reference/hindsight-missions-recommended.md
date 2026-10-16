@@ -2,9 +2,9 @@
 
 Offer these three missions together as the recommended instructions for a coding project, after the owner approves the operating settings. Show the text with the project's subject filled in. The owner can accept it, change it, or choose another template.
 
-These instructions adapt Hindsight's [Coding Agent template](https://github.com/vectorize-io/hindsight/blob/main/hindsight-docs/src/data/templates/coding-agent.json), reviewed on 2026-10-09. Its technical focus informs retention and observations; the toolkit adds the owner's memory policy and reflection instructions. This is a toolkit recommendation, not an unchanged upstream template. It supplies mission text only; operating settings and knowledge pages are selected separately.
+These instructions adapt Hindsight's [Coding Agent template](https://github.com/vectorize-io/hindsight/blob/main/hindsight-docs/src/data/templates/coding-agent.json) and add the owner's memory policy and reflection instructions. They supply mission text only; operating settings and knowledge pages are selected separately.
 
-Replace `{{PROJECT_NAME}}` with the project's name. Keep the text below as the starting point rather than rebuilding it from the upstream template at every setup. Discuss changes needed for a non-coding project before applying it. Apply the approved missions using `hindsight-template-for-the-project.md`, including effective extraction strategies.
+Replace `{{PROJECT_NAME}}` with the project's name. Keep the text below as the starting point rather than rebuilding it from the upstream template at every setup. Discuss changes needed for a non-coding project before applying it. Apply the approved missions as [the template for the project](hindsight-template-for-the-project.md) says, including effective extraction strategies.
 
 ## Retention mission — `retain_mission`
 
@@ -46,4 +46,4 @@ Give a direct answer with useful rationale and source references where available
 When the query begins "A developer is starting a coding session in this repository with this goal:", provide a compact, complete startup briefing for that goal. Aim for at most 3,000 characters by selecting the most relevant complete facts rather than shortening every record. Preserve exact configuration values, qualifications, dates, provenance and useful source pointers for the facts included. Finish every sentence and setting. This is a brevity target, not an output guarantee; identify remembered evidence as historical and name what needs current verification. For other queries, follow the instructions above without this startup size target.
 ```
 
-The startup clause matches the coding-agent add-on's verified query wrapper. Check that wrapper when installing or updating another version; adapt the condition if needed. A mission does not enforce a host payload cap. The default package's full-output recovery remains required.
+The startup clause matches the coding-agent add-on's verified query wrapper. Check that wrapper when installing or updating another version, and adapt the condition if needed.

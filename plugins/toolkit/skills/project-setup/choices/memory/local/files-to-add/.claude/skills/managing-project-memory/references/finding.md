@@ -17,8 +17,8 @@ For a date range, read the event records and Runs tables, the Recent History of 
 
 ## Trusting what you find
 
-- Replaced: answer from the replacement.
-- Retired: history only, unless the owner asks.
+- Status `superseded`: answer from the replacement.
+- Status `retired`: history only, unless the owner asks.
 - Past its check-by date: say so, and check it before acting.
 - Unchecked claims and lessons are not facts. Label them when you mention them.
 - Verify claims about things that change (vendors, roles, processes) before acting on them.
