@@ -22,15 +22,7 @@ Give it its own section in the subject's project record: what was claimed, by wh
 
 ## Lessons
 
-While its work item is open, a lesson lives in the work item. Otherwise it goes under "Gotchas and lessons" in the subject's record as one entry with a Seen line of dates; a repeat adds a date, never a second entry. When the evidence is strong, offer it to the owner as a rule. An owner instruction is never a lesson.
-
-## Owner instructions
-
-An instruction, preference, or correction from the owner is a rule. Write it to `.claude/rules/owner-preferences.md` in the form that file's layout comment gives.
-
-- "Don't let that happen again" becomes the check that prevents it, naming the record that explains why.
-- An instruction you inferred needs the owner's yes first.
-- If the owner says it's for every project, write it to the global file the root `AGENTS.md` names.
+While its work item is open, a lesson lives in the work item. Otherwise it goes under "Gotchas and lessons" in the subject's record as one entry with a Seen line of dates; a repeat adds a date, never a second entry. When the evidence is strong, offer it to the owner as a rule. An owner instruction is a rule, not memory; the root `AGENTS.md`, "Where information goes", says where it goes.
 
 ## Events, recurring jobs, and shared files
 

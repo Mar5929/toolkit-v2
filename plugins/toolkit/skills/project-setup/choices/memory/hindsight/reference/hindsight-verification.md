@@ -25,4 +25,4 @@ Use this before marking setup complete or accepting a configuration change. Veri
 
 ## Record the result
 
-Record what passed, which path was exercised, and what remains under "Hindsight setup" in `PROJECT.md`. Record each open step as a project task through `managing-work-items`. Distinguish installed interactive checks from narrower diagnostic tests. Use [the known defects](hindsight-known-defects.md), "Diagnose a failing or slow memory flow", to investigate a failure while keeping the approved package.
+Record what passed, which path was exercised, and what remains under "Hindsight setup" in `PROJECT.md`. Distinguish installed interactive checks from narrower diagnostic tests. Use [the known defects](hindsight-known-defects.md), "Diagnose a failing or slow memory flow", to investigate a failure while keeping the approved package.

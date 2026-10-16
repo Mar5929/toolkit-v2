@@ -10,4 +10,4 @@ Salesforce publishes its own skills in the GitHub repository `forcedotcom/sf-ski
   - the automatic deploy of `salesforce-development` (`SFDX_AUTO_DEPLOY`). It deploys each saved file to an org, and nothing in the project checks that deploy;
   - the usage data that the same plugin sends (`SF_DISABLE_TELEMETRY`).
 
-When Salesforce's skills are still missing at the end of setup, [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "What setup records as still open", says how setup records it.
+When Salesforce's skills are still missing at the end of setup, [salesforce-steps-left-for-the-owner.md](salesforce-steps-left-for-the-owner.md), "What the report lists as still open", says how setup records it.

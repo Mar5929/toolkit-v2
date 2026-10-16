@@ -44,7 +44,7 @@ After the owner has said where memory is kept, ask about Claude Code's own memor
 
 After the owner's answer, check that each tool is installed and signed in on this computer, and tell the owner what is missing.
 
-Check that a skill or plugin for making outward-facing text sound natural is installed and available in each host the project uses. Reuse a suitable resource the owner already has. When none is available, propose one and install it after the owner approves the resource and installation scope. Record its name and how to invoke it under "Resources and project paths" in `PROJECT.md`, so later agents can use it. A resource named `humanizer` is one option; that name is not required. Setup remains open until the chosen resource is available; record any pending owner action as a setup task.
+Check that a skill or plugin for making outward-facing text sound natural is installed and available in each host the project uses. Reuse a suitable resource the owner already has. When none is available, propose one and install it after the owner approves the resource and installation scope. Record its name and how to invoke it under "Resources and project paths" in `PROJECT.md`, so later agents can use it. A resource named `humanizer` is one option; that name is not required. When the owner still has to install it, say so in the report.
 
 ## Working with the owner (question 9)
 

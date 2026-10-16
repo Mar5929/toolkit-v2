@@ -12,9 +12,9 @@ Work items live in this project's own Notion databases: Work Items, Phases, and 
 | Item phase | A Phases row linked to its work item. |
 | Task | A Tasks row linked to its work item, and to its phase if it has one. |
 | Project task | A Tasks row with Work item and Phase both empty. |
-| Design | The item's Solution Design child page, titled "Solution Design - WI-31". |
+| Design | The item's Solution Design child page, titled "Solution Design - <PREFIX>-31". |
 
-Notion IDs are unpadded: `WI-31`, not `WI-031`. Creating a row through a view doesn't set its ownership, so set relations explicitly and check them.
+Notion IDs are unpadded: `<PREFIX>-31`, not `<PREFIX>-031`. Creating a row through a view doesn't set its ownership, so set relations explicitly and check them.
 
 ## The owner owns the structure
 

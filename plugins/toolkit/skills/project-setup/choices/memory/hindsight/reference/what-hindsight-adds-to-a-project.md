@@ -45,7 +45,7 @@ Write `hindsight` on the Memory line, then add or update these lines:
 | Hindsight template | `Toolkit coding-project instructions`, the selected published template, or `own instructions`. |
 | Hindsight changes | The owner's changes to the package and template, including capture behavior. |
 | Hindsight service | The operator and runbook location, verified provider/model profile, capacity and retrieval profile, authentication-persistence check, and backup/recovery status. Record shared-service facts without credentials. |
-| Hindsight setup | `done`, or a link to the open setup tasks. Applied add-on patches, their backups, and rollback. |
+| Hindsight setup | `done`, or what remains. Applied add-on patches, their backups, and rollback. |
 
 ## Hook settings
 

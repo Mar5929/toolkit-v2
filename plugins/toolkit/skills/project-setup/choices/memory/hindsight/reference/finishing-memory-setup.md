@@ -1,10 +1,8 @@
 # Finishing and moving Hindsight memory setup
 
-Use this reference to record open setup steps and preserve current work when memory moves to Hindsight. Hindsight stores lasting memory; the work tracker and project records hold current work.
+Use this reference to run this choice's checks and preserve current work when memory moves to Hindsight. Hindsight stores lasting memory; the work tracker and project records hold current work.
 
-## Record the open setup steps
-
-Write each open owner step as a project task with `managing-work-items` and name it in the setup report. Use the wording from the shared finishing reference's "The owner's steps" section. `PROJECT.md` records lasting configuration and links to the tracked setup tasks.
+## Check the Hindsight choice
 
 Run the checks in [hindsight-setup.md](../hindsight-setup.md), including both intended hosts and the recorded bank. This choice has no local Current State or `memory/` folder; its installed startup module adds no state snapshot, while the shared hook preserves the compaction reminder.
 

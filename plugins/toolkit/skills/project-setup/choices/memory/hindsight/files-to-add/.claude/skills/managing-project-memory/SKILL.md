@@ -35,4 +35,4 @@ Search and read first, then save a `Correction: <topic>` document stating the ol
 
 Active work, next steps, waits, and handoff context stay in the work tracker. A wait no work item holds becomes a project task through `managing-work-items`; close that task when the wait ends.
 
-When an item closes or is handed off, save each lesson `closing.md` sends here, with its status, its item, and the dates it was seen. An approved standing instruction goes to `owner-preferences.md` or its rule, never only to Hindsight; Hindsight can keep its history. Bank configuration changes go through `project-setup`.
+When an item closes or is handed off, save each lesson `closing.md` sends here, with its status, its item, and the dates it was seen. Bank configuration changes go through `project-setup`.

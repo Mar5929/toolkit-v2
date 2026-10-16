@@ -9,7 +9,7 @@ Replace `{{PROJECT_NAME}}` with the project's name. Keep the text below as the s
 ## Retention mission — `retain_mission`
 
 ```text
-Keep lasting knowledge about {{PROJECT_NAME}}: project facts, people and terminology, technical decisions and their rationale, architectural choices, coding patterns and conventions, constraints, library and tool preferences, recurring issues, lessons, events, and the owner's review preferences.
+Keep lasting knowledge about {{PROJECT_NAME}}: project facts, people and terminology, technical decisions and their rationale, architectural choices, coding patterns and conventions, constraints, library and tool preferences, recurring issues, lessons, and events.
 
 For deliberate project-memory saves, retain knowledge that concerns this project, has lasting significance such that losing it would cost a later agent real time or understanding, and comes from the owner or work done together with the owner. From work outcomes, retain the lasting decision, lesson, or significant event with its useful context and source pointer; leave evolving implementation status and routine verification receipts in the work tracker or project records. Avoid duplicating facts already explained by another authoritative memory record. A significant failure the agent found and fixed itself may also be retained with its cause and fix.
 

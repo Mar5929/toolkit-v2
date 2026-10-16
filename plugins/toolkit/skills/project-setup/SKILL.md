@@ -57,8 +57,8 @@ Say in one line which of these situations this is.
 
 These facts about the folder give you answers to offer:
 
-- `git config user.name` prints a name to offer as the owner.
-- `git remote -v` shows whether the code is on GitHub.
+- `git config user.name` prints a name to offer as the owner. When it is not the owner's name, such as an AI's, tell the owner, because later commits will carry that name.
+- `git remote -v` shows whether the code is on GitHub. When the repository has no remote and the owner names one, offer to add it.
 - `sfdx-project.json` in the folder means that this is a Salesforce project.
 - The files in the folder show the language, the framework, and the systems the project touches.
 
@@ -84,8 +84,8 @@ Write each answer in its place as soon as the owner gives it. During setup, writ
 | 2 | What is this project for, in one sentence? | A sentence from what the folder shows, as a suggestion | The outcome line at the top of `AGENTS.md`, the one-sentence line under the title of `README.md`, and "Intended outcome" in `PROJECT.md` |
 | 3 | Who else is involved, and who may decide what? | The people the folder names | One row for each person in "People and ownership" in `PROJECT.md` |
 | 4 | Which systems does the project touch, and which of them are production? | The systems the folder shows | One row for each system in "Systems and environments" in `PROJECT.md` |
-| 5 | Where are work items kept? | Local files | The "Tracker" line of "Toolkit settings", and Step 5 |
-| 6 | Where is memory kept? Then: is Claude Code's own memory on in this project? | Local files, or Notion when work items are in Notion. Claude Code's own memory: off. | The "Memory" line of "Toolkit settings", `autoMemoryEnabled` in `.claude/settings.json`, and Step 5 |
+| 5 | Where are work items kept? | The option that fits this project | The "Tracker" line of "Toolkit settings", and Step 5 |
+| 6 | Where is memory kept? Then: is Claude Code's own memory on in this project? | The option that fits this project. Claude Code's own memory: off. | The "Memory" line of "Toolkit settings", `autoMemoryEnabled` in `.claude/settings.json`, and Step 5 |
 | 7 | Is this a Salesforce project? | Yes when the folder holds `sfdx-project.json`, otherwise no | Step 5 |
 | 8 | Which outside tools and services does this project use? | The ones that the folder and the earlier answers show | One line for each under "Resources and project paths" in `PROJECT.md` |
 | 9 | How should the agent work with the owner on this project? | Help the owner set up `SOUL.md` in the owner's own words | `SOUL.md` |
@@ -145,7 +145,7 @@ The project's skills read the exact labels in "Toolkit settings".
 
 ## Step 6: Finish
 
-Follow [reference/finishing.md](reference/finishing.md). Setup is finished when every answer is written in the place the table in Step 4 gives, the roadmap is written, the memory choice's startup records and open owner steps are written, the final checks have run, the owner knows the steps that only the owner can do, and the reply ends with the report and the offer to commit the setup files.
+Follow [reference/finishing.md](reference/finishing.md). Setup is finished when every answer is written in the place the table in Step 4 gives, the roadmap is written, the memory choice's startup records are written, the final checks have run, the owner knows the steps that only the owner can do, and the reply ends with the report and the offer to commit the setup files.
 
 ## An existing project
 

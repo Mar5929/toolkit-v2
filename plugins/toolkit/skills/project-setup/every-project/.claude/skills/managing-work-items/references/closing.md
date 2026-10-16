@@ -29,7 +29,8 @@ Run these steps before the closing question. `filing-project-records` and `manag
 3. **File what the owner agreed to.**
    - Decisions, open questions, and lessons about the system or the project: record a decision with `filing-project-records`.
    - Rules to add, change, or retire, possibly-built rules, and terms: update a system document with `filing-project-records`.
-   - Lessons about how to do a step or how the agent works, and lessons kept as not proven: `managing-project-memory`.
+   - A lesson kept for the whole project that says how the agent should work: keep it where the root `AGENTS.md`, "Where information goes", says, with the Q-ID of the owner's yes as its source.
+   - Lessons about how to do a step, and lessons kept as not proven: `managing-project-memory`.
 4. **Write each ID as `filing-project-records` says.** When a save is not confirmed yet, stop, tell the owner what waits, and have `managing-project-memory` record the wait.
 5. **Mark each lesson's outcome** at the end of its line, for example "Kept: <record ID>.", "Kept: owner-preferences.md.", "Kept in memory.", "Kept in work item.", or "Dropped (Q-12)."
 6. **Fill the line** with every record this item added or changed, by ID and with what happened, every term it touched, and anything filed earlier in the item; or "None: <reason>". Add a Recent History row that names the Q-ID from step 2, or says no question was needed.

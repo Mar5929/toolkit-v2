@@ -10,7 +10,7 @@ The Notion steps make the project page as a row of the owner's Projects database
    ntn api v1/search -d '{"query":"Projects","filter":{"property":"object","value":"data_source"}}' < /dev/null | jq -r '.results[] | [.id, (.title | map(.plain_text) | join("")), (.properties | to_entries[] | select(.value.type == "title") | .key), (.database_parent.page_id // "")] | @tsv'
    ```
 
-2. Leave out every data source whose title column is `Name`. Such a data source is Lore's Projects database under another project's Long-Term Memory page. Lore is the name of the Notion memory layout. The owner's Projects database has the title column `Project`.
+2. Leave out every data source whose title column is `Name`. Such a data source is the Projects database under another project's Long-Term Memory page. The owner's Projects database has the title column `Project`.
 3. Use an existing approval that names the exact database and listed writes. Otherwise, show the destination and ask the owner to approve adding this project as a row of that Projects database.
    - When a question is needed, ask it before the ID prefix question. Make no project page until its listed writes and exact destination are approved.
    - Approval must cover the exact database. A generic yes to making pages does not choose a destination.

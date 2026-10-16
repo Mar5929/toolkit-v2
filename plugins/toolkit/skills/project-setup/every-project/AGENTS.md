@@ -58,24 +58,24 @@ Keep memory only in the place that this section names.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
-| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with`project-setup`. Commit with `publish-docs`. |
-| `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with`publish-docs`. |
-| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first.`CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that`project-setup` added for a setup choice: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
+| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
+| `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
+| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that `project-setup` added for a setup choice: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
 | `SOUL.md` | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
-| `.gitignore`, `.ignore` | The files and folders Git does not track.`.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
+| `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
 | `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
-| `sources/INDEX.md` | The list of all sources, one row each.`sources/AGENTS.md` gives the columns. | As for`sources/`. |
-| `delivery/` | The records of putting the work into use: releases, deployments, data migrations, and client handoffs. It does not hold the work itself, or its requirements and tasks: those are in the work item. `delivery/AGENTS.md` gives its folders and record forms. | Read`delivery/AGENTS.md`, which also says how a record is committed. |
-| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with`publish-docs`. |
-| `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem.`INDEX.md` lists the topics. | As for`wiki/reference/`. |
-| `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for`wiki/reference/`. |
-| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release:`<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
+| `sources/INDEX.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
+| `delivery/` | The records of putting the work into use: releases, deployments, data migrations, and client handoffs. It does not hold the work itself, or its requirements and tasks: those are in the work item. `delivery/AGENTS.md` gives its folders and record forms. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
+| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with `publish-docs`. |
+| `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
+| `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
+| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
 | `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named as `managing-work-items`, `references/building.md`, says. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
-| `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files.`owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
+| `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
 | `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
 | `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. | Only with the owner's yes. |
 | `.claude/output-styles/` | The Plain English output style, which says how to write replies to the owner. | Only with the owner's yes. |
-| `.agents/skills`, `.codex/` | What Codex reads: a link to`.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
+| `.agents/skills`, `.codex/` | What Codex reads: a link to `.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
 
 ## Where information goes
 
@@ -92,7 +92,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A decision only one work item needs | A row in that work item's Questions and Answers |
 | A source the project received and keeps | `sources/` (SRC-###); the work item holds the ID |
 | Knowledge captured from outside the project | `wiki/reference/ai-external-knowledge/` |
-| An analysis of how the system works today, for the owner or a work item | Write it to`wiki/reference/current-system/` before you reply (`wiki/reference/AGENTS.md`). |
+| An analysis of how the system works today, for the owner or a work item | Write it to `wiki/reference/current-system/` before you reply (`wiki/reference/AGENTS.md`). |
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A finished file made for the client, or for the owner to pass on, such as a report or a spreadsheet | `delivery/client-handoffs/` |
 | A finished file of records that the owner loads into a system | `delivery/migrations/`. Never commit it. |
@@ -101,7 +101,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A lesson that is not proven yet | The work item's Notes. At closure, keep the lesson in memory if it still holds, as "Project memory" says. With no work item open: memory |
 | A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory, as "Project memory" says |
 | Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in a reply, that a later session would need and no other record shows | Write it to memory before you reply, as "Project memory" says |
-| The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
+| The owner's own procedural preferences and instructions for how the agent works in this project, beyond what the toolkit ships ("from now on", "always", "never"). They are rules, not memory. | Write them to `.claude/rules/owner-preferences.md`, in the form its layout comment gives. When you inferred an instruction, get the owner's yes before you write it. When the owner says not to let something happen again, write the check that prevents it, and name the record that explains why. When the owner says an instruction is for every project, write it to `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never make it a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
 ## Which skill
@@ -112,7 +112,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | --- | --- |
 | Anything about one work item, from finding or reading it to closing or cancelling it; the project's phases and project tasks | `managing-work-items` |
 | A decision or open question more than one work item needs; the project receives a source; an approved fact about the system changes | `filing-project-records` |
-| The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
+| The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
 | The owner ends the session or clears context, asks for a handoff, or pastes one to check. Offer one when this session's context was compacted or the owner says the work will continue in another session, never after a small edit or a quick lookup. | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
@@ -127,7 +127,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 
 | Need | Command |
 | --- | --- |
-| Check, update, or repair the toolkit setup | The`project-setup` skill ("check the setup", "update the toolkit"). |
+| Check, update, or repair the toolkit setup | The `project-setup` skill ("check the setup", "update the toolkit"). |
 | Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |
 
 ## How to write replies (for claude sub agents or non-claude agents)
