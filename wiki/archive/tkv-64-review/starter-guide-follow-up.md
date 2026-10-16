@@ -15,7 +15,7 @@ The lifecycle's actual approval steps, the Project map's protected-file rules, f
 ## Changed files
 
 - [Starter AGENTS.md](../../../plugins/toolkit/skills/project-setup/every-project/AGENTS.md)
-- [Main review](../tkv-64-content-review.md)
+- [Main review](tkv-64-content-review.md)
 - [Marketplace version](../../../.claude-plugin/marketplace.json)
 - [Claude Code plugin version](../../../plugins/toolkit/.claude-plugin/plugin.json)
 - [Codex plugin version](../../../plugins/toolkit/.codex-plugin/plugin.json)

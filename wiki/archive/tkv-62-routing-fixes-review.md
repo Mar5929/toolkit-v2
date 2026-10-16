@@ -14,8 +14,8 @@ Existing record homes remain authoritative until verified migration. Local and H
 
 Two independent reviewers rebuilt the Harbor Services sample and replayed setup, status, deployment, capture before closure, librarian filing, corrections, supersession, concurrent contribution, partial recovery and handoff. Neither found a blocking issue in the three fixes.
 
-- [Workflow review](tkv-62-routing-review/workflow-review.md)
-- [Guidance review](tkv-62-routing-review/guidance-review.md)
+- [Workflow review](wiki/archive/tkv-62-routing-review/workflow-review.md)
+- [Guidance review](guidance-review.md)
 
 Claude marketplace and plugin validation, whitespace checks, changed-module relative links, and nine module assemblies passed. Assembly checks covered skill front matter, JSON settings, host skill symlinks, guide pairs and librarian presence. Codex installed toolkit 0.9.55 into a scratch home successfully.
 
