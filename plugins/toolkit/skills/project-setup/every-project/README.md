@@ -22,6 +22,7 @@
 - [wiki/reference/](wiki/reference/): knowledge captured from outside the project, and the record of the system as it is today.
 - [AGENTS.md](AGENTS.md): how the agent works in this project, where each kind of information goes, including decisions and the approved description of the system, and the full project map.
 - Active work, each work item's design and decisions, the project's phases, and the project's own tasks: the place chosen at setup, which the "Tracker" line in `PROJECT.md` under "Toolkit settings" names.
+- Project memory: the place the "Memory" line in `PROJECT.md` names. With Notion memory, decisions, terms, and product documentation are there too.
 
 ## Browse in Obsidian
 

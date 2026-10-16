@@ -44,7 +44,7 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"State":{"select":{"name"
 **Title the Solution Design page:**
 
 ```bash
-ntn api v1/pages/<design-page-id> -X PATCH -d '{"properties":{"title":{"title":[{"text":{"content":"Solution Design - WI-31"}}]}}}' < /dev/null
+ntn api v1/pages/<design-page-id> -X PATCH -d '{"properties":{"title":{"title":[{"text":{"content":"Solution Design - <PREFIX>-31"}}]}}}' < /dev/null
 ```
 
 The `<page …>` line in the item's text holds the design page's address; its last 32 characters are the ID.
@@ -55,7 +55,7 @@ The `<page …>` line in the item's text holds the design page's address; its la
 ntn api v1/pages/<page-id> -X PATCH -d '{"template":{"type":"template_id","template_id":"<default-template-id>"}}' < /dev/null
 ```
 
-**Add a phase.** A project phase leaves out Work item and uses a two-digit ID like `P01`.
+**Add a phase.** A project phase leaves out Work item and uses a two-digit ID like `P01`. The example below is an item phase.
 
 ```bash
 ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"<phases-data-source-id>"},
@@ -84,7 +84,7 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"<tasks
   "Phase":{"relation":[{"id":"<phase-page-id>"}]}}}' < /dev/null | jq -r .id
 ```
 
-**Find one item by its number** (never by title). For `WI-31` the number is 31; check the returned prefix matches.
+**Find one item by its number** (never by title). For `<PREFIX>-31` the number is 31; check the returned prefix matches.
 
 ```bash
 ntn api v1/data_sources/<work-items-data-source-id>/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":31}},{"property":"Work item","title":{"is_not_empty":true}}]}}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.url)"'

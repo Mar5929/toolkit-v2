@@ -57,8 +57,8 @@ Say in one line which of these situations this is.
 
 These facts about the folder give you answers to offer:
 
-- `git config user.name` prints a name to offer as the owner.
-- `git remote -v` shows whether the code is on GitHub.
+- `git config user.name` prints a name to offer as the owner. When it is not the owner's name, such as an AI's, tell the owner, because later commits will carry that name.
+- `git remote -v` shows whether the code is on GitHub. When the repository has no remote and the owner names one, offer to add it.
 - `sfdx-project.json` in the folder means that this is a Salesforce project.
 - The files in the folder show the language, the framework, and the systems the project touches.
 
