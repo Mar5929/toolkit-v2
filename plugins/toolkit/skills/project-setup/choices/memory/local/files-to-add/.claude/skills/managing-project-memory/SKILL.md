@@ -1,6 +1,6 @@
 ---
 name: managing-project-memory
-description: 'Keeps the project''s memory and Current State true across sessions. Use to find, save, correct, retire, or forget lasting project knowledge; record an event, recurring job, or owner instruction; or update what''s happening now. Other skills call it when work starts, changes, or closes. Work items belong to managing-work-items; shared decisions and sources belong to filing-project-records.'
+description: 'Keeps the project''s memory and Current State true across sessions. Use to find, save, correct, retire, or forget lasting project knowledge; record an event or recurring job; or update what''s happening now. Other skills call it when work starts, changes, or closes. Work items belong to managing-work-items; shared decisions and sources belong to filing-project-records.'
 ---
 
 # Managing project memory
@@ -22,7 +22,7 @@ Memory holds what a later session needs and no other project file holds. Current
 | When you need to… | Read |
 | --- | --- |
 | Decide whether something belongs in memory, its type, or whether to ask | `references/memory-criteria.md` |
-| Save, correct, retire, or forget; record a lesson, event, recurring job, or owner instruction | `references/saving.md` |
+| Save, correct, retire, or forget; record a lesson, event, or recurring job | `references/saving.md` |
 | Find what was recorded or what happened | `references/finding.md` |
 | Update Current State, including when another skill reports work started, changed, or closed | `references/current-state.md` |
 | Clean up memory as a whole | `references/tidying.md` |

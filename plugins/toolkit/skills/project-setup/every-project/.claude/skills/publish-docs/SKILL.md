@@ -45,7 +45,7 @@ A document edit that would be wrong on the default branch without the code chang
 
 1. **Check the files.** Name every file in the save. Each must be under a path in "The paths of the project documents" and not refused by "Refused files".
 
-   Save only an edit that the owner asked for or said yes to, an edit that the root `AGENTS.md` tells you to make without asking, or an edit that another skill tells you to save with this skill, for example `filing-project-records`. That request, yes, or instruction also covers the push in step 7, unless `.claude/rules/owner-preferences.md` says to ask the owner before a push; then ask before step 7.
+   Save only an edit that the owner asked for or said yes to, an edit that the root `AGENTS.md` tells you to make without asking, or an edit that another skill tells you to save with this skill, for example `filing-project-records`. That request, yes, or instruction also covers the push in step 7. When a line in `.claude/rules/owner-preferences.md` limits commits or pushes, that line wins; when the owner then declines the push, stop as [references/recovery.md](references/recovery.md), "A save that cannot finish now", says.
 2. **Look first.** Run `git -C <session folder> worktree list`, `git -C <session folder> status`, and `git -C <session folder> remote`. Find `<remote>` and `<default>` as `pull-latest`, "Find the remote and the default branch", says.
 3. **Start the save worktree** in the main checkout, named `.claude/worktrees/docsave-<short-slug>`, where the slug names the save, for example `docsave-roadmap-phase-2`:
 

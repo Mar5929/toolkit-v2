@@ -101,7 +101,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A lesson that is not proven yet | The work item's Notes. At closure, keep the lesson in memory if it still holds, as "Project memory" says. With no work item open: memory |
 | A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory, as "Project memory" says |
 | Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in a reply, that a later session would need and no other record shows | Write it to memory before you reply, as "Project memory" says |
-| The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a setting of Claude Code or Codex, or a hook. |
+| The owner's own procedural preferences and instructions for how the agent works in this project, beyond what the toolkit ships ("from now on", "always", "never"). They are rules, not memory. | Write them to `.claude/rules/owner-preferences.md`, in the form its layout comment gives. When you inferred an instruction, get the owner's yes before you write it. When the owner says not to let something happen again, write the check that prevents it, and name the record that explains why. When the owner says an instruction is for every project, write it to `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never make it a setting of Claude Code or Codex, or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
 ## Which skill
@@ -112,7 +112,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | --- | --- |
 | Anything about one work item, from finding or reading it to closing or cancelling it; the project's phases and project tasks | `managing-work-items` |
 | A decision or open question more than one work item needs; the project receives a source; an approved fact about the system changes | `filing-project-records` |
-| The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
+| The owner asks to read, keep, correct, forget, or find something in memory, reports a fact, a date, or what another person said, asks what happened in a period, or asks to clean up memory | `managing-project-memory` |
 | The owner ends the session or clears context, asks for a handoff, or pastes one to check. Offer one when this session's context was compacted or the owner says the work will continue in another session, never after a small edit or a quick lookup. | `handoff` |
 | The owner asks what happened in this session, such as "recap this chat" | `session-summary` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
