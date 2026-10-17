@@ -111,6 +111,10 @@ updated: <YYYY-MM-DD>
 
 - <SRC-###>: <What it is.> Informed: <requirement, question, or task IDs.>
 
+### Working files
+
+- `working-files/<short name>/<file name>`: <What the file is, and what it was used for.>
+
 ### Lessons not proven yet
 
 - <The lesson, and where it was seen.>

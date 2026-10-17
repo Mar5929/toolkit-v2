@@ -74,7 +74,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A stable fact about how the client's business or the project team works that is not a rule of the system, such as the month the fiscal year starts | `PROJECT.md`, "Operating conventions" |
 | A new request, idea, or bug | A new work item. "On every turn" says when to ask the owner whether to make one. |
 | A to-do, an action item, or an administrative task that belongs to no work item | The project tasks |
-| The requirements, questions, tasks, design, and history of one change | That work item and its design |
+| The requirements, questions, tasks, design, and history of one change, and its findings, research, decisions, and drafts of text, including a helper agent's report | That work item and its design, never `working-files/`. When the item closes, `managing-work-items` moves what other work items need to the record this table names for it. |
 | Where one work item stands and its next action | The Current state at the top of that work item |
 | A decision only one work item needs | A row in that work item's Questions and Answers |
 | A decision or open question more than one work item needs | `DECISIONS.md` (DEC-###) |
@@ -87,7 +87,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A finished file made for the client, or for the owner to pass on, such as a report or a spreadsheet | `delivery/client-handoffs/` |
 | A finished file of records that the owner loads into a system | `delivery/migrations/`. Never commit it. |
-| A file exported, downloaded, or made while working that is not a finished result, such as an export of records or a draft | `working-files/`, in the folder of its work item |
+| A raw file that is too big or too sensitive to keep in the work item, such as an export of records, a downloaded file, or generated data, or an HTML page made for the owner to look at | `working-files/`, as "Project map" says |
 | A test plan | `tests/` |
 | A lesson that is not proven yet | The work item's Notes. At closure, keep the lesson in memory if it still holds, as "Project memory" says. With no work item open: memory |
 | A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory, as "Project memory" says |
@@ -136,7 +136,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
 | `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
 | `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<short name>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
-| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named as `managing-work-items`, `references/building.md`, says. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
+| `working-files/` | Raw files that are too big or too sensitive to keep in the work item, such as an export of records, a downloaded file, or generated data, and HTML pages made for the owner to look at, such as a mockup. Findings, research, decisions, and drafts of text go in the work item, never here. The work item's Notes list each file it relies on, by path. One folder per work item, named as `managing-work-items`, `references/building.md`, says. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
 | `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
 | `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. | Only with the owner's yes. |
