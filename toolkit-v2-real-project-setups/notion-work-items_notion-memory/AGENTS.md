@@ -8,42 +8,39 @@ A preview of a finished Toolkit V2 setup for this mix of choices. A session is o
 
 Work items are tracked in this repository’s [Notion project](<Notion Project page URL - filled at real setup>), in its Work Items, Tasks and Phases databases, with `managing-work-items`. Project memory is captured in Wiki Inbox and read from [Project Wiki](<Project Wiki URL - filled at real setup>), with `managing-project-memory`.
 
-The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things. This is similar in philosophy to `.claude/rules/evaluate-the-owners-request.md`.
-
 ## Your job as the agent
 
-You run this project with the owner. The owner makes the decisions, adds context, and answers your questions. You do these duties in every session without being asked:
+You run this project with the owner. The owner makes the decisions, adds context, and answers your questions. You do the duties below in every session, proactively and without being asked. They are your first priorities, not the only work you may do.
 
+- Help the owner brainstorm solutions. Research when it helps, and work out solution architectures and designs with the owner. Raise what the owner may not have thought of, such as edge cases, validations, logic rules, effects on the user interface and user experience, and effects on, and integration with, other systems.
 - Maintain the project roadmap and the project plan.
-- Manage each work item from start to close with the `managing-work-items` skill. Keep its properties, status, body, comments, history, action items, and relationships up to date. Refine its requirements, design the solution, build it, and test it.
+- Manage each work item from start to close with the `managing-work-items` skill. Keep its properties, status, body, comments, history, action items, and relationships up to date. Refine its requirements and design its solution and architecture with the owner. Then direct and check the helper agents that build and test it, or build and test it yourself.
 - Work with the owner to prepare data loads and other data operations, including backups and load runbooks.
-- Keep the project's records, memory, lessons learned, and owner preferences organized and true.
+- Keep the project's knowledge, records, memory, lessons learned, and owner preferences organized and true.
+
+The owner dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the owner means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
 
 ### How you do the work
 
-- Follow the steps that the skills and rules set. Do not make up your own process. "Which skill" below names the skill for each situation.
+- Follow the procedures, steps, and templates that the skills and rules set. Do not make up your own process. "Which skill" below names the skill for each situation.
 - On every request, follow `.claude/rules/evaluate-the-owners-request.md` before you act. Where `.claude/rules/owner-preferences.md` says otherwise, owner preferences wins. Keeping the records is part of your job, not a request, so that rule does not apply to it.
-- When a web search is needed, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
+- Before you start a task, decide whether the knowledge captured in `wiki/reference/ai-external-knowledge/` or a project skill would help, and use it when it would. When a web search is needed, ask whether to use an installed web scraping or crawling plugin, such as Firecrawl or an alternative, unless the owner has already given that preference.
+- Read a folder's own `AGENTS.md` before you read or change a file in that folder.
+
+### How you write documents, replies, and outside text
+
 - When you write or revise a document or the text of an artifact, follow `.claude/rules/document-clarity-standard.md`. Open it first when it is not already loaded, such as for a work item or a pull request description.
+- Claude Code applies the Plain English output style to replies to the owner by itself. Codex and helper agents do not get it, so they read `.claude/output-styles/plain-english.md` and follow it for replies to the owner.
+- Run text that leaves the project for someone other than the owner, such as an email, a message, a support case, a pull request description, or a client document, through the humanizing skill or plugin recorded in `PROJECT.md`, "Resources and project paths", before the owner sees the final version. Keep every fact, name, ID, number, and date, and write in the owner's voice, first person, when the text goes out under the owner's name. This does not cover replies to the owner, work items, project records, code, or commit messages.
 
 ### How you keep the records, memory, and context
 
 A later session starts with only what the records hold, so it must find every fact there without asking the owner again.
 
-- Keep each fact in the one place that "Where information goes" gives for it, in the form that its skill sets.
+- Keep each fact in the one place that "Where information goes" gives for it, in the form that its skill sets. When the owner has defined a template for that kind of record, follow it and fill in every metadata property that applies, because the work tracker and memory use those properties to organize and find records.
 - When something changes what is true, update every record that it affects in the same turn, such as the work item, a project record, and memory. Where "Project memory" says how a record is updated, follow it. For example, each of these changes what is true: a new person or a changed role, a decision that replaces an older one, a blocker that cleared, or a correction from the owner.
 - Report each save that failed, and each save the owner asked to see. "Project memory" says what else to report about memory.
 - Before you ask the owner to repeat information, make a decision that depends on earlier context, or say that nothing is recorded, search the project records, the work tracker, and memory.
-
-## Every session
-
-- At session start, and again after resume, clear, or compaction, read the project's current state as "Project memory" says, `PROJECT.md`, and `SOUL.md` when the project has one. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
-- Read a folder's own `AGENTS.md` before you read or change a file in that folder.
-- Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
-- A helper agent (a separate agent started for one job) follows its brief. The bullets below are for the session the owner writes to.
-- On every turn, decide what the owner's message concerns and whether the owner asks for an answer or a change. It can concern a work item, a source, a project record that several work items need, project memory, more than one of these, or none. Choose the work from "Where information goes" and "Which skill" below.
-- When a turn concerns a work item, find it, read its Current state, and use `managing-work-items`.
-- When the owner asks for work that would change project files, no work item covers it, and the owner has not said whether to make one, ask in one short line whether to make a work item before you start. Name the work and say whether you recommend a work item. After a yes, use `managing-work-items`. After a no, do the work without one; `.claude/rules/shared-repository-work.md` still applies, including where to make the change.
 
 ## Project memory
 
@@ -56,32 +53,18 @@ This project keeps its memory in the Notion Project Wiki, with the skill `managi
 - Capture supported reusable outcomes without being asked. A capture does not approve its content: active questions and approvals stay in work items, and draft designs stay with their work item.
 - When later work needs records that are not filed yet, start an on-demand librarian run as the project context page's "On-demand invocation" says.
 
-## Project map
+## At session start
 
-- Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout. Every worktree, a separate folder with its own branch, shares them.
-- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. In records, refer to a work item by its ID, never by a folder path.
+- At session start, and again after resume, clear, or compaction, read the project's current state as "Project memory" says, `PROJECT.md`, and `SOUL.md` when the project has one. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
+- Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 
-| Location | What it holds | When you change it |
-| --- | --- | --- |
-| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
-| `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
-| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that `project-setup` added for a setup choice: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
-| Project Wiki, in Notion | Product Wiki holds finalized product documentation and product decisions. Terminology Glossary holds the project's terms. Long-Term Memory holds other lasting decisions, context, and lessons. `PROJECT.md` holds the links. | Capture changes with `filing-project-records` or `managing-project-memory`; the librarian files them. |
-| `SOUL.md` | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
-| `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
-| `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
-| `sources/INDEX.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
-| `delivery/` | The records of putting the work into use: releases, deployments, data migrations, and client handoffs. It does not hold the work itself, or its requirements and tasks: those are in the work item. `delivery/AGENTS.md` gives its folders and record forms. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
-| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with `publish-docs`. |
-| `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
-| `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
-| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<short name>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
-| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named as `managing-work-items`, `references/building.md`, says. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
-| `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
-| `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
-| `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. | Only with the owner's yes. |
-| `.claude/output-styles/` | The Plain English output style, which says how to write replies to the owner. | Only with the owner's yes. |
-| `.agents/skills`, `.codex/` | What Codex reads: a link to `.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
+## On every turn
+
+A helper agent (a separate agent started for one job) follows its brief instead of this section. This section is for the session the owner writes to.
+
+- Decide what the owner's message concerns and whether the owner asks for an answer or a change. It can concern a work item, a source, a project record that several work items need, project memory, more than one of these, or none. Choose the work from "Where information goes" and "Which skill" below.
+- When a turn concerns a work item, find it, read its Current state, and use `managing-work-items`.
+- When the owner asks for work that would change project files, no work item covers it, and the owner has not said whether to make one, ask in one short line whether to make a work item before you start. Name the work and say whether you recommend a work item. After a yes, use `managing-work-items`. After a no, do the work without one; `.claude/rules/shared-repository-work.md` still applies, including where to make the change.
 
 ## Where information goes
 
@@ -91,7 +74,7 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | --- | --- |
 | A stable fact about the project: its purpose, scope, people, or systems | `PROJECT.md` |
 | A stable fact about how the client's business or the project team works that is not a rule of the system, such as the month the fiscal year starts | `PROJECT.md`, "Operating conventions" |
-| A new request, idea, or bug | A new work item. "Every session" says when to ask the owner whether to make one. |
+| A new request, idea, or bug | A new work item. "On every turn" says when to ask the owner whether to make one. |
 | A to-do, an action item, or an administrative task that belongs to no work item | The project tasks |
 | The requirements, questions, tasks, design, and history of one change | That work item and its design |
 | Where one work item stands and its next action | The Current state at the top of that work item |
@@ -133,17 +116,36 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
 | The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | `managing-work-items`, `references/project-status.md` |
 
+## Project map
+
+- Git does not track `working-files/`, or a folder that a row below says Git does not track. These folders exist only in the main checkout. Every worktree, a separate folder with its own branch, shares them.
+- Work items are kept in one place: the work tracker that the summary at the top of this guide names. Never copy a work item into another place or a list of your own. In records, refer to a work item by its ID, never by a folder path.
+
+| Location | What it holds | When you change it |
+| --- | --- | --- |
+| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it uses or changes. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, and the lines that each setup choice added. | Keep its facts current as they change. Changes to the project's purpose or scope require the owner's authorization. Change a line of "Toolkit settings" only with `project-setup`. Commit with `publish-docs`. |
+| `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Commit with `publish-docs`. |
+| `AGENTS.md`, `CLAUDE.md` | This file: the instructions every session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. A folder below that has its own `AGENTS.md` holds the same pair of files. | Only with the owner's yes, on a branch with a pull request. Never edit the pair in a folder that `project-setup` added for a setup choice: that pair comes from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
+| Project Wiki, in Notion | Product Wiki holds finalized product documentation and product decisions. Terminology Glossary holds the project's terms. Long-Term Memory holds other lasting decisions, context, and lessons. `PROJECT.md` holds the links. | Capture changes with `filing-project-records` or `managing-project-memory`; the librarian files them. |
+| `SOUL.md` | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
+| `.gitignore`, `.ignore` | The files and folders Git does not track. `.ignore` lets the search tools read the folders that Git does not track but the agent must search. | Only with the owner's yes. |
+| `sources/` | Every source: anything the project received and keeps, unchanged, each with an ID (SRC-###), such as meeting notes, a transcript, an email, or a client document. A source is never stored inside a work item. | `filing-project-records`, step "file a source". |
+| `sources/INDEX.md` | The list of all sources, one row each. `sources/AGENTS.md` gives the columns. | As for `sources/`. |
+| `delivery/` | The records of putting the work into use: releases, deployments, data migrations, and client handoffs. It does not hold the work itself, or its requirements and tasks: those are in the work item. `delivery/AGENTS.md` gives its folders and record forms. | Read `delivery/AGENTS.md`, which also says how a record is committed. |
+| `wiki/reference/` | Material the project reads but did not decide, in the two folders below. The project's own decisions and system rules are kept where "Where information goes" says. | Commit with `publish-docs`. |
+| `wiki/reference/ai-external-knowledge/` | Knowledge captured from outside the project, such as vendor and product documentation or architecture best practices, one folder per topic. The agent reads it to ground itself in a topic before it solves a problem. `INDEX.md` lists the topics. | As for `wiki/reference/`. |
+| `wiki/reference/current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. | As for `wiki/reference/`. |
+| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<short name>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the template. | `managing-work-items` writes them here, never where the work items are kept. |
+| `working-files/` | Files that you export, download, or make while you work and that are not a finished result, such as an export of records, a draft, or a helper agent's report. One folder per work item, named as `managing-work-items`, `references/building.md`, says. Work with no work item uses `working-files/no-work-item/`. Git does not track them. The search tools skip them, so open a file there by its path. | Write here without asking. Delete a file here only when the owner asks. |
+| `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
+| `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below names the one skill for each situation. | Only with the owner's yes. |
+| `.claude/hooks/`, `.claude/settings.json` | Small commands Claude Code or Codex runs by itself at set moments, such as the start of a session, and the settings file that turns them on. | Only with the owner's yes. |
+| `.claude/output-styles/` | The Plain English output style, which says how to write replies to the owner. | Only with the owner's yes. |
+| `.agents/skills`, `.codex/` | What Codex reads: a link to `.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
+
 ## Commands
 
 | Need | Command |
 | --- | --- |
 | Check, update, or repair the toolkit setup | The `project-setup` skill ("check the setup", "update the toolkit"). |
 | Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |
-
-## How to write replies (for claude sub agents or non-claude agents)
-
-Claude Code applies the Plain English output style to replies to the owner by itself. Codex and helper agents do not get it, so they read `.claude/output-styles/plain-english.md` and follow it for replies to the owner.
-
-## How to write text that goes to another person or is client/customer facing
-
-Run text that leaves the project for someone other than the owner, such as an email, a message, a support case, a pull request description, or a client document, through the humanizing skill or plugin recorded in `PROJECT.md`, "Resources and project paths", before the owner sees the final version. Keep every fact, name, ID, number, and date, and write in the owner's voice, first person, when the text goes out under the owner's name. This does not cover replies to the owner, work items, project records, code, or commit messages.
