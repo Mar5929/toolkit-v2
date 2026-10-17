@@ -45,7 +45,7 @@ Swap labels in one call so an issue never has two state labels or none. If label
 
 ## Creating an item
 
-Build the body from `assets/work-item-template.md`, from `## Overview` on, filled with no prompts left. Keep the headings, table headers, labels, and guide comments; write "None." under Sources and Lessons; leave Kept for the project empty. Write Related items as "Parent #12, phase P2.", "Parent #14.", or "Project phase P01." as fits. Create it with its State, type, and priority labels only, then link it to its parent or milestone.
+Build the body from `assets/work-item-template.md`, from `## Overview` on, filled with no prompts left. Keep the headings, table headers, labels, and guide comments; write "None." under Sources, Working files, and Lessons; leave Kept for the project empty. Write Related items as "Parent #12, phase P2.", "Parent #14.", or "Project phase P01." as fits. Create it with its State, type, and priority labels only, then link it to its parent or milestone.
 
 An issue the owner opened by hand (no `## Overview` or no state label) gets the layout only after the owner's yes: their text becomes Requirement 1's Original verbatim requirement, it gets `state:backlog` and `priority:medium`, and you ask the type unless it's obvious.
 
