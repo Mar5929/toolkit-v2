@@ -9,7 +9,7 @@ try {
   let input = {};
   try { input = JSON.parse(readFileSync(0, 'utf8')); } catch { /* Manual invocation has no input. */ }
   if (input.source === 'compact') out.push('Context was just compacted. Before you answer the next message,'
-    + ' re-read the active work item with managing-work-items, then do "Every session" in the root AGENTS.md again.');
+    + ' re-read the active work item with managing-work-items, then do "At session start" in the root AGENTS.md again.');
   const { default: startup } = await import('./session-start-choice.mjs');
   const context = await startup({ ...input, cwd: input.cwd || process.cwd() });
   if (context.text) out.push(context.text);
