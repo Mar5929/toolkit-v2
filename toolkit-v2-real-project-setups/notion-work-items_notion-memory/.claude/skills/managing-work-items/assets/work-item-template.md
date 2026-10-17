@@ -111,7 +111,9 @@ updated: <YYYY-MM-DD>
 
 - <SRC-###>: <What it is.> Informed: <requirement, question, or task IDs.>
 
-### Working files
+### Paths to working files
+
+Each line gives the path of a raw file kept in the project's `working-files/` folder, never on this page, and what it was used for.
 
 - `working-files/<short name>/<file name>`: <What the file is, and what it was used for.>
 
